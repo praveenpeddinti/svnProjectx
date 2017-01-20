@@ -7,6 +7,8 @@ import { AppComponent }  from './app.component';
 import { LoginComponent }  from './components/login/login.component';
 import { HomeComponent }  from './components/home/home.component';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
+// HashLocationStrategy added to avoid Refresh Problems on Web Server....
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService, User} from './services/login.service'
 const ROUTES=[
               {path: '',redirectTo: '/login',pathMatch: 'full' },
@@ -19,7 +21,7 @@ const ROUTES=[
   ],
   declarations: [ AppComponent,LoginComponent,HomeComponent ],
   bootstrap:    [ AppComponent ],
-  providers:[LoginService],
+  providers:[LoginService,{provide: LocationStrategy, useClass: HashLocationStrategy}],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule { }
