@@ -5,6 +5,10 @@ namespace frontend\models\mongo;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+ * refer : 
+ * https://github.com/yiisoft/yii2-mongodb/blob/master/docs/guide/usage-ar.md
+ */
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
