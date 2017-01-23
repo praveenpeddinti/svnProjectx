@@ -10,20 +10,12 @@ export class AjaxService {
     private http: Http) { }
 
 AjaxSubscribe(url:string,params:Object,callback)
-{
+{     
       this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(params), headers)
       .subscribe(
       (data) => {
         var res = data.json();//For Success Response
-       // console.log(res.length)
-        if(res.response == 1){
-            callback(res);
-        
-        }
-        else{
-          return false;
-        }
-        
+          callback(res);
       },
       err => { console.error("ERRR_____________________" + err) } //For Error Response
       );

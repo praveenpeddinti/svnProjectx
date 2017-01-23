@@ -15,7 +15,7 @@ export class User {
 export class LoginService {
   constructor(
     private _ajaxService: AjaxService,
-    private _router: Router,
+    public _router: Router,
     private http: Http) { }
 
   logout() {
@@ -29,14 +29,15 @@ export class LoginService {
     'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
   }
  
-  login(user) {
+login(user,loginCallback) {
     this.user_data.username=user.email;
     this.user_data.password=user.password;
-    this._ajaxService.AjaxSubscribe("user/login",this.user_data,function(data){
-        localStorage.setItem("user", user.email);
-
-    }) 
-            this._router.navigate(['home']);
+    this._ajaxService.AjaxSubscribe("user/login",this.user_data,(data)=>
+    { 
+         localStorage.setItem("user", this.user_data.username);
+         loginCallback(data);
+    });
+  
 
   }
   

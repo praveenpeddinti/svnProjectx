@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { LoginService, User } from '../../services/login.service';
+import { Router } from '@angular/router';
+import { GlobalVariable } from '../../config';
+
 
 @Component({
     selector: 'login-view',
@@ -16,12 +19,19 @@ export class LoginComponent {
         this.submitted = true;
     }
     constructor(
+        private _router: Router,
         private _service: LoginService) { }
 
     login() {
-        if (!this._service.login(this.user)) {
+        this._service.login(this.user,(data)=>{
+            if(data.response==1){
+              this._router.navigate(['home']);   
+            }else{
+            console.log("comming..");
             this.errorMsg = 'Failed to login';
-        }
+            }
+
+        });
     }
 
     validateEmail(email){
