@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
+use frontend\models\mongo\SampleCollection;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
@@ -80,14 +81,16 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function beforeAction($action) {
-    $this->enableCsrfValidation = false;
-    return parent::beforeAction($action);
-    }
+//    public function beforeAction($action) {
+//    $this->enableCsrfValidation = false;
+//    return parent::beforeAction($action);
+//    }
     
     public function actionTestAjax()
     {
-        error_log("+++++++++++++actionTestAjax+++++++++++++++++++");
+        error_log("----------------");
+        $data = SampleCollection::testMongo();
+        error_log("+++++++++++++actionTestAjax+++++++++++++++++++".print_r($data,1));
     }
     
     public function actionLogin()
