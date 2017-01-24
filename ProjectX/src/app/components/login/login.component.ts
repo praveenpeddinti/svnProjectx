@@ -23,8 +23,8 @@ export class LoginComponent {
         private _service: LoginService) { }
 
     login() {
-        this._service.login(this.user,(data)=>{
-            if(data.response==1){
+        this._service.login(this.user,(data)=>{ 
+            if(data.status==200){
               this._router.navigate(['home']);   
             }else{
             console.log("comming..");
