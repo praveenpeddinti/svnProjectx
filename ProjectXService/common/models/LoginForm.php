@@ -56,7 +56,7 @@ class LoginForm extends Model
     public function loginAjax($username){
         $userData = User::findByUsername($username);
         
-        error_log("++++++++loginAjax++++++++++".print_r($userData,1));
+       // error_log("++++++++loginAjax++++++++++".print_r($userData,1));
         return $userData;
     }
     
