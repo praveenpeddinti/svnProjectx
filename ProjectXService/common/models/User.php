@@ -29,7 +29,8 @@ class User extends ActiveRecord
     
     public static function findByUsername($username)
     {
-        $qry = "select * from User where username='".$username."'";
+        $qry = "select * from Collaborators where Email='".$username."'";
+        error_log($qry);
         $data = Yii::$app->db->createCommand($qry)->queryAll();
         return $data;
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);

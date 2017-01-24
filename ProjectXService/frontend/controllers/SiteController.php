@@ -13,7 +13,8 @@ use common\models\mongo\SampleCollection;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-
+use common\components\CommonUtility;
+use common\models\bean\ResponseBean;
 /**
  * Site controller
  */
@@ -81,26 +82,45 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-//    public function beforeAction($action) {
-//    $this->enableCsrfValidation = false;
-//    return parent::beforeAction($action);
-//    }
+    public function beforeAction($action) {
+    $this->enableCsrfValidation = false;
+    return parent::beforeAction($action);
+    }
     
     public function actionTestAjax()
     {
         error_log("----------------");
         $data = SampleCollection::testMongo();
-        error_log("+++++++++++++actionTestAjax+++++++++++++++++++".print_r($data,1));
+       // error_log("+++++++++++++actionTestAjax+++++++++++++++++++".print_r($data,1));
+    
+    }
+    /**
+     * @author Moin Hussain
+     * @return type
+     */
+    public function actionSampleResponse(){
+        $data = ["firstName" => "Moin", "lastName" => "Hussain"];
+        $responseBean = new ResponseBean;
+        $responseBean->status = ResponseBean::SUCCESS;
+        $responseBean->message = "success";
+        $responseBean->data = $data;
+        $response = CommonUtility::prepareResponse($responseBean,"xml");
+        return $response;
+    
     }
     
     public function actionLogin()
     {
-        error_log("+++++++++++++actionLogin+++++++++++++++++++");
         $user_data = json_decode(file_get_contents("php://input"));
         $model = new LoginForm();
         $userData = $model->loginAjax($user_data->username);
-//        $userData = $model->loginAjax($_POST['username']);
-        echo json_encode($userData);
+        $responseBean = new ResponseBean;
+        $responseBean->status = ResponseBean::SUCCESS;
+        $responseBean->message = "success";
+        $responseBean->data = $userData;
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;
+        
         
 //        This is default logic.
 //        
@@ -233,3 +253,4 @@ class SiteController extends Controller
         ]);
     }
 }
+?>
