@@ -99,13 +99,18 @@ class SiteController extends Controller
      * @return type
      */
     public function actionSampleResponse(){
+        try{
         $data = ["firstName" => "Moin", "lastName" => "Hussain"];
         $responseBean = new ResponseBean;
         $responseBean->status = ResponseBean::SUCCESS;
         $responseBean->message = "success";
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"xml");
-        return $response;
+        return $response;   
+        } catch (Exception $ex) {
+         Yii::log("SiteController:actionSampleResponse::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
     
     }
     
@@ -120,22 +125,7 @@ class SiteController extends Controller
         $responseBean->data = $userData;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
-        
-        
-//        This is default logic.
-//        
-//        if (!Yii::$app->user->isGuest) {
-//            return $this->goHome();
-//        }
-//
-//        $model = new LoginForm();
-//        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-//            return $this->goBack();
-//        } else {
-//            return $this->render('login', [
-//                'model' => $model,
-//            ]);
-//        }
+ 
     }
 
     /**
