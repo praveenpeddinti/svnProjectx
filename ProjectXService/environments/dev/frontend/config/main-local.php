@@ -15,7 +15,7 @@ $config = [
         ],
         'mongodb' => [
             'class' => 'yii\mongodb\Connection',
-            'dsn' => 'mongodb://10.10.73.111:27017/SkiptaNeo_NEW',
+            'dsn' => 'mongodb://10.10.73.33:27017/Techo2_ProjectX',
 
         ],
         'mailer' => [
