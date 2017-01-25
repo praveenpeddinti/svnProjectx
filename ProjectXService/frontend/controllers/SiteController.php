@@ -97,6 +97,7 @@ class SiteController extends Controller
     /**
      * @author Moin Hussain
      * @return type
+     * Try this in browser http://10.10.73.33/site/sample-response
      */
     public function actionSampleResponse(){
         try{
