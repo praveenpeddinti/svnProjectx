@@ -7,7 +7,8 @@ class ResponseBean {
     
     const SUCCESS = 200;
     const FAILURE = 401;
-    public $status = "";
+    const SUCCESS_MESSAGE = "success";
+    const FAILURE_MESSAGE = "failure";
     public $statusCode = "";
     public $message = "";
     public $data = "";
