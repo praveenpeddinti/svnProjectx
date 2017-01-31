@@ -19,6 +19,9 @@ class CommonUtility {
         }
         return $object;
     }
+    public static function generate_pseudorandom_slug(){
+        
+    }
    
 }
 

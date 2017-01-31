@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use common\models\mongo\SampleCollection;
+use common\models\mongo\ProjectTicketSequence;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
@@ -86,16 +87,21 @@ class SiteController extends Controller
     $this->enableCsrfValidation = false;
     return parent::beforeAction($action);
     }
-    
+   
     public function actionTestAjax()
     {
         error_log("----------------");
-        $data = SampleCollection::testMongo();
+       // $data = SampleCollection::testMongo();
+       $model = new ProjectTicketSequence();
+       $model->getNextSequence(2);
+      // $db->getNextSequence(1);
+      // $db->insert(array("TicketNumber" => $this->getNextSequence(2),"name" => "Sarah C."));
        // error_log("+++++++++++++actionTestAjax+++++++++++++++++++".print_r($data,1));
     
     }
     /**
      * @author Moin Hussain
+     * @description This is sample method to demonstrate the response
      * @return type
      * Try this in browser http://10.10.73.33/site/sample-response
      */
@@ -117,7 +123,12 @@ class SiteController extends Controller
     
     public function actionLogin()
     {
+        foreach ($_SERVER as $name => $value) {
+   // error_log($name."----".$value,"---");
+}
+error_log("@@@---**".print_r($_SERVER,1));
         $user_data = json_decode(file_get_contents("php://input"));
+      //  error_log("request aprams------------)))".print_r($_SERVER,1)."---".print_r($user_data,1));
         $model = new LoginForm();
         $userData = $model->loginAjax($user_data->username);
         $responseBean = new ResponseBean;
