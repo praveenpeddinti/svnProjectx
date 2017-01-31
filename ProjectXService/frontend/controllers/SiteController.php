@@ -109,8 +109,8 @@ class SiteController extends Controller
         try{
         $data = ["firstName" => "Moin", "lastName" => "Hussain"];
         $responseBean = new ResponseBean;
-        $responseBean->status = ResponseBean::SUCCESS;
-        $responseBean->message = "success";
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"xml");
         return $response;   

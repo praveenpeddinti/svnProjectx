@@ -54,14 +54,20 @@ class StoryController extends Controller
     return parent::beforeAction($action);
     }
    /**
-    * 
+    * @author Moin Hussain
+    * @return type
     */
     public function actionGetTicketDetails(){
         try{
-        $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails(103);
-  
+        $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails(103,1);
+        $responseBean = new ResponseBean();
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data = $data;
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;
         } catch (Exception $ex) {
-     Yii::log("SiteController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+     Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     
