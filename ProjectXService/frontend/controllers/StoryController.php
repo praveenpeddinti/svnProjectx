@@ -53,13 +53,16 @@ class StoryController extends Controller
     $this->enableCsrfValidation = false;
     return parent::beforeAction($action);
     }
-   
-    public function actionSampleResponse(){
-        error_log("----------------");
-       // $data = SampleCollection::testMongo();
+   /**
+    * 
+    */
+    public function actionGetTicketDetails(){
+        try{
         $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails(103);
-      
-    
+  
+        } catch (Exception $ex) {
+     Yii::log("SiteController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
     }
     
 }

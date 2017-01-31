@@ -7,14 +7,17 @@ use common\models\mongo\TicketCollection;
  * and open the template in the editor.
  */
 class StoryService {
-    
-        public function getTicketDetails($ticketId) {
+    /**
+     * 
+     * @param type $ticketId
+     */
+        public function StoryService($ticketId) {
         try {
             $model = new TicketCollection();
-            $model->getTicketDetails(104);
+            $model->getTicketDetails($ticketId);
            
         } catch (Exception $ex) {
-            Yii::log("SkiptaUserService:saveToUserCollection::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryService:StoryService::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 }
