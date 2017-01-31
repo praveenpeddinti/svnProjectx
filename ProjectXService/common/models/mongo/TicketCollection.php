@@ -64,19 +64,26 @@ class TicketCollection extends ActiveRecord
         ];
     }
     
-    
-    public static function getTicketDetails(){
-        
-        error_log("getTicketDetails++++++++++++++++++@@@@@@@@2222");
-      $query = new Query();
-        // compose the query
-        //$query->select(['name', 'status'])
+    /**
+     * @author Moin Hussain
+     * @param type $ticketId
+     * @param type $projectId
+     * @return type
+     */
+    public static function getTicketDetails($ticketId,$projectId){
+      try{
+            $query = new Query();
+           //$query->select(['name', 'status'])
             $query->from('TicketCollection')
-            ->where(['TicketId' => 103]);
-        // execute the query
-        $rows = $query->all();
-        error_log("************************".print_r($rows,1));
+            ->where(['TicketId' => $ticketId, "ProjectId" => $projectId ]);
+        $ticketDetails = $query->one();
+        return $ticketDetails;  
+      } catch (Exception $ex) {
+      Yii::log("TicketCollection:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
+      }  
+        
+     
     }
 }
 ?>
