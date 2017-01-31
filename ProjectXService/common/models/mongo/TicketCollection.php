@@ -67,7 +67,7 @@ class TicketCollection extends ActiveRecord
     
     public static function getTicketDetails(){
         
-        error_log("getTicketDetails++++++++++++++++++");
+        error_log("getTicketDetails++++++++++++++++++@@@@@@@@2222");
       $query = new Query();
         // compose the query
         //$query->select(['name', 'status'])
