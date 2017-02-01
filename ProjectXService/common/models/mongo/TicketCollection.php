@@ -76,8 +76,8 @@ class TicketCollection extends ActiveRecord
            //$query->select(['name', 'status'])
             $query->from('TicketCollection')
             ->where(['TicketId' => $ticketId, "ProjectId" => $projectId ]);
-        $ticketDetails = $query->one();
-        return $ticketDetails;  
+           $ticketDetails = $query->one();
+           return $ticketDetails;  
       } catch (Exception $ex) {
       Yii::log("TicketCollection:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
