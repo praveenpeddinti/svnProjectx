@@ -14,7 +14,7 @@ export class HomeComponent {
         private _service: LoginService) { }
 
     ngOnInit() {
-        this._service.checkCredentials();
+ //       this._service.checkCredentials();
     }
 
     logout() {

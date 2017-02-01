@@ -9,21 +9,29 @@ import { HomeComponent }  from './components/home/home.component';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
-import {LoginService, User} from './services/login.service'
-import {AjaxService} from './ajax/ajax.service'
+import {LoginService, User} from './services/login.service';
+import {AjaxService} from './ajax/ajax.service';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+import {AuthGuard} from './services/auth-guard.service';
 
 const ROUTES=[
-              {path: '',redirectTo: '/login',pathMatch: 'full' },
-              {path: 'login',component: LoginComponent},
-              {path: 'home', component: HomeComponent },
+              {path: '',redirectTo: 'login',pathMatch: 'full' },
+              {path: 'home',children:[
+                { path: '' , component: HomeComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+              {path: 'login', component: LoginComponent},
              ];
 @NgModule({
-  imports:      [ BrowserModule ,FormsModule,ReactiveFormsModule ,HttpModule,Ng2DropdownModule,
+  imports:      [ FlexLayoutModule,BrowserModule ,FormsModule,ReactiveFormsModule ,HttpModule,Ng2DropdownModule,
   RouterModule.forRoot(ROUTES)
   ],
-  declarations: [ AppComponent,LoginComponent,HomeComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent ],
   bootstrap:    [ AppComponent ],
-  providers:[LoginService,AjaxService,{provide: LocationStrategy, useClass: HashLocationStrategy}],
+  providers:[LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy}],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule { }

@@ -51,15 +51,14 @@ var LoginService = (function () {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
     };
-    // var authenticatedUser = users.find(u => u.email === user.email);
-    // if (authenticatedUser && authenticatedUser.password === user.password){
-    //   localStorage.setItem("user", authenticatedUser);
-    //   this._router.navigate(['home']);      
-    //   return true;
-    // }
+    var authenticatedUser = users.find(u => u.email === user.email);
+    if (authenticatedUser && authenticatedUser.password === user.password){
+      localStorage.setItem("user", authenticatedUser);
+      return true;
+    }
     LoginService.prototype.checkCredentials = function () {
         if (localStorage.getItem("user") === null) {
-            this._router.navigate(['Login']);
+             this._router.navigate(['login']);
         }
     };
     LoginService = __decorate([

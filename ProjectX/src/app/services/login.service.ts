@@ -20,7 +20,7 @@ export class LoginService {
 
   logout() {
     localStorage.removeItem("user");
-    this._router.navigate(['login']);
+    //this._router.navigate(['login']);
   }
 
   public user_data = {
@@ -32,7 +32,7 @@ export class LoginService {
 login(user,loginCallback) {
     this.user_data.username=user.email;
     this.user_data.password=user.password;
-    this._ajaxService.AjaxSubscribe("user/login",this.user_data,(data)=>
+    this._ajaxService.AjaxSubscribe("site/login",this.user_data,(data)=>
     { 
          localStorage.setItem("user", this.user_data.username);
          loginCallback(data);
@@ -60,7 +60,7 @@ login(user,loginCallback) {
 
   checkCredentials() {
     if (localStorage.getItem("user") === null) {
-      this._router.navigate(['login']);
+       this._router.navigate(['login']);
     }
   }
 }
