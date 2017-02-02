@@ -44,6 +44,7 @@ class CommonUtility {
             $mapListModel = new MapListCustomStoryFields();
             $planlevelModel = new PlanLevel();
             $workFlowModel = new WorkFlowFields();
+            $ticketTypeModel = new TicketType();
             foreach ($ticketDetails["Fields"] as &$value) {
               //  echo $value["Id"]."---".$value["value"]."\n";
                if(isset($value["custom_field_id"] )){
@@ -65,6 +66,10 @@ class CommonUtility {
                 $value["readonly"] = $storyFieldDetails["ReadOnly"];
                 $value["field_type"] = $storyFieldDetails["Name"];
                 $value["field_name"] = $storyFieldDetails["Field_Name"];
+                 if($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5){
+                     $datetime = $value["value"]->toDateTime();
+                     $value["readable_value"] = $datetime; 
+                 }
                 if($storyFieldDetails["Type"] == 6){
                   $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
                   $value["readable_value"] = $assignedToDetails;  
@@ -76,13 +81,13 @@ class CommonUtility {
                 }
                 if($storyFieldDetails["Field_Name"] == "priority"){
                 
-//                    $priorityDetails = $priorityModel->getPriorityDetails($value["value"]);
-//                    $value["readable_value"] = $priorityDetails; 
+                    $priorityDetails = $priorityModel->getPriorityDetails($value["value"]);
+                    $value["readable_value"] = $priorityDetails; 
                 }
                  if($storyFieldDetails["Field_Name"] == "planlevel"){
                 
-//                    $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
-//                    $value["readable_value"] = $planlevelDetails; 
+                    $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
+                    $value["readable_value"] = $planlevelDetails; 
                 }
                  if($storyFieldDetails["Field_Name"] == "workflow"){
                 
@@ -90,39 +95,25 @@ class CommonUtility {
                     $workFlowDetails = $workFlowModel->getWorkFlowDetails($value["value"]);
                      $value["readable_value"] = $workFlowDetails; 
                 }
+                 if($storyFieldDetails["Field_Name"] == "tickettype"){
+                   
+                 $ticketTypeDetails = $ticketTypeModel->getTicketType($value["value"]);
+                 $value["readable_value"] = $ticketTypeDetails; 
+                }
                
                
                 
                 
             }
-           return $ticketDetails["Fields"];
+          // return $ticketDetails["Fields"];
             
-            
-//            $tinyUser =  new TinyUserCollection();
-//            $assignedToDetails = $tinyUser->getMiniUserDetails($ticketDetails["AssignedTo"]);
-//            $reportedByDetails = $tinyUser->getMiniUserDetails($ticketDetails["ReportedBy"]);
-//            
-//            $bucketObject = new Bucket();
-//            $bucketName = $bucketObject->getBucketName($ticketDetails["Bucket"],$ticketDetails["ProjectId"]);
-//            $ticketTypeObject = new TicketType();
-//            $ticketTypeDetails = $ticketTypeObject->getTicketType($ticketDetails["TicketType"]);
-//            
-//            $priorityObj = new Priority();
-//            $priorityDetails = $priorityObj->getPriorityDetails($ticketDetails["Priority"]);
-//            $projectObj = new Projects();
-//            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
-//            $workFlowObj = new WorkFlowFields();
-//            $workFlowDetails = $workFlowObj->getWorkFlowDetails($ticketDetails["Status"]);
-//            $ticketDetails["Priority"] = $priorityDetails;
-//            $ticketDetails["Project"] = $projectDetails;
-//            $ticketDetails["Status"] = $workFlowDetails;
-//            $ticketDetails["AssignedTo"] = $assignedToDetails;
-//            $ticketDetails["ReportedBy"] = $reportedByDetails;
-//            $ticketDetails["Bucket"] = $bucketName;
-//            $ticketDetails["TicketType"] = $ticketTypeDetails;
-            //error_log(print_r($priorityDetails)."-----".print_r($projectDetails)."--".print_r($workFlowDetails)."--".print_r($tinyUserDetails));
-           // error_log(print_r($ticketDetails));
-           // return $ticketDetails;
+           // $ticketDetails["Fields"]="";
+            $projectObj = new Projects();
+            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
+
+             $ticketDetails["Project"] = $projectDetails;
+
+            return $ticketDetails;
         } catch (Exception $ex) {
 Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
