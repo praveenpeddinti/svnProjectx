@@ -70,10 +70,13 @@ class TicketCollection extends ActiveRecord
      * @param type $projectId
      * @return type
      */
-    public static function getTicketDetails($ticketId,$projectId){
+    public static function getTicketDetails($ticketId,$projectId,$selectFields=[]){
       try{
             $query = new Query();
-           //$query->select(['name', 'status'])
+            if(count($selectFields)>0){
+                $query->select($selectFields) ;
+            }
+          
             $query->from('TicketCollection')
             ->where(['TicketId' => $ticketId, "ProjectId" => $projectId ]);
            $ticketDetails = $query->one();
