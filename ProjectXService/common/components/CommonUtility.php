@@ -124,7 +124,7 @@ class CommonUtility {
            // error_log(print_r($ticketDetails));
            // return $ticketDetails;
         } catch (Exception $ex) {
-Yii::log("StoryService:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
   
