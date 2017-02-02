@@ -38,7 +38,7 @@ class CommonUtility {
      * @param type $projectId
      * @return type
      */
-    public static function prepareTicketDetails($ticketId,$projectId){
+    public static function prepareTicketDetails($ticketId,$projectId,$flag = "part"){
         try{
              $ticketCollectionModel = new TicketCollection();
             $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId);
@@ -117,7 +117,11 @@ class CommonUtility {
             $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
             
-            $selectFields = ['Title', 'TicketId'];
+            $selectFields = [];
+            if($flag == "part"){
+               $selectFields = ['Title', 'TicketId'];
+
+            }
             foreach ($ticketDetails["Tasks"] as &$task) {
                  $taskDetails = $ticketCollectionModel->getTicketDetails($task,$projectId,$selectFields);
                  $task = $taskDetails;
