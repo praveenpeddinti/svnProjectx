@@ -116,6 +116,17 @@ class CommonUtility {
             $projectObj = new Projects();
             $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
+            
+            $selectFields = ['Title', 'TicketId'];
+            foreach ($ticketDetails["Tasks"] as &$task) {
+                 $taskDetails = $ticketCollectionModel->getTicketDetails($task,$projectId,$selectFields);
+                 $task = $taskDetails;
+            }
+            
+            
+            unset( $ticketDetails["CreatedOn"]);
+            unset($ticketDetails["UpdatedOn"]);
+          
 
             return $ticketDetails;
         } catch (Exception $ex) {
