@@ -32,6 +32,12 @@ class CommonUtility {
         }
         return $object;
     }
+    /**
+     * @author Moin Hussain
+     * @param type $ticketId
+     * @param type $projectId
+     * @return type
+     */
     public static function prepareTicketDetails($ticketId,$projectId){
         try{
              $ticketCollectionModel = new TicketCollection();
@@ -46,7 +52,6 @@ class CommonUtility {
             $workFlowModel = new WorkFlowFields();
             $ticketTypeModel = new TicketType();
             foreach ($ticketDetails["Fields"] as &$value) {
-              //  echo $value["Id"]."---".$value["value"]."\n";
                if(isset($value["custom_field_id"] )){
                 $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
                  if($storyFieldDetails["Name"] == "List"){
@@ -110,8 +115,7 @@ class CommonUtility {
            // $ticketDetails["Fields"]="";
             $projectObj = new Projects();
             $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
-
-             $ticketDetails["Project"] = $projectDetails;
+            $ticketDetails["Project"] = $projectDetails;
 
             return $ticketDetails;
         } catch (Exception $ex) {
