@@ -112,7 +112,7 @@ class CommonUtility {
             }
           // return $ticketDetails["Fields"];
             
-            $ticketDetails["Fields"]="";
+           // $ticketDetails["Fields"]="";
             $projectObj = new Projects();
             $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
