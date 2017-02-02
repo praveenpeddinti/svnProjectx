@@ -112,7 +112,7 @@ class CommonUtility {
             }
           // return $ticketDetails["Fields"];
             
-           // $ticketDetails["Fields"]="";
+            $ticketDetails["Fields"]="";
             $projectObj = new Projects();
             $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
@@ -121,6 +121,10 @@ class CommonUtility {
             foreach ($ticketDetails["Tasks"] as &$task) {
                  $taskDetails = $ticketCollectionModel->getTicketDetails($task,$projectId,$selectFields);
                  $task = $taskDetails;
+            }
+            foreach ($ticketDetails["RelatedStories"] as &$relatedStory) {
+                 $relatedStoryDetails = $ticketCollectionModel->getTicketDetails($relatedStory,$projectId,$selectFields);
+                 $relatedStory = $relatedStoryDetails;
             }
             
             
