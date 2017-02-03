@@ -28,31 +28,6 @@ class TinyUserCollection extends ActiveRecord
     public function attributes() {
 //        parent::attributes();
         return [
-            
- "TicketId",
-"ProjectId",
-"CreatedOn",
-"UpdateOn",
-"ReportedBy",
-"PlanLevel",
-"Title",
-"Description",
-"Status",
-"AssignedTo",
-"Priority",
-"Bucket",
-"GivenEstimate",
-"TotalEstimate",
-"DueDate",
-"TicketType",
-"TaskId",
-"ParentStoryId",
-"RelatedStoriesId",
-"Followers",
-"CommentsId",
-"ArtifactsId",
-"TotalTimeLog"
-
 
         ];
     }
