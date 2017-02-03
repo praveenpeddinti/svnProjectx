@@ -1,0 +1,83 @@
+<form #storyForm="ngForm" (ngSubmit)="submitted && saveStory() " novalidate="true">
+    <div class="panel-body">
+        <div class="row" *ngFor="let value of storyFormData; let i = index;">
+            <div *ngIf="value.type == 1">
+                <div class="input-field col s12">
+                    <label for="email">{{value.lable}}</label>
+                    <input [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" [readonly]="(value.readOnly == 1) ? true : null"
+                        type="text" class="form-control" name="name_{{value.model}}" >
+                </div>
+                <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
+                    <div [hidden]="!name_value.model.errors.required">
+                        {{value.lable}} is required
+                    </div>
+                </div>-->
+            </div>
+
+             <div *ngIf="value.type == 5">
+                <div class="input-field col s12">
+                    <label for="email">{{value.lable}}</label>
+                    <input [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" [readonly]="(value.readOnly == 1) ? true : null"
+                        type="text" class="form-control" name="name_{{value.model}}" >
+                </div>
+                <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
+                    <div [hidden]="!name_value.model.errors.required">
+                        {{value.lable}} is required
+                    </div>
+                </div>-->
+            </div>
+            <div *ngIf="value.type == 2 ">
+                <div class="input-field col s12">
+                    <label for="email">{{value.lable}}</label>
+                    <select [(ngModel)]="form[value.model]"  [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
+                       >
+                     <option *ngFor="let v of value.values"[value]="v.Id" >{{v.Name}}</option>
+                </select>
+                </div>
+                <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
+                    <div [hidden]="!name_value.model.errors.required">
+                        {{value.lable}} is required
+                    </div>
+                </div>-->
+            </div>
+            <div *ngIf=" value.type == 6 ">
+                <div class="input-field col s12">
+                    <label for="email">{{value.lable}}</label>
+                    <select [(ngModel)]="form[value.model]" [disabled]="value.model== 'ReportedBy'" [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
+                       >
+                     <option *ngFor="let v of value.values" [value]="v.Id" >{{v.Email}}</option>
+                </select>
+                </div>
+                <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
+                    <div [hidden]="!name_value.model.errors.required">
+                        {{value.lable}} is required
+                    </div>
+                </div>-->
+            </div>
+            <div *ngIf=" value.type == 8 ">
+                <div class="input-field col s12">
+                    <label for="email">{{value.lable}}</label>
+                    <select [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
+                        >
+                     <option>1</option>
+                      <option>2</option>
+                </select>
+                </div>
+                <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
+                    <div [hidden]="!name_value.model.errors.required">
+                        {{value.lable}} is required
+                    </div>
+                </div>-->
+            </div>
+            <div *ngIf="value.type == 4">
+                <div class="input-field col s12">
+                    <label for="email">{{value.lable}}</label>
+                    <ng2-datepicker [(ngModel)]="form[value.model]" name="name_{{value.model}}" ></ng2-datepicker>
+                </div>
+
+            </div>
+        </div>
+        <button type="submit" (click)="submitted = true;" class="btn btn-default">Submit</button>
+    </div>
+</form>
+{{form | json}}
