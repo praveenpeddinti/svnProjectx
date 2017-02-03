@@ -82,4 +82,11 @@ class LoginForm extends Model
 
         return $this->_user;
     }
+    
+     protected function getCollaborators()
+    {
+        $collaborators= array();
+        $collaborators = User::getCollabrators();
+        return $collaborators;
+    }
 }
