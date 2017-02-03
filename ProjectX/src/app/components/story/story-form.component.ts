@@ -30,13 +30,13 @@ export class StoryComponent {
                     }else if(element.Type == 6){
                         DefaultValue=response.data.collaborators;
                     }else if(element.Type == 2){
-                       if(item=='Priority'){
+                       if(item=='priority'){
                              DefaultValue=response.data.priority;
-                        }else if(item=='PlanLevel'){
+                        }else if(item=='planlevel'){
                             DefaultValue=response.data.plane_level;
-                        }else if(item=='Type'){
+                        }else if(item=='tickettype'){
                            DefaultValue=response.data.ticket_type;
-                        }else if(item=='Status'){
+                        }else if(item=='status'){
                            DefaultValue=response.data.status;
                         }
                     } 
