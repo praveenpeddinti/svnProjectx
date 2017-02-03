@@ -9,7 +9,7 @@ import { LoginService } from '../../services/login.service';
 })
 
 export class HomeComponent {
-
+    public users=['anand@techo2.com','jagadish@techo2.com','moin@techo2.com','madan@techo2.com','rahul@techo2.com','kishore@techo2.com']
     constructor(
         private _service: LoginService) { }
 
