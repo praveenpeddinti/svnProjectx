@@ -18,7 +18,7 @@ class StoryService {
         public function getTicketDetails($ticketId, $projectId) {
         try {
          $details =  CommonUtility::prepareTicketDetails($ticketId, $projectId);
-         print_r($details);
+         return $details;
         } catch (Exception $ex) {
             Yii::log("StoryService:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
