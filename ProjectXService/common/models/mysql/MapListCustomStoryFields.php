@@ -39,7 +39,7 @@ class MapListCustomStoryFields extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
         } catch (Exception $ex) {
-     Yii::log("StoryFields:getBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+     Yii::log("MapListCustomStoryFields:getListValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
     }
