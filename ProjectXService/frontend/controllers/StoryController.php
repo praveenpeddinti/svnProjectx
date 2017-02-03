@@ -17,6 +17,8 @@ use frontend\models\ContactForm;
 use common\components\CommonUtility;
 use common\models\bean\ResponseBean;
 use common\components\ServiceFactory;
+use common\models\User;
+
 /**
  * Story Controller
  */
@@ -70,6 +72,61 @@ class StoryController extends Controller
      Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    /**
+     * Get StoryFields from sql table .
+     *
+     * @author Anand Singh
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionStoryFields(){
+        try{
+        $status=json_decode('"status":[{"Id":"1","Name":"New"},{"Id":"2","Name":"Accepted"},{"Id":"3","Name":"Specification"}]');
+        $post_data = json_decode(file_get_contents("php://input"));
+        $responseBean = new ResponseBean;
+        $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFields(1);
+        $response_data['plane_level'] = ServiceFactory::getStoryServiceInstance()->getPlanLevel();
+        $response_data['priority'] = ServiceFactory::getStoryServiceInstance()->getPriority();
+        $response_data['ticket_type'] = ServiceFactory::getStoryServiceInstance()->getTicketType();
+        $response_data['collaborators'] = User::getCollabrators();
+        $response_data['status'] = $status;
+        if(sizeof($response_data)!=0){
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = "success";
+        $responseBean->data = $response_data;   
+        }else{
+        $responseBean->statusCode = ResponseBean::FAILURE;
+        $responseBean->message = "fail";
+        $responseBean->data = $response_data; 
+        }
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;   
+        } catch (Exception $ex) {
+         Yii::log("SiteController:actionStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+  public function actionSaveStory(){
+        try{
+        $post_data = json_decode(file_get_contents("php://input"));
+        $responseBean=new ResponseBean();
+        $response_data=$post_data;
+        if(sizeof($response_data)!=0){
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = "success";
+        $responseBean->data = $response_data;   
+        }else{
+        $responseBean->statusCode = ResponseBean::FAILURE;
+        $responseBean->message = "fail";
+        $responseBean->data = $response_data; 
+        }
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;   
+        } catch (Exception $ex) {
+         Yii::log("SiteController:actionSaveStory::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }  
     
 }
 ?>

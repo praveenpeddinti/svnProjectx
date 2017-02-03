@@ -16,6 +16,8 @@ use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use common\components\CommonUtility;
 use common\models\bean\ResponseBean;
+use common\models\User;
+use \common\models\mongo\TinyUserCollection;
 /**
  * Site controller
  */
@@ -254,5 +256,42 @@ error_log("@@@---**".print_r($_SERVER,1));
             'model' => $model,
         ]);
     }
+    /**
+     * Get Collaborators from sql table and insert into mongo document.
+     *
+     * @author Anand Singh
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionCollaborators(){
+          try{
+        $collaborators = User::getCollabrators();
+        $response=  TinyUserCollection::createUsers($collaborators);
+        $responseBean = new ResponseBean;
+        $responseBean->status = ResponseBean::SUCCESS;
+        $responseBean->message = "success";
+        $responseBean->data = $collaborators;
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;   
+        } catch (Exception $ex) {
+         Yii::log("SiteController:actionCollaborators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    public function actionInsertCollaborators(){
+          try{
+        $collaborators = User::insertCollabrators(10000);
+        $responseBean = new ResponseBean;
+        $responseBean->status = ResponseBean::SUCCESS;
+        $responseBean->message = "success";
+        $responseBean->data = $collaborators;
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;   
+        } catch (Exception $ex) {
+         Yii::log("SiteController:actionCollaborators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    
 }
 ?>
