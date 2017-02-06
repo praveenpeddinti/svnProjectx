@@ -44,6 +44,23 @@ class Bucket extends ActiveRecord
        
     }
     
+    /**
+     * @author Moin Hussain
+     * @param type $projectId
+     * @return type
+     */
+    public static function getBucketsList($projectId)
+    {
+        try{
+        $query = "select Id,Name from Bucket where ProjectId=".$projectId;
+        $data = Yii::$app->db->createCommand($query)->queryAll();
+        return $data;  
+        } catch (Exception $ex) {
+     Yii::log("Bucket:getBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+    }
+    
 }
 
 

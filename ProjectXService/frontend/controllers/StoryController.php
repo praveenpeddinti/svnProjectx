@@ -74,6 +74,25 @@ class StoryController extends Controller
         }
     }
     
+    /**
+    * @author Moin Hussain
+    * @description This method is used to get data for edit mode.
+    * @return type
+    */
+    public function actionEditTicket(){
+        try{
+        $data = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails(101,1);
+        $responseBean = new ResponseBean();
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data = $data;
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;
+        } catch (Exception $ex) {
+     Yii::log("StoryController:actionEditTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
 
     /**
      * 
@@ -107,6 +126,10 @@ class StoryController extends Controller
         foreach ($response_data['story_fields'] as &$storyField){
            $fieldType = $storyField["Type"];
             $fieldName= $storyField["Field_Name"];
+          if($fieldName == "bucket"){
+              
+              $storyField["data"] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
+           }
            if($fieldName == "priority"){
               
               $storyField["data"] = ServiceFactory::getStoryServiceInstance()->getPriorityList();

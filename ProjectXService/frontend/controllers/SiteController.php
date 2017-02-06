@@ -125,14 +125,12 @@ class SiteController extends Controller
     
     public function actionLogin()
     {
-        foreach ($_SERVER as $name => $value) {
-   // error_log($name."----".$value,"---");
-}
-error_log("@@@---**".print_r($_SERVER,1));
+        error_log("actionLogin------");
         $user_data = json_decode(file_get_contents("php://input"));
-      //  error_log("request aprams------------)))".print_r($_SERVER,1)."---".print_r($user_data,1));
+       error_log("request aprams-----------".print_r($user_data,1));
         $model = new LoginForm();
         $userData = $model->loginAjax($user_data->username);
+        error_log("use dat---".print_r($userData,1));
         $responseBean = new ResponseBean;
         $responseBean->status = ResponseBean::SUCCESS;
         $responseBean->message = "success";

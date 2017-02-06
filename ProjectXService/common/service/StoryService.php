@@ -8,6 +8,7 @@ use common\models\mysql\StoryFields;
 use common\models\mysql\Priority;
 use common\models\mysql\PlanLevel;
 use common\models\mysql\TicketType;
+use common\models\mysql\Bucket;
 use Yii;
 
 /*
@@ -30,6 +31,21 @@ class StoryService {
          return $details;
         } catch (Exception $ex) {
             Yii::log("StoryService:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+      }
+     /**
+     * @author Moin Hussain
+     * @param type $ticketId
+     * @param type $projectId
+     * @return type
+     */
+       public function getTicketEditDetails($ticketId, $projectId) {
+        try {
+         $editDetails =  CommonUtility::prepareTicketEditDetails($ticketId, $projectId);
+         return $editDetails;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getTicketEditDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
       } 
@@ -113,11 +129,26 @@ class StoryService {
             Yii::log("StoryService:getTicketType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
+    /**
+     * @author Moin Hussain
+     * @return type
+     */
     public function getStoryWorkFlowList(){
         try{
            $workFlowModel = new WorkFlowFields();
            return $workFlowModel->getStoryWorkFlowList();
+        } catch (Exception $ex) {
+Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
+     * @author Moin Hussain
+     * @return type
+     */
+      public function getBucketsList($projectId){
+        try{
+           $bucketModel = new Bucket();
+           return $bucketModel->getBucketsList($projectId);
         } catch (Exception $ex) {
 Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }

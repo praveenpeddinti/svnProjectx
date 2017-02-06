@@ -47,7 +47,7 @@ Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex-
     
       public  function getStoryWorkFlowList(){
         try{
-        $query = "select Id,Name from WorkFlowFields";
+        $query = "select Id,Name,Status from WorkFlowFields";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;   
         } catch (Exception $ex) {
