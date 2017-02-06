@@ -16,6 +16,7 @@ class CollaboratorService {
 
     /**
      * @author Moin Hussain
+     * @description This method to get the collaborators of a project.
      * @param type $ticketId
      * @param type $projectId
      * @return type

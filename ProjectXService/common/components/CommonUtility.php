@@ -33,6 +33,7 @@ class CommonUtility {
         return $object;
     }
     /**
+     * @descritption This method is to prepare ticket details
      * @author Moin Hussain
      * @param type $ticketId
      * @param type $projectId
