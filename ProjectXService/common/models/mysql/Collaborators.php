@@ -27,7 +27,7 @@ class Collaborators extends ActiveRecord
         ];
     }
     
-    public static function findByUsername($username)
+    public function findByUsername($username)
     {
         $qry = "select * from Collaborators where Email='".$username."'";
         error_log($qry);
