@@ -57,6 +57,7 @@ class StoryController extends Controller
     }
    /**
     * @author Moin Hussain
+    * @description This method to get a ticket details.
     * @return type
     */
     public function actionGetTicketDetails(){
