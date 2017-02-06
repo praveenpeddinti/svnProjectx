@@ -3,7 +3,7 @@ namespace common\models;
 
 use Yii;
 use yii\base\Model;
-
+use common\models\mysql\Collaborators;
 /**
  * Login form
  */
@@ -54,9 +54,8 @@ class LoginForm extends Model
      * @return bool whether the user is logged in successfully
      */
     public function loginAjax($username){
-        $userData = User::findByUsername($username);
-        
-       // error_log("++++++++loginAjax++++++++++".print_r($userData,1));
+        $collaboratorModel = new Collaborators();
+        $userData = $collaboratorModel->findByUsername($username);
         return $userData;
     }
     
