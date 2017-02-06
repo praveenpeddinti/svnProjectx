@@ -44,6 +44,19 @@ Yii::log("TicketType:getTicketType::" . $ex->getMessage() . "--" . $ex->getTrace
         
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
+     /**
+     * @author Anand Singh
+     * @return type
+     */
+    public  function getTicketTypeList() {
+        try {
+            $qry = "select * from TicketType";
+            $data = Yii::$app->db->createCommand($qry)->queryAll();
+            return $data;
+        } catch (Exception $exc) {
+            Yii::log("StoryService:getTicketTypeList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     
 }
 

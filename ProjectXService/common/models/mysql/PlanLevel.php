@@ -42,6 +42,19 @@ class PlanLevel extends ActiveRecord
          }
        
     }
+      /**
+     * @author Anand Singh
+     * @return type
+     */
+    public  function getPlanLevelList() {
+        try {
+            $qry = "select * from PlanLevel";
+            $data = Yii::$app->db->createCommand($qry)->queryAll();
+            return $data;
+        } catch (Exception $exc) {
+            Yii::log("PlanLevel:getPlanLevel::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     
 }
 

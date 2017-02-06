@@ -4,7 +4,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-namespace common\models;
+namespace common\models\mysql;
 
 use Yii;
 use yii\base\NotSupportedException;
@@ -12,12 +12,12 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
-class User extends ActiveRecord 
+class Collaborators extends ActiveRecord 
 {
     
     public static function tableName()
     {
-        return '{{%User}}';
+        return '{{%Collaborators}}';
     }
     
     public function behaviors()
@@ -35,13 +35,21 @@ class User extends ActiveRecord
         return $data;
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
-    
-    public static function getCollabrators()
+    /**
+     * @author Moin Hussain
+     * @param type $projectId
+     * @return type
+     */
+    public  function getProjectTeam($projectId)
     {
-        $qry = "select * from Collaborators";
-        $data = Yii::$app->db->createCommand($qry)->queryAll();
-        return $data;
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        try{
+         $qry = "select C.Id,C.UserName,C.Email from ProjectTeam PT join Collaborators C on PT.CollaboratorId = C.Id where PT.ProjectId = $projectId";
+         $data = Yii::$app->db->createCommand($qry)->queryAll();
+         return $data;    
+        } catch (Exception $ex) {
+Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
     }
     public static function insertCollabrators($noofrecords)
     {   

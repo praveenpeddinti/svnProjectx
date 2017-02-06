@@ -44,6 +44,20 @@ class StoryFields extends ActiveRecord
         }
        
     }
+    /**
+     * @author Anand Singh
+     * @param type $projectId
+     * @return type
+     */
+     public function getStoryFieldList() {
+        try {
+            $qry = "select * from StoryFields";
+            $data = Yii::$app->db->createCommand($qry)->queryAll();
+            return $data;
+        } catch (Exception $exc) {
+            Yii::log("StoryFields:getStoryFieldList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     
 }
 

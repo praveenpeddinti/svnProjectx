@@ -42,6 +42,19 @@ class Priority extends ActiveRecord
          }
        
     }
+     /**
+     * @author Anand Singh
+     * @return type
+     */
+    public function getPriorityList() {
+        try {
+            $qry = "select * from Priority";
+            $data = Yii::$app->db->createCommand($qry)->queryAll();
+            return $data;
+        } catch (Exception $exc) {
+            Yii::log("Priority:getPriorityList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     
 }
 

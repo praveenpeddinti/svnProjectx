@@ -1,8 +1,13 @@
 <?php
-namespace frontend\service;
+namespace common\service;
 use common\models\mongo\TicketCollection;
+use common\models\mongo\TinyUserCollection;
 use common\components\CommonUtility;
 use common\models\mysql\WorkFlowFields;
+use common\models\mysql\StoryFields;
+use common\models\mysql\Priority;
+use common\models\mysql\PlanLevel;
+use common\models\mysql\TicketType;
 use Yii;
 
 /*
@@ -21,17 +26,6 @@ class StoryService {
      */
     public function getTicketDetails($ticketId, $projectId) {
         try {
-            $model = new TicketCollection();
-            $ticketDetails = $model->getTicketDetails($ticketId, $projectId);
-
-            $tinyUser = new TinyUserCollection();
-            $assignedToDetails = $tinyUser->getMiniUserDetails($ticketDetails["AssignedTo"]);
-            $reportedByDetails = $tinyUser->getMiniUserDetails($ticketDetails["ReportedBy"]);
-
-            $bucketObject = new Bucket();
-            $bucketName = $bucketObject->getBucketName($ticketDetails["Bucket"], $ticketDetails["ProjectId"]);
-            $ticketTypeObject = new TicketType();
-            $ticketTypeDetails = $ticketTypeObject->getTicketType($ticketDetails["TicketType"]);
          $details =  CommonUtility::prepareTicketDetails($ticketId, $projectId);
          return $details;
         } catch (Exception $ex) {
@@ -72,39 +66,36 @@ class StoryService {
      * @param type $projectId
      * @return type
      */
-    public static function getStoryFields($projectId) {
+    public function getStoryFieldList() {
         try {
-            $qry = "select * from StoryFields";
-            $data = Yii::$app->db->createCommand($qry)->queryAll();
-            return $data;
+           $storyFieldModel = new StoryFields();
+           return $storyFieldModel->getStoryFieldList();
         } catch (Exception $exc) {
             Yii::log("StoryService:getStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
-    /**
-     * @author Anand Singh
-     * @return type
-     */
-    public static function getPriority() {
-        try {
-            $qry = "select * from Priority";
-            $data = Yii::$app->db->createCommand($qry)->queryAll();
-            return $data;
-        } catch (Exception $exc) {
-            Yii::log("StoryService:getPriority::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        /**
+         * @author Anand Singh
+         * @return type
+         */
+        public function getPriorityList() {
+            try {
+               $priorityModel = new Priority();
+           return $priorityModel->getPriorityList();
+            } catch (Exception $exc) {
+                Yii::log("StoryService:getPriority::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            }
         }
-    }
 
     /**
      * @author Anand Singh
      * @return type
      */
-    public static function getPlanLevel() {
+    public  function getPlanLevelList() {
         try {
-            $qry = "select * from PlanLevel";
-            $data = Yii::$app->db->createCommand($qry)->queryAll();
-            return $data;
+           $planlevelModel = new PlanLevel();
+           return $planlevelModel->getPlanLevelList();
         } catch (Exception $exc) {
             Yii::log("StoryService:getPlanLevel::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -114,20 +105,19 @@ class StoryService {
      * @author Anand Singh
      * @return type
      */
-    public static function getTicketType() {
+    public  function getTicketTypeList() {
         try {
-            $qry = "select * from TicketType";
-            $data = Yii::$app->db->createCommand($qry)->queryAll();
-            return $data;
+            $ticketTypeModel = new TicketType();
+            return $ticketTypeModel->getTicketTypeList();
         } catch (Exception $exc) {
             Yii::log("StoryService:getTicketType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     
-    public function getStoryWorkFlow(){
+    public function getStoryWorkFlowList(){
         try{
            $workFlowModel = new WorkFlowFields();
-           return $workFlowModel->getStoryWorkFlow();
+           return $workFlowModel->getStoryWorkFlowList();
         } catch (Exception $ex) {
 Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }

@@ -45,13 +45,13 @@ Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex-
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
-      public  function getStoryWorkFlow(){
+      public  function getStoryWorkFlowList(){
         try{
         $query = "select Id,Name from WorkFlowFields";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;   
         } catch (Exception $ex) {
-Yii::log("WorkFlowFields:getStoryWorkFlow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+Yii::log("WorkFlowFields:getStoryWorkFlowList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
         }
        
