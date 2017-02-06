@@ -33,6 +33,62 @@ class CommonUtility {
         return $object;
     }
     /**
+     * @author Moin Hussain
+     * @param type $sec
+     * @param type $to_tz
+     * @param type $from_tz
+     * @param type $type
+     * @return type
+     */
+     static function convert_time_zone($sec, $to_tz, $from_tz = "", $type = "") {
+        try {
+            $date_time = date("Y-m-d H:i:s", $sec);
+            if ($from_tz == "" || $from_tz == "undefined") {
+                $from_tz = date_default_timezone_get();
+            }
+            if ($to_tz == "" || $to_tz == "undefined") {
+                $to_tz = date_default_timezone_get();
+            }
+            $time_object = new \DateTime($date_time, new \DateTimeZone($from_tz));
+            $time_object->setTimezone(new \DateTimeZone($to_tz));
+            if ($type == "sec") {
+                return strtotime($time_object->format('m-d-Y H:i:s'));
+            } else {
+                return $time_object->format('d-m-Y H:i:s');
+            }
+        } catch (Exception $ex) {
+            Yii::log("CommonUtility:convert_time_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
+     * @author Moin Hussain
+     * @param type $sec
+     * @param type $to_tz
+     * @param type $from_tz
+     * @param type $type
+     * @return type
+     */
+      static function convert_date_zone($sec, $to_tz, $from_tz = "", $type = "") {
+        try {
+            $date_time = date("Y-m-d H:i:s", $sec);
+            if ($from_tz == "" || $from_tz == "undefined") {
+                $from_tz = date_default_timezone_get();
+            }
+            if ($to_tz == "" || $to_tz == "undefined") {
+                $to_tz = date_default_timezone_get();
+            }
+            $time_object = new \DateTime($date_time, new \DateTimeZone($from_tz));
+            $time_object->setTimezone(new \DateTimeZone($to_tz));
+           if ($type == "sec") {
+                return strtotime($time_object->format('Y-m-d H:i:s'));
+            } else {
+                return $time_object->format('d-m-Y');
+            }
+        } catch (Exception $ex) {
+            Yii::log("CommonUtility:convert_date_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
      * @description This method is to prepare ticket details
      * @author Moin Hussain
      * @param type $ticketId

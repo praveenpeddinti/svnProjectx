@@ -45,13 +45,12 @@ class StoryFields extends ActiveRecord
        
     }
     /**
-     * @author Anand Singh
-     * @param type $projectId
+     * @author Moin Hussain
      * @return type
      */
      public function getStoryFieldList() {
         try {
-            $qry = "select * from StoryFields";
+            $qry = "select * from StoryFields sf join FieldTypes ft on sf.Type=ft.Id";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
         } catch (Exception $exc) {
