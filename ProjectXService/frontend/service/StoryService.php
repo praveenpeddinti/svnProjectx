@@ -2,6 +2,7 @@
 namespace frontend\service;
 use common\models\mongo\TicketCollection;
 use common\components\CommonUtility;
+use common\models\mysql\WorkFlowFields;
 use Yii;
 
 /*
@@ -122,7 +123,24 @@ class StoryService {
             Yii::log("StoryService:getTicketType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    public function getStoryWorkFlow(){
+        try{
+           $workFlowModel = new WorkFlowFields();
+           return $workFlowModel->getStoryWorkFlow();
+        } catch (Exception $ex) {
+Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
+       public function saveTicketDetails() {
+        try {
+        
+        } catch (Exception $ex) {
+            Yii::log("StoryService:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+      } 
 }
 
   

@@ -73,60 +73,70 @@ class StoryController extends Controller
         }
     }
     
+
     /**
-     * Get StoryFields from sql table .
+     * 
+     * @return string
+     */
+    public function saveTicketDetails(){
+        try{
+             $post_data = json_decode(file_get_contents("php://input"));
+            error_log("saveTicketDetails-----------") ;
+           $data = ServiceFactory::getStoryServiceInstance()->saveTicketDetails();
+           return "success";
+        } catch (Exception $ex) {
+        Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+
+    /**
+     * Get New StoryTemplate from sql table .
      *
+     * @modified Moin Hussain
      * @author Anand Singh
      * @return mixed
      * @throws BadRequestHttpException
      */
-    public function actionStoryFields(){
+    public function actionNewStoryTemplate(){
         try{
-        $status=json_decode('"status":[{"Id":"1","Name":"New"},{"Id":"2","Name":"Accepted"},{"Id":"3","Name":"Specification"}]');
         $post_data = json_decode(file_get_contents("php://input"));
-        $responseBean = new ResponseBean;
         $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFields(1);
-        $response_data['plane_level'] = ServiceFactory::getStoryServiceInstance()->getPlanLevel();
-        $response_data['priority'] = ServiceFactory::getStoryServiceInstance()->getPriority();
-        $response_data['ticket_type'] = ServiceFactory::getStoryServiceInstance()->getTicketType();
-        $response_data['collaborators'] = User::getCollabrators();
-        $response_data['status'] = $status;
-        if(sizeof($response_data)!=0){
-        $responseBean->statusCode = ResponseBean::SUCCESS;
-        $responseBean->message = "success";
-        $responseBean->data = $response_data;   
-        }else{
-        $responseBean->statusCode = ResponseBean::FAILURE;
-        $responseBean->message = "fail";
-        $responseBean->data = $response_data; 
+        
+        foreach ($response_data['story_fields'] as &$storyField){
+           $fieldType = $storyField["Type"];
+            $fieldName= $storyField["Field_Name"];
+           if($fieldName == "priority"){
+              
+              $storyField["data"] = ServiceFactory::getStoryServiceInstance()->getPriority();
+           }
+           if($fieldName == "planlevel"){
+                
+             $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getPlanLevel();
+           }
+           if($fieldName == "workflow"){
+                $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlow();
+            }
+           if($fieldName == "tickettype"){
+                   
+             $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getTicketType();
+           }
+            
         }
+        $response_data['collaborators'] = User::getCollabrators("Id,UserName,Email");
+
+        $responseBean = new ResponseBean;
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data =$response_data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;   
+       
         } catch (Exception $ex) {
          Yii::log("SiteController:actionStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
-  public function actionSaveStory(){
-        try{
-        $post_data = json_decode(file_get_contents("php://input"));
-        $responseBean=new ResponseBean();
-        $response_data=$post_data;
-        if(sizeof($response_data)!=0){
-        $responseBean->statusCode = ResponseBean::SUCCESS;
-        $responseBean->message = "success";
-        $responseBean->data = $response_data;   
-        }else{
-        $responseBean->statusCode = ResponseBean::FAILURE;
-        $responseBean->message = "fail";
-        $responseBean->data = $response_data; 
-        }
-        $response = CommonUtility::prepareResponse($responseBean,"json");
-        return $response;   
-        } catch (Exception $ex) {
-         Yii::log("SiteController:actionSaveStory::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
-    }  
-    
+ 
+
 }
 ?>

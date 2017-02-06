@@ -66,6 +66,7 @@ class CommonUtility {
                  $storyFieldDetails = $storyFieldsModel->getFieldDetails($value["Id"]);
    
                }
+                $value["position"] = $storyFieldDetails["Position"];
                 $value["title"] = $storyFieldDetails["Title"];
                 $value["required"] = $storyFieldDetails["Required"];
                 $value["readonly"] = $storyFieldDetails["ReadOnly"];
@@ -110,7 +111,12 @@ class CommonUtility {
                 
                 
             }
-          // return $ticketDetails["Fields"];
+            usort($ticketDetails["Fields"], function($a, $b)
+            {
+               // echo $a["position"]."\n";
+                return $a["position"] >= $b["position"];
+            });
+         //  return $ticketDetails["Fields"];
             
            // $ticketDetails["Fields"]="";
             $projectObj = new Projects();
