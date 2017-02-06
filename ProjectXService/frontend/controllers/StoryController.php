@@ -92,8 +92,7 @@ class StoryController extends Controller
     
 
     /**
-     * Get New StoryTemplate from sql table .
-     *
+     * @description This method to get a template for story creation
      * @modified Moin Hussain
      * @author Anand Singh
      * @return mixed
