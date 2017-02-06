@@ -101,29 +101,30 @@ class StoryController extends Controller
     public function actionNewStoryTemplate(){
         try{
         $post_data = json_decode(file_get_contents("php://input"));
-        $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFields(1);
+        $projectId = 1;
+        $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldList();
         
         foreach ($response_data['story_fields'] as &$storyField){
            $fieldType = $storyField["Type"];
             $fieldName= $storyField["Field_Name"];
            if($fieldName == "priority"){
               
-              $storyField["data"] = ServiceFactory::getStoryServiceInstance()->getPriority();
+              $storyField["data"] = ServiceFactory::getStoryServiceInstance()->getPriorityList();
            }
            if($fieldName == "planlevel"){
                 
-             $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getPlanLevel();
+             $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
            }
            if($fieldName == "workflow"){
-                $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlow();
+                $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList();
             }
            if($fieldName == "tickettype"){
                    
-             $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getTicketType();
+             $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();
            }
             
         }
-        $response_data['collaborators'] = User::getCollabrators("Id,UserName,Email");
+        $response_data['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($projectId);
 
         $responseBean = new ResponseBean;
         $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -133,7 +134,7 @@ class StoryController extends Controller
         return $response;   
        
         } catch (Exception $ex) {
-         Yii::log("SiteController:actionStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+         Yii::log("StoryController:actionNewStoryTemplate::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
  
