@@ -121,7 +121,7 @@ class StoryController extends Controller
         try{
         $post_data = json_decode(file_get_contents("php://input"));
         $projectId = 1;
-        $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldList();
+        $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getNewTicketStoryFields();
         
         foreach ($response_data['story_fields'] as &$storyField){
            $fieldType = $storyField["Type"];
@@ -130,24 +130,31 @@ class StoryController extends Controller
               
               $storyField["data"] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
            }
-           if($fieldName == "priority"){
+          else if($fieldName == "priority"){
               
               $storyField["data"] = ServiceFactory::getStoryServiceInstance()->getPriorityList();
            }
-           if($fieldName == "planlevel"){
+          else if($fieldName == "planlevel"){
                 
              $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
            }
-           if($fieldName == "workflow"){
+          else if($fieldName == "workflow"){
                 $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList();
             }
-           if($fieldName == "tickettype"){
+          else if($fieldName == "tickettype"){
                    
              $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();
            }
+          else if($fieldType == 4){
+             $storyField['DefaultValue'] = CommonUtility::convert_date_zone(strtotime(date("m-d-Y H:i:s")), "Asia/Kolkata");
+           }
+          else if($fieldType == 5){
+             $storyField['DefaultValue'] = CommonUtility::convert_time_zone(strtotime(date("m-d-Y H:i:s")), "Asia/Kolkata");
+           }
+            $storyField["Field_Type"] =  $storyField["Name"];
             
         }
-        $response_data['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($projectId);
+       // $response_data['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($projectId);
 
         $responseBean = new ResponseBean;
         $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -158,6 +165,32 @@ class StoryController extends Controller
        
         } catch (Exception $ex) {
          Yii::log("StoryController:actionNewStoryTemplate::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+     public function actionStoryFields(){
+        try{
+        $status=json_decode('"status":[{"Id":"1","Name":"New"},{"Id":"2","Name":"Accepted"},{"Id":"3","Name":"Specification"}]');
+        $post_data = json_decode(file_get_contents("php://input"));
+        $responseBean = new ResponseBean;
+        $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldList();
+        $response_data['plane_level'] = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
+        $response_data['priority'] = ServiceFactory::getStoryServiceInstance()->getPriorityList();
+        $response_data['ticket_type'] = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();
+        $response_data['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam(1);;
+        $response_data['status'] = $status;
+        if(sizeof($response_data)!=0){
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = "success";
+        $responseBean->data = $response_data;   
+        }else{
+        $responseBean->statusCode = ResponseBean::FAILURE;
+        $responseBean->message = "fail";
+        $responseBean->data = $response_data; 
+        }
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;   
+        } catch (Exception $ex) {
+         Yii::log("SiteController:actionStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
  

@@ -78,16 +78,15 @@ class StoryService {
     }
 
     /**
-     * @author Anand Singh
-     * @param type $projectId
+     * @author Moin Hussain
      * @return type
      */
-    public function getStoryFieldList() {
+    public function getNewTicketStoryFields() {
         try {
            $storyFieldModel = new StoryFields();
-           return $storyFieldModel->getStoryFieldList();
+           return $storyFieldModel->getNewTicketStoryFields();
         } catch (Exception $exc) {
-            Yii::log("StoryService:getStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryService:getNewTicketStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
