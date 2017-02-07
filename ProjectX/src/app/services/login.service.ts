@@ -4,10 +4,12 @@ import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../ajax/ajax.service';
 
 import 'rxjs/add/operator/toPromise';
-export class User {
+export class Collaborator {
   constructor(
     public email?: string,
-    public password?: string) { }
+    public password?: string,
+    public rememberme?: boolean,
+    public collabaratorStatus?:boolean) { }
 }
 
 
@@ -17,25 +19,39 @@ export class LoginService {
     private _ajaxService: AjaxService,
     public _router: Router,
     private http: Http) { }
-
+// logout the Collabarator
   logout() {
+     var getAllData= localStorage.getItem("user");
+    // var userObj=JSON.parse(JSON.stringify(getAllData));alert(userObj);
+     this._ajaxService.AjaxSubscribe("site/update-collabarator-status",getAllData,function(result){
+    }) 
     localStorage.removeItem("user");
-    //this._router.navigate(['login']);
+    this._router.navigate(['login']);
+
   }
 
-  public user_data = {
+  public collaboratorObj = {
     'username': '',
     'password': '',
-    'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
+    'rememberme':'',
+    'AccessKey':'sadsadweqwwq',
   }
+
  
+// posting collaboratorObject to UserAuthentication
+  
 login(user,loginCallback) {
-    this.user_data.username=user.email;
-    this.user_data.password=user.password;
-    this._ajaxService.AjaxSubscribe("site/login",this.user_data,(data)=>
+    this.collaboratorObj.username=user.email;
+    this.collaboratorObj.password=user.password;
+    this.collaboratorObj.rememberme=user.rememberme;
+    this.collaboratorObj.AccessKey=user.AccessKey;
+
+    this._ajaxService.AjaxSubscribe("site/user-authentication",this.collaboratorObj,(result)=>
     { 
-         localStorage.setItem("user", this.user_data.username);
-         loginCallback(data);
+      var token=result.data;
+      localStorage.setItem("user",JSON.stringify(token));
+      this.collaboratorObj.AccessKey=token;//alert(this.collaboratorObj.headers);
+      loginCallback(result);
     });
   
 
@@ -59,8 +75,10 @@ login(user,loginCallback) {
 
 
   checkCredentials() {
-    if (localStorage.getItem("user") === null) {
+     if (localStorage.getItem("user") === null) {
        this._router.navigate(['login']);
     }
+    return localStorage.getItem("user");
   }
+
 }

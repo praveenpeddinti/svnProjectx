@@ -1,22 +1,30 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { LoginService } from '../../services/login.service';
+import {AuthGuard} from '../../services/auth-guard.service';
+import { GlobalVariable } from '../../config';
+import { Router,ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'home-view',
-    providers: [LoginService],
+    providers: [LoginService,AuthGuard],
     templateUrl: 'home-component.html'       
     	
 })
 
-export class HomeComponent {
-    public users=['anand@techo2.com','jagadish@techo2.com','moin@techo2.com','madan@techo2.com','rahul@techo2.com','kishore@techo2.com']
-    constructor(
-        private _service: LoginService) { }
+export class HomeComponent{
+    public users=JSON.parse(localStorage.getItem('user'));
+
 
     ngOnInit() {
- //       this._service.checkCredentials();
-    }
-
+       this._service.checkCredentials();
+   }
+     constructor(
+         
+         private _service: LoginService,
+          private _authGuard:AuthGuard
+          ) { }
+    
+   
     logout() {
         this._service.logout();
     }

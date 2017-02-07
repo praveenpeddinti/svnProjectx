@@ -12,17 +12,17 @@ var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/toPromise');
-var User = (function () {
-    function User(email, password) {
+var Collaborator = (function () {
+    function Collaborator(email, password) {
         this.email = email;
         this.password = password;
     }
-    return User;
+    return Collaborator;
 }());
-exports.User = User;
+exports.Collaborator = Collaborator;
 var users = [
-    new User('admin@admin.com', 'adm9'),
-    new User('user1@gmail.com', 'a23')
+    new Collaborator('admin@admin.com', 'adm9'),
+    new Collaborator('user1@gmail.com', 'a23')
 ];
 var LoginService = (function () {
     function LoginService(_router, http) {

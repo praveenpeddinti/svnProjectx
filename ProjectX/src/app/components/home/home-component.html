@@ -1,6 +1,7 @@
 <div class="container">
     <div class="content">
-        <span>Congratulations, you have successfully logged in!!</span>
+        <span>Congratulations  {{users.username}}, you have successfully logged in!!</span>
+       
         <br />
         <ng2-dropdown>
             <ng2-dropdown-button>
@@ -22,7 +23,7 @@
         <ng2-datepicker [(ngModel)]="date"></ng2-datepicker>
         Selected date is: {{ date | json }}
 
-<input type="text" [mention]="users">
+<!--<input type="text" [mention]="users">-->
 <br/><br/><br/><br/><br/><br/><br/>
 <!--<ckeditor
     [(ngModel)]="ckeditorContent"
@@ -30,6 +31,6 @@
     debounce="500">
   </ckeditor> -->
 <br/><br/>
-<story-form></story-form>
+<!--<story-form></story-form>-->
     </div>
 </div>

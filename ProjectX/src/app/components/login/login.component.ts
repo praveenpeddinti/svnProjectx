@@ -1,5 +1,5 @@
 import { Component,OnInit } from '@angular/core';
-import { LoginService, User } from '../../services/login.service';
+import { LoginService, Collaborator } from '../../services/login.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
@@ -13,16 +13,16 @@ import {AuthGuard} from '../../services/auth-guard.service';
 export class LoginComponent implements OnInit{
     public isEmailValid=false;
     public title = "Login";
-    public user = new User('', '');
+    public user = new Collaborator('', '');
     public errorMsg = '';
     public submitted = false;
     returnUrl: string;
     ngOnInit(){
         // reset login status
-        this._service.logout();
+        //this._service.logout();
  
         // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+       // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
     onSubmit() {
         this.submitted = true;
@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit{
             if(data.status==200){
               this._router.navigate(['home']);  
             }else{
-            console.log("comming..");
-            this.errorMsg = 'Failed to login';
+           // console.log("comming..");
+            this.errorMsg = 'wrong Email/Password';
             }
 
         });

@@ -88,7 +88,7 @@
       <div class="row">
         <div class="input-field col s12">
           <label for="password">Password</label>
-          <input [(ngModel)]="user.password" id="password" type="password" id="pass" class="form-control" required minlength="1" maxlength="15"
+          <input [(ngModel)]="user.password" id="password" type="password" id="pass" class="form-control" required minlength="1" maxlength="50"
             name="user_password" #user_password="ngModel" >
 
         </div>
@@ -104,9 +104,14 @@
           </div>
         </div>
       </div>
-
+   <div class="row">
+     <div class="input-field col s12">
+        <input [(ngModel)]="user.rememberme" id="rememberme" type="checkbox"  class="form-control"  
+            name="user_rememberme" #user_rememberme="ngModel" value="0"><label for="password">Remember me</label>
+       </div>
+     </div>
       <span>{{errorMsg}}</span>
-      <button type="submit" (click)="submitted = true;" class="btn btn-default">Login</button>
+      <button type="submit" (click)="submitted = true;validateEmail(user.email);" class="btn btn-default">Login</button>
     </div>
   </form>
 </div>

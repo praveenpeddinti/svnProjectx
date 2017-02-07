@@ -8,14 +8,14 @@ import { LoginComponent }  from './components/login/login.component';
 import { HomeComponent }  from './components/home/home.component';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
 import { DatePickerModule } from 'ng2-datepicker';
-import { Typeahead } from 'ng2-typeahead';
+//import { Typeahead } from 'ng2-typeahead';
 import { MentionModule } from 'angular2-mentions/mention';
 import {StoryService} from './services/story.service';
 import { CKEditorModule } from 'ng2-ckeditor';
 import {Ng2DragDropModule} from "ng2-drag-drop";
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
-import {LoginService, User} from './services/login.service';
+import {LoginService, Collaborator} from './services/login.service';
 import {AjaxService} from './ajax/ajax.service';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { HeaderComponent } from './header/header.component';
