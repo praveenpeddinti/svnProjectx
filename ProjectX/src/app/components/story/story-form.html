@@ -1,5 +1,17 @@
 <form #storyForm="ngForm" (ngSubmit)="submitted && saveStory() " novalidate="true">
     <div class="panel-body">
+        <div class="row">
+        <div class="input-field col s12">
+          <label for="title">Title</label>
+          <input [(ngModel)]="form.title" type="text" id="title"class="form-control" required minlength="3" maxlength="50" 
+            name="title"  #title="ngModel" >
+        </div>
+        <div class="input-field col s12">
+          <label for="email">Description</label>
+          <input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
+            name="description"  #description="ngModel" >
+        </div>
+        </div>
         <div class="row" *ngFor="let value of storyFormData; let i = index;">
             <div *ngIf="value.type == 1">
                 <div class="input-field col s12">
@@ -59,7 +71,7 @@
                     <label for="email">{{value.lable}}</label>
                     <select [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
                         >
-                     <option>1</option>
+                      <option>1</option>
                       <option>2</option>
                 </select>
                 </div>

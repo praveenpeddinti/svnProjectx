@@ -30,17 +30,8 @@ export class StoryComponent {
                     }else if(element.Type == 6){
                         DefaultValue=response.data.collaborators;
                     }else if(element.Type == 2){
-                       if(item=='priority'){
-                             DefaultValue=response.data.priority;
-                        }else if(item=='planlevel'){
-                            DefaultValue=response.data.plane_level;
-                        }else if(item=='tickettype'){
-                           DefaultValue=response.data.ticket_type;
-                        }else if(item=='status'){
-                           DefaultValue=response.data.status;
-                        }
+                        DefaultValue=element.data; 
                     } 
-                    
                     console.log("Default values"+JSON.stringify(DefaultValue));
                     jsonForm[item] = element.DefaultValue;
                    this.storyFormData.push(
@@ -55,10 +46,8 @@ export class StoryComponent {
         });
     }
 saveStory(){
+    console.log("post____data"+JSON.stringify(this.form));
     this._service.saveStory(this.form,(response)=>{
-
-
-
     });
 }
 }
