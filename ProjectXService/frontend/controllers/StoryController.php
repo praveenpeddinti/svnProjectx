@@ -98,7 +98,7 @@ class StoryController extends Controller
      * 
      * @return string
      */
-    public function saveTicketDetails(){
+    public function actionSaveTicketDetails(){
         try{
              $post_data = json_decode(file_get_contents("php://input"));
             error_log("saveTicketDetails-----------") ;
