@@ -27,35 +27,53 @@ class Collaborators extends ActiveRecord
         ];
     }
     
-    public function findByUsername($username)
+    public static function findByUsername($userData)
     {
-        $qry = "select * from Collaborators where Email='".$username."'";
-        error_log($qry);
+         error_log("findByUsername---".print_r($userData,1));
+        $qry = "select * from Collaborators where Email='".$userData->username."' And Password='".$userData->password."'";
+        error_log("queryyyyyyyyyyyyyyy".$qry);
         $data = Yii::$app->db->createCommand($qry)->queryAll();
         return $data;
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
+    
     /**
-     * @author Moin Hussain
-     * @param type $projectId
-     * @return type
-     */
-    public  function getProjectTeam($projectId)
+     * @author Padmaja
+     * @description This is to get the  Collaborator data
+     * @return type json object
+     * 
+     */   
+    public static function getCollaboratorDetails($userData)
     {
         try{
-         $qry = "select C.Id,C.UserName,C.Email from ProjectTeam PT join Collaborators C on PT.CollaboratorId = C.Id where PT.ProjectId = $projectId";
-         $data = Yii::$app->db->createCommand($qry)->queryAll();
-         return $data;    
+            $returnValue='failure';
+           // error_log("findByUsername---".print_r($userData,1));
+            $qry = "select * from Collaborators where Email='".$userData->username."' And Password= md5('".$userData->password."')";
+            error_log("queryyyyyyyyyyyyyyy".$qry);
+            $collabaratorData = Yii::$app->db->createCommand($qry)->queryAll();
+             if(sizeof($collabaratorData)>0){
+                $returnValue=$collabaratorData;
+            }
+            return $returnValue;
+
         } catch (Exception $ex) {
-Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+             Yii::log("Collabarator:getCollaboratorDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
-       
+      
+    }
+    
+    public static function getCollabrators()
+    {
+        $qry = "select * from Collaborators";
+        $data = Yii::$app->db->createCommand($qry)->queryAll();
+        return $data;
+//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     public static function insertCollabrators($noofrecords)
     {   
         
          $comma=  ",";
-        $qry = "INSERT INTO `Techo2_ProjectX_Testing`.`Collaborators`
+        $qry = "INSERT INTO `Techo2_ProjectX`.`Collaborators`
 (
 `FirstName`,
 `LastName`,

@@ -4,6 +4,7 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use common\models\mysql\Collaborators;
+
 /**
  * Login form
  */
@@ -53,6 +54,7 @@ class LoginForm extends Model
      *
      * @return bool whether the user is logged in successfully
      */
+
     public function loginAjax($username){
         $collaboratorModel = new Collaborators();
         $userData = $collaboratorModel->findByUsername($username);
@@ -76,11 +78,35 @@ class LoginForm extends Model
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = Collaborators::findByUsername($this->username);
         }
 
         return $this->_user;
     }
+      /**
+     * @author Padmaja
+     * @description This is update active Collabarator status to inActive when  logout
+     * @return type json object
+     * 
+     */ 
+    public function checkLoginData($userData){
+        try{
+            $returnValue='failure';
+           // error_log("dddddds#########@@@@".print_r($userData,1));
+            $userData = Collaborators::getCollaboratorDetails($userData);
+            // error_log("++++++++loginAjax++++++++++".print_r($userData,1));
+            if(sizeof($userData)>0){
+                $returnValue=$userData;
+            }
+            return $returnValue;
+          
+        } catch (Exception $ex) {
+             Yii::log("Login:checkLoginData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+      
+    }
+    
+
     
      protected function getCollaborators()
     {

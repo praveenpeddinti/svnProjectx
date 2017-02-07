@@ -7,17 +7,27 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\filters\Cors;
+use yii\helpers\ArrayHelper;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use common\models\mongo\SampleCollection;
 use common\models\mongo\ProjectTicketSequence;
+use common\models\mongo\AccessTokenCollection;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use common\components\CommonUtility;
 use common\models\bean\ResponseBean;
+use common\models\mysql\Projects;//testing
+use frontend\service\AccesstokenService;
+use common\components\ServiceFactory;
 use common\models\User;
+use common\models\mysql\Collaborators;
 use \common\models\mongo\TinyUserCollection;
+use common\service\CollaboratorService;
+
+
 /**
  * Site controller
  */
@@ -29,6 +39,7 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
+         
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'signup'],
@@ -92,13 +103,23 @@ class SiteController extends Controller
    
     public function actionTestAjax()
     {
+
+        error_log("----------------dddddddddddd");
+        $model = new Projects();
+       $userdata = $model->listUserData();
+     //   $userData=User::model()->getAllUser();
+      $data = SampleCollection::testMongo();
+        print_r($userdata,1);
+
         error_log("----------------");
        // $data = SampleCollection::testMongo();
        $model = new ProjectTicketSequence();
        $model->getNextSequence(2);
       // $db->getNextSequence(1);
       // $db->insert(array("TicketNumber" => $this->getNextSequence(2),"name" => "Sarah C."));
+
        // error_log("+++++++++++++actionTestAjax+++++++++++++++++++".print_r($data,1));
+        error_log("+++++++++++++actionTestAjax@@@@@@@@@@@@@@@@@+++++++++++++++++++".print_r($userdata,1));
     
     }
     /**
@@ -125,11 +146,19 @@ class SiteController extends Controller
     
     public function actionLogin()
     {
+
+        error_log("sssssssssssssssssssssssssssss");
+        foreach ($_SERVER as $name => $value) {
+   // error_log($name."----".$value,"---");
+        }
+        error_log("@@@---**".print_r($_SERVER,1));
+
         error_log("actionLogin------");
+
         $user_data = json_decode(file_get_contents("php://input"));
        error_log("request aprams-----------".print_r($user_data,1));
         $model = new LoginForm();
-        $userData = $model->loginAjax($user_data->username);
+        $userData = $model->loginAjax($user_data);error_log("34444444444".print_r($userData,1));
         error_log("use dat---".print_r($userData,1));
         $responseBean = new ResponseBean;
         $responseBean->status = ResponseBean::SUCCESS;
@@ -137,21 +166,112 @@ class SiteController extends Controller
         $responseBean->data = $userData;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
- 
-    }
+            
+        }
+   /**
+     * @author Padmaja
+     * @description This is authenticate the  Collaborator data
+     * @return type json object
+     * 
+     */    
 
+    public function actionUserAuthentication(){
+        try{
+            $CollabaratorData = json_decode(file_get_contents("php://input"));
+           // error_log("34444444444".print_r($CollabaratorData,1));
+            $model = new LoginForm();
+            $getcollaboratorData = $model->checkLoginData($CollabaratorData);
+           // error_log("helloo5555556777".print_r($getcollaboratorData,1));
+             if(count($getcollaboratorData)==1 && $getcollaboratorData !='failure'){
+                $collabaratorId=$getcollaboratorData[0]['Id'];
+                $remembermeStatus=isset($CollabaratorData->rememberme)?1:0;
+                $collabaratorTokenData = ServiceFactory::getCollaboratorServiceInstance()->getCollabaratorAccesstoken($collabaratorId);
+                if(count($collabaratorTokenData)==0){
+                    $accesstoken =  $this->GeneratingAccesstoken($collabaratorId);
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken);
+                    $browserType=$_SERVER['HTTP_USER_AGENT'];
+                    $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
+                    $responseBean = new ResponseBean;
+                    $responseBean->status = ResponseBean::SUCCESS;
+                    $responseBean->message = "success";
+                  //  $responseBean->data =    array('email'=>$CollabaratorData->username,"token"=>$accesstoken);
+                    $responseBean->data =    $collabaratorArr;
+                    return  $response = CommonUtility::prepareResponse($responseBean,"json");
+                }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==1) {
+                    $collabaratorLastToken= $collabaratorTokenData[0]['Accesstoken'];
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$collabaratorLastToken);
+                    $accesstoken="response";
+                    $responseBean = new ResponseBean;
+                    $responseBean->status = ResponseBean::SUCCESS;
+                    $responseBean->message = "success";
+                    $responseBean->data =    $collabaratorArr;
+                    return  $response = CommonUtility::prepareResponse($responseBean,"json");
+                }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==0){
+                    $accesstoken =  $this->GeneratingAccesstoken($collabaratorId);
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken);
+                    $browserType=$_SERVER['HTTP_USER_AGENT'];
+                    $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
+                    $responseBean = new ResponseBean;
+                    $responseBean->status = ResponseBean::SUCCESS;
+                    $responseBean->message = "success";
+                  //  $responseBean->data =    array('email'=>$CollabaratorData->username,"token"=>$accesstoken);
+                    $responseBean->data =    $collabaratorArr;
+                    return  $response = CommonUtility::prepareResponse($responseBean,"json");
+                }
+                   
+           }else{
+                    $response='failure';
+                    $responseBean = new ResponseBean;
+                    $responseBean->status = ResponseBean::FAILURE;
+                    $responseBean->message = "FAILURE";
+                  //  $responseBean->data =    array('email'=>$CollabaratorData->username,"token"=>$accesstoken);
+                    $responseBean->data =    $response;
+                    return  $response = CommonUtility::prepareResponse($responseBean,"json");
+           }
+       
+            
+        } catch (Exception $ex) {
+            Yii::log("SiteController:UserAuthentication::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+ 
     /**
      * Logs out the current user.
      *
      * @return mixed
      */
     public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
+    {  
+       Yii::$app->user->logout();
         return $this->goHome();
     }
-
+    
+    /**
+     * @author Padmaja
+     * @description This is update active Collabarator status to inActive when  logout
+     * @return type json object
+     * 
+     */ 
+    public function actionUpdateCollabaratorStatus(){
+        try{
+//          $headerff=Yii::$app->request->getHeaders()->get('Authorization');
+//          error_log("dddddddddddddddweww".print_r($headerff,1));
+            $collabaratorJson = json_decode(file_get_contents("php://input"));
+            //coverting to Json to Array
+            $collabaratortokenArr= json_decode($collabaratorJson);
+            $updateStatus  = ServiceFactory::getCollaboratorServiceInstance()->updateStatusCollabarator($collabaratortokenArr->token);
+            $responseBean     = new ResponseBean;
+            $responseBean->status = ResponseBean::SUCCESS;
+            $responseBean->message = "success";
+            //  $responseBean->data =    array('email'=>$user_data->username,"token"=>$accesstoken);
+            $responseBean->data =    $updateStatus;
+            return  $response = CommonUtility::prepareResponse($responseBean,"json");
+        } catch (Exception $ex) {
+             Yii::log("SiteController:UpdateCollabaratorStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+        
+    } 
     /**
      * Displays contact page.
      *

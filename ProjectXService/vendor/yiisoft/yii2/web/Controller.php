@@ -10,6 +10,9 @@ namespace yii\web;
 use Yii;
 use yii\base\InlineAction;
 use yii\helpers\Url;
+use yii\filters\Cors;
+use yii\helpers\ArrayHelper;
+
 
 /**
  * Controller is the base class of web controllers.
@@ -205,4 +208,26 @@ class Controller extends \yii\base\Controller
     {
         return Yii::$app->getResponse()->redirect(Yii::$app->getRequest()->getUrl() . $anchor);
     }
+    
+   /**
+     * @author Padmaja
+     * @description This is generating accesstoken
+     * @param type $collabaratorId
+     * @return type 
+     * 
+     */ 
+    public function GeneratingAccesstoken($collabaratorId="")
+    {
+        try{
+            //error_log("ddddddfgcvgdfgfdgfdg".$collabaratorId);
+            $token = bin2hex(openssl_random_pseudo_bytes(10)).'@'.$collabaratorId; 
+            //error_log("ddddddfgcvgdfgfdgfdg".$token);
+            return $token;
+            
+        } catch (Exception $ex) {
+            Yii::log("Controller:GeneratingAccesstoken::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');
+        }
+       
+    }
+
 }
