@@ -45,16 +45,32 @@ class StoryFields extends ActiveRecord
        
     }
     /**
+     * @description This method is to get all the storyfields
      * @author Moin Hussain
      * @return type
      */
      public function getStoryFieldList() {
         try {
+           
             $qry = "select * from StoryFields sf join FieldTypes ft on sf.Type=ft.Id";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
         } catch (Exception $exc) {
             Yii::log("StoryFields:getStoryFieldList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
+     * @description This method is to get storyfields to be shown in new ticket creation
+     * @author Moin Hussain
+     * @return type
+     */
+     public function getNewTicketStoryFields() {
+        try {
+            $qry = "select * from StoryFields sf join FieldTypes ft on sf.Type=ft.Id where sf.Id in (4,6)";
+            $data = Yii::$app->db->createCommand($qry)->queryAll();
+            return $data;
+        } catch (Exception $exc) {
+            Yii::log("StoryFields:getNewTicketStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     
