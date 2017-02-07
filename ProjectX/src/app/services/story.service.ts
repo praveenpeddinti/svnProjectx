@@ -19,7 +19,7 @@ getStoryFields(projectId,getStoryCallback) {
       'projectId':projectId,
       'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
     }
-    this._ajaxService.AjaxSubscribe("story/story-fields",post_data,(data)=>
+    this._ajaxService.AjaxSubscribe("story/new-story-template",post_data,(data)=>
     { 
          getStoryCallback(data);
     });
@@ -30,7 +30,7 @@ var post_data={
       'storyData':storyData,
       'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
     }
-     this._ajaxService.AjaxSubscribe("story/save-story",post_data,(data)=>
+     this._ajaxService.AjaxSubscribe("story/save-ticket-details",post_data,(data)=>
     { 
          saveStoryCallback(data);
     });
