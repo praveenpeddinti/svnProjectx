@@ -83,7 +83,8 @@ class StoryController extends Controller
     */
     public function actionGetAllTicketDetails(){
         try{
-        $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails();
+         $projectId=1;
+        $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($projectId);
         $responseBean = new ResponseBean();  
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
