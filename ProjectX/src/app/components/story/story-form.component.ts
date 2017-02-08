@@ -66,7 +66,12 @@ public fileChangeEvent(fileInput: any):void {
         this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
-                this.form['description'] = this.form['description'] + "[[file:" +result[i].path + "]] ";
+                var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                    this.form['description'] = this.form['description'] + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                } else{
+                    this.form['description'] = this.form['description'] + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                }
             }
         }, (error) => {
             console.error(error);
@@ -81,7 +86,12 @@ public onFileDrop(fileInput:any): void{
       this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
-                this.form['description'] = this.form['description'] + "[[file:" +result[i].path + "]] ";
+                var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                    this.form['description'] = this.form['description'] + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                } else{
+                    this.form['description'] = this.form['description'] + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                }
             }
         }, (error) => {
             console.error(error);
