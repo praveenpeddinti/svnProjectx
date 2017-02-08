@@ -37,7 +37,7 @@ const ROUTES=[
                 { path: '' , component: StorydetailsComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]}
+               ],canActivate:[AuthGuard]},
              
               {path: 'story-detail', component: StoryDetailComponent},
              ];
