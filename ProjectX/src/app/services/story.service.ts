@@ -35,6 +35,15 @@ var post_data={
          saveStoryCallback(data);
     });
  }
-
+getAllStoryDetails(projectId,getAllStoryDetailsCallback) { 
+   var post_data={
+      'projectId':projectId,
+      'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
+    }
+    this._ajaxService.AjaxSubscribe("story/get-all-ticket-details",post_data,(data)=>
+    { //console.log("---ddddd-----55-"+JSON.stringify(data));
+         getAllStoryDetailsCallback(data);
+    });
+  }
 
 }
