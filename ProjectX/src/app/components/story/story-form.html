@@ -3,14 +3,27 @@
         <div class="row">
         <div class="input-field col s12">
           <label for="title">Title</label>
-          <input [(ngModel)]="form.title" type="text" id="title"class="form-control" required minlength="3" maxlength="50" 
+          <input [(ngModel)]="form.title" type="text" id="title"class="form-control" required minlength="3" maxlength="150" 
             name="title"  #title="ngModel" >
         </div>
+             <div *ngIf="submitted && title.errors " class="alert alert-danger">
+                    <div [hidden]="!title.errors.required">
+                       Title is required
+                    </div>
+                    <div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
+                       Title must be 3 characters long
+                    </div>
+            </div>
         <div class="input-field col s12">
           <label for="email">Description</label>
-          <ckeditor [config]="toolbar" [(ngModel)]="form.description"  id="description" name="description"  #description="ngModel"     debounce="500"  >
+          <ckeditor [config]="toolbar" [(ngModel)]="form.description"   name="description"  #description="ngModel" required     debounce="500"  >
       
     </ckeditor>
+     <div *ngIf="submitted && description.errors " class="alert alert-danger">
+                    <div [hidden]="!description.errors.required">
+                       Description is required
+                    </div>
+            </div>
     <input type="file" (change)="fileChangeEvent($event)"  multiple  /><br/>
           <!--<input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
             name="description"  #description="ngModel" >-->

@@ -30,6 +30,8 @@ public hasFileDroped:boolean = false;
         this._service.getStoryFields(1,(response)=>{
               let jsonForm={};
               let DefaultValue;
+               jsonForm['title'] ='';
+               jsonForm['description'] ='';
              // console.log("new_data"+JSON.stringify(response));
               if(response.statusCode==200){
                   response.data.story_fields.forEach(element => {
@@ -123,8 +125,8 @@ public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
     }
 
 saveStory(){
-    console.log("post____data"+JSON.stringify(this.form));
-    this._service.saveStory(this.form,(response)=>{
-    });
+    console.log("post____data");
+    // this._service.saveStory(this.form,(response)=>{
+    // });
 }
 }
