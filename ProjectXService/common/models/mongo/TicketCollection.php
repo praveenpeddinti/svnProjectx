@@ -60,8 +60,23 @@ class TicketCollection extends ActiveRecord
       Yii::log("TicketCollection:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
       }  
-        
-     
+    }
+    
+    /**
+     * @author Praveen P
+     * @return type
+     */
+    public static function getAllTicketDetails(){
+      try{
+            $query = new Query();
+           //$query->select(['name', 'status'])
+            $query->from('TicketCollection');
+        $ticketDetails = $query->all();
+        return $ticketDetails;  
+      } catch (Exception $ex) {
+      Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+      }  
     }
 }
 ?>

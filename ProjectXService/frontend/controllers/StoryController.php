@@ -17,6 +17,7 @@ use frontend\models\ContactForm;
 use common\components\CommonUtility;
 use common\models\bean\ResponseBean;
 use common\components\ServiceFactory;
+use common\models\mongo\TicketCollection;
 use common\models\User;
 
 /**
@@ -74,6 +75,28 @@ class StoryController extends Controller
         }
     }
     
+
+    /**
+    * @author Praveen P
+    * @description This method is used to get all data for stories/tasks.
+    * @return type
+    */
+    public function actionGetAllTicketDetails(){
+        try{
+        $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails();
+        $responseBean = new ResponseBean();  
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data = $data;
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;
+        //return "praveen P";
+        } catch (Exception $ex) {
+     Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+
     /**
     * @author Moin Hussain
     * @description This method is used to get data for edit mode.
@@ -194,6 +217,7 @@ class StoryController extends Controller
         }
     }
  
+
 
 }
 ?>
