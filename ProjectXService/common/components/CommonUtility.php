@@ -95,10 +95,10 @@ class CommonUtility {
      * @param type $projectId
      * @return type
      */
-    public static function prepareTicketDetails($ticketId,$projectId,$flag = "part"){
+    public static function prepareTicketDetails($ticketDetails,$projectId,$flag = "part"){
         try{
              $ticketCollectionModel = new TicketCollection();
-            $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId);
+           // $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId);
             $storyFieldsModel = new StoryFields();
             $storyCustomFieldsModel = new StoryCustomFields();
             $tinyUserModel =  new TinyUserCollection();
@@ -131,7 +131,12 @@ class CommonUtility {
                 $value["field_name"] = $storyFieldDetails["Field_Name"];
                  if($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5){
                      $datetime = $value["value"]->toDateTime();
-                     $value["readable_value"] = $datetime; 
+                     if($storyFieldDetails["Type"] == 4){
+                        $readableDate = $datetime->format('Y-m-d');
+                     }else{
+                         $readableDate = $datetime->format('Y-m-d H:i:s');
+                     }
+                     $value["readable_value"] =   $readableDate; 
                  }
                 if($storyFieldDetails["Type"] == 6){
                   $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
