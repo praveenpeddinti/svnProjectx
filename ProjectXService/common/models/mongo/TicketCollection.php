@@ -161,11 +161,14 @@ class TicketCollection extends ActiveRecord
      * @author Praveen P
      * @return type
      */
-    public static function getAllTicketDetails(){
+    public static function getAllTicketDetails($projectId){
       try{
             $query = new Query();
            //$query->select(['name', 'status'])
-            $query->from('TicketCollection');
+            $query->from('TicketCollection')
+                     ->where(["ProjectId" => $projectId ,"TicketId" => array(101,200)])
+            ->limit(1)
+            ->offset(1);
         $ticketDetails = $query->all();
         return $ticketDetails;  
       } catch (Exception $ex) {
