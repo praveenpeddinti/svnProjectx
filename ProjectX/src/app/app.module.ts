@@ -22,6 +22,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import {AuthGuard} from './services/auth-guard.service';
 import { StoryComponent }  from './components/story/story-form.component';
+import { StoryDetailComponent }  from './components/story-detail/story-detail.component';
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: 'home',children:[
@@ -30,6 +31,7 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
               {path: 'login', component: LoginComponent},
+              {path: 'story-detail', component: StoryDetailComponent},
              ];
 @NgModule({
   imports:      [
@@ -45,7 +47,7 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES)
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDetailComponent ],
   bootstrap:    [ AppComponent ],
   providers:[LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
