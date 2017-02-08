@@ -9,6 +9,7 @@ use common\models\mysql\Priority;
 use common\models\mysql\PlanLevel;
 use common\models\mysql\TicketType;
 use common\models\mysql\Bucket;
+use common\models\bean\FieldBean;
 use Yii;
 
 /*
@@ -153,10 +154,55 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
         }
     }
 
-       public function saveTicketDetails() {
+       public function saveTicketDetails($ticket_data) {
         try {
-        
+            error_log("@@@@@@@@@@@@@@@@@@@@@2----------------".print_r($ticket_data,1));
+            
+            
+              $ticket_data = $ticket_data->data;
+              $dataArray = array();
+              $fieldsArray = array();
+              $title =  $ticket_data->title;
+              $description =  $ticket_data->description;
+              unset($ticket_data->title);
+              unset($ticket_data->description);
+              foreach ($ticket_data as $key=>$value) {
+                  $fieldBean = new FieldBean();
+                  error_log($key."--value-----------".$value);
+                  $storyData = StoryFields::getFieldDetails($key);
+                  $fieldBean->Id = (int)$key;
+                  $fieldBean->title=$storyData["Title"];
+                  if(is_numeric($value)){
+                     $fieldBean->value= (int)$value;  
+                  }else{
+                       $fieldBean->value=$value;
+                  }
+                 
+                  array_push($dataArray, $fieldBean);
+              }
+              error_log("hiiiiiiiiiiiiiiiiiiiiiiiii-------------iii");
+           $ticketModel = new TicketCollection();
+           $ticketModel->Title = $title;
+           $ticketModel->Description = $description;
+           $ticketModel->Fields = $dataArray;
+           $ticketModel->ArtifactsRef = "";
+           $ticketModel->CommentsRef = "";
+           $ticketModel->FollowersRef = "";
+           $ticketModel->ProjectId = 1;
+           $ticketModel->RelatedStories= [];
+           $ticketModel->Tasks= [];
+           $ticketModel->TicketId = 1;
+           $ticketModel->TotalEstimate = 0;
+           $ticketModel->TotalTimeLog = 0;
+          
+          
+             
+           
+           TicketCollection::saveTicketDetails($ticketModel);
+            
         } catch (Exception $ex) {
+             error_log($ex->getMessage());
+            
             Yii::log("StoryService:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
@@ -188,6 +234,20 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
         }
 
     }
+      
+        /**
+         * @author Anand Singh
+         * @return type
+         */
+        public function getMyTickets() {
+            try {
+               $priorityModel = new TicketCollection();
+           //return $priorityModel->getMyAssignedTickets();
+          return $priorityModel->updateTicketField();
+            } catch (Exception $exc) {
+                Yii::log("StoryService:getPriority::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            }
+        }
 }
 
   
