@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component,ViewChild } from '@angular/core';
 import { StoryService} from '../../services/story.service';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'story-form',
@@ -126,7 +127,8 @@ public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
 
 saveStory(){
     console.log("post____data");
-    // this._service.saveStory(this.form,(response)=>{
-    // });
+     this._service.saveStory(this.form,(response)=>{
+     });
 }
+
 }
