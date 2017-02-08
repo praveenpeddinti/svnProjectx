@@ -6,7 +6,7 @@ import { HttpModule }    from '@angular/http';
 import { AppComponent }  from './app.component';
 import { LoginComponent }  from './components/login/login.component';
 import { HomeComponent }  from './components/home/home.component';
-import { StorydetailsComponent }  from './components/storydetails/storydetails.component';
+import { StoryDashboardComponent }  from './components/story-dashboard/story-dashboard.component';
 import { Ng2DropdownModule } from 'ng2-material-dropdown';
 import { DatePickerModule } from 'ng2-datepicker';
 //import { Typeahead } from 'ng2-typeahead';
@@ -33,8 +33,8 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
               {path: 'login', component: LoginComponent},
-               {path: 'storydetails',children:[
-                { path: '' , component: StorydetailsComponent},
+               {path: 'story-dashboard',children:[
+                { path: '' , component: StoryDashboardComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
@@ -56,7 +56,7 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES)
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDetailComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, ],
   bootstrap:    [ AppComponent ],
   providers:[LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],

@@ -1,0 +1,51 @@
+      <ngx-datatable
+        #myTable
+        class='material expandable'
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [rows]='response'
+        [limit]="5"
+        (page)="onPage($event)">
+        
+        <ngx-datatable-column name="Id">
+          <template let-row="row" ngx-datatable-cell-template>
+            <strong>#{{row.TicketId}}</strong>
+          </template>
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column name="Title" width="80">
+          <template let-row="row" ngx-datatable-cell-template>
+            <strong>{{row.Title}}</strong>
+          </template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Assigned to">
+          <template let-row="row" let-i="i" ngx-datatable-cell-template>
+           <img src="../../../images/user_noimage.png" width="50px" height="50px" title="{{row.Fields[4].readable_value.UserName}}" />
+          </template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Priority">
+          <template let-row="row" let-i="i" ngx-datatable-cell-template>
+            <strong>{{row.Fields[5].readable_value.Name}}</strong>
+          </template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Type">
+          <template let-row="row" let-i="i" ngx-datatable-cell-template>
+            <strong>{{row.Fields[11].readable_value.Name}}</strong>
+          </template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Status">
+          <template let-row="row" let-i="i" ngx-datatable-cell-template>
+            <strong>{{row.Fields[6].readable_value.Name}}</strong>
+          </template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Due Date">
+          <template let-row="row" let-i="i" ngx-datatable-cell-template>
+              <strong>{{row.Fields[9].readable_value.date}}</strong>
+            <strong></strong>
+          </template>
+        </ngx-datatable-column>
+        
+
+

@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit{
     login() {
         this._service.login(this.user,(data)=>{ 
             if(data.status==200){
-              this._router.navigate(['storydetails']);  
+              this._router.navigate(['story-dashboard']);  
             }else{
            // console.log("comming..");
             this.errorMsg = 'wrong Email/Password';
