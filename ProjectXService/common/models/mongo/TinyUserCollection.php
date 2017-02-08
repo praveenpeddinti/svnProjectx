@@ -28,7 +28,14 @@ class TinyUserCollection extends ActiveRecord
     public function attributes() {
 //        parent::attributes();
         return [
-
+ "_id" ,      
+     "CollaboratorId",
+     "UserName",
+     "ProfilePicture",
+     "Email",
+    "OrganizationId",
+    'CreatedOn',
+    'UpdatedOn',
         ];
     }
     
@@ -52,6 +59,26 @@ class TinyUserCollection extends ActiveRecord
         error_log("************************".print_r($userDetails,1));
        return $userDetails;
      
+    }
+      public static function createUsers($data){
+        
+        try {
+//        $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
+//        $collection->batchInsert($data);
+        foreach ($data as $value) {
+        $userObj= new TicketCollection();
+         $userObj->Title="hi";
+        $userObj->CollaboratorId=(int)$value['Id'];
+        $userObj->UserName=$value['UserName'];
+        $userObj->ProfilePicture='';
+        $userObj->Email=$value['Email'];
+        $userObj->OrganizationId=  (int)$value['OrganizationId'];
+        $userObj->insert();  
+        unset($userObj);
+        }
+        } catch (Exception $exc) {
+           error_log("error occured in model" . $exc->getMessage());
+        }
     }
 }
 ?>

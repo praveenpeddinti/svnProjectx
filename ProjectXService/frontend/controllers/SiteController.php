@@ -22,9 +22,8 @@ use common\models\bean\ResponseBean;
 use common\models\mysql\Projects;//testing
 use frontend\service\AccesstokenService;
 use common\components\ServiceFactory;
-use common\models\User;
 use common\models\mysql\Collaborators;
-use \common\models\mongo\TinyUserCollection;
+use common\models\mongo\TinyUserCollection;
 use common\service\CollaboratorService;
 
 
@@ -383,7 +382,8 @@ class SiteController extends Controller
      */
     public function actionCollaborators(){
           try{
-        $collaborators = User::getCollabrators();
+            $coll =  new Collaborators();
+        $collaborators = $coll->getCollabrators();
         $response=  TinyUserCollection::createUsers($collaborators);
         $responseBean = new ResponseBean;
         $responseBean->status = ResponseBean::SUCCESS;

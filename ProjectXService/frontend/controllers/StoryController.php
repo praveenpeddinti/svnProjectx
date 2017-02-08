@@ -123,9 +123,9 @@ class StoryController extends Controller
      */
     public function actionSaveTicketDetails(){
         try{
-             $post_data = json_decode(file_get_contents("php://input"));
-            error_log("saveTicketDetails-----------") ;
-           $data = ServiceFactory::getStoryServiceInstance()->saveTicketDetails();
+            error_log("actionSaveTicketDetails--");
+             $ticket_data = json_decode(file_get_contents("php://input"));
+            $data = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
            return "success";
         } catch (Exception $ex) {
         Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -190,33 +190,25 @@ class StoryController extends Controller
          Yii::log("StoryController:actionNewStoryTemplate::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-     public function actionStoryFields(){
+
+ /**
+    * @author Moin Hussain
+    * @description This method to get a ticket details.
+    * @return type
+    */
+    public function actionGetMyTickets(){
         try{
-        $status=json_decode('"status":[{"Id":"1","Name":"New"},{"Id":"2","Name":"Accepted"},{"Id":"3","Name":"Specification"}]');
-        $post_data = json_decode(file_get_contents("php://input"));
-        $responseBean = new ResponseBean;
-        $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldList();
-        $response_data['plane_level'] = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
-        $response_data['priority'] = ServiceFactory::getStoryServiceInstance()->getPriorityList();
-        $response_data['ticket_type'] = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();
-        $response_data['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam(1);;
-        $response_data['status'] = $status;
-        if(sizeof($response_data)!=0){
+        $data = ServiceFactory::getStoryServiceInstance()->getMyTickets(101,1);
+        $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
-        $responseBean->message = "success";
-        $responseBean->data = $response_data;   
-        }else{
-        $responseBean->statusCode = ResponseBean::FAILURE;
-        $responseBean->message = "fail";
-        $responseBean->data = $response_data; 
-        }
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
-        return $response;   
+        return $response;
         } catch (Exception $ex) {
-         Yii::log("SiteController:actionStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+     Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
- 
 
 
 }
