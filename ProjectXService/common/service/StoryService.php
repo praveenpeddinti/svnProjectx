@@ -28,7 +28,9 @@ class StoryService {
      */
     public function getTicketDetails($ticketId, $projectId) {
         try {
-         $details =  CommonUtility::prepareTicketDetails($ticketId, $projectId);
+             $ticketCollectionModel = new TicketCollection();
+         $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId);  
+         $details =  CommonUtility::prepareTicketDetails($ticketDetails, $projectId);
          return $details;
         } catch (Exception $ex) {
             Yii::log("StoryService:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -211,11 +213,11 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
      * @author Praveen P
      * @return type
      */
-      public function getAllStoryDetails() {
+      public function getAllStoryDetails($projectId) {
         try {
          $model = new TicketCollection();
-         $ticketDetails = $model->getAllTicketDetails();
-         $ticketDetails =array(101,200,201,202,203,204,205,206,207,208,209,210);
+         $ticketDetails = $model->getAllTicketDetails($projectId);
+        // $ticketDetails =array(101,200,201,202,203,204,205,206,207,208,209,210);
          //$ticketDetails =array(209);
          $finalData = array();
          foreach ($ticketDetails as $ticket){
