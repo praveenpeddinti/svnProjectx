@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit{
               this._router.navigate(['story-dashboard']);  
             }else{
            // console.log("comming..");
-            this.errorMsg = 'wrong Email/Password';
+            this.errorMsg = 'Invalid Email/Password';
             }
 
         });
