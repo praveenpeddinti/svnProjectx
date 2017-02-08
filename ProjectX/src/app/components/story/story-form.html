@@ -8,8 +8,11 @@
         </div>
         <div class="input-field col s12">
           <label for="email">Description</label>
-          <input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
-            name="description"  #description="ngModel" >
+          <ckeditor [config]="toolbar" [(ngModel)]="form.description"  id="description" name="description"  #description="ngModel"     debounce="500"  >
+      
+    </ckeditor>
+          <!--<input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
+            name="description"  #description="ngModel" >-->
         </div>
         </div>
         <div class="row" *ngFor="let value of storyFormData; let i = index;">

@@ -9,10 +9,13 @@ import { StoryService} from '../../services/story.service';
 })
 
 export class StoryComponent {
-    public test="Anand";
+
     public storyFormData=[];
     public storyData={};
     public form={};
+    public toolbar={toolbar : [
+    [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
+]};
     constructor( private _service: StoryService) { }
 
     ngOnInit() {
