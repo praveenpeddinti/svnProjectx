@@ -27,6 +27,23 @@ class Collaborators extends ActiveRecord
         ];
     }
     
+     /**
+     * @author Moin Hussain
+     * @param type $projectId
+     * @return type
+     */
+    public  function getProjectTeam($projectId)
+    {
+        try{
+         $qry = "select C.Id,C.UserName,C.Email from ProjectTeam PT join Collaborators C on PT.CollaboratorId = C.Id where PT.ProjectId = $projectId";
+         $data = Yii::$app->db->createCommand($qry)->queryAll();
+         return $data;    
+        } catch (Exception $ex) {
+Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+    }
+    
     public static function findByUsername($userData)
     {
          error_log("findByUsername---".print_r($userData,1));
