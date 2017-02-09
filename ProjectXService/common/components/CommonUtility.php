@@ -34,6 +34,26 @@ class CommonUtility {
     }
     /**
      * @author Moin Hussain
+     * @param type $str
+     * @return string
+     */
+     public static function getExtension($str) {
+  try{
+    $i = strrpos($str, ".");
+    if (!$i) {
+        return "";
+    }
+
+    $l = strlen($str) - $i;
+    $ext = substr($str, $i + 1, $l);
+    //$ext .= '_'.$_SESSION['user']->id;
+    return $ext;
+    } catch (Exception $ex) {
+            Yii::log("CommonUtility:getExtension::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');
+        }
+}
+    /**
+     * @author Moin Hussain
      * @param type $sec
      * @param type $to_tz
      * @param type $from_tz
