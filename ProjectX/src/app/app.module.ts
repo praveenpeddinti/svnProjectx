@@ -26,6 +26,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { StoryComponent }  from './components/story/story-form.component';
 import { StoryDetailComponent }  from './components/story-detail/story-detail.component';
 import { StoryEditComponent } from './components/story-edit/story-edit.component';
+import {TinyMCE} from './tinymce.component';
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: 'home',children:[
@@ -42,6 +43,7 @@ const ROUTES=[
              
               {path: 'story-detail', component: StoryDetailComponent},
               {path: 'story-edit', component: StoryEditComponent},
+              {path:'story-form',component:StoryComponent}
              ];
 @NgModule({
   imports:      [
@@ -58,7 +60,7 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES)
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent, ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TinyMCE ],
   bootstrap:    [ AppComponent ],
   providers:[LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
