@@ -18,35 +18,39 @@ declare var tinymce: any;
     <div class="form-group" style="position:relative">{{data}}
       <div [mention]="items"></div>
       <div>
-        <textarea [(ngModel)]="data" class="hidden" cols="60" rows="4" id="tmce">{{htmlContent}}</textarea>        
+        <textarea class="hidden" cols="60" rows="4" id="tmce">{{htmlContent}}</textarea>        
       </div>     
     </div>
- `,
-
-    outputs:['eventEmitter']
+ `
 })
 export class TinyMCE {
-  public _myModel = '';
-  
+  //The internal data model
+ /**
+  * @author:TinyMCE (modified by Ryan@Techo2)
+  * Purpose:Custom Model Binding using @Input and @Output
+  */
+    innerValue = '';
+    @Output() contentChange:EventEmitter<string> = new EventEmitter<string>();
 
-  @Input() data:string;
-  @Output()  
-
- 
-  // set name(myModel: string) {
-  //   this._myModel = (myModel && myModel.trim()) || '<no myModel set>';
- // }
+    //get accessor
+    get content() {
+        return this.innerValue;
+    };
+   
+    //set accessor emitting changes to the model 
+    @Input()
+    set content(v) {
+        // if (v !== this.innerValue) {
+        //     this.innerValue = v;
+        //     this.onChangeCallback(v);
+        // }
+        this.innerValue=v;
+        this.contentChange.emit(this.innerValue);
+    }
   @Input() htmlContent;
   @ViewChild(MentionDirective) mention: MentionDirective;
   protected items:string[]= COMMON_NAMES;
   constructor(private _elementRef: ElementRef, private _zone: NgZone) {}
-
-  eventEmitter = new EventEmitter<string>();
-  onChange(value:string){
-    console.log("the data :" + value);
-    this.eventEmitter.emit(value);
-  }
-
   ngAfterViewInit() {
     tinymce.init({
       mode: 'exact',
@@ -66,11 +70,14 @@ export class TinyMCE {
   tinySetup(ed) {
     let comp = this;
     let mention = this.mention;
+    let content=this.contentChange;
     ed.on('keydown', function(e) {
       let frame = <any>window.frames[ed.iframeElement.id];
       let contentEditable = frame.contentDocument.getElementById('tinymce');
       comp._zone.run(() => {
         comp.mention.keyHandler(e, contentEditable);
+        this.innerValue=tinymce.activeEditor.getContent();
+        content.emit(this.innerValue);
       });
     });
     ed.on('init', function(args) {
