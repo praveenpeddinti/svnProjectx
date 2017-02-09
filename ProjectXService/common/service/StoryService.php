@@ -10,6 +10,8 @@ use common\models\mysql\PlanLevel;
 use common\models\mysql\TicketType;
 use common\models\mysql\Bucket;
 use common\models\bean\FieldBean;
+use common\models\mongo\ProjectTicketSequence;
+use common\models\mysql\Collaborators;
 use Yii;
 
 /*
@@ -158,9 +160,11 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
 
        public function saveTicketDetails($ticket_data) {
         try {
-            error_log("@@@@@@@@@@@@@@@@@@@@@2----------------".print_r($ticket_data,1));
-            
-            
+           // error_log("@@@@@@@@@@@@@@@@@@@@@2----------------".print_r($ticket_data,1));
+             $userdata =  $ticket_data->userInfo;
+             $userId = $userdata->Id;
+             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
+             error_log(print_r($collaboratorData,1));
               $ticket_data = $ticket_data->data;
               $dataArray = array();
               $fieldsArray = array();
@@ -168,21 +172,54 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
               $description =  $ticket_data->description;
               unset($ticket_data->title);
               unset($ticket_data->description);
-              foreach ($ticket_data as $key=>$value) {
-                  $fieldBean = new FieldBean();
-                  error_log($key."--value-----------".$value);
-                  $storyData = StoryFields::getFieldDetails($key);
-                  $fieldBean->Id = (int)$key;
-                  $fieldBean->title=$storyData["Title"];
-                  if(is_numeric($value)){
-                     $fieldBean->value= (int)$value;  
-                  }else{
-                       $fieldBean->value=$value;
+              
+               $storyField = new StoryFields();
+                  $standardFields = $storyField->getStoryFieldList();
+                  foreach ($standardFields as $field) {
+                     $fieldBean = new FieldBean();
+                     $fieldId =  $field["Id"];
+                     $fieldType =  $field["Type"];
+                     $fieldTitle =  $field["Title"];
+                      $fieldName =  $field["Field_Name"];
+                     $fieldBean->Id = (int)$field["Id"];
+                     $fieldBean->title = $fieldTitle;
+                     
+                     if($fieldType == 6 && $fieldName == "reportedby"){
+                         $fieldBean->value= (int)$collaboratorData["Id"]; 
+                     }
+                     else if($fieldName == "tickettype"){
+                         $fieldBean->value= (int)1; 
+                     }
+                     else if($fieldName == "tickettype"){
+                         $fieldBean->value= (int)1; 
+                     }
+                     else if($fieldName == "workflow"){
+                         $fieldBean->value= (int)1; 
+                     }
+                     else if($fieldName == "estimatedpoints"){
+                         $fieldBean->value= (int)0; 
+                     }
+                     else if($fieldType == 4 || $fieldType == 5){
+                         $fieldBean->value= new \MongoDB\BSON\UTCDateTime(time() * 1000); 
+                     }
+                     else if($fieldType == 8){
+                        $bucketId = Bucket::getBackLogBucketId(1);
+                        $fieldBean->value = (int)$bucketId;
+                     }
+                     else{
+                          $fieldBean->value=""; 
+                     }
+                     if(isset($ticket_data->$fieldId)){
+                          if(is_numeric($ticket_data->$fieldId)){
+                              $fieldBean->value= (int)$ticket_data->$fieldId;
+                          }else{
+                              $fieldBean->value= $ticket_data->$fieldId;
+                          }
+                          
+                     }
+                      array_push($dataArray, $fieldBean);
                   }
-                 
-                  array_push($dataArray, $fieldBean);
-              }
-              error_log("hiiiiiiiiiiiiiiiiiiiiiiiii-------------iii");
+
            $ticketModel = new TicketCollection();
            $ticketModel->Title = $title;
            $ticketModel->Description = $description;
@@ -193,11 +230,11 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
            $ticketModel->ProjectId = 1;
            $ticketModel->RelatedStories= [];
            $ticketModel->Tasks= [];
-           $ticketModel->TicketId = 1;
+           $ticketNumber = ProjectTicketSequence::getNextSequence(1);
+           $ticketModel->TicketId = (int)$ticketNumber;
            $ticketModel->TotalEstimate = 0;
            $ticketModel->TotalTimeLog = 0;
-          
-          
+                  
              
            
            TicketCollection::saveTicketDetails($ticketModel);

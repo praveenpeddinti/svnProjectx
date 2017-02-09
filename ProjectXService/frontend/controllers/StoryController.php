@@ -126,6 +126,10 @@ class StoryController extends Controller
         try{
             error_log("actionSaveTicketDetails--");
              $ticket_data = json_decode(file_get_contents("php://input"));
+            error_log("pintir-------------".print_r($ticket_data,1));
+//           $userdata =  $ticket_data->userInfo;
+//           error_log("userid------".$userdata->Id);
+          
             $data = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
            return "success";
         } catch (Exception $ex) {
