@@ -13,7 +13,9 @@ export class AjaxService {
 
 AjaxSubscribe(url:string,params:Object,callback)
 {   
-  //alert(JSON.stringify(params));
+  
+   var getAllData=  JSON.parse(localStorage.getItem('user'));
+   params["userInfo"] = getAllData;
       //var  options = new RequestOptions({headers: headers});
       this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(params), headers)
       .subscribe(
