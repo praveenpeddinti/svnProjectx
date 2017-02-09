@@ -36,7 +36,7 @@ public hasFileDroped:boolean = false;
              // console.log("new_data"+JSON.stringify(response));
               if(response.statusCode==200){
                   response.data.story_fields.forEach(element => {
-                    var  item = element.Field_Name;
+                    var  item = element.Id;
                     
                     if(element.Type == 5){
                         element.DefaultValue=new Date().toLocaleString();
@@ -48,7 +48,7 @@ public hasFileDroped:boolean = false;
                     console.log("Default values"+JSON.stringify(DefaultValue));
                     jsonForm[item] = element.DefaultValue;
                    this.storyFormData.push(
-                       {'lable':element.Title,'model':element.Field_Name,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':DefaultValue}
+                       {'lable':element.Title,'model':element.Id,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':DefaultValue}
                        )
                   });
                 this.form = jsonForm;
