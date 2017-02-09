@@ -25,6 +25,7 @@ import {AuthGuard} from './services/auth-guard.service';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { StoryComponent }  from './components/story/story-form.component';
 import { StoryDetailComponent }  from './components/story-detail/story-detail.component';
+import { StoryEditComponent } from './components/story-edit/story-edit.component';
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: 'home',children:[
@@ -40,6 +41,7 @@ const ROUTES=[
                ],canActivate:[AuthGuard]},
              
               {path: 'story-detail', component: StoryDetailComponent},
+              {path: 'story-edit', component: StoryEditComponent},
              ];
 @NgModule({
   imports:      [
@@ -56,7 +58,7 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES)
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent, ],
   bootstrap:    [ AppComponent ],
   providers:[LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
