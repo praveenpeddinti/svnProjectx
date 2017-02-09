@@ -78,7 +78,13 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
         }
       
     }
-    
+     public static function getCollboratorByFieldType($fieldName,$value)
+    {
+        $qry = "select * from Collaborators where ".$fieldName."=".$value;
+        $data = Yii::$app->db->createCommand($qry)->queryOne();
+        return $data;
+//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
     public static function getCollabrators()
     {
         $qry = "select * from Collaborators";

@@ -41,7 +41,7 @@ class ProjectTicketSequence extends ActiveRecord
             TimestampBehavior::className(),
         ];
     }
-     public function getNextSequence($projectId) {
+     public static function getNextSequence($projectId) {
          $db =  ProjectTicketSequence::getCollection();
          $ret = $db->findAndModify( array("ProjectId"=> (int)$projectId ), array('$inc'=> array('seq' =>1)),array('new' => 1,"upsert"=>1));
          error_log("restul-------------".  print_r($ret,1));
