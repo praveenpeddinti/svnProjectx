@@ -52,7 +52,10 @@
         </ngx-datatable-column>
         <ngx-datatable-column name="Due Date">
           <template let-row="row" let-i="i" ngx-datatable-cell-template>
-             {{row.Fields[9].readable_value.date}}
+
+              <strong>{{row.Fields[9].readable_value}}</strong>
+            <strong></strong>
+
           </template>
         </ngx-datatable-column>
     
