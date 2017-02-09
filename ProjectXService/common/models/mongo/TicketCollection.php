@@ -22,7 +22,7 @@ class TicketCollection extends ActiveRecord
 {
     public static function collectionName()
     {
-        return 'TicketCollection1';
+        return 'TicketCollection';
     }
     
     public function attributes() {
@@ -69,7 +69,7 @@ class TicketCollection extends ActiveRecord
     public static function saveTicketDetails($ticket_data) {
         try {
             error_log("TicketCollection--##-saveTicketDetails----------------");
-            $collection = Yii::$app->mongodb->getCollection('TicketCollection1');
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
            
             $ticket_data->insert();
           // $collection->insert($ticket_data);
