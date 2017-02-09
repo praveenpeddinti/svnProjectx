@@ -35,7 +35,7 @@ class Collaborators extends ActiveRecord
     public  function getProjectTeam($projectId)
     {
         try{
-         $qry = "select C.Id,C.UserName,C.Email from ProjectTeam PT join Collaborators C on PT.CollaboratorId = C.Id where PT.ProjectId = $projectId";
+         $qry = "select C.Id,C.UserName as Name,C.Email from ProjectTeam PT join Collaborators C on PT.CollaboratorId = C.Id where PT.ProjectId = $projectId";
          $data = Yii::$app->db->createCommand($qry)->queryAll();
          return $data;    
         } catch (Exception $ex) {
@@ -43,7 +43,7 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
         }
        
     }
-    
+
     public static function findByUsername($userData)
     {
          error_log("findByUsername---".print_r($userData,1));
@@ -91,29 +91,29 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
         
          $comma=  ",";
         $qry = "INSERT INTO `Techo2_ProjectX`.`Collaborators`
-(
-`FirstName`,
-`LastName`,
-`UserName`,
-`Email`,
-`Password`,
-`OrganizationId`,
-`Status`,
-`CreatedOn`,
-`UpdatedOn`)";
-$values = "VALUES";
-for($i=0;$i<=$noofrecords;$i++){
-  $fname='Test';
-  $lname='User';
-  $lname=$lname."_".$i;
-  $username=$fname.$lname;
-  $email=$username."@techo2.com";
-  $values =$values ."(". "'$fname'".","."'$lname'".","."'$username'".","."'$email'".","."md5('test111'),1,1,now(),now())";
-  if($i != $noofrecords){
-   $values=$values.$comma;
-  }
-  
-}
+            (
+            `FirstName`,
+            `LastName`,
+            `UserName`,
+            `Email`,
+            `Password`,
+            `OrganizationId`,
+            `Status`,
+            `CreatedOn`,
+            `UpdatedOn`)";
+            $values = "VALUES";
+            for($i=0;$i<=$noofrecords;$i++){
+              $fname='Test';
+              $lname='User';
+              $lname=$lname."_".$i;
+              $username=$fname.$lname;
+              $email=$username."@techo2.com";
+              $values =$values ."(". "'$fname'".","."'$lname'".","."'$username'".","."'$email'".","."md5('test111'),1,1,now(),now())";
+              if($i != $noofrecords){
+               $values=$values.$comma;
+              }
+
+            }
         $final_query=$qry.$values;
         $data = Yii::$app->db->createCommand($final_query)->execute();
         return $data;

@@ -210,6 +210,51 @@ class StoryController extends Controller
      Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    /*
+    * @author Padmaja
+    * @description This method to get Project details by FieldId.
+    * @return type Json
+    */
+
+    public function actionGetProjectDetailsByFieldId(){
+        try{
+            error_log("getdetaisssssss");
+            $fieldData = '{"FieldId":1,"ProjectId":1,"TicketId":3}';
+            $postFieldData = json_decode(file_get_contents("php://input"));
+            $responseBean = new ResponseBean();
+            $postFieldData['FieldId']=5;
+          //  $responseData['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldDataById(5);
+            $postFieldData['ProjectId']=1;
+            if($postFieldData['FieldId'] == 5 || $postFieldData['FieldId'] == 11){
+            // get all assigned to details,stakeholeders
+                $responseData['getProjectDetails'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postFieldData['ProjectId']);//$projectId
+                //error_log("test##############");
+            }else if($postFieldData['FieldId'] == 3){
+                // get all Bucket details
+                $responseData['getProjectDetails'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($postFieldData['ProjectId']);//$projectId
+            }else if($postFieldData['FieldId'] == 4){
+            //get all planlevel details
+                $responseData['getProjectDetails'] = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
+            }else if($postFieldData['FieldId'] == 7){
+            //get all status details
+                $responseData['getProjectDetails'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList();
+            }else if($postFieldData['FieldId'] == 6){
+            //get all priority details
+                $responseData['getProjectDetails'] = ServiceFactory::getStoryServiceInstance()->getPriorityList();
+            }else if($postFieldData['FieldId'] == 12){
+            //get all ticket type details
+             $responseData['getProjectDetails'] = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();       
+            }
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $responseData;
+            $response = CommonUtility::prepareResponse($responseData,"json");
+            error_log("json dataaaaaaaaaaaaaa".print_r($response,1));
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetAssignedCollabarators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 
 }
