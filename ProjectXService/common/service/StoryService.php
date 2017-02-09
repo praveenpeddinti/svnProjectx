@@ -157,36 +157,49 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
 Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
+/**
+ * @author Moin Hussain
+ * @param type $ticket_data
+ */
        public function saveTicketDetails($ticket_data) {
         try {
 
-            error_log("@@@@@@@@@@@@@@@@@@@@@2----------------".print_r($ticket_data,1));
-            
-              $ticket_data = $ticket_data->storyData;
-
-           // error_log("@@@@@@@@@@@@@@@@@@@@@2----------------".print_r($ticket_data,1));
              $userdata =  $ticket_data->userInfo;
              $projectId =  $ticket_data->projectId;
-             //error_log("projectId------------".$projectId);
              $userId = $userdata->Id;
              $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
-             error_log(print_r($collaboratorData,1));
+            // error_log(print_r($collaboratorData,1));
               $ticket_data = $ticket_data->data;
               $dataArray = array();
               $fieldsArray = array();
               $title =  $ticket_data->title;
               $description =  $ticket_data->description;
-              
-              //error_log("%%%%%%%%%%%%%%%%5 ---------------- ".$description);
+              $crudeDescription = $description;
               $matches=[];
-              //preg_match_all("/\[\[\w+:\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/",$str,$matches); // after uploades/
-              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $str, $matches);
-              error_log("the descriptoin pregmatchcount ".count($matches[0]." --- ". print_r($matches, 1)));
-//              for($i = 0; $i< count($matches); $i++){
-//                  
-//              }
+              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
+              $filematches = $matches[0];
+              for($i = 0; $i< count($filematches); $i++){
+                   $value = $filematches[$i];
+                   $firstArray =  explode("/", $value);
+                   $secondArray = explode("|", $firstArray[1]);
+                   $tempFileName = $secondArray[0];
+                   $originalFileName = $secondArray[1];
+                   $originalFileName = str_replace("]]", "", $originalFileName);
+                $newPath = Yii::$app->params['ServerURL']."/files/".$tempFileName."-".$originalFileName;
+                rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", "/usr/share/nginx/www/ProjectXService/frontend/web/files/$tempFileName-".$originalFileName);
+               $extension = CommonUtility::getExtension($originalFileName);
+                 $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
               
+               if(in_array($extension, $imageExtensions)){
+                $replaceString = "<img src='".$newPath."'/>";
+             
+                }else{
+                   $replaceString = "<a href='".$newPath."'/>";  
+                }
+               $description = str_replace($value, $replaceString, $description);
+              }
+              
+             
               unset($ticket_data->title);
               unset($ticket_data->description);
               
@@ -240,6 +253,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
            $ticketModel = new TicketCollection();
            $ticketModel->Title = $title;
            $ticketModel->Description = $description;
+           $ticketModel->CrudeDescription = $crudeDescription;
            $ticketModel->Fields = $dataArray;
            $ticketModel->ArtifactsRef = "";
            $ticketModel->CommentsRef = "";
