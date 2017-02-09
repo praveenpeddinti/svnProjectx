@@ -162,6 +162,8 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
         try {
            // error_log("@@@@@@@@@@@@@@@@@@@@@2----------------".print_r($ticket_data,1));
              $userdata =  $ticket_data->userInfo;
+             $projectId =  $ticket_data->projectId;
+             //error_log("projectId------------".$projectId);
              $userId = $userdata->Id;
              $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
              error_log(print_r($collaboratorData,1));
@@ -203,7 +205,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                          $fieldBean->value= new \MongoDB\BSON\UTCDateTime(time() * 1000); 
                      }
                      else if($fieldType == 8){
-                        $bucketId = Bucket::getBackLogBucketId(1);
+                        $bucketId = Bucket::getBackLogBucketId($projectId);
                         $fieldBean->value = (int)$bucketId;
                      }
                      else{
@@ -230,7 +232,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
            $ticketModel->ProjectId = 1;
            $ticketModel->RelatedStories= [];
            $ticketModel->Tasks= [];
-           $ticketNumber = ProjectTicketSequence::getNextSequence(1);
+           $ticketNumber = ProjectTicketSequence::getNextSequence($projectId);
            $ticketModel->TicketId = (int)$ticketNumber;
            $ticketModel->TotalEstimate = 0;
            $ticketModel->TotalTimeLog = 0;
