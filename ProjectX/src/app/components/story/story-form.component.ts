@@ -1,6 +1,7 @@
 import { Component,ViewChild } from '@angular/core';
 import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
+import { TinyMCE } from '../../tinymce.component';
 
 @Component({
     selector: 'story-form',
@@ -21,6 +22,7 @@ filesToUpload: Array<File>;
 //sampleModel:string = "";
 public hasBaseDropZoneOver:boolean = false;
 public hasFileDroped:boolean = false;
+editorData:string='';
 
     constructor( private _service: StoryService) {
         this.filesToUpload = [];
