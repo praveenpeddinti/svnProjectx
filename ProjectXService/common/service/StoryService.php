@@ -160,6 +160,11 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
 
        public function saveTicketDetails($ticket_data) {
         try {
+
+            error_log("@@@@@@@@@@@@@@@@@@@@@2----------------".print_r($ticket_data,1));
+            
+              $ticket_data = $ticket_data->storyData;
+
            // error_log("@@@@@@@@@@@@@@@@@@@@@2----------------".print_r($ticket_data,1));
              $userdata =  $ticket_data->userInfo;
              $projectId =  $ticket_data->projectId;
@@ -172,6 +177,16 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
               $fieldsArray = array();
               $title =  $ticket_data->title;
               $description =  $ticket_data->description;
+              
+              //error_log("%%%%%%%%%%%%%%%%5 ---------------- ".$description);
+              $matches=[];
+              //preg_match_all("/\[\[\w+:\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/",$str,$matches); // after uploades/
+              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $str, $matches);
+              error_log("the descriptoin pregmatchcount ".count($matches[0]." --- ". print_r($matches, 1)));
+//              for($i = 0; $i< count($matches); $i++){
+//                  
+//              }
+              
               unset($ticket_data->title);
               unset($ticket_data->description);
               
