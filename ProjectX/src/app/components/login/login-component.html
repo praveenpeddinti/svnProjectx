@@ -7,8 +7,13 @@
 
         <h2 class="loginheader text-center">SIGN IN</h2>
         <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && login()" novalidate="true">
-          <div class="alert alert-danger ">{{errorMsg}}</div>
           <div class="loginform">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+          <div *ngIf="submitted && user_name.errors == null && this.checkData" class="alert alert-danger">
+                    {{errorMsg}}
+                  </div>
+                
+          </div>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
@@ -31,7 +36,7 @@
                     Email invalid.
                   </div>
                 </div>
-
+                   
               </div>
               <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
@@ -57,6 +62,7 @@
     value="0"><label for="password">Remember me</label>
 </div>
 </div>
+
 <div class="col-xs-12 col-sm-12 col-md-12">
   <div class="buttonarea text-center">
     <button type="submit" (click)="submitted = true;validateEmail(user.email);" class="normal bluebutton bluebuttonlarge">SIGN IN</button>

@@ -9,9 +9,10 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <div class="navbar-right">
       <div class="profilesection">
-      <div class="pull-left"><ul class="nav navbar-nav headerrightnavbar"> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sateesh Mandru <span class="caret"></span></a> <ul class="dropdown-menu">  <li><a href="#">Logout</a></li> </ul> </li> </ul></div>
+      <div class="pull-left"><ul class="nav navbar-nav headerrightnavbar"> <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{users.username}}<span class="caret"></span></a> <ul class="dropdown-menu">  
+        <li ><a href="#" (click)="logout()">Logout</a></li> </ul> </li> </ul></div>
       <div class="pull-right">
-      <div class="profilepic"><img src="images/profilepic.jpg" /></div>
+      <div class="profilepic"><img src="images/user_noimage.png" /></div><!--images/profilepic.jpg -->
       </div>
       
       </div>

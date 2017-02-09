@@ -21,12 +21,14 @@ export class LoginService {
     private http: Http) { }
 // logout the Collabarator
   logout() {
-     var getAllData= localStorage.getItem("user");
-    // var userObj=JSON.parse(JSON.stringify(getAllData));alert(userObj);
-     this._ajaxService.AjaxSubscribe("site/update-collabarator-status",getAllData,function(result){
-    }) 
-    localStorage.removeItem("user");
-    this._router.navigate(['login']);
+   //  var getAllData= JSON.parse(localStorage.getItem("user"));
+
+     this._ajaxService.AjaxSubscribe("site/update-collabarator-status",{},function(result){
+      localStorage.removeItem("user");
+      this._router.navigate(['login']);
+
+ }); 
+   
 
   }
 

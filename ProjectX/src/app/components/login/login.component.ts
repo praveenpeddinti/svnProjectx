@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit{
     public user = new Collaborator('', '');
     public errorMsg = '';
     public submitted = false;
+    public checkData=false;
     returnUrl: string;
     ngOnInit(){
         // reset login status
@@ -40,6 +41,7 @@ export class LoginComponent implements OnInit{
               this._router.navigate(['story-dashboard']);  
             }else{
            // console.log("comming..");
+           this.checkData=true;
             this.errorMsg = 'Invalid Email/Password';
             }
 
