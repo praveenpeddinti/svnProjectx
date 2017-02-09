@@ -34,7 +34,6 @@ export class LoginService {
     'username': '',
     'password': '',
     'rememberme':'',
-    'AccessKey':'sadsadweqwwq',
   }
 
  
@@ -44,13 +43,13 @@ login(user,loginCallback) {
     this.collaboratorObj.username=user.email;
     this.collaboratorObj.password=user.password;
     this.collaboratorObj.rememberme=user.rememberme;
-    this.collaboratorObj.AccessKey=user.AccessKey;
+   // this.collaboratorObj.AccessKey=user.AccessKey;
 
     this._ajaxService.AjaxSubscribe("site/user-authentication",this.collaboratorObj,(result)=>
     { 
-      var token=result.data;
-      localStorage.setItem("user",JSON.stringify(token));
-      this.collaboratorObj.AccessKey=token;//alert(this.collaboratorObj.headers);
+      var userdata = result.data;
+      localStorage.setItem("user",JSON.stringify(userdata));
+      //this.collaboratorObj.AccessKey=token;//alert(this.collaboratorObj.headers);
       loginCallback(result);
     });
   
