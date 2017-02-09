@@ -31,6 +31,7 @@ class TicketCollection extends ActiveRecord
             "_id",
             "Title",
             "Description",
+            "CrudeDescription",
             "Fields",
             "CreatedOn",
             "UpdatedOn",
@@ -68,11 +69,8 @@ class TicketCollection extends ActiveRecord
     
     public static function saveTicketDetails($ticket_data) {
         try {
-            error_log("TicketCollection--##-saveTicketDetails----------------");
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-           
             $ticket_data->insert();
-          // $collection->insert($ticket_data);
             
         } catch (Exception $ex) {
                 error_log($ex->getMessage());
