@@ -71,6 +71,11 @@ ngOnInit() {
   onPage(event){
    // alert("on click page");
   }
+
+  renderStoryForm()
+  {
+      this._router.navigate(['story-form']);
+  }
   
    
 }
