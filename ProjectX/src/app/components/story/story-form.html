@@ -18,7 +18,7 @@
           <label for="email">Description</label>
           <!--<ckeditor [config]="toolbar" [(ngModel)]="form.description"   name="description"  #description="ngModel" required     debounce="500"  >
     </ckeditor>-->
-    <tinymce [(content)]="editorData"></tinymce>
+    <tinymce [(content)]="form.description"></tinymce>
      <div *ngIf="submitted && description.errors " class="alert alert-danger">
                     <div [hidden]="!description.errors.required">
                        Description is required
