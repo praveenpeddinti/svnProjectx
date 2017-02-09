@@ -256,9 +256,9 @@ class SiteController extends Controller
 //          $headerff=Yii::$app->request->getHeaders()->get('Authorization');
 //          error_log("dddddddddddddddweww".print_r($headerff,1));
             $collabaratorJson = json_decode(file_get_contents("php://input"));
-            //coverting to Json to Array
-            $collabaratortokenArr= json_decode($collabaratorJson);
-            $updateStatus  = ServiceFactory::getCollaboratorServiceInstance()->updateStatusCollabarator($collabaratortokenArr->token);
+            //error_log("hellooooooooooo@@@@@@@@@@@@@".$collabaratorJson->userInfo->token);
+            $collabaratorToken=$collabaratorJson->userInfo->token;
+            $updateStatus  = ServiceFactory::getCollaboratorServiceInstance()->updateStatusCollabarator($collabaratorToken);
             $responseBean     = new ResponseBean;
             $responseBean->status = ResponseBean::SUCCESS;
             $responseBean->message = "success";
