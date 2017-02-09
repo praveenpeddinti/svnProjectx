@@ -16,6 +16,7 @@ AjaxSubscribe(url:string,params:Object,callback)
   
    var getAllData=  JSON.parse(localStorage.getItem('user'));
    params["userInfo"] = getAllData;
+   params["projectId"] = 1;
       //var  options = new RequestOptions({headers: headers});
       this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(params), headers)
       .subscribe(
