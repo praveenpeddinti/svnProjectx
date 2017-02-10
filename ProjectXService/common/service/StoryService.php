@@ -230,7 +230,12 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                          $fieldBean->value= (int)0; 
                      }
                      else if($fieldType == 4 || $fieldType == 5){
-                            $fieldBean->value= new \MongoDB\BSON\UTCDateTime(time() * 1000);  
+                         if($fieldName == "duedate"){
+                              $fieldBean->value= "";
+                         }else{
+                            $fieldBean->value= new \MongoDB\BSON\UTCDateTime(time() * 1000);   
+                         }
+                            
                          }
                      else if($fieldType == 8){
                         $bucketId = Bucket::getBackLogBucketId($projectId);
