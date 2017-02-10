@@ -85,8 +85,7 @@ class StoryController extends Controller
     public function actionGetAllTicketDetails(){
         try{
             $StoryData = json_decode(file_get_contents("php://input"));
-           
-         $projectId=1;
+            $projectId  =  $StoryData->projectId;
         $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($StoryData,$projectId);
         $responseBean = new ResponseBean();  
         $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -109,7 +108,7 @@ class StoryController extends Controller
     */
     public function actionEditTicket(){
         try{
-        $data = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails(101,1);
+        $data = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails(33,1);
         $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -260,7 +259,24 @@ class StoryController extends Controller
             Yii::log("StoryController:actionGetAssignedCollabarators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
+   /**
+    * @author Moin Hussain
+    * @return string
+    */
+    public function actionEditTicketDetails(){
+        try{
+            error_log("actionEditTicketDetails--");
+             $ticket_data = json_decode(file_get_contents("php://input"));
+            error_log("pintir-------------".print_r($ticket_data,1));
+//           $userdata =  $ticket_data->userInfo;
+//           error_log("userid------".$userdata->Id);
+          
+            //$data = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
+           return "success";
+        } catch (Exception $ex) {
+        Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
 ?>
