@@ -3,9 +3,12 @@ import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
 import { TinyMCE } from '../../tinymce.component';
 
+import {Observable} from 'rxjs/Rx';
+
 @Component({
     selector: 'story-form',
     templateUrl: 'story-form.html',
+    styleUrls: ['story-form.css'],
     providers: [StoryService]     
     	
 })
@@ -23,10 +26,11 @@ filesToUpload: Array<File>;
 public hasBaseDropZoneOver:boolean = false;
 public hasFileDroped:boolean = false;
 editorData:string='';
+public fileUploadStatus:boolean = false;
 
     constructor( private _service: StoryService) {
         this.filesToUpload = [];
-     }
+    }
 
     ngOnInit() {
      
@@ -81,7 +85,7 @@ public fileChangeEvent(fileInput: any):void {
         }, (error) => {
             console.error(error);
             //this.sampleModel = "Error while uploading";
-            this.form['description'] = "Error while uploading";
+            this.form['description'] = this.form['description'] + "Error while uploading";
         });
 }
 public onFileDrop(fileInput:any): void{
@@ -101,7 +105,7 @@ public onFileDrop(fileInput:any): void{
         }, (error) => {
             console.error(error);
             //this.sampleModel = "Error while uploading";
-            this.form['description'] = "Error while uploading";
+            this.form['description'] = this.form['description'] + "Error while uploading";
         });
   }
 
@@ -109,7 +113,7 @@ public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
         return new Promise((resolve, reject) => {
             var formData: any = new FormData();
             var xhr = new XMLHttpRequest();
-            for(var i = 0; i < files.length; i++) {
+            for(var i = 0; i < files.length; i++) { 
                 formData.append("uploads[]", files[i], files[i].name);
             }
             xhr.onreadystatechange = function () {
@@ -121,7 +125,15 @@ public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
                         reject(xhr.response);
                     }
                 }
-            }
+            };
+
+            xhr.upload.onloadstart= (event) => {
+                this.fileUploadStatus = true;
+            };
+            xhr.upload.onloadend = (event) => {
+                   this.fileUploadStatus = false;                
+            };
+            
             xhr.open("POST", url, true);
             xhr.send(formData);
         });

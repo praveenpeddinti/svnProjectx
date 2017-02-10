@@ -109,9 +109,11 @@
             </div>
 <div class="rightdescriptionarea">
 
-          
-          <ckeditor [config]="toolbar" [(ngModel)]="form.description"   name="description"  #description="ngModel" required     debounce="500"  >
-    </ckeditor>
+          <div style="position: relative">
+              <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="images/loader.gif" height="20" width="70" alt=""/> </div>
+            <ckeditor [config]="toolbar" [(ngModel)]="form.description"   name="description"  #description="ngModel" required     debounce="500"  >
+            </ckeditor>
+          </div>
    <!-- <tinymce [(content)]="form.description"></tinymce>-->
      <div *ngIf="submitted && description.errors " class="alert alert-danger">
                     <div [hidden]="!description.errors.required">
