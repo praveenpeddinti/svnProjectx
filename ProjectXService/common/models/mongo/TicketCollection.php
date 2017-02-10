@@ -93,7 +93,8 @@ class TicketCollection extends ActiveRecord
             }
           
             $query->from('TicketCollection')
-            ->where(['TicketId' => $ticketId, "ProjectId" => $projectId ]);
+            ->where(['TicketId' => (int)$ticketId, "ProjectId" => $projectId ]);
+         
            $ticketDetails = $query->one();
            return $ticketDetails;  
       } catch (Exception $ex) {
