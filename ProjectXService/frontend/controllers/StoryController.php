@@ -109,7 +109,8 @@ class StoryController extends Controller
     */
     public function actionEditTicket(){
         try{
-        $data = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails(33,1);
+            $ticket_data = json_decode(file_get_contents("php://input"));
+        $data = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,1);
         $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
