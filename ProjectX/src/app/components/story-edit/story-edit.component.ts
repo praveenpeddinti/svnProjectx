@@ -1,20 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
+import { StoryService} from '../../services/story.service';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-story-edit',
   templateUrl: './story-edit.component.html',
-  styleUrls: ['./story-edit.component.css']
+  styleUrls: ['./story-edit.component.css'],
+  providers:[StoryService]
 })
 export class StoryEditComponent implements OnInit {
 
     private ticketData;
+    public form={};
   private fieldsData = [];
   private showMyEditableField =[];
+  public toolbar={toolbar : [
+    [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
+]};
 
-  constructor(private _ajaxService: AjaxService,
+  constructor(private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,
     private http: Http) { 
 this._ajaxService.AjaxSubscribe("story/edit-ticket","",(data)=>
@@ -22,7 +29,7 @@ this._ajaxService.AjaxSubscribe("story/edit-ticket","",(data)=>
        
          
          this.ticketData = data;
-         alert("++++++++++++++"+JSON.stringify(this.ticketData));
+         console.log("++++++++++++++"+JSON.stringify(this.ticketData));
          this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
         //  alert("========>"+JSON.stringify(this.fieldsData));
          
@@ -31,6 +38,7 @@ this._ajaxService.AjaxSubscribe("story/edit-ticket","",(data)=>
 
 
   ngOnInit() {
+    
   }
 
    editThisField(event,fieldIndex){
@@ -122,5 +130,12 @@ console.log(JSON.stringify(fieldsBuilt));
     return fieldsBuilt;
 
   }
+
+  editStory(data){
+    console.log("===Edit Form Data==="+JSON.stringify(data));
+     this._service.saveStory(this.form,(response)=>{
+     });
+     
+}
 
 }
