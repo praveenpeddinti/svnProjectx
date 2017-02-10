@@ -1,71 +1,63 @@
-      <!-- Menu -->
+<!-- Menu -->
 
- <div class="custom_menu">
- <button data-toggle="tooltip" data-placement="top" title="List view" class="normal"><i class="fa fa-list" aria-hidden="true"></i></button>
+<div class="custom_menu">
+  <button data-toggle="tooltip" data-placement="top" title="List view" class="normal"><i class="fa fa-list" aria-hidden="true"></i></button>
   <button (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="normal bluebutton"><i class="fa fa-plus" aria-hidden="true"></i></button>
- </div>
+</div>
 
 <!--<ul>
       <li *ngFor="let item of response"> {{item.Id}} </li>
     </ul>-->
 <!-- end -->
-      <ngx-datatable
-        #myTable
-        class='material expandable customdatatable'
-        [externalPaging]="false"
-        [loadingIndicator]="false"
-        [columnMode]="'flex'"
-        [headerHeight]="45"
-        [footerHeight]="50"
-        [rowHeight]="auto"
-        [rows]="rows"
-        [limit]="5"
-        (page)="onPage($event)">
-        
+<ngx-datatable #myTable class='material expandable customdatatable' [externalPaging]="false" [loadingIndicator]="false" [columnMode]="'flex'"
+  [headerHeight]="45" [footerHeight]="50" [rowHeight]="auto" [rows]="rows" [limit]="5" (page)="onPage($event)">
 
-       
-        <ngx-datatable-column name="Id" [flexGrow]="1">
-          <template let-row="row" ngx-datatable-cell-template >
-            <img src="../../../images/user_noimage.png" width="24px" height="24px" title="{{row.Fields[4].readable_value.UserName}}" />
-            #{{row.TicketId}}
-          </template>
-        </ngx-datatable-column>
-        
-        <ngx-datatable-column name="Title" [flexGrow]="8">
-          <template let-row="row" ngx-datatable-cell-template>
+  <ngx-datatable-column name="Id" [flexGrow]="1" style="cursor: pointer">
+    <template let-row="row" ngx-datatable-cell-template>
+      <a title="Details" (click)="showStoryDetail(row)">
+        <img src="../../../images/storyicon.png" width="24px" height="24px" title="{{row.Fields[3].readable_value.Name}}" />
+        #{{row.TicketId}}
+      </a>
+    </template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Title" [flexGrow]="8">
+    <template let-row="row" ngx-datatable-cell-template>
+      <a title="Details" (click)="showStoryDetail(row)">
             {{row.Title}}
-          </template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Assigned to" [flexGrow]="1">
-          <template let-row="row" let-i="i" ngx-datatable-cell-template>
-           <img class="profilepic" src="../../../images/user_noimage.png" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}" />
-          </template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Priority" [flexGrow]="1">
-          <template let-row="row" let-i="i" ngx-datatable-cell-template>
-           {{row.Fields[5].readable_value.Name}}
-          </template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Type" [flexGrow]="1">
-          <template let-row="row" let-i="i" ngx-datatable-cell-template>
-           {{row.Fields[11].readable_value.Name}}
-          </template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Status" [flexGrow]="1">
-          <template let-row="row" let-i="i" ngx-datatable-cell-template >
-           {{row.Fields[6].readable_value.Name}}
-          </template>
-        </ngx-datatable-column>
-        <ngx-datatable-column name="Due Date" [flexGrow]="1">
-          <template let-row="row" let-i="i" ngx-datatable-cell-template>
+            </a>
+    </template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Assigned to" [flexGrow]="1">
+    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+      <img class="profilepic" src="../../../images/user_noimage.png" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"
+      />
+    </template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Priority" [flexGrow]="1">
+    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+      {{row.Fields[5].readable_value.Name}}
+    </template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Type" [flexGrow]="1">
+    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+      {{row.Fields[11].readable_value.Name}}
+    </template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Status" [flexGrow]="1">
+    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+      {{row.Fields[6].readable_value.Name}}
+    </template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="Due Date" [flexGrow]="1">
+    <template let-row="row" let-i="i" ngx-datatable-cell-template>
 
-              <strong>{{row.Fields[9].readable_value}}</strong>
-            <strong></strong>
+      <strong>{{row.Fields[9].readable_value}}</strong>
+      <strong></strong>
 
-          </template>
-        </ngx-datatable-column>
-    
-
+    </template>
+  </ngx-datatable-column>
 
 
-      </ngx-datatable>
+
+
+</ngx-datatable>

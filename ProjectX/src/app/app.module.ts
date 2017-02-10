@@ -46,7 +46,7 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
              
-              {path: 'story-detail', component: StoryDetailComponent},
+              {path: 'story-detail/:id', component: StoryDetailComponent},
               {path: 'story-edit', component: StoryEditComponent},
              
              ];

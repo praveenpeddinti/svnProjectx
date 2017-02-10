@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 
@@ -19,6 +19,7 @@ export class StoryDetailComponent implements OnInit {
 
 
   private ticketData;
+  private ticketId;
   private fieldsData = [];
   private showMyEditableField =[];
   private ticketDesc="";
@@ -29,14 +30,14 @@ export class StoryDetailComponent implements OnInit {
   private dropList=[];
   constructor( private _ajaxService: AjaxService,
     public _router: Router,
-    private http: Http) { 
+    private http: Http,private route: ActivatedRoute) { 
     // alert("constructor");
     this._ajaxService.AjaxSubscribe("story/get-ticket-details","",(data)=>
     { 
        
          
          this.ticketData = data;
-         alert("++++++++++++++"+JSON.stringify(this.ticketData));
+         alert(this.ticketId+"++++++++++++++"+JSON.stringify(this.ticketData));
          this.ticketDesc = data.data.Description;
          this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
         //  alert("========>"+JSON.stringify(this.fieldsData));
@@ -46,7 +47,16 @@ export class StoryDetailComponent implements OnInit {
 }
  
   ngOnInit() {
-    
+    // var parms=this.route.params.subscribe;
+
+/** @Praveen P
+ * Getting the TicketId for story dashboard
+ */
+this.route.params.subscribe(params => {
+       this.ticketId = params['id'];
+   });
+
+
   }
 
   onClick(val){

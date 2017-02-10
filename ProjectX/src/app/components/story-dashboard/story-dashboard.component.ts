@@ -88,7 +88,14 @@ ngOnInit() {
   {
       this._router.navigate(['story-form']);
   }
-  
+ /** @Praveen P
+ * Pass the TicketId for story-detail component
+ */
+  showStoryDetail(row){
+      //console.log('Toggled Expand Row!', row.TicketId);
+       this._router.navigate(['story-detail',row.TicketId]);
+      
+  }
    
 }
 
