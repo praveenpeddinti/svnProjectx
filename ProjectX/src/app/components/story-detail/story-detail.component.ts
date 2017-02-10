@@ -84,8 +84,9 @@ cancelDesc(){
     alert("yeaaa working");
   }
 
-  onClick(val){
-    alert(val);
+  onClick(){
+    // alert(val);
+    this._router.navigate(['story-edit',this.ticketId]);
   }
 
   editThisField(event,fieldIndex,fieldId,fieldDataId){

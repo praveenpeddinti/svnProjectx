@@ -25,8 +25,10 @@ import {AuthGuard} from './services/auth-guard.service';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { StoryComponent }  from './components/story/story-form.component';
 import { StoryDetailComponent }  from './components/story-detail/story-detail.component';
+
 import { StoryEditComponent } from './components/story-edit/story-edit.component';
 import {TinyMCE} from './tinymce.component';
+
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: 'home',children:[
@@ -47,7 +49,7 @@ const ROUTES=[
                ],canActivate:[AuthGuard]},
              
               {path: 'story-detail/:id', component: StoryDetailComponent},
-              {path: 'story-edit', component: StoryEditComponent},
+              {path: 'story-edit/:id', component: StoryEditComponent},
              
              ];
 @NgModule({

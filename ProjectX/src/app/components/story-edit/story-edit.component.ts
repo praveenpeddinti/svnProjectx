@@ -27,7 +27,7 @@ export class StoryEditComponent implements OnInit {
   constructor(private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,
     private http: Http) { 
-this._ajaxService.AjaxSubscribe("story/edit-ticket","",(data)=>
+this._ajaxService.AjaxSubscribe("story/edit-ticket",{},(data)=>
     { 
        
          
