@@ -47,7 +47,7 @@ export class StoryDetailComponent implements OnInit {
           
             
             this.ticketData = data;
-            alert(this.ticketId+"++++++++++++++"+JSON.stringify(this.ticketData));
+         //   alert(this.ticketId+"++++++++++++++"+JSON.stringify(this.ticketData));
             this.ticketDesc = data.data.Description;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
             //  alert("========>"+JSON.stringify(this.fieldsData));
@@ -63,7 +63,7 @@ export class StoryDetailComponent implements OnInit {
 
 submitDesc(){
 
-  alert("++++++submitted++++++++++"+this.ticketDesc);
+ // alert("++++++submitted++++++++++"+this.ticketDesc);
 
 }
 cancelDesc(){
@@ -72,7 +72,7 @@ cancelDesc(){
 }
 
   descBlur(){
-    alert("yeaaa working");
+  //  alert("yeaaa working");
   }
 
   onClick(){
