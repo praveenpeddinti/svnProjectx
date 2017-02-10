@@ -5,52 +5,58 @@
   <button (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="normal bluebutton"><i class="fa fa-plus" aria-hidden="true"></i></button>
  </div>
 
-
+<!--<ul>
+      <li *ngFor="let item of response"> {{item.Id}} </li>
+    </ul>-->
 <!-- end -->
       <ngx-datatable
         #myTable
         class='material expandable customdatatable'
-        [columnMode]="'force'"
+        [externalPaging]="false"
+        [loadingIndicator]="false"
+        [columnMode]="'flex'"
         [headerHeight]="45"
         [footerHeight]="50"
-        [rowHeight]="'auto'"
-        [rows]='response'
-        [limit]="15"
+        [rowHeight]="auto"
+        [rows]="rows"
+        [limit]="5"
         (page)="onPage($event)">
         
-        <ngx-datatable-column name="Id" >
-          <template let-row="row" ngx-datatable-cell-template>
+
+       
+        <ngx-datatable-column name="Id" [flexGrow]="1">
+          <template let-row="row" ngx-datatable-cell-template >
             <img src="../../../images/user_noimage.png" width="24px" height="24px" title="{{row.Fields[4].readable_value.UserName}}" />
             #{{row.TicketId}}
           </template>
         </ngx-datatable-column>
         
-        <ngx-datatable-column name="Title" >
+        <ngx-datatable-column name="Title" [flexGrow]="8">
           <template let-row="row" ngx-datatable-cell-template>
             {{row.Title}}
           </template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Assigned to">
+        <ngx-datatable-column name="Assigned to" [flexGrow]="1">
           <template let-row="row" let-i="i" ngx-datatable-cell-template>
            <img class="profilepic" src="../../../images/user_noimage.png" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}" />
           </template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Priority">
+        <ngx-datatable-column name="Priority" [flexGrow]="1">
           <template let-row="row" let-i="i" ngx-datatable-cell-template>
            {{row.Fields[5].readable_value.Name}}
           </template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Type">
+        <ngx-datatable-column name="Type" [flexGrow]="1">
           <template let-row="row" let-i="i" ngx-datatable-cell-template>
            {{row.Fields[11].readable_value.Name}}
           </template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Status">
+        <ngx-datatable-column name="Status" [flexGrow]="1">
           <template let-row="row" let-i="i" ngx-datatable-cell-template >
            {{row.Fields[6].readable_value.Name}}
           </template>
         </ngx-datatable-column>
-        <ngx-datatable-column name="Due Date">
+        <ngx-datatable-column name="Due Date" [flexGrow]="1">
           <template let-row="row" let-i="i" ngx-datatable-cell-template>
 
               <strong>{{row.Fields[9].readable_value}}</strong>
@@ -61,3 +67,5 @@
     
 
 
+
+      </ngx-datatable>

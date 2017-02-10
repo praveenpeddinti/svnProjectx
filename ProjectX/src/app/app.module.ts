@@ -40,10 +40,15 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
+                {path: 'story-form',children:[
+                { path: '' , component: StoryComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
              
               {path: 'story-detail', component: StoryDetailComponent},
               {path: 'story-edit', component: StoryEditComponent},
-              {path:'story-form',component:StoryComponent}
+             
              ];
 @NgModule({
   imports:      [

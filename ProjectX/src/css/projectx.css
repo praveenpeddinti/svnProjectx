@@ -85,3 +85,21 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
 .customdatatable .datatable-row-wrapper .datatable-body-row .datatabledatatable-row-center{border:1px solid #ccc;margin-bottom:5px;}
 .profilepic{border-radius:100px;width:40px;height:40px;border:1px solid #ccc;padding:2px;background: #fff}
 /* end */
+/* componentstyles for to title area*/
+ .titlearea{}
+ .titlearea  .ticketidareanorightpadding{padding-right:0}
+ .titlearea .ticketidarea{background:#f8f8f8;min-height:60px}
+ .titlearea .ticketdescriptionarea{background:#f8f8f8;padding:6px}
+ .titlearea .ticketdescriptionarea .editinput{width:100%;min-height:50px;font-size:25px;background:#fff;padding:5px 10px;word-wrap:break-word}
+ .titlearea .ticketdescriptionarea .editinput{}
+ .rightdescriptionarea{padding:15px;background:#f8f8f8 }
+ .paddingbottom10{padding-bottom:10px}
+ .leftpaneldiv{border:1px solid #f8f8f8}
+ .leftpanelsections{border-bottom:1px solid #f8f8f8;padding: 5px 15px}
+ .leftpanelsections .leftlabels, .leftlabels{font-weight: normal;font-size:12px}
+ .leftpanelsections select, .leftpanelsections input{border:0px solid #ccc;background: #f8f8f8;border-radius:0}
+ .uploadcomponent{position:relative;overflow: hidden;width:200px;height:40px;border:1px solid #000}
+ .uploadcomponent  .uploadbottom{position:absolute;left:0;top:0}
+ .uploadcomponent .transparentinput{position:absolute;z-index:2;left:-10px;top:-15px;font-size:120px;opacity: 0;
+    filter: alpha(opacity=0);}
+/* end */

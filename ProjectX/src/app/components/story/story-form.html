@@ -1,38 +1,27 @@
 <form #storyForm="ngForm" (ngSubmit)="submitted && saveStory()" novalidate="true">
-    <div class="panel-body">
-        <div class="row">
-        <div class="input-field col s12">
-          <label for="title">Title</label>
-          <input [(ngModel)]="form.title" type="text" id="title"class="form-control" required minlength="3" maxlength="150" 
-            name="title"  #title="ngModel" >
-        </div>
-             <div *ngIf="submitted && title.errors " class="alert alert-danger">
-                    <div [hidden]="!title.errors.required">
-                       Title is required
-                    </div>
-                    <div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                       Title must be 3 characters long
-                    </div>
-            </div>
-        <div class="input-field col s12">
-          <label for="email">Description</label>
-          <ckeditor [config]="toolbar" [(ngModel)]="form.description"   name="description"  #description="ngModel" required     debounce="500"  >
-    </ckeditor>
-    <!--<tinymce [(content)]="form.description"></tinymce>-->
-     <div *ngIf="submitted && description.errors " class="alert alert-danger">
-                    <div [hidden]="!description.errors.required">
-                       Description is required
-                    </div>
-            </div>
-    <input type="file" (change)="fileChangeEvent($event)"  multiple  /><br/>
-          <!--<input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
-            name="description"  #description="ngModel" >-->
-        </div>
-        </div>
-        <div class="row" *ngFor="let value of storyFormData; let i = index;">
+    <div class="paddingbottom10">
+    <div class="titlearea  ">
+  <div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12">
+  <div class="ticketdescriptionarea">
+  
+  <input class="editinput" placeholder="Title" [(ngModel)]="form.title" type="text" id="title"class="form-control" required minlength="3" maxlength="150" 
+           name="title"  #title="ngModel"   >
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
+<div class="row">
+  <div class="col-xs-12 col-sm-3 col-md-3">
+<div class="leftpaneldiv">
+
+    <div  *ngFor="let value of storyFormData; let i = index;">
+
             <div *ngIf="value.type == 1">
-                <div class="input-field col s12">
-                    <label for="email">{{value.lable}}</label>
+
+                <div class="leftpanelsections">
+                    <label for="email" class="leftlabels">{{value.lable}}</label>
                     <input [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" [readonly]="(value.readOnly == 1) ? true : null"
                         type="text" class="form-control" name="name_{{value.model}}" >
                 </div>
@@ -44,8 +33,8 @@
             </div>
 
              <div *ngIf="value.type == 5">
-                <div class="input-field col s12">
-                    <label for="email">{{value.lable}}</label>
+                <div class="leftpanelsections">
+                    <label for="email" class="leftlabels">{{value.lable}}</label>
                     <input [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" [readonly]="(value.readOnly == 1) ? true : null"
                         type="text" class="form-control" name="name_{{value.model}}" >
                 </div>
@@ -56,8 +45,8 @@
                 </div>-->
             </div>
             <div *ngIf="value.type == 2 ">
-                <div class="input-field col s12">
-                    <label for="email">{{value.lable}}</label>
+                <div class="leftpanelsections">
+                    <label for="email" class="leftlabels">{{value.lable}}</label>
                     <select [(ngModel)]="form[value.model]"  [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
                        >
                      <option *ngFor="let v of value.values"[value]="v.Id" >{{v.Name}}</option>
@@ -70,8 +59,8 @@
                 </div>-->
             </div>
             <div *ngIf=" value.type == 6 ">
-                <div class="input-field col s12">
-                    <label for="email">{{value.lable}}</label>
+                <div class="leftpanelsections">
+                    <label for="email" class="leftlabels">{{value.lable}}</label>
                     <select [(ngModel)]="form[value.model]" [disabled]="value.model== 'ReportedBy'" [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
                        >
                      <option *ngFor="let v of value.values" [value]="v.Id" >{{v.Email}}</option>
@@ -84,8 +73,8 @@
                 </div>-->
             </div>
             <div *ngIf=" value.type == 8 ">
-                <div class="input-field col s12">
-                    <label for="email">{{value.lable}}</label>
+                <div class="leftpanelsections">
+                    <label for="email" class="leftlabels">{{value.lable}}</label>
                     <select [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
                         >
                       <option>1</option>
@@ -99,14 +88,48 @@
                 </div>-->
             </div>
             <div *ngIf="value.type == 4">
-                <div class="input-field col s12">
-                    <label for="email">{{value.lable}}</label>
+                <div class="leftpanelsections">
+                    <label for="email" class="leftlabels">{{value.lable}}</label>
                     <ng2-datepicker [(ngModel)]="form[value.model]" name="name_{{value.model}}" ></ng2-datepicker>
                 </div>
 
             </div>
         </div>
-        <button type="submit" (click)="submitted = true;" class="btn btn-default">Submit</button>
-    </div>
+</div>
+
+  </div>
+  <div class="col-xs-12 col-sm-9 col-md-9">
+       <div *ngIf="submitted && title.errors " class="alert alert-danger">
+                    <div [hidden]="!title.errors.required">
+                       Title is required
+                    </div>
+                    <div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
+                       Title must be 3 characters long
+                    </div>
+            </div>
+<div class="rightdescriptionarea">
+
+          
+          <ckeditor [config]="toolbar" [(ngModel)]="form.description"   name="description"  #description="ngModel" required     debounce="500"  >
+    </ckeditor>
+   <!-- <tinymce [(content)]="form.description"></tinymce>-->
+     <div *ngIf="submitted && description.errors " class="alert alert-danger">
+                    <div [hidden]="!description.errors.required">
+                       Description is required
+                    </div>
+            </div>
+    <div class="uploadcomponent">
+        <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
+        <input class="transparentinput" type="file" (change)="fileChangeEvent($event)"  multiple  /></div>
+          <!--<input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
+            name="description"  #description="ngModel" >-->
+        
+ 
+</div>
+<button type="submit" (click)="submitted = true;" class="normal bluebutton bluebuttonlarge">Submit</button>
+
+  </div>
+
+</div>
 </form>
 

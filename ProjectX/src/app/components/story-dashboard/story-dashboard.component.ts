@@ -1,9 +1,10 @@
 import { register } from 'ts-node/dist';
-import { Component, Directive, } from '@angular/core';
+import { Component, Directive,ChangeDetectorRef} from '@angular/core';
 import { StoryService} from '../../services/story.service';
 import { Router } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
+
 
 @Component({
 
@@ -15,11 +16,17 @@ import { Http, Headers } from '@angular/http';
 })
 
 export class StoryDashboardComponent {
+
     public errorMsg = '';
+    public offset=0;
+    public pagesize=5;
+    // public aa=1;
+    // public bb=1;
     public response :any = [];
     //public collection: any[] = someArrayOfThings; 
     public submitted = false;
-    public rows = [
+    public rows:any  =[];
+    /*public rows = [
     { name: 'Austin', gender: 'Male', company: 'Swimlane' },
     { name: 'Dany', gender: 'Male', company: 'KFC' },
     { name: 'Molly', gender: 'Female', company: 'Burger King' },
@@ -35,7 +42,7 @@ export class StoryDashboardComponent {
      { name: 'Austin', gender: 'Male', company: 'Swimlane' },
     { name: 'Dany', gender: 'Male', company: 'KFC' },
     { name: 'Molly', gender: 'Female', company: 'Burger King' },
-  ];
+  ];*/
 //   public columns = [
 //     { prop: 'TicketId' },
 //     { prop: 'Title' },
@@ -48,16 +55,21 @@ export class StoryDashboardComponent {
 headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
     constructor(
+        
         private _router: Router,
         private _service: StoryService, private http: Http) { }
 ngOnInit() {
 
-    this._service.getAllStoryDetails(1,(response)=>{
+    this._service.getAllStoryDetails(1,this.offset,this.pagesize,(response)=>{ 
               let jsonForm={};
               if(response.statusCode==200){
                   response.data.forEach(element => {
-                      this.response = response.data;
-                     
+                      //this.response = [{Id:this.aa},{Id:this.bb}];
+                   //    this.count=20;
+                   
+                      this.rows = response.data;
+                           //this.cureentPage=this.offset;
+                     //console.log("responseoooo firsttime" +JSON.stringify(this.response)  )
                   });
                 
             }else{
@@ -69,7 +81,7 @@ ngOnInit() {
         
   
   onPage(event){
-   // alert("on click page");
+    
   }
 
   renderStoryForm()
