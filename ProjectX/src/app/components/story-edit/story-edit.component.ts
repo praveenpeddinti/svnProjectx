@@ -72,7 +72,6 @@ export class StoryEditComponent implements OnInit {
 
 
   fieldsDataBuilder(fieldsArray,ticketId){
-    alert("in builder"+fieldsArray);
     let fieldsBuilt = [];
     let data = {title:"",value:"",readonly:true,required:true,id:"",fieldDataId:"",fieldName:"",fieldType:"",renderType:"",type:"",listdata:[]};
     for(let field of fieldsArray){
