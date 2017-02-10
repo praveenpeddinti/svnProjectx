@@ -112,17 +112,17 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
          
     });
 
-    switch(fieldName){
-      case "planlevel":
-      this.dropList=["Level1","Level2","Level3","Final Level"];
-      break;
-      case "tickettype":
-      this.dropList=["Story","Task","Time Pass","Trash","Not yet Decided"];
-      break;
-      case "stakeholder":
-      this.dropList=["Madan","Jagadish","Bekkam","Kishore","Moin","Paddamma"];
-      break;
-    }
+    // switch(fieldName){
+    //   case "planlevel":
+    //   this.dropList=["Level1","Level2","Level3","Final Level"];
+    //   break;
+    //   case "tickettype":
+    //   this.dropList=["Story","Task","Time Pass","Trash","Not yet Decided"];
+    //   break;
+    //   case "stakeholder":
+    //   this.dropList=["Madan","Jagadish","Bekkam","Kishore","Moin","Paddamma"];
+    //   break;
+    // }
     
 
   }

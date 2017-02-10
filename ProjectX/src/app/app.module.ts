@@ -47,9 +47,17 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-             
-              {path: 'story-detail/:id', component: StoryDetailComponent},
-              {path: 'story-edit/:id', component: StoryEditComponent},
+             {path: 'story-detail/:id',children:[
+                { path: '' , component: StoryDetailComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'story-edit/:id',children:[
+                { path: '' , component: StoryEditComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+              
              
              ];
 @NgModule({

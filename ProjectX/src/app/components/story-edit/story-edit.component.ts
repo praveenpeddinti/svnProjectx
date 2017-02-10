@@ -1,5 +1,5 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 import { StoryService} from '../../services/story.service';
@@ -15,6 +15,7 @@ export class StoryEditComponent implements OnInit {
 
     private ticketData:any=[];
     private ticketid;
+    private url_TicketId;
     private description;
     public form={};
   private fieldsData = [];
@@ -26,8 +27,17 @@ export class StoryEditComponent implements OnInit {
 
   constructor(private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,
-    private http: Http) { 
-this._ajaxService.AjaxSubscribe("story/edit-ticket",{},(data)=>
+    private http: Http,private route: ActivatedRoute) { 
+
+    }
+
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+            this.url_TicketId = params['id'];
+        });
+
+    this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId},(data)=>
     { 
        
          
@@ -40,10 +50,6 @@ this._ajaxService.AjaxSubscribe("story/edit-ticket",{},(data)=>
          console.log("Field Data----"+this.fieldsData);
          
     });
-    }
-
-
-  ngOnInit() {
     
   }
 
