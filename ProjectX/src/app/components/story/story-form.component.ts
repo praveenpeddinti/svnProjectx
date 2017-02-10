@@ -68,7 +68,7 @@ public fileOverBase(e:any):void {
 public fileChangeEvent(fileInput: any):void {
   this.filesToUpload = <Array<File>> fileInput.target.files;
     this.hasBaseDropZoneOver = false;
-        this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
+        this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
@@ -88,7 +88,7 @@ public onFileDrop(fileInput:any): void{
     //this.hasFileDroped = fileInput;
     this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
 
-      this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
+      this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
