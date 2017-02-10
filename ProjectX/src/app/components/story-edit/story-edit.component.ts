@@ -144,10 +144,13 @@ console.log(JSON.stringify(fieldsBuilt));
 
   }
 
-  editStory(data){
-    console.log("===Edit Form Data==="+JSON.stringify(data));
-     this._service.saveStory(this.form,(response)=>{
-     });
+  editStory(edit_data){
+    console.log("===Edit Form Data==="+"===="+typeof(edit_data)+"==="+JSON.stringify(edit_data));
+    this._ajaxService.AjaxSubscribe("story/edit-ticket-details",edit_data,(data)=>
+    { 
+      alert("success");
+    });
+     
      
 }
 
