@@ -16,8 +16,6 @@ export class StoryDetailComponent implements OnInit {
   //   private http: Http;
 //  testObj = {};
 //   newObj = {};
-
-
   private ticketData;
   private ticketId;
   private fieldsData = [];
@@ -31,37 +29,30 @@ export class StoryDetailComponent implements OnInit {
   private dropList=[];
   constructor( private _ajaxService: AjaxService,
     public _router: Router,
-    private http: Http,private route: ActivatedRoute) { 
-    // alert("constructor");
-    
- 
-}
+    private http: Http,private route: ActivatedRoute) {}
  
   ngOnInit() {
     // var parms=this.route.params.subscribe;
-
-/** @Praveen P
+ /** @Praveen P
  * Getting the TicketId for story dashboard
  */
-this.route.params.subscribe(params => {
-    //alert("+++++"+params['id']);
-
-       this.ticketId = params['id'];
-       console.log("+++++"+params['id']);
-   });
+      this.route.params.subscribe(params => {
+            this.ticketId = params['id'];
+        });
+        //  alert("constructor"+this.ticketId);
    
-
-   this._ajaxService.AjaxSubscribe("story/get-ticket-details",{ticketId:this.ticketId},(data)=>
-    { 
-       
-         
-         this.ticketData = data;
-         console.log("++++++++++++++"+JSON.stringify(this.ticketData));
-         this.ticketDesc = data.data.Description;
-         this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
-        //  alert("========>"+JSON.stringify(this.fieldsData));
-         
-    });
+      var ticketIdObj={'ticketId': this.ticketId};
+        this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
+        { 
+          
+            
+            this.ticketData = data;
+            alert(this.ticketId+"++++++++++++++"+JSON.stringify(this.ticketData));
+            this.ticketDesc = data.data.Description;
+            this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
+            //  alert("========>"+JSON.stringify(this.fieldsData));
+            
+        });
 
 
   }
