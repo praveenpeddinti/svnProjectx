@@ -10,19 +10,19 @@
     </ul>-->
 <!-- end -->
 <ngx-datatable #myTable class='material expandable customdatatable' [externalPaging]="false" [loadingIndicator]="false" [columnMode]="'flex'"
-  [headerHeight]="45" [footerHeight]="50" [rowHeight]="auto" [rows]="rows" [limit]="5" (page)="onPage($event)">
+  [headerHeight]="45" [footerHeight]="50" [rowHeight]="auto" [rows]="rows" [limit]="10" (page)="onPage($event)">
 
   <ngx-datatable-column name="Id" [flexGrow]="1" style="cursor: pointer">
     <template let-row="row" ngx-datatable-cell-template>
       <div style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
-        <img *ngIf="row.Fields[3].readable_value.Name=='Story'" src="../../../images/storyicon.png" width="24px" height="24px" title="{{row.Fields[3].readable_value.Name}}" />
+        <img *ngIf="row.Fields[3].readable_value.Name=='Story'" src="../../../images/storyicon.png" width="15px" height="15px" title="{{row.Fields[3].readable_value.Name}}" />
         
-        <img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="../../../images/task.png" width="24px" height="24px" title="{{row.Fields[3].readable_value.Name}}" />
+        <img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="../../../images/task.png" width="15px" height="15px" title="{{row.Fields[3].readable_value.Name}}" />
         #{{row.TicketId}}
       </div>
     </template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Title" [flexGrow]="8">
+  <ngx-datatable-column name="Title" [flexGrow]="5">
     <template let-row="row" ngx-datatable-cell-template>
       <div style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
             {{row.Title}}
@@ -41,11 +41,16 @@
       {{row.Fields[5].readable_value.Name}}
     </template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Type" [flexGrow]="1">
+  <ngx-datatable-column name="Bucket" [flexGrow]="1">
+    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+      {{row.Fields[2].readable_value.Name}}
+    </template>
+  </ngx-datatable-column>
+  <!--<ngx-datatable-column name="Type" [flexGrow]="1">
     <template let-row="row" let-i="i" ngx-datatable-cell-template>
       {{row.Fields[11].readable_value.Name}}
     </template>
-  </ngx-datatable-column>
+  </ngx-datatable-column>-->
   <ngx-datatable-column name="Status" [flexGrow]="1">
     <template let-row="row" let-i="i" ngx-datatable-cell-template>
       {{row.Fields[6].readable_value.Name}}
