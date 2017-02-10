@@ -3,8 +3,6 @@ import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
 import { TinyMCE } from '../../tinymce.component';
 
-import {Observable} from 'rxjs/Rx';
-
 @Component({
     selector: 'story-form',
     templateUrl: 'story-form.html',
