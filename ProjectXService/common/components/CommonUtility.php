@@ -13,6 +13,7 @@ use common\models\mysql\StoryCustomFields;
 use common\models\mysql\FieldTypes;
 use common\models\mysql\MapListCustomStoryFields;
 use common\models\mysql\PlanLevel;
+use Yii;
 /* 
  *
  * @author Moin Hussain
@@ -160,7 +161,10 @@ class CommonUtility {
                  }
                 if($storyFieldDetails["Type"] == 6){
                   $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
+                  error_log("profiel pic--------------------");
+                   error_log("profiel pic----------be----------".$assignedToDetails["ProfilePicture"]);
                   $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$assignedToDetails["ProfilePicture"];
+                   error_log("profiel pic--------------------".$assignedToDetails["ProfilePicture"]);
                   $value["readable_value"] = $assignedToDetails;  
                 }
                  if($storyFieldDetails["Type"] == 8){
