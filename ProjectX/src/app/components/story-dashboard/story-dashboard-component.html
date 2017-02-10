@@ -14,24 +14,26 @@
 
   <ngx-datatable-column name="Id" [flexGrow]="1" style="cursor: pointer">
     <template let-row="row" ngx-datatable-cell-template>
-      <a style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
-        <!--<img src="../../../images/storyicon.png" width="24px" height="24px" title="{{row.Fields[3].readable_value.Name}}" />-->
+      <div style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
+        <img *ngIf="row.Fields[3].readable_value.Name=='Story'" src="../../../images/storyicon.png" width="24px" height="24px" title="{{row.Fields[3].readable_value.Name}}" />
+        
+        <img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="../../../images/task.png" width="24px" height="24px" title="{{row.Fields[3].readable_value.Name}}" />
         #{{row.TicketId}}
-      </a>
+      </div>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Title" [flexGrow]="8">
     <template let-row="row" ngx-datatable-cell-template>
-      <a style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
+      <div style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
             {{row.Title}}
-            </a>
+            </div>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Assigned to" [flexGrow]="1">
-    <template  let-row="row" let-i="i" ngx-datatable-cell-template>
-    
-        <img *ngIf="row.Fields[4].value != '' " class="profilepic" src="{{row.Fields[4].readable_value.ProfilePicture}}" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"
-      />
+    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+      <div *ngIf="row.Fields[4].value!=''">
+      <img  class="profilepic"  src="{{row.Fields[4].readable_value.ProfilePicture}}" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"/>
+   </div>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Priority" [flexGrow]="1">
