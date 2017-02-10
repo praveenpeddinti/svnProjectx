@@ -159,15 +159,18 @@ class TicketCollection extends ActiveRecord
      * @author Praveen P
      * @return type
      */
-    public static function getAllTicketDetails($projectId){
+    public static function getAllTicketDetails($StoryData,$projectId){
       try{
             $query = new Query();
-           //$query->select(['name', 'status'])
             $query->from('TicketCollection')
-                     ->where(["ProjectId" => $projectId ,"TicketId" => array(101,200)])
-            ->limit(1)
-            ->offset(1);
+                     ->where(["ProjectId" => $projectId]);
+            
+            //        ->where(["ProjectId" => $projectId,"TicketId" => array(101,200,201,202,203,204,205,206,207,208,209,210)]);
+            //->limit($StoryData->pagesize)
+            //->offset($StoryData->offset*$StoryData->pagesize);
+            
         $ticketDetails = $query->all();
+        error_log("---total-----".sizeof($ticketDetails));
         return $ticketDetails;  
       } catch (Exception $ex) {
       Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

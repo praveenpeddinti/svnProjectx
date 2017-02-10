@@ -12,6 +12,7 @@ class ResponseBean {
     public $statusCode = "";
     public $message = "";
     public $data = "";
+    public $totalCount=0;
    
     
 }

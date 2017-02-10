@@ -64,7 +64,7 @@ class StoryController extends Controller
     public function actionGetTicketDetails(){
         try{
         $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails(101,1);
-        $responseBean = new ResponseBean();
+       $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
         $responseBean->data = $data;
@@ -83,12 +83,15 @@ class StoryController extends Controller
     */
     public function actionGetAllTicketDetails(){
         try{
+            $StoryData = json_decode(file_get_contents("php://input"));
+           
          $projectId=1;
-        $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($projectId);
+        $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($StoryData,$projectId);
         $responseBean = new ResponseBean();  
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
         $responseBean->data = $data;
+         $responseBean->totalCount = 30;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
         //return "praveen P";
