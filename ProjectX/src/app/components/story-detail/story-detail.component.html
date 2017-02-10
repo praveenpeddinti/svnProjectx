@@ -9,14 +9,19 @@
     <!--Upper Panel-->
     <h1>#{{ticketData?.data?.TicketId}}</h1>{{ticketData?.data?.Title}}
     <br/>
-    <div [innerHTML]="ticketData?.data?.Description">
-      <ckeditor [config]="toolbarForDetail" [(ngModel)]="ticketDesc" name="desc" #desc="ngModel" required debounce="500">
-      </ckeditor>
+    <div [innerHTML]="ticketDesc" (click)="openDescEditor()" [hidden]="!showDescEditor">
+      
       <!--<ckeditor [config]="toolbar"        debounce="500"  >
     </ckeditor>-->
       <!--{{ticketData?.data?.Description}}-->
     </div>
-
+    <!--++++{{ticketDesc}}-->
+    <div [hidden]="showDescEditor">
+    <ckeditor [config]="toolbarForDetail" [(ngModel)]="ticketDesc" name="ticketDesc" required debounce="500">
+      </ckeditor>
+      <button (click)="submitDesc()">Submit</button>
+      <a (click)="cancelDesc()">Cancel</a>
+    </div>
   </div>
   <div *ngFor="let field of fieldsData;let i=index;">
     <!--Left column-->
@@ -27,7 +32,7 @@
 <span *ngIf="field.readonly" data-text="readonly" id="{{field.elIid}}">{{field.value}}</span>
 <div [ngSwitch]="field.renderType" *ngIf="!field.readonly">
   <span (dblclick)="editThisField($event,i,field.elId,field.Id)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
-    id="{{field.elId}}">{{field.value}}</span>
+    id="{{field.elId}}">{{(field.value == "") ? '--': field.value}}</span>
 
   <input *ngSwitchCase="'input'" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
     (blur)="restoreField($event.target.value,field.elId,i)">

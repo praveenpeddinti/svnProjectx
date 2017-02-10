@@ -23,6 +23,7 @@ export class StoryDetailComponent implements OnInit {
   private fieldsData = [];
   private showMyEditableField =[];
   private ticketDesc="";
+  private showDescEditor=true;
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
 ]};
@@ -32,17 +33,7 @@ export class StoryDetailComponent implements OnInit {
     public _router: Router,
     private http: Http,private route: ActivatedRoute) { 
     // alert("constructor");
-    this._ajaxService.AjaxSubscribe("story/get-ticket-details","",(data)=>
-    { 
-       
-         
-         this.ticketData = data;
-         alert(this.ticketId+"++++++++++++++"+JSON.stringify(this.ticketData));
-         this.ticketDesc = data.data.Description;
-         this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
-        //  alert("========>"+JSON.stringify(this.fieldsData));
-         
-    });
+    
  
 }
  
@@ -53,10 +44,44 @@ export class StoryDetailComponent implements OnInit {
  * Getting the TicketId for story dashboard
  */
 this.route.params.subscribe(params => {
+    //alert("+++++"+params['id']);
+
        this.ticketId = params['id'];
+       console.log("+++++"+params['id']);
    });
+   
+
+   this._ajaxService.AjaxSubscribe("story/get-ticket-details",{ticketId:this.ticketId},(data)=>
+    { 
+       
+         
+         this.ticketData = data;
+         console.log("++++++++++++++"+JSON.stringify(this.ticketData));
+         this.ticketDesc = data.data.Description;
+         this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
+        //  alert("========>"+JSON.stringify(this.fieldsData));
+         
+    });
 
 
+  }
+  openDescEditor(){
+    this.showDescEditor = false;
+    // document.getElementById('tktDesc').focus();
+  }
+
+submitDesc(){
+
+  alert("++++++submitted++++++++++"+this.ticketDesc);
+
+}
+cancelDesc(){
+  this.showDescEditor = true;
+
+}
+
+  descBlur(){
+    alert("yeaaa working");
   }
 
   onClick(val){
@@ -139,8 +164,10 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
             break;
             case "List":
             data.title = field.title;
-            data.value = field.readable_value.Name;
-            data.valueId = field.readable_value.Id
+            if(field.readable_value != false){
+                data.value = field.readable_value.Name;
+                data.valueId = field.readable_value.Id
+            }
             data.renderType = "select";
             break;
             case "Numeric":
@@ -165,16 +192,20 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
             break;
             case "Team List":
             data.title = field.title;
-            data.value = field.readable_value.UserName;
-            data.valueId = field.readable_value.CollaboratorId
+            if(field.readable_value != false){
+                data.value = field.readable_value.UserName;
+                data.valueId = field.readable_value.CollaboratorId
+            }
             data.renderType = "select";
             break;
             // case "Checkbox":
             // break;
             case "Bucket":
             data.title = field.title;
-            data.value = field.readable_value.Name;
-            data.valueId = field.readable_value.Id
+            if(field.readable_value != false){
+              data.value = field.readable_value.Name;
+              data.valueId = field.readable_value.Id
+            }
             data.renderType = "select";
             break;
 
