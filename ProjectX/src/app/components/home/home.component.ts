@@ -25,7 +25,7 @@ export class HomeComponent{
           ) { }
     
    
-    logout() {
-        this._service.logout();
-    }
+    // logout() {
+    //     this._service.logout();
+    // }
 }
