@@ -4,39 +4,50 @@
 
 <br/>
 
-<div >
-  <div >
+<div>
+  <div>
     <!--Upper Panel-->
     <h1>#{{ticketData?.data?.TicketId}}</h1>{{ticketData?.data?.Title}}
     <br/>
-    {{ticketData?.data?.Description}}
-    
+    <div [innerHTML]="ticketData?.data?.Description">
+      <ckeditor [config]="toolbarForDetail" [(ngModel)]="ticketDesc" name="desc" #desc="ngModel" required debounce="500">
+      </ckeditor>
+      <!--<ckeditor [config]="toolbar"        debounce="500"  >
+    </ckeditor>-->
+      <!--{{ticketData?.data?.Description}}-->
+    </div>
+
   </div>
   <div *ngFor="let field of fieldsData;let i=index;">
     <!--Left column-->
     <h2>{{field.title}}
       <b style="color: red;" *ngIf="field.required">*</b>
-    </h2>
-    
-    <span *ngIf="field.readonly" data-text="readonly" id="{{field.id}}">{{field.value}}</span>
-    <div [ngSwitch]="field.renderType" *ngIf="!field.readonly">
-    <span (dblclick)="editThisField($event,i)" [hidden]="!showMyEditableField[i]" data-text="not readonly" id="{{field.id}}">{{field.value}}</span>
-    
-      <input *ngSwitchCase="'input'" type="{{field.type}}"  value="{{field.value}}" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.id,i)">
-           
-      <select *ngSwitchCase="'select'" [hidden]="showMyEditableField[i]"  (blur)="selectBlurField(i)" (change)="restoreField($event.target.value,field.id,i)">
-        <option selected value="{{field.value}}">{{field.value}}</option>
-        <option>test1</option>
-        <option>test2</option>
-        <option>test3</option>
-        <option>test4</option>
-      </select>
-      
-    </div>
+</h2>
 
-  </div>
-  
-  
+<span *ngIf="field.readonly" data-text="readonly" id="{{field.elIid}}">{{field.value}}</span>
+<div [ngSwitch]="field.renderType" *ngIf="!field.readonly">
+  <span (dblclick)="editThisField($event,i,field.elId,field.Id)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
+    id="{{field.elId}}">{{field.value}}</span>
+
+  <input *ngSwitchCase="'input'" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
+    (blur)="restoreField($event.target.value,field.elId,i)">
+
+  <select *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" (blur)="selectBlurField(i)"
+    (change)="restoreField($event.target.value,field.elId,i)">
+        <ng-container *ngFor="let opt of dropList;">
+        <!--<option selected value="{{field.value}}">{{field.value}}</option>-->
+        <option *ngIf="opt.Id == field.valueId" value="{{opt.Id}}" selected>{{opt.Name}}</option>
+        <option *ngIf="opt.Id != field.valueId" value="{{opt.Id}}">{{opt.Name}}</option>
+        <!--<option>test3</option>
+        <option>test4</option>-->
+        </ng-container>
+      </select>
+
+</div>
+
+</div>
+
+
 </div>
 
 <!--<button (click)="onClick(paraAbove.innerHTML)">Click this</button>-->
