@@ -273,10 +273,22 @@ Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex
                 $value["readonly"] = $storyFieldDetails["ReadOnly"];
                 $value["field_type"] = $storyFieldDetails["Name"];
                 $value["field_name"] = $storyFieldDetails["Field_Name"];
-                 if($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5){
+                
+                 
+                   if($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5){
                      $datetime = $value["value"]->toDateTime();
-                     $value["readable_value"] = $datetime; 
+                     if($storyFieldDetails["Type"] == 4){
+                        $readableDate = $datetime->format('Y-m-d');
+                     }else{
+                         $readableDate = $datetime->format('Y-m-d H:i:s');
+                     }
+                     $value["readable_value"] =   $readableDate; 
                  }
+                 
+                 
+                 
+                 
+                 
                 if($storyFieldDetails["Type"] == 6){
                   $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
                   $value["readable_value"] = $assignedToDetails;  
