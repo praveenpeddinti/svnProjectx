@@ -163,7 +163,11 @@ class TicketCollection extends ActiveRecord
       try{
             $query = new Query();
             $query->from('TicketCollection')
-                     ->where(["ProjectId" => $projectId]);
+                     ->where(["ProjectId" => $projectId])
+                   ->orderBy([
+    'TicketId' => SORT_DESC,
+   
+]);
             
             //        ->where(["ProjectId" => $projectId,"TicketId" => array(101,200,201,202,203,204,205,206,207,208,209,210)]);
             //->limit($StoryData->pagesize)
