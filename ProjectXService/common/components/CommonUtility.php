@@ -150,22 +150,27 @@ class CommonUtility {
                 $value["readonly"] = $storyFieldDetails["ReadOnly"];
                 $value["field_type"] = $storyFieldDetails["Name"];
                 $value["field_name"] = $storyFieldDetails["Field_Name"];
-                 if($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5){
-                     $datetime = $value["value"]->toDateTime();
+                if($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5){
+                       if($value["value"] != ""){
+                             $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
                         $readableDate = $datetime->format('Y-m-d');
                      }else{
                          $readableDate = $datetime->format('Y-m-d H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
+                       }else{
+                            $value["readable_value"] = "";
+                       }
+                   
                  }
                 if($storyFieldDetails["Type"] == 6){
-                  $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
-                  error_log("profiel pic--------------------");
-                   error_log("profiel pic----------be----------".$assignedToDetails["ProfilePicture"]);
-                  $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$assignedToDetails["ProfilePicture"];
-                   error_log("profiel pic--------------------".$assignedToDetails["ProfilePicture"]);
-                  $value["readable_value"] = $assignedToDetails;  
+                    if($value["value"] != ""){
+                         $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
+                        $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$assignedToDetails["ProfilePicture"];
+                       $value["readable_value"] = $assignedToDetails;  
+                    }
+                 $value["readable_value"]="";
                 }
                  if($storyFieldDetails["Type"] == 8){
                 
@@ -281,13 +286,18 @@ Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex
                 
                  
                    if($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5){
-                     $datetime = $value["value"]->toDateTime();
+                       if($value["value"] != ""){
+                             $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
                         $readableDate = $datetime->format('Y-m-d');
                      }else{
                          $readableDate = $datetime->format('Y-m-d H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
+                       }else{
+                            $value["readable_value"] = "";
+                       }
+                   
                  }
                  
                  
