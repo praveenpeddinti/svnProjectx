@@ -64,7 +64,8 @@ class StoryController extends Controller
     public function actionGetTicketDetails(){
         try{
             $ticket_data = json_decode(file_get_contents("php://input"));
-        $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails(101,1);
+            error_log("ticketdetailsssssssssssssss@@@@@@@".$ticket_data->ticketId);
+       $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data->ticketId,1);
        $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -277,6 +278,6 @@ class StoryController extends Controller
         Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
-}
+            
+        }
 ?>
