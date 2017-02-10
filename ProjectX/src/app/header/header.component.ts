@@ -20,8 +20,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
   }
-  logout() {
-        this._service.logout();
+  logout() { 
+        this._service.logout((data)=>{ 
+              this._router.navigate(['login']);  
+        });
+
     }
 
 }

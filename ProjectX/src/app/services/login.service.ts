@@ -20,13 +20,12 @@ export class LoginService {
     public _router: Router,
     private http: Http) { }
 // logout the Collabarator
-  logout() {
+  logout(logoutCallback) {
    //  var getAllData= JSON.parse(localStorage.getItem("user"));
 
      this._ajaxService.AjaxSubscribe("site/update-collabarator-status",{},function(result){
-      localStorage.removeItem("user");
-      this._router.navigate(['login']);
-
+       localStorage.removeItem("user");
+       logoutCallback(result);
  }); 
    
 
