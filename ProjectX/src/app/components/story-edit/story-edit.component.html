@@ -1,45 +1,45 @@
 <p #paraAbove>
   Story Edit Page
 </p>
-{{ticketData}}
-<form #editstoryForm="ngForm" (ngSubmit)="submitted && editStory()" novalidate="true">
-<!--<ckeditor [config]="toolbar" value="{{ticketData.data.Description}}"  name="description"  required  debounce="500"  >
-    </ckeditor>-->
-<br/>
 
+<form #editstoryForm="ngForm"  novalidate="true">
+<h2>Ticket#{{ticketData?.TicketId}}
+      <b style="color: red;">*</b>
+    </h2>
+    <input type="hidden" [ngModel]="ticketData.TicketId"  name="TicketId">
+    <h2>Title
+      <b style="color: red;">*</b>
+    </h2>
+ <input  type="text" [ngModel]="ticketData.Title" name="Title">
+ <h2>Description
+      <b style="color: red;">*</b>
+    </h2>
+<ckeditor [config]="toolbar" [(ngModel)]="description" name="description"  required  debounce="500"  >
+   </ckeditor>
+<br/>
 <div>
-  <div #editdata *ngFor="let field of fieldsData;let i=index;">
+  <div *ngFor="let field of fieldsData;let i=index;">
     <!--Left column-->
     <h2>{{field.title}}
       <b style="color: red;" *ngIf="field.required">*</b>
     </h2>
-    
     <span *ngIf="field.readonly" data-text="readonly" id="{{field.id}}">{{field.value}}</span>
     <div [ngSwitch]="field.renderType" *ngIf="!field.readonly">
     <!--<span (dblclick)="editThisField($event,i)" [hidden]="!showMyEditableField[i]" data-text="not readonly" id="{{field.id}}">{{field.value}}</span>-->
-      <input *ngSwitchCase="'input'" type="{{field.type}}"   value="{{field.value}}" name="{{field.title}}">
-           
-      <select *ngSwitchCase="'select'" ngModel  name="{{field.title}}">
-        <ng-container *ngFor="let options of field.listdata;">
-        <option *ngIf="options.Name == field.value" selected value="{{options.Id}}">{{options.Name}}</option>
-        <option *ngIf="options.Name != field.value" value="{{options.Id}}">{{options.Name}}</option>
-        </ng-container>
-      </select>
-
-      <select *ngSwitchCase="'TeamList'" name="{{field.title}}">
-        <ng-container *ngFor="let options1 of field.listdata;">
-          {{options1}}
-        <option *ngIf="options1.Name == field.value" selected value="{{options1.Id}}">{{options1.Name}}</option>
-        <option *ngIf="options1.Name != field.value" value="{{options1.Id}}">{{options1.Name}}</option>
-        <!--<option>test2</option>
-        <option>test3</option>
-        <option>test4</option>-->
-        </ng-container>
-      </select>
       
+      <input *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value">
+           
+      <select *ngSwitchCase="'select'" [ngModel]="field.fieldDataId" name="{{field.fieldName}}">
+        <ng-container *ngFor="let options of field.listdata;">
+          <!--{{options.Name}}-->
+        <option *ngIf="options.Name == field.value" selected  [ngValue]="options.Id">{{options.Name}}</option>
+        <option *ngIf="options.Name != field.value" [ngValue]="options.Id">{{options.Name}}</option>
+        </ng-container>
+      </select>  
     </div>
 
   </div>  
-<button (click)="editStory(editstoryForm.value)"class="btn btn-default">Submit</button>
+<button (click)="editStory(editstoryForm.value)" class="btn btn-default">Submit</button>
 </div>
 </form>
+
