@@ -14,22 +14,22 @@
 
   <ngx-datatable-column name="Id" [flexGrow]="1" style="cursor: pointer">
     <template let-row="row" ngx-datatable-cell-template>
-      <a title="Details" (click)="showStoryDetail(row)">
-        <img src="../../../images/storyicon.png" width="24px" height="24px" title="{{row.Fields[3].readable_value.Name}}" />
+      <a style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
+        <!--<img src="../../../images/storyicon.png" width="24px" height="24px" title="{{row.Fields[3].readable_value.Name}}" />-->
         #{{row.TicketId}}
       </a>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Title" [flexGrow]="8">
     <template let-row="row" ngx-datatable-cell-template>
-      <a title="Details" (click)="showStoryDetail(row)">
+      <a style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
             {{row.Title}}
             </a>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Assigned to" [flexGrow]="1">
     <template let-row="row" let-i="i" ngx-datatable-cell-template>
-      <img class="profilepic" src="../../../images/user_noimage.png" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"
+      <img class="profilepic" src="{{row.Fields[4].readable_value.ProfilePicture}}../images/user_noimage.png" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"
       />
     </template>
   </ngx-datatable-column>
