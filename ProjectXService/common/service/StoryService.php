@@ -185,7 +185,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                    $tempFileName = $secondArray[0];
                    $originalFileName = $secondArray[1];
                    $originalFileName = str_replace("]]", "", $originalFileName);
-                $newPath = Yii::$app->params['ServerURL']."/files/".$tempFileName."-".$originalFileName;
+                $newPath = Yii::$app->params['ServerURL']."files/".$tempFileName."-".$originalFileName;
                 rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", "/usr/share/nginx/www/ProjectXService/frontend/web/files/$tempFileName-".$originalFileName);
                $extension = CommonUtility::getExtension($originalFileName);
                  $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
