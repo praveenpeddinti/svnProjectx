@@ -160,6 +160,7 @@ class CommonUtility {
                  }
                 if($storyFieldDetails["Type"] == 6){
                   $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
+                  $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$assignedToDetails["ProfilePicture"];
                   $value["readable_value"] = $assignedToDetails;  
                 }
                  if($storyFieldDetails["Type"] == 8){
