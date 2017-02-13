@@ -146,7 +146,7 @@ setTimeout(()=>{
           // }else{
             data.fieldType = field.field_type;
           // }
-          data.fieldName =  field.field_name;
+          data.fieldName =  field.Id;
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);
           // this.fieldsBindingArray.push(field.Id);
@@ -161,7 +161,7 @@ console.log(JSON.stringify(fieldsBuilt));
 
     jQuery("#title_error").hide();
     jQuery("#desc_error").hide();
-    if(edit_data.Title=='' || edit_data.Title==null)
+    if(edit_data.title=='' || edit_data.title==null)
     {
       jQuery("#title_error").show();
     }
@@ -178,7 +178,7 @@ console.log(JSON.stringify(fieldsBuilt));
     this._ajaxService.AjaxSubscribe("story/edit-ticket-details",post_data,(data)=>
 
     { 
-      alert("success");
+     this._router.navigate(['story-detail',this.url_TicketId]);
     });
     }
      

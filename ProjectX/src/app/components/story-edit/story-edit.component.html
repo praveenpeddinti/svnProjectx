@@ -10,7 +10,7 @@
     <h2>Title
       <b style="color: red;">*</b>
     </h2>
- <input id="title" class="form-control" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="Title">
+ <input id="title" class="form-control" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">
  <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
  <!--<div *ngIf="Title.errors" class="fielderror">
                     <div [hidden]="!Title.errors.required">
