@@ -56,7 +56,6 @@ class TinyUserCollection extends ActiveRecord
             ->where(['CollaboratorId' => $collaboratorId ]);
         // execute the query
         $userDetails = $query->one();
-        error_log("************************".print_r($userDetails,1));
        return $userDetails;
      
     }

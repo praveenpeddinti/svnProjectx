@@ -64,7 +64,7 @@ class StoryController extends Controller
     public function actionGetTicketDetails(){
         try{
             $ticket_data = json_decode(file_get_contents("php://input"));
-       $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data->ticketId,1);
+           $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data->ticketId,1);
        $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -136,7 +136,12 @@ class StoryController extends Controller
 //           error_log("userid------".$userdata->Id);
           
             $data = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
-           return "success";
+           $responseBean = new ResponseBean();
+           $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = "success";
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         } catch (Exception $ex) {
         Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -267,14 +272,14 @@ class StoryController extends Controller
     */
     public function actionEditTicketDetails(){
         try{
-            error_log("actionEditTicketDetails--");
              $ticket_data = json_decode(file_get_contents("php://input"));
-            error_log("pintir-------------".print_r($ticket_data,1));
-//           $userdata =  $ticket_data->userInfo;
-//           error_log("userid------".$userdata->Id);
-          
-            //$data = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
-           return "success";
+           $data = ServiceFactory::getStoryServiceInstance()->updateTicketDetails($ticket_data);
+           $responseBean = new ResponseBean();
+           $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = "success";
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         } catch (Exception $ex) {
         Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }

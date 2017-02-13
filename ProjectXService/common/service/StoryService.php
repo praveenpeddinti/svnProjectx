@@ -316,6 +316,86 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                 Yii::log("StoryService:getPriority::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
             }
         }
+        
+        
+        /**
+ * @author Moin Hussain
+ * @param type $ticket_data
+ */
+       public function updateTicketDetails($ticket_data) {
+        try {
+            error_log("updateTicketDetails-----------");
+             $userdata =  $ticket_data->userInfo;
+             $projectId =  $ticket_data->projectId;
+             $userId = $userdata->Id;
+             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
+            // error_log(print_r($collaboratorData,1));
+              $ticket_data = $ticket_data->data;
+            
+                $ticketCollectionModel = new TicketCollection();
+               $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->TicketId,$projectId);
+               error_log("before---------------");
+        $ticketDetails["Title"] = $ticket_data->title;
+              $description = $ticket_data->description;
+              $ticketDetails["CrudeDescription"] = $description;
+              
+              $matches=[];
+              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
+              $filematches = $matches[0];
+              for($i = 0; $i< count($filematches); $i++){
+                   $value = $filematches[$i];
+                   $firstArray =  explode("/", $value);
+                   $secondArray = explode("|", $firstArray[1]);
+                   $tempFileName = $secondArray[0];
+                   $originalFileName = $secondArray[1];
+                   $originalFileName = str_replace("]]", "", $originalFileName);
+                $newPath = Yii::$app->params['ServerURL']."/files/".$tempFileName."-".$originalFileName;
+                rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", "/usr/share/nginx/www/ProjectXService/frontend/web/files/$tempFileName-".$originalFileName);
+               $extension = CommonUtility::getExtension($originalFileName);
+                 $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
+              
+               if(in_array($extension, $imageExtensions)){
+                $replaceString = "<img src='".$newPath."'/>";
+             
+                }else{
+                   $replaceString = "<a href='".$newPath."'/>";  
+                }
+               $description = str_replace($value, $replaceString, $description);
+              } 
+              
+              
+                      
+              $ticketDetails["Description"] = $description; 
+              
+             // unset($ticket_data->title);
+             // unset($ticket_data->description);
+             error_log("----------------------------");
+               foreach ($ticketDetails["Fields"] as &$value) {
+                 error_log("id--------------".$value["Id"]);
+                 $fieldId =  $value["Id"];
+                
+                     if(isset($ticket_data->$fieldId)){
+                         if(is_numeric($ticket_data->$fieldId)){
+                              $value["value"] = (int)$ticket_data->$fieldId;  
+                         }else{
+                             $value["value"] = $ticket_data->$fieldId; 
+                         }
+                       
+                     }
+                   
+                
+             }
+             error_log(print_r($ticketDetails["Fields"],1));
+             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $collection->save($ticketDetails); 
+            
+        } catch (Exception $ex) {
+             error_log($ex->getMessage());
+            
+            Yii::log("StoryService:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+      }
 }
 
   

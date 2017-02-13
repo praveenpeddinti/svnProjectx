@@ -35,7 +35,7 @@ class Bucket extends ActiveRecord
     public static function getBucketName($bucketId,$projectId)
     {
         try{
-        $query = "select Name from Bucket where Id=".$bucketId." and ProjectId=".$projectId;
+        $query = "select Id,Name from Bucket where Id=".$bucketId." and ProjectId=".$projectId;
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
         } catch (Exception $ex) {
