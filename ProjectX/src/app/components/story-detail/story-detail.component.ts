@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
+import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng'; 
 
 
 @Component({
@@ -28,7 +29,7 @@ export class StoryDetailComponent implements OnInit {
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
 ]};
   // private makeFocused = []; 
-  private dropList={};
+  private dropList=[];
 
 public filesToUpload: Array<File>;
 public hasBaseDropZoneOver:boolean = false;
@@ -115,7 +116,8 @@ closeTitleEdit(editedText){
   editThisField(event,fieldIndex,fieldId,fieldDataId){
     console.log(event.target.id);
    
-    this.dropList={};
+    // this.dropList={};
+    this.dropList=[];
     var fieldName = fieldId.split("_")[1];
     var inptFldId = fieldId+"_"+fieldIndex;
     this.showMyEditableField[fieldIndex] = false;
@@ -138,14 +140,14 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
            list:data.getFieldDetails
          };
          console.log(JSON.stringify(listData));
-         this.dropList = listData;
+         this.dropList=this.prepareItemArray(listData.list);
         
          
     });
     }
 
-        
 
+    
   }
 
    restoreField(editedObj,restoreFieldId,fieldIndex){
@@ -244,7 +246,15 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
     return fieldsBuilt;
 
   }
-
+  public prepareItemArray(list:any){
+  var listItem=[];
+     if(list.length>0){
+         for(var i=0;list.length>i;i++){
+          listItem.push({label:list[i].Name, value:list[i].Id});
+       }
+     }
+return listItem;
+}
   public fileOverBase(e:any):void {
     this.hasBaseDropZoneOver = e;
   }

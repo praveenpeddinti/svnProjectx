@@ -41,7 +41,7 @@
     <h2>{{field.title}}
       <!--<b style="color: red;" *ngIf="field.required">*</b>-->
 </h2>
-
+{{field.readonly}}
 <span *ngIf="field.readonly" data-text="readonly" id="{{field.elIid}}">{{field.value}}</span>
 <div [ngSwitch]="field.renderType" *ngIf="!field.readonly">
   <span (dblclick)="editThisField($event,i,field.elId,field.Id)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
@@ -52,17 +52,18 @@
 
 <!--<ng2-datepicker *ngSwitchCase="'date'" id='{{field.elId}}_{{i}}' [(ngModel)]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i)"></ng2-datepicker>-->
 
-  <select *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" (blur)="selectBlurField(i)"
+  <!--<select *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" (blur)="selectBlurField(i)"
     (change)="restoreField($event.target,field.elId,i)">
     <option selected value=""> Select Option</option>
         <ng-container *ngFor="let opt of dropList.list;">
         
         <option *ngIf="opt.Id == ((dropList.currentSelectedId == '')?field.valueId : dropList.currentSelectedId)" value="{{opt.Id}}" selected>{{opt.Name}}</option>
         <option *ngIf="opt.Id != ((dropList.currentSelectedId == '')?field.valueId : dropList.currentSelectedId)" value="{{opt.Id}}">{{opt.Name}}</option>
-        <!--<option>test3</option>
-        <option>test4</option>-->
+       <option>test3</option>
+        <option>test4</option>
         </ng-container>
-      </select>
+      </select>-->
+<p-dropdown [style]="{'width':'250px'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
       <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
 
 </div>
