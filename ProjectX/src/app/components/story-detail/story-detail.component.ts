@@ -107,6 +107,8 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
     { 
        
          console.log(JSON.stringify(data));
+         var currentId = document.getElementById(inptFldId+"_currentSelected").getAttribute("value");
+         data.getFieldDetails.currentSelectedId = currentId;
          this.dropList = data.getFieldDetails;
         
          
@@ -129,6 +131,8 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
 
    restoreField(editedVal,restoreFieldId,fieldIndex){
     document.getElementById(restoreFieldId).innerHTML = editedVal;
+    var currentSelectedId = document.getElementById(restoreFieldId+"_"+fieldIndex+"_currentSelected");
+    currentSelectedId.setAttribute("value",editedVal);
     this.showMyEditableField[fieldIndex] = true;
     // alert(editedVal);
     

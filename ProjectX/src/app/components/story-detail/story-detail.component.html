@@ -41,12 +41,13 @@
     (change)="restoreField($event.target.value,field.elId,i)">
         <ng-container *ngFor="let opt of dropList;">
         <!--<option selected value="{{field.value}}">{{field.value}}</option>-->
-        <option *ngIf="opt.Id == field.valueId" value="{{opt.Id}}" selected>{{opt.Name}}</option>
-        <option *ngIf="opt.Id != field.valueId" value="{{opt.Id}}">{{opt.Name}}</option>
+        <option *ngIf="opt.Id == ((dropList.currentSelectedId == '')?field.valueId : dropList.currentSelectedId)" value="{{opt.Id}}" selected>{{opt.Name}}</option>
+        <option *ngIf="opt.Id != ((dropList.currentSelectedId == '')?field.valueId : dropList.currentSelectedId)" value="{{opt.Id}}">{{opt.Name}}</option>
         <!--<option>test3</option>
         <option>test4</option>-->
         </ng-container>
       </select>
+      <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
 
 </div>
 

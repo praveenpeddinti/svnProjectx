@@ -36,8 +36,8 @@ export class StoryEditComponent implements OnInit {
     this.route.params.subscribe(params => {
             this.url_TicketId = params['id'];
         });
-
-    this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId},(data)=>
+setTimeout(()=>{
+  this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId},(data)=>
     { 
        
          
@@ -50,6 +50,9 @@ export class StoryEditComponent implements OnInit {
          console.log("Field Data----"+this.fieldsData);
          
     });
+
+},150);
+    
     
   }
 
