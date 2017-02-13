@@ -20,13 +20,15 @@ export class StoryDetailComponent implements OnInit {
   private ticketId;
   private fieldsData = [];
   private showMyEditableField =[];
-  private ticketDesc="";
+  private ticketEditableDesc="";
+  private ticketDesc = "";
+  private ticketCrudeDesc = "";
   private showDescEditor=true;
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
 ]};
   // private makeFocused = []; 
-  private dropList=[];
+  private dropList={};
 
 public filesToUpload: Array<File>;
 public hasBaseDropZoneOver:boolean = false;
@@ -58,6 +60,7 @@ public fileUploadStatus:boolean = false;
             this.ticketData = data;
          //   alert(this.ticketId+"++++++++++++++"+JSON.stringify(this.ticketData));
             this.ticketDesc = data.data.Description;
+            this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
             //  alert("========>"+JSON.stringify(this.fieldsData));
             
@@ -65,24 +68,44 @@ public fileUploadStatus:boolean = false;
 
 
   }
+
+  /*
+  * Description part
+  */
   openDescEditor(){
     this.showDescEditor = false;
     // document.getElementById('tktDesc').focus();
   }
 
 submitDesc(){
+  this.ticketDesc = this.ticketEditableDesc;
+  this.showDescEditor = true;
 
  // alert("++++++submitted++++++++++"+this.ticketDesc);
 
 }
 cancelDesc(){
+  this.ticketEditableDesc = this.ticketCrudeDesc;
+
   this.showDescEditor = true;
 
 }
 
-  descBlur(){
-  //  alert("yeaaa working");
-  }
+//------------------------Description part---------------------------------- 
+
+/*
+* Title part
+*/
+private showTitleEdit=true;
+editTitle(){
+  this.showTitleEdit = false;
+}
+
+closeTitleEdit(editedText){
+  document.getElementById(this.ticketId+"_title").innerHTML= editedText;
+  this.showTitleEdit = true;
+}
+//------------------------------Title part-----------------------------------
 
   onClick(){
     // alert(val);
@@ -91,21 +114,13 @@ cancelDesc(){
 
   editThisField(event,fieldIndex,fieldId,fieldDataId){
     console.log(event.target.id);
-    // var thisFieldId = event.target.id;
-    // var thisField;
-    // var replaceHtml ;
-    // if(thisFieldId !="" && thisFieldId !=null){
-    //     thisField = document.getElementById(thisFieldId);
-    //     replaceHtml = document.createElement("input");
-    //     replaceHtml.setAttribute("value",thisField.textContent);
-    //     replaceHtml.setAttribute("id",thisFieldId);//"<input type='text' value='"+thisField.textContent+"'/>"
-    //     thisField.parentNode.replaceChild(replaceHtml,thisField);
-    // }
-    this.dropList=[];
+   
+    this.dropList={};
     var fieldName = fieldId.split("_")[1];
     var inptFldId = fieldId+"_"+fieldIndex;
     this.showMyEditableField[fieldIndex] = false;
     setTimeout(()=>{document.getElementById(inptFldId).focus();},150);
+    if(fieldName !=="dod" && fieldName !=="duedate"){
 var reqData = {
   FieldId:fieldDataId,
   ProjectId:this.ticketData.data.Project.PId,
@@ -115,33 +130,29 @@ var reqData = {
 this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
     { 
        
-         console.log(JSON.stringify(data));
+         
          var currentId = document.getElementById(inptFldId+"_currentSelected").getAttribute("value");
-         data.getFieldDetails.currentSelectedId = currentId;
-         this.dropList = data.getFieldDetails;
+        //  data.getFieldDetails.currentSelectedId = currentId;
+         var listData = {
+           currentSelectedId: (currentId != "" &&currentId != null )? currentId:"",
+           list:data.getFieldDetails
+         };
+         console.log(JSON.stringify(listData));
+         this.dropList = listData;
         
          
     });
+    }
 
-    // switch(fieldName){
-    //   case "planlevel":
-    //   this.dropList=["Level1","Level2","Level3","Final Level"];
-    //   break;
-    //   case "tickettype":
-    //   this.dropList=["Story","Task","Time Pass","Trash","Not yet Decided"];
-    //   break;
-    //   case "stakeholder":
-    //   this.dropList=["Madan","Jagadish","Bekkam","Kishore","Moin","Paddamma"];
-    //   break;
-    // }
-    
+        
 
   }
 
-   restoreField(editedVal,restoreFieldId,fieldIndex){
-    document.getElementById(restoreFieldId).innerHTML = editedVal;
+   restoreField(editedObj,restoreFieldId,fieldIndex){
+    //  alert("++++");
+    document.getElementById(restoreFieldId).innerHTML = editedObj.options[editedObj.selectedIndex].text;
     var currentSelectedId = document.getElementById(restoreFieldId+"_"+fieldIndex+"_currentSelected");
-    currentSelectedId.setAttribute("value",editedVal);
+    currentSelectedId.setAttribute("value",editedObj.value);
     this.showMyEditableField[fieldIndex] = true;
     // alert(editedVal);
     

@@ -4,11 +4,11 @@
 
 <form #editstoryForm="ngForm"  novalidate="true">
 <h2>#{{ticketData?.TicketId}}
-      <b style="color: red;">*</b>
+      <!--<b style="color: red;">*</b>-->
     </h2>
     <input type="hidden" [ngModel]="ticketData.TicketId"  name="TicketId">
     <h2>Title
-      <b style="color: red;">*</b>
+      <!--<b style="color: red;">*</b>-->
     </h2>
  <input id="title" class="form-control" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">
  <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
@@ -18,7 +18,7 @@
                     </div>
   </div>-->
  <h2>Description
-      <b style="color: red;">*</b>
+      <!--<b style="color: red;">*</b>-->
     </h2>
 
    <div style="position: relative">
@@ -47,7 +47,7 @@
   <div *ngFor="let field of fieldsData;let i=index;">
     <!--Left column-->
     <h2>{{field.title}}
-      <b style="color: red;" *ngIf="field.required">*</b>
+      <!--<b style="color: red;" *ngIf="field.required">*</b>-->
     </h2>
     <span *ngIf="field.readonly" data-text="readonly" id="{{field.id}}">{{field.value}}</span>
     <div [ngSwitch]="field.renderType" *ngIf="!field.readonly">
