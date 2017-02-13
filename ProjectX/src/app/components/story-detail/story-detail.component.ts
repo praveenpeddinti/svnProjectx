@@ -27,9 +27,18 @@ export class StoryDetailComponent implements OnInit {
 ]};
   // private makeFocused = []; 
   private dropList=[];
+
+public filesToUpload: Array<File>;
+public hasBaseDropZoneOver:boolean = false;
+public hasFileDroped:boolean = false;
+public fileUploadStatus:boolean = false;
+
   constructor( private _ajaxService: AjaxService,
     public _router: Router,
-    private http: Http,private route: ActivatedRoute) {}
+    private http: Http,private route: ActivatedRoute) {
+       this.filesToUpload = [];
+    }
+
  
   ngOnInit() {
     // var parms=this.route.params.subscribe;
@@ -224,5 +233,59 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
     return fieldsBuilt;
 
   }
+
+  public fileOverBase(e:any):void {
+    this.hasBaseDropZoneOver = e;
+  }
+
+  public fileChangeEvent(fileInput: any):void {
+  this.filesToUpload = <Array<File>> fileInput.target.files;
+    this.hasBaseDropZoneOver = false;
+        this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
+            for(var i = 0; i<result.length; i++){
+                //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
+                var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                    this.ticketDesc = this.ticketDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                } else{
+                    this.ticketDesc = this.ticketDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                }
+            }
+        }, (error) => {
+            console.error(error);
+            //this.sampleModel = "Error while uploading";
+            this.ticketDesc = this.ticketDesc + "Error while uploading";
+        });
+}
+
+public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
+        return new Promise((resolve, reject) => {
+            var formData: any = new FormData();
+            var xhr = new XMLHttpRequest();
+            for(var i = 0; i < files.length; i++) { 
+                formData.append("uploads[]", files[i], files[i].name);
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        //console.log("the responc " + JSON.parse(xhr.response))
+                        resolve(JSON.parse(xhr.response));
+                    } else {
+                        reject(xhr.response);
+                    }
+                }
+            };
+
+            xhr.upload.onloadstart= (event) => {
+                this.fileUploadStatus = true;
+            };
+            xhr.upload.onloadend = (event) => {
+                   this.fileUploadStatus = false;                
+            };
+            
+            xhr.open("POST", url, true);
+            xhr.send(formData);
+        });
+    }
 
 }

@@ -17,10 +17,21 @@
     </div>
     <!--++++{{ticketDesc}}-->
     <div [hidden]="showDescEditor">
-    <ckeditor [config]="toolbarForDetail" [(ngModel)]="ticketDesc" name="ticketDesc" required debounce="500">
-      </ckeditor>
-      <button (click)="submitDesc()">Submit</button>
-      <a (click)="cancelDesc()">Cancel</a>
+  
+      <div style="position: relative">
+              <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
+            <ckeditor [config]="toolbarForDetail" [(ngModel)]="ticketDesc" name="ticketDesc" required debounce="500">
+            </ckeditor>
+      
+
+        <div class="uploadcomponent">
+            <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
+            <input class="transparentinput" type="file" (change)="fileChangeEvent($event)"  multiple  />
+        </div>
+        
+        <button (click)="submitDesc()">Submit</button>
+        <a (click)="cancelDesc()">Cancel</a>
+      </div>
     </div>
   </div>
   <div *ngFor="let field of fieldsData;let i=index;">
