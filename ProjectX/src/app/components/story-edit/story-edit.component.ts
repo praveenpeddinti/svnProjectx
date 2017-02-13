@@ -154,8 +154,7 @@ console.log(JSON.stringify(fieldsBuilt));
   }
 
   editStory(edit_data){
-    console.log("==Description=="+edit_data.description+"====Title==="+edit_data.Title);
-    console.log("===Edit Form Data==="+"===="+typeof(edit_data)+"==="+JSON.stringify(edit_data));
+
     jQuery("#title_error").hide();
     jQuery("#desc_error").hide();
     if(edit_data.Title=='' || edit_data.Title==null)
@@ -168,7 +167,12 @@ console.log(JSON.stringify(fieldsBuilt));
     }
     if(edit_data.description!='' && edit_data.Title!="")
     {
-    this._ajaxService.AjaxSubscribe("story/edit-ticket-details",edit_data,(data)=>
+   var post_data={
+      'data':edit_data,
+     
+    }
+    this._ajaxService.AjaxSubscribe("story/edit-ticket-details",post_data,(data)=>
+
     { 
       alert("success");
     });
