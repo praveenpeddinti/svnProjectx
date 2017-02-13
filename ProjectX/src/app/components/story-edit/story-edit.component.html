@@ -10,12 +10,33 @@
     <h2>Title
       <b style="color: red;">*</b>
     </h2>
- <input  type="text" [ngModel]="ticketData.Title" name="Title">
+ <input id="title" class="form-control" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="Title">
+ <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
+ <!--<div *ngIf="Title.errors" class="fielderror">
+                    <div [hidden]="!Title.errors.required">
+                      Title is required
+                    </div>
+  </div>-->
  <h2>Description
       <b style="color: red;">*</b>
     </h2>
-<ckeditor [config]="toolbar" [(ngModel)]="description" name="description"  required  debounce="500"  >
+<ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required  debounce="500"  >
    </ckeditor>
+   <div class="uploadcomponent">
+        <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
+        <input class="transparentinput" type="file" (change)="fileChangeEvent($event)"  multiple  /></div>
+
+        <div id="desc_error"  [hidden]="true" class="alert alert-danger">Description is Required</div>
+          <!--<input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
+            name="description"  #description="ngModel" >-->
+        
+ 
+
+   <!--<div *ngIf="description.errors " class="fielderror">
+                    <div [hidden]="!description.errors.required">
+                      Description is required
+                    </div>
+  </div>-->
 <br/>
 <div>
   <div *ngFor="let field of fieldsData;let i=index;">

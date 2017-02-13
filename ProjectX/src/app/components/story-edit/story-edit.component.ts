@@ -4,13 +4,14 @@ import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 import { StoryService} from '../../services/story.service';
 import {NgForm} from '@angular/forms';
-
+declare var jQuery:any;
 @Component({
   selector: 'app-story-edit',
   templateUrl: './story-edit.component.html',
   styleUrls: ['./story-edit.component.css'],
   providers:[StoryService]
 })
+
 export class StoryEditComponent implements OnInit {
 
     private ticketData:any=[];
@@ -153,13 +154,43 @@ console.log(JSON.stringify(fieldsBuilt));
   }
 
   editStory(edit_data){
+    console.log("==Description=="+edit_data.description+"====Title==="+edit_data.Title);
     console.log("===Edit Form Data==="+"===="+typeof(edit_data)+"==="+JSON.stringify(edit_data));
+    jQuery("#title_error").hide();
+    jQuery("#desc_error").hide();
+    if(edit_data.Title=='' || edit_data.Title==null)
+    {
+      jQuery("#title_error").show();
+    }
+    if(edit_data.description=='' || edit_data.description==null)
+    {
+      jQuery("#desc_error").show();
+    }
+    if(edit_data.description!='' && edit_data.Title!="")
+    {
     this._ajaxService.AjaxSubscribe("story/edit-ticket-details",edit_data,(data)=>
     { 
       alert("success");
     });
+    }
      
      
+}
+
+checkEmpty(event,id)
+{
+  if(event!="" || event!=null)
+  {
+    var idAttr = id;
+    if(idAttr=='title')
+    {
+      jQuery("#title_error").hide();
+    }
+    if(idAttr=='description')
+    {
+      jQuery("#desc_error").hide();
+    }
+  }
 }
 
 }
