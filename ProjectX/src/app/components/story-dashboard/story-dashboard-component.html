@@ -15,9 +15,9 @@
   <ngx-datatable-column name="Id" [flexGrow]="1" style="cursor: pointer">
     <template let-row="row" ngx-datatable-cell-template>
       <div style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
-        <img *ngIf="row.Fields[3].readable_value.Name=='Story'" src="../../../images/storyicon.png" width="15px" height="15px" title="{{row.Fields[3].readable_value.Name}}" />
+        <img *ngIf="row.Fields[3].readable_value.Name=='Story'" src="assets/images/storyicon.png" width="15px" height="15px" title="{{row.Fields[3].readable_value.Name}}" />
         
-        <img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="../../../images/task.png" width="15px" height="15px" title="{{row.Fields[3].readable_value.Name}}" />
+        <img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="assets/images/task.png" width="15px" height="15px" title="{{row.Fields[3].readable_value.Name}}" />
         #{{row.TicketId}}
       </div>
     </template>
