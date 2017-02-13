@@ -3,7 +3,7 @@
 </p>
 
 <form #editstoryForm="ngForm"  novalidate="true">
-<h2>Ticket#{{ticketData?.TicketId}}
+<h2>#{{ticketData?.TicketId}}
       <b style="color: red;">*</b>
     </h2>
     <input type="hidden" [ngModel]="ticketData.TicketId"  name="TicketId">
