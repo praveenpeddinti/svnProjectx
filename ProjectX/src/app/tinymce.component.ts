@@ -56,6 +56,8 @@ export class TinyMCE {
       mode: 'exact',
       height: 100,
       theme: 'modern',
+menubar:false,
+    statusbar: false,
       plugins: [
         'lists link ',
         

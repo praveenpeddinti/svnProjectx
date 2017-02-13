@@ -27,10 +27,13 @@ getStoryFields(projectId,getStoryCallback) {
  
  saveStory(storyData,saveStoryCallback){ 
 var post_data={
-      'storyData':storyData,
+      'data':storyData,
+      'userId':3,
       'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
     }
+
      this._ajaxService.AjaxSubscribe("story/save-ticket-details",post_data,(data)=>
+
     { 
          saveStoryCallback(data);
     });

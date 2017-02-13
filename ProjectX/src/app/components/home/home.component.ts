@@ -24,8 +24,5 @@ export class HomeComponent{
           private _authGuard:AuthGuard
           ) { }
     
-   
-    // logout() {
-    //     this._service.logout();
-    // }
+
 }
