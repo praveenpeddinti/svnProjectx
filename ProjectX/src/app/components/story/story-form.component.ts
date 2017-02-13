@@ -3,12 +3,13 @@ import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
 import { TinyMCE } from '../../tinymce.component';
 
+import {AccordionModule,DropdownModule,SelectItem,CalendarModule} from 'primeng/primeng';     
 @Component({
     selector: 'story-form',
     templateUrl: 'story-form.html',
     styleUrls: ['story-form.css'],
     providers: [StoryService]     
-    	
+ 	
 })
 
 export class StoryComponent {
@@ -29,7 +30,7 @@ public fileUploadStatus:boolean = false;
     constructor( private _service: StoryService) {
         this.filesToUpload = [];
     }
-
+  
     ngOnInit() {
      
         this._service.getStoryFields(1,(response)=>{
@@ -48,11 +49,12 @@ public fileUploadStatus:boolean = false;
                         DefaultValue=response.data.collaborators;
                     }else if(element.Type == 2){
                         DefaultValue=element.data; 
-                    } 
+                    }           
                     console.log("Default values"+JSON.stringify(DefaultValue));
                     jsonForm[item] = element.DefaultValue;
+                    var listItemArray=this.prepareItemArray(DefaultValue);
                    this.storyFormData.push(
-                       {'lable':element.Title,'model':element.Id,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':DefaultValue}
+                       {'lable':element.Title,'model':element.Id,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray}
                        )
                   });
                 this.form = jsonForm;
@@ -62,7 +64,15 @@ public fileUploadStatus:boolean = false;
             }
         });
     }
-
+public prepareItemArray(list:any){
+  var listItem=[];
+     if(list.length>0){
+         for(var i=0;list.length>i;i++){
+          listItem.push({label:list[i].Name, value:list[i].Id});
+       }
+     }
+return listItem;
+}
 public fileOverBase(e:any):void {
     this.hasBaseDropZoneOver = e;
 }

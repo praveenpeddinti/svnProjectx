@@ -14,6 +14,7 @@ import { MentionModule } from 'angular2-mentions/mention';
 import {StoryService} from './services/story.service';
 import { CKEditorModule } from 'ng2-ckeditor';
 import {Ng2DragDropModule} from "ng2-drag-drop";
+import {DropdownModule} from 'primeng/primeng'; 
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService, Collaborator} from './services/login.service';
@@ -72,6 +73,7 @@ const ROUTES=[
    CKEditorModule,
    Ng2DragDropModule,
    NgxDatatableModule,
+   DropdownModule,
    RouterModule.forRoot(ROUTES)
   ],
 

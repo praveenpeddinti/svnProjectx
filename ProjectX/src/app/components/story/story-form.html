@@ -45,13 +45,14 @@
                 </div>-->
             </div>
             <div *ngIf="value.type == 2 ">
-                <div class="leftpanelsections">
+                <p-dropdown [options]="value.values" [style]="{'width':'250px'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
+                <!--<div class="leftpanelsections">
                     <label for="email" class="leftlabels">{{value.lable}}</label>
                     <select [(ngModel)]="form[value.model]"  [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
                        >
                      <option *ngFor="let v of value.values"[value]="v.Id" >{{v.Name}}</option>
                 </select>
-                </div>
+                </div>-->
                 <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
                     <div [hidden]="!name_value.model.errors.required">
                         {{value.lable}} is required
@@ -59,13 +60,14 @@
                 </div>-->
             </div>
             <div *ngIf=" value.type == 6 ">
-                <div class="leftpanelsections">
+                <p-dropdown [options]="value.values" [disabled]=true  [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null"  name="name_{{value.model}}"></p-dropdown>
+                <!--<div class="leftpanelsections">
                     <label for="email" class="leftlabels">{{value.lable}}</label>
                     <select [(ngModel)]="form[value.model]" [disabled]="value.model== 'ReportedBy'" [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
                        >
                      <option *ngFor="let v of value.values" [value]="v.Id" >{{v.Email}}</option>
                 </select>
-                </div>
+                </div>-->
                 <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
                     <div [hidden]="!name_value.model.errors.required">
                         {{value.lable}} is required
@@ -108,11 +110,11 @@
                     </div>
             </div>
 <div class="rightdescriptionarea">
-
+        
           <div style="position: relative">
               <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
-            <ckeditor [config]="toolbar" [(ngModel)]="form.description"   name="description"  #description="ngModel" required     debounce="500"  >
-            </ckeditor>
+          <ckeditor [config]="toolbar" [(ngModel)]="form.description"   name="description"  #description="ngModel" required     debounce="500"  >
+    </ckeditor>
           </div>
    <!-- <tinymce [(content)]="form.description"></tinymce>-->
      <div *ngIf="submitted && description.errors " class="alert alert-danger">
