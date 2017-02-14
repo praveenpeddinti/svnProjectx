@@ -211,4 +211,5 @@ html-dropdown span.name {
 .customdropdown .ui-widget-header .ui-state-highlight, .customdropdown  .ui-widget-content .ui-state-highlight, .customdropdown  .ui-state-highlight{background: #78c9ee}
 .customdropdown .ui-corner-all{border-radius:0}
 .customdropdown .ui-widget{font-size:12px}
+.leftreadonlyfontbluecolor{font-weight:bold;color:#78c9ee;font-size:12px}
 /*end*/
