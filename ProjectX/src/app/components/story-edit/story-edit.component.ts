@@ -47,12 +47,12 @@ setTimeout(()=>{
        
          
          this.ticketData = data.data;
-         this.description=data.data.Description;
-         console.log("++++++++++++++"+JSON.stringify(this.ticketData));
+         this.description=data.data.CrudeDescription;
+         //console.log("++++++++++++++--"+data.data.CrudeDescription);
          this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
         //  var t = this.fieldsData.length;
         //  this.fieldsBindingArray[t];
-         console.log("Field Data----"+this.fieldsData);
+        // console.log("Field Data----"+this.fieldsData);
          
     });
 
@@ -204,7 +204,7 @@ checkEmpty(event,id)
 public fileChangeEvent(fileInput: any):void {
   this.filesToUpload = <Array<File>> fileInput.target.files;
     this.hasBaseDropZoneOver = false;
-        this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
+        this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
