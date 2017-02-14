@@ -175,29 +175,8 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
               $title =  $ticket_data->title;
               $description =  $ticket_data->description;
               $crudeDescription = $description;
-              $matches=[];
-              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
-              $filematches = $matches[0];
-              for($i = 0; $i< count($filematches); $i++){
-                   $value = $filematches[$i];
-                   $firstArray =  explode("/", $value);
-                   $secondArray = explode("|", $firstArray[1]);
-                   $tempFileName = $secondArray[0];
-                   $originalFileName = $secondArray[1];
-                   $originalFileName = str_replace("]]", "", $originalFileName);
-                $newPath = Yii::$app->params['ServerURL']."/files/".$tempFileName."-".$originalFileName;
-                rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", "/usr/share/nginx/www/ProjectXService/frontend/web/files/$tempFileName-".$originalFileName);
-               $extension = CommonUtility::getExtension($originalFileName);
-                 $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
-              
-               if(in_array($extension, $imageExtensions)){
-                $replaceString = "<img src='".$newPath."'/>";
-             
-                }else{
-                   $replaceString = "<a href='".$newPath."'/>";  
-                }
-               $description = str_replace($value, $replaceString, $description);
-              }
+              $description = CommonUtility::refineDescription($description);
+            
               
              
               unset($ticket_data->title);
@@ -339,38 +318,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
               $description = $ticket_data->description;
               $ticketDetails["CrudeDescription"] = $description;
               error_log("descripotion--------".$description);
-              
-              $matches=[];
-              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
-              $filematches = $matches[0];
-              error_log("cont------------".count($filematches));
-              for($i = 0; $i< count($filematches); $i++){
-                   $value = $filematches[$i];
-                   $firstArray =  explode("/", $value);
-                   $secondArray = explode("|", $firstArray[1]);
-                   $tempFileName = $secondArray[0];
-                   $originalFileName = $secondArray[1];
-                   $originalFileName = str_replace("]]", "", $originalFileName);
-                $newPath = Yii::$app->params['ServerURL']."/files/".$tempFileName."-".$originalFileName;
-                if(file_exists("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName")){
-                    rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", "/usr/share/nginx/www/ProjectXService/frontend/web/files/$tempFileName-".$originalFileName); 
-                }
-               
-               $extension = CommonUtility::getExtension($originalFileName);
-                 $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
-              
-               if(in_array($extension, $imageExtensions)){
-                $replaceString = "<img src='".$newPath."'/>";
-             
-                }else{
-                   $replaceString = "<a href='".$newPath."'/>";  
-                }
-               $description = str_replace($value, $replaceString, $description);
-              } 
-              
-              
-                      
-              $ticketDetails["Description"] = $description; 
+            $ticketDetails["Description"] = CommonUtility::refineDescription($description);
               
              // unset($ticket_data->title);
              // unset($ticket_data->description);
