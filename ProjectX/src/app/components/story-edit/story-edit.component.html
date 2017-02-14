@@ -1,71 +1,73 @@
-<p #paraAbove>
-  Story Edit Page
-</p>
 
 <form #editstoryForm="ngForm"  novalidate="true">
-<h2>#{{ticketData?.TicketId}}
-      <!--<b style="color: red;">*</b>-->
-    </h2>
-    <input type="hidden" [ngModel]="ticketData.TicketId"  name="TicketId">
-    <h2>Title
-      <!--<b style="color: red;">*</b>-->
-    </h2>
- <input id="title" class="form-control" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">
- <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
- <!--<div *ngIf="Title.errors" class="fielderror">
-                    <div [hidden]="!Title.errors.required">
-                      Title is required
-                    </div>
-  </div>-->
- <h2>Description
-      <!--<b style="color: red;">*</b>-->
-    </h2>
+<div class="paddingbottom10">
 
-   <div style="position: relative">
-        <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
-        <ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required  debounce="500"  >
-        </ckeditor>
+    <div class="titlearea  ">
+  <div class="row">
+    <div class="col-xs-4 col-sm-3 col-md-2 ticketidareanorightpadding">
+  <div class="ticketidarea">#{{ticketData?.TicketId}}</div>
   </div>
-   <div class="uploadcomponent">
-        <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
-        <input class="transparentinput" type="file" (change)="fileChangeEvent($event)"  multiple  />
-    </div>
+  <div class="col-xs-8 col-sm-9 col-md-10">
+  <div class="ticketdescriptionarea minheight50">
+    <input type="hidden" [ngModel]="ticketData.TicketId"  name="TicketId">
+    <input id="title" class="form-control" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">
+ <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
+  </div>
+  </div>
+  </div>
+  </div>
+  </div>
 
-        <div id="desc_error"  [hidden]="true" class="alert alert-danger">Description is Required</div>
-          <!--<input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
-            name="description"  #description="ngModel" >-->
-        
- 
-
-   <!--<div *ngIf="description.errors " class="fielderror">
-                    <div [hidden]="!description.errors.required">
-                      Description is required
-                    </div>
-  </div>-->
-<br/>
+ <div class="row">
+  <div class="col-xs-12 col-sm-3 col-md-3">  <!-->left panel <-->
+<div class="leftpaneldiv">
 <div>
+ 
   <div *ngFor="let field of fieldsData;let i=index;">
-    <!--Left column-->
-    <h2>{{field.title}}
-      <!--<b style="color: red;" *ngIf="field.required">*</b>-->
-    </h2>
-    <span *ngIf="field.readonly" data-text="readonly" id="{{field.id}}">{{field.value}}</span>
-    <div [ngSwitch]="field.renderType" *ngIf="!field.readonly">
-    <!--<span (dblclick)="editThisField($event,i)" [hidden]="!showMyEditableField[i]" data-text="not readonly" id="{{field.id}}">{{field.value}}</span>-->
+    <div class="leftpanelsections">
+                    <label for="email" class="leftlabels">{{field.title}}</label>
+                   
+                    <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.id}}">{{field.value}}</div>
+ 
+   <div class="leftreadonlyfontgreycolor" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
+      <input class="editinput" *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value">  
+      <div class="customdropdown" *ngSwitchCase="'select'" >
+      <p-dropdown  [style]="{'width':'100%'}" [ngModel]="field.fieldDataId" name="{{field.fieldName}}"  [options]="field.listdata" ></p-dropdown>
       
-      <input *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value">
-           
-      <select *ngSwitchCase="'select'" [ngModel]="field.fieldDataId" name="{{field.fieldName}}">
-        <ng-container *ngFor="let options of field.listdata;">
-          <!--{{options.Name}}-->
-        <option *ngIf="options.Name == field.value" selected  [ngValue]="options.Id">{{options.Name}}</option>
-        <option *ngIf="options.Name != field.value" [ngValue]="options.Id">{{options.Name}}</option>
-        </ng-container>
-      </select>  
-    </div>
+    </div>  
+  </div> 
 
-  </div>  
-<button (click)="editStory(editstoryForm.value)" class="btn btn-default">Submit</button>
+ </div>
 </div>
+
+
+</div>
+
+</div>
+</div>
+
+ <div class="col-xs-12 col-sm-9 col-md-9">
+   <div>
+
+      <div class="rightdescriptionarea">
+  <div style="position: relative">
+     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
+            <ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required  debounce="500"  >
+            </ckeditor>
+     </div>
+ <div class="uploadcomponent margintop15">
+        <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
+        <input class="transparentinput" type="file" (change)="fileChangeEvent($event)"  multiple  /></div>
+       </div>
+<div class="buttonarea alignright">
+  <button class="normal bluebutton bluebuttonmedium" (click)="editStory(editstoryForm.value)">UPDATE</button>
+  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">CANCEL</button>
+</div>
+
+  </div>
+</div>
+
+</div> <!-->main div close <-->
+
 </form>
 

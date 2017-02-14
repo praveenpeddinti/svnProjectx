@@ -86,10 +86,9 @@ submitDesc(){
 
 }
 cancelDesc(){
-  this.ticketEditableDesc = this.ticketCrudeDesc;
-
-  this.showDescEditor = true;
-
+  // this.ticketEditableDesc = this.ticketCrudeDesc;
+  // this.showDescEditor = true;
+  this._router.navigate(['story-dashboard']);
 }
 
 //------------------------Description part---------------------------------- 

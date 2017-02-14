@@ -4,6 +4,7 @@ import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 import { StoryService} from '../../services/story.service';
 import {NgForm} from '@angular/forms';
+
 declare var jQuery:any;
 @Component({
   selector: 'app-story-edit',
@@ -147,6 +148,9 @@ setTimeout(()=>{
             data.fieldType = field.field_type;
           // }
           data.fieldName =  field.Id;
+
+          data.listdata=this.prepareItemArray(data.listdata);
+
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);
           // this.fieldsBindingArray.push(field.Id);
@@ -156,7 +160,15 @@ console.log(JSON.stringify(fieldsBuilt));
     return fieldsBuilt;
 
   }
-
+ public prepareItemArray(list:any){
+  var listItem=[];
+     if(list.length>0){
+         for(var i=0;list.length>i;i++){
+          listItem.push({label:list[i].Name, value:list[i].Id});
+       }
+     }
+return listItem;
+}
   editStory(edit_data){
 
     jQuery("#title_error").hide();
