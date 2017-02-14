@@ -5,7 +5,7 @@
   <div class="col-xs-12 col-sm-12 col-md-12">
   <div class="ticketdescriptionarea">
   
-  <input class="editinput" placeholder="Title" [(ngModel)]="form.title" type="text" id="title"class="form-control" required minlength="3" maxlength="150" 
+  <input class="editinput" placeholder="Title" [(ngModel)]="form.title" type="text" id="title" required minlength="3" maxlength="150" 
            name="title"  #title="ngModel"   >
   </div>
   </div>
@@ -44,38 +44,22 @@
                     </div>
                 </div>-->
             </div>
+           
             <div *ngIf="value.type == 2 ">
-                <p-dropdown [options]="value.values" [style]="{'width':'250px'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
-                <!--<div class="leftpanelsections">
+                 <div class="leftpanelsections customdropdown">
                     <label for="email" class="leftlabels">{{value.lable}}</label>
-                    <select [(ngModel)]="form[value.model]"  [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
-                       >
-                     <option *ngFor="let v of value.values"[value]="v.Id" >{{v.Name}}</option>
-                </select>
-                </div>-->
-                <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
-                    <div [hidden]="!name_value.model.errors.required">
-                        {{value.lable}} is required
-                    </div>
-                </div>-->
-            </div>
+                <p-dropdown [options]="value.values" [style]="{'width':'100%'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
+               </div>
+               </div>
+               
             <div *ngIf=" value.type == 6 ">
-                <p-dropdown [options]="value.values" [disabled]=true  [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null"  name="name_{{value.model}}"></p-dropdown>
-                <!--<div class="leftpanelsections">
+                <div class="leftpanelsections customdropdown">
                     <label for="email" class="leftlabels">{{value.lable}}</label>
-                    <select [(ngModel)]="form[value.model]" [disabled]="value.model== 'ReportedBy'" [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
-                       >
-                     <option *ngFor="let v of value.values" [value]="v.Id" >{{v.Email}}</option>
-                </select>
-                </div>-->
-                <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
-                    <div [hidden]="!name_value.model.errors.required">
-                        {{value.lable}} is required
-                    </div>
-                </div>-->
-            </div>
+                <p-dropdown [options]="value.values" [style]="{'width':'100%'}" [disabled]=true  [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null"  name="name_{{value.model}}"></p-dropdown>
+               
+            </div></div>
             <div *ngIf=" value.type == 8 ">
-                <div class="leftpanelsections">
+                <div class="leftpanelsections ">
                     <label for="email" class="leftlabels">{{value.lable}}</label>
                     <select [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" class="form-control" name="name_{{value.model}}"
                         >
@@ -122,7 +106,7 @@
                        Description is required
                     </div>
             </div>
-    <div class="uploadcomponent">
+    <div class="uploadcomponent margintop15">
         <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
         <input class="transparentinput" type="file" (change)="fileChangeEvent($event)"  multiple  /></div>
           <!--<input [(ngModel)]="form.description" type="text"  id="description"class="form-control" 
@@ -130,8 +114,9 @@
         
  
 </div>
-<button type="submit" (click)="submitted = true;" class="normal bluebutton bluebuttonlarge">Submit</button>
-
+<div class="buttonarea alignright">
+<button type="submit" (click)="submitted = true;" class="normal bluebutton bluebuttonmedium">SUBMIT</button>
+</div>
   </div>
 
 </div>
