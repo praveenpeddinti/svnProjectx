@@ -1,17 +1,15 @@
 <div class="paddingbottom10">
-  <p #paraAbove>
-  Story Detail Page
-</p>
+
     <div class="titlearea  ">
   <div class="row">
     <div class="col-xs-4 col-sm-3 col-md-2 ticketidareanorightpadding">
   <div class="ticketidarea">#{{ticketData?.data?.TicketId}}</div>
   </div>
   <div class="col-xs-8 col-sm-9 col-md-10">
-  <div class="ticketdescriptionarea">
+  <div class="ticketdescriptionarea minheight50">
   
-  <div [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (click)="editTitle()" [hidden]="!showTitleEdit"></div>
-    <input type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
+  <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (click)="editTitle()" [hidden]="!showTitleEdit"></div>
+    <input class="editinput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
   </div>
   </div>
   </div>
@@ -22,7 +20,7 @@
   <div class="col-xs-12 col-sm-3 col-md-3">
 <div class="leftpaneldiv">
  <div class="leftpanelsections">
-<button (click)="onClick()">Edit</button>
+<button  class="normal bluebutton bluebuttonmedium" (click)="onClick()">Edit</button>
 </div>
 <div>
  
@@ -34,17 +32,17 @@
    
     
    
-<div [ngSwitch]="field.renderType" *ngIf="!field.readonly">
-  <div class="leftpanelsections" (dblclick)="editThisField($event,i,field.elId,field.Id)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
+<div class="leftreadonlyfontgreycolor" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
+  <div (dblclick)="editThisField($event,i,field.elId,field.Id)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
     id="{{field.elId}}">{{(field.value == "") ? '--': field.value}}</div>
 
   <input class="editinput" *ngSwitchCase="'input'" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
     (blur)="restoreField($event.target.value,field.elId,i)">
 
-
-<p-dropdown [style]="{'width':'100%'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
+<div class="customdropdown">
+<p-dropdown  [style]="{'width':'100%'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
       <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
-
+</div>
 </div>
  </div>
 </div>
@@ -56,41 +54,29 @@
 </div>
  <div class="col-xs-12 col-sm-9 col-md-9">
    <div>
-   <div class="rightdescriptionarea">
+   <div class="rightdescriptionarea" [hidden]="!showDescEditor">
         
           <div style="position: relative">
-    <div [innerHTML]="ticketDesc" id="{{ticketData?.data?.TicketId}}_desc" (click)="openDescEditor()" [hidden]="!showDescEditor">
-      
-      <!--<ckeditor [config]="toolbar"        debounce="500"  >
-    </ckeditor>-->
-      <!--{{ticketData?.data?.Description}}-->
-    </div>  </div>
-    <!--++++{{ticketDesc}}-->
-    <div [hidden]="showDescEditor">
+    <div [innerHTML]="ticketDesc" id="{{ticketData?.data?.TicketId}}_desc" (click)="openDescEditor()" >
+    </div>  </div> </div>
+        <div [hidden]="showDescEditor">
       <div class="rightdescriptionarea">
   <div style="position: relative">
-     
-              <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
+     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
             <ckeditor [config]="toolbarForDetail" [(ngModel)]="ticketEditableDesc" name="ticketEditableDesc" required debounce="500">
             </ckeditor>
      </div>
-
-        
-         <div class="uploadcomponent margintop15">
+ <div class="uploadcomponent margintop15">
         <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
         <input class="transparentinput" type="file" (change)="fileChangeEvent($event)"  multiple  /></div>
-        <div class="buttonarea alignright">
-</div>
-
-</div>
+       </div>
 <div class="buttonarea alignright">
-  <button class="normal bluebutton bluebuttonmedium" (click)="submitDesc()">Submit</button>
-        <a (click)="cancelDesc()">Cancel</a>
-
+  <button class="normal bluebutton bluebuttonmedium" (click)="submitDesc()">SUBMIT</button>
+  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">CANCEL</button>
 </div>
         
       </div>
-    </div>
+   
   </div>
 </div>
 </div>

@@ -43,10 +43,11 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
 }
 /*header right panel section menu end*/
 .custom_menu{padding-bottom:10px}
-.normal{background:#ecebeb;border:1px solid #e7e7e7;padding:14px 12px 12px;line-height:0}
+.normal{background:#ecebeb;border:1px solid #e7e7e7;padding:14px 12px 14px;line-height:0}
 .normal i{color:#78c9ee;font-size:20px;line-height:10px}
 .bluebutton{background:#237ea7;border:1px solid #1e6b8e;}
 .bluebutton, .bluebutton i{color:#fff}
+.greybutton{ background: #ecebeb;border: 1px solid #e7e7e7;color:#333}
 .customtable{display:table;width:100%}
 .customrowheader,.customrow{display:table-row;}
 .customrowheader .cust1,.customrowheader .cust2,.customrowheader .cust3,.customrowheader .cust4,.customrowheader .cust5,.customrowheader .cust6,.customrowheader .cust7,.customrowheader .cust8{display:table-cell;background:#e2e2e2;color:#7d7977;padding:10px 8px;font-size:15px;}
@@ -77,7 +78,10 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
 }
 .loginformlabel{font-weight:normal}
 .customfield{border:1px solid #ccc;border-radius:0;font-size:15px}
-
+.minheight50{min-height: 50px}
+.viewinputtext{min-height:50px; font-size: 20px;
+    min-height: 40px;
+    padding: 6px 10px 0;}
 /* custom data table*/
 .customdatatable{}
 .customdatatable .datatable-header{background:#e2e2e2;color:#7d7977;padding:10px 8px;font-size:15px;margin-bottom:15px}
@@ -88,7 +92,7 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
 /* componentstyles for to title area*/
  .titlearea{}
  .titlearea  .ticketidareanorightpadding{padding-right:0}
- .titlearea .ticketidarea{background:#f8f8f8;min-height:60px}
+ .titlearea .ticketidarea{background:#f8f8f8;font-size: 20px;font-weight: bold;min-height: 50px;padding-top: 12px;text-align: center;}
  .titlearea .ticketdescriptionarea{background:#f8f8f8;padding:6px}
  .titlearea .ticketdescriptionarea .editinput{width:100%;min-height:40px;font-size:20px;background:#fff;padding:5px 10px;border:0}
  .titlearea .ticketdescriptionarea .editinput{}
@@ -212,4 +216,5 @@ html-dropdown span.name {
 .customdropdown .ui-corner-all{border-radius:0}
 .customdropdown .ui-widget{font-size:12px}
 .leftreadonlyfontbluecolor{font-weight:bold;color:#78c9ee;font-size:12px}
+.leftreadonlyfontgreycolor{font-weight:bold;color:#ccc;font-size:12px}
 /*end*/
