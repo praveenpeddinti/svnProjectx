@@ -165,38 +165,49 @@ class CommonUtility {
                    
                  }
                 if($storyFieldDetails["Type"] == 6){
+                     $value["readable_value"]="";
                     if($value["value"] != ""){
                          $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
                         $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$assignedToDetails["ProfilePicture"];
                        $value["readable_value"] = $assignedToDetails;  
                     }
-                 $value["readable_value"]="";
+                
                 }
                  if($storyFieldDetails["Type"] == 8){
-                
+                 $value["readable_value"]= "";
+                if($value["value"] != ""){
                  $bucketName = $bucketModel->getBucketName($value["value"],$ticketDetails["ProjectId"]);
                  $value["readable_value"] = $bucketName;  
                 }
+                }
                 if($storyFieldDetails["Field_Name"] == "priority"){
-                
+                    $value["readable_value"]= "";
+                if($value["value"] != ""){
                     $priorityDetails = $priorityModel->getPriorityDetails($value["value"]);
-                    $value["readable_value"] = $priorityDetails; 
+                    $value["readable_value"] = $priorityDetails;
+                }
                 }
                  if($storyFieldDetails["Field_Name"] == "planlevel"){
-                
+                 $value["readable_value"]= "";
+                if($value["value"] != ""){
                     $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
                     $value["readable_value"] = $planlevelDetails; 
                 }
+                }
                  if($storyFieldDetails["Field_Name"] == "workflow"){
                 
-                   
+                    $value["readable_value"]= "";
+                if($value["value"] != ""){
                     $workFlowDetails = $workFlowModel->getWorkFlowDetails($value["value"]);
                      $value["readable_value"] = $workFlowDetails; 
                 }
+                }
                  if($storyFieldDetails["Field_Name"] == "tickettype"){
-                   
+                    $value["readable_value"]= "";
+                if($value["value"] != ""){
                  $ticketTypeDetails = $ticketTypeModel->getTicketType($value["value"]);
-                 $value["readable_value"] = $ticketTypeDetails; 
+                 $value["readable_value"] = $ticketTypeDetails;
+                }
                 }
                
                
