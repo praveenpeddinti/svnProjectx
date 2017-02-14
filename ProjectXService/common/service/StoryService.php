@@ -338,10 +338,12 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
         $ticketDetails["Title"] = $ticket_data->title;
               $description = $ticket_data->description;
               $ticketDetails["CrudeDescription"] = $description;
+              error_log("descripotion--------".$description);
               
               $matches=[];
               preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
               $filematches = $matches[0];
+              error_log("cont------------".count($filematches));
               for($i = 0; $i< count($filematches); $i++){
                    $value = $filematches[$i];
                    $firstArray =  explode("/", $value);
@@ -350,7 +352,10 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                    $originalFileName = $secondArray[1];
                    $originalFileName = str_replace("]]", "", $originalFileName);
                 $newPath = Yii::$app->params['ServerURL']."/files/".$tempFileName."-".$originalFileName;
-                rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", "/usr/share/nginx/www/ProjectXService/frontend/web/files/$tempFileName-".$originalFileName);
+                if(file_exists("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName")){
+                    rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", "/usr/share/nginx/www/ProjectXService/frontend/web/files/$tempFileName-".$originalFileName); 
+                }
+               
                $extension = CommonUtility::getExtension($originalFileName);
                  $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
               
