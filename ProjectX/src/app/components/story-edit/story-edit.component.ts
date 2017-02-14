@@ -170,18 +170,18 @@ console.log(JSON.stringify(fieldsBuilt));
 return listItem;
 }
   editStory(edit_data){
-
+      console.log("===Edit Data==="+JSON.stringify(edit_data));
     jQuery("#title_error").hide();
     jQuery("#desc_error").hide();
-    if(edit_data.title=='' || edit_data.title==null)
+    if(edit_data.title=='')
     {
       jQuery("#title_error").show();
     }
-    if(edit_data.description=='' || edit_data.description==null)
+    if(edit_data.description=='')
     {
       jQuery("#desc_error").show();
     }
-    if(edit_data.description!='' && edit_data.Title!="")
+    if(edit_data.description!="" && edit_data.title!="")
     {
    var post_data={
       'data':edit_data,
