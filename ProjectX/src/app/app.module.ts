@@ -29,6 +29,7 @@ import { StoryDetailComponent }  from './components/story-detail/story-detail.co
 
 import { StoryEditComponent } from './components/story-edit/story-edit.component';
 import {TinyMCE} from './tinymce.component';
+import {FileDropModule} from 'angular2-file-drop';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -73,6 +74,7 @@ const ROUTES=[
    CKEditorModule,
    Ng2DragDropModule,
    NgxDatatableModule,
+   FileDropModule,
    DropdownModule,
    CalendarModule,
    RouterModule.forRoot(ROUTES)
