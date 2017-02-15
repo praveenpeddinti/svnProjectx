@@ -1,26 +1,28 @@
-import { Component,ViewChild } from '@angular/core';
+import { Component,ViewChild,Output } from '@angular/core';
 import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
 import { TinyMCE } from '../../tinymce.component';
 
 import {AccordionModule,DropdownModule,SelectItem,CalendarModule} from 'primeng/primeng';     
-@Component({
+ @Component({
     selector: 'story-form',
     templateUrl: 'story-form.html',
     styleUrls: ['story-form.css'],
     providers: [StoryService]     
- 	
+
 })
 
 export class StoryComponent {
-
+@Output() public options = {
+    readAs: 'ArrayBuffer'
+  };
     public storyFormData=[];
     public storyData={};
     public form={};
     public toolbar={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
 ]};
-filesToUpload: Array<File>;
+public filesToUpload: Array<File>;
 //sampleModel:string = "";
 public hasBaseDropZoneOver:boolean = false;
 public hasFileDroped:boolean = false;
@@ -73,14 +75,22 @@ public prepareItemArray(list:any){
      }
 return listItem;
 }
-public fileOverBase(e:any):void {
-    this.hasBaseDropZoneOver = e;
+public fileOverBase(fileInput:any):void {  
+    this.hasBaseDropZoneOver = true;
+    //fileInput.preventDefault();
+     //console.log("drag over " + fileInput);
+}
+
+public fileDragLeave(fileInput: any){
+    this.hasBaseDropZoneOver = false;
+    //console.log("drag leave " + fileInput); 
 }
 
 public fileChangeEvent(fileInput: any):void {
+   // console.log("cahnge event " + fileInput.name +"------- " + fileInput.size);
   this.filesToUpload = <Array<File>> fileInput.target.files;
     this.hasBaseDropZoneOver = false;
-        this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
+        this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
@@ -96,11 +106,13 @@ public fileChangeEvent(fileInput: any):void {
             this.form['description'] = this.form['description'] + "Error while uploading";
         });
 }
-public onFileDrop(fileInput:any): void{
-    //this.hasFileDroped = fileInput;
-    this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
 
-      this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
+public onFileDrop(fileInput:any): void {
+    //console.log("file drop " + "File Name "+fileInput.dataTransfer.files[0].name+"File Size "+fileInput.dataTransfer.files[0].size);
+
+    this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
+    this.hasBaseDropZoneOver = false;
+    this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
@@ -121,9 +133,12 @@ public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
         return new Promise((resolve, reject) => {
             var formData: any = new FormData();
             var xhr = new XMLHttpRequest();
+            // console.log("files length "+files.length);
             for(var i = 0; i < files.length; i++) { 
                 formData.append("uploads[]", files[i], files[i].name);
             }
+              //formData.append("uploads[]", files, files.name);
+
             xhr.onreadystatechange = function () {
                 if (xhr.readyState == 4) {
                     if (xhr.status == 200) {
@@ -151,6 +166,12 @@ saveStory(){
     console.log("post____data");
      this._service.saveStory(this.form,(response)=>{
      });
+}
+ckeditorfocus(event){
+//alert('focud');    
+}
+ckeditordragstart(event){
+//alert('ckeditordragstart');    
 }
 
 }
