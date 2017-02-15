@@ -81,14 +81,24 @@ public fileUploadStatus:boolean = false;
 submitDesc(){
   this.ticketDesc = this.ticketEditableDesc;
   this.showDescEditor = true;
-
- // alert("++++++submitted++++++++++"+this.ticketDesc);
+  // Added by Padmaja for Inline Edit
+   var postEditedText={
+    isLeftColumn:0,
+    id:'Description',
+    value:this.ticketDesc,
+    TicketId:this.ticketId,
+    EditedId:'desc'
+  };
+  //alert(JSON.stringify(postEditedText));
+  this.postDataToAjax(postEditedText);
+ //alert("++++++submitted++++++++++"+this.ticketDesc);
 
 }
 cancelDesc(){
-  // this.ticketEditableDesc = this.ticketCrudeDesc;
-  // this.showDescEditor = true;
-  this._router.navigate(['story-dashboard']);
+  this.ticketEditableDesc = this.ticketCrudeDesc;
+
+  this.showDescEditor = true;
+
 }
 
 //------------------------Description part---------------------------------- 
@@ -103,7 +113,17 @@ editTitle(){
 
 closeTitleEdit(editedText){
   document.getElementById(this.ticketId+"_title").innerHTML= editedText;
+  //alert(this.ticketId);
   this.showTitleEdit = true;
+// Added by Padmaja for Inline Edit
+  var postEditedText={
+    isLeftColumn:0,
+    id:'Title',
+    value:editedText,
+    TicketId:this.ticketId,
+    EditedId:'title'
+  };
+  this.postDataToAjax(postEditedText);
 }
 //------------------------------Title part-----------------------------------
 
@@ -114,7 +134,6 @@ closeTitleEdit(editedText){
 
   editThisField(event,fieldIndex,fieldId,fieldDataId){
     console.log(event.target.id);
-   
     // this.dropList={};
     this.dropList=[];
     var fieldName = fieldId.split("_")[1];
@@ -122,11 +141,11 @@ closeTitleEdit(editedText){
     this.showMyEditableField[fieldIndex] = false;
     setTimeout(()=>{document.getElementById(inptFldId).focus();},150);
     if(fieldName !=="dod" && fieldName !=="duedate"){
-var reqData = {
-  FieldId:fieldDataId,
-  ProjectId:this.ticketData.data.Project.PId,
-  TicketId:this.ticketData.data.TicketId
-};
+    var reqData = {
+      FieldId:fieldDataId,
+      ProjectId:this.ticketData.data.Project.PId,
+      TicketId:this.ticketData.data.TicketId
+    };
 // alert(JSON.stringify(reqData)+"reqest data");
 this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
     { 
@@ -140,8 +159,7 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
          };
          console.log(JSON.stringify(listData));
          this.dropList=this.prepareItemArray(listData.list);
-        
-         
+          
     });
     }
 
@@ -150,7 +168,7 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
   }
 
    restoreField(editedObj,restoreFieldId,fieldIndex){
-    //  alert("++++");
+   //  alert("++++");
     document.getElementById(restoreFieldId).innerHTML = editedObj.options[editedObj.selectedIndex].text;
     var currentSelectedId = document.getElementById(restoreFieldId+"_"+fieldIndex+"_currentSelected");
     currentSelectedId.setAttribute("value",editedObj.value);
@@ -266,15 +284,15 @@ return listItem;
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                    this.ticketDesc = this.ticketDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
                 } else{
-                    this.ticketDesc = this.ticketDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    this.ticketEditableDesc = this.ticketEditableDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
                 }
             }
         }, (error) => {
             console.error(error);
             //this.sampleModel = "Error while uploading";
-            this.ticketDesc = this.ticketDesc + "Error while uploading";
+            this.ticketEditableDesc = this.ticketEditableDesc + "Error while uploading";
         });
 }
 
@@ -305,6 +323,21 @@ public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
             
             xhr.open("POST", url, true);
             xhr.send(formData);
+        });
+    }
+// Added by Padmaja for Inline Edit
+    public postDataToAjax(postEditedText){
+       // alert("helloo test"+JSON.stringify(postEditedText));alert(this.ticketId);
+       this._ajaxService.AjaxSubscribe("story/update-story-field-details",postEditedText,(result)=>
+        { 
+       // alert("updating here"+data);
+      // alert(JSON.stringify(result.data));
+          if(result.statusCode== 200){
+          //  alert("success");
+         //  alert(this.ticketId+'_'+postEditedText.EditedId);
+            document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data;
+          }
+    
         });
     }
 
