@@ -228,4 +228,5 @@ footer{font-size:10px}
 .artifacts img{width:100px;height:100px}
 .loading{position: fixed;top:0;bottom:0;right:0;left:0;text-align: center;}
 .loading img{position: absolute;top:50%;margin-top:-20px}
+.loginform .alert-danger{padding:6px}
 /*end*/
