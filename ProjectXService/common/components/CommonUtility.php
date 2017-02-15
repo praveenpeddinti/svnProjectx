@@ -425,6 +425,9 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
 Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
       }
   }
+ public static function validateDate($date){
+    return (bool)strtotime($date);
+}
    
 }
 
