@@ -23,8 +23,9 @@ export class StoryEditComponent implements OnInit {
   private fieldsData = [];
   // private fieldsBindingArray=[];
   private showMyEditableField =[];
+  public dragdrop={extraPlugins:'dragdrop'};
   public toolbar={toolbar : [
-    [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
+    [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList']
 ]};
 public filesToUpload: Array<File>;
 public hasBaseDropZoneOver:boolean = false;
@@ -262,5 +263,11 @@ public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
             xhr.send(formData);
         });
     }
+
+    cancelDesc(){
+  // this.ticketEditableDesc = this.ticketCrudeDesc;
+  // this.showDescEditor = true;
+  this._router.navigate(['story-detail',this.url_TicketId]);
+}
 
 }
