@@ -310,8 +310,8 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                 Yii::log("StoryService:getPriority::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
             }
         }
-        
-        
+
+    
         /**
  * @author Moin Hussain
  * @param type $ticket_data
@@ -364,6 +364,22 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
         }
        
       }
+        /*
+    * @author Padmaja
+    * @param type $fieldData
+     */
+    public function getUpdateStoryDetails($fieldData){
+        try{
+            $storyFieldModel = new TicketCollection();
+            //return $priorityModel->getMyAssignedTickets();
+            return $storyFieldModel->updateStoryField($fieldData);
+        } catch (Exception $ex) {
+              Yii::log("StoryService:getUpdateStoryDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }    
+
+        
+      
 }
 
   

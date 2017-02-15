@@ -17,6 +17,7 @@ use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
 use yii\web\IdentityInterface;
+use common\components\CommonUtility;
 
 class TicketCollection extends ActiveRecord 
 {
@@ -175,8 +176,8 @@ class TicketCollection extends ActiveRecord
 
       }  
     }
-    
-    /**
+
+   /**
      * @author Praveen P
      * getting total count.
      * @return type  $projectId
@@ -192,6 +193,48 @@ class TicketCollection extends ActiveRecord
       Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
       }  
+    }
+        /*
+     * @author Padmaja
+     * @param type $fieldData
+     */
+    public static function updateStoryField($fieldData){ 
+        try{
+            $returnValue = 'failure';
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $checkData=$fieldData->isLeftColumn;
+            if($checkData==0){
+                 if($fieldData->id=='Title'){
+                    $newData = array('$set' => array("Title" => $fieldData->value));
+                    $condition=array("TicketId" => (int)$fieldData->TicketId,"ProjectId"=>(int)$fieldData->projectId);
+                    error_log("newdattaaaaaaaa".print_r($newData,1));error_log("newdattaaaaaaaa2342424".print_r($condition,1));
+                    $updateStaus=$collection->update($condition, $newData); 
+                    if($updateStaus==0){
+                        $returnValue=$fieldData->value;
+                    }
+                }else if($fieldData->id=='Description'){
+                    $actualdescription = CommonUtility::refineDescription($fieldData->value);
+                    $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$fieldData->value ));
+                    $condition=array("TicketId" => (int)$fieldData->TicketId,"ProjectId"=>(int)$fieldData->projectId);
+                    error_log("newdattaaaaaaaa".print_r($newData,1));error_log("newdattaaaaaaaa2342424".print_r($condition,1));
+                    $updateStaus=$collection->update($condition, $newData); 
+                    if($updateStaus==0){
+                        $returnValue=$actualdescription;
+                    }
+                }
+            }else{
+                $newData = array('$set' => array("Fields.$.value" => $fieldData->value));
+                $condition=array("TicketId" => (int)$fieldData->TicketId,"ProjectId"=>(int)$fieldData->projectId,"Fields.Id"=>(int)$fieldData->id);
+                $updateStaus = $collection->update($condition, $newData); 
+                if($updateStaus==0){
+                    $returnValue=$fieldData->value;
+                }
+            }
+            return $returnValue;
+
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:updateStoryField::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
     }
 }
 ?>
