@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../ajax/ajax.service';
-
 import 'rxjs/add/operator/toPromise';
 
 
@@ -46,8 +45,7 @@ getAllStoryDetails(projectId,offset,pagesize,getAllStoryDetailsCallback) {
       'pagesize':pagesize
     }
     this._ajaxService.AjaxSubscribe("story/get-all-ticket-details",post_data,(data)=>
-    { //console.log("---ddddd-----55-"+JSON.stringify(data));
-   // alert("^^^^^^^^^^^^22^^^^^^^^^^^^^^");
+    { 
          getAllStoryDetailsCallback(data);
     });
   }
