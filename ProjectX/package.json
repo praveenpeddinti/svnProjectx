@@ -24,6 +24,7 @@
     "@angular/router": "^3.3.1",
     "@swimlane/ngx-datatable": "^6.0.2",
     "@types/socket.io-client": "^1.4.29",
+    "angular2-file-drop": "^0.2.0",
     "angular2-mentions": "^0.4.4",
     "core-js": "^2.4.1",
     "ng2-ckeditor": "^1.1.5",
