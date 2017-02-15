@@ -164,20 +164,31 @@ class TicketCollection extends ActiveRecord
       try{
             $query = new Query();
             $query->from('TicketCollection')
-                     ->where(["ProjectId" => $projectId])
-                   ->orderBy([
-    'TicketId' => SORT_DESC,
-   
-]);
-            
-            //        ->where(["ProjectId" => $projectId,"TicketId" => array(101,200,201,202,203,204,205,206,207,208,209,210)]);
-            //->limit($StoryData->pagesize)
-            //->offset($StoryData->offset*$StoryData->pagesize);
-            
+                    ->where(["ProjectId" => $projectId])
+                    ->limit($StoryData->pagesize)
+                    ->offset(($StoryData->offset*$StoryData->pagesize))
+                    ->orderBy(['TicketId' => SORT_DESC]);
         $ticketDetails = $query->all();
-        error_log("---total-----".sizeof($ticketDetails));
         return $ticketDetails;  
       } catch (Exception $ex) {
+      Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+      }  
+    }
+    
+    /**
+     * @author Praveen P
+     * getting total count.
+     * @return type  $projectId
+     */
+    public static function getTotalStorys($projectId){
+      try{
+            $query = new Query();
+            $query->from('TicketCollection')
+                     ->where(["ProjectId" => $projectId]);
+            $totalCount = $query->count();
+            return $totalCount;
+        } catch (Exception $ex) {
       Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
       }  

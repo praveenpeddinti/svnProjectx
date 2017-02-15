@@ -265,24 +265,39 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
      * @author Praveen P
      * @return type
      */
-      public function getAllStoryDetails($StoryData,$projectId) {
+    public function getAllStoryDetails($StoryData, $projectId) {
         try {
-         $model = new TicketCollection();
-         $ticketDetails = $model->getAllTicketDetails($StoryData,$projectId);
-         $finalData = array();
-         foreach ($ticketDetails as $ticket){
-             $details =  CommonUtility::prepareTicketDetails($ticket, 1);
-             array_push($finalData,$details);
-             //break;
-         }
-         return $finalData;
+            $model = new TicketCollection();
+            $ticketDetails = $model->getAllTicketDetails($StoryData, $projectId);
+            $finalData = array();
+            foreach ($ticketDetails as $ticket) {
+                $details = CommonUtility::prepareTicketDetails($ticket, $projectId);
+                array_push($finalData, $details);
+                //break;
+            }
+            return $finalData;
         } catch (Exception $ex) {
             Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
-
     }
-      
-        /**
+    
+    /**
+     * @author Praveen P
+     * getting total count.
+     * @return type  $projectId
+     */
+    public function getTotalStorys($projectId) {
+        try {
+            $model = new TicketCollection();
+            $totalCount = $model->getTotalStorys($projectId);
+            
+            return $totalCount;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    /**
          * @author Anand Singh
          * @return type
          */

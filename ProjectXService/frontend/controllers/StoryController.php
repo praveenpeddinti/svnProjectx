@@ -82,24 +82,26 @@ class StoryController extends Controller
     * @description This method is used to get all data for stories/tasks.
     * @return type
     */
-    public function actionGetAllTicketDetails(){
-        try{
+   public function actionGetAllTicketDetails() {
+        try {
             $StoryData = json_decode(file_get_contents("php://input"));
-            $projectId  =  $StoryData->projectId;
-        $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($StoryData,$projectId);
-        $responseBean = new ResponseBean();  
-        $responseBean->statusCode = ResponseBean::SUCCESS;
-        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-        $responseBean->data = $data;
-         $responseBean->totalCount = 30;
-        $response = CommonUtility::prepareResponse($responseBean,"json");
-        return $response;
-        //return "praveen P";
+            //$projectId=1;
+            $projectId = $StoryData->projectId;
+            $totalCount = ServiceFactory::getStoryServiceInstance()->getTotalStorys($projectId);
+            $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($StoryData, $projectId);
+
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $data;
+            $responseBean->totalCount = $totalCount;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            error_log("-----total----".$totalCount);
+            return $response;
         } catch (Exception $ex) {
-     Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
 
     /**
     * @author Moin Hussain
@@ -131,7 +133,7 @@ class StoryController extends Controller
         try{
             error_log("actionSaveTicketDetails--");
              $ticket_data = json_decode(file_get_contents("php://input"));
-            error_log("pintir-------------".print_r($ticket_data,1));
+            //error_log("pintir-------------".print_r($ticket_data,1));
 //           $userdata =  $ticket_data->userInfo;
 //           error_log("userid------".$userdata->Id);
           
