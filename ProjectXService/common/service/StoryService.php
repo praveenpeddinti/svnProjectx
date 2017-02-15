@@ -271,6 +271,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
             $ticketDetails = $model->getAllTicketDetails($StoryData, $projectId);
             $finalData = array();
             foreach ($ticketDetails as $ticket) {
+                error_log("-----------------------".$ticket["TicketId"]);
                 $details = CommonUtility::prepareTicketDetails($ticket, $projectId);
                 array_push($finalData, $details);
                 //break;
@@ -328,32 +329,36 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
             
                 $ticketCollectionModel = new TicketCollection();
                $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->TicketId,$projectId);
-               error_log("before---------------");
         $ticketDetails["Title"] = $ticket_data->title;
               $description = $ticket_data->description;
               $ticketDetails["CrudeDescription"] = $description;
-              error_log("descripotion--------".$description);
             $ticketDetails["Description"] = CommonUtility::refineDescription($description);
               
              // unset($ticket_data->title);
              // unset($ticket_data->description);
-             error_log("----------------------------");
                foreach ($ticketDetails["Fields"] as &$value) {
-                 error_log("id--------------".$value["Id"]);
                  $fieldId =  $value["Id"];
                 
                      if(isset($ticket_data->$fieldId)){
                          if(is_numeric($ticket_data->$fieldId)){
                               $value["value"] = (int)$ticket_data->$fieldId;  
                          }else{
-                             $value["value"] = $ticket_data->$fieldId; 
+                             if($ticket_data->$fieldId != ""){
+                                 if(CommonUtility::validateDate($ticket_data->$fieldId)){
+                                 $value["value"] = new \MongoDB\BSON\UTCDateTime(strtotime($ticket_data->$fieldId) * 1000); 
+                             }else{
+                                 $value["value"] = $ticket_data->$fieldId; 
+                             } 
+                             }
+                            
+                             
                          }
                        
                      }
                    
                 
              }
-             error_log(print_r($ticketDetails["Fields"],1));
+             //error_log(print_r($ticketDetails["Fields"],1));
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $collection->save($ticketDetails); 
             
