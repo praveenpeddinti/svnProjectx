@@ -223,8 +223,8 @@ html-dropdown span.name {
 footer{font-size:10px}
 .custwordwrap{word-wrap: break-word}
 .customdatatable.ngx-datatable.material{background: #FFF;  box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.12), 0 0px 0px 0 rgba(0, 0, 0, 0.24);}
-.ngx-datatable.fixed-row .datatable-scroll .datatable-body-row{border:1px solid #e8e8e8;margin:0;margin-bottom:5px;position: relative}
-.ngx-datatable.fixed-row .datatable-scroll .datatable-body-row:after{content:"";border:1px solid #e8e8e8;top:0;bottom:0;position: absolute;;right:12px;}
+.ngx-datatable.fixed-row .datatable-scroll .datatable-body-row,.ngx-datatable .datatable-scroll .datatable-body-row{border:1px solid #e8e8e8;margin:0;margin-bottom:5px;position: relative}
+.ngx-datatable.fixed-row .datatable-scroll .datatable-body-row:after, .ngx-datatable .datatable-scroll .datatable-body-row:after{content:"";border:1px solid #e8e8e8;top:0;bottom:0;position: absolute;;right:12px;}
 .artifacts img{width:100px;height:100px}
 .loading{position: fixed;top:0;bottom:0;right:0;left:0;text-align: center;}
 .loading img{position: absolute;top:50%;margin-top:-20px}
