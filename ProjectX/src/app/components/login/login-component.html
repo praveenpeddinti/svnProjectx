@@ -8,12 +8,9 @@
         <h2 class="loginheader text-center">SIGN IN</h2>
         <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && login()" novalidate="true">
           <div class="loginform">
-            <div class="col-xs-12 col-sm-12 col-md-12">
-          <div *ngIf="submitted && user_name.errors == null && this.checkData" class="alert alert-danger">
+            <div *ngIf="submitted && user_name.errors == null && this.checkData" class="alert alert-danger">
                     {{errorMsg}}
-                  </div>
-                
-          </div>
+               </div>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
