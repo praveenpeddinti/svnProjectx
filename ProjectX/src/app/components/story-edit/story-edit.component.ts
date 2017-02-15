@@ -4,6 +4,9 @@ import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 import { StoryService} from '../../services/story.service';
 import {NgForm} from '@angular/forms';
+import {CalendarModule} from 'primeng/primeng'; 	
+
+
 
 declare var jQuery:any;
 @Component({
@@ -14,6 +17,8 @@ declare var jQuery:any;
 })
 
 export class StoryEditComponent implements OnInit {
+
+public minDate = new Date();
 
     private ticketData:any=[];
     private ticketid;
@@ -111,14 +116,14 @@ setTimeout(()=>{
             data.title = field.title;
             // alert(field.readable_value.date.split(" ")[0]+"++++++++Date++++++++++");
             data.value = field.readable_value;
-            data.renderType = "input";
+            data.renderType = "date";
             data.type="date";
             break;
             case "DateTime":
             data.title = field.title;
             // alert(field.readable_value.date.split(".")[0]+"++++++++++DateTime++++++++++++");
             data.value = field.readable_value;
-            data.renderType = "input";
+            data.renderType = "date";
             data.type="datetime";
             break;
             case "Team List":
