@@ -57,7 +57,7 @@
    <div class="rightdescriptionarea" [hidden]="!showDescEditor">
         
           <div style="position: relative">
-    <div [innerHTML]="ticketDesc" id="{{ticketData?.data?.TicketId}}_desc" (click)="openDescEditor()" >
+    <div class="custwordwrap artifacts" [innerHTML]="ticketDesc" id="{{ticketData?.data?.TicketId}}_desc" (click)="openDescEditor()" >
     </div>  </div> </div>
         <div [hidden]="showDescEditor">
       <div class="rightdescriptionarea">
