@@ -83,6 +83,14 @@ class CommonUtility {
     }
     /**
      * @author Moin Hussain
+     * @param type $date
+     * @return type
+     */
+    public static function validateDate($date){
+    return (bool)strtotime($date);
+  }
+    /**
+     * @author Moin Hussain
      * @param type $sec
      * @param type $to_tz
      * @param type $from_tz
@@ -430,9 +438,7 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
 Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
       }
   }
- public static function validateDate($date){
-    return (bool)strtotime($date);
-}
+ 
    
 }
 
