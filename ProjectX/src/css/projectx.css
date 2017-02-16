@@ -18,8 +18,9 @@ border-top: 1px solid #eee}
 /* end */
 /*header right panel section menu*/
 .profilesection{border:1px solid #dddddd;margin-top:13px;padding:5px;min-height:45px}
-.profilepic img{max-width:100%;max-height:100%;display:flex}
-.profilepic{width:22px;height:22px;overflow:hidden;border-radius:100px;border:1px solid #dddddd;padding:2px;vertical-align:middle;display:table-cell}
+.profilepic img{max-width:100%;max-height:100%;}
+.profilepic{width:32px;height:32px;overflow:hidden;border-radius:100px;border:1px solid #dddddd;padding:2px;vertical-align:middle;display:table-cell}
+.profilepic_table{width:22px;height:22px;overflow:hidden;border-radius:100px;border:1px solid #dddddd;padding:2px;vertical-align:middle;display:table-cell}
 .headerrightnavbar > li > a {
     padding-top: 6px;
     padding-bottom: 6px;
@@ -81,11 +82,11 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
 .minheight50{min-height: 50px}
 .viewinputtext{min-height:50px; font-size: 20px;
     min-height: 40px;
-    padding: 6px 10px 0;}
+    padding: 6px 10px 0;overflow: hidden;white-space: nowrap;text-overflow: ellipsis}
 /* custom data table*/
 .customdatatable .datatable-header{background:#ececec;color:#7d7977;padding:10px 8px;font-size:15px;margin-bottom:15px}
 .customdatatable .datatable-row-wrapper .datatable-body-row .datatabledatatable-row-center{border:1px solid #ccc;margin-bottom:5px;}
-.profilepic{border-radius:100px;width:22px;height:22px;border:1px solid #ccc;padding:2px;background: #fff}
+.profilepic{border-radius:100px;width:32px;height:32px;border:1px solid #ccc;padding:2px;background: #fff}
 /* end */
 /* componentstyles for to title area*/
  .titlearea  .ticketidareanorightpadding{padding-right:0}
@@ -227,6 +228,7 @@ footer{font-size:10px}
 .Highest{color:#ff2200}
 .High{color:#ff4c4c}
 .Low{color:#c5c950}
+.Lowest{color:#c5c950}
 .New{color:#00b12e}
 .Open{color:#FC4A4A}
 .Accepted{color:#0081c4}

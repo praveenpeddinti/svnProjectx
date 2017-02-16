@@ -42,7 +42,7 @@
   <ngx-datatable-column name="Assigned to" [resizeable]="false" [flexGrow]="1">
     <template let-row="row" let-i="i" ngx-datatable-cell-template>
       <div *ngIf="row.Fields[4].value!=''">
-      <img  class="profilepic"  src="{{row.Fields[4].readable_value.ProfilePicture}}" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"/>
+      <img  class="profilepic_table"  src="{{row.Fields[4].readable_value.ProfilePicture}}" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"/>
    </div>
     </template>
   </ngx-datatable-column>
