@@ -82,7 +82,7 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
 .minheight50{min-height: 50px}
 .viewinputtext{min-height:50px; font-size: 20px;
     min-height: 40px;
-    padding: 6px 10px 0;overflow: hidden;white-space: nowrap;text-overflow: ellipsis}
+    padding: 6px 10px 0;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;background:#fff}
 /* custom data table*/
 .customdatatable .datatable-header{background:#ececec;color:#7d7977;padding:10px 8px;font-size:15px;margin-bottom:15px}
 .customdatatable .datatable-row-wrapper{cursor: pointer}
@@ -238,3 +238,9 @@ footer{font-size:10px}
 .prioritycolumn i{float:right;margin-top:4px}
 .ngx-datatable.material .datatable-footer {font-size: 13px;background: #f4f4f4;}
 .headerrightnavbar .dropdown-toggle{text-decoration: none}
+.customcalender .ui-calendar{display:block}
+.customcalender .ui-calendar.ui-calendar-w-btn input{width:90%}
+.customcalender .ui-calendar .ui-button{background: #e8e8e8;color:#333;border:1px solid #f8f8f8;border-left:0}
+.customcalender .ui-calendar .ui-button:hover, .customcalender .ui-calendar .ui-button:focus{background: #f4f4f4;color:#333;border:1px solid #f8f8f8;}
+.customcalender .ui-datepicker{width:99%}
+/*end*/
