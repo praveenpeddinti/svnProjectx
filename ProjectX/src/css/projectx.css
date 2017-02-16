@@ -85,7 +85,7 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
 /* custom data table*/
 .customdatatable .datatable-header{background:#ececec;color:#7d7977;padding:10px 8px;font-size:15px;margin-bottom:15px}
 .customdatatable .datatable-row-wrapper .datatable-body-row .datatabledatatable-row-center{border:1px solid #ccc;margin-bottom:5px;}
-.profilepic{border-radius:100px;width:32px;height:32px;border:1px solid #ccc;padding:2px;background: #fff}
+.profilepic{border-radius:100px;width:22px;height:22px;border:1px solid #ccc;padding:2px;background: #fff}
 /* end */
 /* componentstyles for to title area*/
  .titlearea  .ticketidareanorightpadding{padding-right:0}
@@ -116,14 +116,7 @@ my-app {
 	display: block ;
 }
 
-a {
-	color: red ;
-	cursor: pointer ;
-	text-decoration: underline ;
-	user-select: none ;
-		-moz-user-select: none ;
-		-webkit-user-select: none ;
-}
+
 
 html-dropdown {
 	cursor: pointer ;
@@ -204,7 +197,9 @@ html-dropdown span.name {
 	font-size: 26px ;
 	padding-left: 70px ;
 }
-
+::-ms-reveal {
+    display: none;
+}
 
 /*custom dropdownload styles*/
 .customdropdown .ui-widget-header .ui-state-default, .customdropdown .ui-widget-content .ui-state-default, .customdropdown .ui-state-default, .customdropdown .ui-inputtext{border:0;background: #f8f8f8}
@@ -226,7 +221,7 @@ footer{font-size:10px}
 .loading{position: fixed;top:0;bottom:0;right:0;left:0;text-align: center;display: block}
 .loading img{position: absolute;top:45%;margin-top:-20px}
 .loginform .alert-danger{padding:6px}
-.datatable-body-cell-label .titlecolumn{text-overflow: ellipsis;overflow: hidden;cursor:pointer}
+.datatable-body-cell-label .titlecolumn{text-overflow: ellipsis;overflow: hidden;cursor:pointer;white-space: nowrap}
 .statusbold{font-weight:bold}
 .Normal{color:#eda74c}
 .Highest{color:#ff2200}
@@ -237,6 +232,7 @@ footer{font-size:10px}
 .Accepted{color:#0081c4}
 .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell{font-size:13px}
 .prioritycolumn{width:66px}
-.prioritycolumn i{float:right;margin-top:2px}
+.prioritycolumn i{float:right;margin-top:4px}
 .ngx-datatable.material .datatable-footer {font-size: 13px;background: #f4f4f4;}
+.headerrightnavbar .dropdown-toggle{text-decoration: none}
 /*end*/
