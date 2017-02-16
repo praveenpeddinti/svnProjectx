@@ -16,6 +16,7 @@ export class StoryDashboardComponent {
     count: number = 0;
     offset: number = 0;
     limit: number = 10;
+    sortvalue = 'TicketId';
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
     constructor(
@@ -23,11 +24,11 @@ export class StoryDashboardComponent {
         private _service: StoryService, private http: Http) { console.log("in constructor"); }
     
     ngOnInit() {
-        this.page(this.offset, this.limit);
+        this.page(this.offset, this.limit,this.sortvalue);
     }
 
-    page(offset, limit) {
-        this._service.getAllStoryDetails(1, offset, limit, (response) => {
+    page(offset, limit,sortvalue) {
+        this._service.getAllStoryDetails(1, offset, limit,sortvalue, (response) => {
             let jsonForm = {};
             if (response.statusCode == 200) {
                 const start = offset * limit;
@@ -47,9 +48,15 @@ export class StoryDashboardComponent {
 
     onPage(event) {
         console.log('Page Event', event);
-        this.page(event.offset, event.limit);
+        this.page(event.offset, event.limit,'TicketId');
     }
+ /*onSort(event) {
 
+    console.log(event.sorts[0].dir,' Sort Event', event.sorts[0].prop);
+ }*/
+ onActivate(event) {
+    this._router.navigate(['story-detail', event.row.TicketId]);
+  }
     renderStoryForm() {
         this._router.navigate(['story-form']);
     }

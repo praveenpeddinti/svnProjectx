@@ -18,13 +18,14 @@
         [count]="count"
         [offset]="offset"
         [limit]="limit"
-        (page)='onPage($event)'
+        (page)="onPage($event)"
+        (activate)="onActivate($event)"
         >
 
 
-  <ngx-datatable-column name="Id" [flexGrow]="1" [resizeable]="false" style="cursor: pointer">
+  <ngx-datatable-column name="Id" [flexGrow]="1" [resizeable]="false">
     <template let-row="row" ngx-datatable-cell-template>
-      <div style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
+      <div title="{{row.Fields[3].readable_value.Name}}">
         <img *ngIf="row.Fields[3].readable_value.Name=='Story'" src="assets/images/storyicon.png"   title="{{row.Fields[3].readable_value.Name}}" />
         
         <img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="assets/images/task.png"  title="{{row.Fields[3].readable_value.Name}}" />
@@ -34,7 +35,7 @@
   </ngx-datatable-column>
   <ngx-datatable-column name="Title" [resizeable]="false" [flexGrow]="5">
     <template let-row="row" ngx-datatable-cell-template>
-      <div class="titlecolumn" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
+      <div class="titlecolumn" title="{{row.Fields[3].readable_value.Name}}">
             {{row.Title}}
             </div>
     </template>
@@ -69,7 +70,7 @@
 
     </template>
   </ngx-datatable-column>
-
+ 
 
 
 

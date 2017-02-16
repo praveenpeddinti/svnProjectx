@@ -85,6 +85,7 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
     padding: 6px 10px 0;overflow: hidden;white-space: nowrap;text-overflow: ellipsis}
 /* custom data table*/
 .customdatatable .datatable-header{background:#ececec;color:#7d7977;padding:10px 8px;font-size:15px;margin-bottom:15px}
+.customdatatable .datatable-row-wrapper{cursor: pointer}
 .customdatatable .datatable-row-wrapper .datatable-body-row .datatabledatatable-row-center{border:1px solid #ccc;margin-bottom:5px;}
 .profilepic{border-radius:100px;width:32px;height:32px;border:1px solid #ccc;padding:2px;background: #fff}
 /* end */
@@ -237,4 +238,3 @@ footer{font-size:10px}
 .prioritycolumn i{float:right;margin-top:4px}
 .ngx-datatable.material .datatable-footer {font-size: 13px;background: #f4f4f4;}
 .headerrightnavbar .dropdown-toggle{text-decoration: none}
-/*end*/
