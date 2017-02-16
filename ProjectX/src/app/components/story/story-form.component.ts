@@ -3,7 +3,9 @@ import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
 import { TinyMCE } from '../../tinymce.component';
 
-import {AccordionModule,DropdownModule,SelectItem,CalendarModule} from 'primeng/primeng';     
+import {AccordionModule,DropdownModule,SelectItem,CalendarModule} from 'primeng/primeng';
+
+declare var jQuery:any;     
  @Component({
     selector: 'story-form',
     templateUrl: 'story-form.html',
@@ -75,15 +77,12 @@ public prepareItemArray(list:any){
      }
 return listItem;
 }
-public fileOverBase(fileInput:any):void {  
+public fileOverBase(fileInput:any):void {
     this.hasBaseDropZoneOver = true;
-    //fileInput.preventDefault();
-     //console.log("drag over " + fileInput);
 }
 
 public fileDragLeave(fileInput: any){
     this.hasBaseDropZoneOver = false;
-    //console.log("drag leave " + fileInput); 
 }
 
 public fileChangeEvent(fileInput: any):void {

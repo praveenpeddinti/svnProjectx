@@ -96,7 +96,7 @@
 <div class="rightdescriptionarea">
         
           <div style="position: relative" >
-               <div [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
+               <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
                     (dragover)="fileOverBase($event)" 
                     (dragleave)="fileDragLeave($event)"   
                     (drop)="onFileDrop($event)" >

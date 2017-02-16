@@ -1,5 +1,5 @@
 
-<form #editstoryForm="ngForm"  novalidate="true">
+<form fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event) #editstoryForm="ngForm"  novalidate="true">
 <div class="paddingbottom10">
 
     <div class="titlearea  ">
@@ -52,6 +52,11 @@
 
       <div class="rightdescriptionarea">
   <div style="position: relative">
+                <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
+                    (dragover)="fileOverBase($event)" 
+                    (dragleave)="fileDragLeave($event)"   
+                    (drop)="onFileDrop($event)" >
+                </div>
      <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
             <ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required  debounce="500"  >
             </ckeditor>

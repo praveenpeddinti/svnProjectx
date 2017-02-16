@@ -219,6 +219,14 @@ checkEmpty(event,id)
   }
 }
 
+public fileOverBase(fileInput:any):void {
+    this.hasBaseDropZoneOver = true;
+}
+
+public fileDragLeave(fileInput: any){
+    this.hasBaseDropZoneOver = false;
+}
+
 public fileChangeEvent(fileInput: any):void {
   this.filesToUpload = <Array<File>> fileInput.target.files;
     this.hasBaseDropZoneOver = false;
@@ -238,6 +246,28 @@ public fileChangeEvent(fileInput: any):void {
             this.description = this.description + "Error while uploading";
         });
 }
+
+public onFileDrop(fileInput:any): void {
+    //console.log("file drop " + "File Name "+fileInput.dataTransfer.files[0].name+"File Size "+fileInput.dataTransfer.files[0].size);
+
+    this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
+    this.hasBaseDropZoneOver = false;
+    this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
+            for(var i = 0; i<result.length; i++){
+                //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
+                var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                    this.description = this.description + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                } else{
+                    this.description = this.description + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                }
+            }
+        }, (error) => {
+            console.error(error);
+            //this.sampleModel = "Error while uploading";
+            this.description = this.description + "Error while uploading";
+        });
+  }
 
 public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
         return new Promise((resolve, reject) => {
