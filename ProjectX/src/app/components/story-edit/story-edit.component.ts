@@ -18,7 +18,7 @@ declare var jQuery:any;
 
 export class StoryEditComponent implements OnInit {
 
-public minDate = new Date();
+public minDate:Date;
 
     private ticketData:any=[];
     private ticketid;
@@ -65,7 +65,7 @@ setTimeout(()=>{
 
 },150);
     
-    
+    this.minDate=new Date();
   }
 
    editThisField(event,fieldIndex){

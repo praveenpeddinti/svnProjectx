@@ -38,9 +38,10 @@
 
   <input class="editinput" *ngSwitchCase="'input'" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
     (blur)="restoreField($event.target.value,field.elId,i)">
+<p-calendar [ngModel]="field.value | date:yyyy/MM/dd" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="yy-mm-dd"></p-calendar>
 
 <div class="customdropdown">
-<p-dropdown  [style]="{'width':'100%'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
+<p-dropdown  [style]="{'width':'100%'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList"></p-dropdown>
       <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
 </div>
 </div>
@@ -49,6 +50,10 @@
 
 
 </div>
+
+
+<!--<a href="#/story-edit"> Story-Edit </a>
+<button (click)="onClick()">Click this</button>-->
 
 </div>
 </div>

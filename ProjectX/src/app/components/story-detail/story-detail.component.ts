@@ -17,6 +17,7 @@ export class StoryDetailComponent implements OnInit {
   //   private http: Http;
 //  testObj = {};
 //   newObj = {};
+  public minDate:Date;
   private ticketData;
   private ticketId;
   private fieldsData = [];
@@ -67,7 +68,7 @@ public fileUploadStatus:boolean = false;
             
         });
 
-
+      this.minDate=new Date();
   }
 
   /*
@@ -77,6 +78,7 @@ public fileUploadStatus:boolean = false;
     this.showDescEditor = false;
     // document.getElementById('tktDesc').focus();
   }
+
 
 submitDesc(){
   this.ticketDesc = this.ticketEditableDesc;
@@ -130,6 +132,7 @@ closeTitleEdit(editedText){
   onClick(){
     // alert(val);
     this._router.navigate(['story-edit',this.ticketId]);
+
   }
 
   editThisField(event,fieldIndex,fieldId,fieldDataId){
@@ -215,14 +218,14 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
             data.title = field.title;
             // alert(field.readable_value.date.split(" ")[0]+"++++++++Date++++++++++");
             data.value = field.readable_value;
-            data.renderType = "input";
+            data.renderType = "date";
             data.type="date";
             break;
             case "DateTime":
             data.title = field.title;
             // alert(field.readable_value.date.split(".")[0]+"++++++++++DateTime++++++++++++");
             data.value = field.readable_value;
-            data.renderType = "input";
+            data.renderType = "date";
             data.type="datetime";
             break;
             case "Team List":
