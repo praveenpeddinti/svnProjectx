@@ -393,7 +393,6 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
               $matches=[];
               preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
               $filematches = $matches[0];
-              error_log("cont------------".count($filematches));
               for($i = 0; $i< count($filematches); $i++){
                    $value = $filematches[$i];
                    $firstArray =  explode("/", $value);
@@ -401,9 +400,15 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
                    $tempFileName = $secondArray[0];
                    $originalFileName = $secondArray[1];
                    $originalFileName = str_replace("]]", "", $originalFileName);
-                $newPath = Yii::$app->params['ServerURL']."/files/".$tempFileName."-".$originalFileName;
+                   $storyArtifactPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['StoryArtifactPath'] ;
+                   if(!is_dir($storyArtifactPath)){
+                       if(!mkdir($storyArtifactPath, 0775,true)){
+                           Yii::log("CommonUtility:refineDescription::Unable to create folder--" . $ex->getTraceAsString(), 'error', 'application');
+                       }
+                   }
+                $newPath = Yii::$app->params['ServerURL'].Yii::$app->params['StoryArtifactPath']."/".$tempFileName."-".$originalFileName;
                 if(file_exists("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName")){
-                    rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", "/usr/share/nginx/www/ProjectXService/frontend/web/files/$tempFileName-".$originalFileName); 
+                    rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", $storyArtifactPath."/".$tempFileName."-".$originalFileName); 
                 }
                
                $extension = CommonUtility::getExtension($originalFileName);
