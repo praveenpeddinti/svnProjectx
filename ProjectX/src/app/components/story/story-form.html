@@ -1,4 +1,4 @@
-<form fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event)  #storyForm="ngForm" (ngSubmit)="submitted && saveStory()" novalidate="true">
+<form fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event)  #storyForm="ngForm" (ngSubmit)="submitted && storyForm.form.valid && saveStory()" novalidate="true">
     <div class="paddingbottom10">
     <div class="titlearea  ">
   <div class="row">
