@@ -19,6 +19,7 @@ export class StoryComponent {
 @Output() public options = {
     readAs: 'ArrayBuffer'
   };
+ public dragTimeout;
     public storyFormData=[];
     public storyData={};
     public form={};
@@ -79,18 +80,31 @@ public prepareItemArray(list:any){
 return listItem;
 }
 public fileOverBase(fileInput:any):void {
+console.log("fileoverbase");
     this.hasBaseDropZoneOver = true;
+if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ console.log("clear---");
+clearTimeout(this.dragTimeout);
+}
+
 }
 
 public fileDragLeave(fileInput: any){
-    this.hasBaseDropZoneOver = false;
+console.log("fileDragLeave");
+var thisObj = this;
+if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ console.log("clear---");
+clearTimeout(this.dragTimeout);
+}
+ this.dragTimeout = setTimeout(function(){
+thisObj.hasBaseDropZoneOver = false;
+},500)
+    
 }
 
 public fileChangeEvent(fileInput: any):void {
    // console.log("cahnge event " + fileInput.name +"------- " + fileInput.size);
   this.filesToUpload = <Array<File>> fileInput.target.files;
     this.hasBaseDropZoneOver = false;
-        this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
+        this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
@@ -112,7 +126,7 @@ public onFileDrop(fileInput:any): void {
 
     this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
     this.hasBaseDropZoneOver = false;
-    this.makeFileRequest("http://10.10.73.62:4200/upload", [], this.filesToUpload).then((result :Array<any>) => {
+    this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
