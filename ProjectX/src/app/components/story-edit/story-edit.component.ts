@@ -31,7 +31,7 @@ public minDate:Date;
   public dragdrop={extraPlugins:'dragdrop'};
   public toolbar={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList']
-]};
+],removePlugins:'elementspath',resize_enabled:false};
 public filesToUpload: Array<File>;
 public hasBaseDropZoneOver:boolean = false;
 public hasFileDroped:boolean = false;

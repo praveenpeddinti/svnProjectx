@@ -2,6 +2,7 @@ import { Component,ViewChild,Output } from '@angular/core';
 import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
 import { TinyMCE } from '../../tinymce.component';
+import {Router} from '@angular/router';
 
 import {AccordionModule,DropdownModule,SelectItem,CalendarModule} from 'primeng/primeng';
 
@@ -23,7 +24,7 @@ export class StoryComponent {
     public form={};
     public toolbar={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
-]};
+],removePlugins:'elementspath',resize_enabled:false};
 public filesToUpload: Array<File>;
 //sampleModel:string = "";
 public hasBaseDropZoneOver:boolean = false;
@@ -31,7 +32,7 @@ public hasFileDroped:boolean = false;
 editorData:string='';
 public fileUploadStatus:boolean = false;
 
-    constructor( private _service: StoryService) {
+    constructor( private _service: StoryService,private _router:Router) {
         this.filesToUpload = [];
     }
   

@@ -28,7 +28,7 @@ export class StoryDetailComponent implements OnInit {
   private showDescEditor=true;
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
-]};
+],removePlugins:'elementspath',resize_enabled:false};
   // private makeFocused = []; 
   private dropList=[];
 
