@@ -34,7 +34,7 @@
   </ngx-datatable-column>
   <ngx-datatable-column name="Title" [resizeable]="false" [flexGrow]="5">
     <template let-row="row" ngx-datatable-cell-template>
-      <div style="cursor:pointer" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
+      <div class="titlecolumn" title="{{row.Fields[3].readable_value.Name}}" (click)="showStoryDetail(row)">
             {{row.Title}}
             </div>
     </template>
@@ -48,7 +48,7 @@
   </ngx-datatable-column>
   <ngx-datatable-column name="Priority" [flexGrow]="1" [resizeable]="false">
     <template let-row="row" let-i="i" ngx-datatable-cell-template>
-      {{row.Fields[5].readable_value.Name}}
+      <div class="prioritycolumn">{{row.Fields[5].readable_value.Name}} <i class="fa fa-circle {{row.Fields[5].readable_value.Name}}" aria-hidden="true"></i></div>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Bucket" [flexGrow]="1" [resizeable]="false">
@@ -57,15 +57,15 @@
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Status" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" let-i="i" ngx-datatable-cell-template>
-      {{row.Fields[6].readable_value.Name}}
+    <template let-row="row" let-i="i" ngx-datatable-cell-template >
+      <div class="statusbold {{row.Fields[6].readable_value.Name}}">{{row.Fields[6].readable_value.Name}}</div>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Due Date" [flexGrow]="1" [resizeable]="false">
     <template let-row="row" let-i="i" ngx-datatable-cell-template>
 
-      <strong>{{row.Fields[9].readable_value}}</strong>
-      <strong></strong>
+      {{row.Fields[9].readable_value}}
+      
 
     </template>
   </ngx-datatable-column>
