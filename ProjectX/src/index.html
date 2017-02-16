@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
   <script type="text/javascript">
 $(function () {
@@ -20,10 +19,13 @@ $(function () {
 </script>
 </head>
 <body>
+  <div id="commonSpinner" class="unloading">
+    <img src="/assets/images/loading.svg"/>
+  </div>
   <app-root>
     <div class="loading">
-<img src="/assets/images/loading.svg"/>
-</div>
+    <img src="/assets/images/loading.svg"/>
+   </div>
   </app-root>
 </body>
 </html>
