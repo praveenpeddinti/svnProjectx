@@ -207,28 +207,35 @@ class TicketCollection extends ActiveRecord
                  if($fieldData->id=='Title'){
                     $newData = array('$set' => array("Title" => $fieldData->value));
                     $condition=array("TicketId" => (int)$fieldData->TicketId,"ProjectId"=>(int)$fieldData->projectId);
-                    error_log("newdattaaaaaaaa".print_r($newData,1));error_log("newdattaaaaaaaa2342424".print_r($condition,1));
-                    $updateStaus=$collection->update($condition, $newData); 
-                    if($updateStaus==0){
-                        $returnValue=$fieldData->value;
-                    }
+                    $selectedValue=$fieldData->value;
                 }else if($fieldData->id=='Description'){
                     $actualdescription = CommonUtility::refineDescription($fieldData->value);
                     $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$fieldData->value ));
                     $condition=array("TicketId" => (int)$fieldData->TicketId,"ProjectId"=>(int)$fieldData->projectId);
-                    error_log("newdattaaaaaaaa".print_r($newData,1));error_log("newdattaaaaaaaa2342424".print_r($condition,1));
-                    $updateStaus=$collection->update($condition, $newData); 
-                    if($updateStaus==0){
-                        $returnValue=$actualdescription;
-                    }
+                    $selectedValue=$actualdescription;
                 }
             }else{
-                $newData = array('$set' => array("Fields.$.value" => $fieldData->value));
-                $condition=array("TicketId" => (int)$fieldData->TicketId,"ProjectId"=>(int)$fieldData->projectId,"Fields.Id"=>(int)$fieldData->id);
-                $updateStaus = $collection->update($condition, $newData); 
-                if($updateStaus==0){
-                    $returnValue=$fieldData->value;
-                }
+                    if(is_numeric($fieldData->value)){
+                         $leftsideFieldVal = (int)$fieldData->value;  
+                    }else{
+                        if($fieldData->value != ""){
+                            if(CommonUtility::validateDate($fieldData->value)){
+                                $leftsideFieldVal = new \MongoDB\BSON\UTCDateTime(strtotime($fieldData->value) * 1000); 
+                            }else{
+                                $leftsideFieldVal = $fieldData->value; 
+                            } 
+                        }
+                    }
+
+                    $newData = array('$set' => array("Fields.$.value" => $leftsideFieldVal));
+                    $condition=array("TicketId" => (int)$fieldData->TicketId,"ProjectId"=>(int)$fieldData->projectId,"Fields.Id"=>(int)$fieldData->id);
+                    //$selectedValue=CommonUtility::getEditableTextByFieldId($condition, $leftsideFieldVal);
+                    $selectedValue=$leftsideFieldVal;
+
+            }
+            $updateStaus = $collection->update($condition, $newData); 
+            if($updateStaus==0){
+                $returnValue=$selectedValue;
             }
             return $returnValue;
 
