@@ -413,7 +413,7 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
                 $replaceString = "<img src='".$newPath."'/>";
              
                 }else{
-                   $replaceString = "<a href='".$newPath."'/>";  
+                   $replaceString = "<a href='".$newPath."' target='_blank'/>".$originalFileName."</a>";  
                 }
                $description = str_replace($value, $replaceString, $description);
               } 
