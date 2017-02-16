@@ -32,14 +32,15 @@
    
     
    
-<div class="leftreadonlyfontgreycolor" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
+<div class="leftreadonlyfontgreycolor customcalender" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
   <div (dblclick)="editThisField($event,i,field.elId,field.Id)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
     id="{{field.elId}}">{{(field.value == "") ? '--': field.value}}</div>
 
   <input class="editinput" *ngSwitchCase="'input'" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
     (blur)="restoreField($event.target.value,field.elId,i)">
-<p-calendar [ngModel]="field.value | date:yyyy/MM/dd" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="yy-mm-dd"></p-calendar>
 
+<p-calendar [ngModel]="field.value | date:yyyy/MM/dd" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="yy-mm-dd"></p-calendar>
+<textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]"></textarea>
 <div class="customdropdown">
 <p-dropdown  [style]="{'width':'100%'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList"></p-dropdown>
       <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">

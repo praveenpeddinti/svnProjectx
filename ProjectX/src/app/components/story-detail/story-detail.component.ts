@@ -256,6 +256,10 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
           //   data.type = "List";
           // }else{
             data.fieldType = field.field_type;
+            if(field.field_name == "dod"){
+              data.renderType = "textarea";
+              console.log(data.renderType);
+          }
           // }
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);

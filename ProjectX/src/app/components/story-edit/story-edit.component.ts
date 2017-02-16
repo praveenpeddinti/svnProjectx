@@ -154,6 +154,11 @@ setTimeout(()=>{
             data.fieldType = field.field_type;
           // }
           data.fieldName =  field.Id;
+          console.log(field.field_name);
+          if(field.field_name == "dod"){
+              data.renderType = "textarea";
+              console.log(data.renderType);
+          }
 
           data.listdata=this.prepareItemArray(data.listdata);
 
@@ -168,7 +173,7 @@ console.log(JSON.stringify(fieldsBuilt));
   }
  public prepareItemArray(list:any){
   var listItem=[];
-     if(list.length>0){
+     if(list.length>0){         
          for(var i=0;list.length>i;i++){
           listItem.push({label:list[i].Name, value:list[i].Id});
        }
