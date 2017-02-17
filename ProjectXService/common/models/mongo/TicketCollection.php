@@ -224,6 +224,8 @@ class TicketCollection extends ActiveRecord
                             }else{
                                 $leftsideFieldVal = $fieldData->value; 
                             } 
+                        }else{
+                            $leftsideFieldVal = $fieldData->value;
                         }
                     }
 
