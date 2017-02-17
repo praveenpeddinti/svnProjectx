@@ -136,7 +136,7 @@ closeTitleEdit(editedText){
 
   }
 
-  editThisField(event,fieldIndex,fieldId,fieldDataId){
+  editThisField(event,fieldIndex,fieldId,fieldDataId){ 
     console.log(event.target.id);
     // this.dropList={};
     this.dropList=[];
@@ -162,7 +162,9 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
            list:data.getFieldDetails
          };
          console.log(JSON.stringify(listData));
-         this.dropList=this.prepareItemArray(listData.list);
+         var priority=(fieldName=="priority"?true:false);
+alert(fieldName.charAt(0).toUpperCase()+fieldName.slice(1));
+         this.dropList=this.prepareItemArray(listData.list,priority,fieldName.charAt(0).toUpperCase() + fieldName.slice(1));
           
     });
     }
@@ -271,11 +273,11 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
     return fieldsBuilt;
 
   }
-  public prepareItemArray(list:any){
+ public prepareItemArray(list:any,priority:boolean,status:string){
   var listItem=[];
      if(list.length>0){
          for(var i=0;list.length>i;i++){
-          listItem.push({label:list[i].Name, value:list[i].Id});
+          listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
        }
      }
 return listItem;

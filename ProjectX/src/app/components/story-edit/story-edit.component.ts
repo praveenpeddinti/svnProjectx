@@ -160,9 +160,9 @@ setTimeout(()=>{
               data.renderType = "textarea";
               console.log(data.renderType);
           }
-
-          data.listdata=this.prepareItemArray(data.listdata);
-
+          var priority=(data.title=="Priority"?true:false);
+          var status=data.title;
+          data.listdata=this.prepareItemArray(data.listdata,priority,status);
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);
           // this.fieldsBindingArray.push(field.Id);
@@ -172,11 +172,11 @@ console.log(JSON.stringify(fieldsBuilt));
     return fieldsBuilt;
 
   }
- public prepareItemArray(list:any){
+ public prepareItemArray(list:any,priority:boolean,status){
   var listItem=[];
      if(list.length>0){         
          for(var i=0;list.length>i;i++){
-          listItem.push({label:list[i].Name, value:list[i].Id});
+          listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
        }
      }
 return listItem;

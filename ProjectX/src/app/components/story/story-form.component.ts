@@ -58,7 +58,8 @@ public fileUploadStatus:boolean = false;
                     }           
                     console.log("Default values"+JSON.stringify(DefaultValue));
                     jsonForm[item] = element.DefaultValue;
-                    var listItemArray=this.prepareItemArray(DefaultValue);
+                    var priority=(element.Title=="Priority"?true:false);
+                    var listItemArray=this.prepareItemArray(DefaultValue,priority,element.Title);
                    this.storyFormData.push(
                        {'lable':element.Title,'model':element.Id,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray}
                        )
@@ -70,11 +71,11 @@ public fileUploadStatus:boolean = false;
             }
         });
     }
-public prepareItemArray(list:any){
+public prepareItemArray(list:any,priority:boolean,status:string){
   var listItem=[];
      if(list.length>0){
          for(var i=0;list.length>i;i++){
-          listItem.push({label:list[i].Name, value:list[i].Id});
+          listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
        }
      }
 return listItem;
