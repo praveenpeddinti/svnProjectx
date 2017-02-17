@@ -172,9 +172,7 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
         //  console.log(JSON.stringify(listData));
          var priority=(fieldTitle=="Priority"?true:false);
          this.dropList=this.prepareItemArray(listData.list,priority,fieldTitle);
-        //  console.log(JSON.stringify(this.dropList)+"************");
-        //  document.getElementById(inptFldId).focus();
-        //  alert(document.getElementById(inptFldId).innerHTML);
+        
         jQuery("#"+inptFldId+" div").click();
         
     });
@@ -187,22 +185,18 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
   dropBlur(){
     console.log("blur");
   }
-  dropFoc(){
-    console.log("focus");
-  }
+ 
 
    restoreField(editedObj,restoreFieldId,fieldIndex){
-    //  console.log("++++"+editedObj);
+  
      document.getElementById(restoreFieldId).innerHTML = editedObj;
-    // document.getElementById(restoreFieldId).innerHTML = editedObj.options[editedObj.selectedIndex].text;
-    // var currentSelectedId = document.getElementById(restoreFieldId+"_"+fieldIndex+"_currentSelected");
-    // currentSelectedId.setAttribute("value",editedObj.value);
     this.showMyEditableField[fieldIndex] = true;
-    // alert(editedVal);
+   
     
 
   }
-  abcd(event,fieldIndex){ 
+
+  dropdownFocus(event,fieldIndex){ 
     console.log("abcd--------------------"+fieldIndex);
     this.focusCalled = "true";
     for(var i in this.showMyEditableField){
