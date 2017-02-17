@@ -2,7 +2,7 @@ import * as io from 'socket.io-client';
 import { Component } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http } from '@angular/http';
-
+declare var jQuery:any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,15 +18,17 @@ export class AppComponent {
   constructor(
      public _router: Router,
     private http: Http,
-   
+    
   ){}
    ngOnInit() {
      var getAllObj=JSON.parse(localStorage.getItem("user"));
     if(getAllObj != null){
-     this._router.navigate(['story-dashboard']); 
+    // this._router.navigate(['story-dashboard']); 
+   
     }else{
        this._router.navigate(['login']); 
     }
+    //alert(jQuery('.container-fluid').height());
   }
   public sendMessage(message:any)
   {
