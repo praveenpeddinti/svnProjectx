@@ -89,21 +89,26 @@ public fileUploadStatus:boolean = false;
     // document.getElementById('tktDesc').focus();
   }
 
-
+private descError="";
 submitDesc(){
-  this.ticketDesc = this.ticketEditableDesc;
+  // this.ticketDesc = this.ticketEditableDesc;
+  if(this.ticketEditableDesc != ""){
+    this.descError = "";
   this.showDescEditor = true;
   // Added by Padmaja for Inline Edit
    var postEditedText={
     isLeftColumn:0,
     id:'Description',
-    value:this.ticketDesc,
+    value:this.ticketEditableDesc,
     TicketId:this.ticketId,
     EditedId:'desc'
   };
   //alert(JSON.stringify(postEditedText));
   this.postDataToAjax(postEditedText);
  //alert("++++++submitted++++++++++"+this.ticketDesc);
+  }else{
+    this.descError = "Description cannot be empty.";
+  }
 
 }
 cancelDesc(){
@@ -119,11 +124,14 @@ cancelDesc(){
 * Title part
 */
 private showTitleEdit=true;
+private titleError="";
 editTitle(){
   this.showTitleEdit = false;
 }
 
 closeTitleEdit(editedText){
+  if(editedText !=""){
+    this.titleError="";
   document.getElementById(this.ticketId+"_title").innerHTML= editedText;
   //alert(this.ticketId);
   this.showTitleEdit = true;
@@ -136,6 +144,10 @@ closeTitleEdit(editedText){
     EditedId:'title'
   };
   this.postDataToAjax(postEditedText);
+}else{
+  this.titleError = "Title cannot be empty";
+
+}
 }
 //------------------------------Title part-----------------------------------
 
@@ -145,7 +157,7 @@ closeTitleEdit(editedText){
 
   }
 
-  editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle){ 
+  editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType){ 
     console.log(event.target.id);
     // this.dropList={};
     this.dropList=[];
@@ -153,7 +165,7 @@ closeTitleEdit(editedText){
     var inptFldId = fieldId+"_"+fieldIndex;
     this.showMyEditableField[fieldIndex] = false;
     setTimeout(()=>{document.getElementById(inptFldId).focus();},150);
-    if(fieldName !=="dod" && fieldName !=="duedate"){
+    if(renderType == "select"){
     var reqData = {
       FieldId:fieldDataId,
       ProjectId:this.ticketData.data.Project.PId,
@@ -186,24 +198,61 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
     console.log("blur");
   }
  
-
-   restoreField(editedObj,restoreFieldId,fieldIndex){
+private dateVal = new Date();
+   restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId){
+     console.log(editedObj+"**********************");
+     console.log(this.dateVal.toLocaleDateString()+"*****+++++++++++++++++++++*****************");
+     var postEditedText={
+                        isLeftColumn:1,
+                        id:fieldId,
+                        value:"",
+                        TicketId:this.ticketId,
+                        EditedId:restoreFieldId.split("_")[1]
+                      };
   
-     document.getElementById(restoreFieldId).innerHTML = editedObj;
+     switch(renderType){
+       case "input":
+       case "textarea":
+       document.getElementById(restoreFieldId).innerHTML = (editedObj == "") ? "--":editedObj;
+       postEditedText.value = editedObj;
+       break;
+       case "select":
+       document.getElementById(restoreFieldId).innerHTML = (editedObj.text == "") ? "--":editedObj.text;
+       postEditedText.value = editedObj.value;
+       break;
+       case "date":
+       var date = this.dateVal.toLocaleDateString();
+       console.log(date);
+       document.getElementById(restoreFieldId).innerHTML = (date == "") ? "--":date;
+       postEditedText.value = this.dateVal.toLocaleDateString();
+       break;
+
+     }
+     
     this.showMyEditableField[fieldIndex] = true;
+    this.postDataToAjax(postEditedText);
    
     
 
   }
 
   dropdownFocus(event,fieldIndex){ 
-    console.log("abcd--------------------"+fieldIndex);
+    // console.log("abcd--------------------"+fieldIndex);
     this.focusCalled = "true";
+    // var idx = 0;
+    // jQuery(".dummyselectbox").each(function(){
+    //   idx = jQuery(this).attr("data-idx");
+    //   if(idx != fieldIndex){
+    //     this.showMyEditableField[idx] = true;
+    //   }
+
+    // });
     for(var i in this.showMyEditableField){
-       console.log(i+"----"+this.showMyEditableField[fieldIndex]);
+      //  console.log(i+"----"+this.showMyEditableField[fieldIndex]);
       if(i != fieldIndex){
-        console.log("makgin true--");
-       this.showMyEditableField[i] = true;
+        // console.log("makgin true--");
+        this.showMyEditableField[i] = true;
+       
       }
      
     }
@@ -213,7 +262,7 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
     clearTimeout(this.blurTimeout[fieldIndex]);
     }
  this.blurTimeout[fieldIndex] = setTimeout(function(){
-   console.log("abcd----tiemeout----------------");
+  //  console.log("abcd----tiemeout----------------");
  thisObj.focusCalled = "";
 },1000)
 
@@ -224,19 +273,15 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
   selectBlurField(event,fieldIndex){  
   
    var thisobj = this;
-   console.log("selectBlurField----");
+  //  console.log("selectBlurField----");
     
    if(this.focusCalled == ""){
-      console.log("selectBlurField----hidding----------------");
+      // console.log("selectBlurField----hidding----------------");
       thisobj.showMyEditableField[fieldIndex] = true;
    }
  
-     
-    
-    
-      
-
     }
+
   fieldsDataBuilder(fieldsArray,ticketId){
     let fieldsBuilt = [];
     let data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:""};
@@ -268,6 +313,7 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
             data.title = field.title;
             // alert(field.readable_value.date.split(" ")[0]+"++++++++Date++++++++++");
             data.value = field.readable_value;
+            this.dateVal = field.readable_value;
             data.renderType = "date";
             data.type="date";
             break;
@@ -391,6 +437,7 @@ var thisObj = this;
           if(result.statusCode== 200){
           //  alert("success");
          //  alert(this.ticketId+'_'+postEditedText.EditedId);
+         if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc")
             document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data;
           }
     
