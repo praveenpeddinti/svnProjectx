@@ -2,7 +2,8 @@ import { Component, OnInit,ViewChild } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
-import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng'; 
+import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
+declare var jQuery:any;
 import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
 declare var jQuery:any;
@@ -18,6 +19,12 @@ export class StoryDetailComponent implements OnInit {
   //   private http: Http;
 //  testObj = {};
 //   newObj = {};
+
+
+private editableSelect= "";
+public blurTimeout=[];
+public focusCalled="";
+
 @ViewChild('editor')  txt_area;
 public dragTimeout;
   public minDate:Date;
@@ -162,10 +169,14 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
            currentSelectedId: (currentId != "" &&currentId != null )? currentId:"",
            list:data.getFieldDetails
          };
-         console.log(JSON.stringify(listData));
+        //  console.log(JSON.stringify(listData));
          var priority=(fieldTitle=="Priority"?true:false);
          this.dropList=this.prepareItemArray(listData.list,priority,fieldTitle);
-          
+        //  console.log(JSON.stringify(this.dropList)+"************");
+        //  document.getElementById(inptFldId).focus();
+        //  alert(document.getElementById(inptFldId).innerHTML);
+        jQuery("#"+inptFldId+" div").click();
+        
     });
     }
 
@@ -173,20 +184,62 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
     
   }
 
+  dropBlur(){
+    console.log("blur");
+  }
+  dropFoc(){
+    console.log("focus");
+  }
+
    restoreField(editedObj,restoreFieldId,fieldIndex){
-   //  alert("++++");
-    document.getElementById(restoreFieldId).innerHTML = editedObj.options[editedObj.selectedIndex].text;
-    var currentSelectedId = document.getElementById(restoreFieldId+"_"+fieldIndex+"_currentSelected");
-    currentSelectedId.setAttribute("value",editedObj.value);
+    //  console.log("++++"+editedObj);
+     document.getElementById(restoreFieldId).innerHTML = editedObj;
+    // document.getElementById(restoreFieldId).innerHTML = editedObj.options[editedObj.selectedIndex].text;
+    // var currentSelectedId = document.getElementById(restoreFieldId+"_"+fieldIndex+"_currentSelected");
+    // currentSelectedId.setAttribute("value",editedObj.value);
     this.showMyEditableField[fieldIndex] = true;
     // alert(editedVal);
     
 
   }
-  selectBlurField(fieldIndex){
-      // document.getElementById(restoreFieldId).innerHTML = editedVal;
-      this.showMyEditableField[fieldIndex] = true;
-      // alert(editedVal);
+  abcd(event,fieldIndex){ 
+    console.log("abcd--------------------"+fieldIndex);
+    this.focusCalled = "true";
+    for(var i in this.showMyEditableField){
+       console.log(i+"----"+this.showMyEditableField[fieldIndex]);
+      if(i != fieldIndex){
+        console.log("makgin true--");
+       this.showMyEditableField[i] = true;
+      }
+     
+    }
+    this.showMyEditableField[fieldIndex] = false;
+    var thisObj = this;
+    if(this.blurTimeout[fieldIndex] != undefined && this.blurTimeout[fieldIndex] != "undefined"){
+    clearTimeout(this.blurTimeout[fieldIndex]);
+    }
+ this.blurTimeout[fieldIndex] = setTimeout(function(){
+   console.log("abcd----tiemeout----------------");
+ thisObj.focusCalled = "";
+},1000)
+
+    
+   
+
+  }
+  selectBlurField(event,fieldIndex){  
+  
+   var thisobj = this;
+   console.log("selectBlurField----");
+    
+   if(this.focusCalled == ""){
+      console.log("selectBlurField----hidding----------------");
+      thisobj.showMyEditableField[fieldIndex] = true;
+   }
+ 
+     
+    
+    
       
 
     }

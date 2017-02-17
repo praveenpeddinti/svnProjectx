@@ -33,7 +33,8 @@
     
    
 <div class="leftreadonlyfontgreycolor customcalender" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
-  <div (dblclick)="editThisField($event,i,field.elId,field.Id,field.title)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
+
+  <div (click)="editThisField($event,i,field.elId,field.Id,field.title)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
     id="{{field.elId}}" class="{{(field.title=='Status')? field.value:''}}">{{(field.value == "") ? '--': field.value}} <i *ngIf="field.title == 'Priority'"  class="fa fa-circle {{field.value}}" aria-hidden="true"></i></div>
 
   <input class="editinput" *ngSwitchCase="'input'" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
@@ -42,7 +43,8 @@
 <p-calendar [ngModel]="field.value | date:yyyy/MM/dd" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="yy-mm-dd"></p-calendar>
 <textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]"></textarea>
 <div class="customdropdown">
-<p-dropdown  [style]="{'width':'100%'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList"></p-dropdown>
+  <p-dropdown [style]="{'width':'100%'}" class="dummyselectbox"  name="dropdownContainer_{{i}}" (onFocus)="abcd($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event.text,field.elId,i)" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
+<!--<p-dropdown  [style]="{'width':'100%'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList"></p-dropdown>-->
       <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
 </div>
 </div>
