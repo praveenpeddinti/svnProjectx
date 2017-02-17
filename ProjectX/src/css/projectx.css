@@ -19,8 +19,8 @@ border-top: 1px solid #eee}
 /*header right panel section menu*/
 .profilesection{border:1px solid #dddddd;margin-top:13px;padding:5px;min-height:45px}
 .profilepic img{max-width:100%;max-height:100%;}
-.profilepic{width:32px;height:32px;overflow:hidden;border-radius:100px;border:1px solid #dddddd;padding:2px;vertical-align:middle;display:table-cell}
-.profilepic_table{width:22px;height:22px;overflow:hidden;border-radius:100px;border:1px solid #dddddd;padding:2px;vertical-align:middle;display:table-cell}
+.profilepic{width:32px;height:32px;overflow:hidden;border-radius:100px;border:1px solid #dddddd;padding:2px;vertical-align:middle;}
+.profilepic_table{width:22px;height:22px;overflow:hidden;border-radius:100px;border:1px solid #dddddd;padding:2px;vertical-align:middle;}
 .headerrightnavbar > li > a {
     padding-top: 6px;
     padding-bottom: 6px;
@@ -51,8 +51,8 @@ navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:
 .greybutton{ background: #ecebeb;border: 1px solid #e7e7e7;color:#333}
 .customtable{display:table;width:100%}
 .customrowheader,.customrow{display:table-row;}
-.customrowheader .cust1,.customrowheader .cust2,.customrowheader .cust3,.customrowheader .cust4,.customrowheader .cust5,.customrowheader .cust6,.customrowheader .cust7,.customrowheader .cust8{display:table-cell;background:#e2e2e2;color:#7d7977;padding:10px 8px;font-size:15px;}
-.customrow .cust1,.customrow .cust2,.customrow .cust3,.customrow .cust4,.customrow .cust5,.customrow .cust6,.customrow .cust7,.customrow .cust8{display:table-cell;vertical-align:middle;border:1px solid #000;padding:5px}
+.customrowheader .cust1,.customrowheader .cust2,.customrowheader .cust3,.customrowheader .cust4,.customrowheader .cust5,.customrowheader .cust6,.customrowheader .cust7,.customrowheader .cust8{background:#e2e2e2;color:#7d7977;padding:10px 8px;font-size:15px;}
+.customrow .cust1,.customrow .cust2,.customrow .cust3,.customrow .cust4,.customrow .cust5,.customrow .cust6,.customrow .cust7,.customrow .cust8{vertical-align:middle;border:1px solid #000;padding:5px}
 .bluebuttonlarge{padding:20px 30px;font-size:20px;border-radius:0px}
 .customrow{border:1px solid #ccc;margin-bottom:10px}
 .bluebuttonlarge {border-radius: 0;font-size: 16px; padding: 15px 15px;}
