@@ -162,8 +162,10 @@ class CommonUtility {
                        if($value["value"] != ""){
                              $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
+                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                         $readableDate = $datetime->format('Y-m-d');
                      }else{
+                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                          $readableDate = $datetime->format('Y-m-d H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
