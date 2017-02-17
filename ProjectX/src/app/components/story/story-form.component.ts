@@ -3,6 +3,8 @@ import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
 import { TinyMCE } from '../../tinymce.component';
 import {Router} from '@angular/router';
+import { FileUploadService } from '../../services/file-upload.service';
+import { GlobalVariable } from '../../config';
 
 import {AccordionModule,DropdownModule,SelectItem,CalendarModule} from 'primeng/primeng';
 
@@ -11,7 +13,7 @@ declare var jQuery:any;
     selector: 'story-form',
     templateUrl: 'story-form.html',
     styleUrls: ['story-form.css'],
-    providers: [StoryService]     
+    providers: [FileUploadService, StoryService]     
 
 })
 
@@ -33,7 +35,7 @@ public hasFileDroped:boolean = false;
 editorData:string='';
 public fileUploadStatus:boolean = false;
 
-    constructor( private _service: StoryService,private _router:Router) {
+    constructor(private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router) {
         this.filesToUpload = [];
     }
   
@@ -81,33 +83,43 @@ public prepareItemArray(list:any,priority:boolean,status:string){
 return listItem;
 }
 public fileOverBase(fileInput:any):void {
-console.log("fileoverbase");
+//console.log("fileoverbase");
     this.hasBaseDropZoneOver = true;
-if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ console.log("clear---");
-clearTimeout(this.dragTimeout);
-}
+    if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ console.log("clear---");
+    clearTimeout(this.dragTimeout);
+    }
 
 }
 
 public fileDragLeave(fileInput: any){
-console.log("fileDragLeave");
+//console.log("fileDragLeave");
 var thisObj = this;
-if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ console.log("clear---");
-clearTimeout(this.dragTimeout);
-}
- this.dragTimeout = setTimeout(function(){
-thisObj.hasBaseDropZoneOver = false;
-},500)
+    if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){
+        // console.log("clear---");
+    clearTimeout(this.dragTimeout);
+    }
+     this.dragTimeout = setTimeout(function(){
+     thisObj.hasBaseDropZoneOver = false;
+    },500);
     
 }
 
-public fileChangeEvent(fileInput: any):void {
+public fileUploadEvent(fileInput: any, comeFrom: string):void {
+    console.log("the source " + comeFrom);
    // console.log("cahnge event " + fileInput.name +"------- " + fileInput.size);
-  this.filesToUpload = <Array<File>> fileInput.target.files;
-    this.hasBaseDropZoneOver = false;
-        this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
+   if(comeFrom == 'fileChange'){
+        this.filesToUpload = <Array<File>> fileInput.target.files;
+   } else if(comeFrom == 'fileDrop'){
+        this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
+   } else{
+        this.filesToUpload = <Array<File>> fileInput.target.files;
+   }
+        
+        this.hasBaseDropZoneOver = false;
+        this.fileUploadStatus = true;
+        this.fileUploadService.makeFileRequest(GlobalVariable.FILE_UPLOAD_URL, [], this.filesToUpload).then((result :Array<any>) => {
+
             for(var i = 0; i<result.length; i++){
-                //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                     this.form['description'] = this.form['description'] + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
@@ -115,78 +127,18 @@ public fileChangeEvent(fileInput: any):void {
                     this.form['description'] = this.form['description'] + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
                 }
             }
+            this.fileUploadStatus = false;
         }, (error) => {
             console.error(error);
-            //this.sampleModel = "Error while uploading";
             this.form['description'] = this.form['description'] + "Error while uploading";
+            this.fileUploadStatus = false;
         });
 }
-
-public onFileDrop(fileInput:any): void {
-    //console.log("file drop " + "File Name "+fileInput.dataTransfer.files[0].name+"File Size "+fileInput.dataTransfer.files[0].size);
-
-    this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
-    this.hasBaseDropZoneOver = false;
-    this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
-            for(var i = 0; i<result.length; i++){
-                //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
-                var uploadedFileExtension = (result[i].originalname).split('.').pop();
-                if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                    this.form['description'] = this.form['description'] + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
-                } else{
-                    this.form['description'] = this.form['description'] + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
-                }
-            }
-        }, (error) => {
-            console.error(error);
-            //this.sampleModel = "Error while uploading";
-            this.form['description'] = this.form['description'] + "Error while uploading";
-        });
-  }
-
-public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
-        return new Promise((resolve, reject) => {
-            var formData: any = new FormData();
-            var xhr = new XMLHttpRequest();
-            // console.log("files length "+files.length);
-            for(var i = 0; i < files.length; i++) { 
-                formData.append("uploads[]", files[i], files[i].name);
-            }
-              //formData.append("uploads[]", files, files.name);
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        //console.log("the responc " + JSON.parse(xhr.response))
-                        resolve(JSON.parse(xhr.response));
-                    } else {
-                        reject(xhr.response);
-                    }
-                }
-            };
-
-            xhr.upload.onloadstart= (event) => {
-                this.fileUploadStatus = true;
-            };
-            xhr.upload.onloadend = (event) => {
-                   this.fileUploadStatus = false;                
-            };
-            
-            xhr.open("POST", url, true);
-            xhr.send(formData);
-        });
-    }
 
 saveStory(){
     console.log("post____data");
      this._service.saveStory(this.form,(response)=>{
      });
-}
-ckeditorfocus(event){
-//alert('focud');    
-}
-ckeditordragstart(event){
-//alert('ckeditordragstart');    
 }
 
 }

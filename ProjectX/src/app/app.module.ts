@@ -30,6 +30,7 @@ import { StoryDetailComponent }  from './components/story-detail/story-detail.co
 import { StoryEditComponent } from './components/story-edit/story-edit.component';
 import {TinyMCE} from './tinymce.component';
 import {FileDropModule} from 'angular2-file-drop';
+import { FileUploadService } from './services/file-upload.service';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -82,7 +83,7 @@ const ROUTES=[
 
   declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TinyMCE ],
   bootstrap:    [ AppComponent ],
-  providers:[LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService],
+  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {

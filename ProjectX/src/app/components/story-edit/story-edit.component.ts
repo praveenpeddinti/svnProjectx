@@ -5,7 +5,8 @@ import { AjaxService } from '../../ajax/ajax.service';
 import { StoryService} from '../../services/story.service';
 import {NgForm} from '@angular/forms';
 import {CalendarModule} from 'primeng/primeng'; 	
-
+import { FileUploadService } from '../../services/file-upload.service';
+import { GlobalVariable } from '../../config';
 
 
 declare var jQuery:any;
@@ -38,7 +39,7 @@ public hasBaseDropZoneOver:boolean = false;
 public hasFileDroped:boolean = false;
 public fileUploadStatus:boolean = false;
 
-  constructor(private _ajaxService: AjaxService,private _service: StoryService,
+  constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,
     private http: Http,private route: ActivatedRoute) { 
            this.filesToUpload = [];
@@ -247,13 +248,21 @@ var thisObj = this;
     
 }
 
+public fileUploadEvent(fileInput: any, comeFrom: string):void {
+   console.log("the source " + comeFrom);
+   // console.log("cahnge event " + fileInput.name +"------- " + fileInput.size);
+   if(comeFrom == 'fileChange'){
+        this.filesToUpload = <Array<File>> fileInput.target.files;
+   } else if(comeFrom == 'fileDrop'){
+        this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
+   } else{
+        this.filesToUpload = <Array<File>> fileInput.target.files;
+   }
 
-public fileChangeEvent(fileInput: any):void {
-  this.filesToUpload = <Array<File>> fileInput.target.files;
-    this.hasBaseDropZoneOver = false;
-        this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
+        this.hasBaseDropZoneOver = false;
+        this.fileUploadStatus = true;
+        this.fileUploadService.makeFileRequest(GlobalVariable.FILE_UPLOAD_URL, [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
-                //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                     this.description = this.description + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
@@ -261,65 +270,13 @@ public fileChangeEvent(fileInput: any):void {
                     this.description = this.description + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
                 }
             }
+            this.fileUploadStatus = false;
         }, (error) => {
             console.error(error);
-            //this.sampleModel = "Error while uploading";
             this.description = this.description + "Error while uploading";
+            this.fileUploadStatus = false;
         });
 }
-
-public onFileDrop(fileInput:any): void {
-    //console.log("file drop " + "File Name "+fileInput.dataTransfer.files[0].name+"File Size "+fileInput.dataTransfer.files[0].size);
-
-    this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
-    this.hasBaseDropZoneOver = false;
-    this.makeFileRequest("http://10.10.73.33:4201/upload", [], this.filesToUpload).then((result :Array<any>) => {
-            for(var i = 0; i<result.length; i++){
-                //this.sampleModel = this.sampleModel + "[[file:" +result[i].path + "]] ";
-                var uploadedFileExtension = (result[i].originalname).split('.').pop();
-                if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                    this.description = this.description + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
-                } else{
-                    this.description = this.description + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
-                }
-            }
-        }, (error) => {
-            console.error(error);
-            //this.sampleModel = "Error while uploading";
-            this.description = this.description + "Error while uploading";
-        });
-  }
-
-public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
-        return new Promise((resolve, reject) => {
-            var formData: any = new FormData();
-            var xhr = new XMLHttpRequest();
-            for(var i = 0; i < files.length; i++) { 
-                formData.append("uploads[]", files[i], files[i].name);
-            }
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        //console.log("the responc " + JSON.parse(xhr.response))
-                        resolve(JSON.parse(xhr.response));
-                    } else {
-                        reject(xhr.response);
-                    }
-                }
-            };
-
-            xhr.upload.onloadstart= (event) => {
-                this.fileUploadStatus = true;
-            };
-            xhr.upload.onloadend = (event) => {
-                   this.fileUploadStatus = false;                
-            };
-            
-            xhr.open("POST", url, true);
-            xhr.send(formData);
-        });
-    }
-
     cancelDesc(){
   // this.ticketEditableDesc = this.ticketCrudeDesc;
   // this.showDescEditor = true;

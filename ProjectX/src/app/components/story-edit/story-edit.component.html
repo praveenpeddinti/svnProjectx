@@ -60,7 +60,7 @@
   <div style="position: relative">
                 <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
   
-                    (drop)="onFileDrop($event)" >
+                    (drop)="fileUploadEvent($event, 'fileDrop')" >
                 </div>
      <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
             <ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required  debounce="500"  >
@@ -69,7 +69,7 @@
      </div>
  <div class="uploadcomponent margintop15">
         <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
-        <input class="transparentinput" type="file" (change)="fileChangeEvent($event)"  multiple  /></div>
+        <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  /></div>
        </div>
 <div class="buttonarea alignright">
   <button class="normal bluebutton bluebuttonmedium" (click)="editStory(editstoryForm.value)">UPDATE</button>
