@@ -397,7 +397,8 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
      */
   public static function refineDescription($description){
       try{
-            
+         
+           $description = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $description);
               $matches=[];
               preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
               $filematches = $matches[0];
