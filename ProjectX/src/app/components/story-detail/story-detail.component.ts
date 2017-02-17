@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng'; 
 import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
-
+declare var jQuery:any;
 @Component({
   selector: 'app-story-detail',
   templateUrl: './story-detail.component.html',
@@ -18,6 +18,7 @@ export class StoryDetailComponent implements OnInit {
   //   private http: Http;
 //  testObj = {};
 //   newObj = {};
+@ViewChild('editor')  txt_area;
 public dragTimeout;
   public minDate:Date;
   private ticketData;
@@ -155,7 +156,6 @@ closeTitleEdit(editedText){
 this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
     { 
        
-         
          var currentId = document.getElementById(inptFldId+"_currentSelected").getAttribute("value");
         //  data.getFieldDetails.currentSelectedId = currentId;
          var listData = {
@@ -348,6 +348,11 @@ var thisObj = this;
           }
     
         });
+    }
+
+    public goBack()
+    {
+        this._router.navigate(['story-dashboard']);
     }
 
 }
