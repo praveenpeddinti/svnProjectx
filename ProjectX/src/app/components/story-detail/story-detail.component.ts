@@ -136,7 +136,7 @@ closeTitleEdit(editedText){
 
   }
 
-  editThisField(event,fieldIndex,fieldId,fieldDataId){ 
+  editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle){ 
     console.log(event.target.id);
     // this.dropList={};
     this.dropList=[];
@@ -162,9 +162,8 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
            list:data.getFieldDetails
          };
          console.log(JSON.stringify(listData));
-         var priority=(fieldName=="priority"?true:false);
-alert(fieldName.charAt(0).toUpperCase()+fieldName.slice(1));
-         this.dropList=this.prepareItemArray(listData.list,priority,fieldName.charAt(0).toUpperCase() + fieldName.slice(1));
+         var priority=(fieldTitle=="Priority"?true:false);
+         this.dropList=this.prepareItemArray(listData.list,priority,fieldTitle);
           
     });
     }
