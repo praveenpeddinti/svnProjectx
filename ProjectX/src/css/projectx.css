@@ -236,7 +236,7 @@ footer{font-size:10px}
 .Accepted{color:#0081c4}
 .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell{font-size:12px;line-height:14px}
 .prioritycolumn{width:66px}
-.prioritycolumn i{float:right;margin-top:4px}
+.prioritycolumn i{float:right;margin-top:2px}
 .ngx-datatable.material .datatable-footer {font-size: 13px;background: #f4f4f4;}
 .headerrightnavbar .dropdown-toggle{text-decoration: none}
 .customcalender .ui-calendar{display:block}
