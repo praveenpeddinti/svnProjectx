@@ -231,12 +231,12 @@ footer{font-size:10px}
 .High{color:#ff7c7c}
 .Low{color:#c5c950}
 .Lowest{color:#e5e970}
-.New{color:#00b12e}
+/*.New{color:#00b12e}
 .Open{color:#FC4A4A}
-.Accepted{color:#0081c4}
-.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell{font-size:12px;line-height:14px}
+.Accepted{color:#0081c4}*/
+.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell{font-size:13px;line-height:14px}
 .prioritycolumn{width:66px}
-.prioritycolumn i{float:right;margin-top:2px}
+.prioritycolumn i{float:right;margin-top:0px}
 .ngx-datatable.material .datatable-footer {font-size: 13px;background: #f4f4f4;}
 .headerrightnavbar .dropdown-toggle{text-decoration: none}
 .customcalender .ui-calendar{display:block}
@@ -246,4 +246,5 @@ footer{font-size:10px}
 .customcalender .ui-datepicker{width:99%}
 .cusomlistbullet{display: block;width:66px;}
 .cusomlistbullet i{float:right;margin-top:2px}
+.ngx-datatable.material .datatable-header .datatable-header-cell{ padding: 0.5rem 0.5rem;}
 /*end*/
