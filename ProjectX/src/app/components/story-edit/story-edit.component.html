@@ -31,14 +31,14 @@
  
    <div class="leftreadonlyfontgreycolor" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
       <input class="editinput custominput width100per" *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value">  
-      <div class="customdropdown" *ngSwitchCase="'select'" >
+   <div class="customdropdown" *ngSwitchCase="'select'" >
       <p-dropdown  [style]="{'width':'100%'}" [ngModel]="field.fieldDataId" name="{{field.fieldName}}"  [options]="field.listdata" ></p-dropdown>
       
     </div>  
    
-    <div class="calbg customcalender">
+    <div class="calbg customcalender" *ngSwitchCase="'date'" >
     <!--<ng2-datepicker [ngModel]="field.value" name="field.fieldName" ></ng2-datepicker>-->
-     <p-calendar [ngModel]="field.value" name="{{field.fieldName}}" [minDate]="minDate" [showIcon]="true" *ngSwitchCase="'date'"  dateFormat="yy-mm-dd"></p-calendar>
+     <p-calendar [ngModel]="field.value" name="{{field.fieldName}}" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
     </div>           
     
     <textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" name="{{field.fieldName}}" [ngModel]="field.value"></textarea>
