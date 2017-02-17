@@ -21,13 +21,6 @@ export class AppComponent {
     
   ){}
    ngOnInit() {
-     var getAllObj=JSON.parse(localStorage.getItem("user"));
-    if(getAllObj != null){
-    // this._router.navigate(['story-dashboard']); 
-   
-    }else{
-       this._router.navigate(['login']); 
-    }
     //alert(jQuery('.container-fluid').height());
   }
   public sendMessage(message:any)

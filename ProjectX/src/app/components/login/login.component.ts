@@ -24,6 +24,12 @@ export class LoginComponent implements OnInit{
  
         // get return url from route parameters or default to '/'
        // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    var getAllObj=JSON.parse(localStorage.getItem("user"));
+    if(getAllObj != null){
+        this._router.navigate(['story-dashboard']); 
+    }else{
+        this._router.navigate(['login']); 
+    }
     }
     onSubmit() {
         this.submitted = true;
