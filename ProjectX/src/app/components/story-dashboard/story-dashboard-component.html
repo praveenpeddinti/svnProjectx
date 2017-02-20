@@ -19,11 +19,14 @@
         [offset]="offset"
         [limit]="limit"
         (page)="onPage($event)"
+        (sort)="onSort($event)"
         (activate)="onActivate($event)"
         >
 
 
-  <ngx-datatable-column name="Id" [flexGrow]="1" [resizeable]="false">
+<!-- Column Template -->
+
+  <ngx-datatable-column name="Id" prop="TicketId" [flexGrow]="1" [resizeable]="false">
     <template let-row="row" ngx-datatable-cell-template>
       <div title="{{row.Fields[3].readable_value.Name}}">
         <img *ngIf="row.Fields[3].readable_value.Name=='Story'" src="assets/images/storyicon.png"   title="{{row.Fields[3].readable_value.Name}}" />
@@ -33,7 +36,7 @@
       </div>
     </template>
   </ngx-datatable-column>
-  <ngx-datatable-column name="Title" [resizeable]="false" [flexGrow]="5">
+  <ngx-datatable-column name="Title" prop="Title" [resizeable]="false" [flexGrow]="4">
     <template let-row="row" ngx-datatable-cell-template>
       <div class="titlecolumn" title="{{row.Fields[3].readable_value.Name}}">
             {{row.Title}}
@@ -41,24 +44,24 @@
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Assigned to" [resizeable]="false" [flexGrow]="1">
-    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+    <template let-row="row" ngx-datatable-cell-template>
       <div *ngIf="row.Fields[4].value!=''">
       <img  class="profilepic_table"  src="{{row.Fields[4].readable_value.ProfilePicture}}" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"/>
    </div>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Priority" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+    <template let-row="row" ngx-datatable-cell-template>
       <div class="prioritycolumn">{{row.Fields[5].readable_value.Name}} <i class="fa fa-circle {{row.Fields[5].readable_value.Name}}" aria-hidden="true"></i></div>
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Bucket" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" let-i="i" ngx-datatable-cell-template>
+    <template let-row="row" ngx-datatable-cell-template>
       {{row.Fields[2].readable_value.Name}}
     </template>
   </ngx-datatable-column>
   <ngx-datatable-column name="Status" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" let-i="i" ngx-datatable-cell-template >
+    <template let-row="row" ngx-datatable-cell-template >
       <div class="statusbold {{row.Fields[6].readable_value.Name}}">{{row.Fields[6].readable_value.Name}}</div>
     </template>
   </ngx-datatable-column>
@@ -70,7 +73,7 @@
 
     </template>
   </ngx-datatable-column>
- 
+
 
 
 

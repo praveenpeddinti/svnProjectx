@@ -38,12 +38,13 @@ this._router.navigate(['story-dashboard']);
 
     });
  }
-getAllStoryDetails(projectId,offset,pagesize,sortvalue,getAllStoryDetailsCallback) { 
+getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,getAllStoryDetailsCallback) { 
    var post_data={
       'projectId':projectId,
       'offset':offset,
       'pagesize':pagesize,
-      'sortvalue':sortvalue
+      'sortvalue':sortvalue,
+      'sortorder':sortorder
     }
     this._ajaxService.AjaxSubscribe("story/get-all-ticket-details",post_data,(data)=>
     { 
