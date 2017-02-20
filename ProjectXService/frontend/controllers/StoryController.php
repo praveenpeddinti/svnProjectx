@@ -96,7 +96,6 @@ class StoryController extends Controller
             $responseBean->data = $data;
             $responseBean->totalCount = $totalCount;
             $response = CommonUtility::prepareResponse($responseBean, "json");
-            error_log("-----total----".$totalCount);
             return $response;
         } catch (Exception $ex) {
             Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

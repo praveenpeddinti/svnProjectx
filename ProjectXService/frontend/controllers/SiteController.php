@@ -108,7 +108,7 @@ class SiteController extends Controller
        $userdata = $model->listUserData();
      //   $userData=User::model()->getAllUser();
       $data = SampleCollection::testMongo();
-        print_r($userdata,1);
+        //print_r($userdata,1);
 
         error_log("----------------");
        // $data = SampleCollection::testMongo();
@@ -118,7 +118,7 @@ class SiteController extends Controller
       // $db->insert(array("TicketNumber" => $this->getNextSequence(2),"name" => "Sarah C."));
 
        // error_log("+++++++++++++actionTestAjax+++++++++++++++++++".print_r($data,1));
-        error_log("+++++++++++++actionTestAjax@@@@@@@@@@@@@@@@@+++++++++++++++++++".print_r($userdata,1));
+        //error_log("+++++++++++++actionTestAjax@@@@@@@@@@@@@@@@@+++++++++++++++++++".print_r($userdata,1));
     
     }
     /**
@@ -150,15 +150,15 @@ class SiteController extends Controller
         foreach ($_SERVER as $name => $value) {
    // error_log($name."----".$value,"---");
         }
-        error_log("@@@---**".print_r($_SERVER,1));
+        //error_log("@@@---**".print_r($_SERVER,1));
 
         error_log("actionLogin------");
 
         $user_data = json_decode(file_get_contents("php://input"));
-       error_log("request aprams-----------".print_r($user_data,1));
+       //error_log("request aprams-----------".print_r($user_data,1));
         $model = new LoginForm();
         $userData = $model->loginAjax($user_data);error_log("34444444444".print_r($userData,1));
-        error_log("use dat---".print_r($userData,1));
+        //error_log("use dat---".print_r($userData,1));
         $responseBean = new ResponseBean;
         $responseBean->status = ResponseBean::SUCCESS;
         $responseBean->message = "success";

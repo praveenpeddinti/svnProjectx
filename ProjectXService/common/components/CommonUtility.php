@@ -179,7 +179,7 @@ class CommonUtility {
                     if($value["value"] != ""){
                          $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
                         $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$assignedToDetails["ProfilePicture"];
-                       $value["readable_value"] = $assignedToDetails;  
+                        $value["readable_value"] = $assignedToDetails;  
                     }
                 
                 }

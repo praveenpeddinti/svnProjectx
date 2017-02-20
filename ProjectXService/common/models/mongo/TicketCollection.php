@@ -163,12 +163,16 @@ class TicketCollection extends ActiveRecord
      */
     public static function getAllTicketDetails($StoryData,$projectId){
       try{
-            $query = new Query();
+           if($StoryData->sortorder=='desc')
+               $order=-1;
+           if($StoryData->sortorder=='asc') 
+               $order=1;
+          $query = new Query();
             $query->from('TicketCollection')
                     ->where(["ProjectId" => $projectId])
                     ->limit($StoryData->pagesize)
                     ->offset(($StoryData->offset*$StoryData->pagesize))
-                    ->orderBy(['TicketId' => SORT_DESC]);
+                    ->orderBy([$StoryData->sortvalue => $order]);
         $ticketDetails = $query->all();
         return $ticketDetails;  
       } catch (Exception $ex) {
