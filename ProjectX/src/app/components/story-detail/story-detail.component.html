@@ -3,7 +3,12 @@
     <div class="titlearea  ">
   <div class="row">
     <div class="col-xs-4 col-sm-3 col-md-2 ticketidareanorightpadding">
-  <div class="ticketidarea">#{{ticketData?.data?.TicketId}}</div>
+      
+  <div class="ticketidarea">
+      <img *ngIf="ticketData?.data?.StoryType?.Id==1" src="assets/images/storyicon.png"  title="{{ticketData?.data?.StoryType?.Name}}"  />
+        
+        <img  *ngIf="ticketData?.data?.StoryType?.Id==2" src="assets/images/task.png" title="{{ticketData?.data?.StoryType?.Name}}" /> 
+       #{{ticketData?.data?.TicketId}}</div>
   </div>
   <div class="col-xs-8 col-sm-9 col-md-10">
   <div class="ticketdescriptionarea minheight50">
@@ -35,16 +40,16 @@
    
 <div class="leftreadonlyfontgreycolor customcalender" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
 
-  <div (click)="editThisField($event,i,field.elId,field.Id,field.title,field.renderType)" [hidden]="!showMyEditableField[i]" data-text="not readonly"
+  <div (click)="editThisField($event,i,field.elId,field.Id,field.title,field.renderType)" [hidden]="!showMyEditableField[i]" data-text="not readonly" 
     id="{{field.elId}}" class="{{(field.title=='Status')? field.value:''}}">{{(field.value == "") ? '--': field.value}} <i *ngIf="field.title == 'Priority'"  class="fa fa-circle {{field.value}}" aria-hidden="true"></i></div>
 
   <input class="editinput" *ngSwitchCase="'input'" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
     (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
 
-<p-calendar [(ngModel)]="dateVal" name="date_{{i}}" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="yy-mm-dd"></p-calendar>
+<p-calendar [(ngModel)]="dateVal" name="date_{{i}}" (onBlur)="closeCalendar(i)" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="yy-mm-dd"></p-calendar>
 <textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)"></textarea>
 <div class="customdropdown">
-  <p-dropdown [style]="{'width':'100%'}" class="dummyselectbox" name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
+  <p-dropdown [style]="{'width':'100%'}"  name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
 <!--<p-dropdown  [style]="{'width':'100%'}" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}' [hidden]="showMyEditableField[i]" [options]="dropList"></p-dropdown>-->
       <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
 </div>
