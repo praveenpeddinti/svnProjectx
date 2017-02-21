@@ -202,6 +202,7 @@ class CommonUtility {
                 if($value["value"] != ""){
                     $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
                     $value["readable_value"] = $planlevelDetails; 
+                     $ticketDetails["StoryType"] = $planlevelDetails;
                 }
                 }
                  if($storyFieldDetails["Field_Name"] == "workflow"){
@@ -310,8 +311,10 @@ Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex
                        if($value["value"] != ""){
                              $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
+                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                         $readableDate = $datetime->format('Y-m-d');
                      }else{
+                          $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                          $readableDate = $datetime->format('Y-m-d H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
@@ -346,6 +349,7 @@ Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex
                 
                     $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
                     $value["readable_value"] = $planlevelDetails; 
+                     $ticketDetails["StoryType"] = $planlevelDetails;
                     $value["meta_data"] = $planlevelModel->getPlanLevelList();
                 }
                  if($storyFieldDetails["Field_Name"] == "workflow"){
