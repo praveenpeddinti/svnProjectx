@@ -46,7 +46,7 @@
   <input class="editinput" *ngSwitchCase="'input'" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
     (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
 
-<p-calendar [(ngModel)]="dateVal" name="date_{{i}}" (onBlur)="closeCalendar(i)" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="yy-mm-dd"></p-calendar>
+<p-calendar [(ngModel)]="dateVal" name="date_{{i}}"  (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="yy-mm-dd"></p-calendar>
 <textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)"></textarea>
 <div class="customdropdown">
   <p-dropdown [style]="{'width':'100%'}"  name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
