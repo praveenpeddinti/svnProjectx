@@ -27,7 +27,7 @@ export class StoryComponent {
     public form={};
     public toolbar={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
-],removePlugins:'elementspath',resize_enabled:false};
+],removePlugins:'elementspath',resize_enabled:true};
 public filesToUpload: Array<File>;
 //sampleModel:string = "";
 public hasBaseDropZoneOver:boolean = false;

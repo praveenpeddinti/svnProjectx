@@ -39,7 +39,7 @@ public dragTimeout;
   private showDescEditor=true;
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
-],removePlugins:'elementspath',resize_enabled:false};
+],removePlugins:'elementspath',resize_enabled:true};
   // private makeFocused = []; 
   private dropList=[];
 
