@@ -23,9 +23,10 @@ export class StoryDetailComponent implements OnInit {
 
 private editableSelect= "";
 public blurTimeout=[];
-public focusCalled="";
+
 
 @ViewChild('editor')  txt_area;
+public clickedOutside = false;
 public dragTimeout;
   public minDate:Date;
   private ticketData;
@@ -55,6 +56,20 @@ public fileUploadStatus:boolean = false;
 
  
   ngOnInit() {
+     var thisObj = this;
+    jQuery(document).ready(function(){
+    jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+    if(jQuery(event.target).closest('div.customdropdown').length == 0){
+    thisObj.clickedOutside = true;
+
+    }else{
+    thisObj.clickedOutside = false;
+    }
+
+    })
+    })
+
+
     // var parms=this.route.params.subscribe;
  /** @Praveen P
  * Getting the TicketId for story dashboard
@@ -200,8 +215,6 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
  
 private dateVal = new Date();
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId){
-     console.log(editedObj+"**********************");
-     console.log(this.dateVal.toLocaleDateString()+"*****+++++++++++++++++++++*****************");
      var postEditedText={
                         isLeftColumn:1,
                         id:fieldId,
@@ -222,7 +235,6 @@ private dateVal = new Date();
        break;
        case "date":
        var date = this.dateVal.toLocaleDateString();
-       console.log(date);
        document.getElementById(restoreFieldId).innerHTML = (date == "") ? "--":date;
        postEditedText.value = this.dateVal.toLocaleDateString();
        break;
@@ -230,56 +242,41 @@ private dateVal = new Date();
      }
      
     this.showMyEditableField[fieldIndex] = true;
-    this.postDataToAjax(postEditedText);
+   this.postDataToAjax(postEditedText);
    
     
 
   }
+closeCalendar(fieldIndex){
 
+  this.showMyEditableField[fieldIndex] = true;
+}
   dropdownFocus(event,fieldIndex){ 
-    // console.log("abcd--------------------"+fieldIndex);
-    this.focusCalled = "true";
-    // var idx = 0;
-    // jQuery(".dummyselectbox").each(function(){
-    //   idx = jQuery(this).attr("data-idx");
-    //   if(idx != fieldIndex){
-    //     this.showMyEditableField[idx] = true;
-    //   }
-
-    // });
+   
+ 
     for(var i in this.showMyEditableField){
-      //  console.log(i+"----"+this.showMyEditableField[fieldIndex]);
+     
       if(i != fieldIndex){
-        // console.log("makgin true--");
         this.showMyEditableField[i] = true;
        
       }
      
     }
     this.showMyEditableField[fieldIndex] = false;
-    var thisObj = this;
-    if(this.blurTimeout[fieldIndex] != undefined && this.blurTimeout[fieldIndex] != "undefined"){
-    clearTimeout(this.blurTimeout[fieldIndex]);
-    }
- this.blurTimeout[fieldIndex] = setTimeout(function(){
-  //  console.log("abcd----tiemeout----------------");
- thisObj.focusCalled = "";
-},1000)
-
-    
    
-
   }
-  selectBlurField(event,fieldIndex){  
-  
+  selectBlurField(event,fieldIndex){ 
    var thisobj = this;
-  //  console.log("selectBlurField----");
-    
-   if(this.focusCalled == ""){
-      // console.log("selectBlurField----hidding----------------");
-      thisobj.showMyEditableField[fieldIndex] = true;
-   }
- 
+    if(this.blurTimeout[fieldIndex] != undefined && this.blurTimeout[fieldIndex] != "undefined"){
+        clearTimeout(this.blurTimeout[fieldIndex]);
+        }
+     this.blurTimeout[fieldIndex]= setTimeout(function(){
+    if(thisobj.clickedOutside == true){
+    thisobj.showMyEditableField[fieldIndex] = true;
+    }
+
+    },1000)
+
     }
 
   fieldsDataBuilder(fieldsArray,ticketId){
