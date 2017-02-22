@@ -451,7 +451,153 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
       }
   }
  
+   public static function prepareDashboardDetails($ticketDetails,$projectId,$fieldsOrderArray,$flag = "part"){
+        try{
+             $ticketCollectionModel = new TicketCollection();
+           // $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId);
+            $storyFieldsModel = new StoryFields();
+            $storyCustomFieldsModel = new StoryCustomFields();
+            $tinyUserModel =  new TinyUserCollection();
+            $bucketModel = new Bucket();
+            $priorityModel = new Priority();
+            $mapListModel = new MapListCustomStoryFields();
+            $planlevelModel = new PlanLevel();
+            $workFlowModel = new WorkFlowFields();
+            $ticketTypeModel = new TicketType();
+            $newArray = array();
+            foreach ($ticketDetails["Fields"] as $value) {
+                if(in_array($value["Id"], $fieldsOrderArray)){
+                    
+               
+               if(isset($value["custom_field_id"] )){
+                $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
+                 if($storyFieldDetails["Name"] == "List"){
+                
+                    $listDetails = $mapListModel->getListValue($value["Id"],$value["value"]);
+                    $value["readable_value"] = $listDetails; 
+                }
+                
+                
+                
+               }else{
+                 $storyFieldDetails = $storyFieldsModel->getFieldDetails($value["Id"]);
    
+               }
+               // $value["position"] = $storyFieldDetails["Position"];
+                 $value["title"] = $storyFieldDetails["Title"];
+//                $value["required"] = $storyFieldDetails["Required"];
+//                $value["readonly"] = $storyFieldDetails["ReadOnly"];
+//                $value["field_type"] = $storyFieldDetails["Name"];
+                $value["field_name"] = $storyFieldDetails["Field_Name"];
+                if($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5){
+                       if($value["value"] != ""){
+                             $datetime = $value["value"]->toDateTime();
+                     if($storyFieldDetails["Type"] == 4){
+                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                        $readableDate = $datetime->format('m-d-Y');
+                     }else{
+                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                         $readableDate = $datetime->format('m-d-Y H:i:s');
+                     }
+                     $value["readable_value"] =   $readableDate; 
+                       }else{
+                            $value["readable_value"] = "";
+                       }
+                   
+                 }
+                if($storyFieldDetails["Type"] == 6){
+                     $value["readable_value"]="";
+                    if($value["value"] != ""){
+                         $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
+                        $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$assignedToDetails["ProfilePicture"];
+                        $value["readable_value"] = $assignedToDetails;  
+                    }
+                
+                }
+                 if($storyFieldDetails["Type"] == 8){
+                 $value["readable_value"]= "";
+                if($value["value"] != ""){
+                 $bucketName = $bucketModel->getBucketName($value["value"],$ticketDetails["ProjectId"]);
+                 $value["readable_value"] = $bucketName;  
+                }
+                }
+                if($storyFieldDetails["Field_Name"] == "priority"){
+                    $value["readable_value"]= "";
+                if($value["value"] != ""){
+                    $priorityDetails = $priorityModel->getPriorityDetails($value["value"]);
+                    $value["readable_value"] = $priorityDetails;
+                }
+                }
+                 if($storyFieldDetails["Field_Name"] == "planlevel"){
+                 $value["readable_value"]= "";
+                if($value["value"] != ""){
+                    $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
+                    $value["readable_value"] = $planlevelDetails; 
+                     $ticketDetails["StoryType"] = $planlevelDetails;
+                }
+                }
+                 if($storyFieldDetails["Field_Name"] == "workflow"){
+                
+                    $value["readable_value"]= "";
+                if($value["value"] != ""){
+                    $workFlowDetails = $workFlowModel->getWorkFlowDetails($value["value"]);
+                     $value["readable_value"] = $workFlowDetails; 
+                }
+                }
+                 if($storyFieldDetails["Field_Name"] == "tickettype"){
+                    $value["readable_value"]= "";
+                if($value["value"] != ""){
+                 $ticketTypeDetails = $ticketTypeModel->getTicketType($value["value"]);
+                 $value["readable_value"] = $ticketTypeDetails;
+                }
+                }
+               
+               $newArray[$value["Id"]]=$value;
+              }   
+             
+            }
+         
+            $arr2ordered = array() ;
+            foreach ($fieldsOrderArray as $key) {
+    $arr2ordered[$key] = $newArray[$key] ;
+}
+  $ticketDetails["Fields"] = $arr2ordered;
+//            usort($ticketDetails["Fields"], function($a, $b)
+//            {
+//               // echo $a["position"]."\n";
+//                return $a["position"] >= $b["position"];
+//            });
+         //  return $ticketDetails["Fields"];
+            
+           // $ticketDetails["Fields"]="";
+            $projectObj = new Projects();
+            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
+            $ticketDetails["Project"] = $projectDetails;
+            
+            $selectFields = [];
+            if($flag == "part"){
+               $selectFields = ['Title', 'TicketId'];
+
+            }
+            foreach ($ticketDetails["Tasks"] as &$task) {
+                 $taskDetails = $ticketCollectionModel->getTicketDetails($task,$projectId,$selectFields);
+                 $task = $taskDetails;
+            }
+            foreach ($ticketDetails["RelatedStories"] as &$relatedStory) {
+                 $relatedStoryDetails = $ticketCollectionModel->getTicketDetails($relatedStory,$projectId,$selectFields);
+                 $relatedStory = $relatedStoryDetails;
+            }
+            
+            
+            unset( $ticketDetails["CreatedOn"]);
+            unset($ticketDetails["UpdatedOn"]);
+          
+
+            return $ticketDetails;
+        } catch (Exception $ex) {
+Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 }
 
 ?>
