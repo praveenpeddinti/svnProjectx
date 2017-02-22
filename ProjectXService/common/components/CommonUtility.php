@@ -88,7 +88,7 @@ class CommonUtility {
      */
     public static function validateDate($date){
     return (bool)strtotime($date);
-  }
+    }
     /**
      * @author Moin Hussain
      * @param type $sec
@@ -163,10 +163,10 @@ class CommonUtility {
                              $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                        $readableDate = $datetime->format('Y-m-d');
+                        $readableDate = $datetime->format('m-d-Y');
                      }else{
                          $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                         $readableDate = $datetime->format('Y-m-d H:i:s');
+                         $readableDate = $datetime->format('m-d-Y H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
                        }else{
@@ -312,10 +312,10 @@ Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex
                              $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                        $readableDate = $datetime->format('Y-m-d');
+                        $readableDate = $datetime->format('m-d-Y');
                      }else{
                           $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                         $readableDate = $datetime->format('Y-m-d H:i:s');
+                         $readableDate = $datetime->format('m-d-Y H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
                        }else{
