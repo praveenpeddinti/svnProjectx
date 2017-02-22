@@ -50,7 +50,7 @@
 <textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)"></textarea>
 <div class="customdropdown">
 
-  <p-dropdown [style]="{'width':'100%'}" [ngModel]="field.value"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
+  <p-dropdown [style]="{'width':'100%'}" [ngModel]="field.valueId"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
       <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
 </div>
 </div>
