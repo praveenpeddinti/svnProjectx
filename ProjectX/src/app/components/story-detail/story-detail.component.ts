@@ -49,7 +49,7 @@ public fileUploadStatus:boolean = false;
        this.filesToUpload = [];
     }
 
- 
+ private calenderClickedOutside = false;
   ngOnInit() {
      var thisObj = this;
     jQuery(document).ready(function(){
@@ -58,6 +58,12 @@ public fileUploadStatus:boolean = false;
           thisObj.clickedOutside = true;
           }else{
           thisObj.clickedOutside = false;
+          }
+
+          if(jQuery(event.target).closest('p-calendar.primeDateComponent').length == 0){
+          thisObj.calenderClickedOutside = true;
+          }else{
+          thisObj.calenderClickedOutside = false;
           }
 
       });
@@ -198,10 +204,20 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
 
     
   }
-// dateBlur($event,i)
+
   dateBlur(event,fieldIndex){
     console.log("blur");
-    this.showMyEditableField[fieldIndex] = true;
+    var thisobj = this;
+    if(this.blurTimeout[fieldIndex] != undefined && this.blurTimeout[fieldIndex] != "undefined"){
+        clearTimeout(this.blurTimeout[fieldIndex]);
+        }
+     this.blurTimeout[fieldIndex]= setTimeout(function(){
+    if(thisobj.calenderClickedOutside == true){
+    thisobj.showMyEditableField[fieldIndex] = true;
+    }
+
+    },1000);
+    // this.showMyEditableField[fieldIndex] = true;
   }
  
 private dateVal = new Date();
@@ -228,7 +244,7 @@ private dateVal = new Date();
 
 
        var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
-date = date.replace(/(\b\d{1}\b)/g, "0$1")      
+date = date.replace(/(\b\d{1}\b)/g, "0$1");      
 // var date = this.dateVal.toLocaleDateString();
        document.getElementById(restoreFieldId).innerHTML = (date == "") ? "--":date;
        postEditedText.value = this.dateVal.toString();
