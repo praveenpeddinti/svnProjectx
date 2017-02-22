@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 declare var jQuery:any;
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,17 +17,42 @@ export class AppComponent {
      private route: ActivatedRoute;
 
   constructor(
-     public _router: Router,
+    public _router: Router,
     private http: Http,
     
   ){}
    ngOnInit() {
-    //alert(jQuery('.container-fluid').height());
+
+  }
+  /*
+  * Added by Padmaja 
+  *After the view is initialized,this script will be available
+  */     
+   ngAfterViewInit() {
+      var thiscall=this;
+      jQuery(document).ready(function(){
+        thiscall.setFooterHeight();
+      jQuery( window ).resize(function() {
+        thiscall.setFooterHeight();
+      }); 
+     });
   }
   public sendMessage(message:any)
   {
     this.socket = io(this.url);
     // this.socket.emit('projectSearch', message); 
      this.socket.emit('add-message', message); 
+  }
+  public setFooterHeight()
+  {
+     var windowHeight=jQuery( window ).height();
+        setTimeout(()=>{
+          var headerHeight=jQuery('.navbar-inverse').height()
+          var footerHeight=jQuery('.loginfooter').height();
+          var AddedValue=headerHeight+footerHeight+50;
+          var finalVal=windowHeight-AddedValue;
+     
+         jQuery("#setHeight").css('min-height',finalVal);
+      },250);
   }
 }
