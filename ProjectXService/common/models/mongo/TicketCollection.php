@@ -223,8 +223,9 @@ class TicketCollection extends ActiveRecord
                          $leftsideFieldVal = (int)$fieldData->value;  
                     }else{
                         if($fieldData->value != ""){
-                            if(CommonUtility::validateDate($fieldData->value)){
-                                $leftsideFieldVal = new \MongoDB\BSON\UTCDateTime(strtotime($fieldData->value) * 1000); 
+                            $validDate = CommonUtility::validateDate($fieldData->value);
+                            if($validDate){
+                                $leftsideFieldVal = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000); 
                             }else{
                                 $leftsideFieldVal = $fieldData->value; 
                             } 
