@@ -48,6 +48,7 @@ export class HomePage {
                         },
                         ()=> console.log('login api call complete')
                         );
+                        
       }
   }
 
