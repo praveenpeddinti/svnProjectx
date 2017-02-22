@@ -13,18 +13,27 @@
   </div>
   </div>
 <div class="row">
-  <div class="col-xs-12 col-sm-3 col-md-3">
-<div class="leftpaneldiv">
-
-    <div  *ngFor="let value of storyFormData; let i = index;">
+  
+  <div class="col-xs-12 col-sm-12 col-md-12">
+       <div *ngIf="submitted && title.errors " class="alert alert-danger">
+                    <div [hidden]="!title.errors.required">
+                       Title is required
+                    </div>
+                    <div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
+                       Title must be 3 characters long
+                    </div>
+            </div>
+            <div class="leftpaneldiv leftpanelsections_noborder">
+<div class="row">
+    <div  *ngFor="let value of storyFormData; let i = index;" class="col-xs-12 col-sm-4 col-md-3">
 
             <div *ngIf="value.type == 1">
 
-                <div class="leftpanelsections">
+                
                     <label for="email" class="leftlabels">{{value.lable}}</label>
                     <input [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" [readonly]="(value.readOnly == 1) ? true : null"
                         type="text" class="form-control" name="name_{{value.model}}" >
-                </div>
+               
                 <!--<div *ngIf="submitted && name_value.model.errors " class="alert alert-danger">
                     <div [hidden]="!name_value.model.errors.required">
                         {{value.lable}} is required
@@ -33,7 +42,7 @@
             </div>
 
              <div *ngIf="value.type == 5">
-                <div class="leftpanelsections">
+                <div class="leftpanelsections ">
                     <label for="email" class="leftlabels">{{value.lable}}</label>
                     <input [(ngModel)]="form[value.model]" [required]="(value.required == 1) ? true : null" [readonly]="(value.readOnly == 1) ? true : null"
                         type="text" class="form-control" name="name_{{value.model}}" >
@@ -45,13 +54,14 @@
                 </div>-->
             </div>
            
-            <div *ngIf="value.type == 2 ">
-                 <div class="leftpanelsections customdropdown">
+  
+            <div *ngIf="value.type == 2 "  >
+                 <div class="leftpanelsections  customdropdown">
                     <label for="email" class="leftlabels">{{value.lable}}</label>
                 <p-dropdown [options]="value.values" [style]="{'width':'100%'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
                </div>
                </div>
-               
+              
             <div *ngIf=" value.type == 6 ">
                 <div class="leftpanelsections customdropdown">
                     <label for="email" class="leftlabels">{{value.lable}}</label>
@@ -82,17 +92,7 @@
             </div>
         </div>
 </div>
-
-  </div>
-  <div class="col-xs-12 col-sm-9 col-md-9">
-       <div *ngIf="submitted && title.errors " class="alert alert-danger">
-                    <div [hidden]="!title.errors.required">
-                       Title is required
-                    </div>
-                    <div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                       Title must be 3 characters long
-                    </div>
-            </div>
+</div>
 <div class="rightdescriptionarea">
         
           <div style="position: relative" >
