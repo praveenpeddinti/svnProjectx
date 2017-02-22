@@ -68,16 +68,37 @@ export class StoryDashboardComponent {
         //this.page(event.offset, event.limit,this.sortvalue);
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
     }
-    onSort(event) {
+    /*oldonSort(event) {
         //alert(this.offset+"----OnSort---"+this.limit+"---sortvalue----"+this.sortvalue);
         this.sortvalue = event.sorts[0].prop;
         this.sortorder = event.sorts[0].dir;
         //alert(this.offset + "----OnSort---" + this.limit + "---sortvalue----" + this.sortvalue);
         //console.log(event, '----event----', event.sorts[0].dir, ' Sort Event', event.sorts[0].prop);
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
-    }
+    }*/
+loading: boolean = false;
+    onSort(event) {
+    // event was triggered, start sort sequence
+    //console.log('Sort Event', event);
+    this.loading = true;
+    // emulate a server request with a timeout
+    setTimeout(() => {
+      const rows = [...this.rows];
+      // this is only for demo purposes, normally
+      // your server would return the result for
+      // you and you would just set the rows prop
+      const sort = event.sorts[0];
+      //alert("sort----"+sort.prop);
+      rows.sort((a, b) => {
+         //alert("----a----"+a[sort.prop]);
+        return a[sort.prop].localeCompare(b[sort.prop]) * (sort.dir === 'desc' ? -1 : 1);
+      });
 
-    
+      this.rows = rows;
+      //console.log("========sorting===" +JSON.stringify(this.rows));
+      this.loading = false;
+    }, 1000);
+  }
   
 
     onActivate(event) {
