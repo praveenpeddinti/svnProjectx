@@ -64,7 +64,7 @@
                     (drop)="fileUploadEvent($event, 'fileDrop')" >
                 </div>
      <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
-            <ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required  debounce="500"  >
+            <ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required    >
             </ckeditor>
             <div id="desc_error" [hidden]="true" class="alert alert-danger">Description is Required</div>
      </div>
