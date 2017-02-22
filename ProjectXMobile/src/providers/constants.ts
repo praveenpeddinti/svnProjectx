@@ -9,9 +9,9 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class Constants {
-    baseUrl = 'https://10.10.73.62/?r='
+   public baseUrl = 'https://10.10.73.62/';
     
-    loginUrl = this.baseUrl+"site/login";
+   public loginUrl = this.baseUrl+"site/user-authentication";
 
   constructor() {
     console.log('Hello Constants Provider');

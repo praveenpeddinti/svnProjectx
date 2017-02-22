@@ -11,7 +11,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Globalservice {
 
-private headers = new Headers({'Content-Type': 'application/json'});
+//private headers = new Headers({'Content-Type': 'application/json'});
+private headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
   constructor(public http: Http) {
     console.log('Hello Globalservice Provider');

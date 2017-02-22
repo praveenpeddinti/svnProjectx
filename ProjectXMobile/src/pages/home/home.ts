@@ -38,17 +38,16 @@ export class HomePage {
           this.loginService.getLoginValidation(this.urlConstants.loginUrl, this.login).subscribe(
                         data=>{
                             console.log("the response " + JSON.stringify(data));
-                        }, 
+                            let userCredentials = {username: this.login.username};
+                            this.navCtrl.push(WelcomePage, userCredentials);
+
+                            this.viewCtrl.dismiss();
+                        },
                         error=>{
                             console.log("the error " + JSON.stringify(error));
                         },
                         ()=> console.log('login api call complete')
                         );
-          
-          let data = {username: this.login.username};
-          this.navCtrl.push(WelcomePage, data);
-          
-          this.viewCtrl.dismiss();
       }
   }
 
