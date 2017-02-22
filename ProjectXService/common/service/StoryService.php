@@ -270,9 +270,11 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
             $model = new TicketCollection();
             $ticketDetails = $model->getAllTicketDetails($StoryData, $projectId);
             $finalData = array();
+           // $fieldsOrderArray = [5,7,10,3];
+              $fieldsOrderArray = [5,6,7,3,10];
             foreach ($ticketDetails as $ticket) {
                 error_log("--------ticketid---------------".$ticket["TicketId"]);
-                $details = CommonUtility::prepareTicketDetails($ticket, $projectId);
+                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
                 array_push($finalData, $details);
                 //break;
             }
