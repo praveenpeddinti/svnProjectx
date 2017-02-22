@@ -14,11 +14,6 @@ declare var jQuery:any;
   
 })
 export class StoryDetailComponent implements OnInit {
-  // private _ajaxService: AjaxService;
-  //   public _router: Router;
-  //   private http: Http;
-//  testObj = {};
-//   newObj = {};
 
 
 private editableSelect= "";
@@ -40,7 +35,7 @@ public dragTimeout;
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
 ],removePlugins:'elementspath',resize_enabled:true};
-  // private makeFocused = []; 
+
   private dropList=[];
 
 public filesToUpload: Array<File>;
@@ -58,16 +53,15 @@ public fileUploadStatus:boolean = false;
   ngOnInit() {
      var thisObj = this;
     jQuery(document).ready(function(){
-    jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-    if(jQuery(event.target).closest('div.customdropdown').length == 0){
-    thisObj.clickedOutside = true;
+      jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                              
+          if(jQuery(event.target).closest('div.customdropdown').length == 0){
+          thisObj.clickedOutside = true;
+          }else{
+          thisObj.clickedOutside = false;
+          }
 
-    }else{
-    thisObj.clickedOutside = false;
-    }
-
-    })
-    })
+      });
+    });
 
 
     // var parms=this.route.params.subscribe;
@@ -77,7 +71,7 @@ public fileUploadStatus:boolean = false;
       this.route.params.subscribe(params => {
             this.ticketId = params['id'];
         });
-        //  alert("constructor"+this.ticketId);
+        
    
       var ticketIdObj={'ticketId': this.ticketId};
         this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
@@ -85,11 +79,9 @@ public fileUploadStatus:boolean = false;
           
             
             this.ticketData = data;
-         //   alert(this.ticketId+"++++++++++++++"+JSON.stringify(this.ticketData));
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
-            //  alert("========>"+JSON.stringify(this.fieldsData));
             
         });
 
@@ -101,12 +93,11 @@ public fileUploadStatus:boolean = false;
   */
   openDescEditor(){
     this.showDescEditor = false;
-    // document.getElementById('tktDesc').focus();
   }
 
 private descError="";
 submitDesc(){
-  // this.ticketDesc = this.ticketEditableDesc;
+  
   if(this.ticketEditableDesc != ""){
     this.descError = "";
   this.showDescEditor = true;
@@ -118,9 +109,7 @@ submitDesc(){
     TicketId:this.ticketId,
     EditedId:'desc'
   };
-  //alert(JSON.stringify(postEditedText));
   this.postDataToAjax(postEditedText);
- //alert("++++++submitted++++++++++"+this.ticketDesc);
   }else{
     this.descError = "Description cannot be empty.";
   }
@@ -167,7 +156,6 @@ closeTitleEdit(editedText){
 //------------------------------Title part-----------------------------------
 
   onClick(){
-    // alert(val);
     this._router.navigate(['story-edit',this.ticketId]);
 
   }
@@ -186,7 +174,7 @@ closeTitleEdit(editedText){
       ProjectId:this.ticketData.data.Project.PId,
       TicketId:this.ticketData.data.TicketId
     };
-// alert(JSON.stringify(reqData)+"reqest data");
+
 this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
     { 
        
@@ -196,11 +184,11 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
            currentSelectedId: (currentId != "" &&currentId != null )? currentId:"",
            list:data.getFieldDetails
          };
-        //  console.log(JSON.stringify(listData));
+        
          var priority=(fieldTitle=="Priority"?true:false);
          this.dropList=this.prepareItemArray(listData.list,priority,fieldTitle);
         
-        jQuery("#"+inptFldId+" div").click();
+         jQuery("#"+inptFldId+" div").click();
         
     });
     }
@@ -209,8 +197,9 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
     
   }
 
-  dropBlur(){
+  dateBlur(event,fieldIndex){
     console.log("blur");
+    this.showMyEditableField[fieldIndex] = true;
   }
  
 private dateVal = new Date();
@@ -251,6 +240,7 @@ closeCalendar(fieldIndex){
 
   this.showMyEditableField[fieldIndex] = true;
 }
+
   dropdownFocus(event,fieldIndex){ 
    
  
@@ -258,13 +248,12 @@ closeCalendar(fieldIndex){
      
       if(i != fieldIndex){
         this.showMyEditableField[i] = true;
-       
-      }
-     
+       }
     }
     this.showMyEditableField[fieldIndex] = false;
    
   }
+
   selectBlurField(event,fieldIndex){ 
    var thisobj = this;
     if(this.blurTimeout[fieldIndex] != undefined && this.blurTimeout[fieldIndex] != "undefined"){
@@ -308,7 +297,6 @@ closeCalendar(fieldIndex){
             break;
             case "Date":
             data.title = field.title;
-            // alert(field.readable_value.date.split(" ")[0]+"++++++++Date++++++++++");
             data.value = field.readable_value;
             this.dateVal = field.readable_value;
             data.renderType = "date";
@@ -316,7 +304,6 @@ closeCalendar(fieldIndex){
             break;
             case "DateTime":
             data.title = field.title;
-            // alert(field.readable_value.date.split(".")[0]+"++++++++++DateTime++++++++++++");
             data.value = field.readable_value;
             data.renderType = "date";
             data.type="datetime";
@@ -345,18 +332,13 @@ closeCalendar(fieldIndex){
           data.required = (field.required == 1)?true:false;
           data.elId =  ticketId+"_"+field.field_name;
           data.Id = field.Id;
-          // if(field.field_type == "Bucket" || field.field_type == "Team List" || field.field_type == "Team List"){
-          //   data.type = "List";
-          // }else{
             data.fieldType = field.field_type;
             if(field.field_name == "dod"){
               data.renderType = "textarea";
               console.log(data.renderType);
           }
-          // }
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);
-          // this.makeFocused.push(new EventEmitter());
       }
     }
 
@@ -366,6 +348,9 @@ closeCalendar(fieldIndex){
  public prepareItemArray(list:any,priority:boolean,status:string){
   var listItem=[];
      if(list.length>0){
+       if(status == "Assigned to" || status == "Stake Holder"){
+       listItem.push({label:"Select Option", value:"",priority:priority,type:status});
+       }
          for(var i=0;list.length>i;i++){
           listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
        }
@@ -373,7 +358,6 @@ closeCalendar(fieldIndex){
 return listItem;
 }
 public fileOverBase(fileInput:any):void {
-//console.log("fileoverbase");
     this.hasBaseDropZoneOver = true;
     if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ console.log("clear---");
     clearTimeout(this.dragTimeout);
@@ -382,10 +366,9 @@ public fileOverBase(fileInput:any):void {
 }
 
 public fileDragLeave(fileInput: any){
-//console.log("fileDragLeave");
+
 var thisObj = this;
     if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){
-        // console.log("clear---");
     clearTimeout(this.dragTimeout);
     }
      this.dragTimeout = setTimeout(function(){
@@ -396,7 +379,6 @@ var thisObj = this;
 
   public fileUploadEvent(fileInput: any, comeFrom: string):void {
    console.log("the source " + comeFrom);
-   // console.log("cahnge event " + fileInput.name +"------- " + fileInput.size);
    if(comeFrom == 'fileChange'){
         this.filesToUpload = <Array<File>> fileInput.target.files;
    } else if(comeFrom == 'fileDrop'){
@@ -426,14 +408,9 @@ var thisObj = this;
 
 // Added by Padmaja for Inline Edit
     public postDataToAjax(postEditedText){
-       // alert("helloo test"+JSON.stringify(postEditedText));alert(this.ticketId);
        this._ajaxService.AjaxSubscribe("story/update-story-field-details",postEditedText,(result)=>
         { 
-       // alert("updating here"+data);
-      // alert(JSON.stringify(result.data));
           if(result.statusCode== 200){
-          //  alert("success");
-         //  alert(this.ticketId+'_'+postEditedText.EditedId);
          if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc")
             document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data;
           }
