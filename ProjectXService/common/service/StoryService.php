@@ -271,7 +271,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
             $ticketDetails = $model->getAllTicketDetails($StoryData, $projectId);
             $finalData = array();
             foreach ($ticketDetails as $ticket) {
-                error_log("-----------------------".$ticket["TicketId"]);
+                error_log("--------ticketid---------------".$ticket["TicketId"]);
                 $details = CommonUtility::prepareTicketDetails($ticket, $projectId);
                 array_push($finalData, $details);
                 //break;
@@ -344,8 +344,9 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                               $value["value"] = (int)$ticket_data->$fieldId;  
                          }else{
                              if($ticket_data->$fieldId != ""){
-                                 if(CommonUtility::validateDate($ticket_data->$fieldId)){
-                                 $value["value"] = new \MongoDB\BSON\UTCDateTime(strtotime($ticket_data->$fieldId) * 1000); 
+                                  $validDate = CommonUtility::validateDate($ticket_data->$fieldId);
+                                 if($validDate){
+                                 $value["value"] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000); 
                              }else{
                                  $value["value"] = $ticket_data->$fieldId; 
                              } 
