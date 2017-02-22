@@ -23,7 +23,7 @@ export class HomePage {
         private loginService: Globalservice,
         private urlConstants: Constants,
         public viewCtrl: ViewController) {
-    
+     console.log("svn check..");
   }
   
    onLogin(form): void{
