@@ -3,7 +3,7 @@ import { Headers, Http } from '@angular/http';
 //import { Headers,RequestOptions, Http } from '@angular/http';
 import { GlobalVariable } from '../../app/config';
 
-var headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+var headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
 
 declare var jQuery:any;
 //headers.append('Authorization',"sdssqweqw2111");
