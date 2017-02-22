@@ -87,7 +87,12 @@ class CommonUtility {
      * @return type
      */
     public static function validateDate($date){
-    return (bool)strtotime($date);
+       $date =  preg_replace("/\([^)]+\)/","",$date);
+     if((bool)strtotime($date)){
+         return $date;
+     }else{
+          return FALSE;
+     }
     }
     /**
      * @author Moin Hussain
