@@ -191,12 +191,14 @@ this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(d
          jQuery("#"+inptFldId+" div").click();
         
     });
+    }else if(renderType == "date"){
+      setTimeout(()=>{jQuery("#"+inptFldId+" span input").focus();},150);    
     }
 
 
     
   }
-
+// dateBlur($event,i)
   dateBlur(event,fieldIndex){
     console.log("blur");
     this.showMyEditableField[fieldIndex] = true;
