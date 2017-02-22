@@ -71,7 +71,7 @@ setTimeout(()=>{
   }
 
    editThisField(event,fieldIndex){
-    console.log(event.target.id);
+   // console.log(event.target.id);
     // var thisFieldId = event.target.id;
     // var thisField;
     // var replaceHtml ;
@@ -156,10 +156,10 @@ setTimeout(()=>{
             data.fieldType = field.field_type;
           // }
           data.fieldName =  field.Id;
-          console.log(field.field_name);
+          //console.log(field.field_name);
           if(field.field_name == "dod"){
               data.renderType = "textarea";
-              console.log(data.renderType);
+             // console.log(data.renderType);
           }
           var priority=(data.title=="Priority"?true:false);
           var status=data.title;
@@ -169,7 +169,7 @@ setTimeout(()=>{
           // this.fieldsBindingArray.push(field.Id);
       }
     }
-console.log(JSON.stringify(fieldsBuilt));
+//console.log(JSON.stringify(fieldsBuilt));
     return fieldsBuilt;
 
   }
@@ -183,7 +183,7 @@ console.log(JSON.stringify(fieldsBuilt));
 return listItem;
 }
   editStory(edit_data){
-      console.log("===Edit Data==="+JSON.stringify(edit_data));
+     // console.log("===Edit Data==="+JSON.stringify(edit_data));
     jQuery("#title_error").hide();
     jQuery("#desc_error").hide();
     if(edit_data.title=='')
@@ -249,7 +249,7 @@ var thisObj = this;
 }
 
 public fileUploadEvent(fileInput: any, comeFrom: string):void {
-   console.log("the source " + comeFrom);
+   //console.log("the source " + comeFrom);
    // console.log("cahnge event " + fileInput.name +"------- " + fileInput.size);
    if(comeFrom == 'fileChange'){
         this.filesToUpload = <Array<File>> fileInput.target.files;
