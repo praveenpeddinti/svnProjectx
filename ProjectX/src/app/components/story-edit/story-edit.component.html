@@ -39,7 +39,7 @@
     </div>  
    
     <div class="calbg customcalender" *ngSwitchCase="'date'" >
-     <p-calendar [ngModel]="field.value" name="{{field.fieldName}}" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+     <p-calendar [ngModel]="field.value" name="{{field.fieldName}}" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="mm-dd-yy"></p-calendar>
     </div>           
     
     <textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" name="{{field.fieldName}}" [ngModel]="field.value"></textarea>

@@ -223,9 +223,13 @@ private dateVal = new Date();
        postEditedText.value = editedObj.value;
        break;
        case "date":
-       var date = this.dateVal.toLocaleDateString();
+
+
+       var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
+date = date.replace(/(\b\d{1}\b)/g, "0$1")      
+// var date = this.dateVal.toLocaleDateString();
        document.getElementById(restoreFieldId).innerHTML = (date == "") ? "--":date;
-       postEditedText.value = this.dateVal.toLocaleDateString();
+       postEditedText.value = this.dateVal.toString();
        break;
 
      }

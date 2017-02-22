@@ -78,10 +78,16 @@ export class StoryDashboardComponent {
     }
 
     
-
+  
 
     onActivate(event) {
-        this._router.navigate(['story-detail', event.row.TicketId]);
+
+if(event.hasOwnProperty("row")){
+    console.log("yes, i have that property");
+ this._router.navigate(['story-detail', event.row.TicketId]);
+}
+    
+//
     }
     renderStoryForm() {
         this._router.navigate(['story-form']);
