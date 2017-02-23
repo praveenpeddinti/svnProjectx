@@ -240,7 +240,7 @@ private dateVal = new Date();
        break;
        case "select":
     
-      var appendHtml = (restoreFieldId.split("_")[1] == "priority")?"<i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
+      var appendHtml = (restoreFieldId.split("_")[1] == "priority")?"&nbsp; <i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
        document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;
        postEditedText.value = editedObj.value;
        break;
