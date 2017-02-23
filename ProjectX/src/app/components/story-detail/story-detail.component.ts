@@ -103,7 +103,8 @@ public fileUploadStatus:boolean = false;
 
 private descError="";
 submitDesc(){
-  
+  // alert(this.ticketEditableDesc);
+  // setTimeout(()=>{
   if(this.ticketEditableDesc != ""){
     this.descError = "";
   this.showDescEditor = true;
@@ -116,9 +117,11 @@ submitDesc(){
     EditedId:'desc'
   };
   this.postDataToAjax(postEditedText);
+  this.ticketCrudeDesc = this.ticketEditableDesc;
   }else{
     this.descError = "Description cannot be empty.";
   }
+  // },1000);
 
 }
 cancelDesc(){
