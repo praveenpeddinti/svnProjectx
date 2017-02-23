@@ -87,7 +87,9 @@ class CommonUtility {
      * @return type
      */
     public static function validateDate($date){
+        error_log("-----------------".$date);
        $date =  preg_replace("/\([^)]+\)/","",$date);
+         error_log("------------afet-----".$date);
      if((bool)strtotime($date)){
          return $date;
      }else{
@@ -562,6 +564,50 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
     $arr2ordered[$key] = $newArray[$key] ;
 }
   $ticketDetails["Fields"] = $arr2ordered;
+   //return $ticketDetails;
+  $newFinalArray = array();
+  
+  
+    $ticketId = array("field_name"=>"","value_id"=>"","field_value"=>$ticketDetails["TicketId"],"other_data"=>"");
+    $ticketTitle = array("field_name"=>"","value_id"=>"","field_value"=>$ticketDetails["Title"],"other_data"=>"");
+    
+    array_push($newFinalArray,$ticketId);
+    array_push($newFinalArray,$ticketTitle);
+    
+    
+  
+  foreach ($arr2ordered as $value) {
+      error_log("--------------".print_r($value,1));
+       $tempArray = array("field_name"=>"","value_id"=>"","field_value"=>"","other_data"=>"");
+       $tempArray["field_name"]= $value["field_name"];
+        $tempArray["value_id"]= $value["value"];
+    
+      if(isset($value["readable_value"]["UserName"])){
+          $tempArray["field_value"]= $value["readable_value"]["UserName"]; 
+          $tempArray["other_data"]= $value["readable_value"]["ProfilePicture"];
+      }
+       else  if(isset($value["readable_value"]["Name"])){
+           $tempArray["field_value"]= $value["readable_value"]["Name"]; 
+       }
+        else{
+           $tempArray["field_value"]=$value["readable_value"];
+        }
+            
+     
+     
+//      if(isset($value["readable_value"]["UserName"]))
+//        $tempArray["Value"]= $value["readable_value"]["UserName"];
+//      else  if(isset($value["readable_value"]["Name"]))
+//          $tempArray["Value"]= $value["readable_value"]["Name"];
+//       else
+//            $tempArray["Value"]="";
+       
+        array_push($newFinalArray,$tempArray);
+       // break;
+  }
+  unset($ticketDetails["Fields"]);
+  $ticketDetails=$newFinalArray;
+  
 //            usort($ticketDetails["Fields"], function($a, $b)
 //            {
 //               // echo $a["position"]."\n";
@@ -570,27 +616,37 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
          //  return $ticketDetails["Fields"];
             
            // $ticketDetails["Fields"]="";
-            $projectObj = new Projects();
-            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
-            $ticketDetails["Project"] = $projectDetails;
-            
-            $selectFields = [];
-            if($flag == "part"){
-               $selectFields = ['Title', 'TicketId'];
-
-            }
-            foreach ($ticketDetails["Tasks"] as &$task) {
-                 $taskDetails = $ticketCollectionModel->getTicketDetails($task,$projectId,$selectFields);
-                 $task = $taskDetails;
-            }
-            foreach ($ticketDetails["RelatedStories"] as &$relatedStory) {
-                 $relatedStoryDetails = $ticketCollectionModel->getTicketDetails($relatedStory,$projectId,$selectFields);
-                 $relatedStory = $relatedStoryDetails;
-            }
+//            $projectObj = new Projects();
+//            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
+//            $ticketDetails["Project"] = $projectDetails;
+//            
+//            $selectFields = [];
+//            if($flag == "part"){
+//               $selectFields = ['Title', 'TicketId'];
+//
+//            }
+//            foreach ($ticketDetails["Tasks"] as &$task) {
+//                 $taskDetails = $ticketCollectionModel->getTicketDetails($task,$projectId,$selectFields);
+//                 $task = $taskDetails;
+//            }
+//            foreach ($ticketDetails["RelatedStories"] as &$relatedStory) {
+//                 $relatedStoryDetails = $ticketCollectionModel->getTicketDetails($relatedStory,$projectId,$selectFields);
+//                 $relatedStory = $relatedStoryDetails;
+//            }
             
             
             unset( $ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
+              unset( $ticketDetails["CreatedOn"]);
+            unset($ticketDetails["Description"]);
+              unset( $ticketDetails["CrudeDescription"]);
+                unset( $ticketDetails["ArtifactsRef"]);
+                  unset( $ticketDetails["CommentsRef"]);
+                    unset( $ticketDetails["FollowersRef"]);
+                      unset( $ticketDetails["TotalEstimate"]);
+                         unset( $ticketDetails["TotalTimeLog"]);
+                            unset( $ticketDetails["RelatedStories"]);
+                               unset( $ticketDetails["Tasks"]);
           
 
             return $ticketDetails;
