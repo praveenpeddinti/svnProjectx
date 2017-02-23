@@ -155,7 +155,9 @@ closeTitleEdit(editedText){
   };
   this.postDataToAjax(postEditedText);
 }else{
-  this.titleError = "Title cannot be empty";
+  this.showTitleEdit = true;
+  editedText = document.getElementById(this.ticketId+"_title").innerHTML;
+  // this.titleError = "Title cannot be empty";
 
 }
 }
@@ -229,7 +231,7 @@ private dateVal = new Date();
                         TicketId:this.ticketId,
                         EditedId:restoreFieldId.split("_")[1]
                       };
-  
+
      switch(renderType){
        case "input":
        case "textarea":
@@ -237,7 +239,9 @@ private dateVal = new Date();
        postEditedText.value = editedObj;
        break;
        case "select":
-       document.getElementById(restoreFieldId).innerHTML = (editedObj.text == "") ? "--":editedObj.text;
+    
+      var appendHtml = (restoreFieldId.split("_")[1] == "priority")?"<i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
+       document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;
        postEditedText.value = editedObj.value;
        break;
        case "date":
@@ -371,7 +375,7 @@ closeCalendar(fieldIndex){
   var listItem=[];
      if(list.length>0){
        if(status == "Assigned to" || status == "Stake Holder"){
-       listItem.push({label:"<---Select a Member--->", value:"",priority:priority,type:status});
+       listItem.push({label:"--Select a Member--", value:"",priority:priority,type:status});
        }
          for(var i=0;list.length>i;i++){
           listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});

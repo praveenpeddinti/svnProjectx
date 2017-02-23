@@ -175,7 +175,10 @@ setTimeout(()=>{
   }
  public prepareItemArray(list:any,priority:boolean,status){
   var listItem=[];
-     if(list.length>0){         
+     if(list.length>0){ 
+       if(status == "Assigned to" || status == "Stake Holder"){
+       listItem.push({label:"--Select a Member--", value:"",priority:priority,type:status});
+       }        
          for(var i=0;list.length>i;i++){
           listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
        }
