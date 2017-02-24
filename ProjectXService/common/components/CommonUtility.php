@@ -477,8 +477,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             
             $arr2ordered = array() ;
 
-            $ticketId = array("field_name"=>"","value_id"=>"","field_value"=>$ticketDetails["TicketId"],"other_data"=>"");
-            $ticketTitle = array("field_name"=>"","value_id"=>"","field_value"=>$ticketDetails["Title"],"other_data"=>"");
+            $ticketId = array("field_name"=>"Id","value_id"=>"","field_value"=>$ticketDetails["TicketId"],"other_data"=>"");
+            $ticketTitle = array("field_name"=>"Title","value_id"=>"","field_value"=>$ticketDetails["Title"],"other_data"=>"");
 
             array_push($arr2ordered,$ticketId);
             array_push($arr2ordered,$ticketTitle);

@@ -173,7 +173,7 @@ class TicketCollection extends ActiveRecord
                     ->where(["ProjectId" => $projectId])
                     ->limit($StoryData->pagesize)
                     ->offset(($StoryData->offset*$StoryData->pagesize))
-                    ->orderBy([$StoryData->sortvalue => $order]);
+                    ->orderBy(["TicketId" => -1]);
         $ticketDetails = $query->all();
         return $ticketDetails;  
       } catch (Exception $ex) {
