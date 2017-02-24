@@ -1,3 +1,4 @@
+import { StoryComponent } from '../story/story-form.component';
 import { register } from 'ts-node/dist';
 import { Component, Directive } from '@angular/core';
 import { StoryService } from '../../services/story.service';
@@ -20,8 +21,51 @@ export class StoryDashboardComponent {
     sortvalue: string = "TicketId";
     sortorder: string = "desc";
     loading: boolean = false;
-    columns = [{ name: 'Id', flexGrow: 1, sortby: 'Id', class:'' }, { name: 'Title', flexGrow: 4, sortby: 'Title', class:'titlecolumn' }, { name: 'Assigned to', flexGrow: 2, sortby: 'assignedto', class:'' }, { name: 'Priority', flexGrow: 1, sortby: 'priority', class:'prioritycolumn' }, { name: 'Status', flexGrow: 1, sortby: 'workflow', class:'statusbold' }, { name: 'Bucket', flexGrow: 1, sortby: 'bucket', class:'' }, { name: 'Due Date', flexGrow: 1, sortby: 'duedate', class:'' }];
-    expanded: any = {};
+    columns = [
+                {
+                    name: 'Id',
+                    flexGrow: 1,
+                    sortby: 'Id',
+                    class: ''
+                },
+                {
+                    name: 'Title',
+                    flexGrow: 4,
+                    sortby: 'Title',
+                    class: 'titlecolumn'
+                },
+                {
+                    name: 'Assigned to',
+                    flexGrow: 2,
+                    sortby: 'assignedto',
+                    class: ''
+                },
+                {
+                    name: 'Priority',
+                    flexGrow: 1,
+                    sortby: 'priority',
+                    class: 'prioritycolumn'
+                },
+                {
+                    name: 'Status',
+                    flexGrow: 1,
+                    sortby: 'workflow',
+                    class: 'statusbold'
+                },
+                {
+                    name: 'Bucket',
+                    flexGrow: 1,
+                    sortby: 'bucket',
+                    class: ''
+                },
+                {
+                    name: 'Due Date',
+                    flexGrow: 1,
+                    sortby: 'duedate',
+                    class: ''
+                }
+              ];
+expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
     constructor(
@@ -29,9 +73,16 @@ export class StoryDashboardComponent {
         private _service: StoryService, private http: Http) { console.log("in constructor"); }
 
     ngOnInit() {
+        /*
+        @params    :  offset,limit,sortvalue,sortorder
+        @Description: Default routing
+        */
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
     }
-
+        /*
+        @params    :  offset,limit,sortvalue,sortorder
+        @Description: StoryComponent/Task list Rendering
+        */
     page(offset, limit, sortvalue, sortorder) {
         this._service.getAllStoryDetails(1, offset, limit, sortvalue, sortorder, (response) => {
             let jsonForm = {};
@@ -49,35 +100,26 @@ export class StoryDashboardComponent {
             }
         });
     }
-
+    /*
+    @When Clicking pages
+    */
     onPage(event) {
         this.offset = event.offset;
         this.limit = event.limit;
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
     }
 
-
+ 
+    /*
+    @When Clicking Columns for Sorting
+    */
     onSort(event) {
-        this.loading = true;
-        // emulate a server request with a timeout
-        setTimeout(() => {
-            const rows = [...this.rows];
-            const sort = event.sorts[0];
-            rows.sort((a, b) => {
-                for (var i = 0; i < a.length; i++) {
-                    if (a[i].field_name == sort.prop) {
-                        var fisrtValue = a[i].field_value;
-                        var secondValue = b[i].field_value;
-                        return fisrtValue.toString().localeCompare(secondValue) * (sort.dir === 'desc' ? -1 : 1);
-                    }
-                }
-            });
-            this.rows = rows;
-            this.loading = false;
-        }, 1000);
+        this.sortvalue = event.sorts[0].prop;
+        this.sortorder = event.sorts[0].dir;
+        this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
     }
 
-    /** @Praveen P
+       /* @Praveen P
         * Pass the TicketId for story-detail component
         */
     onActivate(event) {

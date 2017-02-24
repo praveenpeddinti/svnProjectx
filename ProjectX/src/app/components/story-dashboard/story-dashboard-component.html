@@ -22,18 +22,33 @@
         >
 
 <!-- Column Template -->
+<!--The table column(s) width take dynamically.
+Row classes are also dynamically. These classes are pass to service layer-->
  <ngx-datatable-column *ngFor="let column of columns;let i=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
   [flexGrow]="column.flexGrow">
   <template let-row="row" ngx-datatable-cell-template>
     <div class="{{column.class}} ">
-      <img *ngIf="row[i].field_name=='Id'" src="assets/images/storyicon.png" />
-      <!--<img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="assets/images/task.png"  title="{{row.Fields[3].readable_value.Name}}" />-->
+
+      <!--This img tag belongs to Ticket Id-->
+      <img *ngIf="row[i].other_data==1" src="assets/images/storyicon.png" />
+      <img *ngIf="row[i].other_data==2" src="assets/images/task.png" />
+      
+
+      <!--This img tag belongs to Assigned to column i.e UserName and Profile Pic -->
       <img *ngIf="row[i].field_name=='assignedto' && row[i].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
-        src="{{row[i].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> {{row[i].field_value}}
+        src="{{row[i].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> 
+        
+        {{row[i].field_value}}
+
+      <!--This i tag belongs to priority to column -->
       <i *ngIf="row[i].field_name=='priority'" class="fa fa-circle {{row[i].field_value}}" aria-hidden="true"></i>
+      <!-- End-->
+
     </div>
   </template>
 </ngx-datatable-column>
+<!-- Column Template -->
+
 </ngx-datatable>
 
 
