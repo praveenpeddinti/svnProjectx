@@ -1,98 +1,109 @@
 <div fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event) class="paddingbottom10">
 
-    <div class="titlearea  ">
-  <div class="row">
-    <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
-      
-  <div class="ticketidarea">
-      <img *ngIf="ticketData?.data?.StoryType?.Id==1" src="assets/images/storyicon.png"  title="{{ticketData?.data?.StoryType?.Name}}"  />
-        
-        <img  *ngIf="ticketData?.data?.StoryType?.Id==2" src="assets/images/task.png" title="{{ticketData?.data?.StoryType?.Name}}" /> 
-       #{{ticketData?.data?.TicketId}}</div>
-  </div>
-  <div class="col-xs-12 col-sm-9 col-md-9">
-  <div class="ticketdescriptionarea minheight50">
-  
-  <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle()" [hidden]="!showTitleEdit"></div>
-    <input class="editinput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
-    <div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''"></div>
-  </div>
-  </div>
-  </div>
-  </div>
+        <div class="titlearea  ">
+          <div class="row">
+              <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
+                  <div class="ticketidarea">
+                      <img *ngIf="ticketData?.data?.StoryType?.Id==1" src="assets/images/storyicon.png"  title="{{ticketData?.data?.StoryType?.Name}}"  />
+                      <img  *ngIf="ticketData?.data?.StoryType?.Id==2" src="assets/images/task.png" title="{{ticketData?.data?.StoryType?.Name}}" /> 
+                      #{{ticketData?.data?.TicketId}}
+                  </div>
+              </div>
+            <div class="col-xs-12 col-sm-9 col-md-9">
+              <div class="ticketdescriptionarea minheight50">
+                <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle()" [hidden]="!showTitleEdit">
+                </div>
+                <input class="editinput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
+                <div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
   </div>
 
 <div fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event) class="row">
-  <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom">
-<div class="leftpaneldiv">
- <div class="leftpanelsections">
-<button  class="normal bluebutton bluebuttonmedium" (click)="onClick()">Edit</button>
-</div>
-<div>
- 
-  <div *ngFor="let field of fieldsData;let i=index;">
-    <div class="leftpanelsections">
-                    <label for="email" class="leftlabels">{{field.title}}</label>
-                   
-                    <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elIid}}">{{field.value}}</div>
-   
-    
-   
-<div class="leftreadonlyfontgreycolor customcalender" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
+      <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom">
+          <div class="leftpaneldiv">
+              <div class="leftpanelsections">
+                  <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">Edit</button>
+              </div>
+              <div>
+                  <div *ngFor="let field of fieldsData;let i=index;">
+                      <div class="leftpanelsections">
+                           <label for="email" class="leftlabels">{{field.title}}</label>
+                           <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elIid}}">
+                             {{field.value}}
+                           </div>
+                      
+                    <div class="leftreadonlyfontgreycolor customcalender" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
+                        <div (click)="editThisField($event,i,field.elId,field.Id,field.title,field.renderType)" [hidden]="!showMyEditableField[i]" data-text="not readonly" 
+                             id="{{field.elId}}" class="{{(field.title=='Status')? field.value:''}}">
+                            {{(field.value == "") ? '--': field.value}} 
+                            <i *ngIf="field.title == 'Priority'"  class="fa fa-circle {{field.value}}" aria-hidden="true">
+                            </i>
+                        </div>
 
-  <div (click)="editThisField($event,i,field.elId,field.Id,field.title,field.renderType)" [hidden]="!showMyEditableField[i]" data-text="not readonly" 
-    id="{{field.elId}}" class="{{(field.title=='Status')? field.value:''}}">{{(field.value == "") ? '--': field.value}} <i *ngIf="field.title == 'Priority'"  class="fa fa-circle {{field.value}}" aria-hidden="true"></i></div>
+                        <input *ngSwitchCase="'input'" class="editinput" (keyup.enter)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
+                            (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" />
 
-  <input class="editinput" *ngSwitchCase="'input'" (keyup.enter)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
-    (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
+                        <p-calendar *ngSwitchCase="'date'" [(ngModel)]="dateVal" class="primeDateComponent" name="date_{{i}}" (onBlur)="dateBlur($event,i)" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="mm-dd-yy">
+                        </p-calendar>
 
-<p-calendar [(ngModel)]="dateVal" class="primeDateComponent" name="date_{{i}}" (onBlur)="dateBlur($event,i)" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' *ngSwitchCase="'date'" [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="mm-dd-yy"></p-calendar>
-<textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)"></textarea>
-<div class="customdropdown">
+                        <textarea *ngSwitchCase="'textarea'" class="custtextarea width100per" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
+                        </textarea>
 
-  <p-dropdown [style]="{'width':'100%'}" [ngModel]="field.valueId"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" *ngSwitchCase="'select'" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" ></p-dropdown>
-      <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
-</div>
-</div>
- </div>
-</div>
-
-</div>
-
-
-</div>
-</div>
- <div class="col-xs-12 col-sm-9 col-md-9">
-   <div>
-   <div class="rightdescriptionarea" [hidden]="!showDescEditor">
-        
-          <div style="position: relative">
-    <div class="custwordwrap artifacts" [innerHTML]="ticketDesc" id="{{ticketData?.data?.TicketId}}_desc" (dblclick)="openDescEditor()" >
-    </div>  </div> </div>
-        <div [hidden]="showDescEditor">
-      <div class="rightdescriptionarea">
-  <div style="position: relative">
-                <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
- 
-                    (drop)="fileUploadEvent($event, 'fileDrop')" >
+                        <div class="customdropdown">
+                            <p-dropdown *ngSwitchCase="'select'" [style]="{'width':'100%'}" [ngModel]="field.valueId"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" >
+                            </p-dropdown>
+                            <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
+                        </div>
+                    </div>
+                  </div>
                 </div>
-     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
-            <ckeditor #editor [config]="toolbarForDetail" [(ngModel)]="ticketEditableDesc" name="ticketEditableDesc" required debounce="500">
-            </ckeditor>
-     </div>
-     <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''"></div>
- <div class="uploadcomponent margintop15">
-        <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
-        <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  /></div>
-       </div>
-<div class="buttonarea alignright">
-  <button class="normal bluebutton bluebuttonmedium" (click)="submitDesc()">SUBMIT</button>
-  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">CANCEL</button>
-</div>
+              </div>
+          </div>
+    </div>
 
-        
+    <div class="col-xs-12 col-sm-9 col-md-9">
+      <div>
+        <div class="rightdescriptionarea" [hidden]="!showDescEditor">
+             <div style="position: relative">
+                  <div class="custwordwrap artifacts" [innerHTML]="ticketDesc" id="{{ticketData?.data?.TicketId}}_desc" (dblclick)="openDescEditor()" >
+                  </div>  
+             </div> 
+        </div>
+        <div [hidden]="showDescEditor">
+            <div class="rightdescriptionarea">
+                <div style="position: relative">
+                     <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
+                          (drop)="fileUploadEvent($event, 'fileDrop')" >
+                     </div>
+                     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     </div>
+                     <ckeditor #editor [config]="toolbarForDetail" [(ngModel)]="ticketEditableDesc" name="ticketEditableDesc" required >
+                     </ckeditor>
+                </div>
+                <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+                </div>
+                <div class="uploadcomponent margintop15">
+                      <div class="uploadbottom">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        File upload
+                      </div>
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  />
+                </div>
+            </div>
+            <div class="buttonarea alignright">
+                  <button class="normal bluebutton bluebuttonmedium" (click)="submitDesc()">
+                    SUBMIT
+                  </button>
+                  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">.
+                    CANCEL
+                  </button>
+            </div>
+          </div>
+
       </div>
-
-  </div>
-</div>
+    </div>
 </div>
