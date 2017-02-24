@@ -12,6 +12,8 @@ export class Constants {
    public baseUrl = 'https://10.10.73.62/';
     
    public loginUrl = this.baseUrl+"site/user-authentication";
+   public getAllTicketDetails = this.baseUrl + "story/get-all-ticket-details";
+   public taskDetailsById = this.baseUrl + "story/get-ticket-details";
 
   constructor() {
     console.log('Hello Constants Provider');
