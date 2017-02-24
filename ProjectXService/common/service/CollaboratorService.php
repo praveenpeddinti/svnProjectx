@@ -41,7 +41,6 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
         try {
             $model = new AccessTokenCollection();
             $remembermeStatus= $model->checkCollabaratorStatus($collabaratorId);
-            //error_log("asssssssssssssssss".print_r($remembermeStatus,1));
             return $remembermeStatus;
         } catch (Exception $ex) {
             Yii::log("AccesstokenService:getCollabaratorAccesstoken::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -55,7 +54,6 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
      */     
     public function saveCollabaratortokenData($accesstoken="",$collabaratorId=0,$browserType,$remembermeStatus=""){
         try{
-            //error_log("bbbbbbbbb###########".$accesstoken.$collabaratorId);
             $model = new AccessTokenCollection();
             return $tokenData= $model->saveAccesstokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
         } catch (Exception $ex) {

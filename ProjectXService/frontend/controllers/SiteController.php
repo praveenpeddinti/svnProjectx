@@ -177,10 +177,8 @@ class SiteController extends Controller
     public function actionUserAuthentication(){
         try{
             $CollabaratorData = json_decode(file_get_contents("php://input"));
-           // error_log("34444444444".print_r($CollabaratorData,1));
             $model = new LoginForm();
             $getcollaboratorData = $model->checkLoginData($CollabaratorData);
-           // error_log("helloo5555556777".print_r($getcollaboratorData,1));
              if(count($getcollaboratorData)==1 && $getcollaboratorData !='failure'){
                 $collabaratorId=$getcollaboratorData[0]['Id'];
                 $remembermeStatus=isset($CollabaratorData->rememberme)?1:0;
@@ -193,7 +191,6 @@ class SiteController extends Controller
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::SUCCESS;
                     $responseBean->message = "success";
-                  //  $responseBean->data =    array('email'=>$CollabaratorData->username,"token"=>$accesstoken);
                     $responseBean->data =    $collabaratorArr;
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==1) {
@@ -213,7 +210,6 @@ class SiteController extends Controller
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::SUCCESS;
                     $responseBean->message = "success";
-                  //  $responseBean->data =    array('email'=>$CollabaratorData->username,"token"=>$accesstoken);
                     $responseBean->data =    $collabaratorArr;
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }
@@ -223,7 +219,6 @@ class SiteController extends Controller
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::FAILURE;
                     $responseBean->message = "FAILURE";
-                  //  $responseBean->data =    array('email'=>$CollabaratorData->username,"token"=>$accesstoken);
                     $responseBean->data =    $response;
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
            }
@@ -254,15 +249,12 @@ class SiteController extends Controller
     public function actionUpdateCollabaratorStatus(){
         try{
 //          $headerff=Yii::$app->request->getHeaders()->get('Authorization');
-//          error_log("dddddddddddddddweww".print_r($headerff,1));
             $collabaratorJson = json_decode(file_get_contents("php://input"));
-            //error_log("hellooooooooooo@@@@@@@@@@@@@".$collabaratorJson->userInfo->token);
             $collabaratorToken=$collabaratorJson->userInfo->token;
             $updateStatus  = ServiceFactory::getCollaboratorServiceInstance()->updateStatusCollabarator($collabaratorToken);
             $responseBean     = new ResponseBean;
             $responseBean->status = ResponseBean::SUCCESS;
             $responseBean->message = "success";
-            //  $responseBean->data =    array('email'=>$user_data->username,"token"=>$accesstoken);
             $responseBean->data =    $updateStatus;
             return  $response = CommonUtility::prepareResponse($responseBean,"json");
         } catch (Exception $ex) {

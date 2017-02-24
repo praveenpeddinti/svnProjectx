@@ -64,7 +64,7 @@ class AccessTokenCollection extends ActiveRecord
     * @author Padmaja
     * @description This is to checkCollabaratorStatus
     * @return type 
-    * @param type $accesstoken,$collabaratorId,$browserType
+    * @param type $collabaratorId
      */     
     public function checkCollabaratorStatus($collaboratorId)
     {
@@ -101,10 +101,7 @@ class AccessTokenCollection extends ActiveRecord
             $ActiveUsersObj->DeviceType="";
             $ActiveUsersObj->Rememberme=$remembermeStatus;
             $ActiveUsersObj->UpdatedBy="";
-            //$ActiveUsersObj->insert();  
-            //unset($Obj);
-           if ($ActiveUsersObj->insert()) {
-                error_log("**************");
+            if ($ActiveUsersObj->insert()) {
                 $returnValue = $ActiveUsersObj->_id;
             }
             return $returnValue; 
@@ -124,7 +121,6 @@ class AccessTokenCollection extends ActiveRecord
         try{
             $updateSatus= AccessTokenCollection::getCollection();
             $returnStatus = $updateSatus->update( array("Accesstoken"=> $collabaratortoken ), array('Status' => (int)0,'UpdatedBy'=>(String)'User'));
-           // error_log("restul-------------".  print_r($returnStatus,1));
             return $returnStatus;
         } catch (Exception $ex) {
              Yii::log("AccessTokenCollection:updateStatusByToken::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

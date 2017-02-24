@@ -57,16 +57,14 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
     /**
      * @author Padmaja
      * @description This is to get the  Collaborator data
-     * @return type json object
+     * @return type 
      * 
      */   
     public static function getCollaboratorDetails($userData)
     {
         try{
             $returnValue='failure';
-           // error_log("findByUsername---".print_r($userData,1));
             $qry = "select * from Collaborators where Email='".$userData->username."' And Password= md5('".$userData->password."')";
-            error_log("queryyyyyyyyyyyyyyy".$qry);
             $collabaratorData = Yii::$app->db->createCommand($qry)->queryAll();
              if(sizeof($collabaratorData)>0){
                 $returnValue=$collabaratorData;

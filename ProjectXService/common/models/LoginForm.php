@@ -92,9 +92,7 @@ class LoginForm extends Model
     public function checkLoginData($userData){
         try{
             $returnValue='failure';
-           // error_log("dddddds#########@@@@".print_r($userData,1));
             $userData = Collaborators::getCollaboratorDetails($userData);
-            // error_log("++++++++loginAjax++++++++++".print_r($userData,1));
             if(sizeof($userData)>0){
                 $returnValue=$userData;
             }
