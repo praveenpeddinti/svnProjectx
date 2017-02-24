@@ -18,22 +18,19 @@ export class LoginComponent implements OnInit{
     public submitted = false;
     public checkData=false;
     returnUrl: string;
+    /*
+    * Added by Padmaja
+    * if the user object is set then we redirecting to dashboard page and if it is not set then redirecting to login
+    */
     ngOnInit(){
-        // reset login status
-        //this._service.logout();
- 
-        // get return url from route parameters or default to '/'
-       // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    var getAllObj=JSON.parse(localStorage.getItem("user"));
+     var getAllObj=JSON.parse(localStorage.getItem("user"));
     if(getAllObj != null){
         this._router.navigate(['story-dashboard']); 
     }else{
         this._router.navigate(['login']); 
     }
     }
-    onSubmit() {
-        this.submitted = true;
-    }
+
     constructor(
         private _router: Router,
         private _service: LoginService,
