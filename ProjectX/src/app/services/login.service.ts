@@ -19,16 +19,15 @@ export class LoginService {
     private _ajaxService: AjaxService,
     public _router: Router,
     private http: Http) { }
-// logout the Collabarator
+/*
+  * Added by Padmaja
+  * logout the current Collabarator
+ */
   logout(logoutCallback) {
-   //  var getAllData= JSON.parse(localStorage.getItem("user"));
-
-     this._ajaxService.AjaxSubscribe("site/update-collabarator-status",{},function(result){
+      this._ajaxService.AjaxSubscribe("site/update-collabarator-status",{},function(result){
        localStorage.removeItem("user");
        logoutCallback(result);
- }); 
-   
-
+    }); 
   }
 
   public collaboratorObj = {
@@ -36,7 +35,6 @@ export class LoginService {
     'password': '',
     'rememberme':'',
   }
-
  
 // posting collaboratorObject to UserAuthentication
   

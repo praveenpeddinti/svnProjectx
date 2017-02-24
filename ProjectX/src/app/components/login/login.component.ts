@@ -40,26 +40,29 @@ export class LoginComponent implements OnInit{
         private _authGuard:AuthGuard,
         private route: ActivatedRoute
         ) { }
-
+/*
+* Added by Padmaja
+*This is login used for login of the user it returns string if it is error and redirect to the dashboard page if it is success
+*/        
     login() {
         this._service.login(this.user,(data)=>{ 
             if(data.status==200){
-              this._router.navigate(['story-dashboard']);  
+                this._router.navigate(['story-dashboard']);  
             }else{
-           // console.log("comming..");
-           this.checkData=true;
-            this.errorMsg = 'Invalid Email/Password';
+                this.checkData=true;
+                this.errorMsg = 'Invalid Email/Password';
             }
 
         });
 
     }
-
+/*
+* Added by Padmaja
+* Validating Email in Email pattern
+*/
     validateEmail(email){
-        console.log("------"+email);
-        var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       this.isEmailValid = pattern.test(email); 
-       console.log("------"+this.isEmailValid); 
     }
 }
 
