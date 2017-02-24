@@ -267,16 +267,14 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
      */
     public function getAllStoryDetails($StoryData, $projectId) {
         try {
-            $model = new TicketCollection();
-            $ticketDetails = $model->getAllTicketDetails($StoryData, $projectId);
+            $ticketModel = new TicketCollection();
+            $ticketDetails = $ticketModel->getAllTicketDetails($StoryData, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array();
-           // $fieldsOrderArray = [5,7,10,3];
-              $fieldsOrderArray = [5,6,7,3,10];
+            $fieldsOrderArray = [5,6,7,3,10];
+           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             foreach ($ticketDetails as $ticket) {
-                error_log("--------ticketid---------------".$ticket["TicketId"]);
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
                 array_push($finalData, $details);
-                //break;
             }
             return $finalData;
         } catch (Exception $ex) {
@@ -335,20 +333,26 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
               $description = $ticket_data->description;
               $ticketDetails["CrudeDescription"] = $description;
             $ticketDetails["Description"] = CommonUtility::refineDescription($description);
-              
+          //  error_log("data---".print_r($ticket_data,1));
              // unset($ticket_data->title);
              // unset($ticket_data->description);
                foreach ($ticketDetails["Fields"] as &$value) {
                  $fieldId =  $value["Id"];
                 
                      if(isset($ticket_data->$fieldId)){
+                         
+                        $fieldDetails =  StoryFields::getFieldDetails($fieldId);
                          if(is_numeric($ticket_data->$fieldId)){
                               $value["value"] = (int)$ticket_data->$fieldId;  
                          }else{
                              if($ticket_data->$fieldId != ""){
-                                  $validDate = CommonUtility::validateDate($ticket_data->$fieldId);
-                                 if($validDate){
-                                 $value["value"] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000); 
+                                 
+                                 if($fieldDetails["Type"] == 4){
+                                       $validDate = CommonUtility::validateDate($ticket_data->$fieldId);
+                                      if($validDate){
+                                     $value["value"] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000); 
+                                 }
+                                
                              }else{
                                  $value["value"] = $ticket_data->$fieldId; 
                              } 
