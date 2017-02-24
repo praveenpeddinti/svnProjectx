@@ -9,7 +9,7 @@ import { Http, Headers } from '@angular/http';
     selector: 'story-dashboard-view',
     providers: [StoryService],
     templateUrl: 'story-dashboard-component.html',
-    
+
 })
 
 export class StoryDashboardComponent {
@@ -19,7 +19,8 @@ export class StoryDashboardComponent {
     limit: number = 10;
     sortvalue: string = "TicketId";
     sortorder: string = "desc";
-
+    loading: boolean = false;
+    columns = [{ name: 'Id', flexGrow: 1, sortby: 'Id', class:'' }, { name: 'Title', flexGrow: 4, sortby: 'Title', class:'titlecolumn' }, { name: 'Assigned to', flexGrow: 2, sortby: 'assignedto', class:'' }, { name: 'Priority', flexGrow: 1, sortby: 'priority', class:'prioritycolumn' }, { name: 'Status', flexGrow: 1, sortby: 'workflow', class:'statusbold' }, { name: 'Bucket', flexGrow: 1, sortby: 'bucket', class:'' }, { name: 'Due Date', flexGrow: 1, sortby: 'duedate', class:'' }];
     expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
@@ -33,92 +34,60 @@ export class StoryDashboardComponent {
 
     page(offset, limit, sortvalue, sortorder) {
         this._service.getAllStoryDetails(1, offset, limit, sortvalue, sortorder, (response) => {
-            // alert(offset+"----Servicemethod---"+limit+"---sortvalue----"+sortvalue+"==="+sortorder);
             let jsonForm = {};
             if (response.statusCode == 200) {
                 const start = offset * limit;
                 const end = start + limit;
                 let rows = [...this.rows];
-                //alert(start + "--------" + end);
-                // rows.splice(0);
-                /*for (let i = 0; i < 10; i++) {
-                    console.log("====server response===" + response.data[i]);
-                    rows[i + start] = response.data[i];
-                }*/
-                
                 for (let i = 0; i < 10; i++) {
-                    rows[i+start] = response.data[i];
-                    //console.log("==end======data table view===" + JSON.stringify(rows[i].TicketId));
-                    
+                    rows[i + start] = response.data[i];
                 }
                 this.rows = rows;
                 this.count = response.totalCount;
-                //console.log("==end======data table view===" + JSON.stringify(this.rows));
-
             } else {
                 console.log("fail---");
             }
         });
     }
 
-    onPage(event) {//alert("----onpage====");
-        //console.log('Page Event', event);
+    onPage(event) {
         this.offset = event.offset;
         this.limit = event.limit;
-        //this.page(event.offset, event.limit,this.sortvalue);
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
     }
-    /*oldonSort(event) {
-        //alert(this.offset+"----OnSort---"+this.limit+"---sortvalue----"+this.sortvalue);
-        this.sortvalue = event.sorts[0].prop;
-        this.sortorder = event.sorts[0].dir;
-        //alert(this.offset + "----OnSort---" + this.limit + "---sortvalue----" + this.sortvalue);
-        //console.log(event, '----event----', event.sorts[0].dir, ' Sort Event', event.sorts[0].prop);
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
-    }*/
-loading: boolean = false;
+
+
     onSort(event) {
-    // event was triggered, start sort sequence
-    //console.log('Sort Event', event);
-    this.loading = true;
-    // emulate a server request with a timeout
-    setTimeout(() => {
-      const rows = [...this.rows];
-      // this is only for demo purposes, normally
-      // your server would return the result for
-      // you and you would just set the rows prop
-      const sort = event.sorts[0];
-      //alert("sort----"+sort.prop);
-      rows.sort((a, b) => {
-         //alert("----a----"+a[sort.prop]);
-        return a[sort.prop].localeCompare(b[sort.prop]) * (sort.dir === 'desc' ? -1 : 1);
-      });
-
-      this.rows = rows;
-      //console.log("========sorting===" +JSON.stringify(this.rows));
-      this.loading = false;
-    }, 1000);
-  }
-  
-
-    onActivate(event) {
-
-if(event.hasOwnProperty("row")){
-    console.log("yes, i have that property");
- this._router.navigate(['story-detail', event.row.TicketId]);
-}
-    
-//
+        this.loading = true;
+        // emulate a server request with a timeout
+        setTimeout(() => {
+            const rows = [...this.rows];
+            const sort = event.sorts[0];
+            rows.sort((a, b) => {
+                for (var i = 0; i < a.length; i++) {
+                    if (a[i].field_name == sort.prop) {
+                        var fisrtValue = a[i].field_value;
+                        var secondValue = b[i].field_value;
+                        return fisrtValue.toString().localeCompare(secondValue) * (sort.dir === 'desc' ? -1 : 1);
+                    }
+                }
+            });
+            this.rows = rows;
+            this.loading = false;
+        }, 1000);
     }
+
+    /** @Praveen P
+        * Pass the TicketId for story-detail component
+        */
+    onActivate(event) {
+        if (event.hasOwnProperty("row")) {
+            this._router.navigate(['story-detail', event.row[0].field_value]);
+        }
+    }
+    
     renderStoryForm() {
         this._router.navigate(['story-form']);
-    }
-    /** @Praveen P
-    * Pass the TicketId for story-detail component
-    */
-    showStoryDetail(row) {
-        //console.log('Toggled Expand Row!', row.TicketId);
-        this._router.navigate(['story-detail', row.TicketId]);
     }
 
 }

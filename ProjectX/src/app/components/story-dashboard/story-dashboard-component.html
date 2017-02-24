@@ -1,11 +1,8 @@
 <!-- Menu -->
-
 <div class="custom_menu">
   <button data-toggle="tooltip" data-placement="top" title="List view" class="normal"><i class="fa fa-list" aria-hidden="true"></i></button>
   <button (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="normal bluebutton"><i class="fa fa-plus" aria-hidden="true"></i></button>
 </div>
-
-
 
 <ngx-datatable 
         class="material expandable customdatatable"
@@ -18,66 +15,25 @@
         [count]="count"
         [offset]="offset"
         [limit]="limit"
+        [sortable]= "true"
         (page)="onPage($event)"
         (sort)="onSort($event)"
         (activate)="onActivate($event)"
         >
 
-
 <!-- Column Template -->
-
-  <ngx-datatable-column name="Id" prop="TicketId" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" ngx-datatable-cell-template>
-      <div title="{{row.Fields[3].readable_value.Name}}">
-        <img *ngIf="row.Fields[3].readable_value.Name=='Story'" src="assets/images/storyicon.png"   title="{{row.Fields[3].readable_value.Name}}" />
-        
-        <img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="assets/images/task.png"  title="{{row.Fields[3].readable_value.Name}}" />
-        #{{row.TicketId}}
-      </div>
-    </template>
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Title" prop="Title" [resizeable]="false" [flexGrow]="4">
-    <template let-row="row" ngx-datatable-cell-template>
-      <div class="titlecolumn" title="{{row.Fields[3].readable_value.Name}}">
-            {{row.Title}}
-            </div>
-    </template>
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Assigned to" prop="assignedTo" [resizeable]="false" [flexGrow]="2">
-    <template let-row="row" ngx-datatable-cell-template>
-      <div *ngIf="row.Fields[4].value!=''"  style="position: relative;word-wrap: break-word;padding-left:32px;padding-top:2px">
-      <img data-toggle="tooltip" data-placement="top"    class="profilepic_table" style="position: absolute;left:0;top:-1px;"  src="{{row.Fields[4].readable_value.ProfilePicture}}" data-toggle="tooltip" data-placement="top" title="{{row.Fields[4].readable_value.UserName}}"/> 
-        {{row.Fields[4].readable_value.UserName}}
-      </div>
-    </template>
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Priority" prop="priority" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" ngx-datatable-cell-template>
-      <div class="prioritycolumn">{{row.Fields[5].readable_value.Name}} <i class="fa fa-circle {{row.Fields[5].readable_value.Name}}" aria-hidden="true"></i></div>
-    </template>
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Bucket" prop="Bucket" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" ngx-datatable-cell-template>
-      {{row.Fields[2].readable_value.Name}}
-    </template>
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Status" prop="Status" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" ngx-datatable-cell-template >
-      <div class="statusbold {{row.Fields[6].readable_value.Name}}">{{row.Fields[6].readable_value.Name}}</div>
-    </template>
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Due Date" prop="Due Date" [flexGrow]="1" [resizeable]="false">
-    <template let-row="row" let-i="i" ngx-datatable-cell-template>
-
-      {{row.Fields[9].readable_value}}
-      
-
-    </template>
-  </ngx-datatable-column>
-
-
-
-
+ <ngx-datatable-column *ngFor="let column of columns;let i=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
+  [flexGrow]="column.flexGrow">
+  <template let-row="row" ngx-datatable-cell-template>
+    <div class="{{column.class}} ">
+      <img *ngIf="row[i].field_name=='Id'" src="assets/images/storyicon.png" />
+      <!--<img  *ngIf="row.Fields[3].readable_value.Name=='Task'" src="assets/images/task.png"  title="{{row.Fields[3].readable_value.Name}}" />-->
+      <img *ngIf="row[i].field_name=='assignedto' && row[i].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
+        src="{{row[i].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> {{row[i].field_value}}
+      <i *ngIf="row[i].field_name=='priority'" class="fa fa-circle {{row[i].field_value}}" aria-hidden="true"></i>
+    </div>
+  </template>
+</ngx-datatable-column>
 </ngx-datatable>
 
 
