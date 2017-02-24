@@ -19,7 +19,7 @@ private editableSelect= "";
 public blurTimeout=[];
 
 
-@ViewChild('editor')  txt_area;
+@ViewChild('detailEditor')  detail_ckeditor;
   public clickedOutside = false;
   public dragTimeout;
   public minDate:Date;
@@ -101,25 +101,23 @@ public blurTimeout=[];
 
   private descError="";
   submitDesc(){
-    // alert(JSON.stringify(jQuery(this.ticketEditableDesc).text().trim()));
-    setTimeout(()=>{
-        if(this.ticketEditableDesc != "" && jQuery(this.ticketEditableDesc).text().trim() != ""){
+      var editorData = this.detail_ckeditor.instance.getData();
+          if(editorData != "" && jQuery(editorData).text().trim() != ""){
           this.descError = "";
         this.showDescEditor = true;
         // Added by Padmaja for Inline Edit
         var postEditedText={
           isLeftColumn:0,
           id:'Description',
-          value:this.ticketEditableDesc,
+          value:editorData,
           TicketId:this.ticketId,
           EditedId:'desc'
         };
         this.postDataToAjax(postEditedText);
-        this.ticketCrudeDesc = this.ticketEditableDesc;
+        this.ticketCrudeDesc = editorData;//this.ticketEditableDesc;
         }else{
           this.descError = "Description cannot be empty.";
         }
-    },200);
 
   }
 

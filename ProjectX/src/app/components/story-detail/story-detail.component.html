@@ -14,8 +14,8 @@
                 <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle()" [hidden]="!showTitleEdit">
                 </div>
                 <input class="editinput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
-                <div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
-                </div>
+                <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
+                </div>-->
               </div>
             </div>
           </div>
@@ -81,7 +81,7 @@
                      </div>
                      <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/>
                      </div>
-                     <ckeditor #editor [config]="toolbarForDetail" [(ngModel)]="ticketEditableDesc" name="ticketEditableDesc" required >
+                     <ckeditor #detailEditor [config]="toolbarForDetail" [(ngModel)]="ticketEditableDesc" name="ticketEditableDesc" required >
                      </ckeditor>
                 </div>
                 <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
@@ -98,7 +98,7 @@
                   <button class="normal bluebutton bluebuttonmedium" (click)="submitDesc()">
                     SUBMIT
                   </button>
-                  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">.
+                  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">
                     CANCEL
                   </button>
             </div>
