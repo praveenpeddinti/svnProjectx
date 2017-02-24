@@ -8,6 +8,7 @@ class FieldBean {
     public $Id;
     public $title;
     public $value;
+    public $value_name="";
    
     
 }
