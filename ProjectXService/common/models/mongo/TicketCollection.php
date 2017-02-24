@@ -167,14 +167,20 @@ class TicketCollection extends ActiveRecord
                $order=-1;
            if($StoryData->sortorder=='asc') 
                $order=1;
-          $query = new Query();
-           $query->select($select);
-            $query->from('TicketCollection')
-                    ->where(["ProjectId" => $projectId])
-                    ->limit($StoryData->pagesize)
-                    ->offset(($StoryData->offset*$StoryData->pagesize))
-                    ->orderBy(["TicketId" => -1]);
-        $ticketDetails = $query->all();
+
+        
+           $options = array(
+               "sort" => array("Fields.assignedto.value_name" => 1),
+               "limit" => 1,
+               "skip" => 0
+           );
+         $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+         $cursor =  $collection->find( array(),array(),$options);
+         //error_log("count------------------".$cursor); 
+      // $cursor->sort(array('TicketId' => 1));
+         $ticketDetails = iterator_to_array($cursor);
+         
+        
         return $ticketDetails;  
       } catch (Exception $ex) {
       Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
