@@ -19,7 +19,7 @@ private editableSelect= "";
 public blurTimeout=[];
 
 
-@ViewChild('detailEditor')  detail_ckeditor;
+@ViewChild('detailEditor')  detail_ckeditor; // reference for editor in view.
   public clickedOutside = false;
   public dragTimeout;
   public minDate:Date;
@@ -31,10 +31,13 @@ public blurTimeout=[];
   private ticketDesc = "";
   private ticketCrudeDesc = "";
   private showDescEditor=true;
+
+  //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
     ],removePlugins:'elementspath',resize_enabled:true};
-
+  
+  //common array for Dropdown's option.
   private dropList=[];
 
   public filesToUpload: Array<File>;
@@ -53,13 +56,14 @@ public blurTimeout=[];
   ngOnInit() {
      var thisObj = this;
     jQuery(document).ready(function(){
-      jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                              
+      jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                            //sets the flag, to know if the click happend on the dropdown or outside  
           if(jQuery(event.target).closest('div.customdropdown').length == 0){
           thisObj.clickedOutside = true;
           }else{
           thisObj.clickedOutside = false;
           }
 
+          //sets the flag, to know if the click happend on the datepicker or outside
           if(jQuery(event.target).closest('p-calendar.primeDateComponent').length == 0){
           thisObj.calenderClickedOutside = true;
           }else{
@@ -183,7 +187,7 @@ closeTitleEdit(editedText){
           ProjectId:this.ticketData.data.Project.PId,
           TicketId:this.ticketData.data.TicketId
         };
-
+        //Fetches the field list data for current dropdown in edit mode.
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
             { 
                 var currentId = document.getElementById(inptFldId+"_currentSelected").getAttribute("value");
@@ -194,10 +198,12 @@ closeTitleEdit(editedText){
                 
                 var priority=(fieldTitle=="Priority"?true:false);
                 this.dropList=this.prepareItemArray(listData.list,priority,fieldTitle);
+                //sets the dropdown prefocused
                 jQuery("#"+inptFldId+" div").click();
                 
             });
     }else if(renderType == "date"){
+      //sets the datepicker prefocused
       setTimeout(()=>{
         jQuery("#"+inptFldId+" span input").focus();
       },150);    
@@ -396,7 +402,7 @@ private dateVal = new Date();
 //----------------------File Upload codes---------------------------------
 public fileOverBase(fileInput:any):void {
     this.hasBaseDropZoneOver = true;
-    if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ console.log("clear---");
+    if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){
     clearTimeout(this.dragTimeout);
     }
 
