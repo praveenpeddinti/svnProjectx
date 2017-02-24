@@ -484,7 +484,12 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             array_push($arr2ordered,$ticketTitle);
             
             
-            foreach ($ticketDetails["Fields"] as $value) {
+            foreach ($ticketDetails["Fields"] as $key=>$value) {
+                
+                if($key == "planlevel"){
+                    $arr2ordered[0]["other_data"] = $value["value"];
+                }
+                
                 if(in_array($value["Id"], $fieldsOrderArray)){
                     
                if(isset($value["custom_field_id"] )){
