@@ -157,55 +157,54 @@ class TicketCollection extends ActiveRecord
     }
 
      
-  /**
+    /**
      * @author Praveen P
      * @return type
      */
-    public static function getAllTicketDetails($StoryData,$projectId,$select=[]){
-      try{
-           if($StoryData->sortorder=='desc')
-               $order=-1;
-           if($StoryData->sortorder=='asc') 
-               $order=1;
-
-        
-           $options = array(
-               "sort" => array("Fields.assignedto.value_name" => 1),
-               "limit" => 1,
-               "skip" => 0
-           );
-         $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-         $cursor =  $collection->find( array(),array(),$options);
-         //error_log("count------------------".$cursor); 
-      // $cursor->sort(array('TicketId' => 1));
-         $ticketDetails = iterator_to_array($cursor);
-         
-        
-        return $ticketDetails;  
-      } catch (Exception $ex) {
-      Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
-      }  
+    public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
+        try {
+            if ($StoryData->sortorder == 'desc')
+                $order = -1;
+            if ($StoryData->sortorder == 'asc')
+                $order = 1;
+            if ($StoryData->sortvalue == 'Id')
+                $sortData = "TicketId";
+            else if ($StoryData->sortvalue == 'Title')
+                $sortData = "Title";
+            else
+                $sortData = "Fields." . $StoryData->sortvalue . ".value_name";
+            $options = array(
+                "sort" => array($sortData => $order),
+                "limit" => $StoryData->pagesize,
+                "skip" => $StoryData->offset * $StoryData->pagesize
+            );
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $cursor = $collection->find(array(), array(), $options);
+            $ticketDetails = iterator_to_array($cursor);
+            return $ticketDetails;
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
     }
 
-   /**
+    /**
      * @author Praveen P
      * getting total count.
      * @return type  $projectId
      */
-    public static function getTotalStorys($projectId){
-      try{
+    public static function getTotalStorys($projectId) {
+        try {
             $query = new Query();
             $query->from('TicketCollection')
-                     ->where(["ProjectId" => $projectId]);
+                    ->where(["ProjectId" => $projectId]);
             $totalCount = $query->count();
             return $totalCount;
         } catch (Exception $ex) {
-      Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
-      }  
+            Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
     }
-        /*
+
+    /*
      * @author Padmaja
      * @param type $fieldData
      */
