@@ -1,83 +1,83 @@
 
 <form fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event) #editstoryForm="ngForm"  novalidate="true">
-<div class="paddingbottom10">
+      <div class="paddingbottom10">
 
-    <div class="titlearea  ">
-  <div class="row">
-     <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
-  <div class="ticketidarea">
-        <img *ngIf="ticketData?.StoryType?.Id==1" src="assets/images/storyicon.png"  title="{{ticketData?.StoryType?.Name}}"  />       
-        <img  *ngIf="ticketData?.StoryType?.Id==2" src="assets/images/task.png" title="{{ticketData?.StoryType?.Name}}" /> 
-      #{{ticketData?.TicketId}}</div>
-  </div>
-  <div class="col-xs-12 col-sm-9 col-md-9">
-  <div class="ticketdescriptionarea minheight50">
-    <input type="hidden" [ngModel]="ticketData.TicketId"  name="TicketId">
-    <input id="title" class="editinput" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">
- <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
-  </div>
-  </div>
-  </div>
-  </div>
-  </div>
-
- <div class="row">
-   <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom">  <!-->left panel <-->
-<div class="leftpaneldiv">
-<div>
- 
-  <div *ngFor="let field of fieldsData;let i=index;">
-    <div class="leftpanelsections">
-                    <label for="email" class="leftlabels">{{field.title}}</label>
-                   
-                    <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.id}}">{{field.value}}</div>
- 
-   <div class="leftreadonlyfontgreycolor" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
-      <input class="editinput custominput width100per" *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value">  
-   <div class="customdropdown" *ngSwitchCase="'select'">
-      <p-dropdown  [style]="{'width':'100%'}"  [ngModel]="field.fieldDataId" name="{{field.fieldName}}"  [options]="field.listdata" ></p-dropdown>    
-    </div>  
-   
-    <div class="calbg customcalender" *ngSwitchCase="'date'" >
-     <p-calendar [ngModel]="field.value" name="{{field.fieldName}}" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="mm-dd-yy"></p-calendar>
-    </div>           
-    
-    <textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" name="{{field.fieldName}}" [ngModel]="field.value"></textarea>
-  </div> 
-
- </div>
-</div>
-
-
-</div>
-
-</div>
-</div>
-
- <div class="col-xs-12 col-sm-9 col-md-9">
-   <div>
-
-      <div class="rightdescriptionarea">
-  <div style="position: relative">
-                <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
-  
-                    (drop)="fileUploadEvent($event, 'fileDrop')" >
+        <div class="titlearea  ">
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
+                    <div class="ticketidarea">
+                        <img *ngIf="ticketData?.StoryType?.Id==1" src="assets/images/storyicon.png"  title="{{ticketData?.StoryType?.Name}}"  />       
+                        <img  *ngIf="ticketData?.StoryType?.Id==2" src="assets/images/task.png" title="{{ticketData?.StoryType?.Name}}" /> 
+                        #{{ticketData?.TicketId}}</div>
                 </div>
-     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
-            <ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required    >
-            </ckeditor>
-            <div id="desc_error" [hidden]="true" class="alert alert-danger">Description is Required</div>
-     </div>
- <div class="uploadcomponent margintop15">
-        <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
-        <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  /></div>
-       </div>
-<div class="buttonarea alignright">
-  <button class="normal bluebutton bluebuttonmedium" (click)="editStory(editstoryForm.value)">UPDATE</button>
-  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">CANCEL</button>
-</div>
+                <div class="col-xs-12 col-sm-9 col-md-9">
+                    <div class="ticketdescriptionarea minheight50">
+                        <input type="hidden" [ngModel]="ticketData.TicketId"  name="TicketId">
+                        <input id="title" class="editinput" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">
+                               <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom">  <!-->left panel <-->
+            <div class="leftpaneldiv">
+                <div>
+
+                    <div *ngFor="let field of fieldsData;let i=index;">
+                        <div class="leftpanelsections">
+                            <label for="email" class="leftlabels">{{field.title}}</label>
+
+                            <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.id}}">{{field.value}}</div>
+
+                            <div class="leftreadonlyfontgreycolor" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
+                                <input class="editinput custominput width100per" *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value">  
+                                <div class="customdropdown" *ngSwitchCase="'select'">
+                                    <p-dropdown  [style]="{'width':'100%'}"  [ngModel]="field.fieldDataId" name="{{field.fieldName}}"  [options]="field.listdata" ></p-dropdown>    
+                                </div>  
+
+                                <div class="calbg customcalender" *ngSwitchCase="'date'" >
+                                    <p-calendar [ngModel]="field.value" name="{{field.fieldName}}" [minDate]="minDate" [showIcon]="true" [readonlyInput]="true" dateFormat="mm-dd-yy"></p-calendar>
+                                </div>           
+
+                                <textarea class="custtextarea width100per" *ngSwitchCase="'textarea'" name="{{field.fieldName}}" [ngModel]="field.value"></textarea>
+                            </div> 
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-9 col-md-9">
+            <div>
+
+                <div class="rightdescriptionarea">
+                    <div style="position: relative">
+                        <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
+
+                             (drop)="fileUploadEvent($event, 'fileDrop')" >
+                    </div>
+                    <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
+                    <ckeditor #editor [config]="toolbar"  required  [(ngModel)]="description" name="description"  required    >
+                </ckeditor>
+                <div id="desc_error" [hidden]="true" class="alert alert-danger">Description is Required</div>
+            </div>
+            <div class="uploadcomponent margintop15">
+                <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
+                <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  /></div>
+        </div>
+        <div class="buttonarea alignright">
+            <button class="normal bluebutton bluebuttonmedium" (click)="editStorySubmit(editstoryForm.value)">UPDATE</button>
+            <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">CANCEL</button>
+        </div>
+
+    </div>
 </div>
 
 </div> <!-->main div close <-->
