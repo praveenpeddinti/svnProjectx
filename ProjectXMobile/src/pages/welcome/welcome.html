@@ -26,17 +26,20 @@
 </ion-header>
 <ion-content padding>
     <div>Your logged with <u><b>{{userName}}</b></u></div>
-    <ion-item>
-    <ion-label>Select Name</ion-label>
-    <ion-select type="text">
-    <ion-option >
-        <ion-list>
-            <ion-item>I</ion-item><br>
-            <ion-item>am</ion-item><br>
-            <ion-item>a</ion-item><br>
-            <ion-item>list</ion-item><br>
-        </ion-list>
-    </ion-option> 
-    </ion-select>
-</ion-item>
+
+<button ion-button (click)="storyDetail()">story details</button>
+
 </ion-content>
+
+<ion-pullup #pullup (onExpand)="footerExpanded()" (onCollapse)="footerCollapsed()" [(state)]="footerState">
+    <ion-pullup-tab (tap)="toggleFooter()">
+      <ion-icon name="arrow-up" *ngIf="footerState == 0"></ion-icon>
+      <ion-icon name="arrow-down" *ngIf="footerState == 1"></ion-icon>
+    </ion-pullup-tab>
+    <ion-toolbar color="primary" (tap)="toggleFooter()">
+      <ion-title>Footer</ion-title>
+    </ion-toolbar>
+    <ion-content>
+    ... FOOTER CONTENT ...
+    </ion-content>
+</ion-pullup>

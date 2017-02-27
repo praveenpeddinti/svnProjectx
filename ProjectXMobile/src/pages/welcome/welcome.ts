@@ -3,6 +3,8 @@ import { NavController, NavParams, AlertController, ViewController, LoadingContr
 import { HomePage } from '../home/home';
 import {Storage} from "@ionic/storage";
 import { PopoverPage } from '../popover/popover';
+import { StoryDetailsPage } from '../story-details/story-details'
+
 /*
   Generated class for the Welcome page.
 
