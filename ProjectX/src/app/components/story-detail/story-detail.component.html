@@ -4,6 +4,9 @@
           <div class="row">
               <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
                   <div class="ticketidarea">
+                       <div class="pull-left paddingL10">
+                  <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">Edit</button>
+              </div>
                       <img *ngIf="ticketData?.data?.StoryType?.Id==1" src="assets/images/storyicon.png"  title="{{ticketData?.data?.StoryType?.Name}}"  />
                       <img  *ngIf="ticketData?.data?.StoryType?.Id==2" src="assets/images/task.png" title="{{ticketData?.data?.StoryType?.Name}}" /> 
                       #{{ticketData?.data?.TicketId}}
@@ -24,12 +27,12 @@
   </div>
 
 <div fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event) class="row">
-      <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom">
+      <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom" style="margin:0px;padding:0px;">
           <!--Left Pannel Starts-->
           <div class="leftpaneldiv">
-              <div class="leftpanelsections">
+              <!--<div class="leftpanelsections">
                   <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">Edit</button>
-              </div>
+              </div>-->
               <div>
                   <!--Left pannel fields
                   Loop renders the fields based on the renderType passed in fieldsData-->
