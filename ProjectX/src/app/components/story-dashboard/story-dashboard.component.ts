@@ -5,7 +5,7 @@ import { StoryService } from '../../services/story.service';
 import { Router } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
-
+declare var jQuery:any;
 @Component({
     selector: 'story-dashboard-view',
     providers: [StoryService],
@@ -78,6 +78,9 @@ expanded: any = {};
         @Description: Default routing
         */
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
+        var ScrollHeightDataTable=jQuery(".ngx-datatable").width() - 12;
+       jQuery(".ngx-datatable").css("width",ScrollHeightDataTable);
+
     }
         /*
         @params    :  offset,limit,sortvalue,sortorder
