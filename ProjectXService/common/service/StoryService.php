@@ -411,13 +411,89 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
       }
         /*
     * @author Padmaja
-    * @param type $fieldData
+    * @param type $ticket_data
      */
-    public function getUpdateStoryDetails($fieldData){
-        try{
-            $storyFieldModel = new TicketCollection();
-            //return $priorityModel->getMyAssignedTickets();
-            return $storyFieldModel->updateStoryField($fieldData);
+    public function getUpdateStoryDetails($ticket_data){
+           try{
+            $returnValue = 'failure';
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $checkData = $ticket_data->isLeftColumn;
+            $field_name = $ticket_data->EditedId;
+            $field_id = $ticket_data->id;
+            $fieldDetails =  \common\models\mysql\StoryFields::getFieldDetails($field_id);
+            $workflowModel = new \common\models\mysql\WorkFlowFields();
+            $priorityModel = new \common\models\mysql\Priority();
+            $bucketModel = new \common\models\mysql\Bucket();
+            $planlevelModel = new \common\models\mysql\PlanLevel();
+            $tickettypeModel = new \common\models\mysql\TicketType();
+            $valueName = "";
+            if($checkData==0){
+                 if($ticket_data->id=='Title'){
+                    $newData = array('$set' => array("Title" => $ticket_data->value));
+                    $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
+                    $selectedValue=$ticket_data->value;
+                }else if($ticket_data->id=='Description'){
+                    $actualdescription = CommonUtility::refineDescription($ticket_data->value);
+                    $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$ticket_data->value ));
+                    $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
+                    $selectedValue=$actualdescription;
+                }
+            }else{
+                     if(is_numeric($ticket_data->value)){
+                         if($fieldDetails["Type"] == 6 ){
+                            $collaboratorData = \common\models\mysql\Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
+                            $valueName = $collaboratorData["UserName"]; 
+                        }
+                        
+                             else if($fieldDetails["Field_Name"] == "workflow"){
+                                $workFlowDetail =  $workflowModel->getWorkFlowDetails($ticket_data->value);
+                                $valueName = $workFlowDetail["Name"];
+                                }
+                                else if($fieldDetails["Field_Name"] == "priority"){
+                                $priorityDetail =  $priorityModel->getPriorityDetails($ticket_data->value);
+                                $valueName = $priorityDetail["Name"];
+                                }
+                                else if($fieldDetails["Field_Name"] == "bucket"){
+                                $bucketDetail =  $bucketModel->getBucketName($ticket_data->value,(int)$ticket_data->projectId);
+                                $valueName = $bucketDetail["Name"];
+                                }
+                                else if($fieldDetails["Field_Name"] == "planlevel"){
+                                $planlevelDetail =  $planlevelModel->getPlanLevelDetails($ticket_data->value);
+                                $valueName = $planlevelDetail["Name"];
+                                }
+                                else if($fieldDetails["Field_Name"] == "tickettype"){
+                                $tickettypeDetail =  $tickettypeModel->getTicketType($ticket_data->value);
+                                $valueName = $tickettypeDetail["Name"];
+                                } 
+                        
+                       
+                         $leftsideFieldVal = (int)$ticket_data->value;  
+                    }else{
+                        if($ticket_data->value != ""){
+                            $validDate = CommonUtility::validateDate($ticket_data->value);
+                            if($validDate){
+                                $leftsideFieldVal = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000); 
+                            }else{
+                                $leftsideFieldVal = $ticket_data->value; 
+                            } 
+                        }else{
+                            $leftsideFieldVal = $ticket_data->value;
+                        }
+                    }
+                    $fieldtochange1= "Fields.".$field_name.".value";
+                    $fieldtochange2 = "Fields.".$field_name.".value_name";
+                    $fieldtochangeId = "Fields.".$field_name.".Id";
+                    $newData = array('$set' => array($fieldtochange1 => $leftsideFieldVal,$fieldtochange2 =>$valueName));
+                    $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId,$fieldtochangeId=>(int)$ticket_data->id);
+                    $selectedValue=$leftsideFieldVal;
+
+            }
+            $updateStaus = $collection->update($condition, $newData); 
+            if($updateStaus==0){
+                $returnValue=$selectedValue;
+            }
+            return $returnValue;
+
         } catch (Exception $ex) {
               Yii::log("StoryService:getUpdateStoryDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
