@@ -2,14 +2,26 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import {Storage} from "@ionic/storage";
+
+import { Globalservice } from '../providers/globalservice';
+import { Constants } from '../providers/constants'
 import {WelcomePage} from '../pages/welcome/welcome';
+
+import { StoryDetailsPage } from '../pages/story-details/story-details';
+import { SelectAlertless } from '../pages/story-details/SelectAlert';
+
+ import { DatePickerModule } from 'datepicker-ionic2';
+
+import {Storage} from "@ionic/storage";
 import { PopoverPage } from '../pages/popover/popover';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
+    WelcomePage,
+    StoryDetailsPage,
+    SelectAlertless,
     WelcomePage,
     PopoverPage
   ],
@@ -21,8 +33,12 @@ import { PopoverPage } from '../pages/popover/popover';
     MyApp,
     HomePage,
     WelcomePage,
+    StoryDetailsPage,
+    SelectAlertless,
+    WelcomePage,
     PopoverPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage]
+  providers: [Globalservice, Constants, Storage, {provide: ErrorHandler, useClass: IonicErrorHandler}]
+
 })
 export class AppModule {}
