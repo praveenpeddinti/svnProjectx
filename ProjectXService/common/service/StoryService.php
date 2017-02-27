@@ -321,7 +321,6 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
  */
        public function updateTicketDetails($ticket_data) {
         try {
-            error_log("updateTicketDetails----------***-");
             $workflowModel = new WorkFlowFields();
             $priorityModel = new Priority();
             $bucketModel = new Bucket();
@@ -349,30 +348,29 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                      if(isset($ticket_data->$fieldId)){
                          
                         $fieldDetails =  StoryFields::getFieldDetails($fieldId);
-                          error_log($fieldId."---field type-------------------".$fieldDetails["Type"]);
                          if(is_numeric($ticket_data->$fieldId)){
                               $value["value"] = (int)$ticket_data->$fieldId; 
                                if($fieldDetails["Type"] == 6){
                                 $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$fieldId);
                                 $value["value_name"] = $collaboratorData["UserName"];
                                 }
-                                if($fieldDetails["Field_Name"] == "workflow"){
+                                else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail =  $workflowModel->getWorkFlowDetails($ticket_data->$fieldId);
                                 $value["value_name"] = $workFlowDetail["Name"];
                                 }
-                                 if($fieldDetails["Field_Name"] == "priority"){
+                                else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail =  $priorityModel->getPriorityDetails($ticket_data->$fieldId);
                                 $value["value_name"] = $priorityDetail["Name"];
                                 }
-                                if($fieldDetails["Field_Name"] == "bucket"){
+                                else if($fieldDetails["Field_Name"] == "bucket"){
                                 $bucketDetail =  $bucketModel->getBucketName($ticket_data->$fieldId,$projectId);
                                 $value["value_name"] = $bucketDetail["Name"];
                                 }
-                                 if($fieldDetails["Field_Name"] == "planlevel"){
+                                else if($fieldDetails["Field_Name"] == "planlevel"){
                                 $planlevelDetail =  $planlevelModel->getPlanLevelDetails($ticket_data->$fieldId);
                                 $value["value_name"] = $planlevelDetail["Name"];
                                 }
-                                 if($fieldDetails["Field_Name"] == "tickettype"){
+                                else if($fieldDetails["Field_Name"] == "tickettype"){
                                 $tickettypeDetail =  $tickettypeModel->getTicketType($ticket_data->$fieldId);
                                 $value["value_name"] = $tickettypeDetail["Name"];
                                 }
@@ -387,7 +385,6 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                                  }
                                 
                              }else{
-                                 error_log("field type-------------------".$fieldDetails["Type"]);
                                  
                                  $value["value"] = $ticket_data->$fieldId; 
                               
