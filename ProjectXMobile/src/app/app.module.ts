@@ -2,15 +2,16 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-
-
-import {WelcomePage} from '../pages/welcome/welcome'
+import {Storage} from "@ionic/storage";
+import {WelcomePage} from '../pages/welcome/welcome';
+import { PopoverPage } from '../pages/popover/popover';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    WelcomePage
+    WelcomePage,
+    PopoverPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -19,8 +20,9 @@ import {WelcomePage} from '../pages/welcome/welcome'
   entryComponents: [
     MyApp,
     HomePage,
-    WelcomePage
+    WelcomePage,
+    PopoverPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},Storage]
 })
 export class AppModule {}
