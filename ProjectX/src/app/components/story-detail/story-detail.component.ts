@@ -308,9 +308,10 @@ private dateVal = new Date();
       data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:""};
           switch(field.field_type){
             case "Text":
+            case "TextArea":
             data.title = field.title;
             data.value = field.value;
-            data.renderType = "input";
+            data.renderType = (field.field_type == "TextArea")?"textarea":"input";
             data.type="text";
             break;
 
@@ -372,10 +373,10 @@ private dateVal = new Date();
           data.elId =  ticketId+"_"+field.field_name;
           data.Id = field.Id;
             data.fieldType = field.field_type;
-            if(field.field_name == "dod"){
-              data.renderType = "textarea";
-              console.log(data.renderType);
-          }
+          //  if(field.field_name == "dod"){
+          //     data.renderType = "textarea";
+          //     console.log(data.renderType);
+          // }
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);
       }

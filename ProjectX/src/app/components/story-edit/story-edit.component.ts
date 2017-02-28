@@ -82,9 +82,11 @@ export class StoryEditComponent implements OnInit
           switch(field.field_type)
           {
             case "Text":
+            case "TextArea":
             data.title = field.title;
             data.value = field.value;
-            data.renderType = "input";
+            // data.renderType = "input";
+            data.renderType = (field.field_type == "TextArea")?"textarea":"input";
             data.type="text";
             break;
             case "List":
@@ -133,10 +135,10 @@ export class StoryEditComponent implements OnInit
           data.id =  ticketId+"_"+field.field_name;
           data.fieldType = field.field_type;
           data.fieldName =  field.field_name;
-          if(field.field_name == "dod")
-          {
-              data.renderType = "textarea";
-          }
+          // if(field.field_name == "dod")
+          // {
+          //     data.renderType = "textarea";
+          // }
           var priority=(data.title=="Priority"?true:false);
           var status=data.title;
           data.listdata=this.prepareItemArray(data.listdata,priority,status);
