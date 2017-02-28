@@ -132,7 +132,7 @@ export class StoryEditComponent implements OnInit
           data.required = (field.required == 1)?true:false;
           data.id =  ticketId+"_"+field.field_name;
           data.fieldType = field.field_type;
-          data.fieldName =  field.Id;
+          data.fieldName =  field.field_name;
           if(field.field_name == "dod")
           {
               data.renderType = "textarea";
@@ -194,7 +194,7 @@ export class StoryEditComponent implements OnInit
           'data':edit_data,
          
         }
-        this._ajaxService.AjaxSubscribe("story/edit-ticket-details",post_data,(data)=>
+        this._ajaxService.AjaxSubscribe("story/update-ticket-details",post_data,(data)=>
     
         { 
          this._router.navigate(['story-detail',this.url_TicketId]);
