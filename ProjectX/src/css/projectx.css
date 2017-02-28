@@ -229,7 +229,7 @@ footer{font-size:10px}
 .loading{position: fixed;top:0;bottom:0;right:0;left:0;text-align: center;display: block}
 .loading img{position: absolute;top:45%;margin-top:-20px}
 .loginform .alert-danger{padding:6px}
-.datatable-body-cell-label .titlecolumn{text-overflow: ellipsis;overflow: hidden;cursor:pointer;white-space: nowrap}
+.datatable-body-cell-label .titlecolumn{text-overflow: ellipsis;overflow: hidden;cursor:pointer;white-space: nowrap;line-height: 16px}
 .statusbold{font-weight:bold}
 .Normal{color:#eda74c}
 .Highest{color:#ff2200}
