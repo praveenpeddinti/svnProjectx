@@ -452,7 +452,7 @@ var thisObj = this;
 // Added by Padmaja for Inline Edit
 //Common Ajax method to save the changes.
     public postDataToAjax(postEditedText){
-       this._ajaxService.AjaxSubscribe("story/update-story-field-details",postEditedText,(result)=>
+       this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
         { 
           if(result.statusCode== 200){
             if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc")
