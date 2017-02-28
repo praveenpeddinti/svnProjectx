@@ -52,7 +52,7 @@ export class StoryEditComponent implements OnInit
             this.url_TicketId = params['id'];
         });
 
-    //setTimeout(()=>{
+    setTimeout(()=>{
       this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId},(data)=>
         {   
              this.ticketData = data.data;
@@ -60,7 +60,7 @@ export class StoryEditComponent implements OnInit
              this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);        
         });
     
-    //},150);
+    },150);
     
     this.minDate=new Date(); //set the min date to current date
   }
