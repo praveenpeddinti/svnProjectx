@@ -48,7 +48,7 @@ Yii::log("TicketType:getTicketType::" . $ex->getMessage() . "--" . $ex->getTrace
      * @author Anand Singh
      * @return type
      */
-    public  function getTicketTypeList() {
+    public static function getTicketTypeList() {
         try {
             $qry = "select * from TicketType";
             $data = Yii::$app->db->createCommand($qry)->queryAll();

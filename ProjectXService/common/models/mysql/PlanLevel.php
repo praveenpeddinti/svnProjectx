@@ -46,7 +46,7 @@ class PlanLevel extends ActiveRecord
      * @author Anand Singh
      * @return type
      */
-    public  function getPlanLevelList() {
+    public static function getPlanLevelList() {
         try {
             $qry = "select * from PlanLevel";
             $data = Yii::$app->db->createCommand($qry)->queryAll();

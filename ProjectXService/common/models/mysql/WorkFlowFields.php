@@ -31,7 +31,7 @@ class WorkFlowFields extends ActiveRecord
      * @param type $workFlowId
      * @return type
      */
-    public function getWorkFlowDetails($workFlowId)
+    public static function getWorkFlowDetails($workFlowId)
     {
         try{
         $query = "select Id,Name from WorkFlowFields where Id=".$workFlowId;
@@ -45,7 +45,7 @@ Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex-
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
-      public  function getStoryWorkFlowList(){
+      public static function getStoryWorkFlowList(){
         try{
         $query = "select Id,Name,Status from WorkFlowFields";
         $data = Yii::$app->db->createCommand($query)->queryAll();

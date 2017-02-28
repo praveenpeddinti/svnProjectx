@@ -69,10 +69,10 @@ class Bucket extends ActiveRecord
     public static function getBackLogBucketId($projectId)
     {
         try{
-        $query = "select Id from Bucket where BucketStatus=0 and ProjectId=".$projectId;
+        $query = "select Id,Name from Bucket where BucketStatus=0 and ProjectId=".$projectId;
         $data = Yii::$app->db->createCommand($query)->queryOne();
         if(is_array($data)){
-            return $data["Id"];
+            return $data;
         }else{
             return "failure";
         }

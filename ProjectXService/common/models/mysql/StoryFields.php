@@ -66,7 +66,7 @@ class StoryFields extends ActiveRecord
      * @author Moin Hussain
      * @return type
      */
-     public function getNewTicketStoryFields() {
+     public static function getNewTicketStoryFields() {
         try {
             $qry = "select sf.*,ft.`Name` from StoryFields sf join FieldTypes ft on sf.Type=ft.Id where sf.Id in (4,6)";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
