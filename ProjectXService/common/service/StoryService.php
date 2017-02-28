@@ -410,11 +410,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         }
        
       }
-        /*
+    /*@modified by Moin Hussain
     * @author Padmaja
     * @param type $ticket_data
      */
-    public function getUpdateStoryDetails($ticket_data){
+    public function updateStoryFieldInline($ticket_data){
            try{
             $returnValue = 'failure';
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
@@ -491,7 +491,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             return $returnValue;
 
         } catch (Exception $ex) {
-              Yii::log("StoryService:getUpdateStoryDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+              Yii::log("StoryService:updateStoryFieldInline::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }    
 
