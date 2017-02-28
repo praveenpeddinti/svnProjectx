@@ -62,7 +62,7 @@ class StoryService {
             $projectObj = new Projects();
             $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
             $workFlowObj = new WorkFlowFields();
-            $workFlowDetails = $workFlowObj->getWorkFlowDetails($ticketDetails["Status"]);
+            $workFlowDetails = WorkFlowFields::getWorkFlowDetails($ticketDetails["Status"]);
             $ticketDetails["Priority"] = $priorityDetails;
             $ticketDetails["Project"] = $projectDetails;
             $ticketDetails["Status"] = $workFlowDetails;
@@ -88,8 +88,7 @@ class StoryService {
      */
     public function getNewTicketStoryFields() {
         try {
-           $storyFieldModel = new StoryFields();
-           return $storyFieldModel->getNewTicketStoryFields();
+           return StoryFields::getNewTicketStoryFields();
         } catch (Exception $exc) {
             Yii::log("StoryService:getNewTicketStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -101,8 +100,7 @@ class StoryService {
          */
         public function getPriorityList() {
             try {
-               $priorityModel = new Priority();
-           return $priorityModel->getPriorityList();
+           return Priority::getPriorityList();
             } catch (Exception $exc) {
                 Yii::log("StoryService:getPriority::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
             }
@@ -114,8 +112,7 @@ class StoryService {
      */
     public  function getPlanLevelList() {
         try {
-           $planlevelModel = new PlanLevel();
-           return $planlevelModel->getPlanLevelList();
+           return PlanLevel::getPlanLevelList();
         } catch (Exception $exc) {
             Yii::log("StoryService:getPlanLevel::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -127,8 +124,7 @@ class StoryService {
      */
     public  function getTicketTypeList() {
         try {
-            $ticketTypeModel = new TicketType();
-            return $ticketTypeModel->getTicketTypeList();
+            return TicketType::getTicketTypeList();
         } catch (Exception $exc) {
             Yii::log("StoryService:getTicketType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -139,10 +135,9 @@ class StoryService {
      */
     public function getStoryWorkFlowList(){
         try{
-           $workFlowModel = new WorkFlowFields();
-           return $workFlowModel->getStoryWorkFlowList();
+           return WorkFlowFields::getStoryWorkFlowList();
         } catch (Exception $ex) {
-Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+Yii::log("StoryService:getStoryWorkFlowList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     /**
@@ -151,10 +146,9 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
      */
       public function getBucketsList($projectId){
         try{
-           $bucketModel = new Bucket();
-           return $bucketModel->getBucketsList($projectId);
+           return Bucket::getBucketsList($projectId);
         } catch (Exception $ex) {
-Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 /**
@@ -172,8 +166,8 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
               $ticket_data = $ticket_data->data;
               $dataArray = array();
               $fieldsArray = array();
-              $title =  $ticket_data->title;
-              $description =  $ticket_data->description;
+              $title =  trim($ticket_data->title);
+              $description =  trim($ticket_data->description);
               $crudeDescription = $description;
               $description = CommonUtility::refineDescription($description);
             
@@ -197,17 +191,22 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                          $fieldBean->value= (int)$collaboratorData["Id"]; 
                          $fieldBean->value_name= $collaboratorData["UserName"]; 
                      }
+//                     else if($fieldName == "tickettype"){
+//                         $fieldBean->value= (int)1; 
+//                     }
                      else if($fieldName == "tickettype"){
-                         $fieldBean->value= (int)1; 
-                     }
-                     else if($fieldName == "tickettype"){
-                         $fieldBean->value= (int)1; 
+                          $fieldBean->value= (int)1; 
+                          $tickettypeDetail = TicketType::getTicketType($fieldBean->value);
+                          $fieldBean->value_name = $tickettypeDetail["Name"];
                      }
                      else if($fieldName == "workflow"){
                          $fieldBean->value= (int)1; 
+                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails($fieldBean->value);
+                         $fieldBean->value_name= $workFlowDetail["Name"]; 
                      }
                      else if($fieldName == "estimatedpoints"){
                          $fieldBean->value= (int)0; 
+                         $fieldBean->value_name= (int)0; 
                      }
                      else if($fieldType == 4 || $fieldType == 5){
                          if($fieldName == "duedate"){
@@ -215,20 +214,30 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                          }else{
                             $fieldBean->value= new \MongoDB\BSON\UTCDateTime(time() * 1000);   
                          }
-                            
+                            $fieldBean->value_name= $fieldBean->value; 
                          }
                      else if($fieldType == 8){
-                        $bucketId = Bucket::getBackLogBucketId($projectId);
-                        $fieldBean->value = (int)$bucketId;
+                        $bucket = Bucket::getBackLogBucketId($projectId);
+                        $fieldBean->value = (int)$bucket["Id"];
+                         $fieldBean->value_name = $bucket["Name"];
                      }
                      else{
                           $fieldBean->value=""; 
                      }
                      if(isset($ticket_data->$fieldId)){
                           if(is_numeric($ticket_data->$fieldId)){
-                              $fieldBean->value= (int)$ticket_data->$fieldId;
+                               $fieldBean->value= (int)$ticket_data->$fieldId;
+                              if($fieldId == 4){
+                                $details =  PlanLevel::getPlanLevelDetails($ticket_data->$fieldId);
+                              }
+                              else if($fieldId == 6){
+                                    $details = Priority::getPriorityDetails($ticket_data->$fieldId);
+                              }
+                               $fieldBean->value_name= $details["Name"];
+                             
                           }else{
                               $fieldBean->value= $ticket_data->$fieldId;
+                              $fieldBean->value_name= $ticket_data->$fieldId;
                           }
                           
                      }
@@ -269,8 +278,8 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
      */
     public function getAllStoryDetails($StoryData, $projectId) {
         try {
-            $ticketModel = new TicketCollection();
-            $ticketDetails = $ticketModel->getAllTicketDetails($StoryData, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
+           // $ticketModel = new TicketCollection();
+            $ticketDetails = TicketCollection::getAllTicketDetails($StoryData, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array();
             $fieldsOrderArray = [5,6,7,3,10];
            //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
@@ -289,14 +298,13 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
      * getting total count.
      * @return type  $projectId
      */
-    public function getTotalStorys($projectId) {
+    public function getTotalTicketsCount($projectId) {
         try {
-            $model = new TicketCollection();
-            $totalCount = $model->getTotalStorys($projectId);
+            $totalCount = TicketCollection::getTotalTicketsCount($projectId);
             
             return $totalCount;
         } catch (Exception $ex) {
-            Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryService:getTotalTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     
@@ -310,7 +318,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
            //return $priorityModel->getMyAssignedTickets();
           return $priorityModel->updateTicketField();
             } catch (Exception $exc) {
-                Yii::log("StoryService:getPriority::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+                Yii::log("StoryService:getMyTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
             }
         }
 
@@ -321,11 +329,6 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
  */
        public function updateTicketDetails($ticket_data) {
         try {
-            $workflowModel = new WorkFlowFields();
-            $priorityModel = new Priority();
-            $bucketModel = new Bucket();
-            $planlevelModel = new PlanLevel();
-            $tickettypeModel = new TicketType();
              $userdata =  $ticket_data->userInfo;
              $projectId =  $ticket_data->projectId;
              $userId = $userdata->Id;
@@ -335,16 +338,14 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
             
                 $ticketCollectionModel = new TicketCollection();
                $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->TicketId,$projectId);
-        $ticketDetails["Title"] = $ticket_data->title;
+        $ticketDetails["Title"] = trim($ticket_data->title);
               $description = $ticket_data->description;
               $ticketDetails["CrudeDescription"] = $description;
             $ticketDetails["Description"] = CommonUtility::refineDescription($description);
-          //  error_log("data---".print_r($ticket_data,1));
-             // unset($ticket_data->title);
-             // unset($ticket_data->description);
+          
                foreach ($ticketDetails["Fields"] as &$value) {
                  $fieldId =  $value["Id"];
-                //$value["value_name"]="";
+               
                      if(isset($ticket_data->$fieldId)){
                          
                         $fieldDetails =  StoryFields::getFieldDetails($fieldId);
@@ -355,23 +356,23 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                                 $value["value_name"] = $collaboratorData["UserName"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "workflow"){
-                                $workFlowDetail =  $workflowModel->getWorkFlowDetails($ticket_data->$fieldId);
+                                $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$fieldId);
                                 $value["value_name"] = $workFlowDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
-                                $priorityDetail =  $priorityModel->getPriorityDetails($ticket_data->$fieldId);
+                                $priorityDetail = Priority::getPriorityDetails($ticket_data->$fieldId);
                                 $value["value_name"] = $priorityDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
-                                $bucketDetail =  $bucketModel->getBucketName($ticket_data->$fieldId,$projectId);
+                                $bucketDetail =  Bucket::getBucketName($ticket_data->$fieldId,$projectId);
                                 $value["value_name"] = $bucketDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
-                                $planlevelDetail =  $planlevelModel->getPlanLevelDetails($ticket_data->$fieldId);
+                                $planlevelDetail = PlanLevel::getPlanLevelDetails($ticket_data->$fieldId);
                                 $value["value_name"] = $planlevelDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
-                                $tickettypeDetail =  $tickettypeModel->getTicketType($ticket_data->$fieldId);
+                                $tickettypeDetail = TicketType::getTicketType($ticket_data->$fieldId);
                                 $value["value_name"] = $tickettypeDetail["Name"];
                                 }
                                         
@@ -405,7 +406,7 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
         } catch (Exception $ex) {
              error_log($ex->getMessage());
             
-            Yii::log("StoryService:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryService:updateTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
       }
@@ -420,16 +421,10 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
             $checkData = $ticket_data->isLeftColumn;
             $field_name = $ticket_data->EditedId;
             $field_id = $ticket_data->id;
-            $fieldDetails =  \common\models\mysql\StoryFields::getFieldDetails($field_id);
-            $workflowModel = new \common\models\mysql\WorkFlowFields();
-            $priorityModel = new \common\models\mysql\Priority();
-            $bucketModel = new \common\models\mysql\Bucket();
-            $planlevelModel = new \common\models\mysql\PlanLevel();
-            $tickettypeModel = new \common\models\mysql\TicketType();
             $valueName = "";
             if($checkData==0){
                  if($ticket_data->id=='Title'){
-                    $newData = array('$set' => array("Title" => $ticket_data->value));
+                    $newData = array('$set' => array("Title" => trim($ticket_data->value)));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$ticket_data->value;
                 }else if($ticket_data->id=='Description'){
@@ -439,30 +434,31 @@ Yii::log("StoryService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->g
                     $selectedValue=$actualdescription;
                 }
             }else{
+                  $fieldDetails =  StoryFields::getFieldDetails($field_id);
                      if(is_numeric($ticket_data->value)){
                          if($fieldDetails["Type"] == 6 ){
-                            $collaboratorData = \common\models\mysql\Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
+                            $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
                         }
                         
                              else if($fieldDetails["Field_Name"] == "workflow"){
-                                $workFlowDetail =  $workflowModel->getWorkFlowDetails($ticket_data->value);
+                                $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
                                 $valueName = $workFlowDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
-                                $priorityDetail =  $priorityModel->getPriorityDetails($ticket_data->value);
+                                $priorityDetail = Priority::getPriorityDetails($ticket_data->value);
                                 $valueName = $priorityDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
-                                $bucketDetail =  $bucketModel->getBucketName($ticket_data->value,(int)$ticket_data->projectId);
+                                $bucketDetail =  Bucket::getBucketName($ticket_data->value,(int)$ticket_data->projectId);
                                 $valueName = $bucketDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
-                                $planlevelDetail =  $planlevelModel->getPlanLevelDetails($ticket_data->value);
+                                $planlevelDetail =  PlanLevel::getPlanLevelDetails($ticket_data->value);
                                 $valueName = $planlevelDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
-                                $tickettypeDetail =  $tickettypeModel->getTicketType($ticket_data->value);
+                                $tickettypeDetail = TicketType::getTicketType($ticket_data->value);
                                 $valueName = $tickettypeDetail["Name"];
                                 } 
                         
