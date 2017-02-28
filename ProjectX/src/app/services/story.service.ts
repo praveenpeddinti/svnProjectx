@@ -29,14 +29,17 @@ var post_data={
       'data':storyData,
      
     }
-
-     this._ajaxService.AjaxSubscribe("story/save-ticket-details",post_data,(data)=>
-
+    post_data.data.title = post_data.data.title.trim();
+    if(post_data.data.title!='' && post_data.data.description !='' ){
+       this._ajaxService.AjaxSubscribe("story/save-ticket-details",post_data,(data)=>
     { 
-this._router.navigate(['story-dashboard']);
+        this._router.navigate(['story-dashboard']);
          saveStoryCallback(data);
 
     });
+      
+    }
+ 
  }
 getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,getAllStoryDetailsCallback) { 
    var post_data={
