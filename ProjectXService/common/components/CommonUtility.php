@@ -190,7 +190,7 @@ class CommonUtility {
                     }
                 
                 }
-                 if($storyFieldDetails["Type"] == 8){
+                 if($storyFieldDetails["Type"] == 10){
                  $value["readable_value"]= "";
                 if($value["value"] != ""){
                  $bucketName = $bucketModel->getBucketName($value["value"],$ticketDetails["ProjectId"]);
@@ -340,7 +340,7 @@ Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex
                   $value["readable_value"] = $assignedToDetails;  
                   
                 }
-                 if($storyFieldDetails["Type"] == 8){
+                 if($storyFieldDetails["Type"] == 10){
                 
                  $bucketName = $bucketModel->getBucketName($value["value"],$ticketDetails["ProjectId"]);
                  $value["readable_value"] = $bucketName;  
@@ -534,7 +534,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     }
                 
                 }
-                 if($storyFieldDetails["Type"] == 8){
+                 if($storyFieldDetails["Type"] == 10){
                  $value["readable_value"]= "";
                 if($value["value"] != ""){
                  $bucketName = $bucketModel->getBucketName($value["value"],$ticketDetails["ProjectId"]);

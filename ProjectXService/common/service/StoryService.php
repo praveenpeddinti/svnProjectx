@@ -334,60 +334,61 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              $userId = $userdata->Id;
              $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
             // error_log(print_r($collaboratorData,1));
-              $ticket_data = $ticket_data->data;
-            
-                $ticketCollectionModel = new TicketCollection();
-               $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->TicketId,$projectId);
-        $ticketDetails["Title"] = trim($ticket_data->title);
-              $description = $ticket_data->description;
-              $ticketDetails["CrudeDescription"] = $description;
+            $ticket_data = $ticket_data->data;
+           // error_log(print_r($ticket_data,1));
+           // return;
+            $ticketCollectionModel = new TicketCollection();
+            $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->TicketId, $projectId);
+            $ticketDetails["Title"] = trim($ticket_data->title);
+            $description = $ticket_data->description;
+            $ticketDetails["CrudeDescription"] = $description;
             $ticketDetails["Description"] = CommonUtility::refineDescription($description);
-          
-               foreach ($ticketDetails["Fields"] as &$value) {
+
+            foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
                
-                     if(isset($ticket_data->$fieldId)){
+                     if(isset($ticket_data->$key)){
                          
                         $fieldDetails =  StoryFields::getFieldDetails($fieldId);
-                         if(is_numeric($ticket_data->$fieldId)){
-                              $value["value"] = (int)$ticket_data->$fieldId; 
+                         if(is_numeric($ticket_data->$key)){
+                              $value["value"] = (int)$ticket_data->$key; 
                                if($fieldDetails["Type"] == 6){
-                                $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$fieldId);
+                                $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$key);
                                 $value["value_name"] = $collaboratorData["UserName"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "workflow"){
-                                $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$fieldId);
+                                $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$key);
                                 $value["value_name"] = $workFlowDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
-                                $priorityDetail = Priority::getPriorityDetails($ticket_data->$fieldId);
+                                $priorityDetail = Priority::getPriorityDetails($ticket_data->$key);
                                 $value["value_name"] = $priorityDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
-                                $bucketDetail =  Bucket::getBucketName($ticket_data->$fieldId,$projectId);
+                                $bucketDetail =  Bucket::getBucketName($ticket_data->$key,$projectId);
                                 $value["value_name"] = $bucketDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
-                                $planlevelDetail = PlanLevel::getPlanLevelDetails($ticket_data->$fieldId);
+                                $planlevelDetail = PlanLevel::getPlanLevelDetails($ticket_data->$key);
                                 $value["value_name"] = $planlevelDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
-                                $tickettypeDetail = TicketType::getTicketType($ticket_data->$fieldId);
+                                $tickettypeDetail = TicketType::getTicketType($ticket_data->$key);
                                 $value["value_name"] = $tickettypeDetail["Name"];
                                 }
                                         
                          }else{
-                             if($ticket_data->$fieldId != ""){
+                             if($ticket_data->$key != ""){
                                  
                                  if($fieldDetails["Type"] == 4){
-                                       $validDate = CommonUtility::validateDate($ticket_data->$fieldId);
+                                       $validDate = CommonUtility::validateDate($ticket_data->$key);
                                       if($validDate){
                                      $value["value"] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000); 
                                  }
                                 
                              }else{
                                  
-                                 $value["value"] = $ticket_data->$fieldId; 
+                                 $value["value"] = $ticket_data->$key; 
                               
                              } 
                              }
