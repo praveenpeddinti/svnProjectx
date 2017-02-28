@@ -291,12 +291,12 @@ class StoryController extends Controller
      * @description This method to update the story feilds.
     * @return type Json
      */
-    public function actionUpdateStoryFieldDetails(){
+    public function actionUpdateStoryFieldInline(){
         try{
             // $fieldData='{"Title":"helooooo","Description":"hellooooo","ProjectId":1,"TicketId":110,"Fields": [{ "Id":"3" },{"value":5}]}';
             $fieldData = json_decode(file_get_contents("php://input"));
            // $fieldData=json_decode($fieldData);
-            $getUpdateStatus = ServiceFactory::getStoryServiceInstance()->getUpdateStoryDetails($fieldData);
+            $getUpdateStatus = ServiceFactory::getStoryServiceInstance()->updateStoryFieldInline($fieldData);
             if($getUpdateStatus !='failure'){
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -314,7 +314,7 @@ class StoryController extends Controller
             }        
             return $response;
         } catch (Exception $ex) {
-            Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryController:actionUpdateStoryFieldInline::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
 
         
