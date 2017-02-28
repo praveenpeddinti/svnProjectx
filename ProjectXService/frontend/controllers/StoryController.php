@@ -271,7 +271,7 @@ class StoryController extends Controller
     * @author Moin Hussain
     * @return string
     */
-    public function actionEditTicketDetails(){
+    public function actionUpdateTicketDetails(){
         try{
              $ticket_data = json_decode(file_get_contents("php://input"));
            $data = ServiceFactory::getStoryServiceInstance()->updateTicketDetails($ticket_data);
