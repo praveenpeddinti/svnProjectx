@@ -46,4 +46,19 @@ private headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencod
     return response;
   }
 
+  /**
+      used for getting all the stories list from server
+      author uday   
+  
+   */
+  getStoriesList(url, params) {
+    var response = this.http.post(
+      url,
+      JSON.stringify(params),
+      { headers: this.headers, }).map(res => res.json());
+
+    return response;
+  }
+
+
 }
