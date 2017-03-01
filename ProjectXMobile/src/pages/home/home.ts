@@ -67,7 +67,8 @@ export class HomePage {
                              text: 'Ok',
                              role: 'cancel',
                              handler: () => {
-                               this.navCtrl.push(HomePage);
+                               //alert.dismiss({ delete: true });
+                             this.navCtrl.push(HomePage);
                              console.log('Cancel clicked');
                              this.viewCtrl.dismiss();
                               }

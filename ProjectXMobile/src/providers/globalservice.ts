@@ -20,6 +20,7 @@ private headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencod
     this.params.projectId = "1";
     this.params.ticketId= "";
 
+
     console.log('Hello Globalservice Provider ' + JSON.stringify(this.params));
   }
   
@@ -30,6 +31,13 @@ private headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencod
       );
       return response;
   }
+   getLogout(url,data){
+     var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
+          res => res.json()
+      );
+      return response;
+  }
+ 
   public getTicketDetailsById(url, data){
     this.params.ticketId= data;
     var response = this.http.post(url, JSON.stringify(this.params), this.headers).map(
