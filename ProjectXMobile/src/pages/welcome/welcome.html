@@ -12,10 +12,30 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
+<!--<ion-content padding>
     <div>Your logged with <u><b>{{userName}}</b></u></div>
 
 <button ion-button (click)="storyDetail()">story details</button>
 
+</ion-content>-->
+
+
+<!---
+
+The below code is useful for  listing the stories
+author uday
+-->
+<ion-content>
+  <ion-list>
+    <ion-item id="{{item.id}}" *ngFor="let item of arrayObject" (click)="ticketClick(item)">
+      {{item.id}}<br> {{item.title}}
+      <br> {{item.assignTo}}
+      <br> {{item.priority}}
+      <br> {{item.workflow}}
+      <br> {{item.bucket}}
+      <br> {{item.duedate}}
+      <br>
+    </ion-item>
+  </ion-list>
 </ion-content>
 
