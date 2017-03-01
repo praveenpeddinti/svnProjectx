@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">	
+
+<suite thread-count="1" verbose="1" name="test Suite" >
+
+<parameter name="test Suite" value="Advertisments" />
+ 
+ <listeners>
+ 
+      <listener class-name="org.uncommons.reportng.HTMLReporter"/>
+      <listener class-name="org.uncommons.reportng.JUnitXMLReporter"/>
+      
+  </listeners>
+  
+  
+   <test name="RunTests" allow-return-values="true">
+      
+       
+         	
+      <packages>
+        <package name = "com.techo2.skiptaneo.testsuite.cases"/>
+       </packages>
+         	
+       </test>    
+ </suite>
