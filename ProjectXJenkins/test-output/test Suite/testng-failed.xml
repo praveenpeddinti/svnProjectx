@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="1" guice-stage="DEVELOPMENT" name="Failed suite [test Suite]">
-  <test name="RunTests">
-    <classes>
-      <class name="com.techo2.skiptaneo.testsuite.cases.NewMemberRegistrationTest"/>
-    </classes>
-  </test> <!-- RunTests -->
-</suite> <!-- Failed suite [test Suite] -->
