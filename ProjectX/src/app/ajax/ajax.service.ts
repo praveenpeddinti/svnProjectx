@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 //import { Headers,RequestOptions, Http } from '@angular/http';
 import { GlobalVariable } from '../../app/config';
-
+declare var jstz:any;
 var headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
 
 declare var jQuery:any;
@@ -18,9 +18,10 @@ AjaxSubscribe(url:string,params:Object,callback)
    jQuery("#commonSpinner").removeClass("unloading"); 
    jQuery("#commonSpinner").addClass("loading"); 
    var getAllData=  JSON.parse(localStorage.getItem('user'));
-    if(getAllData != null){
+   if(getAllData != null){
       params["userInfo"] = getAllData;
       params["projectId"] = 1;
+      params["timeZone"] = jstz.determine_timezone().name();
     }
       //var  options = new RequestOptions({headers: headers});
       this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(params), headers)
