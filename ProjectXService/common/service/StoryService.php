@@ -486,9 +486,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 
             }
             $updateStaus = $collection->update($condition, $newData); 
-            if($updateStaus==0){
+           // if($updateStaus==1){
                 $returnValue=$selectedValue;
-            }
+           // }
             return $returnValue;
 
         } catch (Exception $ex) {
