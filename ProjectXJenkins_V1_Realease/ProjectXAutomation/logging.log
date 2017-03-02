@@ -1,0 +1,1360 @@
+2016-12-21 14:18:53 ERROR TestListener:56 - ERROR ----------premiumAdsRotation has failed-----------------
+2016-12-21 14:18:53 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2016-12-21 14:18:53 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2016-12-21 14:18:57 ERROR Weblistener:91 - WebDriver error:
+org.openqa.selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=56.0.2924.28)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 4.01 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 84b154a39a2ed62da245d362d32729ca
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir7420_4156, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=56.0.2924.28, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:678)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:701)
+	at org.openqa.selenium.remote.RemoteWebDriver.getScreenshotAs(RemoteWebDriver.java:335)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:103)
+	at com.sun.proxy.$Proxy10.getScreenshotAs(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.getScreenshotAs(EventFiringWebDriver.java:270)
+	at com.techo2.skiptaneo.commons.utilities.ScreenCapture.saveScreenShot(ScreenCapture.java:163)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.onTestFailure(TestListener.java:63)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1661)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1645)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:703)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:823)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1131)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:778)
+	at org.testng.TestRunner.run(TestRunner.java:632)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:319)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:268)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1225)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1150)
+	at org.testng.TestNG.runSuites(TestNG.java:1075)
+	at org.testng.TestNG.run(TestNG.java:1047)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:126)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:137)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:58)
+2016-12-21 14:18:57 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2016-12-21 14:19:01 ERROR Weblistener:91 - WebDriver error:
+org.openqa.selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=56.0.2924.28)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 4.02 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 84b154a39a2ed62da245d362d32729ca
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir7420_4156, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=56.0.2924.28, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:678)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:701)
+	at org.openqa.selenium.remote.RemoteWebDriver.getScreenshotAs(RemoteWebDriver.java:335)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:103)
+	at com.sun.proxy.$Proxy10.getScreenshotAs(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.getScreenshotAs(EventFiringWebDriver.java:270)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.createAttachment(TestListener.java:92)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.onTestFailure(TestListener.java:64)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1661)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1645)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:703)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:823)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1131)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:778)
+	at org.testng.TestRunner.run(TestRunner.java:632)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:319)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:268)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1225)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1150)
+	at org.testng.TestNG.runSuites(TestNG.java:1075)
+	at org.testng.TestNG.run(TestNG.java:1047)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:126)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:137)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:58)
+2016-12-21 14:19:01 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2016-12-21 14:19:01 INFO  BaseSetup:264 - after suite
+2016-12-21 14:40:37 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2016-12-21 14:40:37 INFO  BaseSetup:171 - Browser name present in config file :chrome
+2016-12-21 14:40:37 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2016-12-21 14:40:37 INFO  ChromeBrowser:60 - Launching google chrome with new profile..
+2016-12-21 14:40:37 INFO  ChromeBrowser:68 - chrome driver initialized..
+2016-12-21 14:40:40 INFO  BaseSetup:190 - what driver is running? chrome
+2016-12-21 14:40:40 INFO  BaseSetup:150 - Initiated Webdriver...
+2016-12-21 14:40:41 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2016-12-21 14:40:51 INFO  Weblistener:41 - WebDriver has navigated to:'https://skiptaneo.com'
+2016-12-21 14:40:51 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2016-12-21 14:41:05 INFO  Weblistener:41 - WebDriver has navigated to:'https://dozer.skiptaneo.com'
+2016-12-21 14:41:05 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='LoginForm_email']
+2016-12-21 14:41:06 INFO  Sync:133 - Element By.xpath: //input[@id='LoginForm_email'] is displayed
+2016-12-21 14:41:07 INFO  Weblistener:46 - Value of the: xpath: //input[@id='LoginForm_email'] before any changes made
+2016-12-21 14:41:08 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='LoginForm_email']
+2016-12-21 14:41:08 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='LoginForm_pword']
+2016-12-21 14:41:08 INFO  Sync:133 - Element By.xpath: //input[@id='LoginForm_pword'] is displayed
+2016-12-21 14:41:08 INFO  Weblistener:46 - Value of the: xpath: //input[@id='LoginForm_pword'] before any changes made
+2016-12-21 14:41:09 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='LoginForm_pword']
+2016-12-21 14:41:09 INFO  Sync:219 - Waiting until element By.xpath: //input[@id='loginbutton'] is clickable
+2016-12-21 14:41:09 INFO  Sync:226 - Element By.xpath: //input[@id='loginbutton'] is displayed and is clickable
+2016-12-21 14:41:09 INFO  Weblistener:56 - Trying to click on:  xpath: //input[@id='loginbutton']
+2016-12-21 14:41:09 INFO  Weblistener:62 - Clicked on:  xpath: //input[@id='loginbutton']
+2016-12-21 14:41:09 INFO  SafeActions:90 - Clicked on the element By.xpath: //input[@id='loginbutton']
+2016-12-21 14:41:48 ERROR Weblistener:91 - WebDriver error:
+org.openqa.selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=56.0.2924.28)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 4.02 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+*** Element info: {Using=xpath, value=//div[@class='myAdvertisements stream_msg_box']//div}
+Session ID: 5f1340a53f75693bf92bab9f51ba7fb4
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir5688_14663, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=56.0.2924.28, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:678)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:363)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:500)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:361)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:355)
+	at sun.reflect.GeneratedMethodAccessor9.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:103)
+	at com.sun.proxy.$Proxy10.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:188)
+	at com.techo2.skiptaneo.commons.pageobjects.PremiumAdsRotation.waitForAdTochange(PremiumAdsRotation.java:155)
+	at com.techo2.skiptaneo.commons.pageobjects.PremiumAdsRotation.verifyPremiumadsRotation(PremiumAdsRotation.java:137)
+	at com.techo2.skiptaneo.testsuite.cases.PremiumAdsTest.premiumAdsRotation(PremiumAdsTest.java:65)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:86)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:646)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:823)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1131)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:778)
+	at org.testng.TestRunner.run(TestRunner.java:632)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:319)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:268)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1225)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1150)
+	at org.testng.TestNG.runSuites(TestNG.java:1075)
+	at org.testng.TestNG.run(TestNG.java:1047)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:126)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:137)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:58)
+2016-12-21 14:41:48 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2016-12-21 14:41:48 ERROR TestListener:56 - ERROR ----------premiumAdsRotation has failed-----------------
+2016-12-21 14:41:48 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2016-12-21 14:41:48 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2016-12-21 14:41:52 ERROR Weblistener:91 - WebDriver error:
+org.openqa.selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=56.0.2924.28)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 4.02 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 5f1340a53f75693bf92bab9f51ba7fb4
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir5688_14663, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=56.0.2924.28, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:678)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:701)
+	at org.openqa.selenium.remote.RemoteWebDriver.getScreenshotAs(RemoteWebDriver.java:335)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:103)
+	at com.sun.proxy.$Proxy10.getScreenshotAs(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.getScreenshotAs(EventFiringWebDriver.java:270)
+	at com.techo2.skiptaneo.commons.utilities.ScreenCapture.saveScreenShot(ScreenCapture.java:163)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.onTestFailure(TestListener.java:63)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1661)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1645)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:703)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:823)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1131)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:778)
+	at org.testng.TestRunner.run(TestRunner.java:632)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:319)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:268)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1225)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1150)
+	at org.testng.TestNG.runSuites(TestNG.java:1075)
+	at org.testng.TestNG.run(TestNG.java:1047)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:126)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:137)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:58)
+2016-12-21 14:41:52 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2016-12-21 14:41:56 ERROR Weblistener:91 - WebDriver error:
+org.openqa.selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=56.0.2924.28)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 4.01 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 5f1340a53f75693bf92bab9f51ba7fb4
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir5688_14663, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=56.0.2924.28, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:678)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:701)
+	at org.openqa.selenium.remote.RemoteWebDriver.getScreenshotAs(RemoteWebDriver.java:335)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:103)
+	at com.sun.proxy.$Proxy10.getScreenshotAs(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.getScreenshotAs(EventFiringWebDriver.java:270)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.createAttachment(TestListener.java:92)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.onTestFailure(TestListener.java:64)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1661)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1645)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:703)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:823)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1131)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:778)
+	at org.testng.TestRunner.run(TestRunner.java:632)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:319)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:268)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1225)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1150)
+	at org.testng.TestNG.runSuites(TestNG.java:1075)
+	at org.testng.TestNG.run(TestNG.java:1047)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:126)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:137)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:58)
+2016-12-21 14:41:56 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2016-12-21 14:41:57 INFO  BaseSetup:264 - after suite
+2016-12-21 14:42:20 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2016-12-21 14:42:20 INFO  BaseSetup:171 - Browser name present in config file :chrome
+2016-12-21 14:42:20 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2016-12-21 14:42:20 INFO  ChromeBrowser:60 - Launching google chrome with new profile..
+2016-12-21 14:42:20 INFO  ChromeBrowser:68 - chrome driver initialized..
+2016-12-21 14:42:23 INFO  BaseSetup:190 - what driver is running? chrome
+2016-12-21 14:42:23 INFO  BaseSetup:150 - Initiated Webdriver...
+2016-12-21 14:42:24 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2016-12-21 14:42:35 INFO  Weblistener:41 - WebDriver has navigated to:'https://skiptaneo.com'
+2016-12-21 14:42:35 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2016-12-21 14:42:46 INFO  Weblistener:41 - WebDriver has navigated to:'https://dozer.skiptaneo.com'
+2016-12-21 14:42:46 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='LoginForm_email']
+2016-12-21 14:42:46 INFO  Sync:133 - Element By.xpath: //input[@id='LoginForm_email'] is displayed
+2016-12-21 14:42:47 INFO  Weblistener:46 - Value of the: xpath: //input[@id='LoginForm_email'] before any changes made
+2016-12-21 14:42:48 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='LoginForm_email']
+2016-12-21 14:42:48 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='LoginForm_pword']
+2016-12-21 14:42:48 INFO  Sync:133 - Element By.xpath: //input[@id='LoginForm_pword'] is displayed
+2016-12-21 14:42:49 INFO  Weblistener:46 - Value of the: xpath: //input[@id='LoginForm_pword'] before any changes made
+2016-12-21 14:42:49 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='LoginForm_pword']
+2016-12-21 14:42:49 INFO  Sync:219 - Waiting until element By.xpath: //input[@id='loginbutton'] is clickable
+2016-12-21 14:42:49 INFO  Sync:226 - Element By.xpath: //input[@id='loginbutton'] is displayed and is clickable
+2016-12-21 14:42:49 INFO  Weblistener:56 - Trying to click on:  xpath: //input[@id='loginbutton']
+2016-12-21 14:42:50 INFO  Weblistener:62 - Clicked on:  xpath: //input[@id='loginbutton']
+2016-12-21 14:42:50 INFO  SafeActions:90 - Clicked on the element By.xpath: //input[@id='loginbutton']
+2016-12-21 14:45:33 INFO  TestListener:137 - ###############################################################
+2016-12-21 14:45:33 INFO  TestListener:138 - SUCCESS ---------premiumAdsRotation has passed-----------------
+2016-12-21 14:45:33 INFO  TestListener:139 - ###############################################################
+2016-12-21 14:45:33 INFO  BaseSetup:264 - after suite
+2016-12-21 14:47:05 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2016-12-21 14:47:05 INFO  BaseSetup:171 - Browser name present in config file :chrome
+2016-12-21 14:47:05 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2016-12-21 14:47:05 INFO  ChromeBrowser:60 - Launching google chrome with new profile..
+2016-12-21 14:47:05 INFO  ChromeBrowser:68 - chrome driver initialized..
+2016-12-21 14:47:09 INFO  BaseSetup:190 - what driver is running? chrome
+2016-12-21 14:47:09 INFO  BaseSetup:150 - Initiated Webdriver...
+2016-12-21 14:47:10 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2016-12-21 14:47:30 INFO  Weblistener:41 - WebDriver has navigated to:'https://skiptaneo.com'
+2016-12-21 14:47:30 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2016-12-21 14:47:45 INFO  Weblistener:41 - WebDriver has navigated to:'https://dozer.skiptaneo.com'
+2016-12-21 14:47:45 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='LoginForm_email']
+2016-12-21 14:47:46 INFO  Sync:133 - Element By.xpath: //input[@id='LoginForm_email'] is displayed
+2016-12-21 14:47:47 INFO  Weblistener:46 - Value of the: xpath: //input[@id='LoginForm_email'] before any changes made
+2016-12-21 14:47:48 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='LoginForm_email']
+2016-12-21 14:47:48 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='LoginForm_pword']
+2016-12-21 14:47:48 INFO  Sync:133 - Element By.xpath: //input[@id='LoginForm_pword'] is displayed
+2016-12-21 14:47:49 INFO  Weblistener:46 - Value of the: xpath: //input[@id='LoginForm_pword'] before any changes made
+2016-12-21 14:47:49 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='LoginForm_pword']
+2016-12-21 14:47:49 INFO  Sync:219 - Waiting until element By.xpath: //input[@id='loginbutton'] is clickable
+2016-12-21 14:47:49 INFO  Sync:226 - Element By.xpath: //input[@id='loginbutton'] is displayed and is clickable
+2016-12-21 14:47:50 INFO  Weblistener:56 - Trying to click on:  xpath: //input[@id='loginbutton']
+2016-12-21 14:47:50 INFO  Weblistener:62 - Clicked on:  xpath: //input[@id='loginbutton']
+2016-12-21 14:47:50 INFO  SafeActions:90 - Clicked on the element By.xpath: //input[@id='loginbutton']
+2016-12-21 14:50:33 INFO  TestListener:137 - ###############################################################
+2016-12-21 14:50:33 INFO  TestListener:138 - SUCCESS ---------premiumAdsRotation has passed-----------------
+2016-12-21 14:50:33 INFO  TestListener:139 - ###############################################################
+2016-12-21 14:50:33 INFO  BaseSetup:264 - after suite
+2016-12-21 14:57:16 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2016-12-21 14:57:16 INFO  BaseSetup:171 - Browser name present in config file :chrome
+2016-12-21 14:57:16 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2016-12-21 14:57:16 INFO  ChromeBrowser:60 - Launching google chrome with new profile..
+2016-12-21 14:57:16 INFO  ChromeBrowser:68 - chrome driver initialized..
+2016-12-21 14:57:19 INFO  BaseSetup:190 - what driver is running? chrome
+2016-12-21 14:57:19 INFO  BaseSetup:150 - Initiated Webdriver...
+2016-12-21 14:57:21 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2016-12-21 14:57:34 INFO  Weblistener:41 - WebDriver has navigated to:'https://skiptaneo.com'
+2016-12-21 14:57:34 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2016-12-21 14:57:52 INFO  Weblistener:41 - WebDriver has navigated to:'https://dozer.skiptaneo.com'
+2016-12-21 14:57:52 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='LoginForm_email']
+2016-12-21 14:57:53 INFO  Sync:133 - Element By.xpath: //input[@id='LoginForm_email'] is displayed
+2016-12-21 14:57:54 INFO  Weblistener:46 - Value of the: xpath: //input[@id='LoginForm_email'] before any changes made
+2016-12-21 14:57:55 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='LoginForm_email']
+2016-12-21 14:57:55 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='LoginForm_pword']
+2016-12-21 14:57:56 INFO  Sync:133 - Element By.xpath: //input[@id='LoginForm_pword'] is displayed
+2016-12-21 14:57:56 INFO  Weblistener:46 - Value of the: xpath: //input[@id='LoginForm_pword'] before any changes made
+2016-12-21 14:57:57 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='LoginForm_pword']
+2016-12-21 14:57:57 INFO  Sync:219 - Waiting until element By.xpath: //input[@id='loginbutton'] is clickable
+2016-12-21 14:57:58 INFO  Sync:226 - Element By.xpath: //input[@id='loginbutton'] is displayed and is clickable
+2016-12-21 14:57:58 INFO  Weblistener:56 - Trying to click on:  xpath: //input[@id='loginbutton']
+2016-12-21 14:57:58 INFO  Weblistener:62 - Clicked on:  xpath: //input[@id='loginbutton']
+2016-12-21 14:57:58 INFO  SafeActions:90 - Clicked on the element By.xpath: //input[@id='loginbutton']
+2016-12-21 14:58:32 INFO  Advertisments:152 - https://dozer.skiptaneo.com/advertisements/
+2016-12-21 14:58:33 INFO  Advertisments:157 - Advertisements
+2016-12-21 14:58:38 INFO  Weblistener:56 - Trying to click on:  xpath: //input[@id='addAdvertisement']
+2016-12-21 14:58:38 INFO  Weblistener:62 - Clicked on:  xpath: //input[@id='addAdvertisement']
+2016-12-21 14:58:41 INFO  Advertisments:169 - New Advertisement
+2016-12-21 14:58:41 INFO  Advertisments:182 - Campaign ID
+Please Select Campaign ID
+Please Select Campaign ID
+2016-12-21 14:58:51 INFO  Weblistener:56 - Trying to click on:  xpath: //div[@class='adfieldsGrouping']//a[@href='#']
+2016-12-21 14:58:51 INFO  Weblistener:62 - Clicked on:  xpath: //div[@class='adfieldsGrouping']//a[@href='#']
+2016-12-21 14:58:54 INFO  Weblistener:46 - Value of the: xpath: //input[@type='input'] before any changes made
+2016-12-21 14:58:54 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@type='input']
+2016-12-21 14:58:54 INFO  Weblistener:56 - Trying to click on:  xpath: //ul//li[text()='kriannontargeted']
+2016-12-21 14:58:54 INFO  Weblistener:62 - Clicked on:  xpath: //ul//li[text()='kriannontargeted']
+2016-12-21 14:59:05 INFO  Weblistener:56 - Trying to click on:  id: AdvertisementFormTacticId
+2016-12-21 14:59:05 INFO  Weblistener:62 - Clicked on:  id: AdvertisementFormTacticId
+2016-12-21 14:59:10 INFO  Weblistener:56 - Trying to click on:  xpath: //select[@id='AdvertisementFormTacticId']/option[contains(text(), 'InStream')]
+2016-12-21 14:59:10 INFO  Weblistener:62 - Clicked on:  xpath: //select[@id='AdvertisementFormTacticId']/option[contains(text(), 'InStream')]
+2016-12-21 14:59:20 INFO  Weblistener:46 - Value of the: xpath: //input[@id='AdvertisementForm_Name'] before any changes made
+2016-12-21 14:59:20 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='AdvertisementForm_Name']
+2016-12-21 14:59:23 INFO  Weblistener:46 - Value of the: xpath: //div[@class='adfieldsGrouping']//input[@id='AdvertisementForm_Title'] before any changes made
+2016-12-21 14:59:24 INFO  Weblistener:51 - Value of element after change:  xpath: //div[@class='adfieldsGrouping']//input[@id='AdvertisementForm_Title']
+2016-12-21 14:59:24 INFO  Weblistener:56 - Trying to click on:  xpath: //div[@id='addNewAd']//form[@id='advertisement-form']/div[3]//div[@id='dpd2Edit']//span/i
+2016-12-21 14:59:24 INFO  Weblistener:62 - Clicked on:  xpath: //div[@id='addNewAd']//form[@id='advertisement-form']/div[3]//div[@id='dpd2Edit']//span/i
+2016-12-21 14:59:24 INFO  Weblistener:56 - Trying to click on:  xpath: //div[@class='datepicker dropdown-menu'][5]//table/tbody//tr//td[@class='day  active']
+2016-12-21 14:59:24 INFO  Weblistener:62 - Clicked on:  xpath: //div[@class='datepicker dropdown-menu'][5]//table/tbody//tr//td[@class='day  active']
+2016-12-21 14:59:24 INFO  Advertisments:299 - Redirect Url
+2016-12-21 14:59:24 INFO  Weblistener:46 - Value of the: id: AdvertisementForm_RedirectUrl before any changes made
+2016-12-21 14:59:25 INFO  Weblistener:51 - Value of element after change:  id: AdvertisementForm_RedirectUrl
+2016-12-21 14:59:33 INFO  Weblistener:56 - Trying to click on:  id: DisplayPage]] -> xpath: .//option[normalize-space(.) = "Curbside"]
+2016-12-21 14:59:33 INFO  Weblistener:62 - Clicked on:  id: DisplayPage]] -> xpath: .//option[normalize-space(.) = "Curbside"]
+2016-12-21 14:59:33 INFO  Advertisments:445 - Country
+2016-12-21 14:59:38 INFO  Weblistener:56 - Trying to click on:  id: AdvertisementForm_Country]] -> xpath: .//option[normalize-space(.) = "Please Select country"]
+2016-12-21 14:59:38 INFO  Weblistener:62 - Clicked on:  id: AdvertisementForm_Country]] -> xpath: .//option[normalize-space(.) = "Please Select country"]
+2016-12-21 14:59:42 INFO  Weblistener:56 - Trying to click on:  id: SourceType]] -> xpath: .//option[normalize-space(.) = "Video"]
+2016-12-21 14:59:42 INFO  Weblistener:62 - Clicked on:  id: SourceType]] -> xpath: .//option[normalize-space(.) = "Video"]
+2016-12-21 14:59:45 INFO  Weblistener:56 - Trying to click on:  xpath: //input[@id='AdvertisementForm_IsAutoPlay']/preceding-sibling::span
+2016-12-21 14:59:45 INFO  Weblistener:62 - Clicked on:  xpath: //input[@id='AdvertisementForm_IsAutoPlay']/preceding-sibling::span
+2016-12-21 14:59:48 INFO  Weblistener:56 - Trying to click on:  xpath: //input[@id='AdvertisementForm_IsRestrictVideo']/preceding-sibling::span
+2016-12-21 14:59:48 INFO  Weblistener:62 - Clicked on:  xpath: //input[@id='AdvertisementForm_IsRestrictVideo']/preceding-sibling::span
+2016-12-21 14:59:53 INFO  Weblistener:46 - Value of the: id: editable_en before any changes made
+2016-12-21 14:59:53 INFO  Weblistener:51 - Value of element after change:  id: editable_en
+2016-12-21 14:59:54 INFO  Weblistener:56 - Trying to click on:  xpath: //div[@id='GroupLogo_en']
+2016-12-21 14:59:54 INFO  Weblistener:62 - Clicked on:  xpath: //div[@id='GroupLogo_en']
+2016-12-21 15:00:33 INFO  Weblistener:56 - Trying to click on:  id: ShowPreviewAdId
+2016-12-21 15:00:33 INFO  Weblistener:62 - Clicked on:  id: ShowPreviewAdId
+2016-12-21 15:00:52 ERROR Weblistener:91 - WebDriver error:
+org.openqa.selenium.WebDriverException: chrome not reachable
+  (Session info: chrome=56.0.2924.28)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 4.02 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+*** Element info: {Using=xpath, value=//button[@id='closemymodal']}
+Session ID: 126dd5ea6c81a2677f90388560d672b1
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir3692_27713, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=56.0.2924.28, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:678)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:363)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByXPath(RemoteWebDriver.java:500)
+	at org.openqa.selenium.By$ByXPath.findElement(By.java:361)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:355)
+	at sun.reflect.GeneratedMethodAccessor8.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:103)
+	at com.sun.proxy.$Proxy10.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:188)
+	at com.techo2.skiptaneo.commons.pageobjects.Advertisments.showPreview(Advertisments.java:721)
+	at com.techo2.skiptaneo.testsuite.cases.AdvertismentsTest.verifyAd_Curbside(AdvertismentsTest.java:94)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:86)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:646)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:823)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1131)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:778)
+	at org.testng.TestRunner.run(TestRunner.java:632)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+
+
+2017-02-28 15:16:41 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-02-28 15:16:51 ERROR Weblistener:91 - WebDriver error:
+org.openqa.selenium.WebDriverException: unknown error: cannot get automation extension
+from unknown error: page could not be found: chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html
+  (Session info: chrome=57.0.2987.74)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 10.64 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 43656ce85be882e2bda64d12839256ae
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir8228_19528, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=57.0.2987.74, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:678)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:701)
+	at org.openqa.selenium.remote.RemoteWebDriver.getScreenshotAs(RemoteWebDriver.java:335)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:103)
+	at com.sun.proxy.$Proxy10.getScreenshotAs(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.getScreenshotAs(EventFiringWebDriver.java:270)
+	at com.techo2.skiptaneo.commons.utilities.ScreenCapture.saveScreenShot(ScreenCapture.java:163)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.onTestFailure(TestListener.java:63)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1661)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1645)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:703)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:823)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1131)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:778)
+	at org.testng.TestRunner.run(TestRunner.java:632)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:319)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:268)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1225)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1150)
+	at org.testng.TestNG.runSuites(TestNG.java:1075)
+	at org.testng.TestNG.run(TestNG.java:1047)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:126)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:137)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:58)
+2017-02-28 15:16:51 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-02-28 15:16:55 ERROR Weblistener:91 - WebDriver error:
+org.openqa.selenium.WebDriverException: unknown error: cannot get automation extension
+from chrome not reachable
+  (Session info: chrome=57.0.2987.74)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 3.22 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 43656ce85be882e2bda64d12839256ae
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir8228_19528, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=57.0.2987.74, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:57)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:526)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:206)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:158)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:678)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:701)
+	at org.openqa.selenium.remote.RemoteWebDriver.getScreenshotAs(RemoteWebDriver.java:335)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:103)
+	at com.sun.proxy.$Proxy10.getScreenshotAs(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.getScreenshotAs(EventFiringWebDriver.java:270)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.createAttachment(TestListener.java:92)
+	at com.techo2.skiptaneo.commons.listiners.TestListener.onTestFailure(TestListener.java:64)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1661)
+	at org.testng.internal.Invoker.runTestListeners(Invoker.java:1645)
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:703)
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:823)
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1131)
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:129)
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:112)
+	at org.testng.TestRunner.privateRun(TestRunner.java:778)
+	at org.testng.TestRunner.run(TestRunner.java:632)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:319)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:268)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1225)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1150)
+	at org.testng.TestNG.runSuites(TestNG.java:1075)
+	at org.testng.TestNG.run(TestNG.java:1047)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:126)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:137)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:58)
+2017-02-28 15:16:55 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-02-28 15:16:55 INFO  BaseSetup:264 - after suite
+2017-02-28 15:20:05 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-02-28 15:20:05 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-02-28 15:20:05 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-02-28 15:20:05 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-02-28 15:20:15 INFO  BaseSetup:190 - what driver is running? firefox
+2017-02-28 15:20:15 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-02-28 15:20:15 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-02-28 15:20:21 INFO  Weblistener:41 - WebDriver has navigated to:'http://10.10.73.33:8083'
+2017-02-28 15:20:21 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-02-28 15:20:28 INFO  Weblistener:41 - WebDriver has navigated to:'http://10.10.73.33:8083'
+2017-02-28 15:20:28 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-02-28 15:20:28 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-02-28 15:20:28 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-02-28 15:20:29 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-02-28 15:20:29 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-02-28 15:20:29 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-02-28 15:20:30 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-02-28 15:20:30 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-02-28 15:20:30 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-02-28 15:20:30 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-02-28 15:20:31 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-02-28 15:20:31 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-02-28 15:20:31 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-02-28 15:20:31 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-02-28 15:20:31 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-02-28 15:20:31 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-02-28 15:20:31 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-02-28 15:20:33 INFO  ScreenCapture:169 - Screenshot created and : Screenshot179068038.jpeg
+2017-02-28 15:20:42 INFO  BaseSetup:264 - after suite
+2017-03-01 11:32:46 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 11:32:46 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 11:32:46 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 11:32:46 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 11:32:57 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 11:32:57 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 11:32:58 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 11:33:03 INFO  Weblistener:41 - WebDriver has navigated to:'http://10.10.73.33:8083'
+2017-03-01 11:33:04 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 11:33:10 INFO  Weblistener:41 - WebDriver has navigated to:'http://10.10.73.33:8083'
+2017-03-01 11:33:10 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 11:33:10 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 11:33:11 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 11:33:11 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 11:33:11 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 11:33:12 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 11:33:12 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 11:33:12 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 11:33:12 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 11:33:13 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 11:33:13 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 11:33:13 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 11:33:13 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 11:33:13 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 11:33:13 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-01 11:33:13 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 11:33:13 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-01 11:33:15 INFO  ScreenCapture:169 - Screenshot created and : Screenshot-79930869.jpeg
+2017-03-01 11:33:25 INFO  BaseSetup:264 - after suite
+2017-03-01 17:47:06 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 17:47:06 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 17:47:06 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 17:47:06 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 17:47:14 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 17:47:14 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 17:47:15 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 17:47:20 INFO  Weblistener:41 - WebDriver has navigated to:'http://10.10.73.33:8083'
+2017-03-01 17:47:21 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 17:47:27 INFO  Weblistener:41 - WebDriver has navigated to:'http://10.10.73.33:8083'
+2017-03-01 17:47:27 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 17:47:27 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 17:47:28 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 17:47:29 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 17:47:29 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 17:47:29 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 17:47:29 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 17:47:29 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 17:47:29 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 17:47:30 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 17:47:30 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 17:47:30 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 17:47:30 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 17:47:30 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 17:47:30 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-01 17:47:30 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 17:47:30 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-01 17:47:32 INFO  ScreenCapture:169 - Screenshot created and : Screenshot143727039.jpeg
+2017-03-01 17:47:42 INFO  BaseSetup:264 - after suite
+2017-03-01 18:45:08 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 18:45:08 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 18:45:08 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 18:45:08 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 18:45:15 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 18:45:15 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 18:45:16 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 18:45:22 INFO  Weblistener:41 - WebDriver has navigated to:'http://10.10.73.33:8083'
+2017-03-01 18:45:23 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 18:45:32 INFO  Weblistener:41 - WebDriver has navigated to:'http://10.10.73.33:8083'
+2017-03-01 18:45:32 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 18:45:33 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 18:45:33 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 18:45:33 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 18:45:34 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 18:45:34 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 18:45:35 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 18:45:35 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 18:45:35 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 18:45:36 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 18:45:36 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:45:38 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:45:38 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:45:38 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 18:45:38 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-01 18:45:38 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 18:45:38 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-01 18:45:39 INFO  ScreenCapture:169 - Screenshot created and : Screenshot-1152337005.jpeg
+2017-03-01 18:45:44 INFO  BaseSetup:264 - after suite
+2017-03-01 18:57:02 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 18:57:02 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 18:57:02 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 18:57:02 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 18:57:09 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 18:57:09 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 18:57:09 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 18:57:14 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 18:57:15 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 18:57:15 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 18:57:15 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 18:57:16 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 18:57:16 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 18:57:16 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 18:57:17 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 18:57:17 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 18:57:17 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 18:57:18 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 18:57:18 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 18:57:18 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 18:57:18 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:57:19 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:57:19 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:57:19 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 18:57:19 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-01 18:57:19 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 18:57:19 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-01 18:57:20 INFO  ScreenCapture:169 - Screenshot created and : Screenshot-1174044640.jpeg
+2017-03-01 18:57:35 INFO  BaseSetup:264 - after suite
+2017-03-01 18:58:05 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 18:58:05 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 18:58:05 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 18:58:05 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 18:58:12 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 18:58:12 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 18:58:13 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 18:58:18 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 18:58:18 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 18:58:18 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 18:58:18 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 18:58:18 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 18:58:19 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 18:58:20 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 18:58:20 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 18:58:20 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 18:58:20 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 18:58:20 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 18:58:20 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 18:58:21 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 18:58:21 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:58:22 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:58:22 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 18:58:22 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 18:58:22 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-01 18:58:22 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-01 18:58:22 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-01 18:58:23 INFO  ScreenCapture:169 - Screenshot created and : Screenshot-1611057975.jpeg
+2017-03-01 18:58:38 INFO  BaseSetup:264 - after suite
+2017-03-01 18:59:48 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 18:59:48 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 18:59:48 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 18:59:48 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 18:59:55 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 18:59:55 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 18:59:55 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 19:00:01 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 19:00:01 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 19:00:01 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 19:00:01 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 19:00:01 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 19:00:02 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 19:00:03 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 19:00:03 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 19:00:03 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 19:00:04 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 19:00:04 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 19:00:04 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 19:00:04 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 19:00:04 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:00:05 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:00:05 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:00:05 INFO  TestListener:137 - ###############################################################
+2017-03-01 19:00:05 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-01 19:00:05 INFO  TestListener:139 - ###############################################################
+2017-03-01 19:00:21 INFO  BaseSetup:264 - after suite
+2017-03-01 19:01:04 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 19:01:04 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 19:01:04 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 19:01:04 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 19:01:11 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 19:01:11 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 19:01:11 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 19:01:16 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 19:01:17 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 19:01:17 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 19:01:17 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 19:01:17 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 19:01:17 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 19:01:18 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 19:01:18 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 19:01:19 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 19:01:19 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 19:01:19 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 19:01:19 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 19:01:19 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 19:01:20 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:01:20 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:01:20 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:02:46 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 19:02:46 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 19:02:46 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 19:02:46 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 19:02:54 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 19:02:54 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 19:02:54 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 19:03:01 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 19:03:01 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 19:03:01 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 19:03:01 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 19:03:01 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 19:03:02 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 19:03:02 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 19:03:03 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 19:03:03 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 19:03:03 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 19:03:04 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 19:03:04 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 19:03:04 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 19:03:04 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:03:04 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:03:04 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:03:04 INFO  TestListener:137 - ###############################################################
+2017-03-01 19:03:04 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-01 19:03:04 INFO  TestListener:139 - ###############################################################
+2017-03-01 19:03:21 INFO  BaseSetup:264 - after suite
+2017-03-01 19:09:13 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-01 19:09:13 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-01 19:09:13 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-01 19:09:13 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-01 19:09:19 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-01 19:09:19 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-01 19:09:20 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 19:09:25 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 19:09:25 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-01 19:09:25 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-01 19:09:25 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-01 19:09:25 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-01 19:09:25 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-01 19:09:26 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-01 19:09:26 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-01 19:09:26 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-01 19:09:27 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-01 19:09:27 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-01 19:09:27 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-01 19:09:27 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-01 19:09:28 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:09:28 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:09:28 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-01 19:09:28 INFO  TestListener:137 - ###############################################################
+2017-03-01 19:09:28 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-01 19:09:28 INFO  TestListener:139 - ###############################################################
+2017-03-01 19:09:45 INFO  BaseSetup:264 - after suite
+2017-03-02 14:53:51 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 14:53:51 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-02 14:53:51 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 14:53:51 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:53:51 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-02 14:53:51 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:53:51 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-02 14:53:51 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-03-02 14:53:51 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-03-02 14:53:51 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:53:51 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-02 14:53:51 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:53:51 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-02 14:53:51 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-03-02 14:53:51 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-03-02 14:55:05 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 14:55:05 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-02 14:55:05 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 14:55:05 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:55:05 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-02 14:55:05 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:55:05 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-02 14:55:05 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-03-02 14:55:05 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-03-02 14:55:05 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:55:05 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-02 14:55:05 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:55:05 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-02 14:55:05 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-03-02 14:55:05 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-03-02 14:55:58 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 14:55:58 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-02 14:55:58 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 14:55:58 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:55:58 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-02 14:55:58 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:55:58 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-02 14:55:58 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-03-02 14:55:58 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-03-02 14:55:58 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:55:58 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-02 14:55:58 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:55:58 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-02 14:55:58 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-03-02 14:55:58 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-03-02 14:56:10 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 14:56:10 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-02 14:56:10 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 14:56:11 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:56:11 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-02 14:56:11 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:56:11 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-02 14:56:11 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-03-02 14:56:11 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-03-02 14:56:11 ERROR TestListener:55 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:56:11 ERROR TestListener:56 - ERROR ----------loginwithcredentials has failed-----------------
+2017-03-02 14:56:11 ERROR TestListener:57 - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+2017-03-02 14:56:11 INFO  ScreenCapture:162 - Saving screenshot of current browser window
+2017-03-02 14:56:11 ERROR ScreenCapture:174 - An exception occured while saving screenshot of current browser window..null
+2017-03-02 14:56:11 ERROR TestListener:96 - An exception occured while saving screenshot of current browser window from createAttachment method..null
+2017-03-02 16:02:50 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 16:02:50 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-02 16:02:50 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 16:02:50 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-02 16:02:58 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-02 16:02:58 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-02 16:02:58 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:03:07 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:03:07 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:03:07 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:03:07 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-02 16:03:07 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-02 16:03:08 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-02 16:03:09 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-02 16:03:09 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-02 16:03:09 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-02 16:03:09 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-02 16:03:10 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-02 16:03:10 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-02 16:03:10 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-02 16:03:10 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:03:10 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:03:10 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:03:13 INFO  Sync:219 - Waiting until element By.xpath: //a[@class='dropdown-toggle'] is clickable
+2017-03-02 16:03:14 INFO  Sync:226 - Element By.xpath: //a[@class='dropdown-toggle'] is displayed and is clickable
+2017-03-02 16:03:14 INFO  Weblistener:56 - Trying to click on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:03:15 INFO  Weblistener:62 - Clicked on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:03:15 INFO  SafeActions:90 - Clicked on the element By.xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:03:17 INFO  TestListener:137 - ###############################################################
+2017-03-02 16:03:17 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-02 16:03:17 INFO  TestListener:139 - ###############################################################
+2017-03-02 16:03:27 INFO  BaseSetup:264 - after suite
+2017-03-02 16:05:02 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 16:05:02 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-02 16:05:02 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 16:05:02 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-02 16:05:10 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-02 16:05:10 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-02 16:05:10 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:05:15 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:05:16 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:05:16 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:05:16 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-02 16:05:17 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-02 16:05:17 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-02 16:05:17 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-02 16:05:18 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-02 16:05:18 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-02 16:05:19 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-02 16:05:19 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-02 16:05:19 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-02 16:05:19 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-02 16:05:19 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:05:22 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:05:22 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:05:25 INFO  Sync:219 - Waiting until element By.xpath: //a[@class='dropdown-toggle'] is clickable
+2017-03-02 16:05:25 INFO  Sync:226 - Element By.xpath: //a[@class='dropdown-toggle'] is displayed and is clickable
+2017-03-02 16:05:25 INFO  Weblistener:56 - Trying to click on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:05:26 INFO  Weblistener:62 - Clicked on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:05:26 INFO  SafeActions:90 - Clicked on the element By.xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:05:28 INFO  TestListener:137 - ###############################################################
+2017-03-02 16:05:28 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-02 16:05:28 INFO  TestListener:139 - ###############################################################
+2017-03-02 16:05:36 INFO  BaseSetup:264 - after suite
+2017-03-02 16:06:04 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 16:06:04 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-02 16:06:04 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 16:06:04 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-02 16:06:11 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-02 16:06:11 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-02 16:06:12 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:06:18 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:06:18 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:06:18 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:06:19 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-02 16:06:19 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-02 16:06:19 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-02 16:06:20 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-02 16:06:20 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-02 16:06:20 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-02 16:06:21 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-02 16:06:21 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-02 16:06:21 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-02 16:06:21 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-02 16:06:21 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:06:22 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:06:22 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:06:26 INFO  Sync:219 - Waiting until element By.xpath: //a[@class='dropdown-toggle'] is clickable
+2017-03-02 16:06:26 INFO  Sync:226 - Element By.xpath: //a[@class='dropdown-toggle'] is displayed and is clickable
+2017-03-02 16:06:26 INFO  Weblistener:56 - Trying to click on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:06:27 INFO  Weblistener:62 - Clicked on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:06:27 INFO  SafeActions:90 - Clicked on the element By.xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:06:28 INFO  TestListener:137 - ###############################################################
+2017-03-02 16:06:28 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-02 16:06:28 INFO  TestListener:139 - ###############################################################
+2017-03-02 16:06:39 INFO  BaseSetup:264 - after suite
+2017-03-02 16:21:56 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 16:21:56 INFO  BaseSetup:171 - Browser name present in config file :firefox
+2017-03-02 16:21:56 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 16:21:56 INFO  FirefoxBrowser:42 - Launching firefox with a new profile
+2017-03-02 16:22:03 INFO  BaseSetup:190 - what driver is running? firefox
+2017-03-02 16:22:03 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-02 16:22:03 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:22:10 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:22:10 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:22:10 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:22:10 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-02 16:22:10 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-02 16:22:11 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-02 16:22:11 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-02 16:22:12 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-02 16:22:12 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-02 16:22:12 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-02 16:22:12 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-02 16:22:13 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-02 16:22:13 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-02 16:22:13 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:22:14 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:22:14 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:22:17 INFO  Sync:219 - Waiting until element By.xpath: //a[@class='dropdown-toggle'] is clickable
+2017-03-02 16:22:17 INFO  Sync:226 - Element By.xpath: //a[@class='dropdown-toggle'] is displayed and is clickable
+2017-03-02 16:22:17 INFO  Weblistener:56 - Trying to click on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:22:18 INFO  Weblistener:62 - Clicked on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:22:18 INFO  SafeActions:90 - Clicked on the element By.xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:22:19 INFO  TestListener:137 - ###############################################################
+2017-03-02 16:22:19 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-02 16:22:19 INFO  TestListener:139 - ###############################################################
+2017-03-02 16:22:30 INFO  BaseSetup:264 - after suite
+2017-03-02 16:30:31 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 16:30:31 INFO  BaseSetup:171 - Browser name present in config file :chrome
+2017-03-02 16:30:31 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 16:30:31 INFO  ChromeBrowser:60 - Launching google chrome with new profile..
+2017-03-02 16:30:31 INFO  ChromeBrowser:68 - chrome driver initialized..
+2017-03-02 16:30:35 INFO  BaseSetup:190 - what driver is running? chrome
+2017-03-02 16:30:35 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-02 16:30:45 ERROR BaseSetup:159 - unknown error: cannot get automation extension
+from unknown error: page could not be found: chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html
+  (Session info: chrome=57.0.2987.88)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 10.07 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: de12038c7d06fcae2a521a8d2eed06ac
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir6244_23779, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=57.0.2987.88, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]---
+com.techo2.skiptaneo.testsuite.base.BaseSetup.initializeBaseSetup(BaseSetup.java:159)
+sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+java.lang.reflect.Method.invoke(Method.java:606)
+org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85)
+org.testng.internal.Invoker.invokeConfigurationMethod(Invoker.java:510)
+org.testng.internal.Invoker.invokeConfigurations(Invoker.java:211)
+org.testng.internal.Invoker.invokeConfigurations(Invoker.java:138)
+org.testng.internal.TestMethodWorker.invokeBeforeClassMethods(TestMethodWorker.java:170)
+org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:104)
+org.testng.TestRunner.privateRun(TestRunner.java:774)
+org.testng.TestRunner.run(TestRunner.java:624)
+org.testng.SuiteRunner.runTest(SuiteRunner.java:359)
+org.testng.SuiteRunner.runSequentially(SuiteRunner.java:354)
+org.testng.SuiteRunner.privateRun(SuiteRunner.java:312)
+org.testng.SuiteRunner.run(SuiteRunner.java:261)
+org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+org.testng.TestNG.runSuitesSequentially(TestNG.java:1215)
+org.testng.TestNG.runSuitesLocally(TestNG.java:1140)
+org.testng.TestNG.run(TestNG.java:1048)
+org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:178)
+org.apache.maven.surefire.testng.TestNGXmlTestSuite.execute(TestNGXmlTestSuite.java:92)
+org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:96)
+sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+java.lang.reflect.Method.invoke(Method.java:606)
+org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray2(ReflectionUtils.java:208)
+org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:159)
+org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:87)
+org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:153)
+org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:95)
+2017-03-02 16:30:45 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:30:53 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:30:53 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-02 16:30:53 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-02 16:30:54 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-02 16:30:54 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-02 16:30:54 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-02 16:30:54 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-02 16:30:55 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-02 16:30:55 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-02 16:30:55 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-02 16:30:55 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-02 16:30:55 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:30:56 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:30:56 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:30:59 INFO  Sync:219 - Waiting until element By.xpath: //a[@class='dropdown-toggle'] is clickable
+2017-03-02 16:30:59 INFO  Sync:226 - Element By.xpath: //a[@class='dropdown-toggle'] is displayed and is clickable
+2017-03-02 16:30:59 INFO  Weblistener:56 - Trying to click on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:31:00 INFO  Weblistener:62 - Clicked on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:31:00 INFO  SafeActions:90 - Clicked on the element By.xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:31:01 INFO  TestListener:137 - ###############################################################
+2017-03-02 16:31:01 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-02 16:31:01 INFO  TestListener:139 - ###############################################################
+2017-03-02 16:31:06 INFO  BaseSetup:264 - after suite
+2017-03-02 16:50:43 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 16:50:43 INFO  BaseSetup:171 - Browser name present in config file :chrome
+2017-03-02 16:50:43 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 16:50:43 INFO  ChromeBrowser:60 - Launching google chrome with new profile..
+2017-03-02 16:50:43 INFO  ChromeBrowser:68 - chrome driver initialized..
+2017-03-02 16:50:46 INFO  BaseSetup:190 - what driver is running? chrome
+2017-03-02 16:50:46 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-02 16:50:56 ERROR BaseSetup:159 - unknown error: cannot get automation extension
+from unknown error: page could not be found: chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html
+  (Session info: chrome=57.0.2987.88)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 10.03 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 5d4e800871c8bd32dee415dff8caf81c
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir8900_27775, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=57.0.2987.88, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]---
+com.techo2.skiptaneo.testsuite.base.BaseSetup.initializeBaseSetup(BaseSetup.java:159)
+sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+java.lang.reflect.Method.invoke(Method.java:606)
+org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85)
+org.testng.internal.Invoker.invokeConfigurationMethod(Invoker.java:510)
+org.testng.internal.Invoker.invokeConfigurations(Invoker.java:211)
+org.testng.internal.Invoker.invokeConfigurations(Invoker.java:138)
+org.testng.internal.TestMethodWorker.invokeBeforeClassMethods(TestMethodWorker.java:170)
+org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:104)
+org.testng.TestRunner.privateRun(TestRunner.java:774)
+org.testng.TestRunner.run(TestRunner.java:624)
+org.testng.SuiteRunner.runTest(SuiteRunner.java:359)
+org.testng.SuiteRunner.runSequentially(SuiteRunner.java:354)
+org.testng.SuiteRunner.privateRun(SuiteRunner.java:312)
+org.testng.SuiteRunner.run(SuiteRunner.java:261)
+org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+org.testng.TestNG.runSuitesSequentially(TestNG.java:1215)
+org.testng.TestNG.runSuitesLocally(TestNG.java:1140)
+org.testng.TestNG.run(TestNG.java:1048)
+org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:178)
+org.apache.maven.surefire.testng.TestNGXmlTestSuite.execute(TestNGXmlTestSuite.java:92)
+org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:96)
+sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+java.lang.reflect.Method.invoke(Method.java:606)
+org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray2(ReflectionUtils.java:208)
+org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:159)
+org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:87)
+org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:153)
+org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:95)
+2017-03-02 16:50:56 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 16:51:02 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 16:51:02 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-02 16:51:03 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-02 16:51:03 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-02 16:51:04 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-02 16:51:04 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-02 16:51:04 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-02 16:51:04 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-02 16:51:04 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-02 16:51:04 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-02 16:51:04 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-02 16:51:05 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:51:05 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:51:05 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 16:51:08 INFO  Sync:219 - Waiting until element By.xpath: //a[@class='dropdown-toggle'] is clickable
+2017-03-02 16:51:08 INFO  Sync:226 - Element By.xpath: //a[@class='dropdown-toggle'] is displayed and is clickable
+2017-03-02 16:51:08 INFO  Weblistener:56 - Trying to click on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:51:08 INFO  Weblistener:62 - Clicked on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:51:08 INFO  SafeActions:90 - Clicked on the element By.xpath: //a[@class='dropdown-toggle']
+2017-03-02 16:51:09 INFO  TestListener:137 - ###############################################################
+2017-03-02 16:51:09 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-02 16:51:09 INFO  TestListener:139 - ###############################################################
+2017-03-02 16:51:17 INFO  BaseSetup:264 - after suite
+2017-03-02 17:34:43 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 17:34:43 INFO  BaseSetup:171 - Browser name present in config file :chrome
+2017-03-02 17:34:43 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 17:34:43 INFO  ChromeBrowser:60 - Launching google chrome with new profile..
+2017-03-02 17:34:43 INFO  ChromeBrowser:68 - chrome driver initialized..
+2017-03-02 17:34:45 INFO  BaseSetup:190 - what driver is running? chrome
+2017-03-02 17:34:45 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-02 17:34:56 ERROR BaseSetup:159 - unknown error: cannot get automation extension
+from unknown error: page could not be found: chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html
+  (Session info: chrome=57.0.2987.88)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 10.06 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 985349999552888bc3c7efa5cc917aed
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir5256_2187, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=57.0.2987.88, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]---
+com.techo2.skiptaneo.testsuite.base.BaseSetup.initializeBaseSetup(BaseSetup.java:159)
+sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+java.lang.reflect.Method.invoke(Method.java:606)
+org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85)
+org.testng.internal.Invoker.invokeConfigurationMethod(Invoker.java:510)
+org.testng.internal.Invoker.invokeConfigurations(Invoker.java:211)
+org.testng.internal.Invoker.invokeConfigurations(Invoker.java:138)
+org.testng.internal.TestMethodWorker.invokeBeforeClassMethods(TestMethodWorker.java:170)
+org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:104)
+org.testng.TestRunner.privateRun(TestRunner.java:774)
+org.testng.TestRunner.run(TestRunner.java:624)
+org.testng.SuiteRunner.runTest(SuiteRunner.java:359)
+org.testng.SuiteRunner.runSequentially(SuiteRunner.java:354)
+org.testng.SuiteRunner.privateRun(SuiteRunner.java:312)
+org.testng.SuiteRunner.run(SuiteRunner.java:261)
+org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+org.testng.TestNG.runSuitesSequentially(TestNG.java:1215)
+org.testng.TestNG.runSuitesLocally(TestNG.java:1140)
+org.testng.TestNG.run(TestNG.java:1048)
+org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:178)
+org.apache.maven.surefire.testng.TestNGXmlTestSuite.execute(TestNGXmlTestSuite.java:92)
+org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:96)
+sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+java.lang.reflect.Method.invoke(Method.java:606)
+org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray2(ReflectionUtils.java:208)
+org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:159)
+org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:87)
+org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:153)
+org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:95)
+2017-03-02 17:34:56 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 17:35:02 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 17:35:02 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-02 17:35:02 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-02 17:35:03 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-02 17:35:04 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-02 17:35:04 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-02 17:35:04 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-02 17:35:04 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-02 17:35:04 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-02 17:35:04 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-02 17:35:04 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-02 17:35:05 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 17:35:05 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 17:35:05 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 17:35:08 INFO  Sync:219 - Waiting until element By.xpath: //a[@class='dropdown-toggle'] is clickable
+2017-03-02 17:35:08 INFO  Sync:226 - Element By.xpath: //a[@class='dropdown-toggle'] is displayed and is clickable
+2017-03-02 17:35:08 INFO  Weblistener:56 - Trying to click on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 17:35:08 INFO  Weblistener:62 - Clicked on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 17:35:08 INFO  SafeActions:90 - Clicked on the element By.xpath: //a[@class='dropdown-toggle']
+2017-03-02 17:35:09 INFO  TestListener:137 - ###############################################################
+2017-03-02 17:35:09 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-02 17:35:09 INFO  TestListener:139 - ###############################################################
+2017-03-02 17:35:16 INFO  BaseSetup:264 - after suite
+2017-03-02 17:36:02 INFO  BaseSetup:132 - <h2>--------------------SuiteRunner Log-------------------------<h2>
+2017-03-02 17:36:02 INFO  BaseSetup:171 - Browser name present in config file :chrome
+2017-03-02 17:36:02 INFO  BaseSetup:179 - -----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------
+2017-03-02 17:36:02 INFO  ChromeBrowser:60 - Launching google chrome with new profile..
+2017-03-02 17:36:02 INFO  ChromeBrowser:68 - chrome driver initialized..
+2017-03-02 17:36:05 INFO  BaseSetup:190 - what driver is running? chrome
+2017-03-02 17:36:06 INFO  BaseSetup:150 - Initiated Webdriver...
+2017-03-02 17:36:16 ERROR BaseSetup:159 - unknown error: cannot get automation extension
+from unknown error: page could not be found: chrome-extension://aapnijgdinlhnhlmodcfapnahmbfebeb/_generated_background_page.html
+  (Session info: chrome=57.0.2987.88)
+  (Driver info: chromedriver=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf),platform=Windows NT 10.0.14393 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 10.04 seconds
+Build info: version: '2.53.1', revision: 'a36b8b1cd5757287168e54b817830adce9b0158d', time: '2016-06-30 19:26:09'
+System info: host: 'user2-PC', ip: '10.10.73.113', os.name: 'Windows 8.1', os.arch: 'amd64', os.version: '6.3', java.version: '1.7.0_79'
+Session ID: 758fbff2ae13a49bc3f52a1be7e9512d
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{platform=WIN8_1, acceptSslCerts=true, javascriptEnabled=true, browserName=chrome, chrome={userDataDir=C:\Users\user2\AppData\Local\Temp\scoped_dir7024_1255, chromedriverVersion=2.24.417431 (9aea000394714d2fbb20850021f6204f2256b9cf)}, networkConnectionEnabled=false, rotatable=false, locationContextEnabled=true, mobileEmulationEnabled=false, version=57.0.2987.88, pageLoadStrategy=normal, takesHeapSnapshot=true, cssSelectorsEnabled=true, databaseEnabled=false, handlesAlerts=true, browserConnectionEnabled=false, webStorageEnabled=true, nativeEvents=true, hasTouchScreen=false, applicationCacheEnabled=false, takesScreenshot=true}]---
+com.techo2.skiptaneo.testsuite.base.BaseSetup.initializeBaseSetup(BaseSetup.java:159)
+sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+java.lang.reflect.Method.invoke(Method.java:606)
+org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:86)
+org.testng.internal.Invoker.invokeConfigurationMethod(Invoker.java:515)
+org.testng.internal.Invoker.invokeConfigurations(Invoker.java:216)
+org.testng.internal.Invoker.invokeConfigurations(Invoker.java:143)
+org.testng.internal.TestMethodWorker.invokeBeforeClassMethods(TestMethodWorker.java:178)
+org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108)
+org.testng.TestRunner.privateRun(TestRunner.java:778)
+org.testng.TestRunner.run(TestRunner.java:632)
+org.testng.SuiteRunner.runTest(SuiteRunner.java:366)
+org.testng.SuiteRunner.runSequentially(SuiteRunner.java:361)
+org.testng.SuiteRunner.privateRun(SuiteRunner.java:319)
+org.testng.SuiteRunner.run(SuiteRunner.java:268)
+org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86)
+org.testng.TestNG.runSuitesSequentially(TestNG.java:1225)
+org.testng.TestNG.runSuitesLocally(TestNG.java:1150)
+org.testng.TestNG.runSuites(TestNG.java:1075)
+org.testng.TestNG.run(TestNG.java:1047)
+org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:126)
+org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:137)
+org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:58)
+2017-03-02 17:36:16 INFO  Weblistener:36 - Before navigating to url printing the browser associated capabilities
+2017-03-02 17:36:22 INFO  Weblistener:41 - WebDriver has navigated to:'http://abc.com:4200/#/login'
+2017-03-02 17:36:22 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='email']
+2017-03-02 17:36:22 INFO  Sync:133 - Element By.xpath: //input[@id='email'] is displayed
+2017-03-02 17:36:22 INFO  Weblistener:46 - Value of the: xpath: //input[@id='email'] before any changes made
+2017-03-02 17:36:23 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='email']
+2017-03-02 17:36:23 INFO  Sync:125 - Waiting for presence of element By.xpath: //input[@id='pass']
+2017-03-02 17:36:23 INFO  Sync:133 - Element By.xpath: //input[@id='pass'] is displayed
+2017-03-02 17:36:24 INFO  Weblistener:46 - Value of the: xpath: //input[@id='pass'] before any changes made
+2017-03-02 17:36:24 INFO  Weblistener:51 - Value of element after change:  xpath: //input[@id='pass']
+2017-03-02 17:36:24 INFO  Sync:219 - Waiting until element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is clickable
+2017-03-02 17:36:24 INFO  Sync:226 - Element By.xpath: //button[@class='normal bluebutton bluebuttonlarge'] is displayed and is clickable
+2017-03-02 17:36:25 INFO  Weblistener:56 - Trying to click on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 17:36:25 INFO  Weblistener:62 - Clicked on:  xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 17:36:25 INFO  SafeActions:90 - Clicked on the element By.xpath: //button[@class='normal bluebutton bluebuttonlarge']
+2017-03-02 17:36:28 INFO  Sync:219 - Waiting until element By.xpath: //a[@class='dropdown-toggle'] is clickable
+2017-03-02 17:36:28 INFO  Sync:226 - Element By.xpath: //a[@class='dropdown-toggle'] is displayed and is clickable
+2017-03-02 17:36:29 INFO  Weblistener:56 - Trying to click on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 17:36:29 INFO  Weblistener:62 - Clicked on:  xpath: //a[@class='dropdown-toggle']
+2017-03-02 17:36:29 INFO  SafeActions:90 - Clicked on the element By.xpath: //a[@class='dropdown-toggle']
+2017-03-02 17:36:32 INFO  TestListener:137 - ###############################################################
+2017-03-02 17:36:32 INFO  TestListener:138 - SUCCESS ---------loginwithcredentials has passed-----------------
+2017-03-02 17:36:32 INFO  TestListener:139 - ###############################################################
+2017-03-02 17:36:36 INFO  BaseSetup:264 - after suite

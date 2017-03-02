@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="RunTests"
+           tests="1"
+           failures="0"
+           errors="0"
+           skipped="0"
+           time="13.048">
+  <properties />
+  
+  
+            <testcase name="loginwithcredentials" time="13.048" classname="com.techo2.skiptaneo.testsuite.cases.LoginTest" />
+      
+</testsuite>
