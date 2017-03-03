@@ -1,28 +1,32 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, MenuController, Nav } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
+import { Storage } from '@ionic/storage'
 
 import { HomePage } from '../pages/home/home';
+import { LoginPage } from '../pages/login/login';
 import { WelcomePage } from '../pages/welcome/welcome';
-import { StoryDetailsPage } from '../pages/story-details/story-details';
-import { ListPage } from '../pages/list/list';
+import { DashboardPage } from '../pages/dashboard/dashboard';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  @ViewChild(Nav) nav: Nav;
-    public options = "options";
-  rootPage = HomePage;
-   pages: Array<{title: string, component: any}>;
+  //rootPage = HomePage;
+  private rootPage;
 
-  constructor(platform: Platform, public menu: MenuController) {
+  constructor(platform: Platform, private storage: Storage) {
 
-    // set our app's pages
-    this.pages = [
-      { title: 'Hello welcome', component: WelcomePage },
-      { title: 'My Story', component: StoryDetailsPage }
-    ];
+    this.storage.get('userCredentials').then((value) => {
+        console.log("the credentails " + value)
+          if(value != null || value != undefined){
+              //this.rootPage = WelcomePage;
+              this.rootPage = DashboardPage;
+          } else {
+              //this.rootPage = HomePage;
+              this.rootPage = LoginPage;
+          }
+      });
 
 
     platform.ready().then(() => {
@@ -32,15 +36,5 @@ export class MyApp {
       Splashscreen.hide();
     });
 
-  }
-  public changeOption(event){
-    console.log("the options --- " + this.options + " -------------");
-    console.log("the change " + JSON.stringify(event) );
-  }
-   openPage(page) {
-    // close the menu when clicking a link from the menu
-    this.menu.close();
-    // navigate to the new page if it is not the current page
-    this.nav.setRoot(page.component);
   }
 }

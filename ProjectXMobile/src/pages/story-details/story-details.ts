@@ -19,8 +19,19 @@ export class StoryDetailsPage {
   public description: string;
   public isBusy: boolean = false;
   public options = "options";
+  public localDate: Date = new Date();
+ // public maxDate: Date = new Date(new Date().setDate(new Date().getDate() + 30));
+  public minDate: any = new Date();
+  public myDate: string = "2017-02-25";
+
+  public ckeditorContent = "";
+  public config = {toolbar : [
+      [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList']
+  ],removePlugins:'elementspath,magicline',resize_enabled:true};
 
   constructor(public globalService: Globalservice, private constants: Constants, public navCtrl: NavController, public navParams: NavParams) {
+    
+    this.minDate = this.formatDate(new Date());
 
     globalService.getTicketDetailsById(this.constants.taskDetailsById, 6).subscribe(
         result=>{
@@ -34,6 +45,18 @@ export class StoryDetailsPage {
     );
   }
 
+   public formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    
+    return [year, month, day].join('-');
+}
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad StoryDetailsPage');
   }
@@ -46,5 +69,13 @@ export class StoryDetailsPage {
   public openDatePicker(){
     
   }
+
+   public Log(stuff): void {
+    console.log(stuff);
+  }
+
+  public event(data: Date): void {
+    this.localDate = data;
+}
 
 }

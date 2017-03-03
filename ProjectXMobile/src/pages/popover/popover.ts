@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
-import {Storage} from "@ionic/storage";
+import { Storage } from "@ionic/storage";
 import { HomePage } from '../home/home';
+import { LoginPage } from '../login/login';
 /*
   Generated class for the Popover page.
 
@@ -14,8 +15,13 @@ import { HomePage } from '../home/home';
 })
 export class PopoverPage {
  userName: string='';
-  constructor(public navCtrl: NavController,public alertController: AlertController,private storage:Storage,
-   public navParams: NavParams, public viewCtrl: ViewController) {}
+  constructor(public navCtrl: NavController,
+            public alertController: AlertController,
+            private storage:Storage,
+            public navParams: NavParams, 
+            public viewCtrl: ViewController) {
+                
+            }
   close() {
     this.viewCtrl.dismiss();
   }
@@ -40,13 +46,16 @@ logoutApp() {
         text: 'Log Out',
         
         handler: () => {
-        this.storage.remove('username');
-        this.storage.remove('password');
-        this.storage.remove('token');
-        this.navCtrl.push(HomePage);
-        console.log('Logged out');
-        this.viewCtrl.dismiss();
-        
+                  
+                  this.storage.remove('userCredentials').then( ()=>{
+                      
+                      this.navCtrl.push(LoginPage);
+                      console.log('Logged out');
+                      this.viewCtrl.dismiss();
+                  }, 
+                  (error)=>{
+                      console.log("error while removing ");
+                  });   
         }
       }
     ]

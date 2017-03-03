@@ -1,0 +1,39 @@
+<!--
+  Generated template for the Dashboard page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar hideBackButton>
+    <ion-title>ProjectX</ion-title>
+    <ion-buttons end>
+     <a ion-button icon-only (click)="openPopover($event)">
+      <ion-icon name="more"></ion-icon>
+    </a>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <div>Your logged with <u><b>{{userName}}</b></u></div>
+
+    <button ion-button (click)="storyDetail()">story details</button>
+    
+    <!---
+        The below code is useful for  listing the stories
+        author uday
+      -->
+  <ion-list>
+    <ion-item id="{{item.id}}" *ngFor="let item of arrayObject" (click)="ticketClick(item)">
+      {{item.id}}<br> {{item.title}}
+      <br> {{item.assignTo}}
+      <br> {{item.priority}}
+      <br> {{item.workflow}}
+      <br> {{item.bucket}}
+      <br> {{item.duedate}}
+      <br>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

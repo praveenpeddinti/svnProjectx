@@ -16,8 +16,8 @@ private headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencod
  params: {userInfo?: any, projectId?: any, ticketId?: any} = {};
 
   constructor(public http: Http) {
-    this.params.userInfo = {"Id":"9","username":"hareesh.bekkam","token":"8120acd3de3141db5ed9@9"};
-    this.params.projectId = "1";
+    this.params.userInfo = {"Id":"9","username":"hareesh.bekkam","token":"045cdabd2bfc0bc46571@9"};
+    this.params.projectId = 1;
     this.params.ticketId= "";
 
 
@@ -39,7 +39,8 @@ private headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencod
   }
  
   public getTicketDetailsById(url, data){
-    this.params.ticketId= data;
+    this.params.ticketId= "35";
+
     var response = this.http.post(url, JSON.stringify(this.params), this.headers).map(
       res => res.json()
     );

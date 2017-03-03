@@ -37,9 +37,18 @@
     </select-alertless>
  </ion-item>
 
- <div  (clcik) = "openDatePicker()">Open Datepicker</div>
+	<!--<span ion-datepicker locale="en-US" (ionChanged)="Log($event)" (ionCanceled)="Log()" okText="Pick" cancelText="Cancel" [value]="localDate" [min]="minDate" [max]="maxDate"  calendar="true" clear class="ScheduleDate">
+      <span> {{localDate | date:'dd-MM-yyyy' }} <ion-icon name="clipboard" item-left ></ion-icon> </span>
+	</span>-->
 
+  <ion-item>
+    <ion-label>Date</ion-label>
+    <ion-datetime displayFormat="MM/DD/YYYY" pickerFormat="MMM DD YYYY" min={{minDate}} max="2117" [(ngModel)]="myDate"></ion-datetime>
+  </ion-item>
 
- 
+  <ckeditor
+    [(ngModel)]="ckeditorContent"
+    [config]="config" name="description">
+  </ckeditor>
 
 </ion-content>
