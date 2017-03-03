@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, MenuController } from 'ionic-angular';
 
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
@@ -29,8 +29,8 @@ export class StoryDetailsPage {
       [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList']
   ],removePlugins:'elementspath,magicline',resize_enabled:true};
 
-  constructor(public globalService: Globalservice, private constants: Constants, public navCtrl: NavController, public navParams: NavParams) {
-    
+  constructor(menu: MenuController, public globalService: Globalservice, private constants: Constants, public navCtrl: NavController, public navParams: NavParams) {
+      menu.swipeEnable(false);
     this.minDate = this.formatDate(new Date());
 
     globalService.getTicketDetailsById(this.constants.taskDetailsById, 6).subscribe(

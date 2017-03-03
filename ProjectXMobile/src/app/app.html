@@ -11,59 +11,38 @@
       <!--<button ion-item *ngFor="let p of pages" (click)="openPage(p)">
         {{p.title}}
       </button>-->
-    <ion-item class="item-text-wrap">
-         <ion-label>Bucket</ion-label>
-         <select-alertless item-content [(ngModel)]="changeBucket">
-         <ion-option value="1" ng-checked="true" >Backlog</ion-option>
-         <ion-option value="2" checked="true" >Sprint1</ion-option>
-         <ion-option value="3">Sprint2</ion-option>
-         <ion-option value="4">Sprint3</ion-option>
-         </select-alertless>
-    </ion-item>
-<ion-item text-wrap>
-    <ion-label>Plan Level</ion-label>
-    <select-alertless item-content [(ngModel)]="changePlanlevel">
-      <ion-option value="1"  >Story</ion-option>
-      <ion-option value="2" checked="true" >Task</ion-option>
-    </select-alertless>
- </ion-item>
-      <ion-item class="item-text-wrap">
-         <ion-label>Assigned to</ion-label>
-         <select-alertless item-content [(ngModel)]="changeAssign">
-         <ion-option value="1" ng-checked="true" >Allamprabhu</ion-option>
-         <ion-option value="2" checked="true" >Hareesh</ion-option>
-         <ion-option value="3">Uday</ion-option>
-         </select-alertless>
-    </ion-item>
     <ion-item text-wrap>
+      <ion-label>Bucket</ion-label>
+      <select-alertless item-content [(ngModel)]="changeBucket">
+      <ion-option *ngFor="let item of arrayList" value="{{item.bucket}}" >{{item.bucket}}</ion-option>
+      </select-alertless>
+  </ion-item>
+  
+ <ion-item text-wrap>
+    <ion-label>Plan Level</ion-label>
+    <select-alertless item-content [(ngModel)]="changePlanLevel">
+      <ion-option *ngFor="let item of arrayList" value="{{item.priority}}" >{{item.priority}}</ion-option>
+    </select-alertless>
+</ion-item>
+
+<ion-item item-text-wrap>
+    <ion-label>Assigned to</ion-label>
+    <select-alertless ion-select item-content [(ngModel)]="changeAssignto">
+    <ion-option *ngFor="let item of arrayList" value="{{item.assignTo}}" >{{item.assignTo}}</ion-option>
+    </select-alertless>
+</ion-item>
+
+<ion-item text-wrap>
     <ion-label>Priority</ion-label>
     <select-alertless item-content [(ngModel)]="changePriority">
-      <ion-option value="1"  >Highest</ion-option>
-      <ion-option value="2" checked="true" >High</ion-option>
-      <ion-option value="3">Normal</ion-option>
-      <ion-option value="4">Low</ion-option>
-      <ion-option value="5">Lowest</ion-option>
+    <ion-option *ngFor="let item of arrayList" value="{{item.priority}}" >{{item.priority}}</ion-option>
     </select-alertless>
- </ion-item>
-
+</ion-item>
+   
 <ion-item text-wrap>
     <ion-label>Status</ion-label>
     <select-alertless item-content [(ngModel)]="changeStatus">
-      <ion-option value="1"  >New</ion-option>
-      <ion-option value="2" checked="true" >Accepted</ion-option>
-      <ion-option value="3">Specification</ion-option>
-      <ion-option value="4">Waiting for Input</ion-option>
-      <ion-option value="5">Development</ion-option>
-      <ion-option value="6">Paused</ion-option>
-      <ion-option value="7">Unit Testing</ion-option>
-      <ion-option value="8">Ready for peer Review</ion-option>
-      <ion-option value="9">Peer Review</ion-option>
-      <ion-option value="9">Ready for QA</ion-option>
-      <ion-option value="10">QA</ion-option>
-      <ion-option value="11">Re-opened</ion-option>
-      <ion-option value="12">Ivalid</ion-option>
-      <ion-option value="13">Fixed</ion-option>
-      <ion-option value="14">Deployed</ion-option>
+      <ion-option *ngFor="let item of arrayList" value="{{item.priority}}" >{{item.priority}}</ion-option>
     </select-alertless>
  </ion-item>
     </ion-list>
