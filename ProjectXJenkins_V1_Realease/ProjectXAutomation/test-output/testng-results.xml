@@ -11,38 +11,38 @@
       <![CDATA[<a class="cbutton" href="..\Log.log">Click to Open Log File</a>]]>
     </line>
   </reporter-output>
-  <suite name="Default suite" duration-ms="33687" started-at="2017-03-02T12:06:02Z" finished-at="2017-03-02T12:06:36Z">
+  <suite name="test Suite" duration-ms="33836" started-at="2017-03-07T09:23:29Z" finished-at="2017-03-07T09:24:03Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="33687" started-at="2017-03-02T12:06:02Z" finished-at="2017-03-02T12:06:36Z">
-      <class name="com.techo2.skiptaneo.testsuite.cases.LoginTest">
-        <test-method status="PASS" signature="beforeSuite()[pri:0, instance:com.techo2.skiptaneo.testsuite.cases.LoginTest@78693d23]" name="beforeSuite" is-config="true" duration-ms="16" started-at="2017-03-02T17:36:02Z" finished-at="2017-03-02T17:36:02Z">
+    <test name="RunTests" duration-ms="33836" started-at="2017-03-07T09:23:29Z" finished-at="2017-03-07T09:24:03Z">
+      <class name="com.techo2.projectx.testsuite.cases.LoginTest">
+        <test-method status="PASS" signature="beforeSuite()[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@5141928f]" name="beforeSuite" is-config="true" duration-ms="25" started-at="2017-03-07T14:53:29Z" finished-at="2017-03-07T14:53:29Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- beforeSuite -->
-        <test-method status="PASS" signature="initializeBaseSetup(org.testng.ITestContext)[pri:0, instance:com.techo2.skiptaneo.testsuite.cases.LoginTest@78693d23]" name="initializeBaseSetup" is-config="true" duration-ms="13334" started-at="2017-03-02T17:36:02Z" finished-at="2017-03-02T17:36:16Z">
+        <test-method status="PASS" signature="initializeBaseSetup(org.testng.ITestContext)[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@5141928f]" name="initializeBaseSetup" is-config="true" duration-ms="13442" started-at="2017-03-07T14:53:29Z" finished-at="2017-03-07T14:53:43Z">
           <params>
             <param index="0">
               <value>
-                <![CDATA[org.testng.TestRunner@4c8f1195]]>
+                <![CDATA[org.testng.TestRunner@30bd5d8a]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- initializeBaseSetup -->
-        <test-method status="PASS" signature="loginwithcredentials()[pri:0, instance:com.techo2.skiptaneo.testsuite.cases.LoginTest@78693d23]" name="loginwithcredentials" duration-ms="16673" started-at="2017-03-02T17:36:16Z" finished-at="2017-03-02T17:36:32Z">
+        <test-method status="PASS" signature="loginwithcredentials()[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@5141928f]" name="loginwithcredentials" duration-ms="15811" started-at="2017-03-07T14:53:43Z" finished-at="2017-03-07T14:53:58Z">
           <reporter-output>
             <line>
               <![CDATA[<a href="..\Videos\loginwithcredentials.avi" style="text-decoration: none; color: white;"><div class = cbutton>Download Video</div></a>]]>
             </line>
           </reporter-output>
         </test-method> <!-- loginwithcredentials -->
-        <test-method status="PASS" signature="CloseBrowser()[pri:0, instance:com.techo2.skiptaneo.testsuite.cases.LoginTest@78693d23]" name="CloseBrowser" is-config="true" duration-ms="0" started-at="2017-03-02T17:36:36Z" finished-at="2017-03-02T17:36:36Z">
+        <test-method status="PASS" signature="CloseBrowser()[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@5141928f]" name="CloseBrowser" is-config="true" duration-ms="0" started-at="2017-03-07T14:54:03Z" finished-at="2017-03-07T14:54:03Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- CloseBrowser -->
-        <test-method status="PASS" signature="AddLogFileToReport()[pri:0, instance:com.techo2.skiptaneo.testsuite.cases.LoginTest@78693d23]" name="AddLogFileToReport" is-config="true" duration-ms="0" started-at="2017-03-02T17:36:36Z" finished-at="2017-03-02T17:36:36Z">
+        <test-method status="PASS" signature="AddLogFileToReport()[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@5141928f]" name="AddLogFileToReport" is-config="true" duration-ms="1" started-at="2017-03-07T14:54:03Z" finished-at="2017-03-07T14:54:03Z">
           <reporter-output>
             <line>
               <![CDATA[<br>]]>
@@ -52,7 +52,7 @@
             </line>
           </reporter-output>
         </test-method> <!-- AddLogFileToReport -->
-      </class> <!-- com.techo2.skiptaneo.testsuite.cases.LoginTest -->
-    </test> <!-- Default test -->
-  </suite> <!-- Default suite -->
+      </class> <!-- com.techo2.projectx.testsuite.cases.LoginTest -->
+    </test> <!-- RunTests -->
+  </suite> <!-- test Suite -->
 </testng-results>

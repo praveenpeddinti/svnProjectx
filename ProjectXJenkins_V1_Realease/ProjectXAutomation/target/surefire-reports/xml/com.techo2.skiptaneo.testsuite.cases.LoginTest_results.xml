@@ -4,10 +4,10 @@
            failures="0"
            errors="0"
            skipped="0"
-           time="13.048">
+           time="15.942">
   <properties />
   
   
-            <testcase name="loginwithcredentials" time="13.048" classname="com.techo2.skiptaneo.testsuite.cases.LoginTest" />
+            <testcase name="loginwithcredentials" time="15.942" classname="com.techo2.skiptaneo.testsuite.cases.LoginTest" />
       
 </testsuite>
