@@ -18,7 +18,7 @@
     <div>Your logged with <u><b>{{userName}}</b></u></div>
 
     <button ion-button (click)="storyDetail()">story details</button>
-    
+
     <!---
         The below code is useful for  listing the stories
         author uday
@@ -35,5 +35,11 @@
     </ion-item>
   </ion-list>
 
+  <ion-infinite-scroll    (ionInfinite)="doInfinite($event)" >
+    <ion-infinite-scroll-content
+       ng-if="moreDataLoaded" loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>
