@@ -12,6 +12,7 @@ use common\models\mysql\Bucket;
 use common\models\bean\FieldBean;
 use common\models\mongo\ProjectTicketSequence;
 use common\models\mysql\Collaborators;
+use common\models\mongo\TicketFollowers;
 use Yii;
 
 /*
@@ -263,8 +264,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                   
              
            
-           TicketCollection::saveTicketDetails($ticketModel);
-            
+          $returnValue = TicketCollection::saveTicketDetails($ticketModel);
+          if($returnValue != "failure"){
+              TicketFollowers::followTicket($userId,$ticketNumber,$projectId,$userId,"reportedby",true);
+          }
+         
         } catch (Exception $ex) {
              error_log($ex->getMessage());
             
@@ -355,6 +359,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                if($fieldDetails["Type"] == 6){
                                 $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$key);
                                 $value["value_name"] = $collaboratorData["UserName"];
+                                TicketFollowers::followTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE);
                                 }
                                 else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$key);
@@ -422,6 +427,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $checkData = $ticket_data->isLeftColumn;
             $field_name = $ticket_data->EditedId;
             $field_id = $ticket_data->id;
+            $loggedInUser = $ticket_data->userInfo->Id;
             $valueName = "";
             if($checkData==0){
                  if($ticket_data->id=='Title'){
@@ -440,6 +446,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                          if($fieldDetails["Type"] == 6 ){
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
+                            TicketFollowers::followTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
                         }
                         
                              else if($fieldDetails["Field_Name"] == "workflow"){
