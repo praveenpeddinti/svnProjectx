@@ -12,8 +12,36 @@
 
 
 <ion-content padding>
-    
-    <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)" novalidate>
+  <ion-row class="logo-row">
+    <ion-col></ion-col>
+    <ion-col width-67>
+      <img src="http://placehold.it/300x200"/>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+  <div class="login-box">
+    <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm">
+      <ion-row>
+        <ion-col>
+          <ion-list inset>
+            
+            <ion-item>
+              <ion-input type="text" placeholder="User name" name="username" [(ngModel)]="login.username" required></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input type="password" placeholder="******" name="password" [(ngModel)]="login.password" required></ion-input>
+            </ion-item>
+
+          </ion-list>
+        </ion-col>
+      </ion-row>
+     
+          <button ion-button center type="submit" [disabled]="!loginForm.form.valid">Login</button>
+      
+    </form>
+  </div>
+    <!--<form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)" novalidate>
 		<ion-list no-lines>
 			<ion-item>
 				<ion-label stacked color="primary">Username</ion-label>
@@ -44,7 +72,7 @@
 				<button ion-button round type="submit" block>Login</button>
 			</ion-col>
 		</ion-row>
-	</form>
+	</form>-->
  
     
     
