@@ -109,9 +109,9 @@ class StoryController extends Controller
     */
     public function actionEditTicket(){
         try{
+
             $ticket_data = json_decode(file_get_contents("php://input"));
         $data = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,1);
-
         $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -319,6 +319,29 @@ class StoryController extends Controller
 
         
          
+    }
+    
+    /*
+     * @author Ryan
+     * @description This method is used to get all the collaborators.
+    * @return type Json
+     */
+    public function actionGetCollaborators()
+    {
+        try
+        {
+            $post_data=json_decode(file_get_contents("php://input"));
+            $team=ServiceFactory::getCollaboratorServiceInstance()->getFilteredProjectTeam($post_data->ProjectId,$post_data->search_term);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $team;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } catch (Exception $ex) {
+             Yii::log("StoryController:actionGetCollaborators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+        
     }
         }
 ?>
