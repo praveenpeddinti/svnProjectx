@@ -25,7 +25,9 @@ import { Storage } from "@ionic/storage";
 export class LoginPage {
 
     login: {username?: string, password?: string,token?:any} = {};
-
+    public submitted = false;
+    public isEmailValid=true;
+    
     constructor(public navCtrl: NavController, 
                 private loginService: Globalservice,
                 private storage: Storage,
