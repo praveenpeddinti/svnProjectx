@@ -25,9 +25,12 @@
         "../node_modules/@swimlane/ngx-datatable/release/material.css",
         "../node_modules/@swimlane/ngx-datatable/release/assets/icons.css",
         "../node_modules/primeng/resources/themes/omega/theme.css",
-        "../node_modules/primeng/resources/primeng.min.css"
+        "../node_modules/primeng/resources/primeng.min.css",
+        "./css/jquery.atwho.css"
+
       ],
-      "scripts": [],
+      "scripts": [
+       ],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
