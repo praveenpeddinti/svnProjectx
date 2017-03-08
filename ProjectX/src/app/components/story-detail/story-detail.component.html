@@ -114,6 +114,10 @@
             </div>
           </div>
             <!--Description Part End-->
+<!--AutoSuggestion for Related Tickets-->
+<div>
+   <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Related Tickets" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="search($event)" ></p-autoComplete>
+ </div>
 
       </div>
     </div>
