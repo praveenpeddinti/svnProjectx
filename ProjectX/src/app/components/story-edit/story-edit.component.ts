@@ -4,23 +4,29 @@ import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 import { StoryService} from '../../services/story.service';
 import {NgForm} from '@angular/forms';
-import {CalendarModule} from 'primeng/primeng'; 	
+import {CalendarModule,AutoComplete} from 'primeng/primeng'; 	
 import { FileUploadService } from '../../services/file-upload.service';
+import { MentionService } from '../../services/mention.service';
 import { GlobalVariable } from '../../config';
 
-declare var jQuery:any; //reference to JQUERY  
+
+declare var jQuery:any; //reference to jquery
+declare const CKEDITOR; //reference to ckeditor
 
 @Component({
   selector: 'app-story-edit',
   templateUrl: './story-edit.component.html',
   styleUrls: ['./story-edit.component.css'],
-  providers:[StoryService]
+  providers:[StoryService],
 })
 
 export class StoryEditComponent implements OnInit 
 {
+  
+  @ViewChild('editor')  txt_area:any; //reference to CKEDITOR
   public dragTimeout;
   public minDate:Date;
+  public datevalue:Date;
   private ticketData:any=[];
   private ticketid;
   private url_TicketId;
@@ -29,17 +35,17 @@ export class StoryEditComponent implements OnInit
   private fieldsData = [];
   private showMyEditableField =[];
   public dragdrop={extraPlugins:'dragdrop'};
-   //CkEditor Configuration Options
+  //ckeditor configuration options
   public toolbar={toolbar : [
       [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList']
-  ],removePlugins:'elementspath',resize_enabled:true};
+  ],removePlugins:'elementspath,magicline',resize_enabled:true,};
   public filesToUpload: Array<File>;
   public hasBaseDropZoneOver:boolean = false;
   public hasFileDroped:boolean = false;
   public fileUploadStatus:boolean = false;
 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
-    public _router: Router,
+    public _router: Router,private mention:MentionService,
     private http: Http,private route: ActivatedRoute) { 
            this.filesToUpload = [];
     }
@@ -47,22 +53,55 @@ export class StoryEditComponent implements OnInit
 
   ngOnInit() 
   {
-    //get route param(TicketId) for specific ticket to edit
+    //getting the route param(Ticketid) for specific ticket to edit
     this.route.params.subscribe(params => {
             this.url_TicketId = params['id'];
         });
 
-    setTimeout(()=>{
       this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId},(data)=>
-        {   
+        {
              this.ticketData = data.data;
              this.description=data.data.CrudeDescription;
              this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);        
         });
     
-    },150);
+    this.minDate=new Date(); //set current date to datepicker as min date
+  }
+
+  ngAfterViewInit() 
+  {
     
-    this.minDate=new Date(); //set the min date to current date
+    //applying keyup event on multiple ckeditors in story edit page
+    CKEDITOR.on('instanceReady', (event)=>
+    {
+      event.editor.on('key',(evt)=>
+      {
+        var this_obj=this;
+          var at_config = {
+          at: "@",
+          callbacks: {
+                  remoteFilter: function(query, callback) {
+                    if(query.length>0)
+                    {
+                      var post_data={ProjectId:1,search_term:query};
+                      this_obj._ajaxService.AjaxSubscribe("story/get-collaborators",post_data,(data)=> {
+                      var mention=[];
+                      for(let i in data.data)
+                      {
+                        mention.push(data.data[i].Name);
+                      }
+                    callback(mention);
+                  });
+                    }
+                }
+              },
+          }
+      var editor=evt.editor;
+      this.mention.load_atwho(editor,at_config);
+      });
+
+      })
+        
   }
 
   /*
@@ -128,7 +167,7 @@ export class StoryEditComponent implements OnInit
             data.listdata = field.meta_data;
             data.fieldDataId = field.readable_value.Id;
             break;
-          }
+            }
 
           data.readonly = (field.readonly == 1)?true:false;
           data.required = (field.required == 1)?true:false;
@@ -148,7 +187,6 @@ export class StoryEditComponent implements OnInit
     }
 
     return fieldsBuilt;
-
   }
 
   /*
@@ -246,10 +284,8 @@ export class StoryEditComponent implements OnInit
     @Description : Disabling the dropzone DIV on dragOver
     */
   public fileDragLeave(fileInput: any){
-  //console.log("fileDragLeave");
   var thisObj = this;
       if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){
-          // console.log("clear---");
       clearTimeout(this.dragTimeout);
       }
        this.dragTimeout = setTimeout(function(){
@@ -265,7 +301,6 @@ export class StoryEditComponent implements OnInit
     */
   public fileUploadEvent(fileInput: any, comeFrom: string):void 
   {
-     
      if(comeFrom == 'fileChange'){
           this.filesToUpload = <Array<File>> fileInput.target.files;
      } else if(comeFrom == 'fileDrop'){
@@ -276,7 +311,8 @@ export class StoryEditComponent implements OnInit
 
         this.hasBaseDropZoneOver = false;
         this.fileUploadStatus = true;
-        this.fileUploadService.makeFileRequest(GlobalVariable.FILE_UPLOAD_URL, [], this.filesToUpload).then((result :Array<any>) => {
+        this.fileUploadService.makeFileRequest(GlobalVariable.FILE_UPLOAD_URL, [], this.filesToUpload).then(
+          (result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
