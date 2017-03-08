@@ -122,5 +122,22 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
         $data = Yii::$app->db->createCommand($final_query)->execute();
         return $data;
     }
+    
+    /**
+     * @author Ryan
+     * @param type $projectId,$search_query
+     * @return type
+     */
+    public function getFilteredProjectTeam($projectId,$search_query)
+    {
+        try{
+         $qry = "select C.Id,C.UserName as Name,C.Email from ProjectTeam PT join Collaborators C on PT.CollaboratorId = C.Id where PT.ProjectId = $projectId and C.UserName like '$search_query%'";
+         $data = Yii::$app->db->createCommand($qry)->queryAll();
+         return $data;    
+        } catch (Exception $ex) {
+            Yii::log("Collaborators:getFilteredProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+    }
 }
 ?>
