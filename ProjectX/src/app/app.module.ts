@@ -14,7 +14,7 @@ import { MentionModule } from 'angular2-mentions/mention';
 import {StoryService} from './services/story.service';
 import { CKEditorModule } from 'ng2-ckeditor';
 import {Ng2DragDropModule} from "ng2-drag-drop";
-import {DropdownModule,CalendarModule} from 'primeng/primeng'; 
+import {DropdownModule,CalendarModule,AutoCompleteModule} from 'primeng/primeng'; 
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService, Collaborator} from './services/login.service';
@@ -26,11 +26,13 @@ import {AuthGuard} from './services/auth-guard.service';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { StoryComponent }  from './components/story/story-form.component';
 import { StoryDetailComponent }  from './components/story-detail/story-detail.component';
-
 import { StoryEditComponent } from './components/story-edit/story-edit.component';
 import {TinyMCE} from './tinymce.component';
 import {FileDropModule} from 'angular2-file-drop';
 import { FileUploadService } from './services/file-upload.service';
+//import {Ng2AutoCompleteModule} from 'ng2-auto-complete';
+import {MentionService} from './services/mention.service';
+//import { GlobalPipe } from './shared/global.pipe';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -78,12 +80,14 @@ const ROUTES=[
    FileDropModule,
    DropdownModule,
    CalendarModule,
+   AutoCompleteModule,
    RouterModule.forRoot(ROUTES)
   ],
 
   declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TinyMCE ],
   bootstrap:    [ AppComponent ],
-  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService],
+  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,
+  ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
