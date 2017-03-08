@@ -1,11 +1,13 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit,ViewChild,Input } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
+import { MentionService } from '../../services/mention.service';
 declare var jQuery:any;
+declare const CKEDITOR;
 @Component({
   selector: 'app-story-detail',
   templateUrl: './story-detail.component.html',
@@ -14,11 +16,11 @@ declare var jQuery:any;
 })
 export class StoryDetailComponent implements OnInit {
 
+private text:string;
+private search_results:string[];
 
 private editableSelect= "";
 public blurTimeout=[];
-
-
 @ViewChild('detailEditor')  detail_ckeditor; // reference for editor in view.
   public clickedOutside = false;
   public dragTimeout;
@@ -35,8 +37,8 @@ public blurTimeout=[];
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
-    ],removePlugins:'elementspath',resize_enabled:true};
-  
+],removePlugins:'elementspath,magicline',resize_enabled:true};
+
   //common array for Dropdown's option.
   private dropList=[];
 
@@ -46,7 +48,7 @@ public blurTimeout=[];
   public fileUploadStatus:boolean = false;
 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
-    public _router: Router,
+    public _router: Router,private mention:MentionService,
     private http: Http,private route: ActivatedRoute) {
        this.filesToUpload = [];
     }
@@ -80,12 +82,12 @@ public blurTimeout=[];
       this.route.params.subscribe(params => {
             this.ticketId = params['id'];
         });
+
         
-   
       var ticketIdObj={'ticketId': this.ticketId};
         this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
         { 
-          
+    
             this.ticketData = data;
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
@@ -94,6 +96,46 @@ public blurTimeout=[];
         });
 
       this.minDate=new Date();
+    }
+
+    /**
+     * @author:Ryan Marshal
+     * @description:In general,This is for getting the contents of CKEDITOR on various events and then performing 
+     *              operations based on the requirement.Here,it is used for getting @mention capabilitly.
+     */
+    ngAfterViewInit()
+    {
+      CKEDITOR.on('instanceReady', (event)=>
+      {
+        
+         event.editor.on('key',(evt)=>
+         {
+            var this_obj=this;
+            var at_config = {
+            at: "@",
+            callbacks: {
+                    remoteFilter: function(query, callback) {
+                      if(query.length>0)
+                      {
+                        var post_data={ProjectId:1,search_term:query};
+                        this_obj._ajaxService.AjaxSubscribe("story/get-collaborators",post_data,(data)=> {
+                        var mention=[];
+                        for(let i in data.data)
+                        {
+                          mention.push(data.data[i].Name);
+                        }
+                      callback(mention);
+                    });
+                      }
+                  }
+                },
+            }
+            var editor=evt.editor;
+            this.mention.load_atwho(editor,at_config);
+        });
+
+       
+      })
     }
 
   /*
@@ -373,15 +415,15 @@ private dateVal = new Date();
           data.elId =  ticketId+"_"+field.field_name;
           data.Id = field.Id;
             data.fieldType = field.field_type;
-          //  if(field.field_name == "dod"){
-          //     data.renderType = "textarea";
-          //     console.log(data.renderType);
-          // }
+
+            if(field.field_name == "dod"){
+              data.renderType = "textarea";
+          }
+
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);
       }
     }
-
     return fieldsBuilt;
 
   }
@@ -443,7 +485,6 @@ var thisObj = this;
             }
             this.fileUploadStatus = false;
         }, (error) => {
-            console.error(error);
             this.ticketEditableDesc = this.ticketEditableDesc + "Error while uploading";
             this.fileUploadStatus = false;
         });
@@ -467,5 +508,17 @@ var thisObj = this;
     {
         this._router.navigate(['story-dashboard']);
     }
+
+    public search(event)
+    {
+        let data=['#174 -Displaying List of Data',"#182 -Displaying List of Views"];
+        this.search_results=data;
+        // this._ajaxService.AjaxSubscribe("story/search",event.query,(data)=>
+        // { 
+        // //logic to search for related tickets
+        //     this.search_results=data;
+        // });
+    }
+  
 
 }
