@@ -8,37 +8,78 @@
   <ion-navbar hideBackButton>
     <ion-title>ProjectX</ion-title>
     <ion-buttons end>
-     <a ion-button icon-only (click)="openPopover($event)">
+      <a ion-button icon-only (click)="openPopover($event)">
       <ion-icon name="person"></ion-icon>
-    </a>
+      </a>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-    <div>Your logged with <u><b>{{userName}}</b></u></div>
-
-    <button ion-button (click)="storyDetail()">story details</button>
-
-    <!---
+<ion-content no-padding>
+  <!---
         The below code is useful for  listing the stories
         author uday
       -->
-  <ion-list>
-    <ion-item id="{{item.id}}" *ngFor="let item of arrayObject" (click)="ticketClick(item)">
-      {{item.id}}<br> {{item.title}}
-      <br> {{item.assignTo}}
-      <br> {{item.priority}}
-      <br> {{item.workflow}}
-      <br> {{item.bucket}}
-      <br> {{item.duedate}}
-      <br>
-    </ion-item>
+  <ion-list >
+    <ion-item-sliding *ngFor="let item of arrayObject" (click)="ticketClick(item)" no-padding>
+      <ion-item id="{{item.id}}" text-wrap no-padding  no-lines> 
+        <ion-item>
+      
+          <ion-row >
+            <ion-col width-5 >
+               <img ng-src=""/>
+            </ion-col>
+            <ion-col width-20>#<b>{{item.id}}</b></ion-col>
+            <ion-col width-75 >
+              {{item.title}}
+            </ion-col>
+          </ion-row>
+
+          <ion-row no-padding>
+            <ion-col width-30>
+              Priority
+            </ion-col>
+            <ion-col width-30>
+              Status
+            </ion-col>
+
+            <ion-col width-30>
+              Bucket
+            </ion-col>
+
+          </ion-row>
+
+
+          <ion-row no-padding>
+            <ion-col width-30>
+              <b>{{item.priority}}</b>
+            </ion-col>
+            <ion-col width-30>
+              <b>{{item.workflow}}</b>
+            </ion-col>
+
+            <ion-col width-30>
+              <b>{{item.bucket}}</b>
+            </ion-col>
+          </ion-row>
+         
+          <ion-row > 
+            <ion-col width-80>
+              Assignto 
+           <b>{{item.assignTo}}</b>
+            </ion-col>
+            <ion-col width-20>
+              T21
+            </ion-col>
+          </ion-row>
+        </ion-item>
+      </ion-item>
+      <ion-item-options side="right" (ionSwipe)="ticketClick(item)">
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
-  <ion-infinite-scroll    (ionInfinite)="doInfinite($event)" >
-    <ion-infinite-scroll-content
-       ng-if="moreDataLoaded" loadingSpinner="bubbles"
-      loadingText="Loading more data...">
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content ng-if="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
