@@ -320,6 +320,48 @@ class StoryController extends Controller
         
          
     }
+
+    
+    /**
+    * @author Moin Hussain
+    * @description This method is used to get all data for stories/tasks.
+    * @return type
+    */
+   public function actionGetMyTicketsDetails() {
+        try {
+            $StoryData = json_decode(file_get_contents("php://input"));
+             $userdata =  $StoryData->userInfo;
+             $userId = $userdata->Id;
+             $projectId =  $StoryData->projectId;
+             $sortorder =  $StoryData->sortorder;
+             $sortvalue = $StoryData->sortvalue;
+             $pageLength = $StoryData->offset;
+             $offset = $StoryData->pagesize;
+            
+//            $userId=11;
+//            $projectId=1;
+//            $sortorder =  "desc";
+//            $sortvalue = "Id";
+            
+            $totalCount = ServiceFactory::getStoryServiceInstance()->getMyTicketsCount($userId,$projectId);
+            $data = ServiceFactory::getStoryServiceInstance()->getAllMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId);
+
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $data;
+            $responseBean->totalCount = $totalCount;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetMyTicketsDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
+
+    }
+    
+       
+     
     
     /*
      * @author Ryan
@@ -341,7 +383,7 @@ class StoryController extends Controller
         } catch (Exception $ex) {
              Yii::log("StoryController:actionGetCollaborators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
-        
+
     }
-        }
+  }
 ?>

@@ -70,8 +70,13 @@ class TicketCollection extends ActiveRecord
     
     public static function saveTicketDetails($ticket_data) {
         try {
+            $returnValue = "failure";
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $ticket_data->insert();
+            $result = $ticket_data->save();
+            if($result){
+               $returnValue = $ticket_data->_id;
+            }
+            return $returnValue;
             
         } catch (Exception $ex) {
                 error_log($ex->getMessage());
@@ -116,7 +121,7 @@ class TicketCollection extends ActiveRecord
            
            
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-         $cursor =  $collection->find( array( "Fields" => array('$elemMatch'=> array( "value"=> 1,  "Id"=> 5 ))));
+         $cursor =  $collection->find(array('$or'=>array( array( "Fields.assignedto.Id"=>5 ,"Fields.assignedto.value"=>11),array("FollowersRef"=>array('$in'=>array(6))))));
          //error_log("count------------------".$cursor); 
          $mergedChatUsers = iterator_to_array($cursor);
 //         foreach ($cursor as $doc) {
@@ -203,6 +208,65 @@ class TicketCollection extends ActiveRecord
             Yii::log("TicketCollection:getTotalTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    /**
+     * @author Moin Hussain
+     * @param type $userId
+     * @param type $projectId
+     * @param type $selectFields
+     * @return type
+     */
+       public static function getMyTicketsCount($userId,$projectId,$selectFields=[]){
+      try{
+           
+           $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+           $cursor =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$projectId),array("Followers.FollowerId"=>array('$in'=>array((int)$userId)),"ProjectId"=>(int)$projectId))));
+           return $cursor;  
+      } catch (Exception $ex) {
+      Yii::log("TicketCollection:getMyTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+      }  
+        
+     
+    }
+    /**
+     * @author Moin Hussain
+     * @param type $userId
+     * @param type $sortorder
+     * @param type $sortvalue
+     * @param type $offset
+     * @param type $pageLength
+     * @param type $projectId
+     * @param type $select
+     * @return type
+     */
+       public static function getMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId, $select = []) {
+        try {
+           $skip = $offset * $pageLength;
+            if ($sortorder == 'desc')
+                $order = -1;
+            if ($sortorder == 'asc')
+                $order = 1;
+             if ($sortvalue == 'Id')
+                $sortData = "TicketId";
+             else if ($sortvalue == 'Title')
+                $sortData = "Title";
+            else
+                $sortData = "Fields." . $sortvalue . ".value_name";
+            
+            $options = array(
+                "sort" => array($sortData => $order),
+                "limit" => $pageLength,
+                "skip" => $skip
+            );
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $cursor = $collection->find(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$projectId),array("Followers.FollowerId"=>array('$in'=>array((int)$userId)),"ProjectId"=>(int)$projectId))), array(), $options);
+            $ticketDetails = iterator_to_array($cursor);
+            return $ticketDetails;
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getMyTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
 
 }
 ?>
