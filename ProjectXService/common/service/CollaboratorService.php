@@ -74,6 +74,21 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
                   Yii::log("AccesstokenService:updateStatusCollabarator::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+     /**
+    * @author Ryan
+    * @description This is to get filtered team list in @mention 
+    * @return type 
+    * @param type $projectId, $search_query
+     */      
+    public function getFilteredProjectTeam($projectId,$search_query){
+        try{
+         $collaboratorModel = new Collaborators();
+         return $collaboratorModel->getFilteredProjectTeam($projectId,$search_query);
+        } catch (Exception $ex) {
+            Yii::log("CollaboratorService:getFilteredProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
       
 }
