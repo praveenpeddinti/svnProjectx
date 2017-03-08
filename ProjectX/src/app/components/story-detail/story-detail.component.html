@@ -5,7 +5,7 @@
               <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
                   <div class="ticketidarea">
                        <div class="pull-left paddingL10">
-                  <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">Edit</button>
+                  <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">EDIT</button>
               </div>
                       <img *ngIf="ticketData?.data?.StoryType?.Id==1" src="assets/images/storyicon.png"  title="{{ticketData?.data?.StoryType?.Name}}"  />
                       <img  *ngIf="ticketData?.data?.StoryType?.Id==2" src="assets/images/task.png" title="{{ticketData?.data?.StoryType?.Name}}" /> 
@@ -114,9 +114,14 @@
             </div>
           </div>
             <!--Description Part End-->
-<!--AutoSuggestion for Related Tickets-->
-<div>
-   <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Related Tickets" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="search($event)" ></p-autoComplete>
+    <!--AutoSuggestion for Related Tickets-->
+    <div><label>Relate Story/Tasks</label></div>
+<div class="relate_story">
+    <div class="custom_story_input">
+        <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Related Tickets" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="search($event)" ></p-autoComplete>
+    </div>
+   
+   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium">RELATE</button></div>
  </div>
 
       </div>
