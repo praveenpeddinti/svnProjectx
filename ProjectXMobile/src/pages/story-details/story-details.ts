@@ -15,7 +15,8 @@ import { Constants } from '../../providers/constants';
   templateUrl: 'story-details.html'
 })
 export class StoryDetailsPage {
-
+public items: Array<any>;
+public arrayList: Array<{ id: string, title: string, assignTo: string, priority: string, bucket: string, planlevel: string }>;
   public description: string;
   public isBusy: boolean = false;
   public options = "options";
@@ -35,15 +36,28 @@ export class StoryDetailsPage {
 
     globalService.getTicketDetailsById(this.constants.taskDetailsById, 6).subscribe(
         result=>{
-
               //console.log("the ticket details " + JSON.stringify(result));
               this.description = result.data.Description;
+    this.items = result.data.Fields;
+        console.log("the count value is from Appcomponent" + this.items.length);
+        this.arrayList = [];
+         for(let i = 0; i < this.items.length; i++) {
+            var _id = this.items[i].Id;
+            var _title = this.items[i].title;
+            var _assignTo = this.items[i].value_name;
+         this.arrayList.push({
+        id: _id, title: _title, assignTo: _assignTo, priority: "",bucket:"",planlevel:""
+      });
+    }
+    console.log("assign to value is "+ JSON.stringify(this.arrayList));
         },error=>{
-
               console.log("the error in ticker derais " + JSON.stringify(error));
         }
     );
+
   }
+
+
 
    public formatDate(date) {
     var d = new Date(date),

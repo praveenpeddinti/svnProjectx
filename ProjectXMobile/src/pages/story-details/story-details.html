@@ -18,69 +18,27 @@
     <ion-list>
     <ion-item *ngFor="let field of arrayList">
         <h3>{{field.title}}</h3>
-        <div class="item">{{field.assignTo}}</div>
-    </ion-item>
-
-      <label>Created on</label>
-      <ion-item > 
-          01-16-2017
-      </ion-item>
-
-      <label>Reported by</label>
-      <ion-item > 
-          Bekkam
-      </ion-item>
-
-      <ion-item text-wrap>
-        <ion-label>Bucket</ion-label>
         <select-alertless item-content [(ngModel)]="changeBucket">
-            <ion-option *ngFor="let item of arrayList" value="{{item.bucket}}" >{{item.bucket}}</ion-option>
+            <ion-option *ngFor="let item of arrayList" value="{{field.assignTo}}" >{{field.assignTo}}</ion-option>
         </select-alertless>
     </ion-item>
-  
-    <ion-item text-wrap>
-        <ion-label>Plan Level</ion-label>
-        <select-alertless item-content [(ngModel)]="changePlanLevel">
-          <ion-option *ngFor="let item of arrayList" value="{{item.priority}}" >{{item.priority}}</ion-option>
-        </select-alertless>
-    </ion-item>
-
-    <ion-item item-text-wrap>
-        <ion-label>Assigned to</ion-label>
-        <select-alertless ion-select item-content [(ngModel)]="changeAssignto">
-        <ion-option *ngFor="let item of arrayList" value="{{item.assignTo}}" >{{item.assignTo}}</ion-option>
-        </select-alertless>
-    </ion-item>
-
-    <ion-item text-wrap>
-        <ion-label>Priority</ion-label>
-        <select-alertless item-content [(ngModel)]="changePriority">
-        <ion-option *ngFor="let item of arrayList" value="{{item.priority}}" >{{item.priority}}</ion-option>
-        </select-alertless>
-    </ion-item>
-   
-    <ion-item text-wrap>
-        <ion-label>Status</ion-label>
-        <select-alertless item-content [(ngModel)]="changeStatus">
-          <ion-option *ngFor="let item of arrayList" value="{{item.priority}}" >{{item.priority}}</ion-option>
-        </select-alertless>
-    </ion-item>
-
+ <!--<ion-item *ngFor="let field of arrayList">
+    <ion-label>{{field.title}}</ion-label>
+    <ion-select [(ngModel)]="demoSelectBox">
+      <ion-option value="1">{{field.assignTo}}</ion-option>
+    </ion-select>
+  </ion-item>-->
     </ion-list>
   </ion-content>
-
 </ion-menu>
 
 <ion-header>
-
   <ion-navbar>
     <ion-title>story-details</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-<ion-content #content padding>
-    
+<ion-content #content padding> 
     <ion-buttons start>
         <button menuToggle>
         <ion-icon name="md-menu"></ion-icon>
