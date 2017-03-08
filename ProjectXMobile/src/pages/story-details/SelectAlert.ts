@@ -141,7 +141,7 @@ export class SelectAlertless implements AfterContentInit, ControlValueAccessor, 
             selectOptions.title = this._item.getLabelText();
         }
 
-        let options = this._options.toArray();
+        //let options = this._options.toArray();
 
 
         // default to use the alert interface

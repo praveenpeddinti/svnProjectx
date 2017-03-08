@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import {Http, Headers } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
+import {Storage} from '@ionic/storage';
 
 /*
   Generated class for the Globalservice provider.
@@ -11,55 +12,74 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Globalservice {
 
-//private headers = new Headers({'Content-Type': 'application/json'});
-private headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
- params: {userInfo?: any, projectId?: any, ticketId?: any} = {};
+    //private headers = new Headers({'Content-Type': 'application/json'});
+    private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
+    params: {userInfo?: any, projectId?: any, ticketId?: any} = {};
 
-  constructor(public http: Http) {
-    this.params.userInfo = {"Id":"9","username":"hareesh.bekkam","token":"045cdabd2bfc0bc46571@9"};
-    this.params.projectId = 1;
-    this.params.ticketId= "";
+    constructor(public http: Http, public storage: Storage) {
 
+        this.storage.get("userCredentials").then((value) => {
+            this.params.userInfo = value;
+        });
 
-    console.log('Hello Globalservice Provider ' + JSON.stringify(this.params));
-  }
-  
-  getLoginValidation(url, data){
-      //var response = this.http.get(url,).map(res => res.json());
-      var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
-          res => res.json()
-      );
-      return response;
-  }
-   getLogout(url,data){
-     var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
-          res => res.json()
-      );
-      return response;
-  }
- 
-  public getTicketDetailsById(url, data){
-    this.params.ticketId= "35";
+        this.params.projectId = 1;
+        this.params.ticketId = "";
 
-    var response = this.http.post(url, JSON.stringify(this.params), this.headers).map(
-      res => res.json()
-    );
-    return response;
-  }
+    }
 
-  /**
-      used for getting all the stories list from server
-      author uday   
-  
-   */
-  getStoriesList(url, params) {
-    var response = this.http.post(
-      url,
-      JSON.stringify(params),
-      { headers: this.headers, }).map(res => res.json());
+    getLoginValidation(url, data) {
+        //var response = this.http.get(url,).map(res => res.json());
+        var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
+            res => res.json()
+        );
+        return response;
+    }
+    getLogout(url, data) {
+        var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
+            res => res.json()
+        );
+        return response;
+    }
 
-    return response;
-  }
+    public getTicketDetailsById(url, data) {
+        this.params.ticketId = data;
 
+        var response = this.http.post(url, JSON.stringify(this.params), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
+
+    /**
+        used for getting all the stories list from server
+        author uday   
+    
+     */
+    getStoriesList(url, params) {
+        var response = this.http.post(
+            url,
+            JSON.stringify(params),
+            {headers: this.headers, }).map(res => res.json());
+
+        return response;
+    }
+
+    public getFieldItemById(url, fieldDetails) {
+
+var fieldItemParams = this.params;
+// var params:{FieldId:any}= {};
+fieldItemParams["FieldId"] = fieldDetails.id;
+fieldItemParams["TicketId"] = fieldDetails.ticketId;
+fieldItemParams["ProjectId"] = 1;
+fieldItemParams["timeZone"] = "Asia/Kolkata";
+
+delete fieldItemParams["ticketId"];
+delete fieldItemParams["projectId"];
+
+        var response = this.http.post(url, JSON.stringify(fieldItemParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
 
 }
