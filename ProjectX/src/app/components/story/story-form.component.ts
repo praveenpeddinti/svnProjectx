@@ -5,8 +5,11 @@ import {Router} from '@angular/router';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
 import {AccordionModule,DropdownModule,SelectItem,CalendarModule} from 'primeng/primeng';
+import { MentionService } from '../../services/mention.service';
+import { AjaxService } from '../../ajax/ajax.service';
 
 declare var jQuery:any;    //Reference to Jquery
+declare const CKEDITOR;
 
  @Component({
     selector: 'story-form',
@@ -35,7 +38,7 @@ export class StoryComponent
     editorData:string='';
     public fileUploadStatus:boolean = false;
 
-    constructor(private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router) {
+    constructor(private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService) {
         this.filesToUpload = [];
     }
 
@@ -71,6 +74,43 @@ export class StoryComponent
                     console.log("storyFrom Component ngOnInit fail---");
               }
         });
+    }
+
+    /**
+     * @author:Ryan Marshal
+     * @description:In general,This is for getting the contents of CKEDITOR on various events and then performing 
+     *              operations based on the requirement.Here,it is used for getting @mention capabilitly.
+     */
+    ngAfterViewInit()
+    {
+      CKEDITOR.on('instanceReady', (event)=>
+      {
+        event.editor.on('key',(evt)=>
+         {
+            var this_obj=this;
+            var at_config = {
+            at: "@",
+            callbacks: {
+                    remoteFilter: function(query, callback) {
+                      if(query.length>0)
+                      {
+                        var post_data={ProjectId:1,search_term:query};
+                        this_obj._ajaxService.AjaxSubscribe("story/get-collaborators",post_data,(data)=> {
+                        var mention=[];
+                        for(let i in data.data)
+                        {
+                          mention.push(data.data[i].Name);
+                        }
+                      callback(mention);
+                    });
+                      }
+                  }
+                },
+            }
+            var editor=evt.editor;
+            this.mention.load_atwho(editor,at_config);
+        });
+      })
     }
 
     /*
