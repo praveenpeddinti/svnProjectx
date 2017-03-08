@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController } from 'ionic-angular';
-import { HomePage } from '../home/home';
-import { LoginPage } from '../login/login';
-import { Storage } from "@ionic/storage";
-import { PopoverPage } from '../popover/popover';
-import { StoryDetailsPage } from '../story-details/story-details';
-import { Globalservice } from '../../providers/globalservice';
-import { Constants } from '../../providers/constants';
+import {Component, ViewChild} from '@angular/core';
+import {NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController} from 'ionic-angular';
+import {Storage} from "@ionic/storage";
+import {PopoverPage} from '../popover/popover';
+import {StoryDetailsPage} from '../story-details/story-details';
+import {Globalservice} from '../../providers/globalservice';
+import {Constants} from '../../providers/constants';
+
+
+import {AutoCompleteProvider} from '../../providers/auto.complete-provider';
+//import {AutoCompTestItem} from './auto-comp-test-item';
 
 /*
   Generated class for the Dashboard page.
@@ -16,7 +18,8 @@ import { Constants } from '../../providers/constants';
 */
 @Component({
     selector: 'page-dashboard',
-    templateUrl: 'dashboard.html'
+    templateUrl: 'dashboard.html',
+    providers: [AutoCompleteProvider]
 })
 export class DashboardPage {
     public items: Array<any>;
@@ -37,7 +40,8 @@ export class DashboardPage {
         private storage: Storage,
         public viewCtrl: ViewController,
         private globalService: Globalservice,
-        private urlConstants: Constants) {
+        private urlConstants: Constants,
+        private autoCompleteProvider: AutoCompleteProvider) {
 
         this.storage.get('userCredentials').then((value) => {
             console.log("in did load " + value.username);
@@ -118,8 +122,9 @@ export class DashboardPage {
         //  });
     }
 
-    public storyDetail(): void {
-        this.navCtrl.push(StoryDetailsPage);
+    public openDetails(item): void {
+        var clickedItemId  = {"id": item.id};
+        this.navCtrl.push(StoryDetailsPage, clickedItemId);
     }
 
     doInfinite(infiniteScroll) {
@@ -130,7 +135,7 @@ export class DashboardPage {
             if (this.moreDataLoaded == true) {
                 console.log('Async operation has ended');
                 this.getAllStoriesList();
-                infiniteScroll.complete();
+                    infiniteScroll.complete();
             } else {
                 console.log('failing condition');
                 infiniteScroll.complete();

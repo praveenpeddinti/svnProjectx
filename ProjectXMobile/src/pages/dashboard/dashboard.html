@@ -20,7 +20,7 @@
         author uday
       -->
   <ion-list >
-    <ion-item-sliding *ngFor="let item of arrayObject" (click)="ticketClick(item)" no-padding>
+    <ion-item-sliding *ngFor="let item of arrayObject" (click)="openDetails(item)" no-padding>
       <ion-item id="{{item.id}}" text-wrap no-padding  no-lines> 
         <ion-item>
       
