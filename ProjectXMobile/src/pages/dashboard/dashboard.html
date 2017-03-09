@@ -6,19 +6,25 @@
 -->
 <ion-header>
   <ion-navbar hideBackButton>
-    <ion-title>ProjectX</ion-title>
+      <ion-buttons text-center>
+      <ion-title>My All Stories</ion-title>
+    </ion-buttons>
+
     <ion-buttons end>
       <a ion-button icon-only (click)="openPopover($event)">
         <ion-icon name="person"></ion-icon>
       </a>
     </ion-buttons>
+
   </ion-navbar>
 </ion-header>
-<ion-content no-padding>
-  <!---
+ <!---
         The below code is useful for  listing the stories
         author uday
       -->
+<!--body content-->
+<ion-content no-padding>
+ 
   <ion-list>
     <ion-item-sliding *ngFor="let item of arrayObject" (click)="openDetails(item)" no-padding>
       <ion-item id="{{item.id}}" text-wrap no-padding no-lines>
@@ -38,14 +44,14 @@
           <!--second row-->
           <ion-row no-padding>
             <ion-col width-30>
-              Priority
+              Status
             </ion-col>
             <ion-col width-30>
-              Status
+              Due date
             </ion-col>
 
             <ion-col width-30>
-              Bucket
+              Total story points
             </ion-col>
 
           </ion-row>
@@ -53,29 +59,26 @@
           <!--third row-->
           <ion-row no-padding>
             <ion-col width-30>
-              <b>{{item.priority}}</b>
+              <b>{{item.workflow}}</b>
             </ion-col>
             <ion-col width-30>
-              <b>{{item.workflow}}</b>
+              <b>{{item.duedate}}</b>
             </ion-col>
 
             <ion-col width-30>
-              <b>{{item.bucket}}</b>
+              <b>4</b>
             </ion-col>
           </ion-row>
 
           <!--fourth row-->
 
           <ion-row>
-            <ion-col width-80>
+            <ion-col >
               Assignto
               <b>{{item.assignTo}}</b>
             </ion-col>
-            <ion-col width-20>
-              T21
-            </ion-col>
           </ion-row>
-          
+
         </ion-item>
       </ion-item>
       <ion-item-options side="right" (ionSwipe)="openDetails(item)">
