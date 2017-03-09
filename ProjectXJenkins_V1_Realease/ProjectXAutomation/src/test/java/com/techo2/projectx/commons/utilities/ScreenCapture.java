@@ -84,8 +84,6 @@ public class ScreenCapture
 			log.error("An Exception occured while recording screen..."+e.getCause());
 		} 	
 	}		
-
-
 	/**
 	 * Method to stop the video recording.
 	 */
