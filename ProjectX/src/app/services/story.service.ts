@@ -55,4 +55,15 @@ getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,getAllStoryDeta
     });
   }
 
+  getSubTasksDetails(projectId,storyId,getSubTasksDetailsCallback) { 
+   var post_data={
+      'projectId':projectId,
+      'storyId':storyId
+    }
+    this._ajaxService.AjaxSubscribe("story/get-sub-task-details",post_data,(data)=>
+    { 
+         getSubTasksDetailsCallback(data);
+    });
+  }
+
 }

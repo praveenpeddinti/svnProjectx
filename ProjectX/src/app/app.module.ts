@@ -7,19 +7,19 @@ import { AppComponent }  from './app.component';
 import { LoginComponent }  from './components/login/login.component';
 import { HomeComponent }  from './components/home/home.component';
 import { StoryDashboardComponent }  from './components/story-dashboard/story-dashboard.component';
-import { Ng2DropdownModule } from 'ng2-material-dropdown';
-import { DatePickerModule } from 'ng2-datepicker';
+//import { Ng2DropdownModule } from 'ng2-material-dropdown';
+//import { DatePickerModule } from 'ng2-datepicker';
 //import { Typeahead } from 'ng2-typeahead';
-import { MentionModule } from 'angular2-mentions/mention';
+//import { MentionModule } from 'angular2-mentions/mention';
 import {StoryService} from './services/story.service';
 import { CKEditorModule } from 'ng2-ckeditor';
-import {Ng2DragDropModule} from "ng2-drag-drop";
+//import {Ng2DragDropModule} from "ng2-drag-drop";
 import {DropdownModule,CalendarModule,AutoCompleteModule} from 'primeng/primeng'; 
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService, Collaborator} from './services/login.service';
 import {AjaxService} from './ajax/ajax.service';
-import {FlexLayoutModule} from '@angular/flex-layout';
+//import {FlexLayoutModule} from '@angular/flex-layout';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import {AuthGuard} from './services/auth-guard.service';
@@ -71,11 +71,7 @@ const ROUTES=[
    FormsModule,
    ReactiveFormsModule ,
    HttpModule,
-   Ng2DropdownModule,
-   DatePickerModule,
-   MentionModule,
    CKEditorModule,
-   Ng2DragDropModule,
    NgxDatatableModule,
    FileDropModule,
    DropdownModule,
@@ -84,7 +80,7 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES)
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TinyMCE ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent ],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,
   ],

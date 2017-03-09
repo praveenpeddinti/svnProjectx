@@ -1,6 +1,5 @@
 import { StoryComponent } from '../story/story-form.component';
-import { register } from 'ts-node/dist';
-import { Component, Directive } from '@angular/core';
+import { Component, Directive,ViewChild,ViewEncapsulation } from '@angular/core';
 import { StoryService } from '../../services/story.service';
 import { Router } from '@angular/router';
 import { GlobalVariable } from '../../config';
@@ -14,7 +13,9 @@ declare var jQuery:any;
 })
 
 export class StoryDashboardComponent {
+    @ViewChild('myTable') table: any;
     rows = [];
+    row1 = [];
     count: number = 0;
     offset: number = 0;
     limit: number = 10;
@@ -63,8 +64,16 @@ export class StoryDashboardComponent {
                     flexGrow: 1,
                     sortby: 'duedate',
                     class: ''
+                },
+                {
+                    name: '',
+                    flexGrow: 0,
+                    sortby: '',
+                    class: 'arrowClass'
                 }
+                
               ];
+
 expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
@@ -88,6 +97,7 @@ expanded: any = {};
         */
     page(offset, limit, sortvalue, sortorder) {
         this._service.getAllStoryDetails(1, offset, limit, sortvalue, sortorder, (response) => {
+            
             let jsonForm = {};
             if (response.statusCode == 200) {
                 const start = offset * limit;
@@ -122,15 +132,34 @@ expanded: any = {};
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
     }
 
-       /* @Praveen P
+toggleExpandRow(row) {
+    //console.log('Toggled Expand Row!', row[0].field_value);
+    this._service.getSubTasksDetails(1, row[0].field_value, (response) => {
+                   let jsonForm = {};
+            if (response.statusCode == 200) {
+                this.row1=response.data;
+                this.table.rowDetail.toggleExpandRow(this.row1);
+                
+            } else {
+                console.log("fail---");
+            }
+        });
+    //console.log('Toggled Expand Row!', row);
+    this.table.rowDetail.toggleExpandRow(row);
+  }
+
+      /* @Praveen P
         * Pass the TicketId for story-detail component
         */
-    onActivate(event) {
-        if (event.hasOwnProperty("row")) {
-            this._router.navigate(['story-detail', event.row[0].field_value]);
-        }
+    onActivate(event) {//alert("----onAct----"+event[0].field_value);
+        //if (event.hasOwnProperty("row")) {
+            this._router.navigate(['story-detail', event[0].field_value]);
+        //}
     }
     
+
+    
+
     renderStoryForm() {
         this._router.navigate(['story-form']);
     }
