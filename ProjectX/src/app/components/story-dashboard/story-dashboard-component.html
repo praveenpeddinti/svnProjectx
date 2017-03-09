@@ -40,8 +40,8 @@
                   [flexGrow]="column.flexGrow">
                   <template let-row="row" ngx-datatable-cell-template>
                     <div class="{{column.class}} ">
-                      <img *ngIf="row[j].other_data.planlevel==1" src="assets/images/storyicon.png" />
-                      <img *ngIf="row[j].other_data.planlevel==2" src="assets/images/task.png" /> 
+                      <img *ngIf="row[j].other_data.planlevel==1" src="assets/images/story-icon.png" />
+                      <img *ngIf="row[j].other_data.planlevel==2" src="assets/images/task-icon.png" /> 
                       <img *ngIf="row[j].field_name=='assignedto' && row[j].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{row[j].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[j].field_value}}"  /> 
                       {{row[j].field_value}}
@@ -60,11 +60,11 @@ Row classes are also dynamically. These classes are pass to service layer-->
  <ngx-datatable-column *ngFor="let column of columns;let i=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
   [flexGrow]="column.flexGrow">
   <template let-row="row" ngx-datatable-cell-template>
-    <div class="{{column.class}} " *ngIf="row[i].field_name!='arrow'" (click)="onActivate(row)">
+    <div class="{{column.class}} " *ngIf="row[i].field_name!='arrow'" (click)="showStoryDetail(row)">
       
       <!--This img tag belongs to Ticket Id-->
-      <img *ngIf="row[i].other_data.planlevel==1" src="assets/images/storyicon.png"  />
-      <img *ngIf="row[i].other_data.planlevel==2" src="assets/images/task.png" />
+      <img *ngIf="row[i].other_data.planlevel==1" src="assets/images/story-icon.png"  />
+      <img *ngIf="row[i].other_data.planlevel==2" src="assets/images/task-icon.png" />
        <!--This img tag belongs to Assigned to column i.e UserName and Profile Pic -->
       <img *ngIf="row[i].field_name=='assignedto' && row[i].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
         src="{{row[i].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> 

@@ -149,14 +149,19 @@ toggleExpandRow(row) {
   }
 
       /* @Praveen P
-        * Pass the TicketId for story-detail component
+        * This method is used subtask details when subtask id click component
         */
-    onActivate(event) {//alert("----onAct----"+event[0].field_value);
-        //if (event.hasOwnProperty("row")) {
-            this._router.navigate(['story-detail', event[0].field_value]);
-        //}
+    onActivate(event) {
+        if (event.hasOwnProperty("row")) {
+            this._router.navigate(['story-detail', event.row[0].field_value]);
+        }
     }
-    
+     /* @Praveen P
+        * This method is used story/task details when story/task id click component
+        */
+    showStoryDetail(event) {
+            this._router.navigate(['story-detail', event[0].field_value]);
+    }
 
     
 
