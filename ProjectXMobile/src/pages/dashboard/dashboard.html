@@ -86,8 +86,11 @@
     </ion-item-sliding>
   </ion-list>
 
+  <div *ngIf="!moreDataLoaded" >
+  <ion-title  text-center>Data not available.</ion-title>
+  </div>
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-    <ion-infinite-scroll-content ng-if="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data...">
+    <ion-infinite-scroll-content *ngIf="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
