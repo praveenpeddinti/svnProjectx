@@ -1,15 +1,10 @@
-import {Component, ViewChild} from '@angular/core';
-import {NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController} from 'ionic-angular';
-import {Storage} from "@ionic/storage";
-import {PopoverPage} from '../popover/popover';
-import {StoryDetailsPage} from '../story-details/story-details';
-import {Globalservice} from '../../providers/globalservice';
-import {Constants} from '../../providers/constants';
-
-
-import {AutoCompleteProvider} from '../../providers/auto.complete-provider';
-//import {AutoCompTestItem} from './auto-comp-test-item';
-
+import { Component } from '@angular/core';
+import { NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController } from 'ionic-angular';
+import { Storage } from "@ionic/storage";
+import { PopoverPage } from '../popover/popover';
+import { StoryDetailsPage } from '../story-details/story-details';
+import { Globalservice } from '../../providers/globalservice';
+import { Constants } from '../../providers/constants';
 /*
   Generated class for the Dashboard page.
 
@@ -19,7 +14,7 @@ import {AutoCompleteProvider} from '../../providers/auto.complete-provider';
 @Component({
     selector: 'page-dashboard',
     templateUrl: 'dashboard.html',
-    providers: [AutoCompleteProvider]
+
 })
 export class DashboardPage {
     public items: Array<any>;
@@ -31,7 +26,7 @@ export class DashboardPage {
     userName: any = '';
     userPassword: string = '';
     userToken: any = '';
-    paramas = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "asc", "userInfo": { "Id": "9", "username": "hareesh.bekkam", "token": "045cdabd2bfc0bc46571@9" } };
+    paramas = { "projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "asc", "userInfo": { "Id": "9", "username": "hareesh.bekkam", "token": "045cdabd2bfc0bc46571@9" } };
     constructor(public navCtrl: NavController,
         public navParams: NavParams,
         public loadingController: LoadingController,
@@ -40,23 +35,35 @@ export class DashboardPage {
         private storage: Storage,
         public viewCtrl: ViewController,
         private globalService: Globalservice,
-        private urlConstants: Constants,
-        private autoCompleteProvider: AutoCompleteProvider) {
+        private urlConstants: Constants) {
 
         this.storage.get('userCredentials').then((value) => {
-            console.log("in did load " + value.username);
             this.userName = value.username;
+            this.userToken = value.userToken;
         });
         this.arrayObject = [];
 
     }
 
+    /**
+          is called once the screen is loaded
+      
+       */
+
     ionViewDidLoad() {
-        console.log('ionViewDidLoad DashboardPage');
+       
+        this.paramas.userInfo.username = this.userName;
+        this.paramas.userInfo.token = this.userToken;
         this.getAllStoriesList();
     }
+
+
+    /**
+           pop for logout
+       
+        */
     openPopover(myEvent) {
-        let userCredentials = {username: this.userName };
+        let userCredentials = { username: this.userName };
         let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
         console.log("User name is " + this.userName);
         popover.present({
@@ -70,12 +77,11 @@ export class DashboardPage {
     
      */
     getAllStoriesList(): void {
-       
+
         if (this.paramas.offset == 0) {
             this.paramas.offset = 0;
         }
-        console.log("params are ");
-        console.log(this.paramas);
+        
         this.globalService.getStoriesList(this.urlConstants.getAllTicketDetails, this.paramas).subscribe(
             data => {
                 this.items = data.data;
@@ -84,8 +90,7 @@ export class DashboardPage {
                 if (this.items.length == 0) {
                     this.moreDataLoaded = false;
                 }
-                //console.log(this.paramas);
-                console.log(this.items);
+               
 
                 for (let ticket = 0; ticket < this.items.length; ticket++) {
                     var _id = this.items[ticket][0].field_value;
@@ -103,7 +108,7 @@ export class DashboardPage {
                 this.paramas.offset = (this.paramas.offset) + 1;
             },
             error => {
-                console.log("the error " + JSON.stringify(error));
+               
             },
             () => console.log('login api call complete')
         );
@@ -114,30 +119,29 @@ export class DashboardPage {
       author uday   
   
    */
-    ticketClick(item) {
 
-        console.log("id is" + item.id);
-        //   this.navCtrl.push(ItemDetailsPage, {
-        //     item: item
-        //  });
-    }
+
+    /**
+          openDetails() is use ful for calling while swiping/clicking on the stories list item  
+      
+       */
 
     public openDetails(item): void {
-        var clickedItemId  = {"id": item.id};
+        var clickedItemId = { "id": item.id };
         this.navCtrl.push(StoryDetailsPage, clickedItemId);
     }
 
+
+    /**
+         doInfinite(event) is called when the list is pulling down 
+     
+      */
     doInfinite(infiniteScroll) {
-
-        console.log("sample scrolling");
-
         setTimeout(() => {
             if (this.moreDataLoaded == true) {
-                console.log('Async operation has ended');
                 this.getAllStoriesList();
-                    infiniteScroll.complete();
+                infiniteScroll.complete();
             } else {
-                console.log('failing condition');
                 infiniteScroll.complete();
             }
         }, 2000);
