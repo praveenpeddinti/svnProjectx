@@ -35,7 +35,6 @@ import com.techo2.projectx.commons.datahandlers.ConfigManager;
 
 public class ScreenCapture  
 {
-
 	private static ScreenRecorder screenRecorder;
 	private static String fileSeperator = System.getProperty("file.separator");
 	private static Logger log =Logger.getLogger("ScreenCapture");
