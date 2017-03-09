@@ -3,6 +3,8 @@ import { NavController, NavParams, ViewController, AlertController } from 'ionic
 import { Storage } from "@ionic/storage";
 import { HomePage } from '../home/home';
 import { LoginPage } from '../login/login';
+import { Globalservice } from '../../providers/globalservice';
+import {Constants} from '../../providers/constants';
 /*
   Generated class for the Popover page.
 
@@ -11,16 +13,29 @@ import { LoginPage } from '../login/login';
 */
 @Component({
   selector: 'page-popover',
-  templateUrl: 'popover.html'
+  templateUrl: 'popover.html',
+  providers: [Globalservice, Constants]
 })
 export class PopoverPage {
+
  userName: string='';
-  constructor(public navCtrl: NavController,
+ login: {username?: string, password?: string,token?:any} = {};
+// userInfo = {"Id":"","username":"","token":"","projectId":1}
+logoutParams = {"userInfo":{"Id":"","username":"","token":""},"projectId":1}
+
+  constructor(private globalService: Globalservice,private constants: Constants,public navCtrl: NavController,
             public alertController: AlertController,
             private storage:Storage,
             public navParams: NavParams, 
             public viewCtrl: ViewController) {
-                
+
+           this.storage.get('userCredentials').then((value) => {
+            console.log("in did load " + value.username);
+            this.logoutParams.userInfo.Id= value.Id;
+            this.logoutParams.userInfo.username=value.username;
+            this.logoutParams.userInfo.token=value.token;
+        });
+     
             }
   close() {
     this.viewCtrl.dismiss();
@@ -31,6 +46,8 @@ export class PopoverPage {
       console.log("User name is " + this.userName);
   }
 logoutApp() {
+  this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
+  data =>{
   let alert = this.alertController.create({
     title: 'Confirm Log Out',
     message: 'Are you sure you want to log out?',
@@ -44,11 +61,8 @@ logoutApp() {
       },
       {
         text: 'Log Out',
-        
-        handler: () => {
-                  
-                  this.storage.remove('userCredentials').then( ()=>{
-                      
+        handler: () => {   
+                  this.storage.remove('userCredentials').then( ()=>{  
                       this.navCtrl.push(LoginPage);
                       console.log('Logged out');
                       this.viewCtrl.dismiss();
@@ -60,6 +74,12 @@ logoutApp() {
       }
     ]
   });
+
   alert.present();
-}
+},
+ error=>
+      { console.log("the error " + JSON.stringify(error)); },
+      ()=> console.log('logout api call complete'));
+ }
+
 }

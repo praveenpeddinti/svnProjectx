@@ -34,11 +34,12 @@ export class Globalservice {
         );
         return response;
     }
+
     getLogout(url, data) {
-        var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
+        var response = this.http.post(url, JSON.stringify(data),this.headers).map(
             res => res.json()
         );
-        return response;
+        return response;    
     }
 
     public getTicketDetailsById(url, data) {
