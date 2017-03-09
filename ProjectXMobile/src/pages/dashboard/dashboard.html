@@ -9,7 +9,7 @@
     <ion-title>ProjectX</ion-title>
     <ion-buttons end>
       <a ion-button icon-only (click)="openPopover($event)">
-      <ion-icon name="person"></ion-icon>
+        <ion-icon name="person"></ion-icon>
       </a>
     </ion-buttons>
   </ion-navbar>
@@ -19,21 +19,23 @@
         The below code is useful for  listing the stories
         author uday
       -->
-  <ion-list >
+  <ion-list>
     <ion-item-sliding *ngFor="let item of arrayObject" (click)="openDetails(item)" no-padding>
-      <ion-item id="{{item.id}}" text-wrap no-padding  no-lines> 
+      <ion-item id="{{item.id}}" text-wrap no-padding no-lines>
         <ion-item>
-      
-          <ion-row >
-            <ion-col width-5 >
-               <img ng-src=""/>
+
+          <!--first row-->
+          <ion-row>
+            <ion-col width-5>
+              <img ng-src="" />
             </ion-col>
             <ion-col width-20>#<b>{{item.id}}</b></ion-col>
-            <ion-col width-75 >
+            <ion-col width-75>
               {{item.title}}
             </ion-col>
           </ion-row>
 
+          <!--second row-->
           <ion-row no-padding>
             <ion-col width-30>
               Priority
@@ -48,7 +50,7 @@
 
           </ion-row>
 
-
+          <!--third row-->
           <ion-row no-padding>
             <ion-col width-30>
               <b>{{item.priority}}</b>
@@ -61,19 +63,22 @@
               <b>{{item.bucket}}</b>
             </ion-col>
           </ion-row>
-         
-          <ion-row > 
+
+          <!--fourth row-->
+
+          <ion-row>
             <ion-col width-80>
-              Assignto 
-           <b>{{item.assignTo}}</b>
+              Assignto
+              <b>{{item.assignTo}}</b>
             </ion-col>
             <ion-col width-20>
               T21
             </ion-col>
           </ion-row>
+          
         </ion-item>
       </ion-item>
-      <ion-item-options side="right" (ionSwipe)="ticketClick(item)">
+      <ion-item-options side="right" (ionSwipe)="openDetails(item)">
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
