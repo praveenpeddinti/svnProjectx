@@ -482,14 +482,16 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
 
             array_push($arr2ordered,$ticketId);
             array_push($arr2ordered,$ticketTitle);
-            
-            
+             $arr2ordered[1]["other_data"] = sizeof($ticketDetails["Tasks"]);
+             $Othervalue=array();
             foreach ($ticketDetails["Fields"] as $key=>$value) {
                 
                 if($key == "planlevel"){
-                    $arr2ordered[0]["other_data"] = $value["value"];
+                    //$arr2ordered[0]["other_data"] = $value["value"];
+                    $Othervalue["planlevel"]=$value["value"];
+                    $Othervalue["totalSubtasks"]=sizeof($ticketDetails["Tasks"]);
+                    $arr2ordered[0]["other_data"] = $Othervalue ;
                 }
-                
                 if(in_array($value["Id"], $fieldsOrderArray)){
                     
                if(isset($value["custom_field_id"] )){
@@ -602,6 +604,9 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             foreach ($fieldsOrderArray as $key) {
                 array_push($arr2ordered, $newArray[$key]);
             }
+            $arrow = array("field_name"=>"arrow","value_id"=>"","field_value"=>"","other_data"=>"");
+            $arrow['other_data']=sizeof($ticketDetails["Tasks"]);
+            array_push($arr2ordered, $arrow);
             unset($ticketDetails["Fields"]);
             $ticketDetails=$arr2ordered;
             return $ticketDetails;

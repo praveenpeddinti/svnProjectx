@@ -209,6 +209,38 @@ class TicketCollection extends ActiveRecord
         }
     }
     /**
+     * @author Praveen P
+     * This method is used to getting subtask Ids by passing particular story Id.
+     * @return type  $projectId $storyId
+     */
+    public static function getSubTaskIds($storyId,$projectId) {
+        try {
+            $query = new Query();
+            $query->from('TicketCollection')
+                     ->where(["ProjectId" => $projectId ,"TicketId" => $storyId]);
+            $taskDetails = $query->all();
+            return $taskDetails;
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getTotalTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
+     * @author Praveen P
+     * @description This method is used to getting subtask details for the particular story.
+     * @return typesubtasks
+     */
+    public static function getSubTaskDetails($subTaskIds, $projectId, $select = []) {
+        try {
+            $query = new Query();
+            $query->from('TicketCollection')
+                  ->where(["ProjectId" => $projectId ,"TicketId" => $subTaskIds]);
+        $ticketDetails = $query->all();
+        return $ticketDetails;  
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
      * @author Moin Hussain
      * @param type $userId
      * @param type $projectId

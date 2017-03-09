@@ -103,6 +103,28 @@ class StoryController extends Controller
     }
 
     /**
+    * @author Praveen P
+    * @description This method is used to getting subtask details for the particular story.
+    * @return type subtasks
+    */
+   public function actionGetSubTaskDetails() {
+        try {
+            $StoryData = json_decode(file_get_contents("php://input"));
+            //$projectId=1;
+            $projectId = $StoryData->projectId;
+            $getSubTaskIds = ServiceFactory::getStoryServiceInstance()->getSubTaskIds($StoryData->storyId,$projectId);
+            $data = ServiceFactory::getStoryServiceInstance()->getSubTaskDetails($getSubTaskIds[0]['Tasks'], $projectId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $data;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
     * @author Moin Hussain
     * @description This method is used to get data for edit mode.
     * @return type

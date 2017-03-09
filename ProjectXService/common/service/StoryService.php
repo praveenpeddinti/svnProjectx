@@ -319,7 +319,40 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getTotalTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+            
+    /**
+     * @author Praveen P
+     * @description This method is used to getting subtask Ids for the particular story.
+     * @return type subtasks Ids
+     */
+    public function getSubTaskIds($StoryData, $projectId) {
+        try {
+           $finalData = TicketCollection::getSubTaskIds($StoryData,$projectId);
+            return $finalData;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     
+    /**
+     * @author Praveen P
+     * @description This method is used to getting subtask details for the particular story.
+     * @return type subtasks
+     */
+    public function getSubTaskDetails($subTaskIds, $projectId) {
+        try {
+           $ticketDetails = TicketCollection::getSubTaskDetails($subTaskIds, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
+            $finalData = array();
+            $fieldsOrderArray = [5,6,7,3,10];
+            foreach ($ticketDetails as $ticket) {
+                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
+                array_push($finalData, $details);
+            }
+            return $finalData;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     /**
          * @author Anand Singh
          * @return type
