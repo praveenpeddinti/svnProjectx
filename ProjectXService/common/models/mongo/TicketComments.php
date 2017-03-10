@@ -29,6 +29,8 @@ class TicketComments extends ActiveRecord
      "TicketId",
      "ProjectId",
      "Activities",
+     "RecentActivityUser",
+     "RecentActivitySlug"
     
    
         ];
@@ -47,6 +49,9 @@ class TicketComments extends ActiveRecord
             $tktCommentsColl->TicketId = $ticketNumber;
             $tktCommentsColl->ProjectId = $projectId;
             $tktCommentsColl->Activities = [];
+            $tktCommentsColl->RecentActivityUser = "";
+            $tktCommentsColl->RecentActivitySlug = "";
+            
             $res = $tktCommentsColl->insert();
             if($res){
                 $query = new Query();
@@ -57,27 +62,37 @@ class TicketComments extends ActiveRecord
            $ticketCommentDetails = $query->one();
            
            error_log("========createCommentsRecord==========".print_r($ticketCommentDetails,1));
-           TicketCollection::updateRefFields("CommentsRef", $ticketCommentDetails,$ticketNumber,$projectId);
+//           TicketCollection::updateRefFields("CommentsRef", $ticketCommentDetails,$ticketNumber,$projectId);
             }
             
         }catch(Exception $ex){
             
         }
     }
+    
+    public static function getTicketComments($ticketId,$projectId){
+                    $query = new Query();
+            $query->from('TicketComments')
+            ->where(['TicketId' => (int)$ticketId, "ProjectId" =>(int)$ticketId ]);
+         
+           $ticketCommentDetails = $query->one();
+    }
+    
     public static function saveComment($ticketNumber,$projectId,$newCommentArray=array()){
         try{
             if(!empty($newCommentArray)){
-            $query = new Query();
-            $query->from('TicketComments')
-            ->where(['TicketId' => (int)$ticketNumber, "ProjectId" =>(int)$projectId ]);
-         
-           $ticketCommentDetails = $query->one();
+//            $query = new Query();
+//            $query->from('TicketComments')
+//            ->where(['TicketId' => (int)$ticketNumber, "ProjectId" =>(int)$projectId ]);
+//         
+//           $ticketCommentDetails = $query->one();
 //            error_log("+++++++ticketcommentcoll+++++++++".print_r($ticketCommentDetails,1));
 //            array_push($ticketCommentDetails["Activities"],$newCommentArray);
             
             $collection = Yii::$app->mongodb->getCollection('TicketComments');
-            $newdata = array('$addToSet' => array("Activities" => $newCommentArray));
-            $collection->findAndModify(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata,array('new' => 1,"upsert"=>1)); 
+            $newdata = array('$addToSet' => array('Activities' => $newCommentArray));
+            $res = $collection->findAndModify(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata,array('new' => 1,"upsert"=>1)); 
+//            error_log("+++++sdad+++++++".$res);
 //            $tktCommentsColl = new TicketComments();
 //            $tktCommentsColl->TicketId = $ticketNumber;
 //            $tktCommentsColl->ProjectId = $projectId;
