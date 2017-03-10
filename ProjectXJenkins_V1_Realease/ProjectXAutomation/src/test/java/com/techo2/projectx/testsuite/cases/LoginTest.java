@@ -8,8 +8,6 @@ import com.techo2.projectx.commons.pageobjects.ProjectXLogin;
 import com.techo2.projectx.commons.pageobjects.locators.LoginPageLocators;
 import com.techo2.projectx.testsuite.base.BaseSetup;
 
-import Utility.TestBase;
-
 public class LoginTest extends BaseSetup implements LoginPageLocators{
 	
 	
