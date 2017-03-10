@@ -36,10 +36,10 @@ export class Globalservice {
     }
 
     getLogout(url, data) {
-        var response = this.http.post(url, JSON.stringify(data),this.headers).map(
+        var response = this.http.post(url, JSON.stringify(data), this.headers).map(
             res => res.json()
         );
-        return response;    
+        return response;
     }
 
     public getTicketDetailsById(url, data) {
@@ -67,15 +67,15 @@ export class Globalservice {
 
     public getFieldItemById(url, fieldDetails) {
 
-var fieldItemParams = this.params;
-// var params:{FieldId:any}= {};
-fieldItemParams["FieldId"] = fieldDetails.id;
-fieldItemParams["TicketId"] = fieldDetails.ticketId;
-fieldItemParams["ProjectId"] = 1;
-fieldItemParams["timeZone"] = "Asia/Kolkata";
+        var fieldItemParams = this.params;
+        // var params:{FieldId:any}= {};
+        fieldItemParams["FieldId"] = fieldDetails.id;
+        fieldItemParams["TicketId"] = fieldDetails.ticketId;
+        fieldItemParams["ProjectId"] = 1;
+        fieldItemParams["timeZone"] = "Asia/Kolkata";
 
-delete fieldItemParams["ticketId"];
-delete fieldItemParams["projectId"];
+        delete fieldItemParams["ticketId"];
+        delete fieldItemParams["projectId"];
 
         var response = this.http.post(url, JSON.stringify(fieldItemParams), this.headers).map(
             res => res.json()
