@@ -149,27 +149,40 @@ class StoryController extends Controller
    /**
     * @author Moin Hussain
     * @return string
+    * @updated suryaprakash for defualt child ticket insertions
     */
-    public function actionSaveTicketDetails(){
-        try{
+    public function actionSaveTicketDetails() {
+        try {
             error_log("actionSaveTicketDetails--");
-             $ticket_data = json_decode(file_get_contents("php://input"));
-            //error_log("pintir-------------".print_r($ticket_data,1));
-//           $userdata =  $ticket_data->userInfo;
-//           error_log("userid------".$userdata->Id);
-          
-            $data = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
-           $responseBean = new ResponseBean();
-           $responseBean->statusCode = ResponseBean::SUCCESS;
+            $ticket_data = json_decode(file_get_contents("php://input"));
+            
+            $title = $ticket_data->data->title;
+            $description = $ticket_data->data->description;
+            $parentTicNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
+
+            $planLevelNumber = $ticket_data->data->{'4'}; //story-1 or task-2
+            if ($planLevelNumber == 1) {
+                $defualtTicketsArray = $ticket_data->data->UI;
+                $childTicketnoArray = array();
+                for ($i = 0; $i < sizeof($defualtTicketsArray); $i++) {
+                    $ticket_data->data->title = $defualtTicketsArray[$i]."-" . $title;
+                    $ticket_data->data->description = $defualtTicketsArray[$i]."-" . $description;
+                    $ticket_data->data->{'4'} = 2;
+                    $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data, $parentTicNumber);
+                    array_push($childTicketnoArray, $ticketNumber);
+                    $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber, $childTicketnoArray);
+                }
+            }
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = "success";
             $response = CommonUtility::prepareResponse($responseBean,"json");
-             return $response;
+            return $response;
         } catch (Exception $ex) {
-        Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
 
     /**
      * @description This method to get a template for story creation

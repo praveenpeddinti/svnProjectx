@@ -45,8 +45,8 @@ class TicketCollection extends ActiveRecord
             "Tasks",
             "TicketId",
             "TotalEstimate",
-            "TotalTimeLog"
-            
+            "TotalTimeLog",
+            "IsChild"
            
           
           
@@ -299,6 +299,23 @@ class TicketCollection extends ActiveRecord
         }
     }
     
+    /**
+     * @author Suryaprakash reddy
+     * @param type $parentTicNumber
+     * @param type $ticketnoArray
+     * @return type
+     * @use used for inserting childtickets into Tasks(array) of parentticket.
+     */
+    
+    public static function updateParentTicketTaskField($parentTicNumber, $ticketnoArray) {
+        try {
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $tasksNew = array('$set' => array("Tasks" => $ticketnoArray));
+            $collection->update(array("TicketId" => $parentTicNumber), $tasksNew);
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
 ?>

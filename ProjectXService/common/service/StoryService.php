@@ -154,8 +154,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 /**
  * @author Moin Hussain
  * @param type $ticket_data
+ * @updated $parentTicNumber by suryaprakash
  */
-       public function saveTicketDetails($ticket_data) {
+       public function saveTicketDetails($ticket_data,$parentTicNumber="") {
         try {
 
              $userdata =  $ticket_data->userInfo;
@@ -259,13 +260,20 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ticketNumber = ProjectTicketSequence::getNextSequence($projectId);
            $ticketModel->TicketId = (int)$ticketNumber;
            $ticketModel->TotalEstimate = 0;
-           $ticketModel->TotalTimeLog = 0;
+           $ticketModel->TotalTimeLog = 0;          
+           $ticketModel->ParentStoryId = "";
+           $ticketModel->IsChild=(int)0;
+           if($parentTicNumber !=""){
+               $ticketModel->ParentStoryId=(int)$parentTicNumber;
+               $ticketModel->IsChild=(int)1;
+           }
+          
                   
-             
-           
+                       
           $returnValue = TicketCollection::saveTicketDetails($ticketModel);
           if($returnValue != "failure"){
               $this->followTicket($userId,$ticketNumber,$projectId,$userId,"reportedby",true);
+              return $ticketNumber;
           }
          
         } catch (Exception $ex) {
@@ -619,7 +627,20 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getAllMyTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-      
+    /**
+     * @author Suryaprakash
+     * @param type $parentTicNumber
+     * @param type $ticketnoArray
+     * @return empty
+     */
+    public function updateParentTicketTaskField($parentTicNumber, $ticketnoArray) {
+        try {
+            $ticketDetails = TicketCollection::updateParentTicketTaskField($parentTicNumber, $ticketnoArray);
+        } catch (Exception $ex) {
+            Yii::log("StoryService:updateParentticketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
 }
 
   
