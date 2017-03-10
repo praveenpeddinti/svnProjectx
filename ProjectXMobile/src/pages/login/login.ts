@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import {NavController, ViewController, AlertController, LoadingController } from 'ionic-angular';
 
 //For pages
-import {WelcomePage} from '../welcome/welcome';
 import {DashboardPage} from '../dashboard/dashboard';
 
 //For Services

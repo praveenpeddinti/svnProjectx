@@ -17,7 +17,12 @@ import {StoryDetailActivitiesPage} from '../story-detail-activities/story-detail
 })
 export class StoryDetailsPage {
     public items: Array<any>;
-    public arrayList: Array<{id: string, title: string, assignTo: string, priority: string, bucket: string, planlevel: string, ticketId: any}>;
+    public arrayList: Array<{id: string, title: string, assignTo: string, readOnly: string, priority: string, bucket: string, planlevel: string, ticketId: any}>;
+    public displayFieldvalue ;
+    public showEditableFieldOnly = [];
+    public readOnlyDropDownField:boolean = false;
+    public clickedDivRef;
+public selectedValue = "";
     public tab1Root: any = StoryDetailActivitiesPage;
 
     public taskDetails = {ticketId: "", title: "", description: ""};
@@ -46,16 +51,18 @@ export class StoryDetailsPage {
                 this.taskDetails.description = result.data.Description;
 
                 this.items = result.data.Fields;
-                console.log("the count value is from Appcomponent" + this.items.length);
+                //console.log("the count value is from Appcomponent" + this.items.length);
                 this.arrayList = [];
                 for (let i = 0; i < this.items.length; i++) {
                     var _id = this.items[i].Id;
                     var _title = this.items[i].title;
                     var _assignTo = this.items[i].value_name;
+                    var _readOnly = this.items[i].readonly;
                     this.arrayList.push({
-                        id: _id, title: _title, assignTo: _assignTo, priority: "", bucket: "", planlevel: "", ticketId: this.taskDetails.ticketId
+                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, priority: "", bucket: "", planlevel: "", ticketId: this.taskDetails.ticketId
                     });
                 }
+                //console.log("the field arrayList " + JSON.stringify(this.arrayList));
             }, error => {
                 console.log("the error in ticker derais " + JSON.stringify(error));
             }
@@ -78,35 +85,41 @@ export class StoryDetailsPage {
     }
 
     ionViewDidLoad() {
-        console.log('ionViewDidLoad StoryDetailsPage');
+        //console.log('ionViewDidLoad StoryDetailsPage');
     }
 
-    public changeOption(event) {
+    public changeOption(event, index) {
         console.log("the options --- " + this.options + " -------------");
         console.log("the change " + JSON.stringify(event));
+        this.readOnlyDropDownField = false;
+        this.showEditableFieldOnly[index] = false;
+        this.selectedValue = event;
+        console.log("the div id " + this.clickedDivRef);
+        (<HTMLInputElement>document.getElementById("Bucket_3")).value = JSON.stringify(event);
+        
     }
 
-    public getFieldValues(fieldDetails) {
+    public getFieldValues(fieldDetails, index) { // 1 --> non editable 
         console.log("the field clicked - " + JSON.stringify(fieldDetails));
-        this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
+
+        if(fieldDetails.readOnly == 0){
+            this.readOnlyDropDownField = true;
+            this.showEditableFieldOnly[index] = true;
+            this.clickedDivRef = fieldDetails.id;
+            this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
             (result) => {
-                console.log("the detials field result ---- " + JSON.stringify(result));
+                //console.log("the detials field result ---- " + JSON.stringify(result));
+                this.displayFieldvalue = result.getFieldDetails;
+                //this.displayFieldvalue = [{"Id":"1","Name":"Backlog"},{"Id":"2","Name":"Sprint1"},{"Id":"3","Name":"Sprint2"},{"Id":"4","Name":"Sprint3"}];
+                console.log("the before loop " + JSON.stringify(this.displayFieldvalue));
+                for(var i = 0; i<result.getFieldDetails.length; i++){
+                    console.log("the for loop data " + JSON.stringify(result.getFieldDetails[i]));
+                }
             },
             (error) => {
                 console.log("the fields error --- " + error);
             });
-    }
-
-    public openDatePicker() {
-
-    }
-
-    public Log(stuff): void {
-        console.log(stuff);
-    }
-
-    public event(data: Date): void {
-        this.localDate = data;
+        }
     }
 
 }

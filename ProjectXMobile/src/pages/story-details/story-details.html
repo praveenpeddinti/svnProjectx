@@ -16,12 +16,19 @@
 
   <ion-content>
     <ion-list>
-    <ion-item *ngFor="let field of arrayList">
-        <h3>{{field.title}}</h3>
-        <div class="item" (click)="getFieldValues(field)">{{field.assignTo}}</div>
-<!--        <select-alertless item-content [(ngModel)]="changeBucket">
-            <ion-option *ngFor="let item of arrayList" value="{{field.assignTo}}" >{{field.assignTo}}</ion-option>
-        </select-alertless>-->
+    <ion-item *ngFor="let field of arrayList; let i=index;">
+        <!--<div *ngIf="field.readOnly == '1'" >-->
+          <div *ngIf="!showEditableFieldOnly[i]" >
+            <h3>{{field.title}}</h3>
+            <div id="{{field.title}}_{{field.id}}" class="item" (click)="getFieldValues(field, i)" >{{field.assignTo}}</div>
+          </div>
+
+        
+          <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
+          <select-alertless *ngIf="showEditableFieldOnly[i]"  (click)="getFieldValues(field)" item-content [(ngModel)]="changeBucket" (ionChange)="changeOption($event, i)">
+              <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}" >{{item.Name}}</ion-option>
+          </select-alertless>
+        
     </ion-item>
  <!--<ion-item *ngFor="let field of arrayList">
     <ion-label>{{field.title}}</ion-label>
@@ -52,6 +59,6 @@
       <div [innerHTML] = " taskDetails.description "></div>
     </ion-card>
 
-    <div></div>
+    <div *ngFor="let item of displayFieldvalue">the :--- {{item.Name}}</div>
 
 </ion-content>

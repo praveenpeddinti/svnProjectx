@@ -2,14 +2,14 @@
   Generated template for the Login page.
 -->
 <ion-content padding>
-  <ion-row class="logo-row">
-    <ion-col></ion-col>
-    <ion-col width-67>
-      <img src="http://placehold.it/300x200"/>
-    </ion-col>
-    <ion-col></ion-col>
-  </ion-row>
-  <div class="login-box">
+    <ion-row class="logo-row">
+        <ion-col></ion-col>
+        <ion-col width-67>
+            <img src="http://placehold.it/300x200"/>
+        </ion-col>
+        <ion-col></ion-col>
+    </ion-row>
+    <div class="login-box">
     <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && onLogin(loginForm)" novalidate="true">         
       <ion-input type="text" placeholder="User name"[(ngModel)]="login.username" class="form-control customfield" required minlength="10" maxlength="50" name="user_name" #user_name="ngModel"></ion-input>
       <p [hidden]="!user_name.errors.required" *ngIf="submitted && user_name.errors " class="fielderror" color="danger">Email is required</p>
