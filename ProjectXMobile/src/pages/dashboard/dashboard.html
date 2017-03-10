@@ -32,19 +32,19 @@
       <ion-item id="{{item.id}}" text-wrap no-padding no-lines class="dashboardouterbox"  >
           <div class="{{item.priority}}">
               <div class="dashboardbox_header">
-                  <i class="Task"></i> <span class="ticketid">#{{item.id}}</span> <span class="tickettitle">{{item.title}}</span>
+                  <i class="{{item.storyOrTask}}"></i> <span class="ticketid">#{{item.id}}</span> <span class="tickettitle">{{item.title}}</span>
               </div>
               
               <div class="dashboardbox_content">
                   <div class="dashboardbox_contentouterdiv">
                       <div class="width33per collabels">Status</div>
                       <div class="width33per collabels">Due date</div>
-                      <div class="width34per collabels">Total story points</div>
+                      <div class="width34per collabels">{{item.storyPointsHeading}}</div>
                   </div>
                   <div class="dashboardbox_contentouterdiv">
                       <div class="width33per colresults">{{item.workflow}}&nbsp; </div>
                       <div class="width33per collabels">{{item.duedate}}&nbsp;</div>
-                      <div class="width34per colresults">4&nbsp;</div>
+                      <div class="width34per colresults">{{item.subTasks}}&nbsp;</div>
                   </div>
               </div>
               <div class="dashboardbox_footer">
