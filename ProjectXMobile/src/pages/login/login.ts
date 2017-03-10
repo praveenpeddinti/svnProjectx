@@ -77,7 +77,7 @@ export class LoginPage {
                             }
                            ]
                          });
-                        alert.present();
+                        //alert.present();
                       }
                 },
                 error=>{
