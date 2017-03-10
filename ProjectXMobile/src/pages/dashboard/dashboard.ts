@@ -26,7 +26,7 @@ export class DashboardPage {
     arrayObject is used for saving the stories list and passing it to the html page
      ** 
     */
-    public arrayObject: Array<{ id: string,storyOrTask:String, title: string, assignTo: string,userThumbNail:string, priority: string, workflow: string, bucket: string, duedate: string }>;
+    public arrayObject: Array<{ id: string,storyOrTask:string,subTasks:string, title: string, assignTo: string,userThumbNail:string, priority: string, workflow: string, bucket: string, duedate: string }>;
     public moreDataLoaded: boolean = true;
 
     userName: any = '';
@@ -119,7 +119,8 @@ export class DashboardPage {
                 }
                 for (let ticket = 0; ticket < this.items.length; ticket++) {
                     var _id = this.items[ticket][0].field_value;
-                    var _storyOrTask=this.items[ticket][0].other_data;
+                    var _storyOrTask=this.items[ticket][0].other_data.planlevel;
+                     var _subTasks=this.items[ticket][0].other_data.totalSubtasks;
                     var _title = this.items[ticket][1].field_value;
                     var _assignTo = this.items[ticket][2].field_value;
                     var _thumbNail=this.items[ticket][2].other_data;
@@ -129,7 +130,7 @@ export class DashboardPage {
                     var _dudate = this.items[ticket][6].field_value;
 
                     this.arrayObject.push({
-                        id: _id,storyOrTask:_storyOrTask, title: _title, assignTo: _assignTo,userThumbNail:_thumbNail, priority: _priority, workflow: _workflow, bucket: _bucket, duedate: _dudate
+                        id: _id,storyOrTask:_storyOrTask,subTasks:_subTasks, title: _title, assignTo: _assignTo,userThumbNail:_thumbNail, priority: _priority, workflow: _workflow, bucket: _bucket, duedate: _dudate
                     });
                 }
                 this.paramas.offset = (this.paramas.offset) + 1;
