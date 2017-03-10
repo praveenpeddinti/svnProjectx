@@ -6,13 +6,13 @@
 -->
 <ion-header>
   <ion-navbar hideBackButton>
-      <ion-buttons text-center>
-      <ion-title>My All Stories</ion-title>
+      <ion-buttons left>
+      <img src="../../assets/images/logo.png"/>
     </ion-buttons>
-
-    <ion-buttons end>
+      <ion-title center>My All Stories</ion-title>
+    <ion-buttons right>
       <a ion-button icon-only (click)="openPopover($event)">
-        <ion-icon name="person"></ion-icon>
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
       </a>
     </ion-buttons>
 
@@ -24,20 +24,19 @@
       -->
 <!--body content-->
 <ion-content no-padding>
- 
+    <div style="padding:10px">
+       
   <ion-list>
     <ion-item-sliding *ngFor="let item of arrayObject" (click)="openDetails(item)" no-padding>
-      <ion-item id="{{item.id}}" text-wrap no-padding no-lines>
-        <ion-item>
+      <ion-item id="{{item.id}}" text-wrap no-padding no-lines  style="background: #ff0000;margin-bottom:10px" >
+       
 
           <!--first row-->
           <ion-row>
-            <ion-col width-5>
-              <img ng-src="" />
-            </ion-col>
-            <ion-col width-20>#<b>{{item.id}}</b></ion-col>
-            <ion-col width-75>
-              {{item.title}}
+            
+            <ion-col width-100>
+                <img ng-src="" />
+              #<b>{{item.id}}</b>{{item.title}}
             </ion-col>
           </ion-row>
 
@@ -79,13 +78,14 @@
             </ion-col>
           </ion-row>
 
-        </ion-item>
+        
       </ion-item>
       <ion-item-options side="right" (ionSwipe)="openDetails(item)">
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-
+        
+ </div>
   <div *ngIf="!moreDataLoaded" >
   <ion-title  text-center>Data not available.</ion-title>
   </div>
