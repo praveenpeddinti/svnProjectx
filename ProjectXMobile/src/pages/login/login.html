@@ -9,7 +9,7 @@
 <ion-content padding  >
     
   <div class="login-box">
-      <div  class="text-md-danger_top">
+      <div [hidden]="hideElement" class="text-md-danger_top" name="invalidname">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Invalid Username or Password</div>
     <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && onLogin(loginForm)" novalidate="true">         
       <ion-input type="text" placeholder="Username"[(ngModel)]="login.username" class="form-control customfield" required minlength="10" maxlength="50" name="user_name" #user_name="ngModel"></ion-input>

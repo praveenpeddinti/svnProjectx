@@ -26,6 +26,7 @@ export class LoginPage {
     login: {username?: string, password?: string,token?:any} = {};
     public submitted = false;
     public isEmailValid=true;
+    public hideElement: boolean=true;
     
     constructor(public navCtrl: NavController, 
                 private loginService: Globalservice,
@@ -67,16 +68,18 @@ export class LoginPage {
 
                       } else{
                         loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
-                           let alert = this.alertController.create({
-                           title: 'Warning',
-                           message: 'Invalid username or password.',
-                            buttons: [
-                            {
-                             text: 'Ok',
-                             role: 'cancel'
-                            }
-                           ]
-                         });
+                        this.hideElement=false;
+                        
+                        //    let alert = this.alertController.create({
+                        //    title: 'Warning',
+                        //    message: 'Invalid username or password.',
+                        //     buttons: [
+                        //     {
+                        //      text: 'Ok',
+                        //      role: 'cancel'
+                        //     }
+                        //    ]
+                        //  });
                         //alert.present();
                       }
                 },
