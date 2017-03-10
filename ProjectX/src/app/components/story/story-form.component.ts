@@ -4,7 +4,7 @@ import { NgForm } from '@angular/forms';
 import {Router} from '@angular/router';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
-import {AccordionModule,DropdownModule,SelectItem,CalendarModule} from 'primeng/primeng';
+import {AccordionModule,DropdownModule,SelectItem,CalendarModule,CheckboxModule} from 'primeng/primeng';
 import { MentionService } from '../../services/mention.service';
 import { AjaxService } from '../../ajax/ajax.service';
 
@@ -24,6 +24,8 @@ export class StoryComponent
     @Output() public options = {
         readAs: 'ArrayBuffer'
       };
+    public selectedTickets: string[] = ['UI','PeerReview','QA'];
+    public defaultTasksShow:boolean=true;
     public dragTimeout;
     public storyFormData=[];
     public storyData={};
@@ -51,6 +53,9 @@ export class StoryComponent
               let DefaultValue;
                jsonForm['title'] ='';
                jsonForm['description'] ='';
+               jsonForm['UI']=this.selectedTickets;
+               jsonForm['PeerReview']=this.selectedTickets;
+               jsonForm['QA']=this.selectedTickets;
               if(response.statusCode==200)
               {
                   response.data.story_fields.forEach(element => {
@@ -212,8 +217,25 @@ export class StoryComponent
 
     */
     saveStory(){
-         this._service.saveStory(this.form,(response)=>{
+   this._service.saveStory(this.form,(response)=>{
          });
     }
+
+     /*
+    @params    :  eventVal,whichDrop
+    @ParamType :  any,string
+    @Description: Based on filed:planlevel default Tasks Div will  show/hide.
+    */
+    dropChange(eventVal,whichDrop){
+        if(whichDrop == "Plan Level"){
+              if(eventVal==1){
+                this.defaultTasksShow = true;
+              }else{
+                this.defaultTasksShow = false;
+              }
+
+        }
+    }
+
 
 }

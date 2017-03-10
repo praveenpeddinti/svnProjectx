@@ -42,7 +42,7 @@
                         <div *ngIf="value.type == 2 "  >
                             <div class="leftpanelsections  customdropdown">
                                 <label for="email" class="leftlabels">{{value.lable}}</label>
-                                <p-dropdown [options]="value.values" [style]="{'width':'100%'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
+                                <p-dropdown [options]="value.values" (onChange)="dropChange($event.value,value.lable)" [style]="{'width':'100%'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
                             </div>
                         </div>
 
@@ -77,6 +77,15 @@
 
         </div>
 
+            <div *ngIf="defaultTasksShow == true "  >
+                <div style="font-size:16px; font-weight:bold; margin:20px 0px 10px 0px;">Tasks</div>
+                <div class="ui-g">
+                    <div class="cbx" ><p-checkbox name="UI" [(ngModel)]="form.UI" value="UI" label="UI" ></p-checkbox></div>
+                    <div class="cbx"><p-checkbox name="PeerReview" [(ngModel)]="form.PeerReview" value="PeerReview" label="Peer Review"></p-checkbox></div>
+                    <div class="cbx"><p-checkbox name="QA" [(ngModel)]="form.QA" value="QA" label="QA" ></p-checkbox></div>
+                </div>
+            </div>
+            
         <div class="buttonarea alignright">
             <button type="submit" (click)="submitted = true;" class="normal bluebutton bluebuttonmedium">SUBMIT</button>
         </div>

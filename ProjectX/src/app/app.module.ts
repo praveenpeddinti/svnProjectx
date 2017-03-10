@@ -14,7 +14,7 @@ import { StoryDashboardComponent }  from './components/story-dashboard/story-das
 import {StoryService} from './services/story.service';
 import { CKEditorModule } from 'ng2-ckeditor';
 //import {Ng2DragDropModule} from "ng2-drag-drop";
-import {DropdownModule,CalendarModule,AutoCompleteModule} from 'primeng/primeng'; 
+import {DropdownModule,CalendarModule,AutoCompleteModule,CheckboxModule} from 'primeng/primeng'; 
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService, Collaborator} from './services/login.service';
@@ -75,6 +75,7 @@ const ROUTES=[
    NgxDatatableModule,
    FileDropModule,
    DropdownModule,
+   CheckboxModule,
    CalendarModule,
    AutoCompleteModule,
    RouterModule.forRoot(ROUTES)
