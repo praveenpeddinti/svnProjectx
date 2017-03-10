@@ -25,10 +25,12 @@
   <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-compiler-plugin</artifactId>
-		<version>3.5</version>
+		<version>3.6.1</version>
 			<configuration>
-				<source>${jdk.level}</source>
-				<target>${jdk.level}</target>
+			    <source>1.8</source>
+                <target>1.8</target>
+				<!-- <source>${jdk.level}</source>
+				<target>${jdk.level}</target> -->
 			</configuration>
     </plugin> 
 	
@@ -111,11 +113,7 @@
 	<version>1.4.12</version>
 </dependency>
 
-<dependency>
-    <groupId>org.testng</groupId>
-    <artifactId>testng</artifactId>
-    <version>6.9.10</version>
-</dependency>
+
 <dependency>
 	<groupId>log4j</groupId>
 	<artifactId>log4j</artifactId>
@@ -149,12 +147,12 @@
 	<version>1.10</version>
 </dependency>
 
-<dependency>
+<!-- <dependency>
   <groupId>org.apache.maven.plugins</groupId>
   <artifactId>maven-compiler-plugin</artifactId>
   <version>3.5.1</version>
   <type>maven-plugin</type>
-</dependency>
+</dependency> -->
 
 <dependency>
 		<groupId>org.apache.poi</groupId>

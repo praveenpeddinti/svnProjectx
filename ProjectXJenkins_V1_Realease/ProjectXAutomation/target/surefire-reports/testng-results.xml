@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="1" passed="1">
+  <reporter-output>
+    <line>
+      <![CDATA[<a href="..\Videos\loginwithcredentials.avi" style="text-decoration: none; color: white;"><div class = cbutton>Download Video</div></a>]]>
+    </line>
+    <line>
+      <![CDATA[<br>]]>
+    </line>
+    <line>
+      <![CDATA[<a class="cbutton" href="..\Log.log">Click to Open Log File</a>]]>
+    </line>
+  </reporter-output>
+  <suite name="test Suite" duration-ms="33256" started-at="2017-03-10T12:49:54Z" finished-at="2017-03-10T12:50:27Z">
+    <groups>
+    </groups>
+    <test name="RunTests" duration-ms="33256" started-at="2017-03-10T12:49:54Z" finished-at="2017-03-10T12:50:27Z">
+      <class name="com.techo2.projectx.testsuite.cases.LoginTest">
+        <test-method status="PASS" signature="beforeSuite()[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@3f581b8c]" name="beforeSuite" is-config="true" duration-ms="27" started-at="2017-03-10T18:19:54Z" finished-at="2017-03-10T18:19:54Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeSuite -->
+        <test-method status="PASS" signature="initializeBaseSetup(org.testng.ITestContext)[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@3f581b8c]" name="initializeBaseSetup" is-config="true" duration-ms="12917" started-at="2017-03-10T18:19:54Z" finished-at="2017-03-10T18:20:07Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[org.testng.TestRunner@8e0191d]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- initializeBaseSetup -->
+        <test-method status="PASS" signature="loginwithcredentials()[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@3f581b8c]" name="loginwithcredentials" duration-ms="16054" started-at="2017-03-10T18:20:07Z" finished-at="2017-03-10T18:20:23Z">
+          <reporter-output>
+            <line>
+              <![CDATA[<a href="..\Videos\loginwithcredentials.avi" style="text-decoration: none; color: white;"><div class = cbutton>Download Video</div></a>]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- loginwithcredentials -->
+        <test-method status="PASS" signature="CloseBrowser()[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@3f581b8c]" name="CloseBrowser" is-config="true" duration-ms="8" started-at="2017-03-10T18:20:27Z" finished-at="2017-03-10T18:20:27Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- CloseBrowser -->
+        <test-method status="PASS" signature="AddLogFileToReport()[pri:0, instance:com.techo2.projectx.testsuite.cases.LoginTest@3f581b8c]" name="AddLogFileToReport" is-config="true" duration-ms="1" started-at="2017-03-10T18:20:28Z" finished-at="2017-03-10T18:20:28Z">
+          <reporter-output>
+            <line>
+              <![CDATA[<br>]]>
+            </line>
+            <line>
+              <![CDATA[<a class="cbutton" href="..\Log.log">Click to Open Log File</a>]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- AddLogFileToReport -->
+      </class> <!-- com.techo2.projectx.testsuite.cases.LoginTest -->
+    </test> <!-- RunTests -->
+  </suite> <!-- test Suite -->
+</testng-results>
