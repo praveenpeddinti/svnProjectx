@@ -1,22 +1,25 @@
 <!--
   Generated template for the Login page.
 -->
-<ion-content padding>
-    <ion-row class="logo-row">
-        <ion-col></ion-col>
-        <ion-col width-67>
-            <img src="http://placehold.it/300x200"/>
-        </ion-col>
-        <ion-col></ion-col>
-    </ion-row>
-    <div class="login-box">
+<ion-header>
+  <ion-navbar center hideBackButton class="logopadding">
+    <img src="../../assets/images/login-logo.png"/>
+  </ion-navbar>
+</ion-header>
+<ion-content padding  >
+    
+  <div class="login-box">
+      <div  class="text-md-danger_top">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Invalid Username or Password</div>
     <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && onLogin(loginForm)" novalidate="true">         
-      <ion-input type="text" placeholder="User name"[(ngModel)]="login.username" class="form-control customfield" required minlength="10" maxlength="50" name="user_name" #user_name="ngModel"></ion-input>
-      <p [hidden]="!user_name.errors.required" *ngIf="submitted && user_name.errors " class="fielderror" color="danger">Email is required</p>
+      <ion-input type="text" placeholder="Username"[(ngModel)]="login.username" class="form-control customfield" required minlength="10" maxlength="50" name="user_name" #user_name="ngModel"></ion-input>
+      <div [hidden]="!user_name.errors.required" *ngIf="submitted && user_name.errors " class="text-md-danger">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Email is required</div>
     	<ion-input type="password" placeholder="******"[(ngModel)]="login.password" class="form-control customfield" required minlength="1" maxlength="50" name="user_password" #user_password="ngModel"></ion-input>
-      <p [hidden]="!user_password.errors.required" *ngIf=" submitted && user_password.errors" class="fielderror" color="danger"> Password is required</p>
+      <div [hidden]="!user_password.errors.required" *ngIf=" submitted && user_password.errors" class="text-md-danger">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Password is required</div>
       <div class="buttonarea text-center">
-           <button ion-button center type="submit" style="color:white;;background-color:#2471a3;" (click)="submitted = true;" class="normal big-btn">Login</button>
+           <button ion-button center type="submit"  (click)="submitted = true;" class="normal big-btn">Login</button>
       </div>
     </form>
   </div>
