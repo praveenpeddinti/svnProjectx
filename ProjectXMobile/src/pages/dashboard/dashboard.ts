@@ -26,13 +26,10 @@ export class DashboardPage {
     arrayObject is used for saving the stories list and passing it to the html page
      ** 
     */
-    public arrayObject: Array<{ id: string,storyOrTask:string,subTasks:string, title: string, assignTo: string,userThumbNail:string, priority: string, workflow: string, bucket: string, duedate: string }>;
+    public arrayObject: Array<{ id: string, storyOrTask: string, subTasks: string, title: string, assignTo: string, userThumbNail: string, priority: string, workflow: string, bucket: string, duedate: string }>;
     public moreDataLoaded: boolean = true;
 
     userName: any = '';
-    // userPassword: string = '';
-    // userToken: any = '';
-
     /*
     *
         paramas are used while getting List Results from the webservice.
@@ -52,6 +49,7 @@ export class DashboardPage {
         this.arrayObject = [];
 
     }
+
 
     /**
           is called once the screen is loaded
@@ -103,15 +101,15 @@ export class DashboardPage {
         if (this.paramas.offset == 0) {
             this.paramas.offset = 0;
         }
-
+        let loader = this.loadingController.create({ content: "Loading..." });
         this.globalService.getStoriesList(this.urlConstants.getAllTicketDetails, this.paramas).subscribe(
             data => {
-                console.log("data is");
-                console.log(JSON.stringify(data));
-
+                if(data.statusCode=='200'){
+                if (this.paramas.offset == 0) {
+                    loader.present();
+                }
                 this.items = data.data;
                 console.log("the count value is " + this.items.length);
-
                 console.log("params are" + JSON.stringify(this.paramas));
 
                 if (this.items.length == 0) {
@@ -119,26 +117,32 @@ export class DashboardPage {
                 }
                 for (let ticket = 0; ticket < this.items.length; ticket++) {
                     var _id = this.items[ticket][0].field_value;
-                    var _storyOrTask=this.items[ticket][0].other_data.planlevel;
-                     var _subTasks=this.items[ticket][0].other_data.totalSubtasks;
+                    var _storyOrTask = this.items[ticket][0].other_data.planlevel;
+                    var _subTasks = this.items[ticket][0].other_data.totalSubtasks;
                     var _title = this.items[ticket][1].field_value;
                     var _assignTo = this.items[ticket][2].field_value;
-                    var _thumbNail=this.items[ticket][2].other_data;
+                    var _thumbNail = this.items[ticket][2].other_data;
                     var _priority = this.items[ticket][3].field_value;
                     var _workflow = this.items[ticket][4].field_value;
                     var _bucket = this.items[ticket][5].field_value;
                     var _dudate = this.items[ticket][6].field_value;
 
                     this.arrayObject.push({
-                        id: _id,storyOrTask:_storyOrTask,subTasks:_subTasks, title: _title, assignTo: _assignTo,userThumbNail:_thumbNail, priority: _priority, workflow: _workflow, bucket: _bucket, duedate: _dudate
+                        id: _id, storyOrTask: _storyOrTask, subTasks: _subTasks, title: _title, assignTo: _assignTo, userThumbNail: _thumbNail, priority: _priority, workflow: _workflow, bucket: _bucket, duedate: _dudate
                     });
                 }
-                this.paramas.offset = (this.paramas.offset) + 1;
-            },
-            error => {
 
+                if (this.paramas.offset == 0) {
+                    loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
+                }
+                this.paramas.offset = (this.paramas.offset) + 1;
+           
+                  }  },
+            error => {
+                loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
+                console.log("the error " + JSON.stringify(error));
             },
-            () => console.log('login api call complete')
+            () => console.log('listing stories api call complete')
         );
     }
 
