@@ -17,7 +17,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
+  <ion-content >
       <ion-buttons right class="custombuttonsmenu custombuttonsmenuborderbottom">
         <button menuToggle>
         <ion-icon name="md-menu"></ion-icon>
@@ -59,27 +59,29 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content #content padding> 
+<ion-content #content no-padding > 
+    <div class="padding10trl" >
     <ion-buttons start class="custombuttonsmenu custombuttonsmenumargintop">
         <button menuToggle>
         <ion-icon name="md-menu"></ion-icon>
         </button>
     </ion-buttons>
-
-    <div><span style="color: #4d90fe"> #{{taskDetails.ticketId}} </span> 
-        <span id="title" *ngIf="!enableEdatable"  (click)="titleEdit($event)" (blur)="text=el.innerText" >{{taskDetails.title}}</span>
-        <input *ngIf="enableEdatable" [(ngModel)]="titleAfterEdit"/>
-    </div>
+         </div >
+     <div >
+ <div class="dashboardbox_header">
+                  <i class="Story"></i> <span class="ticketid">#{{taskDetails.ticketId}}</span> <span id="title" *ngIf="!enableEdatable"  (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span>
+ <input *ngIf="enableEdatable" [(ngModel)]="titleAfterEdit"/>             
+ </div>
     <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
     <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
     
-    <div style="position: relative;">
+    <div style="position: relative;" class="customtoggle">
       <i id="expand" (click)="expandDescription()" class="fa fa-chevron-down expand" aria-hidden="true"></i>
       <i id="collapse" (click)="collapseDescription()" class="fa fa-chevron-up collapse" aria-hidden="true"></i>
-      <ion-card id="description">
-        <div [innerHTML] = " taskDetails.description "></div>
+      <ion-card id="description" class="customcard">
+        <div class="padding10r25 displayblock" [innerHTML] = " taskDetails.description "></div>
       </ion-card>
-    </div>
-
+    </div> </div>
+  
 
 </ion-content>
