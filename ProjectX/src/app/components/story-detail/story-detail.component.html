@@ -114,6 +114,40 @@
             </div>
           </div>
             <!--Description Part End-->
+            <div class="expand_collapse">
+            <a type="button" id="expand" (click)="expand()" class="expand"><span class="glyphicon glyphicon-chevron-up alignright"></span></a>
+<a type="button" id="collapse" (click)="collapse()" class="collapse"><span class="glyphicon glyphicon-chevron-down alignright"></span></a>
+</div>
+<div class="main_div" [ngClass]="{ 'hide': hide}">
+<div><label>Followers</label></div>
+<div class="relate_story">
+    <div class="custom_story_input">
+        <div>Followers Area</div>
+    </div>
+   
+   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium">Add Followers</button></div>
+ </div>
+
+ <div><label>Attachments</label></div>
+<div class="relate_story">
+    <div class="custom_story_input">
+        <div *ngFor="let attachment of attachmentsData;let i=index;">{{attachment}}</div>
+    </div>
+   
+   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium">Attachments</button></div>
+ </div>
+
+ <div><label>Tasks</label></div>
+<div class="relate_story">
+    <div class="custom_story_input">
+       <div>Tasks Area</div>
+    </div>
+   
+   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium">Add Task</button></div>
+ </div>
+
+
+
     <!--AutoSuggestion for Related Tickets-->
     <div><label>Relate Story/Tasks</label></div>
 <div class="relate_story">
@@ -122,6 +156,7 @@
     </div>
    
    <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium">RELATE</button></div>
+ </div>
  </div>
 
       </div>
