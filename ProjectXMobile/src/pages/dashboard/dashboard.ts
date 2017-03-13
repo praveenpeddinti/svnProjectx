@@ -36,7 +36,7 @@ export class DashboardPage {
     *
     */
 
-    paramas = { "projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "asc", "userInfo": { "Id": "", "username": "", "token": "" } };
+    paramas = { "projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "asc", "userInfo": { } };
     constructor(public navCtrl: NavController,
         public navParams: NavParams,
         public loadingController: LoadingController,
@@ -48,33 +48,21 @@ export class DashboardPage {
         private urlConstants: Constants) {
         this.arrayObject = [];
 
-    }
-
-
-    /**
-          is called once the screen is loaded
-      
-       */
-
-    ionViewDidLoad() {
-
-        /** 
-         * User Local storage details getting logic.
-         
-         * **/
 
         this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
-            this.paramas.userInfo.Id = value.Id;
-            this.paramas.userInfo.username = value.username;
-            this.paramas.userInfo.token = value.token;
+            this.paramas.userInfo = value;
+
+             console.log("the get sll list " + JSON.stringify(this.paramas));
+
+            this.getAllStoriesList();
         });
 
-        /** 
-         * Displaying stories list when first time loading the screen.
-        * 
-        * **/
-        this.getAllStoriesList();
+    }
+
+    ionViewDidLoad() {
+       
+        // this.getAllStoriesList();
     }
 
 

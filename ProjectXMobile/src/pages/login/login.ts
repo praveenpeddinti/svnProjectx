@@ -65,6 +65,8 @@ export class LoginPage {
                                     console.log("error while storing");
                                 });
                             });
+                            
+                            this.storage.set('projectId', 1);
 
                       } else{
                         loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
