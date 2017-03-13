@@ -410,9 +410,29 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
      */
   public static function refineDescription($description){
       try{
-         
+          error_log("descriopt---------------".$description);
            $description = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $description);
               $matches=[];
+              $mention_matches=[];//added by Ryan
+              //preg_match_all('/(@\w+.\w+)/', $description, $mention_matches);//added by ryan
+              preg_match_all('/@([\w_\.]+)/', $description, $mention_matches);
+              $mentionmatches=$mention_matches[0];//added by Ryan
+              for($i=0;$i<count($mentionmatches);$i++)//added by Ryan
+              {
+                  $value=explode('@',$mentionmatches[$i]);
+                  //query for matching users 
+                  $user=ServiceFactory::getCollaboratorServiceInstance()->getMatchedCollaborator($value[1]);
+                  if(!empty($user))
+                  {
+                      //replace the @mention with <a> tag
+                      $userMention='@'.$user;
+                      $user_link="<a name=".$user." ". "href=''>".$userMention."</a>";
+                      //replace the link of @mention in description
+                      $description=  str_replace($userMention, $user_link, $description);
+                  }
+                  
+              }//code end .... By Ryan
+              
               preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
               $filematches = $matches[0];
               for($i = 0; $i< count($filematches); $i++){
