@@ -94,7 +94,6 @@ public blurTimeout=[];
       var ticketIdObj={'ticketId': this.ticketId};
         this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
         { 
-            alert("+++ticketdata++++"+JSON.stringify(data));
             this.ticketData = data;
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
@@ -102,7 +101,7 @@ public blurTimeout=[];
             // this.commentsList = [];
             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
-              alert(JSON.stringify(data));
+              console.log(JSON.stringify(data));
               this.commentsList = data.data.Activities;
             });
             
