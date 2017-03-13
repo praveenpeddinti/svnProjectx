@@ -89,6 +89,23 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
             Yii::log("CollaboratorService:getFilteredProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    /**
+    * @author Ryan
+    * @description This is to get matched user in @mention 
+    * @return type 
+    * @param type $user
+     */   
+    public function getMatchedCollaborator($user)
+    {
+        try{
+            $collaboratorModel = new Collaborators();
+            return  $collaboratorModel->checkMatchedUsers($user);
+            
+        } catch (Exception $ex) {
+            Yii::log("CollaboratorService:getMatchedCollaborator::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
       
 }
