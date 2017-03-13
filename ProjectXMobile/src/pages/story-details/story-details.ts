@@ -3,7 +3,6 @@ import {NavController, NavParams, MenuController} from 'ionic-angular';
 
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
-import {StoryDetailActivitiesPage} from '../story-detail-activities/story-detail-activities';
 declare var jQuery: any;
 /*
   Generated class for the StoryDetails page.
@@ -23,7 +22,6 @@ export class StoryDetailsPage {
     public readOnlyDropDownField:boolean = false;
     public clickedDivRef;
 public selectedValue = "";
-    public tab1Root: any = StoryDetailActivitiesPage;
 
     public titleAfterEdit: string = "";
     public enableEdatable: boolean = false;
