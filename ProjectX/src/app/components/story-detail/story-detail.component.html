@@ -187,8 +187,15 @@
             <span>{{comment.ActivityOn}}</span>
             
             <div *ngFor="let property of comment.PropertyChanges;">
-                <b>{{property.ActionFieldName}}</b> <span>{{property.Action}}</span>  <b>{{property.PreviousValue}}</b> to <b>{{property.NewValue}}</b> {{property.ActivityOn}}
-            </div>
+                <b>{{property.ActionFieldTitle}}</b> <span>{{property.Action}}</span> 
+                <div *ngIf="property.type=='user'"> 
+                    <b><a href="#" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></b> to <b><a href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a></b> {{property.ActivityOn}}
+                </div>
+                 <div *ngIf="property.type!='user'"> 
+                <b>{{property.PreviousValue}}</b> to <b>{{property.NewValue}}</b> {{property.ActivityOn}}
+                </div>
+                
+                </div>
             
             <div id="commentContent" >
                 <!--<div style="background: #c0c0c0;" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.parentId)" [innerHTML]="comment.repliedToComment">
