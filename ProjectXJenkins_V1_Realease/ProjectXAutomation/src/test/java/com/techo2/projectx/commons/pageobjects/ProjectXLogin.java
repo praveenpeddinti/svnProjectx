@@ -44,14 +44,26 @@ public class ProjectXLogin extends SafeActions implements LoginPageLocators{
 			}*/
 			
 			loginpage.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-			safeType(USERNAME, envprop.getProperty("login_username"),5);
+			
+			loginpage.findElement(By.xpath("//input[@id='email']")).sendKeys("sravan.gangelly@techo2.com");
+			Thread.sleep(5000);
+			loginpage.findElement(By.xpath("//input[@id='pass']")).sendKeys("test111");
+			Thread.sleep(5000);
+			loginpage.findElement(By.xpath("//button[@class='normal bluebutton bluebuttonlarge']")).click();
+			Thread.sleep(5000);
+			
+			
+			
+		/*	safeType(USERNAME, envprop.getProperty("login_username"),5);
 			safeType(PASSWORD, envprop.getProperty("login_password"),5);
-			safeClick(SIGNIN_BTN, 5);
+			safeClick(SIGNIN_BTN, 5);*/
 			
 			Thread.sleep(3000);
 			
 			// clicked on Logout button.So it will exapnd
-			safeClick(Logout_Exapnsion, 5);
+			
+			//safeClick(Logout_Exapnsion, 5);
+			loginpage.findElement(By.xpath("//a[@class='dropdown-toggle']")).click();
 			util.waitForSeconds(3);
 			Actions action = new Actions(loginpage);
 			WebElement expansionmousehover = loginpage.findElement(By.xpath("//ul[@class='dropdown-menu']"));
