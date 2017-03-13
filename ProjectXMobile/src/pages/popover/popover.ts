@@ -22,7 +22,9 @@ export class PopoverPage {
 // userInfo = {"Id":"","username":"","token":"","projectId":1}
 logoutParams = {"userInfo":{"Id":"","username":"","token":""},"projectId":1}
 
-  constructor(private globalService: Globalservice,private constants: Constants,public navCtrl: NavController,
+  constructor(private globalService: Globalservice,
+            private constants: Constants,
+            public navCtrl: NavController,
             public alertController: AlertController,
             private storage:Storage,
             public navParams: NavParams, 
@@ -46,48 +48,16 @@ logoutParams = {"userInfo":{"Id":"","username":"","token":""},"projectId":1}
   }
 logoutApp() {
   this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
-  data =>{
-             this.storage.remove('userCredentials').then( ()=>{  
-               this.navCtrl.push(LoginPage);
-               console.log('Logged out');
+        data =>{
+             this.storage.remove('userCredentials').then( ()=>{
+                this.navCtrl.push(LoginPage);
                 this.viewCtrl.dismiss();
-                 }, 
-               (error)=>{
-                 console.log("error while removing ");
-           });   
-    
-  // let alert = this.alertController.create({
-  //   title: 'Confirm Log Out',
-  //   message: 'Are you sure you want to log out?',
-  //   buttons: [
-  //     {
-  //       text: 'Cancel',
-  //       role: 'cancel',
-  //       handler: () => {
-  //         console.log('Cancel clicked');
-  //       }
-  //     },
-  //     {
-  //       text: 'Log Out',
-  //       handler: () => {   
-  //                 this.storage.remove('userCredentials').then( ()=>{  
-  //                     this.navCtrl.push(LoginPage);
-  //                     console.log('Logged out');
-  //                     this.viewCtrl.dismiss();
-  //                 }, 
-  //                 (error)=>{
-  //                     console.log("error while removing ");
-  //                 });   
-  //       }
-  //     }
-  //   ]
-  // });
-
-  // alert.present();
-},
- error=>
-      { console.log("the error " + JSON.stringify(error)); },
-      ()=> console.log('logout api call complete'));
- }
+                 });   
+            },
+        error=>{ 
+            console.log("the error " + JSON.stringify(error)); 
+            },
+        ()=> console.log('logout api call complete'));
+       }
 
 }
