@@ -139,5 +139,25 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
         }
        
     }
+    
+    /**
+     * @author Ryan
+     * @param type $user
+     * @return type
+     */
+    public function checkMatchedUsers($user)
+    {
+        try{
+            $qry="select UserName from Collaborators where UserName = '$user'";
+            $data = Yii::$app->db->createCommand($qry)->queryOne();
+            if(!empty($data))
+            {
+                return $user;
+            }
+            
+        } catch (Exception $ex) {
+
+        }
+    }
 }
 ?>
