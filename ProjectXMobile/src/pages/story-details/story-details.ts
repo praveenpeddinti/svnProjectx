@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, MenuController} from 'ionic-angular';
+import {NavController, NavParams, MenuController, LoadingController} from 'ionic-angular';
 
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
@@ -40,10 +40,18 @@ public selectedValue = "";
         ], removePlugins: 'elementspath,magicline', resize_enabled: true
     };
 
-    constructor(menu: MenuController, public globalService: Globalservice, private constants: Constants, public navCtrl: NavController, public navParams: NavParams) {
+    constructor(menu: MenuController, 
+        public globalService: Globalservice, 
+        private constants: Constants, 
+        public navCtrl: NavController, 
+        public navParams: NavParams,
+        public loadingController: LoadingController) {
         //      menu.swipeEnable(false);
         this.minDate = this.formatDate(new Date());
-
+        
+        let loader = this.loadingController.create({ content: "Loading..."});  
+            loader.present();
+            
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.navParams.get("id")).subscribe(
             result => {
                 this.taskDetails.ticketId = result.data.TicketId;
@@ -64,7 +72,9 @@ public selectedValue = "";
                     });
                 }
                 //console.log("the field arrayList " + JSON.stringify(this.arrayList));
+                loader.dismiss();
             }, error => {
+                loader.dismiss();
                 console.log("the error in ticker derais " + JSON.stringify(error));
             }
         );
