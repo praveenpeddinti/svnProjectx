@@ -274,6 +274,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
           $returnValue = TicketCollection::saveTicketDetails($ticketModel);
           if($returnValue != "failure"){
               $this->followTicket($userId,$ticketNumber,$projectId,$userId,"reportedby",true);
+              TicketComments::createCommentsRecord($ticketNumber,$projectId);
               return $ticketNumber;
           }
          
@@ -552,7 +553,58 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         } catch (Exception $ex) {
               Yii::log("StoryService:updateStoryFieldInline::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
-    }    
+    }
+    
+    public function saveComment($commentData){
+        try{
+        
+        $processedDesc = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
+        $commentDesc = $commentData->Comment->CrudeCDescription;
+//                 $validDate = CommonUtility::validateDate($commentData->Comment->CommentedOn);
+//                 error_log("--------------validadte----------".$validDate);
+//                            if($validDate){
+//                                error_log("in if");
+//                                $commentedOn = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000); 
+//                            }else{
+//                                error_log("in else");
+//                                $commentedOn = $commentData->Comment->CommentedOn; 
+//                            }
+                            $commentedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+//                            error_log("++++++++++++++");
+        $commentDataArray=array(
+            "Slug"=>new \MongoDB\BSON\ObjectID(),
+            "CDescription"=>  $processedDesc,
+            "CrudeCDescription"=>$commentDesc,
+            "ActivityOn"=>$commentedOn,
+            "ActivityBy"=>(int)$commentData->userInfo->Id,
+            "Status"=>(int)1,
+            "PropertyChanges"=>[],
+            "ParentIndex"=>(int)$commentData->Comment->ParentIndex
+            
+        );
+        
+        TicketComments::saveComment($commentData->TicketId, $commentData->projectId,$commentDataArray);
+        $commentDataArray["userName"]=$commentData->userInfo->username;
+        $datetime = $commentDataArray["ActivityOn"]->toDateTime();
+        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+        $readableDate = $datetime->format('m-d-Y H:i:s');
+        $commentDataArray["readableDate"]=$readableDate;
+        
+        return $commentDataArray;
+//        error_log("==================");
+//        $ticketComment->Comments=[];
+//        $populateComment = $ticketComment->Comments;
+//        array_push($populateComment, $commentDataArray);
+//        $ticketComment->Comments=$populateComment;
+//        error_log("++++++++++++++++".print_r($ticketComment,1));
+//        $ticketComment->insert();
+    }catch(Exception $ex){
+        error_log("===========>".$ex->getMessage()."--------->".$ex->getTraceAsString());
+        Yii::log("StoryService:saveComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+    }
+        
+        
+    }
 
        /**
   * @author Moin Hussain
@@ -637,9 +689,17 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     public function getTicketActivity($ticketId, $projectId){
         try{
            $ticketActivity = TicketComments::getTicketActivity($ticketId, $projectId);
-           foreach ($ticketActivity as &$value) {
-               
+           error_log("+=+=+=+=+=+=+=+=+".print_r($ticketActivity,1));
+           $tinyUserModel =  new TinyUserCollection();
+           foreach ($ticketActivity["Activities"] as &$value) {
+               $userProfile = $tinyUserModel->getMiniUserDetails($value["ActivityBy"]);
+                $value["userName"] = $userProfile["UserName"];
+                $datetime = $value["ActivityOn"]->toDateTime();
+                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $readableDate = $datetime->format('m-d-Y H:i:s');
+                $value["readableDate"]=$readableDate;
            }
+           return $ticketActivity;
             
         } catch (Exception $ex) {
     Yii::log("StoryService:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

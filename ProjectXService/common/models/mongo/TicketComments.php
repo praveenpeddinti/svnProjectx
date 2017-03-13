@@ -71,11 +71,15 @@ class TicketComments extends ActiveRecord
     }
     
     public static function getTicketComments($ticketId,$projectId){
+        error_log("======getTicketComments=========".$ticketId."-------------".$projectId);
                     $query = new Query();
             $query->from('TicketComments')
-            ->where(['TicketId' => (int)$ticketId, "ProjectId" =>(int)$ticketId ]);
+         ->select(array("Activities"))
+            ->where(['TicketId' => (int)$ticketId, "ProjectId" =>(int)$projectId ]);
          
            $ticketCommentDetails = $query->one();
+//           error_log("#############".print_r($ticketCommentDetails,1));
+           return $ticketCommentDetails;
     }
     
     public static function saveComment($ticketNumber,$projectId,$newCommentArray=array()){
@@ -115,6 +119,7 @@ class TicketComments extends ActiveRecord
          error_log("getTicketActivity-----".$ticketId."---".$projectId);
          $query = new Query();
             $query->from('TicketComments')
+                    ->select(array("Activities"))
                      ->where(["ProjectId" => (int)$projectId ,"TicketId" => (int)$ticketId]);
           $ticketActivity = $query->one();
             return $ticketActivity;

@@ -133,6 +133,7 @@ class StoryController extends Controller
         try{
 
             $ticket_data = json_decode(file_get_contents("php://input"));
+            error_log("++++++++++++++++++++++++dfsdfsdfsdf+++++++++++++".$ticket_data->ticketId);
         $data = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,1);
         $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -420,6 +421,18 @@ class StoryController extends Controller
         }
 
     }
+ 
+   public function actionSubmitComment(){
+       $comment_post_data=json_decode(file_get_contents("php://input"));
+       error_log(print_r($comment_post_data,1));
+       $returnData = ServiceFactory::getStoryServiceInstance()->saveComment($comment_post_data);
+       $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $returnData;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+   }
     /**
      * @author Moin Hussain
      * @return type
@@ -427,7 +440,7 @@ class StoryController extends Controller
     public function actionGetTicketActivity(){
         try{
             $post_data=json_decode(file_get_contents("php://input"));
-            $data = ServiceFactory::getStoryServiceInstance()->getTicketActivity(1,1);
+            $data = ServiceFactory::getStoryServiceInstance()->getTicketActivity($post_data->ticketId,$post_data->projectId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
