@@ -4,10 +4,10 @@
            failures="0"
            errors="0"
            skipped="0"
-           time="29.511">
+           time="25.663">
   <properties />
   
   
-            <testcase name="loginwithcredentials" time="29.511" classname="com.techo2.projectx.testsuite.cases.LoginTest" />
+            <testcase name="loginwithcredentials" time="25.663" classname="com.techo2.projectx.testsuite.cases.LoginTest" />
       
 </testsuite>
