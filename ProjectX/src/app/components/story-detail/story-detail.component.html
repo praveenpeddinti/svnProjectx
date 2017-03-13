@@ -179,10 +179,17 @@
 
 <div>
     <!--Comment Display area-->
+     <div><label>Activity</label></div>
     <ng-container *ngFor="let comment of commentsList;let cmtIdx = index;">
         <div id="{{cmtIdx}}">
-            <span>{{comment.userName}}</span>
-            <span>{{comment.readableDate}}</span>
+            <img src="{{comment.ActivityBy.ProfilePicture}}" />
+            by <b>{{comment.ActivityBy.UserName}}</b>
+            <span>{{comment.ActivityOn}}</span>
+            
+            <div *ngFor="let property of comment.PropertyChanges;">
+                <b>{{property.ActionFieldName}}</b> <span>{{property.Action}}</span>  <b>{{property.PreviousValue}}</b> to <b>{{property.NewValue}}</b> {{property.ActivityOn}}
+            </div>
+            
             <div id="commentContent" >
                 <!--<div style="background: #c0c0c0;" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.parentId)" [innerHTML]="comment.repliedToComment">
                 </div>-->
