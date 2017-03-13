@@ -4,7 +4,7 @@ import {NavController, NavParams, MenuController} from 'ionic-angular';
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
 import {StoryDetailActivitiesPage} from '../story-detail-activities/story-detail-activities';
-
+declare var jQuery: any;
 /*
   Generated class for the StoryDetails page.
 
@@ -25,6 +25,8 @@ export class StoryDetailsPage {
 public selectedValue = "";
     public tab1Root: any = StoryDetailActivitiesPage;
 
+    public titleAfterEdit: string = "";
+    public enableEdatable: boolean = false;
     public taskDetails = {ticketId: "", title: "", description: ""};
     public isBusy: boolean = false;
     public options = "options";
@@ -49,6 +51,7 @@ public selectedValue = "";
                 this.taskDetails.ticketId = result.data.TicketId;
                 this.taskDetails.title = result.data.Title;
                 this.taskDetails.description = result.data.Description;
+                this.titleAfterEdit = result.data.Title;
 
                 this.items = result.data.Fields;
                 //console.log("the count value is from Appcomponent" + this.items.length);
@@ -120,6 +123,36 @@ public selectedValue = "";
                 console.log("the fields error --- " + error);
             });
         }
+    }
+    
+    public titleEdit(event){  
+        //this.enableEdatable = true;
+    }
+
+    public updateTitleSubmit(){
+        this.enableEdatable = false;
+        this.taskDetails.title = this.titleAfterEdit;
+    }
+    public updateTitleCancel(){
+        this.enableEdatable = false;
+        this.titleAfterEdit = this.taskDetails.title;
+    }
+
+    public expandDescription(){
+        jQuery('#expand').hide();
+
+        jQuery('#collapse').show();
+        jQuery('#description').show("slow", function() {
+            // console.log( "Animation complete." );
+        });
+    }
+    public collapseDescription(){
+        jQuery('#expand').show();
+        
+        jQuery('#collapse').hide();
+        jQuery('#description').hide("slow", function() {
+            // console.log( "Animation complete." );
+        });
     }
 
 }

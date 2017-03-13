@@ -57,7 +57,6 @@
       </a>
     </ion-buttons>
   </ion-navbar>
-    
 </ion-header>
 
 <ion-content #content padding> 
@@ -67,12 +66,20 @@
         </button>
     </ion-buttons>
 
-    <span style="color: #4d90fe"> #{{taskDetails.ticketId}} </span> {{taskDetails.title}}
+    <div><span style="color: #4d90fe"> #{{taskDetails.ticketId}} </span> 
+        <span id="title" *ngIf="!enableEdatable"  (click)="titleEdit($event)" (blur)="text=el.innerText" >{{taskDetails.title}}</span>
+        <input *ngIf="enableEdatable" [(ngModel)]="titleAfterEdit"/>
+    </div>
+    <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
+    <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
+    
+    <div style="position: relative;">
+      <i id="expand" (click)="expandDescription()" class="fa fa-chevron-down expand" aria-hidden="true"></i>
+      <i id="collapse" (click)="collapseDescription()" class="fa fa-chevron-up collapse" aria-hidden="true"></i>
+      <ion-card id="description">
+        <div [innerHTML] = " taskDetails.description "></div>
+      </ion-card>
+    </div>
 
-    <ion-card>
-      <div [innerHTML] = " taskDetails.description "></div>
-    </ion-card>
-
-    <div *ngFor="let item of displayFieldvalue">the :--- {{item.Name}}</div>
 
 </ion-content>
