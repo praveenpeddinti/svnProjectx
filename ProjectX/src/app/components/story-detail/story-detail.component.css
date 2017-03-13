@@ -33,3 +33,13 @@
     left:40%; top:30%; 
 
 }
+
+.hide 
+{
+    display: none !important;
+}
+
+.expand_collapse
+{
+    text-align: right;
+}
