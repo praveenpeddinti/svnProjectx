@@ -33,6 +33,7 @@ public blurTimeout=[];
   private ticketDesc = "";
   private ticketCrudeDesc = "";
   private showDescEditor=true;
+  public commentsList=[];
 
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
@@ -87,14 +88,24 @@ public blurTimeout=[];
         });
 
         
+
+   console.log("+++++++++++++iniit+++++++++");
+
       var ticketIdObj={'ticketId': this.ticketId};
         this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
         { 
-    
+            alert("+++ticketdata++++"+JSON.stringify(data));
             this.ticketData = data;
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
+            // this.commentsList = [];
+            this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
+            { 
+              alert(JSON.stringify(data));
+              this.commentsList = data.data.Activities;
+            });
+            
             
         });
 
@@ -153,7 +164,7 @@ public blurTimeout=[];
       var editorData = this.detail_ckeditor.instance.getData();
           if(editorData != "" && jQuery(editorData).text().trim() != ""){
           this.descError = "";
-        this.showDescEditor = true;
+        
         // Added by Padmaja for Inline Edit
         var postEditedText={
           isLeftColumn:0,
@@ -163,6 +174,7 @@ public blurTimeout=[];
           EditedId:'desc'
         };
         this.postDataToAjax(postEditedText);
+        this.showDescEditor = true;
         this.ticketCrudeDesc = editorData;//this.ticketEditableDesc;
         }else{
           this.descError = "Description cannot be empty.";
@@ -179,7 +191,94 @@ public blurTimeout=[];
   }
 
 //------------------------Description part---------------------------------- 
+/*
+********/
+//---------------------------Comments Part-------------------------------------
 
+@ViewChild('commentEditor')  detail_comment_ckeditor;
+public commentDesc = "";//"sdadas<img src='https://10.10.73.21/files/story/thumb1.png' height='50%' width='50%' />";
+
+public commentCount = 0;
+submitComment(){
+var commentText = this.detail_comment_ckeditor.instance.getData();
+alert("****comment editor data***"+commentText);
+var commentPushData = {
+  text:commentText,//jQuery(commentText).html(),
+  id:this.commentCount++,
+  repliedToComment:"",
+  parentId:""
+};
+if(this.replying == true){
+  // commentPushData.text = "<div style='background:#C0C0C0;'>"+this.replyToComment.text+"</div>"+commentPushData.text;
+  commentPushData.repliedToComment=this.replyToComment.text
+  commentPushData.parentId = this.replyToComment.id;
+}
+alert("====comment data==>"+JSON.stringify(commentPushData));
+this.commentsList.push(commentPushData);
+this.commentDesc="";
+
+jQuery("#commentEditorArea").css("background",this.commentAreaColor);
+  console.log("comment is submitted");
+
+var commentedOn = new Date()
+var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear()
+  var reqData = {
+    TicketId:this.ticketId,
+    Comment:{
+      CrudeCDescription:commentText,
+      CommentedOn:formatedDate,
+      ParentIndex:""
+    },
+  };
+  if(this.replying == true){
+    reqData.Comment.ParentIndex=this.replyToComment.id;
+
+  }
+  this._ajaxService.AjaxSubscribe("story/submit-comment",reqData,(result)=>
+        { 
+          this.replying = false;
+          alert("++++++++++++++++++++"+JSON.stringify(result));
+        });
+  
+}
+
+
+private replyToComment={text:"",id:"",repliedToComment:"",parentId:""};
+private replying=false;
+private commentAreaColor="";
+replyComment(commentId){
+// var commentEditorObject = document.getElementById("commentEditorArea");
+// var offset = commentEditorObject.offsetTop;
+
+// var commentToReply = this.commentsList[commentId];//jQuery("#"+commentId+" #commentContent").html();
+this.replyToComment = this.commentsList[commentId];
+this.replying = true;
+// this.commentDesc = commentToReply+"<br/><img src='https://10.10.73.21/files/story/thumb1.png' height='50%' width='50%' />";
+// alert(this.commentDesc)
+this.commentAreaColor = jQuery("#commentEditorArea").css("background");
+jQuery("#commentEditorArea").css("background","red");
+jQuery('html, body').animate({
+        scrollTop: jQuery("#commentEditorArea").offset().top
+    }, 1000);
+
+// jQuery.scrollTo(jQuery("#commentEditorArea"),500);
+}
+
+
+navigateToParentComment(parentId){
+  jQuery('html, body').animate({
+        scrollTop: jQuery("#"+parentId).offset().top
+    }, 1000);
+}
+cancelReply(){
+  this.replying = false;
+  this.replyToComment = {text:"",id:"",repliedToComment:"",parentId:""};
+  jQuery("#commentEditorArea").css("background",this.commentAreaColor);
+
+}
+//------------------------------Comments Part end------------------------------------
+/********
+ */
 /*
 * Title part
 */
@@ -466,7 +565,7 @@ var thisObj = this;
     
 }
 
-  public fileUploadEvent(fileInput: any, comeFrom: string):void {
+  public fileUploadEvent(fileInput: any, comeFrom: string,where:string):void {
    if(comeFrom == 'fileChange'){
         this.filesToUpload = <Array<File>> fileInput.target.files;
    } else if(comeFrom == 'fileDrop'){
@@ -481,9 +580,17 @@ var thisObj = this;
             for(var i = 0; i<result.length; i++){
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                    this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    if(where =="comments"){
+                      this.commentDesc = this.commentDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    }else{
+                      this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    }
                 } else{
-                    this.ticketEditableDesc = this.ticketEditableDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    if(where =="comments"){
+                      this.commentDesc = this.commentDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    }else{
+                      this.ticketEditableDesc = this.ticketEditableDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    }
                 }
             }
             this.fileUploadStatus = false;

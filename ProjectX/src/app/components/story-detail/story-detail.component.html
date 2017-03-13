@@ -1,3 +1,18 @@
+<!--<input type="text" [(ngModel)]="vidUrl"/>
+
+<video autoplay>
+<source [src]="vidUrl" type="video/mp4">
+
+</video>-->
+
+
+<!--<vg-player>
+    <video vgMedia id="singleVideo" preload="auto" controls>
+        <source src="https://10.10.73.21/files/story/Matrix.mp4" type="video/mp4">
+    </video>
+</vg-player>-->
+
+
 <div fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event) class="paddingbottom10">
     <!--Title Part-->
         <div class="titlearea  ">
@@ -87,7 +102,7 @@
             <div class="rightdescriptionarea">
                 <div style="position: relative">
                      <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
-                          (drop)="fileUploadEvent($event, 'fileDrop')" >
+                          (drop)="fileUploadEvent($event, 'fileDrop','description')" >
                      </div>
                      <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/>
                      </div>
@@ -101,7 +116,7 @@
                         <i class="fa fa-paperclip" aria-hidden="true"></i>
                         File upload
                       </div>
-                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  />
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','description')"  multiple  />
                 </div>
             </div>
             <div class="buttonarea alignright">
@@ -160,5 +175,68 @@
  </div>
 
       </div>
+<!--Comments Section-->
+
+<div>
+    <!--Comment Display area-->
+    <ng-container *ngFor="let comment of commentsList;let cmtIdx = index;">
+        <div id="{{cmtIdx}}">
+            <span>{{comment.userName}}</span>
+            <span>{{comment.readableDate}}</span>
+            <div id="commentContent" >
+                <!--<div style="background: #c0c0c0;" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.parentId)" [innerHTML]="comment.repliedToComment">
+                </div>-->
+                <div [innerHTML]="comment.CDescription">
+                
+                </div>
+            </div>
+            <button class="normal bluebutton bluebuttonmedium" (click)="replyComment(cmtIdx)">
+                Reply
+            </button>
+        </div>
+    </ng-container>
+    <!--Comment Displa area end-->
+</div>
+        <div>
+           
+            <div id="commentEditorArea" class="rightdescriptionarea">
+                <div id="replyToSnippet" [hidden]="!replying" >
+                    <div id="replySnippetContent" *ngIf="replyToComment !='{}'" [innerHTML]="replyToComment.text">
+                        
+                    </div>
+                    <button class="normal bluebutton bluebuttonmedium" (click)="cancelReply()">
+                        Cancel
+                    </button>
+                </div>
+                <div style="position: relative">
+                     <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
+                          (drop)="fileUploadEvent($event, 'fileDrop','comments')" >
+                     </div>
+                     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     </div>
+                     <ckeditor #commentEditor [config]="toolbarForDetail" [(ngModel)]="commentDesc" name="commentDesc" required >
+                     </ckeditor>
+                </div>
+                <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+                </div>
+                <div class="uploadcomponent margintop15">
+                      <div class="uploadbottom">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        File upload
+                      </div>
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments')"  multiple  />
+                </div>
+            </div>
+            <div class="buttonarea alignright">
+                  <button class="normal bluebutton bluebuttonmedium" (click)="submitComment()">
+                    SUBMIT
+                  </button>
+                  
+            </div>
+          
+
+        </div>
+<!--Comments Section End-->
+
     </div>
 </div>
