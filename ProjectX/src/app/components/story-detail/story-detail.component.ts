@@ -46,6 +46,7 @@ public blurTimeout=[];
   public hasBaseDropZoneOver:boolean = false;
   public hasFileDroped:boolean = false;
   public fileUploadStatus:boolean = false;
+  public hide:boolean=false;//added by Ryan
 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
@@ -73,6 +74,8 @@ public blurTimeout=[];
           }
 
       });
+      jQuery("#collapse").show();//added by Ryan
+      jQuery("#expand").hide();//added by Ryan
     });
 
 
@@ -519,6 +522,34 @@ var thisObj = this;
         //     this.search_results=data;
         // });
     }
-  
+
+    /**
+     * @author:Ryan
+     * @description: This is used to expand the div section
+     */
+    public expand()
+    {
+      jQuery(".main_div").toggle(1000);
+      jQuery(".main_div").show();
+      this.hide=false;
+      jQuery("#collapse").show();
+      jQuery("#expand").hide();
+    }
+
+    /**
+     * @author:Ryan
+     * @description : This is used to collapse the div section
+     */
+    public collapse()
+    {
+      jQuery(".main_div").toggle(1000);
+      jQuery(".main_div").hide();
+      this.hide=true;
+      jQuery("#expand").show();
+      jQuery("#collapse").hide();
+    } 
+
+    //---------------------------- Attachments code---------------//
+    public attachmentsData=['Attachment1','Attachment2','Attachment3'];
 
 }
