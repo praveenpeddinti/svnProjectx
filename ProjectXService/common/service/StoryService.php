@@ -395,16 +395,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketCollectionModel = new TicketCollection();
             $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->TicketId, $projectId);
             $ticketDetails["Title"] = trim($ticket_data->title);
+            $this->saveActivity($ticket_data->TicketId,$projectId,"Title", $ticketDetails["Title"],$userId);
             $description = $ticket_data->description;
             $ticketDetails["CrudeDescription"] = $description;
             $ticketDetails["Description"] = CommonUtility::refineDescription($description);
-
+            $this->saveActivity($ticket_data->TicketId,$projectId,"Description", $description,$userId);
             foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
                
                      if(isset($ticket_data->$key)){
                          
                         $fieldDetails =  StoryFields::getFieldDetails($fieldId);
+                        $fieldName =  $fieldDetails["Field_Name"];
                          if(is_numeric($ticket_data->$key)){
                               $value["value"] = (int)$ticket_data->$key; 
                                if($fieldDetails["Type"] == 6){
@@ -451,7 +453,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             
                              
                          }
-                       
+                       $this->saveActivity($ticket_data->TicketId,$projectId,$fieldName, $value["value"],$userId);
                      }
                    
                 
@@ -485,20 +487,23 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $newData = array('$set' => array("Title" => trim($ticket_data->value)));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$ticket_data->value;
+                    $activityNewValue = $ticket_data->value;
                 }else if($ticket_data->id=='Description'){
                     $actualdescription = CommonUtility::refineDescription($ticket_data->value);
                     $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$ticket_data->value ));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$actualdescription;
+                    $activityNewValue = $ticket_data->value;
                 }
+                $fieldName = $ticket_data->id;
             }else{
                   $fieldDetails =  StoryFields::getFieldDetails($field_id);
+                  $fieldName = $fieldDetails["Field_Name"];
                      if(is_numeric($ticket_data->value)){
                          if($fieldDetails["Type"] == 6 ){
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
                             $this->followTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
-                            $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"],"",$ticket_data->value,$loggedInUser);
                             }
                         
                              else if($fieldDetails["Field_Name"] == "workflow"){
@@ -542,8 +547,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $newData = array('$set' => array($fieldtochange1 => $leftsideFieldVal,$fieldtochange2 =>$valueName));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId,$fieldtochangeId=>(int)$ticket_data->id);
                     $selectedValue=$leftsideFieldVal;
-
+                    $activityNewValue = $leftsideFieldVal;
             }
+            $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
+
             $updateStaus = $collection->update($condition, $newData); 
            // if($updateStaus==1){
                 $returnValue=$selectedValue;
@@ -689,15 +696,89 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     public function getTicketActivity($ticketId, $projectId){
         try{
            $ticketActivity = TicketComments::getTicketActivity($ticketId, $projectId);
-           error_log("+=+=+=+=+=+=+=+=+".print_r($ticketActivity,1));
            $tinyUserModel =  new TinyUserCollection();
            foreach ($ticketActivity["Activities"] as &$value) {
                $userProfile = $tinyUserModel->getMiniUserDetails($value["ActivityBy"]);
-                $value["userName"] = $userProfile["UserName"];
+                $value["ActivityBy"] = $userProfile;
                 $datetime = $value["ActivityOn"]->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $readableDate = $datetime->format('m-d-Y H:i:s');
-                $value["readableDate"]=$readableDate;
+                $readableDate = $datetime->format('M-d-Y H:i:s');
+                $value["ActivityOn"]=$readableDate;
+                $propertyChanges = $value["PropertyChanges"];
+                error_log("property changes count-------".count($propertyChanges));
+                if(count($propertyChanges)>0){
+                    foreach ($value["PropertyChanges"] as $key=>&$property) {
+                        error_log("----property---".$property["ActionFieldName"]);
+                       $fieldName = $property["ActionFieldName"];
+                       $storyFieldDetails =  StoryFields::getFieldDetails($fieldName,"Field_Name");  
+                       $type = $storyFieldDetails["Type"];
+                        $actionFieldName = $property["ActionFieldName"];
+                        $property["ActionFieldTitle"] = $storyFieldDetails["Title"];
+                        $previousValue = $property["PreviousValue"];
+                        $property["NewValue"];
+                        $property["CreatedOn"];
+                        if($type == 6){
+                            if($property["PreviousValue"] != ""){
+                                   $property["PreviousValue"] = $tinyUserModel->getMiniUserDetails($property["PreviousValue"]);
+                                
+                            }
+                            if($property["NewValue"] != ""){
+                                 $property["NewValue"] = $tinyUserModel->getMiniUserDetails($property["NewValue"]);
+                            }
+                           
+                        }
+                        if($fieldName == "workflow"){
+                            $workflowDetails  = WorkFlowFields::getWorkFlowDetails($property["PreviousValue"]);
+                            $property["PreviousValue"]  = $workflowDetails["Name"]; 
+                            $workflowDetails  = WorkFlowFields::getWorkFlowDetails($property["NewValue"]);
+                            $property["NewValue"]  = $workflowDetails["Name"]; 
+                        }
+                         if($type == 4){
+                             
+                              $datetime = $property["PreviousValue"]->toDateTime();
+                              $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                             $property["PreviousValue"] = $datetime->format('M-d-Y');
+                             
+                              $datetime = $property["NewValue"]->toDateTime();
+                              $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                             $property["NewValue"] = $datetime->format('M-d-Y'); 
+                          
+                        }
+                         if($type == 8){
+                           //due date
+                             
+                          
+                        }
+                         if($type == 10){
+                           //bucket
+                             $bucketDetails  = Bucket::getBucketName($property["PreviousValue"],$projectId);
+                            $property["PreviousValue"]  = $bucketDetails["Name"]; 
+                            $bucketDetails  = Bucket::getBucketName($property["NewValue"],$projectId);
+                            $property["NewValue"]  = $bucketDetails["Name"];  
+                          
+                        }
+                        if($fieldName == "planlevel"){
+                           //Plan Level
+                            $planlevelDetails  = PlanLevel::getPlanLevelDetails($property["PreviousValue"]);
+                            $property["PreviousValue"]  = $planlevelDetails["Name"]; 
+                            $planlevelDetails  = PlanLevel::getPlanLevelDetails($property["NewValue"]);
+                            $property["NewValue"]  = $planlevelDetails["Name"];  
+                          
+                        }
+                         if($fieldName == "tickettype"){
+                           //Ticket Type
+                            $ticketTypeDetails  = TicketType::getTicketType($property["PreviousValue"]);
+                            $property["PreviousValue"]  = $ticketTypeDetails["Name"]; 
+                            $ticketTypeDetails  = TicketType::getTicketType($property["NewValue"]);
+                            $property["NewValue"]  = $ticketTypeDetails["Name"];  
+                          
+                        }
+                          $datetime = $property["CreatedOn"]->toDateTime();
+                             $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                             $readableDate = $datetime->format('M-d-Y H:i:s');
+                             $property["ActivityOn"] = $readableDate;
+                    } 
+                }
            }
            return $ticketActivity;
             
@@ -705,13 +786,26 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     Yii::log("StoryService:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
-    public function saveActivity($ticketId,$projectId,$actionfieldName,$oldValue,$newValue,$activityUserId){
+    /**
+     * @author Moin Hussain
+     * @param type $ticketId
+     * @param type $projectId
+     * @param type $actionfieldName
+     * @param type $newValue
+     * @param type $activityUserId
+     */
+    public function saveActivity($ticketId,$projectId,$actionfieldName,$newValue,$activityUserId){
         error_log("saveActivity---------");
-        
+        $oldValue = "";
         $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
-        $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];
-        error_log("old value--------".$oldValue);
+        if($actionfieldName == "Title" || $actionfieldName == "Description"){
+         $oldValue = $ticketDetails[$actionfieldName]; 
+        }else{
+          $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];
+        }
+        
+        error_log("old value--------".$oldValue."------------".$newValue);
+       if($oldValue != $newValue){
         if($oldValue == ""){
             $action = "set to";
         }else{
@@ -733,7 +827,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ActivityOn"=>$currentDate,
             "ActivityBy"=>(int)$activityUserId,
             "Status"=>(int)1,
-            "PropertyChanges"=>array(array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>(int)$oldValue,"NewValue"=>(int)$newValue,"CreatedOn" => $currentDate)),
+            "PropertyChanges"=>array(array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
             "ParentIndex"=>(int)0
             
         );
@@ -743,9 +837,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
          }else{
              error_log("elseeeeeeeeeee----------------");
              $recentSlug = $record["RecentActivitySlug"];
-             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>(int)$oldValue,"NewValue"=>(int)$newValue,"CreatedOn" => $currentDate ))),array('new' => 1,"upsert"=>1));
+             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate ))),array('new' => 1,"upsert"=>1));
  
          }
+    }
           //error_log("response-------".$v);
     }
       
