@@ -69,7 +69,7 @@
          </div >
      <div >
  <div class="dashboardbox_header">
-                  <i class="Story"></i> <span class="ticketid">#{{taskDetails.ticketId}}</span> <span id="title" *ngIf="!enableEdatable"  (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span>
+                  <i class="{{taskDetails.type}}"></i> <span class="ticketid">#{{taskDetails.ticketId}}</span> <span id="title" *ngIf="!enableEdatable"  (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span>
  <input *ngIf="enableEdatable" [(ngModel)]="titleAfterEdit"/>             
  </div>
     <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>

@@ -25,7 +25,7 @@ public selectedValue = "";
 
     public titleAfterEdit: string = "";
     public enableEdatable: boolean = false;
-    public taskDetails = {ticketId: "", title: "", description: ""};
+    public taskDetails = {ticketId: "", title: "", description: "", type:""};
     public isBusy: boolean = false;
     public options = "options";
     public localDate: Date = new Date();
@@ -57,6 +57,7 @@ public selectedValue = "";
                 this.taskDetails.ticketId = result.data.TicketId;
                 this.taskDetails.title = result.data.Title;
                 this.taskDetails.description = result.data.Description;
+                this.taskDetails.type = result.data.StoryType.Name;
                 this.titleAfterEdit = result.data.Title;
 
                 this.items = result.data.Fields;
