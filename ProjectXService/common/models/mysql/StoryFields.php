@@ -32,10 +32,10 @@ class StoryFields extends ActiveRecord
      * @param type $projectId
      * @return type
      */
-    public static function getFieldDetails($fieldId)
+    public static function getFieldDetails($fieldId,$col="Id")
     {
         try{
-        $query = "select sf.*,ft.Name from StoryFields sf join FieldTypes ft on sf.Type=ft.Id  where sf.Id=".$fieldId;
+        $query = "select sf.*,ft.Name from StoryFields sf join FieldTypes ft on sf.Type=ft.Id  where sf.".$col."='".$fieldId."'";
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
         } catch (Exception $ex) {
