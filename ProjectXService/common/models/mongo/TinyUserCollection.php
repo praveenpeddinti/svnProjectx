@@ -56,6 +56,7 @@ class TinyUserCollection extends ActiveRecord
             ->where(['CollaboratorId' => $collaboratorId ]);
         // execute the query
         $userDetails = $query->one();
+        $userDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$userDetails["ProfilePicture"];
        return $userDetails;
      
     }
