@@ -710,10 +710,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     foreach ($value["PropertyChanges"] as $key=>&$property) {
                         error_log("----property---".$property["ActionFieldName"]);
                        $fieldName = $property["ActionFieldName"];
+                     
                        $storyFieldDetails =  StoryFields::getFieldDetails($fieldName,"Field_Name");  
                        $type = $storyFieldDetails["Type"];
                         $actionFieldName = $property["ActionFieldName"];
-                        $property["ActionFieldTitle"] = $storyFieldDetails["Title"];
+                        $property["ActionFieldTitle"] = $fieldName;
+                        if($storyFieldDetails["Title"] != "" && $storyFieldDetails["Title"] != null){
+                           $property["ActionFieldTitle"] = $storyFieldDetails["Title"];  
+                        }
+                       
                         $previousValue = $property["PreviousValue"];
                         $property["NewValue"];
                         $property["CreatedOn"];
@@ -731,6 +736,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             if($property["NewValue"] != ""){
                                  $property["NewValue"] = $tinyUserModel->getMiniUserDetails($property["NewValue"]);
                             }
+                              $property["type"] = "user";
                            
                         }
                         if($fieldName == "workflow"){
