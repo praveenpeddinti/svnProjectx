@@ -103,5 +103,24 @@ class TicketComments extends ActiveRecord
             
         }
     }
+    
+    /**
+     * @author Moin Hussain
+     * @param type $ticketId
+     * @param type $projectId
+     * @return type
+     */
+       public static function getTicketActivity($ticketId, $projectId){
+        try{
+         error_log("getTicketActivity-----".$ticketId."---".$projectId);
+         $query = new Query();
+            $query->from('TicketComments')
+                     ->where(["ProjectId" => (int)$projectId ,"TicketId" => (int)$ticketId]);
+          $ticketActivity = $query->one();
+            return $ticketActivity;
+        } catch (Exception $ex) {
+Yii::log("TicketComments:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 }
 ?>

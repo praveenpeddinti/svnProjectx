@@ -12,6 +12,7 @@ use common\models\mysql\Bucket;
 use common\models\bean\FieldBean;
 use common\models\mongo\ProjectTicketSequence;
 use common\models\mysql\Collaborators;
+use common\models\mongo\TicketComments;
 use Yii;
 
 /*
@@ -496,7 +497,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
                             $this->followTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
-                        }
+                            $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"],"",$ticket_data->value,$loggedInUser);
+                            }
                         
                              else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
@@ -627,6 +629,67 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getAllMyTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+/**
+ * @author Moin Hussain
+ * @param type $ticketId
+ * @param type $projectId
+ */
+    public function getTicketActivity($ticketId, $projectId){
+        try{
+           $ticketActivity = TicketComments::getTicketActivity($ticketId, $projectId);
+           foreach ($ticketActivity as &$value) {
+               
+           }
+            
+        } catch (Exception $ex) {
+    Yii::log("StoryService:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    public function saveActivity($ticketId,$projectId,$actionfieldName,$oldValue,$newValue,$activityUserId){
+        error_log("saveActivity---------");
+        
+        $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
+        $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];
+        error_log("old value--------".$oldValue);
+        if($oldValue == ""){
+            $action = "set to";
+        }else{
+            $action = "changed from"; 
+        }
+           $db =  TicketComments::getCollection();
+           $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+          $record = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId));
+         //  $record = iterator_to_array($record);
+         //  error_log(print_r($record,1));
+         $slug =  new \MongoDB\BSON\ObjectID();
+         if($record["RecentActivityUser"] != $activityUserId ){
+            error_log("iffffffffffffff----------------");
+            // $dataArray = array();
+             $commentDataArray=array(
+            "Slug"=>$slug,
+            "CDescription"=>  "",
+            "CrudeCDescription"=>"",
+            "ActivityOn"=>$currentDate,
+            "ActivityBy"=>(int)$activityUserId,
+            "Status"=>(int)1,
+            "PropertyChanges"=>array(array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>(int)$oldValue,"NewValue"=>(int)$newValue,"CreatedOn" => $currentDate)),
+            "ParentIndex"=>(int)0
+            
+        );
+
+            $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Activities' =>$commentDataArray)));  
+            $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId));  
+         }else{
+             error_log("elseeeeeeeeeee----------------");
+             $recentSlug = $record["RecentActivitySlug"];
+             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>(int)$oldValue,"NewValue"=>(int)$newValue,"CreatedOn" => $currentDate ))),array('new' => 1,"upsert"=>1));
+ 
+         }
+          //error_log("response-------".$v);
+    }
+      
+
     /**
      * @author Suryaprakash
      * @param type $parentTicNumber
