@@ -717,6 +717,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $previousValue = $property["PreviousValue"];
                         $property["NewValue"];
                         $property["CreatedOn"];
+                       if($fieldName == "Title" || $fieldName == "Description"){
+                            $property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
+                            $property["NewValue"]   = substr($property["NewValue"], 0, 25);
+                        } 
+                        
+                        
                         if($type == 6){
                             if($property["PreviousValue"] != ""){
                                    $property["PreviousValue"] = $tinyUserModel->getMiniUserDetails($property["PreviousValue"]);
@@ -828,7 +834,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ActivityBy"=>(int)$activityUserId,
             "Status"=>(int)1,
             "PropertyChanges"=>array(array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
-            "ParentIndex"=>(int)0
+            "ParentIndex"=>""
             
         );
 
