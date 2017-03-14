@@ -419,7 +419,7 @@ class QueryBuilder extends Object
             [
                 'aggregate' => $collectionName,
                 'pipeline' => $pipelines,
-                'allowDiskUse' => false,
+               // 'allowDiskUse' => false,
             ],
             $options
         );
