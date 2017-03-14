@@ -1,22 +1,18 @@
 <!--
   Generated template for the Login page.
 -->
-<ion-header>
-  <ion-navbar center hideBackButton class="logopadding">
-    <img src="assets/images/login-logo.png"/>
-  </ion-navbar>
-</ion-header>
+
 <ion-content padding  >
-    
+    <div class="loginlogo"><img src="assets/images/login-logo.png"/></div>
   <div class="login-box">
-      <div [hidden]="hideElement" class="text-md-danger_top" name="invalidname">
+      <div [hidden]="hideElement" class="text-md-danger_top text-ios-danger_top text-wp-danger_top" name="invalidname">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Invalid Username or Password</div>
     <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && onLogin(loginForm)" novalidate="true">         
       <ion-input type="text" placeholder="Username"[(ngModel)]="login.username" class="form-control customfield" required minlength="10" maxlength="50" name="user_name" #user_name="ngModel"></ion-input>
-      <div [hidden]="!user_name.errors.required" *ngIf="submitted && user_name.errors " class="text-md-danger">
+      <div [hidden]="!user_name.errors.required" *ngIf="submitted && user_name.errors " class="text-md-danger text-ios-danger text-wp-danger">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Email is required</div>
     	<ion-input type="password" placeholder="Password"[(ngModel)]="login.password" class="form-control customfield" required minlength="1" maxlength="50" name="user_password" #user_password="ngModel"></ion-input>
-      <div [hidden]="!user_password.errors.required" *ngIf=" submitted && user_password.errors" class="text-md-danger">
+      <div [hidden]="!user_password.errors.required" *ngIf=" submitted && user_password.errors" class="text-md-danger text-ios-danger text-wp-danger">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Password is required</div>
       <div class="buttonarea text-center">
            <button ion-button center type="submit"  (click)="submitted = true;" class="normal big-btn">Login</button>
