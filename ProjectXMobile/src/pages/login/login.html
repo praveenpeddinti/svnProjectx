@@ -3,7 +3,7 @@
 -->
 <ion-header>
   <ion-navbar center hideBackButton class="logopadding">
-    <img src="../../assets/images/login-logo.png"/>
+    <img src="assets/images/login-logo.png"/>
   </ion-navbar>
 </ion-header>
 <ion-content padding  >
@@ -15,7 +15,7 @@
       <ion-input type="text" placeholder="Username"[(ngModel)]="login.username" class="form-control customfield" required minlength="10" maxlength="50" name="user_name" #user_name="ngModel"></ion-input>
       <div [hidden]="!user_name.errors.required" *ngIf="submitted && user_name.errors " class="text-md-danger">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Email is required</div>
-    	<ion-input type="password" placeholder="******"[(ngModel)]="login.password" class="form-control customfield" required minlength="1" maxlength="50" name="user_password" #user_password="ngModel"></ion-input>
+    	<ion-input type="password" placeholder="Password"[(ngModel)]="login.password" class="form-control customfield" required minlength="1" maxlength="50" name="user_password" #user_password="ngModel"></ion-input>
       <div [hidden]="!user_password.errors.required" *ngIf=" submitted && user_password.errors" class="text-md-danger">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Password is required</div>
       <div class="buttonarea text-center">
