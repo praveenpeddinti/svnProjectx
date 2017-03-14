@@ -94,6 +94,7 @@ public blurTimeout=[];
       var ticketIdObj={'ticketId': this.ticketId};
         this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
         { 
+
             this.ticketData = data;
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
@@ -101,7 +102,7 @@ public blurTimeout=[];
             // this.commentsList = [];
             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
-              console.log(JSON.stringify(data));
+
               this.commentsList = data.data.Activities;
             });
             
@@ -200,20 +201,20 @@ public commentDesc = "";//"sdadas<img src='https://10.10.73.21/files/story/thumb
 public commentCount = 0;
 submitComment(){
 var commentText = this.detail_comment_ckeditor.instance.getData();
-alert("****comment editor data***"+commentText);
+// alert("****comment editor data***"+commentText);
 var commentPushData = {
   text:commentText,//jQuery(commentText).html(),
   id:this.commentCount++,
   repliedToComment:"",
   parentId:""
 };
-if(this.replying == true){
-  // commentPushData.text = "<div style='background:#C0C0C0;'>"+this.replyToComment.text+"</div>"+commentPushData.text;
-  commentPushData.repliedToComment=this.replyToComment.text
-  commentPushData.parentId = this.replyToComment.id;
-}
-alert("====comment data==>"+JSON.stringify(commentPushData));
-this.commentsList.push(commentPushData);
+// if(this.replying == true){
+//   // commentPushData.text = "<div style='background:#C0C0C0;'>"+this.replyToComment.text+"</div>"+commentPushData.text;
+//   commentPushData.repliedToComment=this.replyToComment.text
+//   commentPushData.parentId = this.replyToComment.id;
+// }
+// alert("====comment data==>"+JSON.stringify(commentPushData));
+// this.commentsList.push(commentPushData);
 this.commentDesc="";
 
 jQuery("#commentEditorArea").css("background",this.commentAreaColor);
@@ -230,27 +231,33 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
     },
   };
   if(this.replying == true){
-    reqData.Comment.ParentIndex=this.replyToComment.id;
+    if(this.replyToComment != -1){
+    reqData.Comment.ParentIndex=this.replyToComment+"";
+    }
 
   }
   this._ajaxService.AjaxSubscribe("story/submit-comment",reqData,(result)=>
         { 
           this.replying = false;
-          alert("++++++++++++++++++++"+JSON.stringify(result));
+          // alert("++++++++++++++++++++"+JSON.stringify(result));
+          this.commentsList.push(result.data);
+          
         });
   
 }
 
 
-private replyToComment={text:"",id:"",repliedToComment:"",parentId:""};
+private replyToComment=-1;
 private replying=false;
 private commentAreaColor="";
 replyComment(commentId){
 // var commentEditorObject = document.getElementById("commentEditorArea");
 // var offset = commentEditorObject.offsetTop;
-
+// alert(commentId);
 // var commentToReply = this.commentsList[commentId];//jQuery("#"+commentId+" #commentContent").html();
-this.replyToComment = this.commentsList[commentId];
+// this.replyToComment = this.commentsList[commentId];
+// alert(JSON.stringify(this.commentsList[commentId]));
+this.replyToComment = commentId;
 this.replying = true;
 // this.commentDesc = commentToReply+"<br/><img src='https://10.10.73.21/files/story/thumb1.png' height='50%' width='50%' />";
 // alert(this.commentDesc)
@@ -271,7 +278,7 @@ navigateToParentComment(parentId){
 }
 cancelReply(){
   this.replying = false;
-  this.replyToComment = {text:"",id:"",repliedToComment:"",parentId:""};
+  this.replyToComment = -1;
   jQuery("#commentEditorArea").css("background",this.commentAreaColor);
 
 }

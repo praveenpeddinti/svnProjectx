@@ -196,15 +196,20 @@
                 </div>
                 
                 </div>
-            
+
             <div id="commentContent" >
-                <!--<div style="background: #c0c0c0;" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.parentId)" [innerHTML]="comment.repliedToComment">
-                </div>-->
+                <div style="background: #c0c0c0;" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.ParentIndex)" >
+                    <img src="{{commentsList[comment.ParentIndex].ActivityBy.ProfilePicture}}" />
+                    by <b>{{commentsList[comment.ParentIndex].ActivityBy.UserName}}</b>
+                    <span>{{commentsList[comment.ParentIndex].ActivityOn}}</span>
+                    <div [innerHTML]="commentsList[comment.ParentIndex].CDescription">
+                    </div>
+                </div>
                 <div [innerHTML]="comment.CDescription">
                 
                 </div>
             </div>
-            <button class="normal bluebutton bluebuttonmedium" (click)="replyComment(cmtIdx)">
+            <button *ngIf="!(comment.PropertyChanges.length > 0)" class="normal bluebutton bluebuttonmedium" (click)="replyComment(cmtIdx)">
                 Reply
             </button>
         </div>
@@ -215,9 +220,15 @@
            
             <div id="commentEditorArea" class="rightdescriptionarea">
                 <div id="replyToSnippet" [hidden]="!replying" >
-                    <div id="replySnippetContent" *ngIf="replyToComment !='{}'" [innerHTML]="replyToComment.text">
-                        
+
+                    <div id="replySnippetContent" *ngIf="replyToComment !=-1" >
+                        <!--<span>{{commentsList[replyToComment].ActivityBy}}</span>-->
+                        <img src="{{commentsList[replyToComment].ActivityBy.ProfilePicture}}" />
+                        by <b>{{commentsList[replyToComment].ActivityBy.UserName}}</b>
+                        <div [innerHTML]="commentsList[replyToComment].CDescription">
+                        </div>
                     </div>
+                    
                     <button class="normal bluebutton bluebuttonmedium" (click)="cancelReply()">
                         Cancel
                     </button>
