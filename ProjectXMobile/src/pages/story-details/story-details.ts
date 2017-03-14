@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component,ViewChild} from '@angular/core';
 import {NavController, NavParams, MenuController, LoadingController} from 'ionic-angular';
 
 import {Globalservice} from '../../providers/globalservice';
@@ -100,14 +100,19 @@ public selectedValue = "";
         //console.log('ionViewDidLoad StoryDetailsPage');
     }
 
-    public changeOption(event, index) {
+    public changeOption(event, index,fieldDetails) {
+        // @ViewChild("{{field.title}}_{{field.id}}");
         console.log("the options --- " + this.options + " -------------");
         console.log("the change " + JSON.stringify(event));
         this.readOnlyDropDownField = false;
         this.showEditableFieldOnly[index] = false;
         this.selectedValue = event;
         console.log("the div id " + this.clickedDivRef);
-        (<HTMLInputElement>document.getElementById("Bucket_3")).value = JSON.stringify(event);
+         
+         setTimeout( ()=>{
+            document.getElementById("field.title_field.id_"+index).innerHTML = event;
+            document.getElementById("item_"+index).classList.remove("item-select");
+         }, 300);
         
     }
 

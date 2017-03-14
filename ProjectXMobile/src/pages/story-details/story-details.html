@@ -9,7 +9,7 @@
 <ion-menu [content]="content">
 
   <ion-header>
-    <ion-toolbar>
+     <ion-toolbar>
         <ion-buttons left>
       <img src="assets/images/logo.png"/>
     </ion-buttons>
@@ -24,26 +24,18 @@
         </button>
     </ion-buttons>
     <ion-list>
-    <ion-item *ngFor="let field of arrayList; let i=index;">
-        <!--<div *ngIf="field.readOnly == '1'" >-->
+    <ion-item *ngFor="let field of arrayList; let i=index;" id="item_{{i}}">
           <div *ngIf="!showEditableFieldOnly[i]" >
             <h3>{{field.title}}</h3>
-            <div id="{{field.title}}_{{field.id}}" class="item" (click)="getFieldValues(field, i)" >{{field.assignTo}}</div>
+            <div id="field.title_field.id_{{i}}" class="item" (click)="getFieldValues(field, i)">{{field.assignTo}}</div>
           </div>
-
-        
+  
           <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
           <select-alertless *ngIf="showEditableFieldOnly[i]"  (click)="getFieldValues(field)" item-content [(ngModel)]="changeBucket" (ionChange)="changeOption($event, i)">
               <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}" >{{item.Name}}</ion-option>
           </select-alertless>
         
     </ion-item>
- <!--<ion-item *ngFor="let field of arrayList">
-    <ion-label>{{field.title}}</ion-label>
-    <ion-select [(ngModel)]="demoSelectBox">
-      <ion-option value="1">{{field.assignTo}}</ion-option>
-    </ion-select>
-  </ion-item>-->
     </ion-list>
   </ion-content>
 </ion-menu>
