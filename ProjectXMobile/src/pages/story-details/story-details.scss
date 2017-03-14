@@ -31,7 +31,7 @@ page-story-details{
                   top: 50%;
                   width: 0;                                
     }
-    .toolbar-background-md{
+    .toolbar-background-md, .toolbar-background-ios, .toolbar-background-wp{
     background-image:none;
    
 background: #6cbed6; /* Old browsers */
@@ -41,14 +41,14 @@ background: linear-gradient(to bottom, #6cbed6 0%,#3b9ec2 100%); /* W3C, IE10+, 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', endColorstr='#3b9ec2',GradientType=0 ); /* IE6-9 */
     
 }
-.toolbar-title-md{text-align: center;color:#fff;}
-.bar-button-md[icon-only] i{font-size:2.4em;color:#fff}
-.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default{color:#fff}
+.toolbar-title-md, .toolbar-title-ios, .toolbar-title-wp{text-align: center;color:#fff;}
+.bar-button-md[icon-only] i, .bar-button-ios[icon-only] i, .bar-button-wp[icon-only] i{font-size:2.4em;color:#fff}
+.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default, .bar-button-default-ios, .bar-button-clear-ios-default, .bar-button-ios-default, .bar-button-default-wp, .bar-button-clear-wp-default, .bar-button-wp-default{color:#fff}
 .custombuttonsmenu.bar-buttons-md[right]{padding-top:8px;padding-right:8px}
-.custombuttonsmenu.bar-buttons-md ion-icon{font-size:25px}
-.custombuttonsmenu.custombuttonsmenumargintop.bar-buttons-md ion-icon{margin-top:-5px}
+.custombuttonsmenu.bar-buttons-md ion-icon, .custombuttonsmenu.bar-buttons-ios ion-icon, .custombuttonsmenu.bar-buttons-wp ion-icon{font-size:25px}
+.custombuttonsmenu.custombuttonsmenumargintop.bar-buttons-md ion-icon, .custombuttonsmenu.custombuttonsmenumargintop.bar-buttons-ios ion-icon, .custombuttonsmenu.custombuttonsmenumargintop.bar-buttons-wp ion-icon{margin-top:-5px}
 .custombuttonsmenuborderbottom{border-bottom:1px solid #dedede;padding-bottom:5px}
-.list-md .item-block .item-inner{margin-left:-16px;padding-left:15px}
+.list-md .item-block .item-inner, .list-ios .item-block .item-inner, .list-wp .item-block .item-inner{margin-left:-16px;padding-left:15px}
 .expand{display: none; color: #3b9ec2; position: absolute; right: 11px; top: 2px}
 .collapse{color: #3b9ec2; position: absolute; right: 11px; top: 2px}
 .dashboardouterbox{}
@@ -69,7 +69,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 .padding10{padding:10px}
 .padding10r25{padding:10px 25px 10px 10px}
 .padding10trl{padding:10px 10px 0 10px}
-.customcard.card.card-md{box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.14), 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.12);}
+.customcard.card.card-md, .customcard.card.card-ios, .customcard.card.card-wp{box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.14), 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.12);}
 .displayblock:after{content:"";clear:both;display:block}
 .customtoggle i{font-size:20px;right:18px;top:10px}
 .customcard p, .customcard{font-size:14px}
