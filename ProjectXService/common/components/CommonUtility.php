@@ -13,6 +13,7 @@ use common\models\mysql\StoryCustomFields;
 use common\models\mysql\FieldTypes;
 use common\models\mysql\MapListCustomStoryFields;
 use common\models\mysql\PlanLevel;
+use common\models\mongo\TicketComments;
 use Yii;
 /* 
  *
@@ -570,9 +571,16 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
                
                $extension = CommonUtility::getExtension($originalFileName);
                  $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
-              
+$videoExtensions = array("mp4", "mov", "ogg", "avi"); 
+              error_log("+++++++++++++++++".$extension);
                if(in_array($extension, $imageExtensions)){
                 $replaceString = "<img src='".$newPath."'/>";
+             
+                }else if(in_array($extension, $videoExtensions)){
+$filename = $tempFileName."-".$originalFileName;
+error_log("++++++++ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath/thumb1.png");
+exec("ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath/thumb1.png");
+                $replaceString = "<video controls width='50%' height='50%'><source src='".$newPath."' type='video/mp4'/></video>";
              
                 }else{
                    $replaceString = "<a href='".$newPath."' target='_blank'/>".$originalFileName."</a>";  

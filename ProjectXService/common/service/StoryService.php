@@ -584,18 +584,25 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "CrudeCDescription"=>$commentDesc,
             "ActivityOn"=>$commentedOn,
             "ActivityBy"=>(int)$commentData->userInfo->Id,
-            "Status"=>(int)1,
+            "Status"=>($commentData->Comment->ParentIndex == "")?(int)1:(int)2,
             "PropertyChanges"=>[],
-            "ParentIndex"=>(int)$commentData->Comment->ParentIndex
+            "ParentIndex"=>($commentData->Comment->ParentIndex == "")?"":(int)$commentData->Comment->ParentIndex
             
         );
         
         TicketComments::saveComment($commentData->TicketId, $commentData->projectId,$commentDataArray);
-        $commentDataArray["userName"]=$commentData->userInfo->username;
-        $datetime = $commentDataArray["ActivityOn"]->toDateTime();
-        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-        $readableDate = $datetime->format('m-d-Y H:i:s');
-        $commentDataArray["readableDate"]=$readableDate;
+        $tinyUserModel = new TinyUserCollection();
+        $userProfile = $tinyUserModel->getMiniUserDetails($commentDataArray["ActivityBy"]);
+                $commentDataArray["ActivityBy"] = $userProfile;
+                $datetime = $commentDataArray["ActivityOn"]->toDateTime();
+                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $readableDate = $datetime->format('M-d-Y H:i:s');
+                $commentDataArray["ActivityOn"]=$readableDate;
+//        $commentDataArray["userName"]=$commentData->userInfo->username;
+//        $datetime = $commentDataArray["ActivityOn"]->toDateTime();
+//        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+//        $readableDate = $datetime->format('m-d-Y H:i:s');
+//        $commentDataArray["readableDate"]=$readableDate;
         
         return $commentDataArray;
 //        error_log("==================");
