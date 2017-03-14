@@ -8,6 +8,12 @@ page-login {
      text-align:center;
     }
 .toolbar-md, .toolbar-ios, .toolbar-wp{min-height:180px}
+.loginlogo{height:250px;text-align: center;padding-top:40px;padding-bottom:30px}
+.loginlogo img{max-height:100%}
+@media (max-width:340px) and (min-width:320px) {
+    .loginlogo{height:200px;text-align: center;padding-top:10px;padding-bottom:10px}
+    
+}
 .logopadding{padding-top:30px}
 input[type=text], select {
     width: 100%;
