@@ -1,8 +1,10 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams, MenuController, LoadingController} from 'ionic-angular';
+import {NavController, NavParams, MenuController, LoadingController, PopoverController} from 'ionic-angular';
 
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
+import { PopoverPage } from '../popover/popover';
+import { Storage } from "@ionic/storage";
 declare var jQuery: any;
 /*
   Generated class for the StoryDetails page.
@@ -32,6 +34,7 @@ public selectedValue = "";
     // public maxDate: Date = new Date(new Date().setDate(new Date().getDate() + 30));
     public minDate: any = new Date();
     public myDate: string = "2017-02-25";
+    public userName: any = '';
 
     public ckeditorContent = "";
     public config = {
@@ -45,12 +48,18 @@ public selectedValue = "";
         private constants: Constants, 
         public navCtrl: NavController, 
         public navParams: NavParams,
-        public loadingController: LoadingController) {
+        public loadingController: LoadingController,
+        public popoverCtrl: PopoverController,
+        private storage: Storage) {
         //      menu.swipeEnable(false);
         this.minDate = this.formatDate(new Date());
         
         let loader = this.loadingController.create({ content: "Loading..."});  
             loader.present();
+
+            this.storage.get('userCredentials').then((value) => {
+            this.userName = value.username;
+        });
             
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.navParams.get("id")).subscribe(
             result => {
@@ -137,6 +146,14 @@ public selectedValue = "";
                 console.log("the fields error --- " + error);
             });
         }
+    }
+
+    openPopover(myEvent) {
+        let userCredentials = { username: this.userName };
+        let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
+        popover.present({
+            ev: myEvent
+        });
     }
     
     public titleEdit(event){  
