@@ -66,14 +66,19 @@
  </div>
     <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
     <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
-    
-    <div style="position: relative;" class="customtoggle">
-      <i id="expand" (click)="expandDescription()" class="fa fa-chevron-down expand" aria-hidden="true"></i>
-      <i id="collapse" (click)="collapseDescription()" class="fa fa-chevron-up collapse" aria-hidden="true"></i>
-      <ion-card id="description" class="customcard">
-        <div class="padding10r25 displayblock" [innerHTML] = " taskDetails.description "></div>
-      </ion-card>
+    <div class="padding10">
+    <div style="position: relative;" class="customtoggle padding10">
+     <div id="description" style="overflow:hidden;height:200px" >
+        <div id="innerdesc" class=" displayblock" [innerHTML] = " taskDetails.description "></div>
+      </div>
+       <div class="show-morediv">
+           <button id="show"  (click)="expandDescription()" class="normal customshowbutton">Show more</button>
+           <button id="hide"  (click)="collapseDescription()" class="normal customshowbutton" style="display:none">Show less</button>
+       
+    </div></div>
     </div> </div>
-  
-
+         
+         <script>
+                     
+         </script>      
 </ion-content>

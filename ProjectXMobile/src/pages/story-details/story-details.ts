@@ -170,18 +170,21 @@ public selectedValue = "";
     }
 
     public expandDescription(){
-        jQuery('#expand').hide();
-
-        jQuery('#collapse').show();
+        jQuery('#hide').show();
+        jQuery('#show').hide();
+        var innerheight=jQuery('#innerdesc').height();
+        jQuery('#description').css("height",innerheight+"px");
+        jQuery('#description').css("overflow","visible");
         jQuery('#description').show("slow", function() {
             // console.log( "Animation complete." );
         });
     }
     public collapseDescription(){
-        jQuery('#expand').show();
-        
-        jQuery('#collapse').hide();
-        jQuery('#description').hide("slow", function() {
+        jQuery('#hide').hide();
+        jQuery('#show').show();
+        jQuery('#description').css("height","200px");
+        jQuery('#description').css("overflow","hidden");
+        jQuery('#description').show("slow", function() {
             // console.log( "Animation complete." );
         });
     }
