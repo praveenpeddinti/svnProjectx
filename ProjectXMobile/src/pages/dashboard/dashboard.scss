@@ -18,6 +18,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 .Normal{background: #ffead0}
 .Low{background: #faf9e3}
 .Highest{background:#ffb0b0}
+.Lowest{background:#f0f0f0}
 .dashboardouterbox{}
 .dashboardbox_header{padding:8px 10px 2px;font-size:14px;line-height:16px}
 .dashboardbox_header i{width:22px;height:22px;border-radius:100px;display: inline-block;vertical-align: middle}
@@ -42,4 +43,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 .dashboardbox_footer .usericon {font-size:20px;color:#9c9c9c}
 .dashboardbox_footer .username{font-weight:bold;font-size:13px;vertical-align: top}
 .customcontention .list-md ion-item-sliding, .customcontention .list-ios ion-item-sliding, .customcontention .list-wp ion-item-sliding{background: #f4f4f4;margin-bottom:10px}
+.list-md, .list-ios, .list-wp {margin:0 0 0;}
+.toolbar-ios{min-height:70px;padding-top:25px}
 }
