@@ -311,8 +311,10 @@ footer{font-size:10px}
 .relate_story .ui-autocomplete-panel .ui-autocomplete-list-item:last-child{border:0}
 
 .cbx { float: left; margin-right: 20px;}
-.cbx label{ font-weight: normal!important; font-size: 12px!important; vertical-align: top!important;line-height: 25px!important;}
-
+.cbx label{ font-weight: normal!important; font-size: 12px!important; vertical-align: top!important;line-height: 25px!important;
+  color: #6d6d6d!important;
+}
+.ui-chkbox .ui-chkbox-icon{line-height:12px!important;}
 /* end */
 
 /* Activity*/
