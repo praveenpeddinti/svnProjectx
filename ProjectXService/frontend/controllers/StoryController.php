@@ -171,9 +171,9 @@ class StoryController extends Controller
                     $ticket_data->data->{'4'} = 2;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data, $parentTicNumber);
                     array_push($childTicketnoArray, $ticketNumber);
-                    $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber, $childTicketnoArray);
+                    $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber, $childTicketnoArray);     
+                    }
                 }
-            }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -446,7 +446,7 @@ class StoryController extends Controller
  Yii::log("StoryController:actionGetTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
+
          /*
      * @author Padmaja
      * @description This method is used to save child task details.
@@ -509,8 +509,54 @@ class StoryController extends Controller
         $totalCount = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($StoryData);
        
     }
-   
+    
+      /**
+     * @author suryaprakash reddy 
+     * @description This method is used to insertTimelog
+     * @return type array
+     */
+    public function actionInsertTimeLog() {
+        try {
+            $timelog_data = json_decode(file_get_contents("php://input"));
+            $insertTimelog = ServiceFactory::getStoryServiceInstance()->insertTimeLog($timelog_data);
+            $projectId = $timelog_data->projectId;
+            $parentTicketId = $timelog_data->TicketId;
+            $updateTimeLog = ServiceFactory::getStoryServiceInstance()->getTimeLog($projectId, $parentTicketId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $updateTimeLog;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionInsertTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
-  }
+    /**
+     * @author suryaprakash reddy 
+     * @description This method is used to getworklog
+     * @return type array
+     */
+    public function actionGetWorkLog() {
+        try {
+            $timelog_data = json_decode(file_get_contents("php://input"));
+            $projectId = $timelog_data->projectId;
+            $parentTicketId = $timelog_data->ticketId;
+//             $projectId = 1;
+//            $parentTicketId = 497;
+            $getTimelog = ServiceFactory::getStoryServiceInstance()->getTimeLog($projectId, $parentTicketId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $getTimelog;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+}
 
 ?>

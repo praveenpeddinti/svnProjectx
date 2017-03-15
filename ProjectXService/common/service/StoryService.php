@@ -11,6 +11,7 @@ use common\models\mysql\TicketType;
 use common\models\mysql\Bucket;
 use common\models\bean\FieldBean;
 use common\models\mongo\ProjectTicketSequence;
+use common\models\mongo\TicketTimeLogCollection;
 use common\models\mysql\Collaborators;
 use common\models\mongo\TicketComments;
 use Yii;
@@ -262,7 +263,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ticketModel->TicketId = (int)$ticketNumber;
            $ticketModel->TicketIdString = (string)$ticketNumber;
            $ticketModel->TotalEstimate = 0;
-           $ticketModel->TotalTimeLog = 0;          
+           $ticketModel->TotalTimeLog = (float)0.0;          
            $ticketModel->ParentStoryId = "";
            $ticketModel->IsChild=(int)0;
            if($parentTicNumber !=""){
@@ -827,7 +828,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                       $fieldName =  $field["Field_Name"];
                      $fieldBean->Id = (int)$field["Id"];
                      $fieldBean->title = $fieldTitle;
-
                     if($fieldType == 10){
                         $fieldBean->value = (int)$ticketDetails['Fields']['bucket']['value'];
                         $fieldBean->value_name = $ticketDetails['Fields']['bucket']['value_name'];
@@ -917,6 +917,61 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             TicketCollection::updateChiledTaskObject($postData->TicketId,$parentTasks,'RelatedStories'); 
         } catch (Exception $ex) {
             Yii::log("StoryService:updateRelatedTaskId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+      /**
+     * @author suryaprakash reddy 
+     * @description This method is used to insertTimelog
+     * @return type array
+     */
+    public function insertTimeLog($timelog_data) {
+        try {
+
+            $projectId = $timelog_data->projectId;
+            $ticketId = $timelog_data->TicketId;
+            $userId = $timelog_data->userInfo->Id;
+            $totalWorkHours = (float) $timelog_data->workHours;
+            $ticketDetails = TicketTimeLogCollection::saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours);
+
+            $parenTicketInfo = TicketCollection::getTimeLog($projectId, $ticketId);
+            if ($parenTicketInfo["ParentStoryId"] != "") {
+                $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
+            }
+            if ($ticketDetails != "failure") {
+                $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $totalWorkHours);
+            }
+        } catch (Exception $ex) {
+            Yii::log("StoryService:insertTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+    /**
+     * @author suryaprakash reddy 
+     * @description This method is used to getTimeLog
+     * @return type array
+     */
+    public function getTimeLog($projectId, $parentTicketId) {
+        try {
+            $ticketDetails = TicketCollection::getTimeLog($projectId, $parentTicketId);
+            $ticketTimeLog = TicketTimeLogCollection::getTimeLogRecords($projectId, (int) $parentTicketId);
+
+            $taskArray = array();
+            if (!empty($ticketDetails["Tasks"])) {
+                $taskArray = $ticketDetails["Tasks"];
+                array_push($taskArray, (int) $parentTicketId);
+                $taskFlag = 1;
+                $ticketTimeLog = TicketTimeLogCollection::getTimeLogRecords($projectId, $taskArray, $taskFlag);
+            }
+
+            foreach ($ticketTimeLog as &$log) {
+                $collaboratorData = TinyUserCollection::getMiniUserDetails($log["_id"]);
+                $log["readable_value"] = $collaboratorData;
+            }
+            $ticketDetails["individualLog"] = $ticketTimeLog;
+            return $ticketDetails;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

@@ -56,22 +56,24 @@ class TicketTimeLogCollection extends ActiveRecord
         ];
     }
     
-    /*@surya
-     * 
+      /**
+     * @author suryaprakash reddy 
+     * @description This method is used to save timelog data in ticketTimeCollection
+     * @return type mongoId
      */
-    public function saveTimeLogData($projectId,$ticketId,$userId,$totalWorkHours){
-        
-        try{
-             $returnValue = 'failure';
+    public function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours) {
+
+        try {
+            $returnValue = 'failure';
             $timelogObj = new TicketTimeLogCollection();
-            $timelogObj->ProjectId = (int)$projectId;
-            $timelogObj->TicketId = (int)$ticketId;
-            $timelogObj->CollaboratorId = (int)$userId;
-            $timelogObj->Time = (float)$totalWorkHours;
+            $timelogObj->ProjectId = (int) $projectId;
+            $timelogObj->TicketId = (int) $ticketId;
+            $timelogObj->CollaboratorId = (int) $userId;
+            $timelogObj->Time = $totalWorkHours;
             if ($timelogObj->insert()) {
                 $returnValue = $timelogObj->_id;
             }
-            return $returnValue; 
+            return $returnValue;
             
         } catch (Exception $ex) {
             Yii::log("TicketTimeLogCollection:saveTimeLogData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -80,53 +82,36 @@ class TicketTimeLogCollection extends ActiveRecord
         
         
     }
-    
-    
-    
-  public  function getTimeLogRecords($projectId,$ticketId){
-        try{
-            
-            error_log("+++++++++++++getimelog+++++++++======".$projectId."____".$ticketId);
-               $matchArray = array("TicketId" => (int)497, "ProjectId" =>(int) 1);
-               
-                $query = Yii::$app->mongodb->getCollection('TicketTimeLogCollection');
-                  error_log("+++++++++++++collectio+++++++++======");
-//                $Arraytimelog = $query->aggregate(
-//                    array('$match' => $matchArray
-//                    ), array('$group' => array(
-//                    '_id' => '$CollaboratorId',
-//                    "sum" => array('$sum' => '$Time'),
-//                ))
-//            );
-                
- $pipeline = array(
-    array(
-        '$group' => array(
-            '_id' => '$CollaboratorId',
-                    "sum" => array('$sum' => '$Time'),
-        ),
-    ),
-    array('$match' => $matchArray),
-   
-);
-                
-                
-                $options = array("allowDiskUse"=>true,"explain" => true);
-            $Arraytimelog = $query->aggregate($pipeline,$options);      
-                
-                
-            error_log("quert************************************");
-                            error_log("+++++++++++++++++++++++timelogaray+++++=".print_r($Arraytimelog,1)) ;
 
+    /**
+     * @author suryaprakash reddy 
+     * @description This method is used to getTimeLogRecords for userbased
+     * @return type array
+     */
+    public function getTimeLogRecords($projectId, $ticketsList, $taskFlag = 0) {
+        try {
+            if ($taskFlag == 1) {
+                $matchArray = array("TicketId" => array('$in' => $ticketsList), "ProjectId" => (int) $projectId);
+            } else {
+                $matchArray = array("TicketId" => (int) $ticketsList, "ProjectId" => (int) $projectId);
+            }
+            $query = Yii::$app->mongodb->getCollection('TicketTimeLogCollection');
+            $pipeline = array(
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                        '_id' => '$CollaboratorId',
+                        "sum" => array('$sum' => '$Time'),
+                    ),
+                ),
+            );
+            $Arraytimelog = $query->aggregate($pipeline);
+            return $Arraytimelog;
         } catch (Exception $ex) {
-            Yii::log("TicketTimeLogCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TicketTimeLogCollection:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
-    
-    
-    
-    
+
 }
 ?>
 

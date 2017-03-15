@@ -167,7 +167,7 @@ class TicketCollection extends ActiveRecord
      * @author Praveen P
      * @return type
      */
-    public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
+        public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
         try {
             if ($StoryData->sortorder == 'desc')
                 $order = -1;
@@ -333,10 +333,10 @@ class TicketCollection extends ActiveRecord
             
        } catch (Exception $ex) {
       Yii::log("TicketCollection:updateChiledTaskObject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
-      }  
-        
-     
+            
+    }
+    
+  
     }
      /**
      * @author Padmaja 
@@ -356,6 +356,45 @@ class TicketCollection extends ActiveRecord
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("TicketCollection:getAllTicketDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+      /**
+     * @author suryaprakash reddy 
+     * @description This method is used to update TotalTime log in collection
+     * @return type mongoId
+     */
+      public function updateTotalTimeLog($projectId, $ticketId, $totalWorkHours) {
+        try {
+            $query = new Query();
+            $query->from('TicketCollection')
+                    ->where(['TicketId' => (int) $ticketId, "ProjectId" => $projectId]);
+            $ticketDetails = $query->one();
+            $totalTimeLog = (float) ($ticketDetails["TotalTimeLog"] + $totalWorkHours);
+            if ($totalTimeLog > 0) {
+                $ticketCollection = Yii::$app->mongodb->getCollection('TicketCollection');
+                $updateTotalTimeLog = array('$set' => array("TotalTimeLog" => $totalTimeLog));
+                $ticketCollection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int) $projectId), $updateTotalTimeLog);
+            }
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+  /**
+     * @author suryaprakash reddy 
+     * @description This method is used to get TicketId,TotalTimeLog,Tasks,ParentStoryId from ticket collection
+     * @return type array
+     */
+    public function getTimeLog($projectId, $ticketId) {
+        try {
+            $query = new Query();
+            $query->select(array("TicketId", "TotalTimeLog", "Tasks", "ParentStoryId"));
+            $query->from('TicketCollection')
+                    ->where(['TicketId' => (int) $ticketId, "ProjectId" => $projectId]);
+            $ticketDetails = $query->one();
+
+            return $ticketDetails;
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
