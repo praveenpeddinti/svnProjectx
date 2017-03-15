@@ -86,6 +86,7 @@
                 <!--Left Pannel Loop ends here-->
               </div>
           </div>
+
           <!--Left Pannel End-->
     </div>
 
@@ -152,29 +153,78 @@
    <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium">Attachments</button></div>
  </div>
 
- <div><label>Tasks</label></div>
+<!-- <div><label>Tasks</label></div>
 <div class="relate_story">
     <div class="custom_story_input">
        <div>Tasks Area</div>
     </div>
    
    <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium">Add Task</button></div>
- </div>
+ </div>-->
 
+ <!--  -->
+      <div><label>Tasks</label>
+        <div class="relate_story">
+            <div class="custom_story_input">
+                    <input class="editinput" type="text" placeholder="Title"  id="childtitle" value=""   name="childtitle" />
+            </div>
+             <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="savechiledTask()" type="submit">Add Task</button></div>
+             <!--<span class="buttonarea alignright">
+                <button type="submit" (click)="savechiledTask()" class="normal bluebutton bluebuttonmedium">ADD</button>
+             </span>-->
+        </div>
+        <div *ngFor="let childTasks of childTasksArray;let j=index;">
+                <div class="addtask">
+                    <div class="col-md-1">
+                    <div class="addtask_taskno">{{childTasks.TicketId}}</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="addtask_bor">
+                            <div class="addtask_title" id="childTaskTitle" (click)="navigateToChildDetail(childTasks.TicketId)">{{childTasks.Title}}</div>
+                            <div class="addtask_status"></div>
+                        </div>
+                    </div>
+                    <div *ngFor="let childTaskFields of childTasks.Fields;let k=index;" class="col-md-3">
+                    <div class="">
+                    <div class="">
+                    <div class="">
+                        <label>{{childTaskFields.data.title}}</label>
+                        <div class="clearfix">
+                        <div   data-text="not readonly" [hidden]="taskFieldsEditable[j][k]" (click)="editThisField($event,j+'_'+k,childTasks.TicketId,childTaskFields.data.Id,childTaskFields.data.title,'select','Tasks')"
+                  id="{{childTasks.TicketId+'_'+childTaskFields.fieldName}}" class="{{(childTaskFields.data.title=='Priority')? childTaskFields.data.value:''}}">
+                {{(childTaskFields.data.value == "") ? '--': childTaskFields.data.value_name}} 
+     <i *ngIf="childTaskFields.data.title == 'Priority'"  class="fa fa-circle {{childTaskFields.data.value_name}}" aria-hidden="true">
+     </i>
+     </div>
 
+         <div class="customdropdown">
+     <p-dropdown [hidden]="!taskFieldsEditable[j][k]"  [style]="{'width':'100%'}" [ngModel]="childTaskFields.data.value"   name="dropdownContainer_{{j}}_{{k}}" (onFocus)="dropdownFocus($event,j+'_'+k,'Tasks')" (onBlur)="selectBlurField($event,j+'_'+k,'Tasks')"  (onChange)="restoreField($event,childTasks.TicketId+'_'+childTaskFields.fieldName,j+'_'+k,'select',childTaskFields.data.Id,'Tasks')" id="{{childTasks.TicketId}}_{{j}}_{{k}}"   [options]="dropList" >
+     </p-dropdown>
+     </div>
+                        </div>
+
+                        
+                    </div>
+                
+                    </div>
+                    </div><!-- -->
+                    </div><!-- 2nd loop ends -->
+                    <div class="clearfix"></div>
+                </div>
+</div><!-- 1st loop ends -->
 
     <!--AutoSuggestion for Related Tickets-->
     <div><label>Relate Story/Tasks</label></div>
 <div class="relate_story">
     <div class="custom_story_input">
-        <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Related Tickets" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="search($event)" ></p-autoComplete>
+        <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Related Tickets" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="search($event)" id="relatedTask"></p-autoComplete>
     </div>
    
-   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium">RELATE</button></div>
+   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="saveRelatedTask()">RELATE</button></div>
  </div>
- </div>
+</div>
 
-      </div>
+ </div>
 <!--Comments Section-->
  <div class="widgethed">Activity</div>
  

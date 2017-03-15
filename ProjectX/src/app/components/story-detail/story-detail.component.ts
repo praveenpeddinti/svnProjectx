@@ -29,11 +29,15 @@ public blurTimeout=[];
   private ticketId;
   private fieldsData = [];
   private showMyEditableField =[];
+  private showMyEditableTaskField =[];
   private ticketEditableDesc="";
   private ticketDesc = "";
   private ticketCrudeDesc = "";
   private showDescEditor=true;
+  private childTasksArray=[];
+  private childTaskData="";
   public commentsList=[];
+  private taskFieldsEditable=[];
 
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
@@ -99,14 +103,20 @@ public blurTimeout=[];
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
+
+            this.childTaskData=data.data.Tasks;
+            // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
+            this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
+          //  alert("subtasksdat"+JSON.stringify(this.childTasksArray));
+             
+
             // this.commentsList = [];
             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
 
               this.commentsList = data.data.Activities;
             });
-            
-            
+
         });
 
       this.minDate=new Date();
@@ -161,6 +171,7 @@ public blurTimeout=[];
 
   private descError="";
   submitDesc(){
+    setTimeout(()=>{
       var editorData = this.detail_ckeditor.instance.getData();
           if(editorData != "" && jQuery(editorData).text().trim() != ""){
           this.descError = "";
@@ -179,7 +190,7 @@ public blurTimeout=[];
         }else{
           this.descError = "Description cannot be empty.";
         }
-
+},250);
   }
 
   cancelDesc(){
@@ -326,30 +337,50 @@ closeTitleEdit(editedText){
 
 //Changes inline editable filed to thier respective edit modes - Left Column fields.
 //Renders data to dropdowns dynamically.
-  editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType){ 
+  editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType,where){ 
+   // alert(event+fieldIndex+"--"+fieldId+"--"+fieldDataId+"--"+fieldTitle+"--"+renderType+"--");
     // this.dropList={};
-    this.dropList=[];
-    var fieldName = fieldId.split("_")[1];
+     this.dropList=[];
+    // var fieldName = fieldId.split("_")[1];alert(fieldName);
     var inptFldId = fieldId+"_"+fieldIndex;
-    this.showMyEditableField[fieldIndex] = false;
+    var q =0;
+      for(let taskRow of this.taskFieldsEditable){
+        
+        for(let taskCol in taskRow){
+          this.taskFieldsEditable[q][taskCol] = false;
+        }
+        q++;
+      }
+    if(where == "Tasks"){
+      
+      var row = fieldIndex.split("_")[0];
+      var col = fieldIndex.split("_")[1];
+      this.taskFieldsEditable[row][col]=true;
+
+    }else{
+      this.showMyEditableField[fieldIndex] = false;
+    
+   
+   // this.showMyEditableTaskField[fieldIndex] = true;
     setTimeout(()=>{document.getElementById(inptFldId).focus();},150);
+    }
     if(renderType == "select"){
         var reqData = {
           FieldId:fieldDataId,
           ProjectId:this.ticketData.data.Project.PId,
-          TicketId:this.ticketData.data.TicketId
+          TicketId:(where == "Tasks")?fieldId:this.ticketData.data.TicketId
         };
         //Fetches the field list data for current dropdown in edit mode.
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
             { 
-                var currentId = document.getElementById(inptFldId+"_currentSelected").getAttribute("value");
+                // var currentId = document.getElementById(inptFldId+"_currentSelected").getAttribute("value");
                 var listData = {
-                  currentSelectedId: (currentId != "" &&currentId != null )? currentId:"",
+                  // currentSelectedId: (currentId != "" &&currentId != null )? currentId:"",
                   list:data.getFieldDetails
                 };
-                
-                var priority=(fieldTitle=="Priority"?true:false);
+                 var priority=(fieldTitle=="Priority"?true:false);
                 this.dropList=this.prepareItemArray(listData.list,priority,fieldTitle);
+                //alert("#"+inptFldId+" div");
                 //sets the dropdown prefocused
                 jQuery("#"+inptFldId+" div").click();
                 
@@ -361,7 +392,7 @@ closeTitleEdit(editedText){
       },150);    
     }
 
-
+ 
     
   }
 
@@ -382,12 +413,12 @@ private dateVal = new Date();
 //Restores the editable field to static mode.
 //Also prepares the data to be sent to service to save the changes.
 //This is common to left Column fields.
-   restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId){
+   restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,where){
      var postEditedText={
                         isLeftColumn:1,
                         id:fieldId,
                         value:"",
-                        TicketId:this.ticketId,
+                        TicketId:(where == "Tasks")?restoreFieldId.split("_")[0]:this.ticketId,
                         EditedId:restoreFieldId.split("_")[1]
                       };
 
@@ -406,14 +437,21 @@ private dateVal = new Date();
 
             case "date":
             var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
-            date = date.replace(/(\b\d{1}\b)/g, "0$1");      
+            date = date.replace(/(\b\d{1}\b)/g, "0$1");
             document.getElementById(restoreFieldId).innerHTML = (date == "") ? "--":date;
             postEditedText.value = this.dateVal.toString();
+            var rightNow = new Date();
             break;
 
           }
-     
-        this.showMyEditableField[fieldIndex] = true;
+         if(where == "Tasks"){
+          var row = fieldIndex.split("_")[0];
+          var col = fieldIndex.split("_")[1];
+          this.taskFieldsEditable[row][col]=false;
+
+        }else{  
+            this.showMyEditableField[fieldIndex] = true;
+        }
         this.postDataToAjax(postEditedText);
   }
 
@@ -423,28 +461,46 @@ private dateVal = new Date();
   }
 
 //Dropdown's onFocus event
-  dropdownFocus(event,fieldIndex){ 
- 
-    for(var i in this.showMyEditableField){
-     
-      if(i != fieldIndex){
-        this.showMyEditableField[i] = true;
-       }
-    }
-    this.showMyEditableField[fieldIndex] = false;
-   
+  dropdownFocus(event,fieldIndex,where){
+     if(where == "Tasks"){
+      var row = fieldIndex.split("_")[0];
+      var col = fieldIndex.split("_")[1];
+      this.taskFieldsEditable[row][col]=true;
+
+    }else{ 
+      for(var i in this.showMyEditableField){
+      
+        if(i != fieldIndex){
+          this.showMyEditableField[i] = true;
+        }
+      }
+      this.showMyEditableField[fieldIndex] = false;
+    } 
   }
 
 //Dropdown's onBlur event
-  selectBlurField(event,fieldIndex){ 
+  selectBlurField(event,fieldIndex,where){ 
    var thisobj = this;
-    if(this.blurTimeout[fieldIndex] != undefined && this.blurTimeout[fieldIndex] != "undefined"){
-        clearTimeout(this.blurTimeout[fieldIndex]);
+   var i;
+   if(where =="Tasks"){
+     i = fieldIndex.split("_")[0];
+   }else{
+     i = fieldIndex;
+   }
+    if(this.blurTimeout[i] != undefined && this.blurTimeout[i] != "undefined"){
+        clearTimeout(this.blurTimeout[i]);
         }
-        this.blurTimeout[fieldIndex]= setTimeout(function(){
+        this.blurTimeout[i]= setTimeout(function(){
               if(thisobj.clickedOutside == true){
-              thisobj.showMyEditableField[fieldIndex] = true;
-              }
+                if(where == "Tasks"){
+                  var row = fieldIndex.split("_")[0];
+                  var col = fieldIndex.split("_")[1];
+                  thisobj.taskFieldsEditable[row][col]=false;
+                }else{
+                 thisobj.showMyEditableField[fieldIndex] = true;
+                }
+              
+            }
 
           },1000);
 
@@ -546,7 +602,7 @@ private dateVal = new Date();
        listItem.push({label:"--Select a Member--", value:"",priority:priority,type:status});
        }
          for(var i=0;list.length>i;i++){
-          listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
+           listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
        }
      }
   return listItem;
@@ -636,16 +692,66 @@ var thisObj = this;
         this._router.navigate(['story-dashboard']);
     }
 
+
+    public savechiledTask()
+    {
+       var title= jQuery('#childtitle').val();
+       if(title !=""){
+       var postTaskData={
+            TicketId:this.ticketId,
+            title:jQuery('#childtitle').val()
+          };
+          // var _this = this;
+         // alert(JSON.stringify(postTaskData));
+        this._ajaxService.AjaxSubscribe("story/save-chiled-task",postTaskData,(result)=>
+        {
+          var task=[];
+          task.push(result.data.Tasks);
+          var newChildData = this.taskDataBuilder(task);
+          this.childTasksArray.push(newChildData[0]);
+         });
+       }else{
+          alert("Please enter Title"); 
+       }
+    }
+
+    navigateToChildDetail(childTicketId){
+      this._router.navigate(['story-edit',childTicketId]);
+    }
+
     public search(event)
     {
+     // alert("ddddddddddddddddddddddddddd");
         let data=['#174 -Displaying List of Data',"#182 -Displaying List of Views"];
-        this.search_results=data;
-        // this._ajaxService.AjaxSubscribe("story/search",event.query,(data)=>
-        // { 
-        // //logic to search for related tickets
-        //     this.search_results=data;
-        // });
+        var post_data={
+        'projectId':1,
+        'sortvalue':'Title',
+        'ticketId':150
     }
+    let prepareSearchData = [];
+      //  this.search_results=data;GetTicketDetails get-all-ticket-details-for-search
+        this._ajaxService.AjaxSubscribe("story/get-all-ticket-details-for-search",post_data,(result)=>
+         { 
+           var subTaskData = result.data;
+            for(let subTaskfield of subTaskData){
+            //    alert("subTaskfield"+subTaskfield);
+               var currentData = '# '+subTaskfield.TicketId+' '+subTaskfield.Title;
+                 prepareSearchData.push(currentData);
+            }
+         //  alert(JSON.stringify(prepareSearchData));
+        // //logic to search for related tickets
+          // this.search_results=data;
+          // prepareSearchData.push(result);
+          // alert(JSON.stringify(preparesearchData));
+          // this.ticketData = '# '+result.data.TicketId+''+result.data.Title;
+          // prepareSearchData.push(this.ticketData);
+           this.search_results=prepareSearchData;
+            
+       //   alert(JSON.stringify(prepareSearchData));
+
+         });
+    }
+
 
     /**
      * @author:Ryan
@@ -676,4 +782,43 @@ var thisObj = this;
     //---------------------------- Attachments code---------------//
     public attachmentsData=['Attachment1','Attachment2','Attachment3'];
 
+
+    taskDataBuilder(taskArray){
+     var subTasksArray = [];
+       let prepareData = [];
+       var fieldsEditable = [];
+       var i=0;
+       var obj;
+       for(let subTaskfield of taskArray){
+          obj = {data:{},fieldName:""};
+        for(let fields in subTaskfield.Fields){
+          // alert(fields+"+++++++taskDataBuilder+++++++++");
+          obj.data = subTaskfield.Fields[fields];
+          obj.fieldName = fields;
+          // alert("******************"+JSON.stringify(obj));
+          prepareData.push(Object.assign({},obj));
+          // alert("--prepareData---"+JSON.stringify(prepareData));
+          fieldsEditable.push(false);
+        }
+        subTaskfield.Fields = prepareData;
+        subTasksArray.push(subTaskfield);
+        this.taskFieldsEditable.push(fieldsEditable);
+        fieldsEditable = [];
+        prepareData=[];
+      }
+       return subTasksArray;
+    }
+    public saveRelatedTask(){
+     //  console.log(this.text);
+       var suggestValue=this.text;
+        var relatedTasks={
+        'projectId':1,
+        'ticketId':suggestValue.split(" ")[1]
+        }
+        this._ajaxService.AjaxSubscribe("story/update-related-tasks",relatedTasks,(result)=>
+         { 
+        alert(JSON.stringify(result));
+        })
+    }
+  
 }

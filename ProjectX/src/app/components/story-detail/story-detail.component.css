@@ -43,3 +43,15 @@
 {
     text-align: right;
 }
+
+/*Relate and Add Task CSS*/
+
+.detailctask{ padding:10px 0px; background:#f8f8f8; margin-bottom:10px;}
+.ctasktxtbox{ background:#fff; line-height:45px; outline:none; border:none; text-indent:10px; width:100%}
+.addbut{ background:#237ea7; color:#fff; text-align:center; line-height:45px; cursor:pointer; text-transform:uppercase; font-family: 'robotoregular';}
+.addtask{ background:#fbfbfb; clear:both; margin-bottom:1px; width:100%; height:auto; min-height:55px;}
+.addtask_bor{ border-left:solid 1px #fff; padding-left:15px;}
+.addtask_taskno{ font-size:15px; color:#000; font-weight:bold; line-height:30px; }
+.addtask_title{ color:#000; font-size:15px; line-height:18px; margin-top:5px;}
+.addtask_status{ color:#979797;font-size:14px; line-height:24px;}
+.addtask label{ color:#4c4c4c;font-size:13px;font-family: 'robotoregular';font-weight: normal;}

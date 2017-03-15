@@ -296,7 +296,7 @@ footer{font-size:10px}
 
 .paddingL10{ padding-left:10px;}
 /* custom auto suggestions styles */
-.relate_story{position: relative;padding:10px;background: #f8f8f8}
+.relate_story{position: relative;padding:10px;background: #f8f8f8;margin-bottom: 10px;}
 .relate_story .custom_story_input{padding-right:92px;}
 .relate_story .custom_story_input input{    width: 100%;
     min-height: 40px;
