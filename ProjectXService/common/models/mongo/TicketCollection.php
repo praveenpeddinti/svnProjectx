@@ -44,6 +44,7 @@ class TicketCollection extends ActiveRecord
             "RelatedStories",
             "Tasks",
             "TicketId",
+            "TicketIdString",
             "TotalEstimate",
             "TotalTimeLog",
             "IsChild"
@@ -344,9 +345,14 @@ class TicketCollection extends ActiveRecord
     public static function getAllTicketDetailsForSearch($StoryData, $projectId, $selectFields = []) {
         try {
             $options=array($StoryData->sortvalue);
-            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $cursor = $collection->find(array("ProjectId" => (int)$projectId),$selectFields, $options);
-            $ticketDetails = iterator_to_array($cursor);
+            $query = new Query();
+            $query->from('TicketCollection')
+                    ->where(["ProjectId" => (int)1]);
+             $query->andWhere(['like','TicketIdString', '618']);
+              $query->orWhere(['like','Title', '618']);
+             error_log(print_r($query,1));
+            $ticketDetails = $query->all();
+            
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

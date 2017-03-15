@@ -260,6 +260,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ticketModel->Tasks= [];
            $ticketNumber = ProjectTicketSequence::getNextSequence($projectId);
            $ticketModel->TicketId = (int)$ticketNumber;
+           $ticketModel->TicketIdString = (string)$ticketNumber;
            $ticketModel->TotalEstimate = 0;
            $ticketModel->TotalTimeLog = 0;          
            $ticketModel->ParentStoryId = "";

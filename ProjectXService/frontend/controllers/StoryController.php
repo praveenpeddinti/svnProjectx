@@ -167,7 +167,7 @@ class StoryController extends Controller
                 $childTicketnoArray = array();
                 for ($i = 0; $i < sizeof($defualtTicketsArray); $i++) {
                     $ticket_data->data->title = $defualtTicketsArray[$i]."-" . $title;
-                    $ticket_data->data->description = $defualtTicketsArray[$i]."-" . $description;
+                    $ticket_data->data->description = "Please provide description here";
                     $ticket_data->data->{'4'} = 2;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data, $parentTicNumber);
                     array_push($childTicketnoArray, $ticketNumber);
