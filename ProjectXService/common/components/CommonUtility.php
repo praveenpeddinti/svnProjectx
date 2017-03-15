@@ -757,6 +757,12 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
 Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    /**
+     * @author Moin Hussain
+     * @param type $value
+     * @param type $projectId
+     */
      public static function prepareActivity(&$value,$projectId){
          try{
                $tinyUserModel =  new TinyUserCollection();
@@ -774,9 +780,16 @@ Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . 
                     } 
                 }
          } catch (Exception $ex) {
-
+Yii::log("CommonUtility:prepareActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
          }
      }
+     
+     /**
+      * @author Moin Hussain
+      * @param type $property
+      * @param type $projectId
+      * @return type
+      */
     public static function prepareActivityProperty(&$property,$projectId){
         try{
             $tinyUserModel =  new TinyUserCollection();
@@ -870,6 +883,7 @@ Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . 
                              $property["ActivityOn"] = $readableDate;
                              return $property;
         } catch (Exception $ex) {
+Yii::log("CommonUtility:prepareActivityProperty::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
         }
     }
