@@ -85,9 +85,32 @@
                 </div>
                 <!--Left Pannel Loop ends here-->
               </div>
-          </div>
+              </div>
+          <div class="clearfix">   
+              <div class="tworkedhours">
+                  <div class="pull-left">Total worked hours</div>
+                  <div class="pull-right">
+                      <div class="thours"><i class="fa fa-clock-o timeclr" aria-hidden="true"></i> {{totalWorkLog}}</div>
+                  </div>
+                  <div class="clearfix"></div>
+              </div>
+              <div class="iworkhoursbg clearfix" >
+                  <div class="ihors clearfix" *ngFor="let workLog of individualLog;">
+                       <div class="iworkhours text-left"><a href="javascript:void(0)">{{workLog.readable_value.UserName}} </a></div>
+                      <div class="iworkhours text-right">{{workLog.sum}}</div>
+                  </div>
+              </div>
+              <div class="workedhoursbg">
+                  <div class="pull-left">Worked hours</div>
+                  <div class="pull-right">
+                      <input type="text" max-length="5" value="" id="workedhours" class="workedhourstxtbox" placeholder="00.00" name="worklog" (keyup.enter)="workLogCapture($event.target.value)" />
+                  </div>
+                  <div class="clearfix"></div>
+              </div>
 
+          </div>
           <!--Left Pannel End-->
+
     </div>
 
     <div class="col-xs-12 col-sm-9 col-md-9">

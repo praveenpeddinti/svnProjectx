@@ -38,6 +38,9 @@ public blurTimeout=[];
   private childTaskData="";
   public commentsList=[];
   private taskFieldsEditable=[];
+  public totalWorkLog=[];
+  public individualLog=[];
+
 
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
@@ -118,7 +121,11 @@ public blurTimeout=[];
             });
 
         });
-
+        this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
+            { 
+               this.individualLog =data.data.individualLog;
+                this.totalWorkLog =data.data.TotalTimeLog;
+            });
       this.minDate=new Date();
     }
 
@@ -821,4 +828,26 @@ var thisObj = this;
         })
     }
   
+
+        public workLogCapture(event)
+    {
+      if(event!=0){
+        var TimeLog={
+          TicketId:this.ticketId,
+          workHours:event,
+        };
+        this._ajaxService.AjaxSubscribe("story/insert-time-log",TimeLog,(data)=>
+        { 
+          if(data.statusCode== 200){
+              this.individualLog =data.data.individualLog;
+                this.totalWorkLog =data.data.TotalTimeLog;
+                   jQuery("#workedhours").val("");
+                      }
+        });
+
+       }else{
+     // alert("+++++++++++==");
+    }
+}
+
 }
