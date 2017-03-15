@@ -217,7 +217,7 @@ var commentPushData = {
 // this.commentsList.push(commentPushData);
 this.commentDesc="";
 
-jQuery("#commentEditorArea").css("background",this.commentAreaColor);
+jQuery("#commentEditorArea").removeClass("replybox");
   console.log("comment is submitted");
 
 var commentedOn = new Date()
@@ -262,7 +262,7 @@ this.replying = true;
 // this.commentDesc = commentToReply+"<br/><img src='https://10.10.73.21/files/story/thumb1.png' height='50%' width='50%' />";
 // alert(this.commentDesc)
 this.commentAreaColor = jQuery("#commentEditorArea").css("background");
-jQuery("#commentEditorArea").css("background","red");
+jQuery("#commentEditorArea").addClass("replybox");
 jQuery('html, body').animate({
         scrollTop: jQuery("#commentEditorArea").offset().top
     }, 1000);
@@ -272,6 +272,8 @@ jQuery('html, body').animate({
 
 
 navigateToParentComment(parentId){
+alert(parentId+"---"+jQuery("#"+parentId).length);
+alert(jQuery("#"+parentId).offset().top);
   jQuery('html, body').animate({
         scrollTop: jQuery("#"+parentId).offset().top
     }, 1000);
@@ -279,7 +281,7 @@ navigateToParentComment(parentId){
 cancelReply(){
   this.replying = false;
   this.replyToComment = -1;
-  jQuery("#commentEditorArea").css("background",this.commentAreaColor);
+ jQuery("#commentEditorArea").removeClass("replybox");
 
 }
 //------------------------------Comments Part end------------------------------------
@@ -613,8 +615,17 @@ var thisObj = this;
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
         { 
           if(result.statusCode== 200){
-            if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc")
-                document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data;
+
+         if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc")
+                document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.updatedFieldData;
+
+
+
+         //  this.commentsList = result.data.Activities;
+            if(result.data.activityData.referenceKey == -1){
+             this.commentsList.push(result.data.activityData.data);
+            }
+         this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
           }
         });
     }

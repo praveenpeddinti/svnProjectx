@@ -176,63 +176,87 @@
 
       </div>
 <!--Comments Section-->
-
+ <div class="widgethed">Activity</div>
+ 
+ <div class="activitybg mt10">
 <div>
     <!--Comment Display area-->
-     <div><label>Activity</label></div>
+    
     <ng-container *ngFor="let comment of commentsList;let cmtIdx = index;">
         <div id="{{cmtIdx}}">
-            <img src="{{comment.ActivityBy.ProfilePicture}}" />
-            by <b>{{comment.ActivityBy.UserName}}</b>
-            <span>{{comment.ActivityOn}}</span>
             
-            <div *ngFor="let property of comment.PropertyChanges;">
-                <b>{{property.ActionFieldTitle}}</b> <span>{{property.Action}}</span> 
-                <div *ngIf="property.type=='user'"> 
-                    <b><a href="#" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></b> to <b><a href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a></b> {{property.ActivityOn}}
-                </div>
-                 <div *ngIf="property.type!='user'"> 
-                <b>{{property.PreviousValue}}</b> to <b>{{property.NewValue}}</b> {{property.ActivityOn}}
-                </div>
-                
-                </div>
+            
+                    <div class="user">
+              <a href="javascript:void(0)"> <img src="{{comment.ActivityBy.ProfilePicture}}" /></a>  by <span><a href="javascript:void(0)">{{comment.ActivityBy.UserName}}</a> </span> <div *ngIf="(comment.PropertyChanges.length == 0)" class="userdate">( {{comment.ActivityOn}} ) </div>    
+            </div>
+          <div *ngFor="let property of comment.PropertyChanges;">   
+    <div class="ticketactivity">
+   {{property.ActionFieldTitle}} {{property.Action}} <span *ngIf="property.type=='user'"> 
+       <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="property"><a href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
+                </span>
+    <span *ngIf="property.type!='user'"> 
+        <span class="property"> {{property.PreviousValue}}</span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="property">{{property.NewValue}}</span> 
+                </span>
+   
+   <span class="erdate">( {{property.ActivityOn}} )</span>
+</div>
+                 </div>
+            
+            
+            
+            
+        
 
-            <div id="commentContent" >
-                <div style="background: #c0c0c0;" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.ParentIndex)" >
+            <div  *ngIf="(comment.PropertyChanges.length == 0)" id="commentContent" class="comment{{(comment.Status ==2)?'_reply':''}}" >
+                <div class="commentedtext" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.ParentIndex)" >
+                    <div class="user">
+                        <a href="javascript:void(0)">
                     <img src="{{commentsList[comment.ParentIndex].ActivityBy.ProfilePicture}}" />
-                    by <b>{{commentsList[comment.ParentIndex].ActivityBy.UserName}}</b>
-                    <span>{{commentsList[comment.ParentIndex].ActivityOn}}</span>
+                    </a>
+                    by <span><a href="javascript:void(0)">{{commentsList[comment.ParentIndex].ActivityBy.UserName}}</a>
+                    </span>
+                    </div>
                     <div [innerHTML]="commentsList[comment.ParentIndex].CDescription">
                     </div>
                 </div>
-                <div [innerHTML]="comment.CDescription">
+                <div class="commentp" [innerHTML]="comment.CDescription">
                 
                 </div>
+                <div class="clearfix pull-right">
+                <div class="commedit"><a href="javascript:void(0)"><img src="assets/images/comment-reply.png" (click)="replyComment(cmtIdx)"/></a></div> 
+                <div class="commedit"><a href="javascript:void(0)"><img src="assets/images/comment-edit.png"/></a></div> 
+                <div class="commedit"><a href="javascript:void(0)"><img src="assets/images/comment-delete.png"/></a></div>
+                </div>
             </div>
-            <button *ngIf="!(comment.PropertyChanges.length > 0)" class="normal bluebutton bluebuttonmedium" (click)="replyComment(cmtIdx)">
-                Reply
-            </button>
+          
         </div>
     </ng-container>
     <!--Comment Displa area end-->
 </div>
         <div>
            
-            <div id="commentEditorArea" class="rightdescriptionarea">
-                <div id="replyToSnippet" [hidden]="!replying" >
+            <div id="commentEditorArea" >
+                
+                 <div class="commentedtext porel" [hidden]="!replying">
+     <div class="commentclose"><a href="javascript:void()" (click)="cancelReply()"><img src="assets/images/comment-close.png"/></a></div>
+                
+                
+                <div id="replyToSnippet"  >
 
                     <div id="replySnippetContent" *ngIf="replyToComment !=-1" >
                         <!--<span>{{commentsList[replyToComment].ActivityBy}}</span>-->
-                        <img src="{{commentsList[replyToComment].ActivityBy.ProfilePicture}}" />
-                        by <b>{{commentsList[replyToComment].ActivityBy.UserName}}</b>
-                        <div [innerHTML]="commentsList[replyToComment].CDescription">
+                        
+                <div class="user">
+              <a href="javascript:void(0)"> <img src="{{commentsList[replyToComment].ActivityBy.ProfilePicture}}" /></a>  by <span><a href="javascript:void(0)">{{commentsList[replyToComment].ActivityBy.UserName}}</a></span>    
+            </div>   
+               <div [innerHTML]="commentsList[replyToComment].CDescription">
                         </div>
                     </div>
-                    
-                    <button class="normal bluebutton bluebuttonmedium" (click)="cancelReply()">
-                        Cancel
-                    </button>
+                 
                 </div>
+                 </div>
+                
+                
                 <div style="position: relative">
                      <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
                           (drop)="fileUploadEvent($event, 'fileDrop','comments')" >
@@ -261,6 +285,7 @@
           
 
         </div>
+      </div>
 <!--Comments Section End-->
 
     </div>
