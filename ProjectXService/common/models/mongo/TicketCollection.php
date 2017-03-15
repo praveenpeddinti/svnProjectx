@@ -338,7 +338,7 @@ class TicketCollection extends ActiveRecord
         
      
     }
-        /**
+     /**
      * @author Padmaja 
      * @return type
      */
@@ -355,7 +355,7 @@ class TicketCollection extends ActiveRecord
             
             return $ticketDetails;
         } catch (Exception $ex) {
-            Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TicketCollection:getAllTicketDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
