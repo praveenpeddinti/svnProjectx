@@ -894,9 +894,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            // $fieldsOrderArray = [12];
            //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             foreach ($ticketDetails as $ticket) {
-             //   echo "ddddddddddddddddddddddddddddsssssssss".$ticket['TicketId'];
-              // $details =  CommonUtility::prepareTicketDetails($ticket['TicketId'], $projectId);
-                //$details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
                array_push($finalData, $ticket);
                  
             }
