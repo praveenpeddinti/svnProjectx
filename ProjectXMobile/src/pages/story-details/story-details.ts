@@ -17,6 +17,10 @@ declare var jQuery: any;
     templateUrl: 'story-details.html'
 })
 export class StoryDetailsPage {
+
+    public month:any;
+    public timeStarts:any;
+    public timeEnds:any;
     public items: Array<any>;
     public arrayList: Array<{id: string, title: string, assignTo: string, readOnly: string, priority: string, bucket: string, planlevel: string, ticketId: any}>;
     public displayFieldvalue ;
@@ -90,7 +94,20 @@ public selectedValue = "";
         );
 
     }
-
+ public event = {
+    month: '2017-02-19',
+    timeStarts: '07:43',
+    timeEnds: '2099-02-20'
+     
+ }
+ public datemethod(event, index,fieldDetails){
+     this.month= '2017-02-19';
+      this.timeStarts='07:43';
+     this.timeEnds='2099-02-20';
+     setTimeout( ()=>{
+            document.getElementById("item_"+index).classList.add("item-select");
+         }, 300);
+ }
 
 
     public formatDate(date) {
@@ -117,12 +134,13 @@ public selectedValue = "";
         this.showEditableFieldOnly[index] = false;
         this.selectedValue = event;
         console.log("the div id " + this.clickedDivRef);
-         
+ 
          setTimeout( ()=>{
             document.getElementById("field.title_field.id_"+index).innerHTML = event;
             document.getElementById("item_"+index).classList.remove("item-select");
          }, 300);
         
+        document.getElementById("field.title_field.id_9").innerHTML = "---";
     }
 
     public getFieldValues(fieldDetails, index) { // 1 --> non editable 
@@ -146,6 +164,7 @@ public selectedValue = "";
                 console.log("the fields error --- " + error);
             });
         }
+        
     }
 
     openPopover(myEvent) {

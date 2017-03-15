@@ -29,11 +29,17 @@
             <h3>{{field.title}}</h3>
             <div id="field.title_field.id_{{i}}" class="item" (click)="getFieldValues(field, i)">{{field.assignTo}}</div>
           </div>
-  
+          
+         <ion-label *ngIf="field.title=='Due Date'">
+          <ion-label label>{{field.title}}</ion-label>
+            <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM DD YYYY" (ionChange)="datemethod($event, i,field)">03-03-2017</ion-datetime>
+          </ion-label>
+
           <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
           <select-alertless *ngIf="showEditableFieldOnly[i]"  (click)="getFieldValues(field)" item-content [(ngModel)]="changeBucket" (ionChange)="changeOption($event, i)">
               <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}" >{{item.Name}}</ion-option>
           </select-alertless>
+          
         
     </ion-item>
     </ion-list>
@@ -76,9 +82,5 @@
            <button id="hide"  (click)="collapseDescription()" class="normal customshowbutton" style="display:none">Show less</button>
        
     </div></div>
-    </div> </div>
-         
-         <script>
-                     
-         </script>      
+    </div> </div> 
 </ion-content>
