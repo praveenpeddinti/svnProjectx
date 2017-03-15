@@ -184,7 +184,7 @@ class TicketCollection extends ActiveRecord
                 "skip" => $StoryData->offset * $StoryData->pagesize
             );
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $cursor = $collection->find(array("ProjectId" => (int)$projectId), array(), $options);
+           $cursor = $collection->find(array("ProjectId" => (int)$projectId,"IsChild" => (int)0), array(), $options);
             $ticketDetails = iterator_to_array($cursor);
             return $ticketDetails;
         } catch (Exception $ex) {

@@ -542,7 +542,7 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
                   {
                       //replace the @mention with <a> tag
                       $userMention='@'.$user;
-                      $user_link="<a name=".$user." ". "href=''>".$userMention."</a>";
+                      $user_link="<a name=".$user." ". "href='javascript:void(0)'>".$userMention."</a>";
                       //replace the link of @mention in description
                       $description=  str_replace($userMention, $user_link, $description);
                   }
@@ -755,6 +755,122 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             return $ticketDetails;
         } catch (Exception $ex) {
 Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+     public static function prepareActivity(&$value,$projectId){
+         try{
+               $tinyUserModel =  new TinyUserCollection();
+              $userProfile = $tinyUserModel->getMiniUserDetails($value["ActivityBy"]);
+                $value["ActivityBy"] = $userProfile;
+                $datetime = $value["ActivityOn"]->toDateTime();
+                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $readableDate = $datetime->format('M-d-Y H:i:s');
+                $value["ActivityOn"]=$readableDate;
+                $propertyChanges = $value["PropertyChanges"];
+                if(count($propertyChanges)>0){
+                    foreach ($value["PropertyChanges"] as &$property) {
+                        error_log("----property---".$property["ActionFieldName"]);
+                        CommonUtility::prepareActivityProperty($property,$projectId);
+                    } 
+                }
+         } catch (Exception $ex) {
+
+         }
+     }
+    public static function prepareActivityProperty(&$property,$projectId){
+        try{
+            $tinyUserModel =  new TinyUserCollection();
+             $fieldName = $property["ActionFieldName"];
+                     
+                       $storyFieldDetails =  StoryFields::getFieldDetails($fieldName,"Field_Name");  
+                       $type = $storyFieldDetails["Type"];
+                        $actionFieldName = $property["ActionFieldName"];
+                        $property["ActionFieldTitle"] = $fieldName;
+                        if($storyFieldDetails["Title"] != "" && $storyFieldDetails["Title"] != null){
+                           $property["ActionFieldTitle"] = $storyFieldDetails["Title"];  
+                        }
+                       
+                        $previousValue = $property["PreviousValue"];
+                        $property["NewValue"];
+                        $property["CreatedOn"];
+                       if($fieldName == "Title" || $fieldName == "Description"){
+                            $property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
+                            $property["NewValue"]   = substr($property["NewValue"], 0, 25);
+                        } 
+                        
+                        
+                        if($type == 6){
+                            if($property["PreviousValue"] != ""){
+                                   $property["PreviousValue"] = $tinyUserModel->getMiniUserDetails($property["PreviousValue"]);
+                                
+                            }
+                            if($property["NewValue"] != ""){
+                                 $property["NewValue"] = $tinyUserModel->getMiniUserDetails($property["NewValue"]);
+                            }
+                              $property["type"] = "user";
+                           
+                        }
+                        if($fieldName == "workflow"){
+                            $workflowDetails  = WorkFlowFields::getWorkFlowDetails($property["PreviousValue"]);
+                            $property["PreviousValue"]  = $workflowDetails["Name"]; 
+                            $workflowDetails  = WorkFlowFields::getWorkFlowDetails($property["NewValue"]);
+                            $property["NewValue"]  = $workflowDetails["Name"]; 
+                        }
+                         if($fieldName == "priority"){
+                            $priorityDetails  = Priority::getPriorityDetails($property["PreviousValue"]);
+                            $property["PreviousValue"]  = $priorityDetails["Name"]; 
+                            $priorityDetails  = Priority::getPriorityDetails($property["NewValue"]);
+                            $property["NewValue"]  = $priorityDetails["Name"]; 
+                        }
+                         if($type == 4){
+                             if($property["PreviousValue"] != ""){
+                                 $datetime = $property["PreviousValue"]->toDateTime();
+                               $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                              $property["PreviousValue"] = $datetime->format('M-d-Y'); 
+                             }
+                             
+                             
+                              $datetime = $property["NewValue"]->toDateTime();
+                              $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                             $property["NewValue"] = $datetime->format('M-d-Y'); 
+                          
+                        }
+                         if($type == 8){
+                           //due date
+                             
+                          
+                        }
+                         if($type == 10){
+                           //bucket
+                             $bucketDetails  = Bucket::getBucketName($property["PreviousValue"],$projectId);
+                            $property["PreviousValue"]  = $bucketDetails["Name"]; 
+                            $bucketDetails  = Bucket::getBucketName($property["NewValue"],$projectId);
+                            $property["NewValue"]  = $bucketDetails["Name"];  
+                          
+                        }
+                        if($fieldName == "planlevel"){
+                           //Plan Level
+                            $planlevelDetails  = PlanLevel::getPlanLevelDetails($property["PreviousValue"]);
+                            $property["PreviousValue"]  = $planlevelDetails["Name"]; 
+                            $planlevelDetails  = PlanLevel::getPlanLevelDetails($property["NewValue"]);
+                            $property["NewValue"]  = $planlevelDetails["Name"];  
+                          
+                        }
+                         if($fieldName == "tickettype"){
+                           //Ticket Type
+                            $ticketTypeDetails  = TicketType::getTicketType($property["PreviousValue"]);
+                            $property["PreviousValue"]  = $ticketTypeDetails["Name"]; 
+                            $ticketTypeDetails  = TicketType::getTicketType($property["NewValue"]);
+                            $property["NewValue"]  = $ticketTypeDetails["Name"];  
+                          
+                        }
+                          $datetime = $property["CreatedOn"]->toDateTime();
+                             $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                             $readableDate = $datetime->format('M-d-Y H:i:s');
+                             $property["ActivityOn"] = $readableDate;
+                             return $property;
+        } catch (Exception $ex) {
+
         }
     }
 }

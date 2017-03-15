@@ -207,8 +207,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                          $fieldBean->value_name= $workFlowDetail["Name"]; 
                      }
                      else if($fieldName == "estimatedpoints"){
-                         $fieldBean->value= (int)0; 
-                         $fieldBean->value_name= (int)0; 
+                         $fieldBean->value= ""; 
+                         $fieldBean->value_name= ""; 
                      }
                      else if($fieldType == 4 || $fieldType == 5){
                          if($fieldName == "duedate"){
@@ -475,6 +475,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      */
     public function updateStoryFieldInline($ticket_data){
            try{
+               
             $returnValue = 'failure';
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $checkData = $ticket_data->isLeftColumn;
@@ -549,12 +550,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $selectedValue=$leftsideFieldVal;
                     $activityNewValue = $leftsideFieldVal;
             }
-            $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
-
-            $updateStaus = $collection->update($condition, $newData); 
+             
+              $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
+               $updateStaus = $collection->update($condition, $newData);
+           
            // if($updateStaus==1){
                 $returnValue=$selectedValue;
            // }
+            $returnValue =  array("updatedFieldData" =>$returnValue,"activityData"=>$activityData);
             return $returnValue;
 
         } catch (Exception $ex) {
@@ -578,8 +581,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 //                            }
                             $commentedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
 //                            error_log("++++++++++++++");
-        $commentDataArray=array(
-            "Slug"=>new \MongoDB\BSON\ObjectID(),
+       $slug = new \MongoDB\BSON\ObjectID();
+                            $commentDataArray=array(
+            "Slug"=>$slug,
             "CDescription"=>  $processedDesc,
             "CrudeCDescription"=>$commentDesc,
             "ActivityOn"=>$commentedOn,
@@ -589,7 +593,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ParentIndex"=>($commentData->Comment->ParentIndex == "")?"":(int)$commentData->Comment->ParentIndex
             
         );
-        
+         $db =  TicketComments::getCollection();
+         $v = $db->update( array("ProjectId"=> (int)$commentData->projectId ,"TicketId"=> (int)$commentData->TicketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$commentData->userInfo->Id,"Activity"=>"Comment"));  
         TicketComments::saveComment($commentData->TicketId, $commentData->projectId,$commentDataArray);
         $tinyUserModel = new TinyUserCollection();
         $userProfile = $tinyUserModel->getMiniUserDetails($commentDataArray["ActivityBy"]);
@@ -703,101 +708,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     public function getTicketActivity($ticketId, $projectId){
         try{
            $ticketActivity = TicketComments::getTicketActivity($ticketId, $projectId);
-           $tinyUserModel =  new TinyUserCollection();
+         
            foreach ($ticketActivity["Activities"] as &$value) {
-               $userProfile = $tinyUserModel->getMiniUserDetails($value["ActivityBy"]);
-                $value["ActivityBy"] = $userProfile;
-                $datetime = $value["ActivityOn"]->toDateTime();
-                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $readableDate = $datetime->format('M-d-Y H:i:s');
-                $value["ActivityOn"]=$readableDate;
-                $propertyChanges = $value["PropertyChanges"];
-                error_log("property changes count-------".count($propertyChanges));
-                if(count($propertyChanges)>0){
-                    foreach ($value["PropertyChanges"] as $key=>&$property) {
-                        error_log("----property---".$property["ActionFieldName"]);
-                       $fieldName = $property["ActionFieldName"];
-                     
-                       $storyFieldDetails =  StoryFields::getFieldDetails($fieldName,"Field_Name");  
-                       $type = $storyFieldDetails["Type"];
-                        $actionFieldName = $property["ActionFieldName"];
-                        $property["ActionFieldTitle"] = $fieldName;
-                        if($storyFieldDetails["Title"] != "" && $storyFieldDetails["Title"] != null){
-                           $property["ActionFieldTitle"] = $storyFieldDetails["Title"];  
-                        }
-                       
-                        $previousValue = $property["PreviousValue"];
-                        $property["NewValue"];
-                        $property["CreatedOn"];
-                       if($fieldName == "Title" || $fieldName == "Description"){
-                            $property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
-                            $property["NewValue"]   = substr($property["NewValue"], 0, 25);
-                        } 
-                        
-                        
-                        if($type == 6){
-                            if($property["PreviousValue"] != ""){
-                                   $property["PreviousValue"] = $tinyUserModel->getMiniUserDetails($property["PreviousValue"]);
-                                
-                            }
-                            if($property["NewValue"] != ""){
-                                 $property["NewValue"] = $tinyUserModel->getMiniUserDetails($property["NewValue"]);
-                            }
-                              $property["type"] = "user";
-                           
-                        }
-                        if($fieldName == "workflow"){
-                            $workflowDetails  = WorkFlowFields::getWorkFlowDetails($property["PreviousValue"]);
-                            $property["PreviousValue"]  = $workflowDetails["Name"]; 
-                            $workflowDetails  = WorkFlowFields::getWorkFlowDetails($property["NewValue"]);
-                            $property["NewValue"]  = $workflowDetails["Name"]; 
-                        }
-                         if($type == 4){
-                             
-                              $datetime = $property["PreviousValue"]->toDateTime();
-                              $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                             $property["PreviousValue"] = $datetime->format('M-d-Y');
-                             
-                              $datetime = $property["NewValue"]->toDateTime();
-                              $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                             $property["NewValue"] = $datetime->format('M-d-Y'); 
-                          
-                        }
-                         if($type == 8){
-                           //due date
-                             
-                          
-                        }
-                         if($type == 10){
-                           //bucket
-                             $bucketDetails  = Bucket::getBucketName($property["PreviousValue"],$projectId);
-                            $property["PreviousValue"]  = $bucketDetails["Name"]; 
-                            $bucketDetails  = Bucket::getBucketName($property["NewValue"],$projectId);
-                            $property["NewValue"]  = $bucketDetails["Name"];  
-                          
-                        }
-                        if($fieldName == "planlevel"){
-                           //Plan Level
-                            $planlevelDetails  = PlanLevel::getPlanLevelDetails($property["PreviousValue"]);
-                            $property["PreviousValue"]  = $planlevelDetails["Name"]; 
-                            $planlevelDetails  = PlanLevel::getPlanLevelDetails($property["NewValue"]);
-                            $property["NewValue"]  = $planlevelDetails["Name"];  
-                          
-                        }
-                         if($fieldName == "tickettype"){
-                           //Ticket Type
-                            $ticketTypeDetails  = TicketType::getTicketType($property["PreviousValue"]);
-                            $property["PreviousValue"]  = $ticketTypeDetails["Name"]; 
-                            $ticketTypeDetails  = TicketType::getTicketType($property["NewValue"]);
-                            $property["NewValue"]  = $ticketTypeDetails["Name"];  
-                          
-                        }
-                          $datetime = $property["CreatedOn"]->toDateTime();
-                             $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                             $readableDate = $datetime->format('M-d-Y H:i:s');
-                             $property["ActivityOn"] = $readableDate;
-                    } 
-                }
+                 CommonUtility::prepareActivity($value,$projectId);
            }
            return $ticketActivity;
             
@@ -823,7 +736,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
           $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];
         }
         
-        error_log("old value--------".$oldValue."------------".$newValue);
+      //  error_log("old value--------".$oldValue."------------".$newValue);
        if($oldValue != $newValue){
         if($oldValue == ""){
             $action = "set to";
@@ -836,7 +749,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
          //  $record = iterator_to_array($record);
          //  error_log(print_r($record,1));
          $slug =  new \MongoDB\BSON\ObjectID();
-         if($record["RecentActivityUser"] != $activityUserId ){
+         if($record["RecentActivityUser"] != $activityUserId || $record["Activity"] == "Comment" ){
             error_log("iffffffffffffff----------------");
             // $dataArray = array();
              $commentDataArray=array(
@@ -852,12 +765,24 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         );
 
             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Activities' =>$commentDataArray)));  
-            $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId));  
+            $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId,"Activity"=>"PropertyChange"));  
+            CommonUtility::prepareActivity($commentDataArray,$projectId);
+            return array("referenceKey"=>-1,"data"=>$commentDataArray);
+            
          }else{
              error_log("elseeeeeeeeeee----------------");
              $recentSlug = $record["RecentActivitySlug"];
-             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate ))),array('new' => 1,"upsert"=>1));
- 
+             $property = array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate );
+
+             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>$property)),array('new' => 1,"upsert"=>1));
+            
+             error_log("count------".count($v["Activities"]));
+             $activitiesCount = count($v["Activities"]);
+             if($activitiesCount>0){
+                 $activitiesCount = $activitiesCount-1;
+             }
+             CommonUtility::prepareActivityProperty($property,$projectId);
+             return array("referenceKey"=>$activitiesCount,"data"=>$property);
          }
     }
           //error_log("response-------".$v);

@@ -1,0 +1,759 @@
+{
+  "data": [
+    {
+      "id": 1124059053,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "bEEzBQl8ar4Oe0acwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/e20e6fae/bEEzBQl8ar4Oe0acwqEsg8:1450853657",
+        "profile_url": "/user/popup_profile/sateesh.mandru",
+        "name": "sateesh.mandru"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": null,
+      "changes": [
+        {
+          "type": "milestone_id",
+          "name": "Milestone",
+          "operation_verb": "changed",
+          "old_value": "Backlog",
+          "new_value": "Sprint 1",
+          "comment_id": 1124058103,
+          "created_on": "2017-01-09T18:04:46.000+05:30"
+        },
+        {
+          "type": "assigned_to_id",
+          "name": "Assigned to",
+          "operation_verb": "set  to",
+          "old_value": null,
+          "new_value": {
+            "id": "dx4MHKqB4r5BJdacwqEsg8",
+            "url": "/user/popup_profile/MadanGopal",
+            "name": "Madan Gopal Rao Ongole"
+          },
+          "comment_id": 1124059053,
+          "created_on": "2017-01-09T18:05:54.000+05:30"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    },
+    {
+      "id": 1124726893,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https ://s3.amazonaws.com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user /popup_profile/MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": null,
+      "changes": [
+        {
+          "type": "status",
+          "name": "Status",
+          "operation_verb": "changed",
+          "old_value": "New",
+          "new_value": "Accepted",
+          "comment_id": 1124726763,
+          "created_on": "2017-01-10T14 :32:49.000+05:30"
+        },
+        {
+          "type": "status",
+          "name": "Status",
+          "operation_verb": "changed",
+          "old_value": "Accepted",
+          "new_value": "Specification",
+          "comment_id": 1124726893,
+          "created_on": "2017-01-10T14:32:55.000+05:30"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    },
+    {
+      "id": 1125191443,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws .com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile /MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-10 23:19",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "0.0",
+          "new_value": "5.5"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "<a href=\"/profile/sateesh.mandru\">@sateesh.mandru</a> <a  href=\"/profile/moinhussain\">@moinhussain</a> @kishore.neelam@techo2<br />As part of my initial POC , I am working on following things:<br />1. Explore the Documentation about Yii2<br />2. Figure out the  System Requirements and Installation Process.<br />3. Install and Configure Yii2 project.<br />4. Analyze  the File Structure of Yii2 Project in comparison with Yii 1.1 project.<br />5. Figure out the Key changes  that has to be kept in mind in relation to Yii2.<br />6. Document the Findings.",
+      "raw_comment": "@sateesh .mandru @moinhussain @kishore.neelam@techo2 \nAs part of my initial POC, I am working on following things :\n1. Explore the Documentation about Yii2\n2. Figure out the System Requirements and Installation Process .\n3. Install and Configure Yii2 project.\n4. Analyze the File Structure of Yii2 Project in comparison  with Yii 1.1 project.\n5. Figure out the Key changes that has to be kept in mind in relation to Yii2 .\n6. Document the Findings.",
+      "is_ready": true
+    },
+    {
+      "id": 1125195223,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/c6dcdf27 /dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan Gopal  Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-10 23:25",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "5.5",
+          "new_value": "8.5"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    },
+    {
+      "id": 1125452863,
+      "css_class": "s-box-comment mb-10  arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars /c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan  Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-11 10:30",
+      "changes": [
+        
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "I Have gone through Yii2 framework Documentations and have installed it to my local system. Also i  have successfully created and configured a Yii2 Project to my local.<br />Currently I am trying to understand  the file structure and documenting the installation, Project creation process.",
+      "raw_comment": "I Have  gone through Yii2 framework Documentations and have installed it to my local system. Also i have successfully  created and configured a Yii2 Project to my local.\nCurrently I am trying to understand the file structure  and documenting the installation, Project creation process.",
+      "is_ready": true
+    },
+    {
+      "id": 1125463943,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws .com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile /MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": null,
+      "changes": [
+        {
+          "type": "status",
+          "name": "Status",
+          "operation_verb": "changed",
+          "old_value": "Specification",
+          "new_value": "Development",
+          "comment_id": 1125453363,
+          "created_on": "2017-01-11T10 :32:13.000+05:30"
+        },
+        {
+          "type": "dod",
+          "name": "Dod",
+          "operation_verb": "set to",
+          "new_value": "<a href=\"https ://app.assembla.com/spaces/projectx-0/wiki/Developer_DOD\">https://app.assembla.com/spaces/projectx-0 /wiki...</a>",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11:09:14.000+05:30"
+        },
+        {
+          "type": "db_script_req'd ?",
+          "name": "Db script req'd?",
+          "operation_verb": "set to",
+          "new_value": "No",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11:09:14.000+05:30"
+        },
+        {
+          "type": "estimate",
+          "name": "Estimate",
+          "operation_verb": "set to",
+          "new_value": "3",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11:09:14.000+05:30"
+        },
+        {
+          "type": "expected_completion",
+          "name": "Expected completion ",
+          "operation_verb": "set to",
+          "new_value": "2017-01-12",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11:09:14.000+05:30"
+        },
+        {
+          "type": "peer",
+          "name": "Peer",
+          "operation_verb": "set to",
+          "new_value": "kishore neelam",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11:09:14.000+05:30"
+        },
+        {
+          "type": "peer_review_projection_date",
+          "name": "Peer review projection date",
+          "operation_verb": "set to",
+          "new_value": "2017-01-11",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11:09:14.000+05:30"
+        },
+        {
+          "type": "qa_engineer",
+          "name": "Qa engineer",
+          "operation_verb": "set to",
+          "new_value": "sravan.gangelly",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11:09:14.000+05:30"
+        },
+        {
+          "type": "stakeholder",
+          "name": "Stakeholder ",
+          "operation_verb": "set to",
+          "new_value": "Sreeni Jakka",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11 :09:14.000+05:30"
+        },
+        {
+          "type": "tech_owner",
+          "name": "Tech owner",
+          "operation_verb": "set to",
+          "new_value": "Sreeni  Jakka",
+          "comment_id": 1125463943,
+          "created_on": "2017-01-11T11:09:14.000+05:30"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    },
+    {
+      "id": 1125492833,
+      "css_class": "s-box-comment mb-10  arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars /c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan  Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-11 12:29",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested  hours",
+          "operation_verb": "changed",
+          "old_value": "8.5",
+          "new_value": "10.5"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "<a href=\"/profile/sateesh.mandru\">@sateesh.mandru</a> <a href=\"/profile/moinhussain \">@moinhussain</a> @kishore.neelam@techo2 <a href=\"/profile/ranjanithakur\">@ranjanithakur</a> <br  /><br />I have created a Document detailing the System requirements and Installations process for Yii2 . Kindly look into following link for the document. I have also moved it to Project X folder.<br /><br  /><a rel=\"nofollow\" href=\"https://docs.google.com/document/d/1SMKWMi7FSUdEOrl6bUVWFfXdtEnboYQZH4hQWrXBmaQ /edit?usp=sharing\">https://docs.google.com/document/d/1SMKWMi7FSUdEOrl6bUVWFfXdtEnboYQZH4hQWrXBmaQ/edit ?usp=sharing</a><br /><br />Thank you.",
+      "raw_comment": "@sateesh.mandru @moinhussain @kishore.neelam@techo2  @ranjanithakur \n\nI have created a Document detailing the System requirements and Installations process  for Yii2. Kindly look into following link for the document. I have also moved it to Project X folder .\n\nhttps://docs.google.com/document/d/1SMKWMi7FSUdEOrl6bUVWFfXdtEnboYQZH4hQWrXBmaQ/edit?usp=sharing \n\nThank you.",
+      "is_ready": true
+    },
+    {
+      "id": 1125975603,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8 :1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-11 23:14",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "10.5",
+          "new_value": "13.5"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "I have reconfigured  the Yii2 Project after installation of PHP7 in my local system. Documented the installation process  and also worked with padmaja in setting up the Yiii2 project in her system.",
+      "raw_comment": "I have reconfigured  the Yii2 Project after installation of PHP7 in my local system. Documented the installation process  and also worked with padmaja in setting up the Yiii2 project in her system.",
+      "is_ready": true
+    },
+    {
+      "id": 1126780423,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-12 23:30",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "13.5",
+          "new_value": "18.5"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "<a href=\"/profile/sateesh.mandru\">@sateesh.mandru</a> @kishore .neelam@techo2 <a href=\"/profile/moinhussain\">@moinhussain</a> <br /><br />Documented all my findings  on Yii2 to and have given the Demo on it. As discussed I will work on the Advanced version template  of Yii2 and document the details on it as well.",
+      "raw_comment": "@sateesh.mandru @kishore.neelam@techo2  @moinhussain \n\nDocumented all my findings on Yii2 to and have given the Demo on it. As discussed I  will work on the Advanced version template of Yii2 and  document the details on it as well.",
+      "is_ready": true
+    },
+    {
+      "id": 1127662133,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "da-9_Ok6Cr4Or9acwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/6bb8c79a/da-9_Ok6Cr4Or9acwqEsg8:1422156519",
+        "profile_url": "/user/popup_profile/moinhussain",
+        "name": "moin hussain"
+      },
+      "comment_css_class": "s-self-header bg-soft  arrOut-soft",
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": null,
+      "changes": [
+        {
+          "type": "attachment",
+          "name": "25-smart-collection-tumblr-quotes-picshunger-wrJLUr-quote.jpg",
+          "operation_verb": "deleted",
+          "comment_id": 1127662033,
+          "created_on": "2017-01-14T09:06:06.000+05:30"
+        },
+        {
+          "type": "attachment",
+          "name": "15-free-dark-polygon-backgrounds.jpg",
+          "operation_verb": "deleted",
+          "comment_id": 1127662043,
+          "created_on": "2017-01-14T09:06:11.000+05:30"
+        },
+        {
+          "type": "description",
+          "name": "Description",
+          "operation_verb": "changed",
+          "old_value": "@MadanGopal \nKindly documen...",
+          "new_value": "@MadanGopal \nKindly documen...",
+          "comment_id": 1127662083,
+          "created_on": "2017-01-14T09:06:47.000+05:30"
+        },
+        {
+          "type": "description",
+          "name": "Description",
+          "operation_verb": "changed",
+          "old_value": "@MadanGopal \nKindly documen...",
+          "new_value": "@MadanGopal \nKindly  documen...",
+          "comment_id": 1127662123,
+          "created_on": "2017-01-14T09:07:11.000+05:30"
+        },
+        {
+          "type": "attachment",
+          "name": "15-free-dark-polygon-backgrounds.jpg",
+          "operation_verb": "deleted",
+          "comment_id": 1127662133,
+          "created_on": "2017-01-14T09:07:21.000+05:30"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": "",
+      "is_ready": true
+    },
+    {
+      "id": 1128183463,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-16 19:12",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "18.5",
+          "new_value": "26.5"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "<a href=\"/profile/sateesh.mandru\">@sateesh.mandru</a> <a  href=\"/profile/moinhussain\">@moinhussain</a> @kishore.neelam@techo2<br /><br />As discussed, I have  worked on Advanced version of the Yii2 templates and was able to configure the Project successfully . Also i have documented all details on the new file structure in Yii2 advanced template and its installation  process.<br /><br />Thank you",
+      "raw_comment": "@sateesh.mandru @moinhussain @kishore.neelam@techo2 \n \nAs discussed, I have worked on Advanced version of the Yii2 templates and was able to configure the  Project successfully. Also i have documented all details on the new file structure in Yii2 advanced  template and its installation process.\n\nThank you",
+      "is_ready": true
+    },
+    {
+      "id": 1129415053,
+      "css_class": "s-box-comment  mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars /c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan  Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-17 23:34",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested  hours",
+          "operation_verb": "changed",
+          "old_value": "26.5",
+          "new_value": "34.5"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "Post Demo on Yii2 Advanced template. Worked on experimenting through the code base and  also worked on Url Manager in new Yii configurations.",
+      "raw_comment": "Post Demo on Yii2 Advanced template . Worked on experimenting through the code base and also worked on Url Manager in new Yii configurations .",
+      "is_ready": true
+    },
+    {
+      "id": 1129416573,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-17 23:36",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "34.5",
+          "new_value": "33.5"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    },
+    {
+      "id": 1130218563,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws .com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile /MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-18 22:53",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "33.5",
+          "new_value": "39.5"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "Worked with the Model and Controller flows in Yii2 Project . Worked on experimenting the Login Authentications by connecting with DB.",
+      "raw_comment": "Worked with  the Model and Controller flows in Yii2 Project. Worked on experimenting the Login Authentications by  connecting with DB.",
+      "is_ready": true
+    },
+    {
+      "id": 1132710133,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/c6dcdf27 /dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan Gopal  Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-23 23:52",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "39.5",
+          "new_value": "47.5"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "Worked on Mongo DB connection and adding extensions. Testing mongo with Yii2..Documented  the details and also committed the code base.",
+      "raw_comment": "Worked on Mongo DB connection and adding  extensions. Testing mongo with Yii2..Documented the details and also committed the code base.",
+      "is_ready": true
+    },
+    {
+      "id": 1132711573,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-23 23:54",
+      "changes": [
+        {
+          "type": "total_invested_hours",
+          "name": "Total invested hours",
+          "operation_verb": "changed",
+          "old_value": "47.5",
+          "new_value": "46.0"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    },
+    {
+      "id": 1133022143,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws .com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile /MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-24 12:19",
+      "changes": [
+        {
+          "type": "status",
+          "name": "Status",
+          "operation_verb": "changed",
+          "old_value": "Development",
+          "new_value": "Ready for Peer Review"
+        }
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "<a href=\"/profile/sateesh.mandru\">@sateesh.mandru</a> <a href=\"/profile/moinhussain \">@moinhussain</a> @kishore.neelam@techo2<br /><br />As part of the ticket i have completed the Installation  and Configuration of Yii2 Project and also give a demo on the process of doing it. I have also documented  all my findings and have added them to Drive. Also i have created the Service side project and added  to SVN.<br /><br />Kindly let me know if i have missed anything.<br /><br />Thank you",
+      "raw_comment": "@sateesh.mandru @moinhussain @kishore.neelam@techo2 \n\nAs part of the ticket i have completed the  Installation and Configuration of Yii2 Project and also give a demo on the process of doing it. I have  also documented all my findings and have added them to Drive. Also i have created the Service side project  and added to SVN.\n\nKindly let me know if i have missed anything.\n\nThank you",
+      "is_ready": true
+    },
+    {
+      "id": 1133023973,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "da-9_Ok6Cr4Or9acwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/6bb8c79a/da-9_Ok6Cr4Or9acwqEsg8:1422156519",
+        "profile_url": "/user/popup_profile/moinhussain",
+        "name": "moin hussain"
+      },
+      "comment_css_class": "s-self-header bg-soft  arrOut-soft",
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": null,
+      "changes": [
+        {
+          "type": "status",
+          "name": "Status",
+          "operation_verb": "changed",
+          "old_value": "Ready for Peer Review",
+          "new_value": "Peer Review",
+          "comment_id": 1133023903,
+          "created_on": "2017-01-24T12:21:16.000+05:30"
+        },
+        {
+          "type": "status",
+          "name": "Status",
+          "operation_verb": "changed",
+          "old_value": "Peer Review",
+          "new_value": "Fixed",
+          "comment_id": 1133023973,
+          "created_on": "2017-01-24T12:21:20.000+05:30"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    },
+    {
+      "id": 1137116533,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "a1dZPUp0ir5yTkacwqjQYw",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/58dc2b13 /a1dZPUp0ir5yTkacwqjQYw:1456498167",
+        "profile_url": "/user/popup_profile/ranjanithakur",
+        "name": "ranjanithakur"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-01-30 12:33",
+      "changes": [
+        {
+          "type": "technical_spec",
+          "name": "Technical spec",
+          "operation_verb": "set  to",
+          "new_value": "<a href=\"https://docs.google.com/document/d/1SMKWMi7FSUdEOrl6bUVWFfXdtEnboYQZH4hQWrXBmaQ /edit?usp=sharing\">https://docs.google.com/document/d/1SMKWMi7FSUd...</a>"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    },
+    {
+      "id": 1164507963,
+      "css_class": "s-box-comment mb-10  arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars /c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan  Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": "2017-03-06 18:06",
+      "changes": [
+        
+      ],
+      "is_deleted": false,
+      "extended_comment": null,
+      "comment": "test <img src=\"https://bigfiles.assembla.com/spaces/projectx-0/documents/download/cm5oGAaMKr54qKdmr6bg7m \" alt=\"Yii2Advanced-5.png\" />",
+      "raw_comment": "test [[image:cm5oGAaMKr54qKdmr6bg7m|Yii2Advanced-5.png ]]\n",
+      "is_ready": true
+    },
+    {
+      "id": 1164511233,
+      "css_class": "s-box-comment mb-10 arrOut-white",
+      "user": {
+        "id": "dx4MHKqB4r5BJdacwqEsg8",
+        "image_url": "https://s3.amazonaws.com/assembla-avatars/c6dcdf27/dx4MHKqB4r5BJdacwqEsg8:1468475939",
+        "profile_url": "/user/popup_profile/MadanGopal",
+        "name": "Madan Gopal Rao Ongole"
+      },
+      "comment_css_class": null,
+      "comment_arrow_css_class": "comment-arrow",
+      "is_editable": false,
+      "created_on": null,
+      "changes": [
+        {
+          "type": "description",
+          "name": "Description",
+          "operation_verb": "changed",
+          "old_value": "@MadanGopal \nKindly documen...",
+          "new_value": "@MadanGopal \nKindly  documen...",
+          "comment_id": 1164510263,
+          "created_on": "2017-03-06T18:08:49.000+05:30"
+        },
+        {
+          "type": "description",
+          "name": "Description",
+          "operation_verb": "changed",
+          "old_value": "@MadanGopal \nKindly documen...",
+          "new_value": "@MadanGopal \nKindly documen...",
+          "comment_id": 1164510633,
+          "created_on": "2017-03-06T18:09:10.000+05:30"
+        },
+        {
+          "type": "description",
+          "name": "Description",
+          "operation_verb": "changed",
+          "old_value": "@MadanGopal \nKindly  documen...",
+          "new_value": "@MadanGopal \nKindly documen...",
+          "comment_id": 1164510933,
+          "created_on": "2017-03-06T18 :09:27.000+05:30"
+        },
+        {
+          "type": "description",
+          "name": "Description",
+          "operation_verb": "changed",
+          "old_value": "@MadanGopal \nKindly documen...",
+          "new_value": "@MadanGopal \nKindly documen...",
+          "comment_id": 1164511233,
+          "created_on": "2017-03-06T18:09:42.000+05:30"
+        }
+      ],
+      "is_deleted": true,
+      "extended_comment": null,
+      "comment": "",
+      "raw_comment": null,
+      "is_ready": true
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 80,
+    "total_pages": 1,
+    "show_comments_bar": true,
+    "allow_comments": true,
+    "logged_user_image_url": "https://s3.amazonaws.com/assembla-avatars/6bb8c79a /da-9_Ok6Cr4Or9acwqEsg8:1422156519"
+  }
+}
