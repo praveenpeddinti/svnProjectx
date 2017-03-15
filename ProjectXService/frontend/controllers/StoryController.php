@@ -63,9 +63,9 @@ class StoryController extends Controller
     */
     public function actionGetTicketDetails(){
         try{
-            $ticket_data = json_decode(file_get_contents("php://input"));
-           $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data->ticketId,1);
-       $responseBean = new ResponseBean();
+        $ticket_data = json_decode(file_get_contents("php://input"));
+        $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data->ticketId,1);
+        $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
         $responseBean->data = $data;
@@ -269,15 +269,12 @@ class StoryController extends Controller
 
     public function actionGetFieldDetailsByFieldId(){
         try{
-           // $fieldData = '{"FieldId":1,"ProjectId":1,"TicketId":3}';
             $postFieldData = json_decode(file_get_contents("php://input"));
-//            error_log("***************************>>".$postFieldData->FieldId);
             $responseBean = new ResponseBean();
           //  $responseData['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldDataById(5);
             if($postFieldData->FieldId == 5 || $postFieldData->FieldId == 11){
             // get all assigned to details,stakeholeders
                 $responseData['getFieldDetails'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postFieldData->ProjectId);//$projectId
-                //error_log("test##############");
             }else if($postFieldData->FieldId == 3){
                 // get all Bucket details
                 $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($postFieldData->ProjectId);//$projectId
@@ -329,9 +326,7 @@ class StoryController extends Controller
      */
     public function actionUpdateStoryFieldInline(){
         try{
-            // $fieldData='{"Title":"helooooo","Description":"hellooooo","ProjectId":1,"TicketId":110,"Fields": [{ "Id":"3" },{"value":5}]}';
             $fieldData = json_decode(file_get_contents("php://input"));
-           // $fieldData=json_decode($fieldData);
             $getUpdateStatus = ServiceFactory::getStoryServiceInstance()->updateStoryFieldInline($fieldData);
             if($getUpdateStatus !='failure'){
                 $responseBean = new ResponseBean();
@@ -344,7 +339,6 @@ class StoryController extends Controller
                 $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::FAILURE;
                 $responseBean->message = "FAILURE";
-                //  $responseBean->data =    array('email'=>$CollabaratorData->username,"token"=>$accesstoken);
                 $responseBean->data =    $getUpdateStatus;
                 $response = CommonUtility::prepareResponse($responseBean,"json");
             }        
@@ -421,7 +415,8 @@ class StoryController extends Controller
         }
 
     }
- 
+
+
    public function actionSubmitComment(){
        $comment_post_data=json_decode(file_get_contents("php://input"));
        error_log(print_r($comment_post_data,1));
@@ -451,5 +446,71 @@ class StoryController extends Controller
  Yii::log("StoryController:actionGetTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+         /*
+     * @author Padmaja
+     * @description This method is used to save child task details.
+    * @return type Json
+     */
+    public function actionSaveChiledTask(){
+        try{
+            $postData= json_decode(file_get_contents("php://input")); 
+            $task = ServiceFactory::getStoryServiceInstance()->SaveChiledTask($postData);
+            $responseData = array();
+            $responseData = array("Tasks"=>$task);
+            if($task !='failure'){
+                $responseBean = new ResponseBean();
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+                $responseBean->data = $responseData;
+                $response = CommonUtility::prepareResponse($responseBean,"json");
+            }else{
+                $response='failure';
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "FAILURE";
+                $responseBean->data =    $task;
+                $response = CommonUtility::prepareResponse($responseBean,"json");
+            } 
+             return $response;
+        } catch (Exception $ex) {
+             Yii::log("StoryController:actionSaveChiledTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+ 
+    
+      /**
+    * @author Padmaja 
+    * @description This method is used to get all data for stories/tasks.
+    * @return type
+    */
+   public function actionGetAllTicketDetailsForSearch() {
+        try {
+            $StoryData = json_decode(file_get_contents("php://input"));
+            //$projectId=1;
+            $projectId = $StoryData->projectId;
+            $totalCount = ServiceFactory::getStoryServiceInstance()->getTotalTicketsCount($projectId);
+            $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetailsForSearch($StoryData, $projectId);
+
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $data;
+            $responseBean->totalCount = $totalCount;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    public function actionUpdateRelatedTasks(){
+        $StoryData = json_decode(file_get_contents("php://input"));
+        $totalCount = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($StoryData);
+       
+    }
+   
+
   }
+
 ?>

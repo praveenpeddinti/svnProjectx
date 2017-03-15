@@ -97,9 +97,9 @@ class TicketCollection extends ActiveRecord
             if(count($selectFields)>0){
                 $query->select($selectFields) ;
             }
-          
+            
             $query->from('TicketCollection')
-            ->where(['TicketId' => (int)$ticketId, "ProjectId" => $projectId ]);
+            ->where(['TicketId' => (int)$ticketId, "ProjectId" =>(int) $projectId ]);
          
            $ticketDetails = $query->one();
            return $ticketDetails;  
@@ -183,6 +183,7 @@ class TicketCollection extends ActiveRecord
                 "limit" => $StoryData->pagesize,
                 "skip" => $StoryData->offset * $StoryData->pagesize
             );
+            $options=array();
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
            $cursor = $collection->find(array("ProjectId" => (int)$projectId,"IsChild" => (int)0), array(), $options);
             $ticketDetails = iterator_to_array($cursor);
@@ -208,7 +209,8 @@ class TicketCollection extends ActiveRecord
             Yii::log("TicketCollection:getTotalTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    /**
+
+     /**
      * @author Praveen P
      * This method is used to getting subtask Ids by passing particular story Id.
      * @return type  $projectId $storyId
@@ -314,6 +316,40 @@ class TicketCollection extends ActiveRecord
             $collection->update(array("TicketId" => $parentTicNumber), $tasksNew);
         } catch (Exception $ex) {
             Yii::log("TicketCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+           /**
+     * @author Padmaja
+     * @param type $parentTicketId
+     * @param type $newTasksList
+     * @return type
+     */
+    public static function updateChiledTaskObject($parentTicketId,$newTasksList){
+      try{
+          $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+          $newdata = array('$set' => array('Tasks' =>$newTasksList));
+          $collection->update(array("TicketId" => (int)$parentTicketId), $newdata);
+            
+       } catch (Exception $ex) {
+      Yii::log("TicketCollection:updateChiledTaskObject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+      }  
+        
+     
+    }
+        /**
+     * @author Padmaja 
+     * @return type
+     */
+    public static function getAllTicketDetailsForSearch($StoryData, $projectId, $selectFields = []) {
+        try {
+            $options=array($StoryData->sortvalue);
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $cursor = $collection->find(array("ProjectId" => (int)$projectId),$selectFields, $options);
+            $ticketDetails = iterator_to_array($cursor);
+            return $ticketDetails;
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

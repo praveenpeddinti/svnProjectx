@@ -221,7 +221,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                      else if($fieldType == 10){
                         $bucket = Bucket::getBackLogBucketId($projectId);
                         $fieldBean->value = (int)$bucket["Id"];
-                         $fieldBean->value_name = $bucket["Name"];
+                        $fieldBean->value_name = $bucket["Name"];
                      }
                      else{
                           $fieldBean->value=""; 
@@ -563,8 +563,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         } catch (Exception $ex) {
               Yii::log("StoryService:updateStoryFieldInline::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
-    }
-    
+
+    } 
+  
     public function saveComment($commentData){
         try{
         
@@ -624,6 +625,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         
         
     }
+
 
        /**
   * @author Moin Hussain
@@ -709,8 +711,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         try{
            $ticketActivity = TicketComments::getTicketActivity($ticketId, $projectId);
          
+           if(isset($ticketActivity["Activities"])){
            foreach ($ticketActivity["Activities"] as &$value) {
                  CommonUtility::prepareActivity($value,$projectId);
+           }
            }
            return $ticketActivity;
             
@@ -800,6 +804,121 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketDetails = TicketCollection::updateParentTicketTaskField($parentTicNumber, $ticketnoArray);
         } catch (Exception $ex) {
             Yii::log("StoryService:updateParentticketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+        /*
+     * @author Padmaja
+     * @description This method is used to save child task details.
+    * @return type 
+     */
+    public function SaveChiledTask($postData){
+        try{
+            $returnStatus="failure";
+            $ticketCollectionModel = new TicketCollection();
+            $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->TicketId, $postData->projectId);
+            $storyField = new StoryFields();
+            $standardFields = $storyField->getStoryFieldList();
+            foreach ($standardFields as $field) {
+                     $fieldBean = new FieldBean();
+                     $fieldId =  $field["Id"];
+                     $fieldType =  $field["Type"];
+                     $fieldTitle =  $field["Title"];
+                      $fieldName =  $field["Field_Name"];
+                     $fieldBean->Id = (int)$field["Id"];
+                     $fieldBean->title = $fieldTitle;
+
+                    if($fieldType == 10){
+                        $fieldBean->value = (int)$ticketDetails['Fields']['bucket']['value'];
+                        $fieldBean->value_name = $ticketDetails['Fields']['bucket']['value_name'];
+                     }
+                     else if($fieldName == "planlevel"){
+                        $fieldBean->value = (int)2;
+                        $fieldBean->value_name = 'Task';
+                     }
+                    else if($fieldName == "priority"){
+                        $fieldBean->value =(int)$ticketDetails['Fields']['priority']['value'];
+                        $fieldBean->value_name =$ticketDetails['Fields']['priority']['value_name'];
+                     }
+                     else{
+                          $fieldBean->value=""; 
+                     }
+                     $dataArray[$fieldName]= $fieldBean;
+                   }
+
+           $ticketModel = new TicketCollection();
+           $ticketModel->Title = $postData->title;
+          // $ticketModel->Description = $description;
+         //  $ticketModel->CrudeDescription = $crudeDescription;
+           $ticketModel->Fields = $dataArray;
+           $ticketModel->ArtifactsRef = "";
+           $ticketModel->CommentsRef = "";
+           $ticketModel->FollowersRef = "";
+           $ticketModel->ProjectId = 1;
+           $ticketModel->RelatedStories= [];
+           $ticketModel->Tasks= [];
+           $ticketNumber = ProjectTicketSequence::getNextSequence($postData->projectId);
+           $ticketModel->TicketId = (int)$ticketNumber;
+           $ticketModel->TotalEstimate = 0;
+           $ticketModel->TotalTimeLog = 0;
+           $ticketModel->IsChild = 1;
+           $returnValue = TicketCollection::saveTicketDetails($ticketModel);
+           if($returnValue != "failure"){
+               $lastChiledTicketId=  $ticketModel->TicketId;
+               $parentTasks = $ticketDetails['Tasks'];
+               array_push($parentTasks,$lastChiledTicketId);
+               TicketCollection::updateChiledTaskObject($postData->TicketId,$parentTasks);
+               TicketComments::createCommentsRecord($ticketNumber,$postData->projectId);
+               $selectFields = [];
+               $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto','Fields.assignedto'];
+               $subTicketDetails = $ticketCollectionModel->getTicketDetails($ticketNumber,$postData->projectId,$selectFields);
+               $returnStatus=$subTicketDetails;
+              
+            }
+             return $returnStatus;
+         } catch (Exception $ex) {
+              Yii::log("StoryService:SaveChiledTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+    
+    
+       /**
+     * @author Padmaaja 
+     * @return type
+     */
+    public function getAllStoryDetailsForSearch($StoryData, $projectId) {
+        try {
+           // $ticketModel = new TicketCollection();
+            $ticketDetails = TicketCollection::getAllTicketDetailsForSearch($StoryData, $projectId,$select=['TicketId', 'Title','Fields.workflow.value_name','ProjectId']);
+            $finalData = array();
+           // $fieldsOrderArray = [12];
+           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
+            foreach ($ticketDetails as $ticket) {
+             //   echo "ddddddddddddddddddddddddddddsssssssss".$ticket['TicketId'];
+              // $details =  CommonUtility::prepareTicketDetails($ticket['TicketId'], $projectId);
+                //$details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
+               array_push($finalData, $ticket);
+                 
+            }
+            return $finalData;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /*
+     * 
+     */
+    public function updateRelatedTaskId($postData){
+        try{
+            $returnStatus="failure";
+            error_log("updainggggggggggg".$postData->ticketId);
+            $ticketCollectionModel = new TicketCollection();
+            $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->ticketId, $postData->projectId);
+            $parentTasks = $ticketDetails['RelatedStories'];
+            array_push($parentTasks,$postData->ticketId);
+            TicketCollection::updateChiledTaskObject($postData->TicketId,$parentTasks,'RelatedStories'); 
+        } catch (Exception $ex) {
+            Yii::log("StoryService:updateRelatedTaskId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

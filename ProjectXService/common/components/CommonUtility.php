@@ -365,15 +365,15 @@ class CommonUtility {
                $selectFields = ['Title', 'TicketId'];
 
             }
+            $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto'];
             foreach ($ticketDetails["Tasks"] as &$task) {
                  $taskDetails = $ticketCollectionModel->getTicketDetails($task,$projectId,$selectFields);
-                 $task = $taskDetails;
+                   $task =(array)$taskDetails;
             }
             foreach ($ticketDetails["RelatedStories"] as &$relatedStory) {
                  $relatedStoryDetails = $ticketCollectionModel->getTicketDetails($relatedStory,$projectId,$selectFields);
                  $relatedStory = $relatedStoryDetails;
             }
-            
             
             unset( $ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
