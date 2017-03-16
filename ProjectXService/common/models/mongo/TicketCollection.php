@@ -181,8 +181,7 @@ class TicketCollection extends ActiveRecord
                 "limit" => $StoryData->pagesize,
                 "skip" => $StoryData->offset * $StoryData->pagesize
             );
-            $options=array();
-            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+           $collection = Yii::$app->mongodb->getCollection('TicketCollection');
            $cursor = $collection->find(array("ProjectId" => (int)$projectId,"IsChild" => (int)0), array(), $options);
             $ticketDetails = iterator_to_array($cursor);
             return $ticketDetails;
@@ -196,15 +195,15 @@ class TicketCollection extends ActiveRecord
      * getting total count.
      * @return type  $projectId
      */
-    public static function getTotalTicketsCount($projectId) {
+    public static function getAllStoriesCount($projectId) {
         try {
             $query = new Query();
             $query->from('TicketCollection')
-                    ->where(["ProjectId" => $projectId]);
+                    ->where(["ProjectId" => $projectId,"IsChild" => (int)0]);
             $totalCount = $query->count();
             return $totalCount;
         } catch (Exception $ex) {
-            Yii::log("TicketCollection:getTotalTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TicketCollection:getAllStoriesCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

@@ -83,12 +83,12 @@ class StoryController extends Controller
     * @description This method is used to get all data for stories/tasks.
     * @return type
     */
-   public function actionGetAllTicketDetails() {
+   public function actionGetAllStoryDetails() {
         try {
             $StoryData = json_decode(file_get_contents("php://input"));
             //$projectId=1;
             $projectId = $StoryData->projectId;
-            $totalCount = ServiceFactory::getStoryServiceInstance()->getTotalTicketsCount($projectId);
+            $totalCount = ServiceFactory::getStoryServiceInstance()->getAllStoriesCount($projectId);
             $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($StoryData, $projectId);
 
             $responseBean = new ResponseBean();
@@ -99,7 +99,7 @@ class StoryController extends Controller
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryController:actionGetAllStoryDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
