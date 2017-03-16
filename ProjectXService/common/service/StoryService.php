@@ -253,9 +253,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ticketModel->Description = $description;
            $ticketModel->CrudeDescription = $crudeDescription;
            $ticketModel->Fields = $dataArray;
-           $ticketModel->ArtifactsRef = "";
-           $ticketModel->CommentsRef = "";
-           $ticketModel->FollowersRef = "";
            $ticketModel->ProjectId = 1;
            $ticketModel->RelatedStories= [];
            $ticketModel->Tasks= [];
@@ -851,9 +848,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
           // $ticketModel->Description = $description;
          //  $ticketModel->CrudeDescription = $crudeDescription;
            $ticketModel->Fields = $dataArray;
-           $ticketModel->ArtifactsRef = "";
-           $ticketModel->CommentsRef = "";
-           $ticketModel->FollowersRef = "";
            $ticketModel->ProjectId = 1;
            $ticketModel->RelatedStories= [];
            $ticketModel->Tasks= [];
