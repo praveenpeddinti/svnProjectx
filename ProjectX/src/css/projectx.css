@@ -317,6 +317,30 @@ footer{font-size:10px}
 .ui-chkbox .ui-chkbox-icon{line-height:12px!important;}
 /* end */
 
+/* Attatchment*/
+.attatchment{ width:100%; clear: both;}
+.attatchment_url{ font-size:15px; color:#237ea7; font-family: 'robotoregular'; font-weight:500;}
+.attatchment_url a{color:#237ea7; text-decoration:none;}
+.attatchment_postename{ color:#999999; font-size:13px; font-family: 'robotoregular'; margin-bottom:10px; border-bottom: solid 1px #f8f8f8; padding-bottom: 8px;}
+.attatchment img{ max-width:320px; }
+.attatchment video{ max-width:320px; }
+
+/*Relate and Add Task*/
+
+.detailctask{ padding:10px 0px; background:#f8f8f8; margin-bottom:10px;}
+.ctasktxtbox{ background:#fff; line-height:45px; outline:none; border:none; text-indent:10px; width:100%}
+.addbut{ background:#237ea7; color:#fff; text-align:center; line-height:45px; cursor:pointer; text-transform:uppercase; font-family: 'robotoregular';}
+.addtask{ background:#fbfbfb; clear:both; margin-bottom:1px; width:100%; height:auto; min-height:55px;}
+.addtask_bor{ border-left:solid 1px #fff; padding-left:15px;}
+.addtask_taskno{ font-size:15px; color:#000; font-weight:bold; line-height:30px; }
+.addtask_title{ color:#000; font-size:15px; line-height:18px; margin-top:5px;}
+.addtask_status{ color:#979797;font-size:14px; line-height:24px;}
+.addtask label{ color:#4c4c4c;font-size:13px;font-family: 'robotoregular';font-weight: normal;}
+
+/*Header*/
+.navbar-brand > img { margin-top: 8px;}
+.navbar { min-height: 70px!important;}
+
 /* Activity*/
 
 .widgethed{ border-bottom:solid 1px #f0f0f0; padding:10px 0px; font-size:20px; color:#000; font-family: 'robotoregular';}
