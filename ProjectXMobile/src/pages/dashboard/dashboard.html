@@ -59,8 +59,9 @@
   </ion-list>
         
  </div>
-  <div *ngIf="!moreDataLoaded" >
-  <ion-title  text-center>Data not available.</ion-title>
+   
+  <div *ngIf="!moreDataLoaded" class="dashboardbox_footer">
+    <span class="assignlabel" text-align: center> More data not available. </span>
   </div>
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content *ngIf="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data...">
