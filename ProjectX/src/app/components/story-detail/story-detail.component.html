@@ -191,16 +191,16 @@
             </div>
         </div>
 
-
+ 
        
     </div>
 
       <div><label>Tasks</label>
         <div class="relate_story">
             <div class="custom_story_input">
-                    <input class="editinput" type="text" placeholder="Task Area"  id="childtitle" value=""   name="childtitle" />
+                    <input class="editinput" type="text" placeholder="Create a task here"  id="childtitle" value=""   name="childtitle" />
             </div>
-             <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="savechiledTask()" type="submit">Add Task</button></div>
+             <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="savechiledTask()" type="submit">CREATE</button></div>
      
         </div>
         <div *ngFor="let childTasks of childTasksArray;let j=index;">
@@ -244,10 +244,10 @@
 </div><!-- 1st loop ends -->
 
     <!--AutoSuggestion for Related Tickets-->
-    <div><label>Relate Story/Tasks</label></div>
+    <div><label>Related Stories/Tasks</label></div>
 <div class="relate_story">
     <div class="custom_story_input">
-        <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Related Tickets" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="search($event)" id="relatedTask"></p-autoComplete>
+        <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Relate a Story/Task" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="search($event)" id="relatedTask"></p-autoComplete>
     </div>
    
    <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="saveRelatedTask()">RELATE</button></div>
@@ -271,11 +271,11 @@
             </div>
           <div *ngFor="let property of comment.PropertyChanges;">   
     <div class="ticketactivity">
-   {{property.ActionFieldTitle}} {{property.Action}} <span *ngIf="property.type=='user'"> 
+   <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
        <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="property"><a href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
                 </span>
     <span *ngIf="property.type!='user'"> 
-        <span class="property"> {{property.PreviousValue}}</span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="property">{{property.NewValue}}</span> 
+        <span class="bold"> {{property.PreviousValue}}</span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold">{{property.NewValue}}</span> 
                 </span>
    
    <span class="erdate">( {{property.ActivityOn}} )</span>
@@ -303,9 +303,9 @@
                 
                 </div>
                 <div class="clearfix pull-right">
-                <div class="commedit"><a href="javascript:void(0)"><img src="assets/images/comment-reply.png" (click)="replyComment(cmtIdx)"/></a></div> 
-                <div class="commedit"><a href="javascript:void(0)"><img src="assets/images/comment-edit.png"/></a></div> 
-                <div class="commedit"><a href="javascript:void(0)"><img src="assets/images/comment-delete.png"/></a></div>
+                <div class="commedit reply_icn" (click)="replyComment(cmtIdx)"></div> 
+                <div class="commedit edit_icn"></div> 
+                <div class="commedit delete_icn"></div>
                 </div>
             </div>
           
