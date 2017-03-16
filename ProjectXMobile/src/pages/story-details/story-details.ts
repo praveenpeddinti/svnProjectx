@@ -64,7 +64,6 @@ public selectedValue = "";
             this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
         });
-            
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.navParams.get("id")).subscribe(
             result => {
                 this.taskDetails.ticketId = result.data.TicketId;
@@ -124,6 +123,14 @@ public selectedValue = "";
 
     ionViewDidLoad() {
         //console.log('ionViewDidLoad StoryDetailsPage');
+    }
+    ionViewDidEnter(){
+        console.log("the ngAfterContentInit --- " + jQuery('#description').height());
+        if(jQuery('#description').height()>200){
+            jQuery('#description').css("height","200px");
+            jQuery('.show-morediv').show();
+            jQuery('#show').show();
+        }
     }
 
     public changeOption(event, index,fieldDetails) {
@@ -189,23 +196,15 @@ public selectedValue = "";
     }
 
     public expandDescription(){
-        jQuery('#hide').show();
+        jQuery('#description').css('height', 'auto');
         jQuery('#show').hide();
-        var innerheight=jQuery('#innerdesc').height();
-        jQuery('#description').css("height",innerheight+"px");
-        jQuery('#description').css("overflow","visible");
-        jQuery('#description').show("slow", function() {
-            // console.log( "Animation complete." );
-        });
+        jQuery('#hide').show();
     }
     public collapseDescription(){
         jQuery('#hide').hide();
         jQuery('#show').show();
         jQuery('#description').css("height","200px");
         jQuery('#description').css("overflow","hidden");
-        jQuery('#description').show("slow", function() {
-            // console.log( "Animation complete." );
-        });
     }
  
 }

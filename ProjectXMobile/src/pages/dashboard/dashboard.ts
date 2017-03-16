@@ -55,8 +55,6 @@ export class DashboardPage {
             this.userName = value.username;
             this.paramas.userInfo = value;
 
-             console.log("the get sll list " + JSON.stringify(this.paramas));
-
             this.getAllStoriesList();
         });
 

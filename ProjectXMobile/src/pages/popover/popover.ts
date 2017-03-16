@@ -50,14 +50,15 @@ logoutApp() {
   this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
         data =>{
              this.storage.remove('userCredentials').then( ()=>{
-                this.navCtrl.push(LoginPage);
-                this.viewCtrl.dismiss();
+                   this.viewCtrl.dismiss();
+                   //this.navCtrl.push(LoginPage);
+                   this.navCtrl.setRoot(LoginPage)
                  });   
             },
         error=>{ 
             console.log("the error " + JSON.stringify(error)); 
             },
         ()=> console.log('logout api call complete'));
-       }
+  }
 
 }
