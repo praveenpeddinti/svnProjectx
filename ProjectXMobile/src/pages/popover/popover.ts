@@ -50,7 +50,7 @@ logoutApp() {
   this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
         data =>{
              this.storage.remove('userCredentials').then( ()=>{
-                   this.viewCtrl.dismiss();
+//                this.viewCtrl.dismiss();
                    //this.navCtrl.push(LoginPage);
                    this.navCtrl.setRoot(LoginPage)
                  });   
