@@ -570,6 +570,9 @@ class StoryController extends Controller
             $tinyUserModel = new TinyUserCollection();
             $Artifacts = $Artifacts["Artifacts"];
             foreach ($Artifacts as $key => $Artifact) {
+                if($Artifact["FileName"] != ""){
+                  $Artifacts[$key]["FileName"] = Yii::$app->params['ServerURL'].Yii::$app->params['StoryArtifactPath']."/".$Artifact["FileName"].".".$Artifact["Extension"];
+                }
                 if ($Artifact["UploadedBy"] != "") {
                     $userName = $tinyUserModel->getMiniUserDetails($Artifact["UploadedBy"]);
                     $Artifacts[$key]["UploadedBy"] = $userName["UserName"];
@@ -579,7 +582,7 @@ class StoryController extends Controller
                 if ($Artifact["UploadedOn"] != "") {
                     $datetime = $Artifact["UploadedOn"]->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $readableDate = $datetime->format('m-d-Y H:i:s');
+                    $readableDate = $datetime->format('M-d-Y H:i:s');
                     $Artifacts[$key]["UploadedOn"] = $readableDate;
                 } else {
                     $Artifacts[$key]["UploadedOn"] = "";
