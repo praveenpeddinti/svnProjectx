@@ -369,7 +369,7 @@ class TicketCollection extends ActiveRecord
             $query->from('TicketCollection')
                     ->where(['TicketId' => (int) $ticketId, "ProjectId" => $projectId]);
             $ticketDetails = $query->one();
-            $totalTimeLog = (float) ($ticketDetails["TotalTimeLog"] + $totalWorkHours);
+            $totalTimeLog = $ticketDetails["TotalTimeLog"] + $totalWorkHours;
             if ($totalTimeLog > 0) {
                 $ticketCollection = Yii::$app->mongodb->getCollection('TicketCollection');
                 $updateTotalTimeLog = array('$set' => array("TotalTimeLog" => $totalTimeLog));
