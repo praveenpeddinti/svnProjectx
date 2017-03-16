@@ -36,8 +36,8 @@
           </ion-label>
 
           <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
-          <select-alertless *ngIf="showEditableFieldOnly[i]"  (click)="getFieldValues(field)" item-content [(ngModel)]="changeBucket" (ionChange)="changeOption($event, i)">
-              <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}" >{{item.Name}}</ion-option>
+          <select-alertless id="slect_{{i}}" *ngIf="showEditableFieldOnly[i]"  item-content [(ngModel)]="changeBucket" (ionCancel)="selectCancel(i)" (ionChange)="changeOption($event, i)">
+              <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}">{{item.Name}}</ion-option>
           </select-alertless>
           
         

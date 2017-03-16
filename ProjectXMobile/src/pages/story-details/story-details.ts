@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
-import {NavController, NavParams, MenuController, LoadingController, PopoverController} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {NavController, NavParams, MenuController, LoadingController, PopoverController, ViewController} from 'ionic-angular';
 
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
+import { Select } from 'ionic-angular';
 declare var jQuery: any;
 /*
   Generated class for the StoryDetails page.
@@ -28,6 +29,8 @@ export class StoryDetailsPage {
     public readOnlyDropDownField:boolean = false;
     public clickedDivRef;
 public selectedValue = "";
+//@ViewChild('select-alertless') select: Select;
+ public previousSelectIndex:any;
 
     public titleAfterEdit: string = "";
     public enableEdatable: boolean = false;
@@ -54,7 +57,7 @@ public selectedValue = "";
         public navParams: NavParams,
         public loadingController: LoadingController,
         public popoverCtrl: PopoverController,
-        private storage: Storage) {
+        private storage: Storage,public viewCtrl: ViewController,) {
         //      menu.swipeEnable(false);
         this.minDate = this.formatDate(new Date());
         
@@ -146,21 +149,34 @@ public selectedValue = "";
             document.getElementById("field.title_field.id_"+index).innerHTML = event;
             document.getElementById("item_"+index).classList.remove("item-select");
          }, 300);
-        
-        document.getElementById("field.title_field.id_9").innerHTML = "---";
+        //  setTimeout(() => {
+        //  this.viewCtrl.dismiss();
+        //  }, 200);
+    }
+
+    public selectCancel(index){
+        console.log("selectCancel --- " + index);
+        this.showEditableFieldOnly[index] = false;
+        setTimeout( ()=>{
+            //document.getElementById("item_"+index).classList.remove("item-select");
+         }, 300);
     }
 
     public getFieldValues(fieldDetails, index) { // 1 --> non editable 
-        console.log("the field clicked - " + JSON.stringify(fieldDetails));
 
+        this.selectCancel(this.previousSelectIndex);
+                
         if(fieldDetails.readOnly == 0){
             this.readOnlyDropDownField = true;
             this.showEditableFieldOnly[index] = true;
             this.clickedDivRef = fieldDetails.id;
+            this.previousSelectIndex = index;
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
             (result) => {
+                
                 //console.log("the detials field result ---- " + JSON.stringify(result));
                 this.displayFieldvalue = result.getFieldDetails;
+                
                 //this.displayFieldvalue = [{"Id":"1","Name":"Backlog"},{"Id":"2","Name":"Sprint1"},{"Id":"3","Name":"Sprint2"},{"Id":"4","Name":"Sprint3"}];
                 console.log("the before loop " + JSON.stringify(this.displayFieldvalue));
                 for(var i = 0; i<result.getFieldDetails.length; i++){
@@ -170,6 +186,7 @@ public selectedValue = "";
             (error) => {
                 console.log("the fields error --- " + error);
             });
+           
         }
         
     }
