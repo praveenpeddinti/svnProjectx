@@ -19,6 +19,7 @@ use common\models\bean\ResponseBean;
 use common\components\ServiceFactory;
 use common\models\mongo\TicketCollection;
 use common\models\User;
+use common\models\mongo\TinyUserCollection;
 
 /**
  * Story Controller
@@ -415,7 +416,7 @@ class StoryController extends Controller
         }
 
     }
-
+    
 
    public function actionSubmitComment(){
        $comment_post_data=json_decode(file_get_contents("php://input"));
@@ -446,7 +447,7 @@ class StoryController extends Controller
  Yii::log("StoryController:actionGetTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
+    
          /*
      * @author Padmaja
      * @description This method is used to save child task details.
@@ -556,7 +557,46 @@ class StoryController extends Controller
             Yii::log("StoryController:actionGetWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+            /**
+     * @author Jagadish
+     * @description This method is used to get all attachments for stories/tasks.
+     * @return Attachmets
+     */
+    public function actionGetMyTicketAttachments() {
+        try {
+            $post_data = json_decode(file_get_contents("php://input"));
+            $Artifacts = ServiceFactory::getStoryServiceInstance()->getTicketAttachments($post_data->ticketId, $post_data->projectId);
+            $tinyUserModel = new TinyUserCollection();
+            $Artifacts = $Artifacts["Artifacts"];
+            foreach ($Artifacts as $key => $Artifact) {
+                if ($Artifact["UploadedBy"] != "") {
+                    $userName = $tinyUserModel->getMiniUserDetails($Artifact["UploadedBy"]);
+                    $Artifacts[$key]["UploadedBy"] = $userName["UserName"];
+                } else {
+                    $Artifacts[$key]["UploadedBy"] = "";
+                }
+                if ($Artifact["UploadedOn"] != "") {
+                    $datetime = $Artifact["UploadedOn"]->toDateTime();
+                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                    $readableDate = $datetime->format('m-d-Y H:i:s');
+                    $Artifacts[$key]["UploadedOn"] = $readableDate;
+                } else {
+                    $Artifacts[$key]["UploadedOn"] = "";
+                }
+            }
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $Artifacts;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetMyTicketAttachments::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
+
 
 ?>

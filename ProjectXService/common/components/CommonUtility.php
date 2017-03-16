@@ -14,6 +14,7 @@ use common\models\mysql\FieldTypes;
 use common\models\mysql\MapListCustomStoryFields;
 use common\models\mysql\PlanLevel;
 use common\models\mongo\TicketComments;
+use common\models\mongo\TicketArtifacts;
 use Yii;
 /* 
  *
@@ -528,6 +529,8 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
       try{
           error_log("descriopt---------------".$description);
            $description = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $description);
+           
+           $uploadedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
               $matches=[];
               $mention_matches=[];//added by Ryan
               //preg_match_all('/(@\w+.\w+)/', $description, $mention_matches);//added by ryan
@@ -551,6 +554,7 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
               
               preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
               $filematches = $matches[0];
+              $artifactsList=array();
               for($i = 0; $i< count($filematches); $i++){
                    $value = $filematches[$i];
                    $firstArray =  explode("/", $value);
@@ -568,27 +572,45 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
                 if(file_exists("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName")){
                     rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", $storyArtifactPath."/".$tempFileName."-".$originalFileName); 
                 }
-               
+                $fileName=  explode(".", $originalFileName);
+                
                $extension = CommonUtility::getExtension($originalFileName);
+               
+                $artifactData=array(
+                    "Slug" => new \MongoDB\BSON\ObjectID(),
+                    "UploadedOn" => $uploadedOn,
+                    "UploadedBy" => '',
+                    "Status" => (int)1,
+                    "ArtifactType" => "",
+                    "isThumbnailExist" => (int)0,
+                    "ThumbnailPath" => Yii::$app->params['StoryArtifactPath']."/thumbnails",
+                    "FileName" => $tempFileName."-".$fileName[0],
+                    "OriginalFileName" => $originalFileName,
+                    "Extension" =>$extension
+                );
                  $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
 $videoExtensions = array("mp4", "mov", "ogg", "avi"); 
               error_log("+++++++++++++++++".$extension);
                if(in_array($extension, $imageExtensions)){
                 $replaceString = "<img src='".$newPath."'/>";
-             
+             $artifactData["ArtifactType"] = "image";
                 }else if(in_array($extension, $videoExtensions)){
 $filename = $tempFileName."-".$originalFileName;
 error_log("++++++++ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath/thumb1.png");
 exec("ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath/thumb1.png");
                 $replaceString = "<video controls width='50%' height='50%'><source src='".$newPath."' type='video/mp4'/></video>";
-             
+             $artifactData["ArtifactType"] = "video";
+             $artifactData["isThumbnailExist"] = (int)1;
                 }else{
-                   $replaceString = "<a href='".$newPath."' target='_blank'/>".$originalFileName."</a>";  
+                   $replaceString = "<a href='".$newPath."' target='_blank'/>".$originalFileName."</a>"; 
+                   $artifactData["ArtifactType"] = "other";
                 }
                $description = str_replace($value, $replaceString, $description);
+               array_push($artifactsList, $artifactData);
+//               TicketArtifacts::saveArtifacts($ticketNumber, $projectId);
               } 
-              
-              return $description;
+              $returnData = array("description"=>$description,"ArtifactsList"=>$artifactsList);
+              return $returnData;
                       
                
       } catch (Exception $ex) {

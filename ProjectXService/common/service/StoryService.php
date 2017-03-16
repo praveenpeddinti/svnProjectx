@@ -14,6 +14,7 @@ use common\models\mongo\ProjectTicketSequence;
 use common\models\mongo\TicketTimeLogCollection;
 use common\models\mysql\Collaborators;
 use common\models\mongo\TicketComments;
+use common\models\mongo\TicketArtifacts;
 use Yii;
 
 /*
@@ -160,7 +161,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
  */
        public function saveTicketDetails($ticket_data,$parentTicNumber="") {
         try {
-
+             
              $userdata =  $ticket_data->userInfo;
              $projectId =  $ticket_data->projectId;
              $userId = $userdata->Id;
@@ -172,7 +173,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
               $title =  trim($ticket_data->title);
               $description =  trim($ticket_data->description);
               $crudeDescription = $description;
-              $description = CommonUtility::refineDescription($description);
+              $refinedData = CommonUtility::refineDescription($description);
+              $description = $refinedData["description"];
             
               
              
@@ -274,7 +276,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
           if($returnValue != "failure"){
               $this->followTicket($userId,$ticketNumber,$projectId,$userId,"reportedby",true);
               TicketComments::createCommentsRecord($ticketNumber,$projectId);
-              return $ticketNumber;
+              foreach ($refinedData["ArtifactsList"] as &$artifact) {
+                    $artifact["UploadedBy"] = (int) $userId;
+                }
+                TicketArtifacts::createArtifactsRecord($ticketNumber, $projectId, $refinedData["ArtifactsList"]);
+                return $ticketNumber;
           }
          
         } catch (Exception $ex) {
@@ -397,7 +403,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $this->saveActivity($ticket_data->TicketId,$projectId,"Title", $ticketDetails["Title"],$userId);
             $description = $ticket_data->description;
             $ticketDetails["CrudeDescription"] = $description;
-            $ticketDetails["Description"] = CommonUtility::refineDescription($description);
+            $refiendData = CommonUtility::refineDescription($description);
+            $ticketDetails["Description"] = $refiendData["description"];
             $this->saveActivity($ticket_data->TicketId,$projectId,"Description", $description,$userId);
             foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
@@ -489,7 +496,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $selectedValue=$ticket_data->value;
                     $activityNewValue = $ticket_data->value;
                 }else if($ticket_data->id=='Description'){
-                    $actualdescription = CommonUtility::refineDescription($ticket_data->value);
+                    $refinedData = CommonUtility::refineDescription($ticket_data->value);
+                    $actualdescription = $refinedData["description"];
                     $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$ticket_data->value ));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$actualdescription;
@@ -568,7 +576,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     public function saveComment($commentData){
         try{
         
-        $processedDesc = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
+        $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
+        $processedDesc = $refinedData["description"];
+        $artifacts = $refinedData["ArtifactsList"];
         $commentDesc = $commentData->Comment->CrudeCDescription;
 //                 $validDate = CommonUtility::validateDate($commentData->Comment->CommentedOn);
 //                 error_log("--------------validadte----------".$validDate);
@@ -596,6 +606,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
          $db =  TicketComments::getCollection();
          $v = $db->update( array("ProjectId"=> (int)$commentData->projectId ,"TicketId"=> (int)$commentData->TicketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$commentData->userInfo->Id,"Activity"=>"Comment"));  
         TicketComments::saveComment($commentData->TicketId, $commentData->projectId,$commentDataArray);
+        if(!empty($artifacts)){
+            TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId,$artifacts,$commentData->userInfo->Id);   
+        }
         $tinyUserModel = new TinyUserCollection();
         $userProfile = $tinyUserModel->getMiniUserDetails($commentDataArray["ActivityBy"]);
                 $commentDataArray["ActivityBy"] = $userProfile;
@@ -970,6 +983,20 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+     /**
+     * @author Jagadish 
+     * @return type array
+     */
+    public function getTicketAttachments($ticketId,$projectId){
+        try {
+            $artifacts = TicketArtifacts::getTicketArtifacts($ticketId, $projectId);
+            return $artifacts;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getTicketAttachments::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
 
 }
 
