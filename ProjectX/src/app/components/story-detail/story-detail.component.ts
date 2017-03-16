@@ -56,6 +56,7 @@ public blurTimeout=[];
   public hasFileDroped:boolean = false;
   public fileUploadStatus:boolean = false;
   public hide:boolean=false;//added by Ryan
+  public attachmentsData=[];
 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
@@ -128,6 +129,20 @@ public blurTimeout=[];
                 this.totalWorkLog =data.data.TotalTimeLog;
             });
       this.minDate=new Date();
+
+          //---------------------------- Attachments code---------------//
+     /**
+     * @author:Jagadish
+     * @description: This is used to display Attachments
+     */
+       this._ajaxService.AjaxSubscribe("story/get-my-ticket-attachments",ticketIdObj,(data)=>
+        { 
+        if(data.statusCode == 200){
+                         this.attachmentsData = data.data;                            
+        } else {
+            this.attachmentsData =[];
+        }          
+        });
     }
 
     /**
@@ -786,10 +801,7 @@ var thisObj = this;
       jQuery("#expand").show();
       jQuery("#collapse").hide();
     } 
-
-    //---------------------------- Attachments code---------------//
-    public attachmentsData=['Attachment1','Attachment2','Attachment3'];
-
+       
 
     taskDataBuilder(taskArray){
      var subTasksArray = [];
