@@ -29,6 +29,8 @@ export class DashboardPage {
     public arrayObject: Array<{ id: string, storyOrTask: string, subTasks: number, storyPointsHeading: string, title: string, assignTo: string, userThumbNail: string, priority: string, workflow: string, bucket: string, duedate: string }>;
     public moreDataLoaded: boolean = true;
 
+     public  loader = this.loadingController.create({ content: "Loading..." });
+
     userName: any = '';
     /*
     *
@@ -89,12 +91,12 @@ export class DashboardPage {
         if (this.paramas.offset == 0) {
             this.paramas.offset = 0;
         }
-        let loader = this.loadingController.create({ content: "Loading..." });
+       
         this.globalService.getStoriesList(this.urlConstants.getAllTicketDetails, this.paramas).subscribe(
             data => {
                 if (data.statusCode == '200') {
                     if (this.paramas.offset == 0) {
-                        loader.present();
+                        this.loader.present();
                     }
                     this.items = data.data;
                     if (this.items.length == 0) {
@@ -128,14 +130,14 @@ export class DashboardPage {
                     }
 
                     if (this.paramas.offset == 0) {
-                        loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
+                        this.loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                     }
                     this.paramas.offset = (this.paramas.offset) + 1;
 
                 }
             },
             error => {
-                loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
+                this.loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                 console.log("the error " + JSON.stringify(error));
             },
             () => console.log('listing stories api call complete')
