@@ -40,6 +40,7 @@ public blurTimeout=[];
   private taskFieldsEditable=[];
   public totalWorkLog=[];
   public individualLog=[];
+  public isTimeValidErrorMessage;
 
 
   //Configuration varibale for CKEDITOR in detail page.
@@ -828,26 +829,44 @@ var thisObj = this;
         })
     }
   
-
+     /**
+     * @author:suryaprakash
+     * @description : This is used to capture workhours
+     */
         public workLogCapture(event)
     {
-      if(event!=0){
-        var TimeLog={
-          TicketId:this.ticketId,
-          workHours:event,
-        };
-        this._ajaxService.AjaxSubscribe("story/insert-time-log",TimeLog,(data)=>
-        { 
-          if(data.statusCode== 200){
-              this.individualLog =data.data.individualLog;
-                this.totalWorkLog =data.data.TotalTimeLog;
-                   jQuery("#workedhours").val("");
-                      }
+       var pattern=/^[0-9]+(\.[0-9]{1,2})?$/
+       this.isTimeValidErrorMessage = pattern.test(event); 
+       if(this.isTimeValidErrorMessage==false)
+       {
+          this.errorTimeLog();
+       }else{
+       if(event!=0){
+            var TimeLog={
+                TicketId:this.ticketId,
+                workHours:event,
+              };
+            this._ajaxService.AjaxSubscribe("story/insert-time-log",TimeLog,(data)=>
+              { 
+              if(data.statusCode== 200){
+                    this.individualLog =data.data.individualLog;
+                    this.totalWorkLog =data.data.TotalTimeLog;
+                     jQuery("#workedhours").val("");
+              }
         });
 
-       }else{
-     // alert("+++++++++++==");
+           }else{
+            this.errorTimeLog();
+           }
+       }
+     
     }
-}
+
+        public  errorTimeLog(){
+           jQuery("#timelog").html("Invalid Entry");
+          jQuery("#timelog").show();
+          jQuery("#timelog").fadeOut(4000);
+          jQuery("#workedhours").val("");
+        }
 
 }

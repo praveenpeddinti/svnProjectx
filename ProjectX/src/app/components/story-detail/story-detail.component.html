@@ -103,11 +103,13 @@
               <div class="workedhoursbg">
                   <div class="pull-left">Worked hours</div>
                   <div class="pull-right">
-                      <input type="text" max-length="5" value="" id="workedhours" class="workedhourstxtbox" placeholder="00.00" name="worklog" (keyup.enter)="workLogCapture($event.target.value)" />
+                      <input type="text" maxlength="4" value="" id="workedhours" class="workedhourstxtbox"    placeholder="00.00" step="0.01" name="worklog" (keyup.enter)="workLogCapture($event.target.value)" />
                   </div>
                   <div class="clearfix"></div>
               </div>
+              <div id="timelog" class="alert alert-danger" style="display:none;">
 
+              </div>
           </div>
           <!--Left Pannel End-->
 
