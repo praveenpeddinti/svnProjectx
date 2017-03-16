@@ -1,11 +1,10 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, NavParams, MenuController, LoadingController, PopoverController, ViewController} from 'ionic-angular';
 
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
-import { Select } from 'ionic-angular';
 declare var jQuery: any;
 /*
   Generated class for the StoryDetails page.
