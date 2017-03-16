@@ -49,7 +49,7 @@ getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,getAllStoryDeta
       'sortvalue':sortvalue,
       'sortorder':sortorder
     }
-    this._ajaxService.AjaxSubscribe("story/get-all-ticket-details",post_data,(data)=>
+    this._ajaxService.AjaxSubscribe("story/get-all-story-details",post_data,(data)=>
     { 
          getAllStoryDetailsCallback(data);
     });
