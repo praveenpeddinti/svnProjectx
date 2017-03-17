@@ -280,7 +280,7 @@
     <!--Comment Display area-->
     
     <ng-container *ngFor="let comment of commentsList;let cmtIdx = index;">
-        <div id="{{cmtIdx}}">
+        <div id="{{cmtIdx}}" data-slug="comment.Slug.$oid">
             
             
                     <div class="user">
@@ -300,11 +300,8 @@
                  </div>
             
             
-            
-            
-        
-
             <div  *ngIf="(comment.PropertyChanges.length == 0)" id="commentContent" class="comment{{(comment.Status ==2)?'_reply':''}}" >
+                <div (dragover)="fileOverBase($event,'edit_comments','dropble_comment_'+cmtIdx)" (dragleave)="fileDragLeave($event,'edit_comments','dropble_comment_'+cmtIdx)" fileDrop>
                 <div class="commentedtext" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.ParentIndex)" >
                     <div class="user">
                         <a href="javascript:void(0)">
@@ -316,18 +313,48 @@
                     <div [innerHTML]="commentsList[comment.ParentIndex].CDescription">
                     </div>
                 </div>
-                <div class="commentp" [innerHTML]="comment.CDescription">
+                <div style="position:relative">
+                <div id="dropble_comment_{{cmtIdx}}" 
+                          (drop)="fileUploadEvent($event, 'fileDrop','edit_comments','Activity_content_'+cmtIdx)" >
+                     </div>
+                     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     </div>
+                     <div id="Activity_content_{{cmtIdx}}">
+                <div  class="commentp" [innerHTML]="comment.CDescription">
                 
                 </div>
                 <div class="clearfix pull-right">
+
                 <div class="commedit reply_icn" (click)="replyComment(cmtIdx)"></div> 
-                <div class="commedit edit_icn"></div> 
-                <div class="commedit delete_icn"></div>
+                <div *ngIf="comment.ActivityBy.UserName == getAllData.username" class="commedit edit_icn" (click)="editComment(cmtIdx)"></div> 
+                <div *ngIf="(comment.ActivityBy.UserName == getAllData.username && comment.repliesCount==0)" class="commedit delete_icn" (click)="deleteComment(cmtIdx,comment.Slug.$oid)"></div>
+
                 </div>
+                <div id="Actions_{{cmtIdx}}" [hidden]="true" >
+                    <div class="uploadcomponent margintop15">
+                      <div class="uploadbottom">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        File upload
+                      </div>
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments','Activity_content_'+cmtIdx)"  multiple  />
+                </div>
+                <div class="buttonarea alignright">
+                  <button class="normal bluebutton bluebuttonmedium" (click)="submitEditedComment(cmtIdx,comment.Slug.$oid)">
+                    SUBMIT
+                  </button>
+                  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelEdit(cmtIdx)">
+                    CANCEL
+                  </button>
+                </div>
+                </div>
+                
             </div>
-          
+          </div>
         </div>
+
+        
     </ng-container>
+
     <!--Comment Displa area end-->
 </div>
         <div>
@@ -353,10 +380,10 @@
                 </div>
                  </div>
                 
-                
+                <div (dragover)="fileOverBase($event,'comments','')" (dragleave)="fileDragLeave($event,'comments','')" fileDrop>
                 <div style="position: relative">
                      <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
-                          (drop)="fileUploadEvent($event, 'fileDrop','comments')" >
+                          (drop)="fileUploadEvent($event, 'fileDrop','comments','')" >
                      </div>
                      <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/>
                      </div>
@@ -370,7 +397,7 @@
                         <i class="fa fa-paperclip" aria-hidden="true"></i>
                         File upload
                       </div>
-                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments')"  multiple  />
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments','')"  multiple  />
                 </div>
             </div>
             <div class="buttonarea alignright">
@@ -379,7 +406,7 @@
                   </button>
                   
             </div>
-          
+          </div>
 
         </div>
       </div>

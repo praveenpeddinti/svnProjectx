@@ -19,6 +19,8 @@ export class StoryDetailComponent implements OnInit {
 private text:string;
 private search_results:string[];
 
+private getAllData=  JSON.parse(localStorage.getItem('user'));
+
 private editableSelect= "";
 public blurTimeout=[];
 @ViewChild('detailEditor')  detail_ckeditor; // reference for editor in view.
@@ -54,6 +56,7 @@ public blurTimeout=[];
 
   public filesToUpload: Array<File>;
   public hasBaseDropZoneOver:boolean = false;
+  public hasBaseDropZoneOverComment:boolean = false;
   public hasFileDroped:boolean = false;
   public fileUploadStatus:boolean = false;
   public hide:boolean=false;//added by Ryan
@@ -66,6 +69,7 @@ public blurTimeout=[];
     }
 
  private calenderClickedOutside = false;
+ private comment_status:boolean=true;
 
   ngOnInit() {
      var thisObj = this;
@@ -87,6 +91,7 @@ public blurTimeout=[];
       });
       jQuery("#collapse").show();//added by Ryan
       jQuery("#expand").hide();//added by Ryan
+      jQuery('[id^=button_comment]').hide();
     });
 
 
@@ -98,7 +103,7 @@ public blurTimeout=[];
         });
 
         
-
+// alert("User Data---------->"+JSON.stringify(this.getAllData));
    console.log("+++++++++++++iniit+++++++++");
 
       var ticketIdObj={'ticketId': this.ticketId};
@@ -119,7 +124,7 @@ public blurTimeout=[];
             // this.commentsList = [];
             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
-
+              console.log(data.data.Activities);
               this.commentsList = data.data.Activities;
             });
 
@@ -269,7 +274,7 @@ jQuery("#commentEditorArea").removeClass("replybox");
   console.log("comment is submitted");
 
 var commentedOn = new Date()
-var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear()
+var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear();
   var reqData = {
     TicketId:this.ticketId,
     Comment:{
@@ -286,9 +291,14 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
   }
   this._ajaxService.AjaxSubscribe("story/submit-comment",reqData,(result)=>
         { 
-          this.replying = false;
+          
           // alert("++++++++++++++++++++"+JSON.stringify(result));
           this.commentsList.push(result.data);
+          if(this.replying == true){
+            this.commentsList[this.replyToComment].repliesCount++;
+          }
+          
+          this.replying = false;
           
         });
   
@@ -320,8 +330,8 @@ jQuery('html, body').animate({
 
 
 navigateToParentComment(parentId){
-alert(parentId+"---"+jQuery("#"+parentId).length);
-alert(jQuery("#"+parentId).offset().top);
+// alert(parentId+"---"+jQuery("#"+parentId).length);
+// alert(jQuery("#"+parentId).offset().top);
   jQuery('html, body').animate({
         scrollTop: jQuery("#"+parentId).offset().top
     }, 1000);
@@ -646,34 +656,58 @@ private dateVal = new Date();
 }
 
 //----------------------File Upload codes---------------------------------
-public fileOverBase(fileInput:any):void {
+public fileOverBase(fileInput:any,where:string,comment:string):void {
+  if(where=="edit_comments"){
+    jQuery("#"+comment).addClass("dragdrop","true");
+  }else{
     this.hasBaseDropZoneOver = true;
+  }
+    
     if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){
     clearTimeout(this.dragTimeout);
     }
 
 }
 
-public fileDragLeave(fileInput: any){
+public fileDragLeave(fileInput: any,where:string,comment:string){
 
 var thisObj = this;
     if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){
     clearTimeout(this.dragTimeout);
     }
      this.dragTimeout = setTimeout(function(){
-     thisObj.hasBaseDropZoneOver = false;
+       if(where=="edit_comments"){
+        jQuery("#"+comment).removeClass("dragdrop");
+      }else{
+        thisObj.hasBaseDropZoneOver = false;
+      }
+     
     },500);
     
 }
 
-  public fileUploadEvent(fileInput: any, comeFrom: string,where:string):void {
+
+
+  public fileUploadEvent(fileInput: any, comeFrom: string,where:string,comment:string):void {
+    var editor_contents;
+    var appended_content;
+    if(where=="edit_comments"){
+      editor_contents=jQuery("#cke_"+comment).find("iframe").contents().find('body').html();
+      // alert(editor_contents);
+      fileInput.preventDefault();
+    }
    if(comeFrom == 'fileChange'){
         this.filesToUpload = <Array<File>> fileInput.target.files;
    } else if(comeFrom == 'fileDrop'){
+    //  alert(JSON.stringify(Object.keys(fileInput))+"**********************");
         this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
    } else{
         this.filesToUpload = <Array<File>> fileInput.target.files;
    }
+
+        if(where=="edit_comments"){
+             jQuery("#"+fileInput.target.id).removeClass("dragdrop","true");
+          }
 
         this.hasBaseDropZoneOver = false;
         this.fileUploadStatus = true;
@@ -683,12 +717,18 @@ var thisObj = this;
                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                     if(where =="comments"){
                       this.commentDesc = this.commentDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    }else if(where=="edit_comments"){
+                      appended_content=editor_contents+"[[image:" +result[i].path + "|" + result[i].originalname + "]]"; 
+                    jQuery("#cke_"+comment).find("iframe").contents().find('body').html(appended_content);
                     }else{
                       this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
                     }
                 } else{
                     if(where =="comments"){
                       this.commentDesc = this.commentDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    }else if(where=="edit_comments"){
+                      appended_content =editor_contents+"[[file:" +result[i].path + "|" + result[i].originalname + "]]";
+                      jQuery("#cke_"+comment).find("iframe").contents().find('body').html(appended_content);
                     }else{
                       this.ticketEditableDesc = this.ticketEditableDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
                     }
@@ -700,6 +740,10 @@ var thisObj = this;
             this.fileUploadStatus = false;
         });
 }
+
+
+
+
 //------------------------------------File Upload logics end-----------------------------------------------------
 
 // Added by Padmaja for Inline Edit
@@ -802,6 +846,104 @@ var thisObj = this;
         jQuery("#expand").show();
         jQuery("#collapse").hide();
     } 
+
+
+    /**
+     * @author:Ryan
+     * @updated:Madan
+     * @description: This is used for replacing the individual comment to CKEDITOR ON EDIT
+     * @param comment 
+     */
+    private commentEditorsInstance=[];
+   public editComment(comment)
+   {
+    //  alert(comment);
+    var comment_div=document.getElementById("Activity_content_"+comment);
+    // alert(comment_div);
+    // alert(comment_div.innerHTML);
+    var editorInstance = CKEDITOR.replace(comment_div,this.toolbarForDetail);
+    editorInstance.setData(this.commentsList[comment].CrudeCDescription);
+    this.commentEditorsInstance[comment] = editorInstance;
+    jQuery("#Actions_"+comment).show();//show submit and cancel button on editor replace at the bottom
+   }
+
+   submitEditedComment(commentIndex,slug){
+     var editedContent = this.commentEditorsInstance[commentIndex].getData();
+     var commentedOn = new Date()
+     var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear();
+
+     var reqData = {
+    TicketId:this.ticketId,
+    Comment:{
+      CrudeCDescription:editedContent,
+      CommentedOn:formatedDate,
+      ParentIndex:"",
+      Slug:slug
+    },
+  };
+  
+  this._ajaxService.AjaxSubscribe("story/submit-comment",reqData,(result)=>
+        { 
+          // this.replying = false;
+          // var obj = {"statusCode":200,
+          // "message":"success",
+          // "data":{"CrudeCDescription":"<p>test comment asjkdhaskjdhals edited by madan</p>\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n",
+          // "CDescription":"<p>test comment asjkdhaskjdhals edited by madan</p>\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n"},"totalCount":0}
+          // alert("++++++++++++++++++++"+JSON.stringify(result));
+          this.commentsList[commentIndex].CrudeCDescription = result.data.CrudeCDescription;
+          this.commentsList[commentIndex].CDescription = result.data.CDescription;
+          this.commentEditorsInstance[commentIndex].destroy(true);
+          jQuery("#Actions_"+commentIndex).hide();
+          // this.commentsList.push(result.data);
+          
+        });
+    //  alert(editedContent);
+
+   }
+
+   deleteComment(commentIndex,slug){
+     var reqData;
+     var parent;
+     if(this.commentsList[commentIndex].Status == 2){
+            parent = parseInt(this.commentsList[commentIndex].ParentIndex);
+             reqData = {
+                  TicketId:this.ticketId,
+                  Comment:{
+                    Slug:slug,
+                    ParentIndex:parent
+                  },
+                };
+          }else{
+              reqData = {
+                TicketId:this.ticketId,
+                Comment:{
+                  Slug:slug
+                },
+              };
+          }
+     this._ajaxService.AjaxSubscribe("story/delete-comment",reqData,(result)=>
+        { 
+          
+          // alert("++++++++++++++++++++"+JSON.stringify(result));
+          if(this.commentsList[commentIndex].Status == 2){
+            // parent = parseInt(this.commentsList[commentIndex].ParentIndex);
+            this.commentsList[parent].repliesCount--;
+          }
+          
+          this.commentsList.splice(commentIndex,1);
+          // this.commentsList.push(result.data);
+          
+        });
+
+   }
+
+
+   cancelEdit(commentIndex){
+    //  var comment_div=document.getElementById("Activity_content_"+commentIndex);
+    //  var name="cke_"+comment_div;
+    this.commentEditorsInstance[commentIndex].destroy(true);
+    jQuery("#Actions_"+commentIndex).hide();
+   }
 
 
     taskDataBuilder(taskArray){
