@@ -96,6 +96,10 @@ class TicketComments extends ActiveRecord
             $collection = Yii::$app->mongodb->getCollection('TicketComments');
             $newdata = array('$addToSet' => array('Activities' => $newCommentArray));
             $res = $collection->findAndModify(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata,array('new' => 1,"upsert"=>1)); 
+            if($newCommentArray["Status"] == 2){
+                $newdata = array('$inc' => array('Activities.'.$newCommentArray["ParentIndex"].'.repliesCount' =>1));
+            $res = $collection->update(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata,array('new' => 1,"upsert"=>1)); 
+            }
 //            error_log("+++++sdad+++++++".$res);
 //            $tktCommentsColl = new TicketComments();
 //            $tktCommentsColl->TicketId = $ticketNumber;
@@ -126,6 +130,24 @@ class TicketComments extends ActiveRecord
         } catch (Exception $ex) {
 Yii::log("TicketComments:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
+    }
+    
+    public static function removeComment($commentData){
+        $collection = Yii::$app->mongodb->getCollection('TicketComments');
+//},,
+        error_log("slug----".$commentData->Comment->Slug);
+//        if(isset($commentData->Comment->ParentIndex)){
+//          $newdata = array('$pull' =>array("Activities"=> array("Slug"=>new \MongoDB\BSON\ObjectID($commentData->Comment->Slug))),'$inc'=>array('Activities.'.$commentData->Comment->ParentIndex.'repliesCount'=>-1));
+//        }else{
+          $newdata = array('$pull' =>array("Activities"=> array("Slug"=>new \MongoDB\BSON\ObjectID($commentData->Comment->Slug))));
+//        }
+          
+        $res = $collection->update(array("TicketId" => (int)$commentData->TicketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
+        if(isset($commentData->Comment->ParentIndex)){
+          $newdata = array('$inc'=>array('Activities.'.$commentData->Comment->ParentIndex.'.repliesCount'=>-1));
+          $res = $collection->update(array("TicketId" => (int)$commentData->TicketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
+        }
+          error_log("**************".$res);
     }
 }
 ?>
