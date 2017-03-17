@@ -136,9 +136,6 @@ public selectedValue = "";
     }
 
     public changeOption(event, index,fieldDetails) {
-        // @ViewChild("{{field.title}}_{{field.id}}");
-        console.log("the options --- " + this.options + " -------------");
-        console.log("the change " + JSON.stringify(event));
         this.readOnlyDropDownField = false;
         this.showEditableFieldOnly[index] = false;
         this.selectedValue = event;
@@ -148,9 +145,6 @@ public selectedValue = "";
             document.getElementById("field.title_field.id_"+index).innerHTML = event;
             document.getElementById("item_"+index).classList.remove("item-select");
          }, 300);
-        //  setTimeout(() => {
-        //  this.viewCtrl.dismiss();
-        //  }, 200);
     }
 
     public selectCancel(index){

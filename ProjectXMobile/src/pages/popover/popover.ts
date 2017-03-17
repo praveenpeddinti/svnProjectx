@@ -4,6 +4,7 @@ import { Storage } from "@ionic/storage";
 import { LoginPage } from '../login/login';
 import { Globalservice } from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
+import {App} from 'ionic-angular';
 /*
   Generated class for the Popover page.
 
@@ -22,7 +23,8 @@ export class PopoverPage {
 // userInfo = {"Id":"","username":"","token":"","projectId":1}
 logoutParams = {"userInfo":{"Id":"","username":"","token":""},"projectId":1}
 
-  constructor(private globalService: Globalservice,
+  constructor(protected app: App,
+            private globalService: Globalservice,
             private constants: Constants,
             public navCtrl: NavController,
             public alertController: AlertController,
@@ -38,7 +40,7 @@ logoutParams = {"userInfo":{"Id":"","username":"","token":""},"projectId":1}
         });
      
             }
-  close() {
+ public close() {
     this.viewCtrl.dismiss();
   }
   ionViewDidLoad() {
@@ -47,12 +49,13 @@ logoutParams = {"userInfo":{"Id":"","username":"","token":""},"projectId":1}
       console.log("User name is " + this.userName);
   }
 logoutApp() {
+  this.close();
   this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
         data =>{
              this.storage.remove('userCredentials').then( ()=>{
-//                this.viewCtrl.dismiss();
-                   //this.navCtrl.push(LoginPage);
-                   this.navCtrl.setRoot(LoginPage)
+                  //  this.viewCtrl.dismiss();
+                  //  this.navCtrl.push(LoginPage);
+                   this.app.getRootNav().setRoot(LoginPage);
                  });   
             },
         error=>{ 
