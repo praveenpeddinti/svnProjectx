@@ -84,4 +84,100 @@ background: -webkit-linear-gradient(top, #23576a 0%,#173b48 100%); /* Chrome10-2
 background: linear-gradient(to bottom, #23576a 0%,#173b48 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#23576a', endColorstr='#173b48',GradientType=0 ); /* IE6-9 */}
 .back-button-icon-md, .back-button-icon-ios, .back-button-icon-wp{font-size:35px}
+
+.dod{width: 100%;}
+.dod ion-label{ width: 100%!important; float:left!important;}
+.dod ion-input{width: 100%!important;}
+
+
+.icnlist .input-wrapper {
+    /* display: -webkit-flex; */
+    display: -ms-flexbox;
+    /* display: flex; */
+    /* overflow: hidden; */
+    /* -webkit-flex: 1; */
+   /* -ms-flex: 1; */
+   /* flex: 1; */
+    -webkit-flex-direction: inherit;
+    -ms-flex-direction: inherit;
+    flex-direction: inherit;
+    -webkit-align-items: inherit;
+    -ms-flex-align: inherit;
+    align-items: inherit;
+    -webkit-align-self: stretch;
+    -ms-flex-item-align: stretch;
+    align-self: stretch;
+    text-overflow: ellipsis;
+}
+
+.icnlist .text-input-md, .icnlist .text-input-ios, .icnlist .text-input-wp {
+    margin: 13px 8px 13px 8px;
+    padding: 0;
+    width:100%!important;
+}
+
+.icnlist text-input {
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    display: block!important;
+    /* -webkit-flex: 1; */
+    /*-ms-flex: 1;
+    /* flex: 1; */
+    width: 100%!important;
+    /* width: calc(100% - 10px); */
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+
+.input-wrapper {
+    display: block!important;
+    display: -ms-flexbox;
+    /* display: flex; */
+    /* overflow: hidden; */
+    /* -webkit-flex: 1;
+    -ms-flex: 1; */
+    /* flex: 1; */
+    /* -webkit-flex-direction: inherit; */
+    -ms-flex-direction: inherit;
+    flex-direction: inherit;
+    -webkit-align-items: inherit;
+    -ms-flex-align: inherit;
+    align-items: inherit;
+    -webkit-align-self: stretch;
+    -ms-flex-item-align: stretch;
+    align-self: stretch;
+    /* text-overflow: ellipsis; */
+}
+
+.dodtxt{ margin: 2px 0!important;
+    font-size: 1.4rem!important;
+    font-weight: normal;
+    line-height: normal;}
+    color:#000!important;
+}
+
+.input-wrapper .estpoint .label{font-size: 1.4rem!important;}
+
+.input-wrapper .label-md, .input-wrapper .label-ios, .input-wrapper .label-wp {
+    color: #000;    
+}
+
+.fntsize{font-size: 1.4rem!important;margin: 13px 13px 1px 0px!important;}
+.bc{color: #000!important;}
+
+/*.item-md h3{ font-style:italic!important;}*/
+
+.input-wrapper .bc {color: #000!important;}
+
+.text-input-md, .text-input-ios, .text-input-wp { margin: 3px 13px 13px 0px!important; color: #000!important;}
+
+/*.page-story-details .icnlist .text-input-md { margin-right:0px!important;}*/
+
+.input-wrapper .no_mar{ margin: 0px!important;font-size: 1.4rem!important; margin-bottom: 5px!important;}
+.input-wrapper .datetime-md, .input-wrapper .datetime-ios, .input-wrapper .datetime-wp {
+    padding: 0px 8px 13px 0px!important;
 }

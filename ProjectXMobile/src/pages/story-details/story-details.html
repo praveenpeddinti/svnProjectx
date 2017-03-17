@@ -23,7 +23,7 @@
         <ion-icon name="md-menu"></ion-icon>
         </button>
     </ion-buttons>
-    <ion-list>
+    <ion-list class="icnlist">
     <ion-item *ngFor="let field of arrayList; let i=index;" id="item_{{i}}">
           <div *ngIf="!showEditableFieldOnly[i]" >
             <h3>{{field.title}}</h3>
@@ -31,16 +31,22 @@
           </div>
         
         
-        <ion-label *ngIf="field.title=='DOD'" >{{field.title}}</ion-label>
-    <ion-input  *ngIf="field.title=='DOD'" type="text" placeholder="{{field.title}}"></ion-input>
+        <ion-label *ngIf="field.title=='DOD'" class="fntsize"  >{{field.title}}</ion-label>
+       
+        
+    <ion-input  *ngIf="field.title=='DOD'" type="text" placeholder="{{field.title}}" class="bc " ></ion-input>
     
-        <ion-label *ngIf="field.title=='Estimated Points'" >{{field.title}}</ion-label>
-    <ion-input  *ngIf="field.title=='Estimated Points'" type="text" placeholder="{{field.title}}"></ion-input>
-          
-         <ion-label *ngIf="field.title=='Due Date'">
+    
+    
+    
+        <ion-label *ngIf="field.title=='Estimated Points'" class="fntsize"  >{{field.title}}</ion-label>
+    <ion-input  *ngIf="field.title=='Estimated Points'" type="text" placeholder="{{field.title}}" class="bc"></ion-input>
+        
+         <ion-label *ngIf="field.title=='Due Date'" class="no_mar">
           <ion-label label>{{field.title}}</ion-label>
             <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM DD YYYY" (ionChange)="datemethod($event, i,field)">03-03-2017</ion-datetime>
           </ion-label>
+         
         
           <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
           <select-alertless id="slect_{{i}}" *ngIf="showEditableFieldOnly[i]"  item-content [(ngModel)]="changeBucket" (ionCancel)="selectCancel(i)" (ionChange)="changeOption($event, i)">
