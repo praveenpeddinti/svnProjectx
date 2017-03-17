@@ -1,4 +1,4 @@
-import { Component, Input,ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import {NavController, ViewController, AlertController, LoadingController,  } from 'ionic-angular';
 
 //For pages
@@ -24,7 +24,6 @@ import { Storage } from "@ionic/storage";
   
 })
 export class LoginPage {
- @ViewChild('input') myInput ;
     login: {username?: string, password?: string} = {};
     public submitted = false;
     public isEmailValid=true;
@@ -39,13 +38,6 @@ export class LoginPage {
                 public viewCtrl: ViewController) {
     
      
-  }
-  ionViewLoaded() {
-    setTimeout(() => {
-        
-      this.myInput.setFocus();
-      this.myInput.preventDefault();
-    },150);
   }
   
    onLogin(form): void{
