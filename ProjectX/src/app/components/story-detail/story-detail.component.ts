@@ -787,9 +787,7 @@ var thisObj = this;
      */
     public expand()
     {
-      jQuery(".main_div").toggle(1000);
-      jQuery(".main_div").show();
-      this.hide=false;
+      jQuery(".main_div").stop().slideToggle();
       jQuery("#collapse").show();
       jQuery("#expand").hide();
     }
@@ -800,13 +798,11 @@ var thisObj = this;
      */
     public collapse()
     {
-      jQuery(".main_div").toggle(1000);
-      jQuery(".main_div").hide();
-      this.hide=true;
-      jQuery("#expand").show();
-      jQuery("#collapse").hide();
+        jQuery(".main_div").stop().slideToggle();
+        jQuery("#expand").show();
+        jQuery("#collapse").hide();
     } 
-       
+
 
     taskDataBuilder(taskArray){
      var subTasksArray = [];

@@ -55,3 +55,5 @@
 .addtask_title{ color:#000; font-size:15px; line-height:18px; margin-top:5px;}
 .addtask_status{ color:#979797;font-size:14px; line-height:24px;}
 .addtask label{ color:#4c4c4c;font-size:13px;font-family: 'robotoregular';font-weight: normal;}
+.colapse{ background: #e0dfdf; cursor: pointer; text-align: center; display: table-cell; float: right; padding: 5px 10px; color: #fff;}
+.widgetmainbg{ border:solid 1px #f0f0f0; padding:20px; margin-top: 30px;}
