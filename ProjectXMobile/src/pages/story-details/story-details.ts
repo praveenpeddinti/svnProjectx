@@ -126,8 +126,16 @@ public selectedValue = "";
     ionViewDidLoad() {
         //console.log('ionViewDidLoad StoryDetailsPage');
     }
+    ionViewDidEnter(){
+        console.log("the ionViewDidEnter --- " + jQuery('#description').height());
+        if(jQuery('#description').height()>200){
+            jQuery('#description').css("height","200px");
+            jQuery('.show-morediv').show();
+            jQuery('#show').show();
+        }
+    }
     ionViewWillEnter(){
-        console.log("the ngAfterContentInit --- " + jQuery('#description').height());
+        console.log("the ionViewWillEnter --- " + jQuery('#description').height());
         if(jQuery('#description').height()>200){
             jQuery('#description').css("height","200px");
             jQuery('.show-morediv').show();
