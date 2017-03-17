@@ -126,7 +126,7 @@ public selectedValue = "";
     ionViewDidLoad() {
         //console.log('ionViewDidLoad StoryDetailsPage');
     }
-    ionViewDidEnter(){
+    ionViewWillEnter(){
         console.log("the ngAfterContentInit --- " + jQuery('#description').height());
         if(jQuery('#description').height()>200){
             jQuery('#description').css("height","200px");
