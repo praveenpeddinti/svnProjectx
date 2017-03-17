@@ -575,37 +575,24 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
                 $fileName=  explode(".", $originalFileName);
                 
                $extension = CommonUtility::getExtension($originalFileName);
-               
-                $artifactData=array(
-                    "Slug" => new \MongoDB\BSON\ObjectID(),
-                    "UploadedOn" => $uploadedOn,
-                    "UploadedBy" => '',
-                    "Status" => (int)1,
-                    "ArtifactType" => "",
-                    "isThumbnailExist" => (int)0,
-                    "ThumbnailPath" => Yii::$app->params['StoryArtifactPath']."/thumbnails",
-                    "FileName" => $tempFileName."-".$fileName[0],
-                    "OriginalFileName" => $originalFileName,
-                    "Extension" =>$extension
-                );
                  $imageExtensions = array("jpg", "jpeg", "gif", "png"); 
 $videoExtensions = array("mp4", "mov", "ogg", "avi"); 
               error_log("+++++++++++++++++".$extension);
                if(in_array($extension, $imageExtensions)){
                 $replaceString = "<img src='".$newPath."'/>";
-             $artifactData["ArtifactType"] = "image";
+             $artifactType = "image";             
                 }else if(in_array($extension, $videoExtensions)){
 $filename = $tempFileName."-".$originalFileName;
 error_log("++++++++ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath/thumb1.png");
 exec("ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath/thumb1.png");
                 $replaceString = "<video controls width='50%' height='50%'><source src='".$newPath."' type='video/mp4'/></video>";
-             $artifactData["ArtifactType"] = "video";
-             $artifactData["isThumbnailExist"] = (int)1;
+            $artifactType = "video";
                 }else{
                    $replaceString = "<a href='".$newPath."' target='_blank'/>".$originalFileName."</a>"; 
-                   $artifactData["ArtifactType"] = "other";
+                   $artifactType = "other";
                 }
                $description = str_replace($value, $replaceString, $description);
+               $artifactData = CommonUtility::getArtifact($tempFileName,$originalFileName,$extension,$fileName,$artifactType);
                array_push($artifactsList, $artifactData);
 //               TicketArtifacts::saveArtifacts($ticketNumber, $projectId);
               } 
@@ -617,6 +604,32 @@ exec("ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath
 Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
       }
   }
+  
+      /**
+     * @author Jagadish
+     * @return array
+     */
+     public static function getArtifact($tempFileName,$originalFileName,$extension,$fileName,$artifactType) {
+  try{
+      $slug= new \MongoDB\BSON\ObjectID();
+      $time= new \MongoDB\BSON\UTCDateTime(time() * 1000);
+                    $artifactData=array(
+                    "Slug" => $slug,
+                    "UploadedOn" => $time,
+                    "UploadedBy" => '',
+                    "Status" => (int)1,
+                    "ArtifactType" => "$artifactType",
+                    "isThumbnailExist" => ($artifactType == "video")?(int)1:(int)0,
+                    "ThumbnailPath" => Yii::$app->params['StoryArtifactPath']."/thumbnails",
+                    "FileName" => $tempFileName."-".$fileName[0],
+                    "OriginalFileName" => $originalFileName,
+                    "Extension" =>$extension
+                );
+    return $artifactData;
+    } catch (Exception $ex) {
+            Yii::log("CommonUtility:getArtifact::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');
+        }
+}
   
  /**
   * @author Moin Hussain
