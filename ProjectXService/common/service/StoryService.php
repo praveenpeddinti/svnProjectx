@@ -571,15 +571,34 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
               Yii::log("StoryService:updateStoryFieldInline::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
 
-    } 
+    }
+    
+    public function removeComment($commentData){
+      error_log("-----------removeComment----------------".print_r($commentData,1));
+      TicketComments::removeComment($commentData);
+    }
   
     public function saveComment($commentData){
         try{
         
-        $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
-        $processedDesc = $refinedData["description"];
-        $artifacts = $refinedData["ArtifactsList"];
-        $commentDesc = $commentData->Comment->CrudeCDescription;
+            $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
+            $processedDesc = $refinedData["description"];
+            $artifacts = $refinedData["ArtifactsList"];
+            $commentDesc = $commentData->Comment->CrudeCDescription;
+        if(isset($commentData->Comment->Slug)){
+            error_log("++++++Slug++++++++".print_r($commentData,1));
+            $collection = Yii::$app->mongodb->getCollection('TicketComments');
+//}
+          $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc,"Activities.$.CDescription" => $processedDesc));
+          $collection->update(array("TicketId" => (int)$commentData->TicketId,"ProjectId"=>(int)$commentData->projectId,"Activities.Slug"=>new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
+          $retData = array("CrudeCDescription"=>$commentDesc,
+                            "CDescription"=>$processedDesc);
+            return $retData;
+//            $db =  TicketComments::getCollection();
+//         $v = $db->update( array("ProjectId"=> (int)$commentData->projectId ,"TicketId"=> (int)$commentData->TicketId,"Activities.Slug"=>$commentData->Comment->Slug), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$commentData->userInfo->Id,"Activity"=>"Comment"));  
+        }else{
+        
+
 //                 $validDate = CommonUtility::validateDate($commentData->Comment->CommentedOn);
 //                 error_log("--------------validadte----------".$validDate);
 //                            if($validDate){
@@ -600,8 +619,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ActivityBy"=>(int)$commentData->userInfo->Id,
             "Status"=>($commentData->Comment->ParentIndex == "")?(int)1:(int)2,
             "PropertyChanges"=>[],
-            "ParentIndex"=>($commentData->Comment->ParentIndex == "")?"":(int)$commentData->Comment->ParentIndex
-            
+            "ParentIndex"=>($commentData->Comment->ParentIndex == "")?"":(int)$commentData->Comment->ParentIndex,
+            "repliesCount"=>(int)0
         );
          $db =  TicketComments::getCollection();
          $v = $db->update( array("ProjectId"=> (int)$commentData->projectId ,"TicketId"=> (int)$commentData->TicketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$commentData->userInfo->Id,"Activity"=>"Comment"));  
@@ -623,6 +642,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 //        $commentDataArray["readableDate"]=$readableDate;
         
         return $commentDataArray;
+        }
 //        error_log("==================");
 //        $ticketComment->Comments=[];
 //        $populateComment = $ticketComment->Comments;
