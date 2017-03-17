@@ -54,11 +54,11 @@ export class LoginPage {
                                 this.storage.set('userCredentials', result.data).then( ()=>{
 
                                     let userCredentials = {username: this.login.username};
-                                    //this.navCtrl.push(WelcomePage, userCredentials);
-                                    this.navCtrl.push(DashboardPage, userCredentials);
+                                    //this.navCtrl.push(DashboardPage, userCredentials);
+                                    this.navCtrl.setRoot(DashboardPage, userCredentials);
                                    // loader.dismiss();
                                     loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
-                                    this.viewCtrl.dismiss();
+                                    //this.viewCtrl.dismiss();
 
                                 },
                                 (error)=>{
