@@ -429,6 +429,18 @@ class StoryController extends Controller
             $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
    }
+   
+   public function actionDeleteComment(){
+       $comment_post_data=json_decode(file_get_contents("php://input"));
+       error_log(print_r($comment_post_data,1));
+       $returnData = ServiceFactory::getStoryServiceInstance()->removeComment($comment_post_data);
+       $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $returnData;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+   }
     /**
      * @author Moin Hussain
      * @return type
