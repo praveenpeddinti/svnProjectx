@@ -892,36 +892,38 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     
        /**
      * @author Padmaaja 
-     * @return type
+     * @return array
+     * @updated by suryaprakash
      */
-    public function getAllStoryDetailsForSearch($StoryData, $projectId) {
+    public function getAllStoryDetailsForSearch($projectId, $ticketId, $sortvalue, $searchString) {
         try {
-           // $ticketModel = new TicketCollection();
-            $ticketDetails = TicketCollection::getAllTicketDetailsForSearch($StoryData, $projectId,$select=['TicketId', 'Title','Fields.workflow.value_name','ProjectId']);
+            $ParentTicketInfo = TicketCollection::getTimeLog($projectId, $ticketId); //common method for getting ticket details
+            $ticketArray = $ParentTicketInfo["Tasks"];
+            array_push($ticketArray, (int)$ticketId);
+            if (!empty($ParentTicketInfo["RelatedStories"])) {
+                for ($i = 0; $i < sizeof($ParentTicketInfo["RelatedStories"]); $i++) {
+                     array_push($ticketArray,(int)$ParentTicketInfo["RelatedStories"][$i] );
+                }
+            }
             $finalData = array();
-           // $fieldsOrderArray = [12];
-           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
+            $ticketDetails = TicketCollection::getAllTicketDetailsForSearch($projectId, $ticketId, $sortvalue, $searchString,$ticketArray);
             foreach ($ticketDetails as $ticket) {
-               array_push($finalData, $ticket);
-                 
+                array_push($finalData, $ticket);
             }
             return $finalData;
         } catch (Exception $ex) {
-            Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryService:getAllStoryDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    /*
-     * 
+
+      /**
+     * @author suryaprakash reddy 
+     * @return array
      */
-    public function updateRelatedTaskId($postData){
+    public function updateRelatedTaskId($projectId,$ticketId,$searchTicketId){
         try{
             $returnStatus="failure";
-            error_log("updainggggggggggg".$postData->ticketId);
-            $ticketCollectionModel = new TicketCollection();
-            $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->ticketId, $postData->projectId);
-            $parentTasks = $ticketDetails['RelatedStories'];
-            array_push($parentTasks,$postData->ticketId);
-            TicketCollection::updateChiledTaskObject($postData->TicketId,$parentTasks,'RelatedStories'); 
+            TicketCollection::updateRelateTicket($projectId,$ticketId,$searchTicketId); 
         } catch (Exception $ex) {
             Yii::log("StoryService:updateRelatedTaskId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -983,7 +985,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
+
      /**
      * @author Jagadish 
      * @return type array
@@ -997,6 +999,37 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         }
     }
 
+    /**
+     * @author suryaprakash reddy 
+     * @return type array
+     */
+    public function getAllRelateStory($projectId, $ticketId) {
+        try {
+            // $ticketModel = new TicketCollection();
+            $ParentTicketInfo = TicketCollection::getTimeLog($projectId, $ticketId);
+            $finalData = array();
+            $ticketArray = $ParentTicketInfo["RelatedStories"];
+            $ticketDetails = TicketCollection::getAllRelateStory($projectId, $ticketId, $ticketArray);
+            foreach ($ticketDetails as $ticket) {
+                array_push($finalData, $ticket);
+            }
+            return $finalData;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getAllRelateStory::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+    /**
+     * @author suryaprakash reddy 
+     * @return type array
+     */
+    public function unRelateTask($projectId, $parentTicketId, $unRelateTicketId) {
+        try {
+            $unRelateChild = TicketCollection::unRelateTask($projectId, $parentTicketId, $unRelateTicketId);
+        } catch (Exception $ex) {
+            Yii::log("StoryService:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
 

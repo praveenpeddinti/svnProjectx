@@ -172,8 +172,8 @@ class StoryController extends Controller
                     $ticket_data->data->{'4'} = 2;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data, $parentTicNumber);
                     array_push($childTicketnoArray, $ticketNumber);
-                    $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber, $childTicketnoArray);     
                     }
+                $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber, $childTicketnoArray);     
                 }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -483,32 +483,55 @@ class StoryController extends Controller
     
       /**
     * @author Padmaja 
+    * @updated  suryaprakash 
     * @description This method is used to get all data for stories/tasks.
     * @return type
     */
    public function actionGetAllTicketDetailsForSearch() {
         try {
-            $StoryData = json_decode(file_get_contents("php://input"));
-            //$projectId=1;
-            $projectId = $StoryData->projectId;
-            $totalCount = ServiceFactory::getStoryServiceInstance()->getTotalTicketsCount($projectId);
-            $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetailsForSearch($StoryData, $projectId);
+            $storyData = json_decode(file_get_contents("php://input"));
+            $projectId = $storyData->projectId;
+            $ticketId = $storyData->ticketId;
+            $sortvalue = $storyData->sortvalue;
+            $searchString = $storyData->searchString;
+            
+           // $totalCount = ServiceFactory::getStoryServiceInstance()->getTotalTicketsCount($projectId);
+            $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetailsForSearch($projectId,$ticketId,$sortvalue, $searchString);
 
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $data;
-            $responseBean->totalCount = $totalCount;
+           // $responseBean->totalCount = $totalCount;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
             Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+      /**
+    * @author  suryaprakash 
+    * @description This method is used to get all data for stories/tasks.
+    * @return type
+    */
     public function actionUpdateRelatedTasks(){
-        $StoryData = json_decode(file_get_contents("php://input"));
-        $totalCount = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($StoryData);
-       
+        try{
+          $storyData = json_decode(file_get_contents("php://input"));
+          $projectId = $storyData->projectId;
+          $ticketId = $storyData->ticketId;
+          $searchTicketId = $storyData->relatedSearchTicketId;
+          $pdateRelateTask = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($projectId,$ticketId,$searchTicketId);
+          $ticketData = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId,$ticketId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $ticketData;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+             return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionUpdateRelatedTasks::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+
     }
     
       /**
@@ -596,6 +619,53 @@ class StoryController extends Controller
             return $response;
         } catch (Exception $ex) {
             Yii::log("StoryController:actionGetMyTicketAttachments::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+      /**
+     * @author suryaprakash reddy
+     * @description unrelate ticket from Parent story
+     * @return relatedTicketsInfo
+     */
+    public function actionUnRelateTask() {
+
+
+        try {
+            $ticketData = json_decode(file_get_contents("php://input"));
+            $projectId = $ticketData->projectId;
+            $parentTicketId = $ticketData->ticketId;
+            $unRelateTicketId = $ticketData->unRelateTicketId;
+            $removeUnrelateTask = ServiceFactory::getStoryServiceInstance()->unRelateTask($projectId, $parentTicketId, $unRelateTicketId);
+            $relatedTicketsInfo = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId, $parentTicketId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $relatedTicketsInfo;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionUnRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+       /**
+     * @author suryaprakash reddy
+     * @description getall related tasks for Parent
+     * @return relatedTicketsInfo
+     */
+    public function actionGetAllRelatedTasks() {
+        try {
+            $ticketData = json_decode(file_get_contents("php://input"));
+            $projectId = $ticketData->projectId;
+            $parentTicketId = $ticketData->ticketId;
+            $relatedTicketsInfo = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId, $parentTicketId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $relatedTicketsInfo;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetAllRelatedTasks::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

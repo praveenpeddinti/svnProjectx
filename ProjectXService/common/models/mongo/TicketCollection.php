@@ -309,7 +309,7 @@ class TicketCollection extends ActiveRecord
     public static function updateParentTicketTaskField($parentTicNumber, $ticketnoArray) {
         try {
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $tasksNew = array('$set' => array("Tasks" => $ticketnoArray));
+            $tasksNew = array('$addToSet' => array("Tasks" => $ticketnoArray));
             $collection->update(array("TicketId" => $parentTicNumber), $tasksNew);
         } catch (Exception $ex) {
             Yii::log("TicketCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -336,17 +336,16 @@ class TicketCollection extends ActiveRecord
     }
      /**
      * @author Padmaja 
-     * @return type
+     * @return array
+     * @updated by suryaprakash reddy
      */
-    public static function getAllTicketDetailsForSearch($StoryData, $projectId, $selectFields = []) {
+    public static function getAllTicketDetailsForSearch($projectId,$ticketId,$sortvalue, $searchString,$ticketArray) {
         try {
-            $options=array($StoryData->sortvalue);
             $query = new Query();
             $query->from('TicketCollection')
-                    ->where(["ProjectId" => (int)1]);
-             $query->andWhere(['like','TicketIdString', '618']);
-              $query->orWhere(['like','Title', '618']);
-             error_log(print_r($query,1));
+                    ->where(["ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$ticketArray)]);
+             $query->andWhere(['like','TicketIdString', $searchString]);            
+              $query->orWhere(['like','Title', $searchString]);
             $ticketDetails = $query->all();
             
             return $ticketDetails;
@@ -380,10 +379,10 @@ class TicketCollection extends ActiveRecord
      * @description This method is used to get TicketId,TotalTimeLog,Tasks,ParentStoryId from ticket collection
      * @return type array
      */
-    public function getTimeLog($projectId, $ticketId) {
+    public static function getTimeLog($projectId, $ticketId) {
         try {
             $query = new Query();
-            $query->select(array("TicketId", "TotalTimeLog", "Tasks", "ParentStoryId"));
+            $query->select(array("TicketId", "TotalTimeLog", "Tasks", "ParentStoryId","RelatedStories"));
             $query->from('TicketCollection')
                     ->where(['TicketId' => (int) $ticketId, "ProjectId" => $projectId]);
             $ticketDetails = $query->one();
@@ -391,6 +390,52 @@ class TicketCollection extends ActiveRecord
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("TicketCollection:getTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
+     * @author suryaprakash reddy 
+     * @description This method is used to get TicketId,TotalTimeLog,Tasks,ParentStoryId from ticket collection
+     * @return type array
+     */
+    public static function updateRelateTicket($projectId, $ticketId, $searchTicketId) {
+        try {
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $newdata = array('$addToSet' => array('RelatedStories' => (int) $searchTicketId));
+            $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => $projectId), $newdata);
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:updateChiledTaskObject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+    /**
+     * @author suryaprakash reddy 
+     * @description This method is used to get allrelated stories
+     * @return type array
+     */
+    public static function getAllRelateStory($projectId, $ticketId, $ticketArray) {
+        try {
+            $query = new Query();
+            $query->from('TicketCollection')
+                    ->where(["TicketId" => array('$in' => $ticketArray), "ProjectId" => (int) $projectId]);
+            $ticketDetails = $query->all();
+            return $ticketDetails;
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getAllRelateStory::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+    /**
+     * @author suryaprakash reddy 
+     * @description This method is used to unrelate task from parent ticket
+     * @return type array
+     */
+    public static function unRelateTask($projectId, $parentTicketId, $unRelateTicketId) {
+        try {
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $newdata = array('$pull' => array('RelatedStories' => (int) $unRelateTicketId));
+            $collection->update(array("TicketId" => (int) $parentTicketId, "ProjectId" => $projectId), $newdata);
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
