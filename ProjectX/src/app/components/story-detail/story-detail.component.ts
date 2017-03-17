@@ -169,13 +169,18 @@ public blurTimeout=[];
                         var mention=[];
                         for(let i in data.data)
                         {
-                          mention.push(data.data[i].Name);
+                          //mention.push(data.data[i].Name);
+                          mention.push({"name":data.data[i].Name,"Profile":data.data[i].ProfilePic});
                         }
                       callback(mention);
                     });
                       }
                   }
                 },
+            editableAtwhoQueryAttrs: {
+                    "data-fr-verified": true
+            },
+            displayTpl:"<li value='${name}' name='${name}'><img width='20' height='20' src='http://10.10.73.77${Profile}'/> ${name}</li>",
             }
             var editor=evt.editor;
             this.mention.load_atwho(editor,at_config);

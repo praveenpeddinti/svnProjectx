@@ -85,22 +85,29 @@ export class StoryEditComponent implements OnInit
                     {
                       var post_data={ProjectId:1,search_term:query};
                       this_obj._ajaxService.AjaxSubscribe("story/get-collaborators",post_data,(data)=> {
+                        console.log("===Mention Data=="+JSON.stringify(data.data));
                       var mention=[];
+                      var pic=[];
                       for(let i in data.data)
                       {
-                        mention.push(data.data[i].Name);
+                        //mention.push({"Name":data.data[i].Name,"Profile":data.data[i].ProfilePic});
+                        mention.push({"name":data.data[i].Name,"Profile":data.data[i].ProfilePic});
                       }
                     callback(mention);
                   });
                     }
                 }
               },
+          editableAtwhoQueryAttrs: {
+            "data-fr-verified": true
+            },
+          displayTpl:"<li value='${name}' name='${name}'><img width='20' height='20' src='http://10.10.73.77${Profile}'/> ${name}</li>",
           }
-      var editor=evt.editor;
+      var editor=evt.editor; 
       this.mention.load_atwho(editor,at_config);
       });
 
-      })
+      });
         
   }
 
