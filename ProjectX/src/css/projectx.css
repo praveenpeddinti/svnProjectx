@@ -366,6 +366,9 @@ footer{font-size:10px}
 .addtask_title{ color:#000; font-size:15px; line-height:18px; margin-top:5px;}
 .addtask_status{ color:#979797;font-size:14px; line-height:24px;}
 .addtask label{ color:#4c4c4c;font-size:13px;font-family: 'robotoregular';font-weight: normal;}
+.removetask{ background:#237ea7; color: #fff; cursor: pointer; width: 22px; height: 22px; border-radius: 50%;
+-moz-border-radius: 50%; -webkit-border-radius: 50%; text-align: center; display: table-cell; padding-top:3px;}
+.mart10{margin-top: 10px;}
 
 /*Header*/
 .navbar-brand > img { margin-top: 8px;}
@@ -484,6 +487,7 @@ color: #0199e0;
 .user{font:normal 14px/15px 'robotoregular', Arial, Helvetica, sans-serif; }	
 .user .userdate{ color:#a2a2a2; font:normal 12px/15px 'robotoregular', Arial, Helvetica, sans-serif; display:inline-block; margin-left:40px;}
 .ticketactivity .erdate{float:none!important;}
+.addtask_bor{ border-left:0px!important; padding-left:0px!important;}
 }
 
 /* TotalWorked Hours*/

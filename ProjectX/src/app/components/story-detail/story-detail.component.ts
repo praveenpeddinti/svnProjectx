@@ -38,9 +38,10 @@ public blurTimeout=[];
   private childTaskData="";
   public commentsList=[];
   private taskFieldsEditable=[];
-  public totalWorkLog=[];
+  public totalWorkLog = '0.00';
   public individualLog=[];
   public isTimeValidErrorMessage;
+  public relatedTaskArray=[];
 
 
   //Configuration varibale for CKEDITOR in detail page.
@@ -126,8 +127,16 @@ public blurTimeout=[];
         this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
             { 
                this.individualLog =data.data.individualLog;
-                this.totalWorkLog =data.data.TotalTimeLog;
+                 if(data.data.TotalTimeLog > 0){
+                  this.totalWorkLog = data.data.TotalTimeLog;
+                 }
             });
+
+        this._ajaxService.AjaxSubscribe("story/get-all-related-tasks",ticketIdObj,(result)=>
+         { 
+        
+         this.relatedTaskArray=result.data;
+        })
       this.minDate=new Date();
 
           //---------------------------- Attachments code---------------//
@@ -746,15 +755,17 @@ var thisObj = this;
     navigateToChildDetail(childTicketId){
       this._router.navigate(['story-edit',childTicketId]);
     }
-
-    public search(event)
+    /**
+     * @author:suryaprakash
+     * @description : This is used to capture search related story
+     */
+    public searchRelateTask(event)
     {
-     // alert("ddddddddddddddddddddddddddd");
-        let data=['#174 -Displaying List of Data',"#182 -Displaying List of Views"];
         var post_data={
         'projectId':1,
         'sortvalue':'Title',
-        'ticketId':150
+        'ticketId':this.ticketId,
+        'searchString':event.query
     }
     let prepareSearchData = [];
       //  this.search_results=data;GetTicketDetails get-all-ticket-details-for-search
@@ -762,21 +773,10 @@ var thisObj = this;
          { 
            var subTaskData = result.data;
             for(let subTaskfield of subTaskData){
-            //    alert("subTaskfield"+subTaskfield);
                var currentData = '# '+subTaskfield.TicketId+' '+subTaskfield.Title;
                  prepareSearchData.push(currentData);
             }
-         //  alert(JSON.stringify(prepareSearchData));
-        // //logic to search for related tickets
-          // this.search_results=data;
-          // prepareSearchData.push(result);
-          // alert(JSON.stringify(preparesearchData));
-          // this.ticketData = '# '+result.data.TicketId+''+result.data.Title;
-          // prepareSearchData.push(this.ticketData);
            this.search_results=prepareSearchData;
-            
-       //   alert(JSON.stringify(prepareSearchData));
-
          });
     }
 
@@ -833,16 +833,21 @@ var thisObj = this;
       }
        return subTasksArray;
     }
+    /**
+     * @author:suryaprakash
+     * @description : This is used to capture related tickets
+     */
     public saveRelatedTask(){
-     //  console.log(this.text);
        var suggestValue=this.text;
         var relatedTasks={
         'projectId':1,
-        'ticketId':suggestValue.split(" ")[1]
-        }
+        'ticketId':this.ticketId,
+        'relatedSearchTicketId':suggestValue.split(" ")[1]
+         } 
         this._ajaxService.AjaxSubscribe("story/update-related-tasks",relatedTasks,(result)=>
          { 
-        alert(JSON.stringify(result));
+         this.relatedTaskArray=result.data;
+
         })
     }
   
@@ -884,6 +889,22 @@ var thisObj = this;
           jQuery("#timelog").show();
           jQuery("#timelog").fadeOut(4000);
           jQuery("#workedhours").val("");
+        }
+        /**
+        * @author:suryaprakash
+        * @description : unrelate task from Story.
+        */
+        public unRelateTask(ticketId){
+            var unRelateTicketData={
+                ticketId:this.ticketId,
+                unRelateTicketId:ticketId,
+              };
+            this._ajaxService.AjaxSubscribe("story/un-relate-task",unRelateTicketData,(data)=>
+              { 
+              if(data.statusCode== 200){
+                   this.relatedTaskArray=data.data;
+              }
+        });
         }
 
 }

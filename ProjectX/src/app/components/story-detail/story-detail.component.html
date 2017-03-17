@@ -247,11 +247,28 @@
     <div><label>Related Stories/Tasks</label></div>
 <div class="relate_story">
     <div class="custom_story_input">
-        <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Relate a Story/Task" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="search($event)" id="relatedTask"></p-autoComplete>
+        <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="Relate a Story/Task" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchRelateTask($event)" id="relatedTask"></p-autoComplete>
     </div>
    
    <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="saveRelatedTask()">RELATE</button></div>
  </div>
+    <div class="addtask" *ngFor="let relatedTask of relatedTaskArray;">
+    <div class="col-md-1">
+       <div class="addtask_taskno">#{{relatedTask.TicketId}}</div>
+    </div>
+    <div class="col-md-10">
+        <div class="addtask_bor">
+            <div class="addtask_title">{{relatedTask.Title}}</div>
+            <div class="addtask_status">{{relatedTask.Fields.workflow.value_name}}</div>
+        </div>
+    </div>
+    <div class="col-md-1" (click)="unRelateTask(relatedTask.TicketId)" >
+        <div class="mart10"><i class="fa fa-times removetask" aria-hidden="true"></i></div>
+</div>
+    
+    <div class="clearfix"></div>
+</div>              
+
 </div>
 
  </div>
