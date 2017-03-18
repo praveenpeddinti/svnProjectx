@@ -370,24 +370,7 @@ class TicketCollection extends ActiveRecord
             Yii::log("TicketCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-  /**
-     * @author suryaprakash reddy 
-     * @description This method is used to get TicketId,TotalTimeLog,Tasks,ParentStoryId from ticket collection
-     * @return type array
-     */
-    public static function getTimeLog($projectId, $ticketId) {
-        try {
-            $query = new Query();
-            $query->select(array("TicketId", "TotalTimeLog", "Tasks", "ParentStoryId","RelatedStories"));
-            $query->from('TicketCollection')
-                    ->where(['TicketId' => (int) $ticketId, "ProjectId" => $projectId]);
-            $ticketDetails = $query->one();
 
-            return $ticketDetails;
-        } catch (Exception $ex) {
-            Yii::log("TicketCollection:getTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
-    }
     /**
      * @author suryaprakash reddy 
      * @description This method is used to get TicketId,TotalTimeLog,Tasks,ParentStoryId from ticket collection
