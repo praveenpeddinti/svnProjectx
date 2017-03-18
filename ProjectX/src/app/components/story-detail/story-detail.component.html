@@ -333,6 +333,7 @@
                 <div *ngIf="(comment.ActivityBy.UserName == getAllData.username && comment.repliesCount==0)" class="commedit delete_icn" (click)="deleteComment(cmtIdx,comment.Slug.$oid)"></div>
 
                 </div>
+                </div>
                 <div id="Actions_{{cmtIdx}}" [hidden]="true" >
                     <div class="uploadcomponent margintop15">
                       <div class="uploadbottom">
@@ -351,10 +352,11 @@
                 </div>
                 </div>
                 
-            </div>
           </div>
         </div>
-
+            </div>
+            </div>
+        
         
     </ng-container>
 
