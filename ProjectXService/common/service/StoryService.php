@@ -466,7 +466,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              }
              //error_log(print_r($ticketDetails["Fields"],1));
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $collection->save($ticketDetails); 
+            $collection->save($ticketDetails);
+            TicketArtifacts::saveArtifacts($ticket_data->TicketId, $projectId, $refiendData["ArtifactsList"],$userId);
             
         } catch (Exception $ex) {
              error_log($ex->getMessage());
@@ -488,6 +489,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $field_name = $ticket_data->EditedId;
             $field_id = $ticket_data->id;
             $loggedInUser = $ticket_data->userInfo->Id;
+            $artifacts = array();
             $valueName = "";
             if($checkData==0){
                  if($ticket_data->id=='Title'){
@@ -498,6 +500,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 }else if($ticket_data->id=='Description'){
                     $refinedData = CommonUtility::refineDescription($ticket_data->value);
                     $actualdescription = $refinedData["description"];
+                    $artifacts=$refinedData["ArtifactsList"];
                     $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$ticket_data->value ));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$actualdescription;
@@ -560,6 +563,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              
               $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
                $updateStaus = $collection->update($condition, $newData);
+               if(!empty($artifacts)){
+               TicketArtifacts::saveArtifacts($ticket_data->TicketId, $ticket_data->projectId, $artifacts,$loggedInUser);
+               }
            
            // if($updateStaus==1){
                 $returnValue=$selectedValue;
@@ -593,6 +599,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
           $collection->update(array("TicketId" => (int)$commentData->TicketId,"ProjectId"=>(int)$commentData->projectId,"Activities.Slug"=>new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
           $retData = array("CrudeCDescription"=>$commentDesc,
                             "CDescription"=>$processedDesc);
+          if(!empty($artifacts)){
+            TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId,$artifacts,$commentData->userInfo->Id);   
+        }
             return $retData;
 //            $db =  TicketComments::getCollection();
 //         $v = $db->update( array("ProjectId"=> (int)$commentData->projectId ,"TicketId"=> (int)$commentData->TicketId,"Activities.Slug"=>$commentData->Comment->Slug), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$commentData->userInfo->Id,"Activity"=>"Comment"));  
