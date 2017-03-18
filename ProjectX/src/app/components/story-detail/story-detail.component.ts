@@ -977,6 +977,9 @@ var thisObj = this;
      */
     public saveRelatedTask(){
        var suggestValue=this.text;
+       if(suggestValue==""||suggestValue==undefined){
+        this.commonErrorFunction("relatedTaskerr_msg","Please enter title or id.")
+       }else{
         var relatedTasks={
         'projectId':1,
         'ticketId':this.ticketId,
@@ -985,8 +988,10 @@ var thisObj = this;
         this._ajaxService.AjaxSubscribe("story/update-related-tasks",relatedTasks,(result)=>
          { 
          this.relatedTaskArray=result.data;
-
+            this.text="";
         })
+        }
+      
     }
   
      /**
@@ -1023,7 +1028,7 @@ var thisObj = this;
     }
 
         public  errorTimeLog(){
-           jQuery("#timelog").html("Invalid Entry");
+           jQuery("#timelog").html("Invalid Time");
           jQuery("#timelog").show();
           jQuery("#timelog").fadeOut(4000);
           jQuery("#workedhours").val("");
@@ -1044,5 +1049,15 @@ var thisObj = this;
               }
         });
         }
+
+        /**
+        * @author:suryaprakash
+        * @description : Error Message dispaly function
+        */
+        commonErrorFunction(id,message){
+          jQuery("#"+id).html(message);
+          jQuery("#"+id).show();
+          jQuery("#"+id).fadeOut(4000);
+            }
 
 }

@@ -252,6 +252,9 @@
    
    <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="saveRelatedTask()">RELATE</button></div>
  </div>
+         <div id="relatedTaskerr_msg" class="alert alert-danger" style="display:none;">
+
+              </div>
     <div class="addtask" *ngFor="let relatedTask of relatedTaskArray;">
     <div class="col-md-1">
        <div class="addtask_taskno">#{{relatedTask.TicketId}}</div>
@@ -267,7 +270,7 @@
 </div>
     
     <div class="clearfix"></div>
-</div>              
+</div> 
 
 </div>
 
