@@ -831,9 +831,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @param type $ticketnoArray
      * @return empty
      */
-    public function updateParentTicketTaskField($parentTicNumber, $ticketnoArray) {
+    public function updateParentTicketTaskField($parentTicNumber, $ticketNumber) {
         try {
-            $ticketDetails = TicketCollection::updateParentTicketTaskField($parentTicNumber, $ticketnoArray);
+            $ticketDetails = TicketCollection::updateParentTicketTaskField($parentTicNumber, $ticketNumber);
         } catch (Exception $ex) {
             Yii::log("StoryService:updateParentticketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
