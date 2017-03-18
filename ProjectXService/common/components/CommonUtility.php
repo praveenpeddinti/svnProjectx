@@ -569,6 +569,12 @@ Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" .
                        }
                    }
                 $newPath = Yii::$app->params['ServerURL'].Yii::$app->params['StoryArtifactPath']."/".$tempFileName."-".$originalFileName;
+                $push = true;
+                if(file_exists($storyArtifactPath."/".$tempFileName."-".$originalFileName)){
+                    $push=false;
+                }else{
+                    $push = true;
+                }
                 if(file_exists("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName")){
                     rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName", $storyArtifactPath."/".$tempFileName."-".$originalFileName); 
                 }
@@ -592,8 +598,13 @@ exec("ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath
                    $artifactType = "other";
                 }
                $description = str_replace($value, $replaceString, $description);
+               
+                   error_log("-----in if----------".$storyArtifactPath."/".$tempFileName."-".$originalFileName);
+                   error_log("-----in push if----------".$push);
+               if($push){
                $artifactData = CommonUtility::getArtifact($tempFileName,$originalFileName,$extension,$fileName,$artifactType);
                array_push($artifactsList, $artifactData);
+               }
 //               TicketArtifacts::saveArtifacts($ticketNumber, $projectId);
               } 
               $returnData = array("description"=>$description,"ArtifactsList"=>$artifactsList);
