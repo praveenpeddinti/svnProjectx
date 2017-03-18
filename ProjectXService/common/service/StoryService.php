@@ -11,7 +11,7 @@ use common\models\mysql\TicketType;
 use common\models\mysql\Bucket;
 use common\models\bean\FieldBean;
 use common\models\mongo\ProjectTicketSequence;
-use common\models\mongo\TicketTimeLogCollection;
+use common\models\mongo\TicketTimeLog;
 use common\models\mysql\Collaborators;
 use common\models\mongo\TicketComments;
 use common\models\mongo\TicketArtifacts;
@@ -962,7 +962,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketId = $timelog_data->TicketId;
             $userId = $timelog_data->userInfo->Id;
             $totalWorkHours = (float) $timelog_data->workHours;
-            $ticketDetails = TicketTimeLogCollection::saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours);
+            $ticketDetails = TicketTimeLog::saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours);
             if ($ticketDetails != "failure") {
             $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId") );
             if ($parenTicketInfo["ParentStoryId"] != "") {
@@ -990,7 +990,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $taskArray = $ticketDetails["Tasks"];
                 array_push($taskArray, (int) $parentTicketId);
             }
-            $ticketTimeLog = TicketTimeLogCollection::getTimeLogRecords($projectId, $taskArray);
+            $ticketTimeLog = TicketTimeLog::getTimeLogRecords($projectId, $taskArray);
 
             foreach ($ticketTimeLog as &$log) {
                 $collaboratorData = TinyUserCollection::getMiniUserDetails($log["_id"]);

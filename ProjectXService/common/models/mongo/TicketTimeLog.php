@@ -20,11 +20,11 @@ use yii\web\IdentityInterface;
 
 
 
-class TicketTimeLogCollection extends ActiveRecord 
+class TicketTimeLog extends ActiveRecord 
 {
     public static function collectionName()
     {
-        return 'TicketTimeLogCollection';
+        return 'TicketTimeLog';
     }
     public function attributes() {
 //        parent::attributes();
