@@ -88,13 +88,10 @@ class TicketTimeLogCollection extends ActiveRecord
      * @description This method is used to getTimeLogRecords for userbased
      * @return type array
      */
-    public function getTimeLogRecords($projectId, $ticketsList, $taskFlag = 0) {
+    public function getTimeLogRecords($projectId, $ticketsList) {
         try {
-            if ($taskFlag == 1) {
-                $matchArray = array("TicketId" => array('$in' => $ticketsList), "ProjectId" => (int) $projectId);
-            } else {
-                $matchArray = array("TicketId" => (int) $ticketsList, "ProjectId" => (int) $projectId);
-            }
+          
+            $matchArray = array("TicketId" => array('$in' => $ticketsList), "ProjectId" => (int) $projectId);
             $query = Yii::$app->mongodb->getCollection('TicketTimeLogCollection');
             $pipeline = array(
                 array('$match' => $matchArray),

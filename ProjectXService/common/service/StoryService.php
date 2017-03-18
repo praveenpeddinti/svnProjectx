@@ -962,17 +962,17 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $userId = $timelog_data->userInfo->Id;
             $totalWorkHours = (float) $timelog_data->workHours;
             $ticketDetails = TicketTimeLogCollection::saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours);
-
-            $parenTicketInfo = TicketCollection::getTimeLog($projectId, $ticketId);
+            if ($ticketDetails != "failure") {
+            $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId") );
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
             }
-            if ($ticketDetails != "failure") {
+           
                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $totalWorkHours);
             }
         } catch (Exception $ex) {
             Yii::log("StoryService:insertTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+}
     }
 
     /**
@@ -982,16 +982,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      */
     public function getTimeLog($projectId, $parentTicketId) {
         try {
-            $ticketDetails = TicketCollection::getTimeLog($projectId, $parentTicketId);
-            $ticketTimeLog = TicketTimeLogCollection::getTimeLogRecords($projectId, (int) $parentTicketId);
-
+            $ticketDetails = TicketCollection::getTicketDetails($parentTicketId,$projectId,array("TicketId", "TotalTimeLog", "Tasks", "ParentStoryId","RelatedStories") );
             $taskArray = array();
+            array_push($taskArray, (int) $parentTicketId);
             if (!empty($ticketDetails["Tasks"])) {
                 $taskArray = $ticketDetails["Tasks"];
                 array_push($taskArray, (int) $parentTicketId);
-                $taskFlag = 1;
-                $ticketTimeLog = TicketTimeLogCollection::getTimeLogRecords($projectId, $taskArray, $taskFlag);
             }
+            $ticketTimeLog = TicketTimeLogCollection::getTimeLogRecords($projectId, $taskArray);
 
             foreach ($ticketTimeLog as &$log) {
                 $collaboratorData = TinyUserCollection::getMiniUserDetails($log["_id"]);
