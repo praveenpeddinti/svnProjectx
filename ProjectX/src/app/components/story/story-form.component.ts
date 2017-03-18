@@ -53,13 +53,12 @@ export class StoryComponent
               let DefaultValue;
                jsonForm['title'] ='';
                jsonForm['description'] ='';
-               jsonForm['UI']=this.selectedTickets;
-               jsonForm['PeerReview']=this.selectedTickets;
-               jsonForm['QA']=this.selectedTickets;
+               jsonForm['tasks']=this.selectedTickets;
+         
               if(response.statusCode==200)
               {
                   response.data.story_fields.forEach(element => {
-                    var  item = element.Id;
+                    var  item = element.Field_Name;
                     if(element.Type == 5){
                         element.DefaultValue=new Date().toLocaleString();
                     }else if(element.Type == 6){
@@ -71,7 +70,7 @@ export class StoryComponent
                     var priority=(element.Title=="Priority"?true:false);
                     var listItemArray=this.prepareItemArray(DefaultValue,priority,element.Title);
                     this.storyFormData.push(
-                       {'lable':element.Title,'model':element.Id,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray}
+                       {'lable':element.Title,'model':element.Field_Name,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray}
                        )
                   });
                 this.form = jsonForm;
