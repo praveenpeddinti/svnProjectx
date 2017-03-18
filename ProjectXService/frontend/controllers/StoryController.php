@@ -172,8 +172,8 @@ class StoryController extends Controller
                     $ticket_data->data->{'4'} = 2;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data, $parentTicNumber);
                     array_push($childTicketnoArray, $ticketNumber);
+                     $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber,$ticketNumber);     
                     }
-                $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber, $childTicketnoArray);     
                 }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
