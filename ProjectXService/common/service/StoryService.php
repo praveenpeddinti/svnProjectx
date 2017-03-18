@@ -917,7 +917,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      */
     public function getAllStoryDetailsForSearch($projectId, $ticketId, $sortvalue, $searchString) {
         try {
-            $ParentTicketInfo = TicketCollection::getTimeLog($projectId, $ticketId); //common method for getting ticket details
+           $ParentTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("Tasks","RelatedStories") );
+            
             $ticketArray = $ParentTicketInfo["Tasks"];
             array_push($ticketArray, (int)$ticketId);
             if (!empty($ParentTicketInfo["RelatedStories"])) {
@@ -1024,7 +1025,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     public function getAllRelateStory($projectId, $ticketId) {
         try {
             // $ticketModel = new TicketCollection();
-            $ParentTicketInfo = TicketCollection::getTimeLog($projectId, $ticketId);
+             $ParentTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("TicketId","RelatedStories") );
             $finalData = array();
             $ticketArray = $ParentTicketInfo["RelatedStories"];
             $ticketDetails = TicketCollection::getAllRelateStory($projectId, $ticketId, $ticketArray);
