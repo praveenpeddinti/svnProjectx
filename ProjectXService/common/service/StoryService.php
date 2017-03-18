@@ -229,14 +229,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                      else{
                           $fieldBean->value=""; 
                      }
-                     if(isset($ticket_data->$fieldId)){
-                          if(is_numeric($ticket_data->$fieldId)){
-                               $fieldBean->value= (int)$ticket_data->$fieldId;
-                              if($fieldId == 4){
-                                $details =  PlanLevel::getPlanLevelDetails($ticket_data->$fieldId);
+                     if(isset($ticket_data->$fieldName)){
+                          if(is_numeric($ticket_data->$fieldName)){
+                               $fieldBean->value= (int)$ticket_data->$fieldName;
+                              if($fieldName == "planlevel"){
+                                $details =  PlanLevel::getPlanLevelDetails($ticket_data->$fieldName);
                               }
-                              else if($fieldId == 6){
-                                    $details = Priority::getPriorityDetails($ticket_data->$fieldId);
+                              else if($fieldId == "priority"){
+                                    $details = Priority::getPriorityDetails($ticket_data->$fieldName);
                               }
                                $fieldBean->value_name= $details["Name"];
                              
@@ -828,12 +828,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     /**
      * @author Suryaprakash
      * @param type $parentTicNumber
-     * @param type $ticketnoArray
+     * @param type $childTicketIds
      * @return empty
      */
-    public function updateParentTicketTaskField($parentTicNumber, $ticketNumber) {
+    public function updateParentTicketTaskField($parentTicNumber, $childTicketIds) {
         try {
-            $ticketDetails = TicketCollection::updateParentTicketTaskField($parentTicNumber, $ticketNumber);
+            $ticketDetails = TicketCollection::updateParentTicketTaskField($parentTicNumber, $childTicketIds);
         } catch (Exception $ex) {
             Yii::log("StoryService:updateParentticketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }

@@ -301,15 +301,15 @@ class TicketCollection extends ActiveRecord
     /**
      * @author Suryaprakash reddy
      * @param type $parentTicNumber
-     * @param type $ticketnoArray
+     * @param type $$childTicketIds
      * @return type
      * @use used for inserting childtickets into Tasks(array) of parentticket.
      */
     
-    public static function updateParentTicketTaskField($parentTicNumber, $ticketNumber) {
+    public static function updateParentTicketTaskField($parentTicNumber, $childTicketIds) {
         try {
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $tasksNew = array('$addToSet' => array("Tasks" => $ticketNumber));
+            $tasksNew = array('$addToSet' => array("Tasks" => array('$each' => $childTicketIds)));
             $collection->update(array("TicketId" => $parentTicNumber), $tasksNew);
         } catch (Exception $ex) {
             Yii::log("TicketCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

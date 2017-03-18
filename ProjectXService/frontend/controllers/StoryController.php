@@ -162,18 +162,19 @@ class StoryController extends Controller
             $description = $ticket_data->data->description;
             $parentTicNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
 
-            $planLevelNumber = $ticket_data->data->{'4'}; //story-1 or task-2
+            $planLevelNumber = $ticket_data->data->planlevel; //story-1 or task-2
             if ($planLevelNumber == 1) {
-                $defualtTicketsArray = $ticket_data->data->UI;
-                $childTicketnoArray = array();
+                $defualtTicketsArray = $ticket_data->data->tasks;
+                $childTicketIds = array();
                 for ($i = 0; $i < sizeof($defualtTicketsArray); $i++) {
                     $ticket_data->data->title = $defualtTicketsArray[$i]."-" . $title;
                     $ticket_data->data->description = "Please provide description here";
-                    $ticket_data->data->{'4'} = 2;
+                    $ticket_data->data->planlevel = 2;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data, $parentTicNumber);
-                    array_push($childTicketnoArray, $ticketNumber);
-                     $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber,$ticketNumber);     
+                    array_push($childTicketIds, $ticketNumber);
+                    
                     }
+                $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($parentTicNumber,$childTicketIds);     
                 }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
