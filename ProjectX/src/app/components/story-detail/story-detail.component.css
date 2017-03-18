@@ -44,6 +44,14 @@
     text-align: right;
 }
 
+.comments
+{
+  border-radius: 3px;
+  border: 5px solid #ccc;
+}
+
+
+
 /*Relate and Add Task CSS*/
 
 .detailctask{ padding:10px 0px; background:#f8f8f8; margin-bottom:10px;}
