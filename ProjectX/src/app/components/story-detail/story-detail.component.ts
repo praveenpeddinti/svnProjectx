@@ -754,7 +754,7 @@ var thisObj = this;
           if(result.statusCode== 200){
 
          if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc")
-                document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.updatedFieldData;
+                document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
 
 
 
