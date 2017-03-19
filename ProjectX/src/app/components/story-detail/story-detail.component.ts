@@ -255,12 +255,12 @@ public commentCount = 0;
 submitComment(){
 var commentText = this.detail_comment_ckeditor.instance.getData();
 // alert("****comment editor data***"+commentText);
-var commentPushData = {
-  text:commentText,//jQuery(commentText).html(),
-  id:this.commentCount++,
-  repliedToComment:"",
-  parentId:""
-};
+// var commentPushData = {
+//   text:commentText,//jQuery(commentText).html(),
+//   id:this.commentCount++,
+//   repliedToComment:"",
+//   parentId:""
+// };
 // if(this.replying == true){
 //   // commentPushData.text = "<div style='background:#C0C0C0;'>"+this.replyToComment.text+"</div>"+commentPushData.text;
 //   commentPushData.repliedToComment=this.replyToComment.text
@@ -268,6 +268,7 @@ var commentPushData = {
 // }
 // alert("====comment data==>"+JSON.stringify(commentPushData));
 // this.commentsList.push(commentPushData);
+if(commentText != "" && jQuery(commentText).text().trim() != ""){
 this.commentDesc="";
 
 jQuery("#commentEditorArea").removeClass("replybox");
@@ -278,11 +279,12 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
   var reqData = {
     TicketId:this.ticketId,
     Comment:{
-      CrudeCDescription:commentText,
+      CrudeCDescription:commentText.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
       CommentedOn:formatedDate,
       ParentIndex:""
     },
   };
+  // alert(JSON.stringify(reqData));
   if(this.replying == true){
     if(this.replyToComment != -1){
     reqData.Comment.ParentIndex=this.replyToComment+"";
@@ -301,6 +303,7 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
           this.replying = false;
           
         });
+}
   
 }
 
@@ -869,19 +872,20 @@ var thisObj = this;
 
    submitEditedComment(commentIndex,slug){
      var editedContent = this.commentEditorsInstance[commentIndex].getData();
+     if(editedContent != "" && jQuery(editedContent).text().trim() != ""){
      var commentedOn = new Date()
      var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear();
 
      var reqData = {
     TicketId:this.ticketId,
     Comment:{
-      CrudeCDescription:editedContent,
+      CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
       CommentedOn:formatedDate,
       ParentIndex:"",
       Slug:slug
     },
   };
-  
+  // alert(JSON.stringify(reqData)+"<---->edited content");
   this._ajaxService.AjaxSubscribe("story/submit-comment",reqData,(result)=>
         { 
           // this.replying = false;
@@ -898,6 +902,7 @@ var thisObj = this;
           
         });
     //  alert(editedContent);
+     }
 
    }
 
