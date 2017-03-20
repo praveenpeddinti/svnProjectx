@@ -22,14 +22,15 @@ export class StoryDetailsPage {
     public timeStarts:any;
     public timeEnds:any;
     public items: Array<any>;
-    public arrayList: Array<{id: string, title: string, assignTo: string, readOnly: string, priority: string, bucket: string, planlevel: string, ticketId: any}>;
-    public displayFieldvalue ;
+    public arrayList: Array<{id: string, title: string, assignTo: string, readOnly: string,fieldType: string, ticketId: any}>;
+    public displayFieldvalue = [] ;
     public showEditableFieldOnly = [];
     public readOnlyDropDownField:boolean = false;
     public clickedDivRef;
 public selectedValue = "";
 //@ViewChild('select-alertless') select: Select;
  public previousSelectIndex:any;
+ public enableDataPicker = [];
 
     public titleAfterEdit: string = "";
     public enableEdatable: boolean = false;
@@ -80,10 +81,16 @@ public selectedValue = "";
                 for (let i = 0; i < this.items.length; i++) {
                     var _id = this.items[i].Id;
                     var _title = this.items[i].title;
-                    var _assignTo = this.items[i].value_name;
+                    var _assignTo;
+                    if(this.items[i].value_name == "") {
+                        _assignTo = "--";
+                    } else {
+                        _assignTo = this.items[i].value_name;
+                    }
                     var _readOnly = this.items[i].readonly;
+                    var _fieldType = this.items[i].field_type;
                     this.arrayList.push({
-                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, priority: "", bucket: "", planlevel: "", ticketId: this.taskDetails.ticketId
+                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly,fieldType: _fieldType, ticketId: this.taskDetails.ticketId
                     });
                 }
                 //console.log("the field arrayList " + JSON.stringify(this.arrayList));
@@ -163,31 +170,27 @@ public selectedValue = "";
          }, 300);
     }
 
-    public getFieldValues(fieldDetails, index) { // 1 --> non editable 
+    public getFieldValues(fieldDetails, index) {
 
         this.selectCancel(this.previousSelectIndex);
                 
-        if(fieldDetails.readOnly == 0){
+        if((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))){
             this.readOnlyDropDownField = true;
             this.showEditableFieldOnly[index] = true;
             this.clickedDivRef = fieldDetails.id;
             this.previousSelectIndex = index;
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
             (result) => {
-                
-                //console.log("the detials field result ---- " + JSON.stringify(result));
                 this.displayFieldvalue = result.getFieldDetails;
-                
-                //this.displayFieldvalue = [{"Id":"1","Name":"Backlog"},{"Id":"2","Name":"Sprint1"},{"Id":"3","Name":"Sprint2"},{"Id":"4","Name":"Sprint3"}];
-                console.log("the before loop " + JSON.stringify(this.displayFieldvalue));
-                for(var i = 0; i<result.getFieldDetails.length; i++){
-                    console.log("the for loop data " + JSON.stringify(result.getFieldDetails[i]));
-                }
             },
             (error) => {
                 console.log("the fields error --- " + error);
             });
            
+        } else if((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")){
+            this.enableDataPicker[index] = true;
+        } else if((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))){
+            console.log("TextArea was enabled " + fieldDetails.fieldType);
         }
         
     }

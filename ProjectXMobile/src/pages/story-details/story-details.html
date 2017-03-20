@@ -31,26 +31,21 @@
           </div>
         
         
-        <ion-label *ngIf="field.title=='DOD'" class="fntsize"  >{{field.title}}</ion-label>
-       
-        
-    <ion-input  *ngIf="field.title=='DOD'" type="text" placeholder="{{field.title}}" class="bc " ></ion-input>
-    
-    
-    
-    
+        <ion-label *ngIf="field.title=='DOD'" class="fntsize"  >{{field.title}}</ion-label>        
+        <ion-input  *ngIf="field.title=='DOD'" type="text" placeholder="{{field.title}}" class="bc " ></ion-input>
+
         <ion-label *ngIf="field.title=='Estimated Points'" class="fntsize"  >{{field.title}}</ion-label>
-    <ion-input  *ngIf="field.title=='Estimated Points'" type="text" placeholder="{{field.title}}" class="bc"></ion-input>
+        <ion-input  *ngIf="field.title=='Estimated Points'" type="text" placeholder="{{field.title}}" class="bc"></ion-input>
         
-         <ion-label *ngIf="field.title=='Due Date'" class="no_mar">
+         <div *ngIf="enableDataPicker[i]"  class="no_mar">
           <ion-label label>{{field.title}}</ion-label>
-            <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM DD YYYY" (ionChange)="datemethod($event, i,field)">03-03-2017</ion-datetime>
-          </ion-label>
+            <ion-datetime id="field.title_field.id_{{i}}"  displayFormat="MMM DD YYYY" (ionChange)="datemethod($event, i,field)">03-03-2017</ion-datetime>
+         </div>
          
         
           <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
-          <select-alertless id="slect_{{i}}" *ngIf="showEditableFieldOnly[i]"  item-content [(ngModel)]="changeBucket" (ionCancel)="selectCancel(i)" (ionChange)="changeOption($event, i)">
-              <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}">{{item.Name}}</ion-option>
+          <select-alertless id="slect_{{i}}" *ngIf="showEditableFieldOnly[i]"  item-content [(ngModel)]="New" (ionCancel)="selectCancel(i)" (ionChange)="changeOption($event, i)">
+              <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}" [selected]="(item.Name == field.assignTo)" >{{item.Name}}</ion-option>
           </select-alertless>
           
         
