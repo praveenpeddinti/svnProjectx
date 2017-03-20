@@ -65,7 +65,7 @@ class TicketTimeLog extends ActiveRecord
 
         try {
             $returnValue = 'failure';
-            $timelogObj = new TicketTimeLogCollection();
+            $timelogObj = new TicketTimeLog();
             $timelogObj->ProjectId = (int) $projectId;
             $timelogObj->TicketId = (int) $ticketId;
             $timelogObj->CollaboratorId = (int) $userId;
@@ -76,7 +76,7 @@ class TicketTimeLog extends ActiveRecord
             return $returnValue;
             
         } catch (Exception $ex) {
-            Yii::log("TicketTimeLogCollection:saveTimeLogData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TicketTimeLog:saveTimeLogData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
         
         
@@ -92,7 +92,7 @@ class TicketTimeLog extends ActiveRecord
         try {
           
             $matchArray = array("TicketId" => array('$in' => $ticketsList), "ProjectId" => (int) $projectId);
-            $query = Yii::$app->mongodb->getCollection('TicketTimeLogCollection');
+            $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
                 array('$match' => $matchArray),
                 array(
@@ -105,7 +105,7 @@ class TicketTimeLog extends ActiveRecord
             $Arraytimelog = $query->aggregate($pipeline);
             return $Arraytimelog;
         } catch (Exception $ex) {
-            Yii::log("TicketTimeLogCollection:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
