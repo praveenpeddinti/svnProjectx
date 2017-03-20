@@ -126,6 +126,54 @@ class CommonUtility {
             Yii::log("CommonUtility:convert_date_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    static function refineActivityData($html) {
+         // $html = CommonUtility::closetags($html);
+          $html = substr($html, 0, 25)."...";
+          $html = strip_tags($html);
+          return $html;
+    }
+    
+    static function closetags($html) {
+
+  #put all opened tags into an array
+
+  preg_match_all('#<([a-z]+)(?: .*)?(?<![/|/ ])>#iU', $html, $result);
+
+  $openedtags = $result[1];   #put all closed tags into an array
+
+  preg_match_all('#</([a-z]+)>#iU', $html, $result);
+
+  $closedtags = $result[1];
+
+  $len_opened = count($openedtags);
+
+  # all tags are closed
+
+  if (count($closedtags) == $len_opened) {
+
+    return $html;
+
+  }
+
+  $openedtags = array_reverse($openedtags);
+
+  # close tags
+
+  for ($i=0; $i < $len_opened; $i++) {
+
+    if (!in_array($openedtags[$i], $closedtags)){
+
+      $html .= '</'.$openedtags[$i].'>';
+
+    } else {
+
+      unset($closedtags[array_search($openedtags[$i], $closedtags)]);    }
+
+  }  return $html;
+  
+    }
+    
+    
     /**
      * @author Moin Hussain
      * @param type $text
@@ -366,7 +414,7 @@ class CommonUtility {
                $selectFields = ['Title', 'TicketId'];
 
             }
-            $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto'];
+            $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto','Fields.workflow'];
             foreach ($ticketDetails["Tasks"] as &$task) {
                  $taskDetails = $ticketCollectionModel->getTicketDetails($task,$projectId,$selectFields);
                    $task =(array)$taskDetails;
@@ -853,8 +901,12 @@ Yii::log("CommonUtility:prepareActivity::" . $ex->getMessage() . "--" . $ex->get
                         $property["NewValue"];
                         $property["CreatedOn"];
                        if($fieldName == "Title" || $fieldName == "Description"){
-                            $property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
-                            $property["NewValue"]   = substr($property["NewValue"], 0, 25);
+                            //$property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
+                           // $property["NewValue"]   = substr($property["NewValue"], 0, 25);
+                            $property["PreviousValue"] = self::refineActivityData($property["PreviousValue"]);
+                            $property["NewValue"] = self::refineActivityData($property["NewValue"]);
+                             
+                          
                         } 
                         
                         

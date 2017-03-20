@@ -235,7 +235,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                               if($fieldName == "planlevel"){
                                 $details =  PlanLevel::getPlanLevelDetails($ticket_data->$fieldName);
                               }
-                              else if($fieldId == "priority"){
+                              else if($fieldName == "priority"){
                                     $details = Priority::getPriorityDetails($ticket_data->$fieldName);
                               }
                                $fieldBean->value_name= $details["Name"];
