@@ -366,8 +366,8 @@ footer{font-size:10px}
 .addtask_title{ color:#000; font-size:15px; line-height:18px; margin-top:5px;}
 .addtask_status{ color:#979797;font-size:14px; line-height:24px;}
 .addtask label{ color:#4c4c4c;font-size:13px;font-family: 'robotoregular';font-weight: normal;}
-.removetask{ background:#237ea7; color: #fff; cursor: pointer; width: 22px; height: 22px; border-radius: 50%;
--moz-border-radius: 50%; -webkit-border-radius: 50%; text-align: center; display: table-cell; padding-top:3px;}
+.removetask{ background:#237ea7; color: #fff; cursor: pointer; width: 23px; height: 23px; border-radius: 50%;
+-moz-border-radius: 50%; -webkit-border-radius: 50%; text-align: center; display: table-cell; padding-top:4px;}
 .mart10{margin-top: 10px;}
 
 /*Header*/

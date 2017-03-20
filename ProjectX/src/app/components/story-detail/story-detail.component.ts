@@ -822,13 +822,13 @@ var thisObj = this;
          { 
            var subTaskData = result.data;
             for(let subTaskfield of subTaskData){
-               var currentData = '# '+subTaskfield.TicketId+' '+subTaskfield.Title;
+               var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
                  prepareSearchData.push(currentData);
             }
            this.search_results=prepareSearchData;
          });
     }
-
+ 
 
     /**
      * @author:Ryan
@@ -990,7 +990,7 @@ var thisObj = this;
         var relatedTasks={
         'projectId':1,
         'ticketId':this.ticketId,
-        'relatedSearchTicketId':suggestValue.split(" ")[1]
+        'relatedSearchTicketId':suggestValue.split("#")[1]
          } 
         this._ajaxService.AjaxSubscribe("story/update-related-tasks",relatedTasks,(result)=>
          { 
@@ -1066,5 +1066,9 @@ var thisObj = this;
           jQuery("#"+id).show();
           jQuery("#"+id).fadeOut(4000);
             }
+
+    public navigateStoryDetail(ticketId){
+          this._router.navigate(['/story-detail',ticketId]);   
+    }
 
 }
