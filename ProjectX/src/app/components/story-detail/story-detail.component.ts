@@ -101,8 +101,8 @@ public blurTimeout=[];
       this.route.params.subscribe(params => {
             this.ticketId = params['id'];
         });
-
         
+
 // alert("User Data---------->"+JSON.stringify(this.getAllData));
    console.log("+++++++++++++iniit+++++++++");
 
@@ -992,15 +992,18 @@ var thisObj = this;
         'ticketId':this.ticketId,
         'relatedSearchTicketId':suggestValue.split("#")[1]
          } 
-        this._ajaxService.AjaxSubscribe("story/update-related-tasks",relatedTasks,(result)=>
+       if(relatedTasks.relatedSearchTicketId==undefined){
+         this.commonErrorFunction("relatedTaskerr_msg","Please select ticket") 
+       }else{
+       this._ajaxService.AjaxSubscribe("story/update-related-tasks",relatedTasks,(result)=>
          { 
          this.relatedTaskArray=result.data;
             this.text="";
         })
+       }
+       
         }
-      
-    }
-  
+      }
      /**
      * @author:suryaprakash
      * @description : This is used to capture workhours
