@@ -44,6 +44,113 @@
     text-align: right;
 }
 
+
+/*Followers*/
+.add{ background:#207fa9; width:30px; height:30px;  text-align:center; vertical-align:middle; -webkit-border-radius:1100%;
+ -moz-border-radius:100%;
+ -o-border-radius:100%;
+ border-radius:100%; float:right; display:table-cell;
+padding:5px 10px; cursor:pointer; margin-top:10px;}
+
+.add i{ color:#fff;}
+
+.followers{ width:100%; height:auto; clear:both; margin-top:10px }
+.followers_usr{width:30px; height:30px; border-radius:50%; float:left;margin-right:20px; position:relative; cursor:pointer;}
+.followers_usr img{ width:30px; height:30px; border-radius:50%; }
+.followers_delete{ width:30px; height:30px;  background: url(../assets/images/close.png) no-repeat; position:absolute; left:0px; top:0px; display:none;}
+.followers_usr:hover .followers_delete{width:30px; height:30px;  background: url(../assets/images/close.png) no-repeat; position:absolute; left:0px; top:0px;display:block!important;
+}
+
+.padd10{padding:0px 10px 8px;}
+
+.add_followersbg {
+	position: relative;
+	background: #ebebeb;
+	width:280px;
+	height:auto; min-height:80px;
+		border-radius:2px;
+	 -moz-border-radius:2px;
+	 -webkit-border-radius:2px;
+	 padding-top:10px;
+}
+.add_followersbg:after {
+	bottom: 100%;
+	right: 5%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(136, 183, 213, 0);
+	border-bottom-color: #ebebeb;
+	border-width: 6px;
+	margin-left: -10px;
+}
+
+.delete_followersbg {
+	position: relative;
+	background: #ebebeb;
+	width:200px;
+	height:auto; min-height:80px;
+		border-radius:2px;
+	 -moz-border-radius:2px;
+	 -webkit-border-radius:2px;
+	 padding:10px;
+	 margin-bottom: 20px;
+         margin-left:-85px;
+}
+.delete_followersbg:after {
+	bottom: 100%;
+	left: 52%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(136, 183, 213, 0);
+	border-bottom-color: #ebebeb;
+	border-width: 6px;
+	margin-left: -10px;
+}
+.delete_followersbg_nobg{ border:none!important; background:none!important; box-shadow:none!important; }
+
+.addfollower_userbg{ width:100%; background:#ebebeb; border-top:#f3f3f3 solid 1px; cursor:pointer; clear:both; padding:5px 10px;}
+.addfollower_userbg:hover{ background:#fafafa; padding:5px 10px;}
+.addfollower_user{width:30px; height:30px; border-radius:50%;  overflow:hidden; position:relative; cursor:pointer;}
+.addfollower_user img{ width:30px; height:30px; border-radius:50%; }
+.addfollower_username{font-family: 'robotoregular'; font-size:14px; color:#9b9b9b; line-height:18px; }
+.addfollower_search{  border:none; outline:none; text-indent:8px; line-height:30px; width:100%;}
+
+.yes{ background:#237ea7; color:#fff;font-family: 'robotoregular'; font-size:14px; padding:5px 10px; line-height:18px; text-align:center; display:inline-block;}
+.no{background:#cacaca; color:#fff;font-family: 'robotoregular'; font-size:14px; padding:5px 10px; line-height:18px; text-align:center;display:inline-block;}
+.addfollowers_overlap{ z-index: 1; float: right; margin-top: -30px;}
+.followers .dropdown-toggle{box-shadow:none!important;}
+.customdropdown-menu {
+    background-clip: padding-box;
+    background-color: transparent;
+    border: 0px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.176);
+    margin: 5px 0 0;
+    min-width:100%;
+    padding: 0px 0;
+   
+}
+@media screen and (max-width:900px){
+.delete_followersbg {
+	 margin-left:0px;
+}
+
+.delete_followersbg:after {
+	left:20px!important;
+}
+
+}
+
+
+
 .comments
 {
   border-radius: 3px;

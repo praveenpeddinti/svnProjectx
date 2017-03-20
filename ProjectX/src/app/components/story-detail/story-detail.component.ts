@@ -1,6 +1,6 @@
 import { Component, OnInit,ViewChild,Input } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
-import { Headers, Http } from '@angular/http';
+import { Headers, Http, Response } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import { FileUploadService } from '../../services/file-upload.service';
@@ -36,6 +36,15 @@ public blurTimeout=[];
   private ticketDesc = "";
   private ticketCrudeDesc = "";
   private showDescEditor=true;
+
+
+  private followers:any=[];
+  private added_follower=[];
+  private follower_search_results:string[];
+  private texts:string;
+  private check_status:boolean=false;
+
+
   private childTasksArray=[];
   private childTaskData="";
   public commentsList=[];
@@ -111,6 +120,7 @@ public blurTimeout=[];
         { 
 
             this.ticketData = data;
+            this.followers = data.data.Followers;
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
@@ -128,8 +138,13 @@ public blurTimeout=[];
               console.log(data.data.Activities);
               this.commentsList = data.data.Activities;
             });
-
+            
         });
+
+
+       
+
+
         this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
             { 
                this.individualLog =data.data.individualLog;
@@ -203,6 +218,7 @@ public blurTimeout=[];
 
        
       })
+      //jQuery('span[id^="check_"]').hide();
     }
 
   /*
@@ -829,6 +845,146 @@ var thisObj = this;
     }
  
 
+
+    /**
+     * @author:Praveen P
+     * @description: This is used to add/remove the followers in the follower div section
+     */
+    
+    /* When click the plus button to open the input box for followers*/
+    public loadfollowers(){
+      document.getElementById("followerdiv").style.display='block';
+      jQuery("#followerId").val("");
+      this.follower_search_results=[];
+    }
+    /* Enter 2 char in the follower input box*/ 
+    public searchfollower(event){
+      this.follower_search_results=[];
+      if(event.length>=2){
+        var dafaultUserList:any=[];
+      for(var x=0;x<this.followers.length;x++){
+           dafaultUserList.push(this.followers[x].FollowerId);
+      }
+         var followerData = {
+          TicketId:this.ticketId,
+          ProjectId:1,
+          DafaultUserList:dafaultUserList,
+          SearchValue:event
+        };
+         this._ajaxService.AjaxSubscribe("story/get-followers-details",followerData,(response)=>
+         { 
+
+          if (response.statusCode == 200) {
+                 var fList:any=[];
+         for(var l=0;l<response.data.length;l++){
+           //fList.push(response.data[l].ProfilePicture+" "+response.data[l].UserName);
+           fList.push({Name:response.data[l].Name,id:response.data[l].Id});
+           }
+           
+             this.follower_search_results=fList;
+              
+            } else {
+                console.log("fail---");
+            } 
+             
+         });
+      }
+    }
+    /* add the followers in the Follower div */
+    public checkFollower(event)
+    {
+      console.log("Follower id"+event);
+      if(jQuery("#check_"+event).hasClass("glyphicon glyphicon-ok"))
+      {
+        jQuery("#check_"+event).removeClass("glyphicon glyphicon-ok");
+        var followerData = {
+          TicketId:this.ticketId,
+          ProjectId:1,
+          Follower:event,
+          Field:'follower',
+          FlagCheckbox:0
+        };
+        this._ajaxService.AjaxSubscribe("story/add-followers",followerData,(response)=>
+         {
+                if(response.statusCode==200)
+                {
+                 this.followers=[];
+                  //var follower=jQuery("#"+event).html();
+                  //this.added_follower=[];
+                  for(var i=0;i<response.data.length;i++)
+                  {
+                    this.added_follower.push(response.data[i]);
+                    this.followers.push(response.data[i]);
+                  }
+                  //this.followers.push(response.data[i]);
+                  //console.log("--Add followers removeoncheck---"+JSON.stringify(this.followers));
+                }
+        });
+      }
+      else{
+        jQuery("#check_"+event).addClass("glyphicon glyphicon-ok");
+        //make ajax to add follower to the Ticket.....
+        var followerData = {
+          TicketId:this.ticketId,
+          ProjectId:1,
+          Follower:event,
+          Field:'follower',
+          FlagCheckbox:1
+        };
+        this._ajaxService.AjaxSubscribe("story/add-followers",followerData,(response)=>
+         {
+                if(response.statusCode==200)
+                {
+                 
+                 for(var i=0;i<response.data.length;i++)
+                  {
+                    this.added_follower.push(response.data[i]);
+                    this.followers.push(response.data[i]);
+                  }
+                  //this.followers.push(response.data[i]);
+                  //console.log("--Add followers oncheck---"+JSON.stringify(this.followers));
+                }
+        });
+      }
+      
+    }
+    /*when click the 'yes' in the popup div on the follower to remove the user*/
+    public removefollowerId(event){
+
+    jQuery("#check_"+event).removeClass("glyphicon glyphicon-ok");
+    document.getElementById("followerdiv").style.display='none';
+    var followerData = {
+          TicketId:this.ticketId,
+          ProjectId:1,
+          Follower:event,
+          Field:'follower',
+          FlagCheckbox:0
+        };
+        this._ajaxService.AjaxSubscribe("story/add-followers",followerData,(response)=>
+         {
+                if(response.statusCode==200)
+                {
+                 this.followers=[];
+                  //var follower=jQuery("#"+event).html();
+                  //this.added_follower=[];
+                  for(var i=0;i<response.data.length;i++)
+                  {
+                    this.added_follower.push(response.data[i]);
+                    this.followers.push(response.data[i]);
+                  }
+                  //this.followers.push(response.data[i]);
+                  console.log("--Add followers removeoncheck---"+JSON.stringify(this.followers));
+                }
+        });
+    }
+    /*when click the 'X' button in the follower div to open the popup*/
+  public removeFollower(event)
+  {
+    document.getElementById("followerdiv").style.display='none';
+  }
+/* Followers list method end /*
+
+
     /**
      * @author:Ryan
      * @description: This is used to expand the div section
@@ -849,7 +1005,7 @@ var thisObj = this;
         jQuery(".main_div").stop().slideToggle();
         jQuery("#expand").show();
         jQuery("#collapse").hide();
-    } 
+      }
 
 
     /**
