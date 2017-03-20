@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {NavController, NavParams, MenuController, LoadingController, PopoverController, ViewController} from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, NavParams, MenuController, LoadingController, PopoverController, ViewController } from 'ionic-angular';
 
-import {Globalservice} from '../../providers/globalservice';
-import {Constants} from '../../providers/constants';
+import { Globalservice } from '../../providers/globalservice';
+import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
 declare var jQuery: any;
@@ -18,23 +18,29 @@ declare var jQuery: any;
 })
 export class StoryDetailsPage {
 
-    public month:any;
-    public timeStarts:any;
-    public timeEnds:any;
+    public month: any;
+    public timeStarts: any;
+    public timeEnds: any;
     public items: Array<any>;
-    public arrayList: Array<{id: string, title: string, assignTo: string, readOnly: string,fieldType: string, ticketId: any}>;
-    public displayFieldvalue = [] ;
+    public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, ticketId: any }>;
+    public displayFieldvalue = [];
     public showEditableFieldOnly = [];
-    public readOnlyDropDownField:boolean = false;
+    public readOnlyDropDownField: boolean = false;
     public clickedDivRef;
-public selectedValue = "";
-//@ViewChild('select-alertless') select: Select;
- public previousSelectIndex:any;
- public enableDataPicker = [];
+
+   
+    public selectedValue = "";
+
+    
+    public previousSelectIndex: any;
+    public enableDataPicker = [];
+
+    public enableTextField = [];
+    public enableTextArea = [];
 
     public titleAfterEdit: string = "";
     public enableEdatable: boolean = false;
-    public taskDetails = {ticketId: "", title: "", description: "", type:""};
+    public taskDetails = { ticketId: "", title: "", description: "", type: "" };
     public isBusy: boolean = false;
     public options = "options";
     public localDate: Date = new Date();
@@ -50,21 +56,21 @@ public selectedValue = "";
         ], removePlugins: 'elementspath,magicline', resize_enabled: true
     };
 
-    constructor(menu: MenuController, 
-        public globalService: Globalservice, 
-        private constants: Constants, 
-        public navCtrl: NavController, 
+    constructor(menu: MenuController,
+        public globalService: Globalservice,
+        private constants: Constants,
+        public navCtrl: NavController,
         public navParams: NavParams,
         public loadingController: LoadingController,
         public popoverCtrl: PopoverController,
-        private storage: Storage,public viewCtrl: ViewController,) {
+        private storage: Storage, public viewCtrl: ViewController, ) {
         //      menu.swipeEnable(false);
         this.minDate = this.formatDate(new Date());
-        
-        let loader = this.loadingController.create({ content: "Loading..."});  
-            loader.present();
 
-            this.storage.get('userCredentials').then((value) => {
+        let loader = this.loadingController.create({ content: "Loading..." });
+        loader.present();
+
+        this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
         });
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.navParams.get("id")).subscribe(
@@ -82,7 +88,7 @@ public selectedValue = "";
                     var _id = this.items[i].Id;
                     var _title = this.items[i].title;
                     var _assignTo;
-                    if(this.items[i].value_name == "") {
+                    if (this.items[i].value_name == "") {
                         _assignTo = "--";
                     } else {
                         _assignTo = this.items[i].value_name;
@@ -90,7 +96,7 @@ public selectedValue = "";
                     var _readOnly = this.items[i].readonly;
                     var _fieldType = this.items[i].field_type;
                     this.arrayList.push({
-                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly,fieldType: _fieldType, ticketId: this.taskDetails.ticketId
+                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, fieldType: _fieldType, ticketId: this.taskDetails.ticketId
                     });
                 }
                 //console.log("the field arrayList " + JSON.stringify(this.arrayList));
@@ -102,20 +108,21 @@ public selectedValue = "";
         );
 
     }
- public event = {
-    month: '2017-02-19',
-    timeStarts: '07:43',
-    timeEnds: '2099-02-20'
-     
- }
- public datemethod(event, index,fieldDetails){
-     this.month= '2017-02-19';
-      this.timeStarts='07:43';
-     this.timeEnds='2099-02-20';
-     setTimeout( ()=>{
-            document.getElementById("item_"+index).classList.add("item-select");
-         }, 300);
- }
+    public event = {
+        month: '2017-02-19',
+        timeStarts: '07:43',
+        timeEnds: '2099-02-20'
+
+    }
+    public datemethod(event, index, fieldDetails) {
+        this.month = '2017-02-19';
+        this.timeStarts = '07:43';
+        this.timeEnds = '2099-02-20';
+        setTimeout(() => {
+             document.getElementById("field.title_field.id_" + index).style.display ='none';
+            //document.getElementById("item_" + index).classList.add("item-select");
+        }, 300);
+    }
 
 
     public formatDate(date) {
@@ -133,66 +140,82 @@ public selectedValue = "";
     ionViewDidLoad() {
         //console.log('ionViewDidLoad StoryDetailsPage');
     }
-    ionViewDidEnter(){
+    ionViewDidEnter() {
         console.log("the ionViewDidEnter --- " + jQuery('#description').height());
-        if(jQuery('#description').height()>200){
-            jQuery('#description').css("height","200px");
+        if (jQuery('#description').height() > 200) {
+            jQuery('#description').css("height", "200px");
             jQuery('.show-morediv').show();
             jQuery('#show').show();
         }
     }
-    ionViewWillEnter(){
+    ionViewWillEnter() {
         console.log("the ionViewWillEnter --- " + jQuery('#description').height());
-        if(jQuery('#description').height()>200){
-            jQuery('#description').css("height","200px");
+        if (jQuery('#description').height() > 200) {
+            jQuery('#description').css("height", "200px");
             jQuery('.show-morediv').show();
             jQuery('#show').show();
         }
     }
 
-    public changeOption(event, index,fieldDetails) {
+    public changeOption(event, index, fieldDetails) {
         this.readOnlyDropDownField = false;
         this.showEditableFieldOnly[index] = false;
         this.selectedValue = event;
         console.log("the div id " + this.clickedDivRef);
- 
-         setTimeout( ()=>{
-            document.getElementById("field.title_field.id_"+index).innerHTML = event;
-            document.getElementById("item_"+index).classList.remove("item-select");
-         }, 300);
+
+        setTimeout(() => {
+            document.getElementById("field.title_field.id_" + index).innerHTML = event;
+            document.getElementById("item_" + index).classList.remove("item-select");
+        }, 300);
     }
 
-    public selectCancel(index){
+    public selectCancel(index) {
         console.log("selectCancel --- " + index);
         this.showEditableFieldOnly[index] = false;
-        setTimeout( ()=>{
+        setTimeout(() => {
             //document.getElementById("item_"+index).classList.remove("item-select");
-         }, 300);
+        }, 300);
     }
 
     public getFieldValues(fieldDetails, index) {
 
         this.selectCancel(this.previousSelectIndex);
-                
-        if((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))){
+
+        if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
             this.readOnlyDropDownField = true;
             this.showEditableFieldOnly[index] = true;
             this.clickedDivRef = fieldDetails.id;
             this.previousSelectIndex = index;
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
-            (result) => {
-                this.displayFieldvalue = result.getFieldDetails;
-            },
-            (error) => {
-                console.log("the fields error --- " + error);
-            });
-           
-        } else if((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")){
+                (result) => {
+                    this.displayFieldvalue = result.getFieldDetails;
+                },
+                (error) => {
+                    console.log("the fields error --- " + error);
+                });
+
+        } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
+            document.getElementById("field.title_field.id_" + index).style.display ='none';
             this.enableDataPicker[index] = true;
-        } else if((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))){
+            
+        } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
             console.log("TextArea was enabled " + fieldDetails.fieldType);
+
+            if (fieldDetails.fieldType == "TextArea") {
+                this.enableTextArea[index] = true;
+             
+                document.getElementById("field.title_field.id_" + index).style.display ='none';
+
+                
+
+            }
+            else if (fieldDetails.fieldType == "Text") {
+                this.enableTextField[index] = true;
+                 document.getElementById("field.title_field.id_" + index).style.display='none';
+            }
+            //this.enable
         }
-        
+
     }
 
     openPopover(myEvent) {
@@ -202,30 +225,30 @@ public selectedValue = "";
             ev: myEvent
         });
     }
-    
-    public titleEdit(event){  
+
+    public titleEdit(event) {
         //this.enableEdatable = true;
     }
 
-    public updateTitleSubmit(){
+    public updateTitleSubmit() {
         this.enableEdatable = false;
         this.taskDetails.title = this.titleAfterEdit;
     }
-    public updateTitleCancel(){
+    public updateTitleCancel() {
         this.enableEdatable = false;
         this.titleAfterEdit = this.taskDetails.title;
     }
 
-    public expandDescription(){
+    public expandDescription() {
         jQuery('#description').css('height', 'auto');
         jQuery('#show').hide();
         jQuery('#hide').show();
     }
-    public collapseDescription(){
+    public collapseDescription() {
         jQuery('#hide').hide();
         jQuery('#show').show();
-        jQuery('#description').css("height","200px");
-        jQuery('#description').css("overflow","hidden");
+        jQuery('#description').css("height", "200px");
+        jQuery('#description').css("overflow", "hidden");
     }
- 
+
 }
