@@ -878,7 +878,7 @@ var thisObj = this;
                  var fList:any=[];
          for(var l=0;l<response.data.length;l++){
            //fList.push(response.data[l].ProfilePicture+" "+response.data[l].UserName);
-           fList.push({Name:response.data[l].Name,id:response.data[l].Id});
+           fList.push({Name:response.data[l].Name,id:response.data[l].Id,ProfilePic:response.data[l].ProfilePic});
            }
            
              this.follower_search_results=fList;
