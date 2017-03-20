@@ -211,7 +211,7 @@
                     <div class="col-md-5">
                         <div class="addtask_bor">
                             <div class="addtask_title" id="childTaskTitle" (click)="navigateToChildDetail(childTasks.TicketId)">{{childTasks.Title}}</div>
-                            <div class="addtask_status"></div>
+                            <div class="addtask_status">{{childTasks.Fields[2].data.value_name}}</div>
                         </div>
                     </div>
                     <div *ngFor="let childTaskFields of childTasks.Fields;let k=index;" class="col-md-3">
