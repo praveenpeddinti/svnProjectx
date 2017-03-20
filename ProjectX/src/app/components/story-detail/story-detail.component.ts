@@ -765,8 +765,10 @@ var thisObj = this;
             if(result.data.activityData.referenceKey == -1){
              this.commentsList.push(result.data.activityData.data);
             }
-         this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
-          }
+       else{
+        this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+     }        
+ }
         });
     }
 
