@@ -195,20 +195,20 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                      if($fieldType == 6 && $fieldName == "reportedby"){
                          $fieldBean->value= (int)$collaboratorData["Id"]; 
                          $fieldBean->value_name= $collaboratorData["UserName"]; 
-                     }
+                         }
 //                     else if($fieldName == "tickettype"){
 //                         $fieldBean->value= (int)1; 
 //                     }
                      else if($fieldName == "tickettype"){
-                          $fieldBean->value= (int)1; 
-                          $tickettypeDetail = TicketType::getTicketType($fieldBean->value);
-                          $fieldBean->value_name = $tickettypeDetail["Name"];
-                     }
+                            $fieldBean->value= (int)1; 
+                            $tickettypeDetail = TicketType::getTicketType($fieldBean->value);
+                            $fieldBean->value_name = $tickettypeDetail["Name"];
+                          }
                      else if($fieldName == "workflow"){
-                         $fieldBean->value= (int)1; 
-                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails($fieldBean->value);
-                         $fieldBean->value_name= $workFlowDetail["Name"]; 
-                     }
+                            $fieldBean->value= (int)1; 
+                            $workFlowDetail = WorkFlowFields::getWorkFlowDetails($fieldBean->value);
+                            $fieldBean->value_name= $workFlowDetail["Name"]; 
+                          }
                      else if($fieldName == "estimatedpoints"){
                          $fieldBean->value= ""; 
                          $fieldBean->value_name= ""; 
@@ -222,10 +222,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             $fieldBean->value_name= $fieldBean->value; 
                          }
                      else if($fieldType == 10){
-                        $bucket = Bucket::getBackLogBucketId($projectId);
-                        $fieldBean->value = (int)$bucket["Id"];
-                        $fieldBean->value_name = $bucket["Name"];
-                     }
+                            $bucket = Bucket::getBackLogBucketId($projectId);
+                            $fieldBean->value = (int)$bucket["Id"];
+                            $fieldBean->value_name = $bucket["Name"];
+                         }
                      else{
                           $fieldBean->value=""; 
                      }
@@ -234,10 +234,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                $fieldBean->value= (int)$ticket_data->$fieldName;
                               if($fieldName == "planlevel"){
                                 $details =  PlanLevel::getPlanLevelDetails($ticket_data->$fieldName);
-                              }
+                                }
                               else if($fieldName == "priority"){
                                     $details = Priority::getPriorityDetails($ticket_data->$fieldName);
-                              }
+                                }  
                                $fieldBean->value_name= $details["Name"];
                              
                           }else{
@@ -871,6 +871,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $fieldBean->value = (int)$ticketDetails['Fields']['bucket']['value'];
                         $fieldBean->value_name = $ticketDetails['Fields']['bucket']['value_name'];
                      }
+                    if($fieldName == "reportedby"){
+                         $fieldBean->value= $ticketDetails['Fields']['reportedby']['value']; 
+                         $fieldBean->value_name= $ticketDetails['Fields']['reportedby']['value_name']; 
+                     }
+                     else if($fieldName == "tickettype"){
+                          $fieldBean->value= (int)1; 
+                          $fieldBean->value_name = 'New';
+                     }
+                     else if($fieldName == "workflow"){
+                         $fieldBean->value= (int)1; 
+                         $fieldBean->value_name= 'New'; 
+                     }
                      else if($fieldName == "planlevel"){
                         $fieldBean->value = (int)2;
                         $fieldBean->value_name = 'Task';
@@ -879,6 +891,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $fieldBean->value =(int)$ticketDetails['Fields']['priority']['value'];
                         $fieldBean->value_name =$ticketDetails['Fields']['priority']['value_name'];
                      }
+                     else if($fieldType == 4 || $fieldType == 5){
+                             $fieldBean->value= new \MongoDB\BSON\UTCDateTime(time() * 1000);   
+                            $fieldBean->value_name= $fieldBean->value; 
+                         }
                      else{
                           $fieldBean->value=""; 
                      }
