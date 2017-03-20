@@ -194,8 +194,8 @@
  
        
     </div>
-
-      <div><label>Tasks</label>
+<div *ngIf='checkPlanLevel =="Story"'>
+      <label>Tasks</label>
         <div class="relate_story">
             <div class="custom_story_input">
                     <input class="editinput" type="text" placeholder="Create a task here"  id="childtitle" value=""   name="childtitle" />
@@ -215,6 +215,7 @@
                         </div>
                     </div>
                     <div *ngFor="let childTaskFields of childTasks.Fields;let k=index;" class="col-md-3">
+                        <ng-container *ngIf="k<2">
                     <div class="">
                     <div class="">
                     <div class="">
@@ -238,11 +239,12 @@
                 
                     </div>
                     </div><!-- -->
+                    </ng-container>
                     </div><!-- 2nd loop ends -->
                     <div class="clearfix"></div>
                 </div>
 </div><!-- 1st loop ends -->
-
+</div>
     <!--AutoSuggestion for Related Tickets-->
     <div><label>Related Stories/Tasks</label></div>
 <div class="relate_story">
@@ -272,7 +274,7 @@
     <div class="clearfix"></div>
 </div> 
 
-</div>
+
 
  </div>
 <!--Comments Section-->

@@ -44,7 +44,7 @@ public blurTimeout=[];
   public individualLog=[];
   public isTimeValidErrorMessage;
   public relatedTaskArray=[];
-
+  public checkPlanLevel='';
 
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
@@ -114,12 +114,13 @@ public blurTimeout=[];
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
-
+           // alert("fieldsData"+JSON.stringify(this.fieldsData[4].value));
+            this.checkPlanLevel=this.fieldsData[4].value;
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
           //  alert("subtasksdat"+JSON.stringify(this.childTasksArray));
-             
+
 
             // this.commentsList = [];
             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
@@ -997,7 +998,7 @@ var thisObj = this;
        }else{
        this._ajaxService.AjaxSubscribe("story/update-related-tasks",relatedTasks,(result)=>
          { 
-         this.relatedTaskArray=result.data;
+      this.relatedTaskArray=result.data;
             this.text="";
         })
        }
