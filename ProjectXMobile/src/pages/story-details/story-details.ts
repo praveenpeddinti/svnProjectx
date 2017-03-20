@@ -28,10 +28,10 @@ export class StoryDetailsPage {
     public readOnlyDropDownField: boolean = false;
     public clickedDivRef;
 
-   
+
     public selectedValue = "";
 
-    
+
     public previousSelectIndex: any;
     public enableDataPicker = [];
 
@@ -119,7 +119,7 @@ export class StoryDetailsPage {
         this.timeStarts = '07:43';
         this.timeEnds = '2099-02-20';
         setTimeout(() => {
-             document.getElementById("field.title_field.id_" + index).style.display ='none';
+            document.getElementById("field.title_field.id_" + index).style.display = 'none';
             //document.getElementById("item_" + index).classList.add("item-select");
         }, 300);
     }
@@ -195,23 +195,23 @@ export class StoryDetailsPage {
                 });
 
         } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
-            document.getElementById("field.title_field.id_" + index).style.display ='none';
+            document.getElementById("field.title_field.id_" + index).style.display = 'none';
             this.enableDataPicker[index] = true;
-            
+
         } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
             console.log("TextArea was enabled " + fieldDetails.fieldType);
 
             if (fieldDetails.fieldType == "TextArea") {
                 this.enableTextArea[index] = true;
-             
-                document.getElementById("field.title_field.id_" + index).style.display ='none';
 
-                
+                document.getElementById("field.title_field.id_" + index).style.display = 'none';
+
+
 
             }
             else if (fieldDetails.fieldType == "Text") {
                 this.enableTextField[index] = true;
-                 document.getElementById("field.title_field.id_" + index).style.display='none';
+                document.getElementById("field.title_field.id_" + index).style.display = 'none';
             }
             //this.enable
         }
@@ -249,6 +249,26 @@ export class StoryDetailsPage {
         jQuery('#show').show();
         jQuery('#description').css("height", "200px");
         jQuery('#description').css("overflow", "hidden");
+    }
+
+
+    public isColorChange(fieldDetails) {
+
+        if (fieldDetails.title == "Created on") {
+            return true;
+        }
+
+        else if (fieldDetails.title == "Reported by") {
+            return true;
+        }
+
+        else if (fieldDetails.title == "Plan Level") {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
 
 }

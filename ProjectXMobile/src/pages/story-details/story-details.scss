@@ -153,10 +153,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#23576a', end
     /* text-overflow: ellipsis; */
 }
 
+
+
 .dodtxt{ margin: 2px 0!important;
     font-size: 1.4rem!important;
     font-weight: normal;
-    line-height: normal;}
+    line-height: normal;
     color:#000!important;
 }
 
@@ -180,6 +182,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#23576a', end
 .input-wrapper .no_mar{ margin: 0px!important;font-size: 1.4rem!important; margin-bottom: 5px!important;}
 .input-wrapper .datetime-md, .input-wrapper .datetime-ios, .input-wrapper .datetime-wp {
     padding: 0px 8px 13px 0px!important;
+    }
 
     .high{ width:8px; height:8px;border-radius:50%;
 	-moz-border-radius:50%;
@@ -196,4 +199,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#23576a', end
      .user img{ width:20px; height:20px;border-radius:50%;
 	-moz-border-radius:50%;
 	-webkit-border-radius:50%;}
+
+.input-wrapper .spinnerlabel{ color:#1c8ab5!important;}
+
+
+
+
+
 }
