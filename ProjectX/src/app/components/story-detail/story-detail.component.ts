@@ -778,9 +778,7 @@ var thisObj = this;
     {
         this._router.navigate(['story-dashboard']);
     }
-
-
-    public savechiledTask()
+   public savechiledTask()
     {
        var title= jQuery('#childtitle').val();
        if(title !=""){
@@ -798,7 +796,7 @@ var thisObj = this;
           this.childTasksArray.push(newChildData[0]);
          });
        }else{
-          alert("Please enter Title"); 
+          this.commonErrorFunction("subtaskerr","Please enter title.")
        }
     }
 

@@ -195,13 +195,14 @@
        
     </div>
 <div *ngIf='checkPlanLevel =="Story"'>
-      <label>Tasks</label>
+      <div class="widgethed">Tasks</div>
         <div class="relate_story">
             <div class="custom_story_input">
                     <input class="editinput" type="text" placeholder="Create a task here"  id="childtitle" value=""   name="childtitle" />
             </div>
              <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="savechiledTask()" type="submit">CREATE</button></div>
-     
+       <div id="subtaskerr" class="alert alert-danger" style="display:none;"></div>
+
         </div>
         <div *ngFor="let childTasks of childTasksArray;let j=index;">
                 <div class="addtask">
