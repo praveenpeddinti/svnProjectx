@@ -423,12 +423,26 @@ class CommonUtility {
                  $relatedStoryDetails = $ticketCollectionModel->getTicketDetails($relatedStory,$projectId,$selectFields);
                  $relatedStory = $relatedStoryDetails;
             }
+
+            foreach ($ticketDetails["Followers"] as &$followersList){
+                //error_log($followersList['FollowerId']."----Follower--1--".print_r($followersList,1));
+               
+                $projectFDetails = $tinyUserModel->getMiniUserDetails($followersList['FollowerId']);
+                $followersList["ProfilePicture"] = $projectFDetails["ProfilePicture"];
+                $followersList["UserName"] = $projectFDetails["UserName"];
+                //$followersList["readable_value"] = $projectFDetails;
+                //error_log($followersList['FollowerId']."----Follower--2--".print_r($followersList,1));
+                
+            }
+
             
+
             unset( $ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
           
 
             return $ticketDetails;
+            
         } catch (Exception $ex) {
 Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -554,14 +568,13 @@ Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex
             $projectObj = new Projects();
             $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
-            
+           
            
             
             unset( $ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
             unset( $ticketDetails["ArtifactsRef"]);
             unset($ticketDetails["CommentsRef"]);
-          
 
             return $ticketDetails;
         } catch (Exception $ex) {

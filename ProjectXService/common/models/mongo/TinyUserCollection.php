@@ -80,5 +80,18 @@ class TinyUserCollection extends ActiveRecord
            error_log("error occured in model" . $exc->getMessage());
         }
     }
+    
+    public static function getProfileOfFollower($follower) {
+        try {
+            $query = new Query();
+            $query->from('TinyUserCollection')
+                    ->where(['CollaboratorId' => (int) $follower]);
+            $profile_pic = $query->one();
+            return $profile_pic["ProfilePicture"];
+        } catch (Exception $ex) {
+            error_log("Error in Profile");
+        }
+    }
+
 }
 ?>

@@ -44,7 +44,6 @@ class ProjectTicketSequence extends ActiveRecord
      public static function getNextSequence($projectId) {
          $db =  ProjectTicketSequence::getCollection();
          $ret = $db->findAndModify( array("ProjectId"=> (int)$projectId ), array('$inc'=> array('seq' =>1)),array('new' => 1,"upsert"=>1));
-         error_log("restul-------------".  print_r($ret,1));
          return $ret["seq"];
   
   }

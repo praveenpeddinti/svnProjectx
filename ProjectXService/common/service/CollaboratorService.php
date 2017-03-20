@@ -106,8 +106,22 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
             Yii::log("CollaboratorService:getMatchedCollaborator::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+     /**
+    * @author Praveen P
+    * @description This is to get filtered team list in Followerlist 
+    * @return type 
+    * @param type $projectId, $search_query,$defaultusers
+     */      
+    public function getFilteredFollowersDetailsProjectTeam($StoryData, $projectId) {
+        try {
+            $collaboratorModel = new Collaborators();
+            return $collaboratorModel->getFilteredFollowersDetailsProjectTeam($StoryData, $projectId);
+        } catch (Exception $ex) {
+            Yii::log("CollaboratorService:getFilteredFollowersDetailsProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
-      
 }
 
   

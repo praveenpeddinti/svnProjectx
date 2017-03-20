@@ -716,6 +716,20 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         } catch (Exception $ex) {
           Yii::log("TicketFollowers:followTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
+    }
+    /**
+    * @author Praveen P
+    * @param type $collaboratorId
+    * @param type $ticketId
+    * @param type $projectId
+    */
+    public function removefollowTicket($collaboratorId,$ticketId,$projectId){
+        try {
+           $db =  TicketCollection::getCollection();
+           $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$pull'=> array('Followers' =>array("FollowerId" => (int)$collaboratorId))));
+        } catch (Exception $ex) {
+          Yii::log("TicketFollowers:followTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
     } 
     /**
      * @author Moin Hussain
@@ -832,8 +846,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     }
           //error_log("response-------".$v);
     }
-      
 
+      
     /**
      * @author Suryaprakash
      * @param type $parentTicNumber
@@ -847,12 +861,50 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:updateParentticketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+
+    
+    /**
+     * @author Ryan
+     * @param type $ticketId
+     * @param type $projectId
+     * @return empty
+     */
+    public function getTicketFollowers($ticketId,$projectId)
+    {
+        try{
+            //get all followers of a ticket....
+            $ticketobj=  TicketCollection::getTicketDetails($ticketId,$projectId);
+            $followers=array();
+            foreach ($ticketobj["Followers"] as &$value) {
+                array_push($followers,$value["FollowerId"]);
+           }
+           return $followers;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getTicketFollowers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    /**
+     * @author Ryan
+     * @param type $follower
+     * @return empty
+     */
+    public function getFollower($follower)
+    {
+        try{
+            $follower=TinyUserCollection::getProfileOfFollower($follower);
+            return $follower;
+        } catch (Exception $ex) {
+        }
+    }    
         /*
      * @author Padmaja
      * @description This method is used to save child task details.
     * @return type 
      */
-    public function SaveChiledTask($postData){
+    public function SaveChiledTask($postData)
+            {
+    
         try{
             $returnStatus="failure";
             $ticketCollectionModel = new TicketCollection();
@@ -900,7 +952,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                      }
                      $dataArray[$fieldName]= $fieldBean;
                    }
-
            $ticketModel = new TicketCollection();
            $ticketModel->Title = $postData->title;
           // $ticketModel->Description = $description;

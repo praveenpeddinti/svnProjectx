@@ -45,8 +45,8 @@ class TicketCollection extends ActiveRecord
             "TotalEstimate",
             "TotalTimeLog",
             "IsChild"
+            
            
-          
           
         ];
     }
