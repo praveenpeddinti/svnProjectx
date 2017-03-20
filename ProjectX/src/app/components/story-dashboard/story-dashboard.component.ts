@@ -31,13 +31,13 @@ export class StoryDashboardComponent {
                 },
                 {
                     name: 'Title',
-                    flexGrow: 4,
+                    flexGrow: 3,
                     sortby: 'Title',
                     class: 'titlecolumn'
                 },
                 {
                     name: 'Assigned to',
-                    flexGrow: 2,
+                    flexGrow: 1,
                     sortby: 'assignedto',
                     class: ''
                 },
@@ -57,13 +57,13 @@ export class StoryDashboardComponent {
                     name: 'Bucket',
                     flexGrow: 1,
                     sortby: 'bucket',
-                    class: ''
+                    class: 'bucket'
                 },
                 {
                     name: 'Due Date',
                     flexGrow: 1,
                     sortby: 'duedate',
-                    class: ''
+                    class: 'duedate'
                 },
                 {
                     name: '',
@@ -131,22 +131,32 @@ expanded: any = {};
         this.sortorder = event.sorts[0].dir;
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
     }
-
+//collapseAllRows(){alert("collapseAllRows===");}
 toggleExpandRow(row) {
-    //console.log('Toggled Expand Row!', row[0].field_value);
+    // this.table.rowDetail.collapseAllRows();
+   //setTimeout(()=>{
+     //alert("set time===");
+    //this.table.rowDetail.collapseAllRows();
+    //},250);
+    this.row1=[];
+    console.log('Toggled Expand Row!', row[0].field_value);
     this._service.getSubTasksDetails(1, row[0].field_value, (response) => {
                    let jsonForm = {};
             if (response.statusCode == 200) {
                 this.row1=response.data;
+                //this.row1.push(response.data);
                 this.table.rowDetail.toggleExpandRow(this.row1);
-                
+                console.log('Toggled Expand Row!', this.row1);
             } else {
                 console.log("fail---");
             }
         });
-    //console.log('Toggled Expand Row!', row);
+    console.log('Toggled Expand Row2!', row);
     this.table.rowDetail.toggleExpandRow(row);
-  }
+    
+  
+
+}
 
       /* @Praveen P
         * This method is used subtask details when subtask id click component
