@@ -90,7 +90,7 @@
               <div class="tworkedhours">
                   <div class="pull-left">Total worked hours</div>
                   <div class="pull-right">
-                      <div class="thours"><i class="fa fa-clock-o timeclr" aria-hidden="true"></i> {{totalWorkLog}}</div>
+                      <div class="thours"><i class="fa fa-clock-o timeclr" aria-hidden="true"></i>&nbsp; {{totalWorkLog}}</div>
                   </div>
                   <div class="clearfix"></div>
               </div>
@@ -103,7 +103,7 @@
               <div class="workedhoursbg">
                   <div class="pull-left">Worked hours</div>
                   <div class="pull-right">
-                      <input type="text" maxlength="4" value="" id="workedhours" class="workedhourstxtbox"    placeholder="00.00" step="0.01" name="worklog" (keyup.enter)="workLogCapture($event.target.value)" />
+                      <input type="text" maxlength="5" value="" id="workedhours" class="workedhourstxtbox"    placeholder="0.00" step="0.01" name="worklog" (keyup.enter)="workLogCapture($event.target.value)" />
                   </div>
                   <div class="clearfix"></div>
               </div>

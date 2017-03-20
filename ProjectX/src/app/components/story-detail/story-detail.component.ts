@@ -1007,7 +1007,7 @@ var thisObj = this;
      */
         public workLogCapture(event)
     {
-       var pattern=/^[0-9]+(\.[0-9]{1,2})?$/
+       var pattern=/^([0-9])*(\.[0-9]{1,2})?$/
        this.isTimeValidErrorMessage = pattern.test(event); 
        if(this.isTimeValidErrorMessage==false)
        {
