@@ -1019,11 +1019,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 
             foreach ($ticketTimeLog as &$log) {
                 $collaboratorData = TinyUserCollection::getMiniUserDetails($log["_id"]);
-                 $log["sum"] = round($log["sum"],2);
+                 $log["sum"] =  number_format(round($log["sum"],2),2);                 
                 $log["readable_value"] = $collaboratorData;
             }
             $ticketDetails["individualLog"] = $ticketTimeLog;
-              $ticketDetails["TotalTimeLog"] = round($ticketDetails["TotalTimeLog"],2);
+              $ticketDetails["TotalTimeLog"] = number_format(round($ticketDetails["TotalTimeLog"],2), 2);             
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("StoryService:getTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
