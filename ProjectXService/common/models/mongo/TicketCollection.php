@@ -321,14 +321,14 @@ class TicketCollection extends ActiveRecord
      * @param type $newTasksList
      * @return type
      */
-    public static function updateChiledTaskObject($parentTicketId,$newTasksList){
+    public static function updateChildTaskObject($parentTicketId,$newTasksList){
       try{
           $collection = Yii::$app->mongodb->getCollection('TicketCollection');
           $newdata = array('$set' => array('Tasks' =>$newTasksList));
           $collection->update(array("TicketId" => (int)$parentTicketId), $newdata);
             
        } catch (Exception $ex) {
-      Yii::log("TicketCollection:updateChiledTaskObject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+      Yii::log("TicketCollection:updateChildTaskObject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
             
     }
     
