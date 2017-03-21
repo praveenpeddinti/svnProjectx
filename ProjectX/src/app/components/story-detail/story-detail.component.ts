@@ -81,8 +81,9 @@ public blurTimeout=[];
  private comment_status:boolean=true;
 
   ngOnInit() {
-
+    
     this.callTicketDetailPage("");
+   
 
     }
 
@@ -1205,6 +1206,7 @@ public callTicketDetailPage(ticId){
         { 
 
             this.ticketData = data;
+            this.followers = data.data.Followers; //@Praveen P This line to show the default followers in the Follower Div section
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
