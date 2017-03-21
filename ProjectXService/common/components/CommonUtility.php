@@ -781,7 +781,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                      $value["readable_value"]="";
                     if($value["value"] != ""){
                          $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
-                        $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$assignedToDetails["ProfilePicture"];
+                        $assignedToDetails["ProfilePicture"] = $assignedToDetails["ProfilePicture"];
                         $value["readable_value"] = $assignedToDetails;  
                     }
                 
