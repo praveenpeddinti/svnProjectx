@@ -283,7 +283,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="addtask_bor">
-                            <div class="addtask_title" id="childTaskTitle" (click)="navigateToChildDetail(childTasks.TicketId)">{{childTasks.Title}}</div>
+                            <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/story-detail',childTasks.TicketId]" (click)="navigateStoryDetail(childTasks.TicketId)">{{childTasks.Title}}</a></div>
                             <div class="addtask_status">{{childTasks.Fields[2].data.value_name}}</div>
                         </div>
                     </div>
