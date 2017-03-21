@@ -96,7 +96,7 @@ export class StoryEditComponent implements OnInit
                     callback(mention);
                   });
                     }
-                }
+                },           
               },
           editableAtwhoQueryAttrs: {
             "data-fr-verified": true
@@ -237,13 +237,15 @@ export class StoryEditComponent implements OnInit
     }
     if(edit_data.description!="" && edit_data.title!="")
     {
+      var desc=this.txt_area.instance.getData();
+      edit_data.description=desc;
        var post_data={
           'data':edit_data,
          
         }
         this._ajaxService.AjaxSubscribe("story/update-ticket-details",post_data,(data)=>
     
-        { 
+        {
          this._router.navigate(['story-detail',this.url_TicketId]);
         });
     }
