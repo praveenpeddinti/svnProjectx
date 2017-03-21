@@ -972,8 +972,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                array_push($parentTasks,$lastChiledTicketId);
                TicketCollection::updateChiledTaskObject($postData->TicketId,$parentTasks);
                TicketComments::createCommentsRecord($ticketNumber,$postData->projectId);
+               $this->updateFollowersForSubTask($ticketNumber,$postData->projectId,$ticketDetails['Followers']);
                $selectFields = [];
-               $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto','Fields.assignedto'];
+               $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto','Fields.assignedto','Fields.workflow'];
                $subTicketDetails = $ticketCollectionModel->getTicketDetails($ticketNumber,$postData->projectId,$selectFields);
                $returnStatus=$subTicketDetails;
               
@@ -1125,7 +1126,24 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
+     /**
+     * @author Padmaja
+      * @description updatung follower list for subTask
+     * @return type 
+     */
+       public function updateFollowersForSubTask($ticketId,$projectId,$followerArray){
+        try{
+            $db =  TicketCollection::getCollection();
+            foreach($followerArray as $prepareArray){
+              $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Followers' =>$prepareArray)),array('new' => 1,"upsert"=>1)); 
+            }
+           
+        } catch (Exception $ex) {
+            Yii::log("StoryService:updateFollowersForSubTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+          
+    }
+    
 }
 
   
