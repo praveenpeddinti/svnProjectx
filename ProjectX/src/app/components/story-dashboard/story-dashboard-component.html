@@ -36,6 +36,7 @@
                     [externalPaging]="false"
                     [externalSorting]="false"
                     (activate)="onActivate($event)"
+                     [messages]="{emptyMessage: ''}"
                 >
                 <ngx-datatable-column *ngFor="let column of columns;let j=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
                   [flexGrow]="column.flexGrow">
