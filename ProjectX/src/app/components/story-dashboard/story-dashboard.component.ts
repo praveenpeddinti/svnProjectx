@@ -143,7 +143,7 @@ toggleExpandRow(row) {
             if (response.statusCode == 200) {
                 this.row1=response.data;
                 //this.row1.push(response.data);
-                this.table.rowDetail.toggleExpandRow(this.row1);
+                this.table.rowDetail.toggleExpandRow(row);
                 //console.log('Toggled Expand Row!', this.row1);
             } else {
                 console.log("fail---");
@@ -151,7 +151,7 @@ toggleExpandRow(row) {
         });
        
     //console.log('Toggled Expand Row2!', row);
-    this.table.rowDetail.toggleExpandRow(row);
+   
     
   
 
