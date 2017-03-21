@@ -294,8 +294,11 @@ cancelReply(){
 */
 private showTitleEdit=true;
 // private titleError="";
-editTitle(){
+editTitle(titleId){
+  // alert("+++++++++"+titleId);
   this.showTitleEdit = false;
+  setTimeout(()=>{jQuery("#"+titleId).focus();},150);
+  
 }
 
 closeTitleEdit(editedText){
