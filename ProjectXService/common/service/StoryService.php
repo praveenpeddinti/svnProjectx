@@ -795,8 +795,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
           $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];
         }
         
-      //  error_log("old value--------".$oldValue."------------".$newValue);
-       if($oldValue != $newValue){
+       if(trim($oldValue) != trim($newValue)){
         if($oldValue == ""){
             $action = "set to";
         }else{
