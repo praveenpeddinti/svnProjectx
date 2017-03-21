@@ -530,10 +530,10 @@ class StoryController extends Controller
      * @description This method is used to save child task details.
     * @return type Json
      */
-    public function actionSaveChiledTask(){
+    public function actionCreateChildTask(){
         try{
             $postData= json_decode(file_get_contents("php://input")); 
-            $task = ServiceFactory::getStoryServiceInstance()->SaveChiledTask($postData);
+            $task = ServiceFactory::getStoryServiceInstance()->createChildTask($postData);
             $responseData = array();
             $responseData = array("Tasks"=>$task);
             if($task !='failure'){
@@ -552,7 +552,7 @@ class StoryController extends Controller
             } 
              return $response;
         } catch (Exception $ex) {
-             Yii::log("StoryController:actionSaveChiledTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+             Yii::log("StoryController:actionCreateChildTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
