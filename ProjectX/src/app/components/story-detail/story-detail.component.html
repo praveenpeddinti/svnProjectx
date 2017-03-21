@@ -367,7 +367,7 @@
           <div *ngFor="let property of comment.PropertyChanges;">   
     <div class="ticketactivity">
    <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
-       <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="property"><a href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
+       <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-none-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
                 </span>
     <span *ngIf="property.type!='user'"> 
         <span class="bold" [innerHTML]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerHTML]= "property.NewValue"></span> 
