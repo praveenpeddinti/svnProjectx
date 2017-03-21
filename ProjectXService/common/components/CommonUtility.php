@@ -930,6 +930,8 @@ Yii::log("CommonUtility:prepareActivity::" . $ex->getMessage() . "--" . $ex->get
                             }
                             if($property["NewValue"] != ""){
                                  $property["NewValue"] = $tinyUserModel->getMiniUserDetails($property["NewValue"]);
+                            }else{
+                                $property["NewValue"] = "-none-";
                             }
                               $property["type"] = "user";
                            
