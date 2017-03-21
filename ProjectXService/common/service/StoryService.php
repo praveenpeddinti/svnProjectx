@@ -255,7 +255,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ticketModel->Description = $description;
            $ticketModel->CrudeDescription = $crudeDescription;
            $ticketModel->Fields = $dataArray;
-           $ticketModel->ProjectId = 1;
+           $ticketModel->ProjectId = (int)$projectId;
            $ticketModel->RelatedStories= [];
            $ticketModel->Tasks= [];
            $ticketNumber = ProjectTicketSequence::getNextSequence($projectId);
@@ -901,7 +901,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @description This method is used to save child task details.
     * @return type 
      */
-    public function SaveChiledTask($postData)
+    public function createChildTask($postData)
             {
     
         try{
@@ -910,6 +910,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->TicketId, $postData->projectId);
             $storyField = new StoryFields();
             $standardFields = $storyField->getStoryFieldList();
+            $description = "Please provide description here";
             foreach ($standardFields as $field) {
                      $fieldBean = new FieldBean();
                      $fieldId =  $field["Id"];
@@ -943,9 +944,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $fieldBean->value_name =$ticketDetails['Fields']['priority']['value_name'];
                      }
                      else if($fieldType == 4 || $fieldType == 5){
-                             $fieldBean->value= new \MongoDB\BSON\UTCDateTime(time() * 1000);   
-                            $fieldBean->value_name= $fieldBean->value; 
+                         if($fieldName == "duedate"){
+                              $fieldBean->value= "";
+                         }else{
+                            $fieldBean->value= new \MongoDB\BSON\UTCDateTime(time() * 1000);   
                          }
+                            $fieldBean->value_name= $fieldBean->value; 
+                         }  
+                         
                      else{
                           $fieldBean->value=""; 
                      }
@@ -953,23 +959,24 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                    }
            $ticketModel = new TicketCollection();
            $ticketModel->Title = $postData->title;
-          // $ticketModel->Description = $description;
-         //  $ticketModel->CrudeDescription = $crudeDescription;
+           $ticketModel->Description = $description;
+           $ticketModel->CrudeDescription = $description;
            $ticketModel->Fields = $dataArray;
-           $ticketModel->ProjectId = 1;
+           $ticketModel->ProjectId = (int)$postData->projectId;
            $ticketModel->RelatedStories= [];
            $ticketModel->Tasks= [];
            $ticketNumber = ProjectTicketSequence::getNextSequence($postData->projectId);
            $ticketModel->TicketId = (int)$ticketNumber;
            $ticketModel->TotalEstimate = 0;
            $ticketModel->TotalTimeLog = 0;
+           $ticketModel->ParentStoryId = (int)$postData->TicketId;
            $ticketModel->IsChild = 1;
            $returnValue = TicketCollection::saveTicketDetails($ticketModel);
            if($returnValue != "failure"){
                $lastChiledTicketId=  $ticketModel->TicketId;
                $parentTasks = $ticketDetails['Tasks'];
                array_push($parentTasks,$lastChiledTicketId);
-               TicketCollection::updateChiledTaskObject($postData->TicketId,$parentTasks);
+               TicketCollection::updateChildTaskObject($postData->TicketId,$parentTasks);
                TicketComments::createCommentsRecord($ticketNumber,$postData->projectId);
                if(!empty($ticketDetails['Followers'])){
                     $this->updateFollowersForSubTask($ticketNumber,$postData->projectId,$ticketDetails['Followers']);
@@ -982,7 +989,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             }
              return $returnStatus;
          } catch (Exception $ex) {
-              Yii::log("StoryService:SaveChiledTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+              Yii::log("StoryService:createChildTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
@@ -1135,9 +1142,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
        public function updateFollowersForSubTask($ticketId,$projectId,$followerArray){
         try{
             $db =  TicketCollection::getCollection();
-            foreach($followerArray as $prepareArray){
-              $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Followers' =>$prepareArray)),array('new' => 1,"upsert"=>1)); 
-            }
+            $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Followers' =>array('$each'=>$followerArray))),array('new' => 1,"upsert"=>1)); 
            
         } catch (Exception $ex) {
             Yii::log("StoryService:updateFollowersForSubTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
