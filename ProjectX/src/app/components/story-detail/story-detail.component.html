@@ -241,7 +241,7 @@
 
 <!--- Show the Followers list  End -->
 
-
+<div *ngIf="attachmentsData.length>0">
 <div class="widgethed">Attachments</div>
     <div class="attatchment">
         <div *ngFor="let attachment of attachmentsData;let i=index;">
@@ -263,7 +263,7 @@
             </div>
         </div>
 
- 
+        </div>
        
     </div>
 <div *ngIf='checkPlanLevel =="Story"'>
