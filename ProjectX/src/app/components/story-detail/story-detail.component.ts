@@ -727,16 +727,21 @@ var thisObj = this;
     {
         this._router.navigate(['story-dashboard']);
     }
+       /**
+     * @author:Padmaja
+     * @description : This is used to saving subtask details
+     */
    public savechiledTask()
     {
-       var title= jQuery('#childtitle').val();
-       if(title !=""){
-       var postTaskData={
+       var title= jQuery('#childtitle').val().trim();
+
+       if(title=='' || title=='undefined'){
+          this.commonErrorFunction("subtaskerr","Please enter title.")
+       }else{
+        var postTaskData={
             TicketId:this.ticketId,
             title:jQuery('#childtitle').val()
           };
-          // var _this = this;
-         // alert(JSON.stringify(postTaskData));
         this._ajaxService.AjaxSubscribe("story/create-child-task",postTaskData,(result)=>
         {
           var task=[];
@@ -744,9 +749,9 @@ var thisObj = this;
           var newChildData = this.taskDataBuilder(task);
           this.childTasksArray.push(newChildData[0]);
          });
-       }else{
-          this.commonErrorFunction("subtaskerr","Please enter title.")
-       }
+       }  
+        
+       
     }
 
     navigateToChildDetail(childTicketId){
@@ -1161,7 +1166,7 @@ var thisObj = this;
           jQuery("#"+id).fadeOut(4000);
             }
 
-    public navigateStoryDetail(ticketId){     
+    public navigateStoryDetail(ticketId){  
          this.callTicketDetailPage(ticketId);        
         }
 

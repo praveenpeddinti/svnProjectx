@@ -273,13 +273,14 @@
                     <input class="editinput" type="text" placeholder="Create a task here"  id="childtitle" value=""   name="childtitle" />
             </div>
              <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="savechiledTask()" type="submit">CREATE</button></div>
-       <div id="subtaskerr" class="alert alert-danger" style="display:none;"></div>
+   
 
         </div>
+            <div id="subtaskerr" class="alert alert-danger" style="display:none;"></div>
         <div *ngFor="let childTasks of childTasksArray;let j=index;">
                 <div class="addtask">
                     <div class="col-md-1">
-                    <div class="addtask_taskno">{{childTasks.TicketId}}</div>
+                    <div class="addtask_taskno"><span>#</span>{{childTasks.TicketId}}</div>
                     </div>
                     <div class="col-md-5">
                         <div class="addtask_bor">
