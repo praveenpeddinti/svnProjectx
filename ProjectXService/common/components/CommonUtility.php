@@ -334,10 +334,10 @@ class CommonUtility {
                              $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                        $readableDate = $datetime->format('m-d-Y');
+                        $readableDate = $datetime->format('M-d-Y');
                      }else{
                          $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                         $readableDate = $datetime->format('m-d-Y H:i:s');
+                         $readableDate = $datetime->format('M-d-Y H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
                        }else{
@@ -498,10 +498,10 @@ Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex
                              $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                        $readableDate = $datetime->format('m-d-Y');
+                        $readableDate = $datetime->format('M-d-Y');
                      }else{
                           $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                         $readableDate = $datetime->format('m-d-Y H:i:s');
+                         $readableDate = $datetime->format('M-d-Y H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
                        }else{
@@ -766,10 +766,10 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                              $datetime = $value["value"]->toDateTime();
                      if($storyFieldDetails["Type"] == 4){
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                        $readableDate = $datetime->format('m-d-Y');
+                        $readableDate = $datetime->format('M-d-Y');
                      }else{
                          $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                         $readableDate = $datetime->format('m-d-Y H:i:s');
+                         $readableDate = $datetime->format('M-d-Y H:i:s');
                      }
                      $value["readable_value"] =   $readableDate; 
                        }else{
