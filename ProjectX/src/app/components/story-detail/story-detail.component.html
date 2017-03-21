@@ -336,7 +336,7 @@
     </div>
     <div class="col-md-10">
         <div class="addtask_bor">
-            <div class="addtask_title"><a>{{relatedTask.Title}}</a></div>
+            <div class="addtask_title"><a [routerLink]="['/story-detail',relatedTask.TicketId]" (click)="navigateStoryDetail(relatedTask.TicketId)">{{relatedTask.Title}}</a></div>
             <div class="addtask_status">{{relatedTask.Fields.workflow.value_name}}</div>
         </div>
     </div>
