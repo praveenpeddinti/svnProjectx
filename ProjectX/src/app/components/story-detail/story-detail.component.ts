@@ -81,98 +81,7 @@ public blurTimeout=[];
  private comment_status:boolean=true;
 
   ngOnInit() {
-     var thisObj = this;
-    jQuery(document).ready(function(){
-      jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                            //sets the flag, to know if the click happend on the dropdown or outside  
-          if(jQuery(event.target).closest('div.customdropdown').length == 0){
-          thisObj.clickedOutside = true;
-          }else{
-          thisObj.clickedOutside = false;
-          }
-
-          //sets the flag, to know if the click happend on the datepicker or outside
-          if(jQuery(event.target).closest('p-calendar.primeDateComponent').length == 0){
-          thisObj.calenderClickedOutside = true;
-          }else{
-          thisObj.calenderClickedOutside = false;
-          }
-
-      });
-      jQuery("#collapse").show();//added by Ryan
-      jQuery("#expand").hide();//added by Ryan
-      jQuery('[id^=button_comment]').hide();
-    });
-
-
-    /** @Praveen P
-     * Getting the TicketId for story dashboard
-     */
-      this.route.params.subscribe(params => {
-            this.ticketId = params['id'];
-        });
-        
-
-// alert("User Data---------->"+JSON.stringify(this.getAllData));
-   console.log("+++++++++++++iniit+++++++++");
-
-      var ticketIdObj={'ticketId': this.ticketId};
-        this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
-        { 
-
-            this.ticketData = data;
-            this.followers = data.data.Followers;
-            this.ticketDesc = data.data.Description;
-            this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
-            this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
-           // alert("fieldsData"+JSON.stringify(this.fieldsData[4].value));
-            this.checkPlanLevel=this.fieldsData[4].value;
-            this.childTaskData=data.data.Tasks;
-            // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
-            this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
-          //  alert("subtasksdat"+JSON.stringify(this.childTasksArray));
-
-
-            // this.commentsList = [];
-            this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
-            { 
-              console.log(data.data.Activities);
-              this.commentsList = data.data.Activities;
-            });
-            
-        });
-
-
-       
-
-
-        this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
-            { 
-               this.individualLog =data.data.individualLog;
-                 if(data.data.TotalTimeLog > 0){
-                  this.totalWorkLog = data.data.TotalTimeLog;
-                 }
-            });
-
-        this._ajaxService.AjaxSubscribe("story/get-all-related-tasks",ticketIdObj,(result)=>
-         { 
-        
-         this.relatedTaskArray=result.data;
-        })
-      this.minDate=new Date();
-
-          //---------------------------- Attachments code---------------//
-     /**
-     * @author:Jagadish
-     * @description: This is used to display Attachments
-     */
-       this._ajaxService.AjaxSubscribe("story/get-my-ticket-attachments",ticketIdObj,(data)=>
-        { 
-        if(data.statusCode == 200){
-                         this.attachmentsData = data.data;                            
-        } else {
-            this.attachmentsData =[];
-        }          
-        });
+    this.callTicketDetailPage("");
     }
 
     /**
@@ -1225,8 +1134,98 @@ var thisObj = this;
           jQuery("#"+id).fadeOut(4000);
             }
 
-    public navigateStoryDetail(ticketId){
-          this._router.navigate(['/story-detail',ticketId]);   
-    }
+    public navigateStoryDetail(ticketId){     
+         this.callTicketDetailPage(ticketId);        
+        }
 
+public callTicketDetailPage(ticId){
+    var thisObj = this;
+    jQuery(document).ready(function(){
+      jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                            //sets the flag, to know if the click happend on the dropdown or outside  
+          if(jQuery(event.target).closest('div.customdropdown').length == 0){
+          thisObj.clickedOutside = true;
+          }else{
+          thisObj.clickedOutside = false;
+          }
+
+          //sets the flag, to know if the click happend on the datepicker or outside
+          if(jQuery(event.target).closest('p-calendar.primeDateComponent').length == 0){
+          thisObj.calenderClickedOutside = true;
+          }else{
+          thisObj.calenderClickedOutside = false;
+          }
+
+      });
+      jQuery("#collapse").show();//added by Ryan
+      jQuery("#expand").hide();//added by Ryan
+      jQuery('[id^=button_comment]').hide();
+    });
+
+
+    /** @Praveen P
+     * Getting the TicketId for story dashboard
+     */
+      if(ticId == ""){
+         this.route.params.subscribe(params => {
+            this.ticketId = params['id'];
+        });
+      }else{  
+          this.ticketId = ticId;
+      }
+    console.log("+++++++++++++iniit+++++++++");
+
+      var ticketIdObj={'ticketId': this.ticketId};
+        this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
+        { 
+
+            this.ticketData = data;
+            this.ticketDesc = data.data.Description;
+            this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
+            this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
+           // alert("fieldsData"+JSON.stringify(this.fieldsData[4].value));
+            this.checkPlanLevel=this.fieldsData[4].value;
+            this.childTaskData=data.data.Tasks;
+            // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
+            this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
+          //  alert("subtasksdat"+JSON.stringify(this.childTasksArray));
+
+
+            // this.commentsList = [];
+            this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
+            { 
+              console.log(data.data.Activities);
+              this.commentsList = data.data.Activities;
+            });
+
+        });
+        this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
+            { 
+               this.individualLog =data.data.individualLog;
+                 if(data.data.TotalTimeLog > 0){
+                  this.totalWorkLog = data.data.TotalTimeLog;
+                 }
+            });
+
+        this._ajaxService.AjaxSubscribe("story/get-all-related-tasks",ticketIdObj,(result)=>
+         { 
+        
+         this.relatedTaskArray=result.data;
+        })
+      this.minDate=new Date();
+
+          //---------------------------- Attachments code---------------//
+     /**
+     * @author:Jagadish
+     * @description: This is used to display Attachments
+     */
+       this._ajaxService.AjaxSubscribe("story/get-my-ticket-attachments",ticketIdObj,(data)=>
+        { 
+        if(data.statusCode == 200){
+                         this.attachmentsData = data.data;                            
+        } else {
+            this.attachmentsData =[];
+        }          
+        });
 }
+
+    }
