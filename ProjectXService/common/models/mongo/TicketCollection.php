@@ -306,11 +306,11 @@ class TicketCollection extends ActiveRecord
      * @use used for inserting childtickets into Tasks(array) of parentticket.
      */
     
-    public static function updateParentTicketTaskField($parentTicNumber, $childTicketIds) {
+    public static function updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketIds) {
         try {
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $tasksNew = array('$addToSet' => array("Tasks" => array('$each' => $childTicketIds)));
-            $collection->update(array("TicketId" => $parentTicNumber), $tasksNew);
+            $collection->update(array("TicketId" => (int)$parentTicNumber,"ProjectId"=>(int)$projectId), $tasksNew);
         } catch (Exception $ex) {
             Yii::log("TicketCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -343,7 +343,7 @@ class TicketCollection extends ActiveRecord
         try {
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $cursor =  $collection->find(array('$or'=>array( array( "TicketIdString"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$ticketArray)),array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$ticketArray)))));
-            $ticketDetails = iterator_to_array($cursor);
+            $ticketDetails = iterator_to_array($cursor);            
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("TicketCollection:getAllTicketDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
