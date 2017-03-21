@@ -737,7 +737,7 @@ var thisObj = this;
           };
           // var _this = this;
          // alert(JSON.stringify(postTaskData));
-        this._ajaxService.AjaxSubscribe("story/save-chiled-task",postTaskData,(result)=>
+        this._ajaxService.AjaxSubscribe("story/create-child-task",postTaskData,(result)=>
         {
           var task=[];
           task.push(result.data.Tasks);
