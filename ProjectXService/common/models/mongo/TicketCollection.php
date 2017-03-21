@@ -321,18 +321,18 @@ class TicketCollection extends ActiveRecord
      * @param type $newTasksList
      * @return type
      */
-    public static function updateChildTaskObject($parentTicketId,$newTasksList){
+    public static function updateChildTaskObject($parentTicketId,$projectId,$newTasksList){
       try{
           $collection = Yii::$app->mongodb->getCollection('TicketCollection');
           $newdata = array('$set' => array('Tasks' =>$newTasksList));
-          $collection->update(array("TicketId" => (int)$parentTicketId), $newdata);
+          $collection->update(array("TicketId" => (int)$parentTicketId,"ProjectId"=>(int)$projectId), $newdata);
             
        } catch (Exception $ex) {
       Yii::log("TicketCollection:updateChildTaskObject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-            
-    }
-    
-  
+
+      }  
+      
+
     }
      /**
      * @author Padmaja 
@@ -413,6 +413,6 @@ class TicketCollection extends ActiveRecord
             Yii::log("TicketCollection:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
-}
+            
+      }  
 ?>

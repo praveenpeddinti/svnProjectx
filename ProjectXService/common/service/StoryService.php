@@ -919,25 +919,29 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                       $fieldName =  $field["Field_Name"];
                      $fieldBean->Id = (int)$field["Id"];
                      $fieldBean->title = $fieldTitle;
-                    if($fieldType == 10){
+                    if($fieldName == "bucket"){
                         $fieldBean->value = (int)$ticketDetails['Fields']['bucket']['value'];
                         $fieldBean->value_name = $ticketDetails['Fields']['bucket']['value_name'];
                      }
-                    if($fieldName == "reportedby"){
+                    else if($fieldName == "reportedby"){
                          $fieldBean->value= $ticketDetails['Fields']['reportedby']['value']; 
                          $fieldBean->value_name= $ticketDetails['Fields']['reportedby']['value_name']; 
                      }
                      else if($fieldName == "tickettype"){
                           $fieldBean->value= (int)1; 
-                          $fieldBean->value_name = 'New';
+                           $tickettypeDetail = TicketType::getTicketType($fieldBean->value);
+                            $fieldBean->value_name = $tickettypeDetail["Name"];// New
                      }
                      else if($fieldName == "workflow"){
                          $fieldBean->value= (int)1; 
-                         $fieldBean->value_name= 'New'; 
+                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails($fieldBean->value);
+                          $fieldBean->value_name= $workFlowDetail["Name"];  // New
                      }
                      else if($fieldName == "planlevel"){
+                       
                         $fieldBean->value = (int)2;
-                        $fieldBean->value_name = 'Task';
+                        $details =  PlanLevel::getPlanLevelDetails($fieldBean->value );
+                        $fieldBean->value_name = $details["Name"]; // Task
                      }
                     else if($fieldName == "priority"){
                         $fieldBean->value =(int)$ticketDetails['Fields']['priority']['value'];
@@ -958,9 +962,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                      $dataArray[$fieldName]= $fieldBean;
                    }
            $ticketModel = new TicketCollection();
-           $ticketModel->Title = $postData->title;
-           $ticketModel->Description = $description;
-           $ticketModel->CrudeDescription = $description;
+           $ticketModel->Title = trim($postData->title);
+           $ticketModel->Description = trim($description);
+           $ticketModel->CrudeDescription = trim($description);
            $ticketModel->Fields = $dataArray;
            $ticketModel->ProjectId = (int)$postData->projectId;
            $ticketModel->RelatedStories= [];
@@ -976,7 +980,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                $lastChiledTicketId=  $ticketModel->TicketId;
                $parentTasks = $ticketDetails['Tasks'];
                array_push($parentTasks,$lastChiledTicketId);
-               TicketCollection::updateChildTaskObject($postData->TicketId,$parentTasks);
+               TicketCollection::updateChildTaskObject($postData->TicketId,$postData->projectId,$parentTasks);
                TicketComments::createCommentsRecord($ticketNumber,$postData->projectId);
                if(!empty($ticketDetails['Followers'])){
                     $this->updateFollowersForSubTask($ticketNumber,$postData->projectId,$ticketDetails['Followers']);
