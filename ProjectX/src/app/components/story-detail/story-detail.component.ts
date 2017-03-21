@@ -734,11 +734,12 @@ var thisObj = this;
      */
     public searchRelateTask(event)
     {
+       var modifiedString=event.query.replace("#","");
         var post_data={
         'projectId':1,
         'sortvalue':'Title',
         'ticketId':this.ticketId,
-        'searchString':event.query
+        'searchString':modifiedString
     }
     let prepareSearchData = [];
       //  this.search_results=data;GetTicketDetails get-all-ticket-details-for-search
