@@ -972,7 +972,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                array_push($parentTasks,$lastChiledTicketId);
                TicketCollection::updateChiledTaskObject($postData->TicketId,$parentTasks);
                TicketComments::createCommentsRecord($ticketNumber,$postData->projectId);
-               $this->updateFollowersForSubTask($ticketNumber,$postData->projectId,$ticketDetails['Followers']);
+               if(!empty($ticketDetails['Followers'])){
+                    $this->updateFollowersForSubTask($ticketNumber,$postData->projectId,$ticketDetails['Followers']);
+               }
                $selectFields = [];
                $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto','Fields.assignedto','Fields.workflow'];
                $subTicketDetails = $ticketCollectionModel->getTicketDetails($ticketNumber,$postData->projectId,$selectFields);
