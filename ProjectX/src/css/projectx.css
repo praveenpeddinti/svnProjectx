@@ -606,3 +606,12 @@ color: #0199e0;
     left: 5px;
 }
 .bold{font-weight: bold}
+#replySnippetContent .replySnippet{ overflow:hidden;}
+#replySnippetContent .replySnippet p img{ width: 200px; height: 70px; text-align:left; margin-right:20px;position: absolute; left:0px; top: 50px; float: left;  margin-left: 10px;}
+#replySnippetContent .replySnippet p{ margin-left: 210px;  }
+
+@media screen and (max-width:800px){
+
+	#replySnippetContent .replySnippet p img{ width: 200px; height: 70px; text-align:left; margin-right:20px;position: absolute; left:0px; top: 50px; float: left;  margin-left: 10px;}
+#replySnippetContent .replySnippet p{ margin-left: 0px!important; padding-top: 70px!important;  }
+}
