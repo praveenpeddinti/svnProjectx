@@ -606,8 +606,20 @@ private dateVal = new Date();
 //----------------------File Upload codes---------------------------------
 public fileOverBase(fileInput:any,where:string,comment:string):void {
   if(where=="edit_comments"){
-    jQuery("#"+comment).addClass("dragdrop","true");
-  }else{
+    
+    jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
+
+    if(jQuery("#cke_Activity_content_"+comment).length >0)
+    {
+      jQuery("#dropble_comment_"+comment).addClass("dragdrop","true");
+    }
+    
+  }else if(where=="comments")
+  {
+    jQuery("#dropble_comment_").addClass("dragdrop","true");
+  }
+
+    else{
     this.hasBaseDropZoneOver = true;
   }
     
@@ -624,11 +636,10 @@ var thisObj = this;
     clearTimeout(this.dragTimeout);
     }
      this.dragTimeout = setTimeout(function(){
-       if(where=="edit_comments"){
-        jQuery("#"+comment).removeClass("dragdrop");
-      }else{
-        thisObj.hasBaseDropZoneOver = false;
-      }
+     jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
+    //  alert(comment);
+     thisObj.hasBaseDropZoneOver = false;
+    
      
     },500);
     
@@ -639,8 +650,9 @@ var thisObj = this;
   public fileUploadEvent(fileInput: any, comeFrom: string,where:string,comment:string):void {
     var editor_contents;
     var appended_content;
+    console.log("==FileInput=="+JSON.stringify(fileInput));
     if(where=="edit_comments"){
-      editor_contents=jQuery("#cke_"+comment).find("iframe").contents().find('body').html();
+      editor_contents=jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html();
       // alert(editor_contents);
       fileInput.preventDefault();
     }
@@ -654,11 +666,19 @@ var thisObj = this;
    }
 
         if(where=="edit_comments"){
-             jQuery("#"+fileInput.target.id).removeClass("dragdrop","true");
+             jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
+             jQuery("#comments_gif_"+comment).show();
           }
+          else if(where=="comments")
+          {
+            jQuery("#dropble_comment_").removeClass("dragdrop","true");
+            jQuery("#last_comments").show();
+          }
+          else{
 
-        this.hasBaseDropZoneOver = false;
-        this.fileUploadStatus = true;
+             this.hasBaseDropZoneOver = false;
+             this.fileUploadStatus = true;
+          }
         this.fileUploadService.makeFileRequest(GlobalVariable.FILE_UPLOAD_URL, [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
@@ -667,7 +687,7 @@ var thisObj = this;
                       this.commentDesc = this.commentDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
                     }else if(where=="edit_comments"){
                       appended_content=editor_contents+"[[image:" +result[i].path + "|" + result[i].originalname + "]]"; 
-                    jQuery("#cke_"+comment).find("iframe").contents().find('body').html(appended_content);
+                    jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html(appended_content);
                     }else{
                       this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
                     }
@@ -676,12 +696,14 @@ var thisObj = this;
                       this.commentDesc = this.commentDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
                     }else if(where=="edit_comments"){
                       appended_content =editor_contents+"[[file:" +result[i].path + "|" + result[i].originalname + "]]";
-                      jQuery("#cke_"+comment).find("iframe").contents().find('body').html(appended_content);
+                      jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html(appended_content);
                     }else{
                       this.ticketEditableDesc = this.ticketEditableDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
                     }
                 }
             }
+            jQuery("#comments_gif_"+comment).hide();
+            jQuery("#last_comments").hide();
             this.fileUploadStatus = false;
         }, (error) => {
             this.ticketEditableDesc = this.ticketEditableDesc + "Error while uploading";
