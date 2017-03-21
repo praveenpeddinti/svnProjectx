@@ -246,19 +246,19 @@
     <div class="attatchment">
         <div *ngFor="let attachment of attachmentsData;let i=index;">
             <div *ngIf='attachment.ArtifactType =="other"'>
-                <div class="attatchment_url"><a href="{{attachment.FileName}}" download>{{attachment.OriginalFileName}}</a></div>
+                <div class="attatchment_url"><a href="{{attachment.FileName}}" target="_blank" download>{{attachment.OriginalFileName}}</a></div>
                 <div class="attatchment_postename">{{attachment.UploadedBy}}<span>{{attachment.UploadedOn}}</span></div>
             </div>
             <div *ngIf='attachment.ArtifactType =="video"' class="attatchment_url">
                 <video preload="auto" controls>
                     <source src="{{attachment.FileName}}" type="video/mp4">
                 </video>
-                <div class="attatchment_url"><a href="{{attachment.FileName}}" download>{{attachment.OriginalFileName}}</a></div>
+                <div class="attatchment_url"><a href="{{attachment.FileName}}" target="_blank" download>{{attachment.OriginalFileName}}</a></div>
                 <div class="attatchment_postename">{{attachment.UploadedBy}}<span>{{attachment.UploadedOn}}</span></div>
             </div>            
             <div *ngIf='attachment.ArtifactType =="image"'>
                 <img src="{{attachment.FileName}}" />
-                <div class="attatchment_url"><a href="{{attachment.FileName}}" download>{{attachment.OriginalFileName}}</a></div>
+                <div class="attatchment_url"><a href="{{attachment.FileName}}" target="_blank" download>{{attachment.OriginalFileName}}</a></div>
                 <div class="attatchment_postename">{{attachment.UploadedBy}}<span>({{attachment.UploadedOn}})</span></div>
             </div>
         </div>
