@@ -81,7 +81,9 @@ public blurTimeout=[];
  private comment_status:boolean=true;
 
   ngOnInit() {
+
     this.callTicketDetailPage("");
+
     }
 
     /**
@@ -129,6 +131,17 @@ public blurTimeout=[];
       })
       //jQuery('span[id^="check_"]').hide();
     }
+
+getArtifacts(obj){
+  this._ajaxService.AjaxSubscribe("story/get-my-ticket-attachments",obj,(data)=>
+        { 
+        if(data.statusCode == 200){
+                         this.attachmentsData = data.data;                            
+        } else {
+            this.attachmentsData =[];
+        }          
+        });
+}
 
   /*
   * Description part
@@ -227,6 +240,8 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
           }
           
           this.replying = false;
+          var ticketIdObj={'ticketId': this.ticketId};
+          this.getArtifacts(ticketIdObj);
           
         });
 }
@@ -682,8 +697,13 @@ var thisObj = this;
         { 
           if(result.statusCode== 200){
 
-         if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc")
+         if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
                 document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
+                if(postEditedText.EditedId == "desc"){
+                  var ticketIdObj={'ticketId': this.ticketId};
+                  this.getArtifacts(ticketIdObj);
+                }
+         }
 
 
 
@@ -965,6 +985,8 @@ var thisObj = this;
           this.commentsList[commentIndex].CDescription = result.data.CDescription;
           this.commentEditorsInstance[commentIndex].destroy(true);
           jQuery("#Actions_"+commentIndex).hide();
+          var ticketIdObj={'ticketId': this.ticketId};
+          this.getArtifacts(ticketIdObj);
           // this.commentsList.push(result.data);
           
         });
@@ -1219,14 +1241,7 @@ public callTicketDetailPage(ticId){
      * @author:Jagadish
      * @description: This is used to display Attachments
      */
-       this._ajaxService.AjaxSubscribe("story/get-my-ticket-attachments",ticketIdObj,(data)=>
-        { 
-        if(data.statusCode == 200){
-                         this.attachmentsData = data.data;                            
-        } else {
-            this.attachmentsData =[];
-        }          
-        });
+       this.getArtifacts(ticketIdObj);
 }
 
     }
