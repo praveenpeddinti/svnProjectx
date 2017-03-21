@@ -1,5 +1,6 @@
 <!-- Menu -->
 <div class="custom_menu">
+  <button id="collapsediv" hidden (click)="collapseAll()">Collapse All</button>
   <button data-toggle="tooltip" data-placement="top" title="List view" class="normal"><i class="fa fa-list" aria-hidden="true"></i></button>
   <button (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="normal bluebutton"><i class="fa fa-plus" aria-hidden="true"></i></button>
 </div>
@@ -84,7 +85,8 @@ Row classes are also dynamically. These classes are pass to service layer-->
               [class.fa-chevron-down]="!row.$$expanded"
               [class.fa-chevron-up]="row.$$expanded"
               title="Expand/Collapse Row"
-              (click)="toggleExpandRow(row)">
+              (click)="toggleExpandRow(row)"
+              >
             </a>
      </div>
 </template>

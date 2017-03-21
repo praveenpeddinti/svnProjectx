@@ -131,13 +131,11 @@ expanded: any = {};
         this.sortorder = event.sorts[0].dir;
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
     }
-//collapseAllRows(){alert("collapseAllRows===");}
+collapseAll(){ 
+    this.table.rowDetail.collapseAllRows()
+}
 toggleExpandRow(row) {
-    // this.table.rowDetail.collapseAllRows();
-   //setTimeout(()=>{
-     //alert("set time===");
-    //this.table.rowDetail.collapseAllRows();
-    //},250);
+    if(row.$$expanded!=1){jQuery("#collapsediv").click();}
     this.row1=[];
     console.log('Toggled Expand Row!', row[0].field_value);
     this._service.getSubTasksDetails(1, row[0].field_value, (response) => {
@@ -146,12 +144,13 @@ toggleExpandRow(row) {
                 this.row1=response.data;
                 //this.row1.push(response.data);
                 this.table.rowDetail.toggleExpandRow(this.row1);
-                console.log('Toggled Expand Row!', this.row1);
+                //console.log('Toggled Expand Row!', this.row1);
             } else {
                 console.log("fail---");
             }
         });
-    console.log('Toggled Expand Row2!', row);
+       
+    //console.log('Toggled Expand Row2!', row);
     this.table.rowDetail.toggleExpandRow(row);
     
   
