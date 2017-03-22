@@ -54,7 +54,6 @@ public blurTimeout=[];
   public isTimeValidErrorMessage;
   public relatedTaskArray=[];
   public checkPlanLevel='';
-
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
@@ -782,7 +781,8 @@ var thisObj = this;
           task.push(result.data.Tasks);
           var newChildData = this.taskDataBuilder(task);
           this.childTasksArray.push(newChildData[0]);
-         });
+          });
+       jQuery('#childtitle').val("");
        }  
         
        
@@ -1254,7 +1254,7 @@ public callTicketDetailPage(ticId){
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
-          //  alert("subtasksdat"+JSON.stringify(this.childTasksArray));
+          //alert("subtasksdat"+JSON.stringify(this.childTasksArray.length));
 
 
             // this.commentsList = [];
