@@ -994,6 +994,9 @@ Yii::log("CommonUtility:prepareActivity::" . $ex->getMessage() . "--" . $ex->get
                              $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                              $readableDate = $datetime->format('M-d-Y H:i:s');
                              $property["ActivityOn"] = $readableDate;
+                             if( $property["NewValue"] == ""){
+                                  $property["NewValue"] = "-none-";
+                             }
                              return $property;
         } catch (Exception $ex) {
 Yii::log("CommonUtility:prepareActivityProperty::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
