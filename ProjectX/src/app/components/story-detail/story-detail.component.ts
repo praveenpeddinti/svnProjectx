@@ -83,9 +83,13 @@ public blurTimeout=[];
   ngOnInit() {
     
     this.callTicketDetailPage("");
-   
-
-    }
+   //@Praveen P toggle for plus button in follower list
+   jQuery(document).click(function(e) {
+     if( jQuery(e.target).closest('div#followerdiv').length==0 && e.target.id != 'follwersAdd' && e.target.id != 'follwersAddI'  ) {
+        jQuery("#followerdiv").css( "display",'none' );
+      }
+   });
+}
 
     /**
      * @author:Ryan Marshal
@@ -822,7 +826,7 @@ var thisObj = this;
     
     /* When click the plus button to open the input box for followers*/
     public loadfollowers(){
-      document.getElementById("followerdiv").style.display='block';
+      jQuery("#followerdiv").toggle();
       jQuery("#followerId").val("");
       this.follower_search_results=[];
     }

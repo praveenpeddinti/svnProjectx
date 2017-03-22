@@ -156,89 +156,73 @@
           </div>
             <!--Description Part End-->
 
-<!--Show the Followers list start-->
+
 
             <div class="expand_collapse">
             <a type="button" id="expand" (click)="expand()" class="colapse"><span class="glyphicon glyphicon-chevron-up alignright"></span></a>
 <a type="button" id="collapse" (click)="collapse()" class="colapse"><span class="glyphicon glyphicon-chevron-down alignright"></span></a>
 </div>
 <div class="main_div widgetmainbg" [ngClass]="{ 'hide': hide}">
-
-    <!--  Followers List --> 
-<div (click)="loadfollowers()" class="add"><i class="fa fa-plus" aria-hidden="true"></i></div>
-    
-    <div class="widgethed">Followers List</div>
-   <div class="followers" >
-       <div class="">
-       
+<!--Show the Followers list start-->
+    <!-- @Praveen P  Followers List Start--> 
+<div (click)="loadfollowers()" id="follwersAdd" class="add"><i id="follwersAddI" class="fa fa-plus" aria-hidden="true"></i></div>
+    <div class="widgethed">Followers</div>
+    <div class="followers" >
+    <div class="">
       <div *ngFor="let follower of followers" class="followers_usr btn-group ">
-
-          
-       <img *ngIf="follower.Flag=='reportedby'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
+        <img *ngIf="follower.Flag=='reportedby'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  /> 
-      <img *ngIf="follower.Flag=='assignedto'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
+        <img *ngIf="follower.Flag=='assignedto'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{follower.ProfilePicture}}" title="{{follower.UserName}}" />
-      <img *ngIf="follower.Flag=='stakeholder'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
+        <img *ngIf="follower.Flag=='stakeholder'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  />                                    
-                         
-      <img *ngIf="follower.Flag=='follower'"data-toggle="tooltip" data-placement="top" class="profilepic_table"
+        <img *ngIf="follower.Flag=='follower'"data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  />
-      <div (click)="removeFollower($event.target.id)" id={{follower.FollowerId}} *ngIf="follower.Flag=='follower'" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+        <div (click)="removeFollower($event.target.id)" id={{follower.FollowerId}} *ngIf="follower.Flag=='follower'" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
          
-
- 
-  <div id="conformRF_{{follower.FollowerId}}" class="dropdown-menu customdropdown-menu">
-   <div class="delete_followersbg">  
-               Do you want to remove this user?
-               <div class="text-center">
-               <div (click)="removefollowerId(follower.FollowerId)" id="remove_yes" class="yes">Yes</div>
-               <div class="no">No</div>
-               </div> 
-                 
-           </div>
-  </div>
-</div>
-     
-      
-      <div class=" clearfix"></div>
-     
-     </div> 
+        <div id="conformRF_{{follower.FollowerId}}" class="dropdown-menu customdropdown-menu">
+            <div class="delete_followersbg">  
+                Do you want to remove this user?
+                <div class="text-center">
+                    <div (click)="removefollowerId(follower.FollowerId)" id="remove_yes" class="yes">Yes</div>
+                    <div class="no">No</div>
+                </div> 
+            </div>
+        </div>
+        </div>
+       
+    <div class=" clearfix"></div>
+    </div> 
    </div>
    
- <!-- List End -->
-
-  <div id="followerdiv" style="display:none" class="add_followersbg addfollowers_overlap">
-   <!--<input id='followerId' type="text" value="" (keyup)="searchfollower($event.target.value)" />-->
-   <!--<div (click)="checkFollower($event.target.id)" id="{{flist.id}}" value="flist.Name" *ngFor="let flist of follower_search_results">{{flist.Name}}<span  id="check_{{flist.id}}"  style="font-size:18px"></span></div>-->
-    
-             
-                <div class="padd10"><input id='followerId' type="text" placeholder="Search" class="addfollower_search" value="" (keyup)="searchfollower($event.target.value)"/> </div>
-                
-                    
-                  <div (click)="checkFollower(flist.id)" id="{{flist.id}}" *ngFor="let flist of follower_search_results">
-                <!--<div  (click)="checkFollower($event.target.id)" id="{{flist.id}}" value="flist.Name" *ngFor="let flist of follower_search_results">{{flist.Name}}<span  id="check_{{flist.id}}"  style="font-size:18px"></span></div>-->
-                  <div class="addfollower_userbg">
-                  <div class="row">
-                   <div class="col-md-2">
+   <!-- Search Follower list start -->
+    <div id="followerdiv" style="display:none" class="addfollowers_overlap">
+    <div class="add_followersbg ">
+        <div class="padd10"><input id='followerId' type="text" placeholder="Search" class="addfollower_search" value="" (keyup)="searchfollower($event.target.value)"/> </div>
+        <div (click)="checkFollower(flist.id)" id="{{flist.id}}" *ngFor="let flist of follower_search_results">
+            <div class="addfollower_userbg">
+                <div class="row">
+                   <div class="col-md-2 col-sm-2 col-xs-2">
                       <div class="addfollower_user">
                           <img data-toggle="tooltip" data-placement="top" class="profilepic_table" src="{{flist.ProfilePic}}" />
                       </div>
                    </div>
-                   <div class="col-md-8">
+                   <div class="col-md-8 col-sm-8 col-xs-8">
                        <div class="addfollower_username">{{flist.Name}}</div>
                    </div>
-                   <div class="col-md-2">
+                   <div class="col-md-2 col-sm-2 col-xs-2">
                        <span  id="check_{{flist.id}}"  style="font-size:18px;color:#53c808"></span>  
-                      <!--<i id="check_{{flist.id}}" class="fa fa-fw" aria-hidden="true" style="color:#F00"></i>-->
                    </div>
-                   </div>
-                   </div> 
-                  
                 </div>
+            </div> 
                   
-  
+        </div>
    </div>
+   </div>
+   <!-- Search follower list end -->
+ <!-- List End -->
 
+  
 <!--- Show the Followers list  End -->
 
 <div *ngIf="attachmentsData.length>0">
