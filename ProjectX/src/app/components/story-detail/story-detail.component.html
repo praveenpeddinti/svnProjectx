@@ -29,9 +29,9 @@
               </div>
             <div class="col-xs-12 col-sm-9 col-md-9">
               <div class="ticketdescriptionarea minheight50">
-                <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle()" [hidden]="!showTitleEdit">
+                <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
                 </div>
-                <input class="editinput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
+                <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
                 <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
                 </div>-->
               </div>
