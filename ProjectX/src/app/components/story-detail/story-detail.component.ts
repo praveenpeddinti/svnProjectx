@@ -409,6 +409,9 @@ private dateVal = new Date();
 //Also prepares the data to be sent to service to save the changes.
 //This is common to left Column fields.
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,where){
+    var intRegex = /^\d+$/;
+    var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
+
      var postEditedText={
                         isLeftColumn:1,
                         id:fieldId,
@@ -416,9 +419,14 @@ private dateVal = new Date();
                         TicketId:(where == "Tasks")?restoreFieldId.split("_")[0]:this.ticketId,
                         EditedId:restoreFieldId.split("_")[1]
                       };
-
           switch(renderType){
             case "input":
+            if(intRegex.test(editedObj) || floatRegex.test(editedObj)) {
+             postEditedText.value = editedObj;
+            }else{
+              postEditedText.value ="--";
+            }
+            break;
             case "textarea":
             document.getElementById(restoreFieldId).innerHTML = (editedObj == "") ? "--":editedObj;
             postEditedText.value = editedObj;
@@ -447,7 +455,7 @@ private dateVal = new Date();
         }else{  
             this.showMyEditableField[fieldIndex] = true;
         }
-        this.postDataToAjax(postEditedText);
+       this.postDataToAjax(postEditedText);
   }
 
   closeCalendar(fieldIndex){

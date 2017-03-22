@@ -277,15 +277,15 @@
 
         </div>
             <div id="subtaskerr" class="alert alert-danger" style="display:none;"></div>
-        <div *ngFor="let childTasks of childTasksArray;let j=index;">
+        <div  *ngFor="let childTasks of childTasksArray;let j=index;">
                 <div class="addtask">
                     <div class="col-md-1">
-                    <div class="addtask_taskno"><span>#</span>{{childTasks.TicketId}}</div>
+                    <div class="addtask_taskno"><span *ngIf="childTasks.TicketId">#</span>{{childTasks.TicketId}}</div>
                     </div>
                     <div class="col-md-5">
                         <div class="addtask_bor">
                             <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/story-detail',childTasks.TicketId]" (click)="navigateStoryDetail(childTasks.TicketId)">{{childTasks.Title}}</a></div>
-                            <div class="addtask_status">{{childTasks.Fields[2].data.value_name}}</div>
+                            <div class="addtask_status" *ngIf="childTasks.TicketId">{{childTasks.Fields[2].data.value_name}}</div>
                         </div>
                     </div>
                     <div *ngFor="let childTaskFields of childTasks.Fields;let k=index;" class="col-md-3">
