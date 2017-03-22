@@ -183,6 +183,9 @@ export class StoryDetailsPage {
 
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
             this.readOnlyDropDownField = true;
+            // setTimeout( () => {
+            //     this.showEditableFieldOnly[index] = true;
+            // }, 500);
             this.showEditableFieldOnly[index] = true;
             this.clickedDivRef = fieldDetails.id;
             this.previousSelectIndex = index;
@@ -203,11 +206,7 @@ export class StoryDetailsPage {
 
             if (fieldDetails.fieldType == "TextArea") {
                 this.enableTextArea[index] = true;
-
                 document.getElementById("field.title_field.id_" + index).style.display = 'none';
-
-
-
             }
             else if (fieldDetails.fieldType == "Text") {
                 this.enableTextField[index] = true;

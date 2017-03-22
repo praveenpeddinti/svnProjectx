@@ -37,16 +37,17 @@
         <div *ngIf="enableDataPicker[i]" class="no_mar">
           <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM DD YYYY" (ionChange)="datemethod($event, i,field)">03-03-2017</ion-datetime>
         </div>
-
-
-        <ion-label *ngIf="showEditableFieldOnly[i]">{{field.title}}</ion-label>
-        <select-alertless id="slect_{{i}}" *ngIf="showEditableFieldOnly[i]" item-content [(ngModel)]="New" (ionCancel)="selectCancel(i)"
-          (ionChange)="changeOption($event, i)">
-          <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}" [selected]="(item.Name == field.assignTo)">{{item.Name}}</ion-option>
-        </select-alertless>
-
-
-      </ion-item>
+         
+        
+          <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
+          <select-alertless id="slect_{{i}}" *ngIf="showEditableFieldOnly[i]"  item-content [(ngModel)]="New" (ionCancel)="selectCancel(i)" (ionChange)="changeOption($event, i)">
+              <ng-container *ngIf="displayFieldvalue.length > 0" >
+                  <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}" [selected]="(item.Name == field.assignTo)" > <div>{{item.Name}}</div> </ion-option>
+              </ng-container> 
+          </select-alertless>
+          <!--<custom-alert *ngIf="showEditableFieldOnly[i]"></custom-alert>-->
+               
+    </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
