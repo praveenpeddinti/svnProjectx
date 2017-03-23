@@ -30,20 +30,18 @@
           <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item" (click)="getFieldValues(field, i)" >{{field.assignTo}}</div>
         </div>
       
-        <ion-input *ngIf="enableTextField[i]" class="icnlist estpo" id="field.title_field.id_{{i}}" type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="{{field.title}}"></ion-input>
-             
-        <ion-input *ngIf="enableTextArea[i]" id="field.title_field.id_{{i}}" type="text" placeholder="{{field.title}}" class="bc dodlink"></ion-input>
-
+        <ion-input *ngIf="enableTextField[i]" (blur)="inputBlurMethod($event, i, field)" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}" type="number" placeholder="{{field.title}}" value="{{field.assignTo}}" ></ion-input>
+        <ion-input *ngIf="enableTextArea[i]" id="field.title_field.id_{{i}}"  (blur)="inputBlurMethod($event, i, field)" type="text" placeholder="{{field.title}}" class="bc" value="{{field.assignTo}}" ></ion-input>
 
         <div *ngIf="enableDataPicker[i]" class="no_mar">
-          <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM-DD-YYYY" (ionChange)="datemethod($event, i,field)">03-03-2017</ion-datetime>
+          <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM-DD-YYYY" [(ngModel)]="date" (ionChange)="dateChange($event, i,field)">03-03-2017</ion-datetime>
         </div>
          
         
           <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
-          <select-alertless id="slect_{{i}}" *ngIf="showEditableFieldOnly[i]"  item-content [(ngModel)]="New" (ionCancel)="selectCancel(i)" (ionChange)="changeOption($event, i)">
+          <select-alertless #device id="select_{{i}}" *ngIf="showEditableFieldOnly[i]"  item-content (ionCancel)="selectCancel(i)" (ionChange)="changeOption($event, i, field)">
               <ng-container *ngIf="displayFieldvalue.length > 0" >
-                  <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Name}}" [selected]="(item.Name == field.assignTo)" > <div>{{item.Name}}</div> </ion-option>
+                  <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Id}}" [selected]="(item.Name == field.assignTo)" > <div>{{item.Name}}</div> </ion-option>
               </ng-container> 
           </select-alertless>
           <!--<custom-alert *ngIf="showEditableFieldOnly[i]"></custom-alert>-->
@@ -83,7 +81,7 @@
     <div class="padding10">
       <div style="position: relative;" class="customtoggle padding10">
 <div id="description" style="overflow:hidden;" >
-<div id="innerdesc" class=" displayblock" [innerHTML]=" taskDetails.description "></div>
+<div id="innerdesc" class="displayblock imgVideo_bg" [innerHTML]=" taskDetails.description "></div>
 </div>
 <div class="show-morediv" style="display:none">
 <button id="show" (click)="expandDescription()" class="customshowbutton">Show more</button>

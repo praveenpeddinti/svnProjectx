@@ -207,9 +207,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#23576a', end
 	-moz-border-radius:50%;
 	-webkit-border-radius:50%;}
 
+    .input-wrapper .spinnerlabel{ color:#1c8ab5!important;}
+    
+    .imgVideo_bg p img, video{margin-left: auto;
+                             margin-right: auto;
+                             display: block;}
+
 .input-wrapper .spinnerlabel{ color:#1c8ab5!important; }
 
-
+    .toast{background-color:#eda74c;}
+    
 // .estimatepoints{    display: block!important;
 //  display: -ms-flexbox;
 //  /* display: flex; */

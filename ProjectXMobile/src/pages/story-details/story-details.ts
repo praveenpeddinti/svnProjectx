@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ToastController } from 'ionic-angular';
 import { NavController, NavParams, MenuController, LoadingController, PopoverController, ViewController } from 'ionic-angular';
 
 import { Globalservice } from '../../providers/globalservice';
@@ -22,7 +23,7 @@ export class StoryDetailsPage {
     public timeStarts: any;
     public timeEnds: any;
     public items: Array<any>;
-    public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, ticketId: any }>;
+    public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any }>;
     public displayFieldvalue = [];
     public showEditableFieldOnly = [];
     public readOnlyDropDownField: boolean = false;
@@ -48,6 +49,8 @@ export class StoryDetailsPage {
     public minDate: any = new Date();
     public myDate: string = "2017-02-25";
     public userName: any = '';
+    
+    public date:any = new Date().toString();
 
     public ckeditorContent = "";
     public config = {
@@ -57,6 +60,7 @@ export class StoryDetailsPage {
     };
 
     constructor(menu: MenuController,
+        private toastCtrl: ToastController,
         public globalService: Globalservice,
         private constants: Constants,
         public navCtrl: NavController,
@@ -88,15 +92,24 @@ export class StoryDetailsPage {
                     var _id = this.items[i].Id;
                     var _title = this.items[i].title;
                     var _assignTo;
-                    if (this.items[i].value_name == "") {
-                        _assignTo = "--";
-                    } else {
-                        _assignTo = this.items[i].value_name;
+                    if ((this.items[i].field_type == "Text") || (this.items[i].field_type == "TextArea")) {
+                        if (this.items[i].value == "") {
+                            _assignTo = "--";
+                        } else {
+                            _assignTo = this.items[i].value;
+                        }
+                    } else { 
+                        if (this.items[i].value_name == "") {
+                            _assignTo = "--";
+                        } else {
+                            _assignTo = this.items[i].value_name;
+                        }
                     }
                     var _readOnly = this.items[i].readonly;
                     var _fieldType = this.items[i].field_type;
+                    var _fieldName = this.items[i].field_name;
                     this.arrayList.push({
-                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, fieldType: _fieldType, ticketId: this.taskDetails.ticketId
+                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, fieldType: _fieldType, fieldName: _fieldName, ticketId: this.taskDetails.ticketId
                     });
                 }
                 //console.log("the field arrayList " + JSON.stringify(this.arrayList));
@@ -114,10 +127,30 @@ export class StoryDetailsPage {
         timeEnds: '2099-02-20'
 
     }
-    public datemethod(event, index, fieldDetails) {
-        this.month = '2017-02-19';
-        this.timeStarts = '07:43';
-        this.timeEnds = '2099-02-20';
+    public dateChange(event, index, fieldDetails) {
+        
+        console.log("the date changed " + JSON.stringify(this.date));
+
+//        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, event, fieldDetails).subscribe( 
+//            (result) => {
+//                setTimeout(() => {
+//                    document.getElementById("field.title_field.id_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
+//                    document.getElementById("item_" + index).classList.remove("item-select");
+//                }, 300);
+//            },
+//            (error) => {
+//                console.log("the error --- " + JSON.stringify(error));
+//                 let toast = this.toastCtrl.create({
+//                    message: 'Some thing Un-successfull',
+//                    duration: 3000,
+//                    position: 'bottom',
+//                    cssClass: "toast",
+//                    dismissOnPageChange: true
+//                  });
+//                  toast.present();
+//            });
+
+
         setTimeout(() => {
             document.getElementById("field.title_field.id_" + index).style.display = 'none';
             //document.getElementById("item_" + index).classList.add("item-select");
@@ -157,19 +190,7 @@ export class StoryDetailsPage {
         }
     }
 
-    public changeOption(event, index, fieldDetails) {
-        this.readOnlyDropDownField = false;
-        this.showEditableFieldOnly[index] = false;
-        this.selectedValue = event;
-        console.log("the div id " + this.clickedDivRef);
-
-        setTimeout(() => {
-            document.getElementById("field.title_field.id_" + index).innerHTML = event;
-            document.getElementById("item_" + index).classList.remove("item-select");
-        }, 300);
-    }
-
-    public selectCancel(index) {
+     public selectCancel(index) {
         console.log("selectCancel --- " + index);
         this.showEditableFieldOnly[index] = false;
         setTimeout(() => {
@@ -212,9 +233,70 @@ export class StoryDetailsPage {
                 this.enableTextField[index] = true;
                 document.getElementById("field.title_field.id_" + index).style.display = 'none';
             }
-            //this.enable
         }
 
+    }
+
+    public changeOption(event, index, fieldDetails) {
+        this.readOnlyDropDownField = false;
+        this.showEditableFieldOnly[index] = false;
+        this.selectedValue = event;
+        console.log("the div id --- " + event + "---- " + index + " ---- " + this.selectedValue + "----- " + this.displayFieldvalue[event -1].Name);
+
+        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, event, fieldDetails).subscribe( 
+            (result) => {
+                setTimeout(() => {
+                    document.getElementById("field.title_field.id_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
+                    document.getElementById("item_" + index).classList.remove("item-select");
+                }, 300);
+            },
+            (error) => {
+                console.log("the error --- " + JSON.stringify(error));
+                 let toast = this.toastCtrl.create({
+                    message: 'Some thing Un-successfull',
+                    duration: 3000,
+                    position: 'bottom',
+                    cssClass: "toast",
+                    dismissOnPageChange: true
+                  });
+                  toast.present();
+            });
+
+        setTimeout(() => {
+            // document.getElementById("field.title_field.id_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
+            // document.getElementById("item_" + index).classList.remove("item-select");
+        }, 300);
+    }
+    
+    public inputBlurMethod(event, index, fieldDetails){
+        
+        console.log("inside the input blur method " + event.target.value);
+        
+       this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe( 
+            (result) => {
+                setTimeout(() => {
+                    // this.enableTextField[index] = false;
+                    // this.showEditableFieldOnly[index] = true;
+                    document.getElementById("field.title_field.id_" + index).innerHTML = (event.target.value);
+                }, 300);
+            },
+            (error) => {
+                console.log("the error --- " + JSON.stringify(error));
+                 let toast = this.toastCtrl.create({
+                    message: 'Some thing Un-successfull',
+                    duration: 3000,
+                    position: 'bottom',
+                    cssClass: "toast",
+                    dismissOnPageChange: true
+                  });
+                  toast.present();
+            });
+
+        setTimeout(() => {
+            // document.getElementById("field.title_field.id_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
+            // document.getElementById("item_" + index).classList.remove("item-select");
+        }, 300);
+        
     }
 
     openPopover(myEvent) {
