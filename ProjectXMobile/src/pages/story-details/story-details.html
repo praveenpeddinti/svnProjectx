@@ -30,7 +30,8 @@
           <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item" (click)="getFieldValues(field, i)" >{{field.assignTo}}</div>
         </div>
 
-        <ion-input *ngIf="enableTextField[i]" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}" type="tel" placeholder="{{field.title}}"></ion-input>
+        <ion-input *ngIf="enableTextField[i]" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}" type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="{{field.title}}"></ion-input>
+ 
         <ion-input *ngIf="enableTextArea[i]" id="field.title_field.id_{{i}}" type="text" placeholder="{{field.title}}" class="bc"></ion-input>
 
 
