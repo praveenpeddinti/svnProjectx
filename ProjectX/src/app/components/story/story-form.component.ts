@@ -103,7 +103,7 @@ export class StoryComponent
                         var mention=[];
                         for(let i in data.data)
                         {
-                          mention.push(data.data[i].Name);
+                          mention.push({"name":data.data[i].Name,"Profile":data.data[i].ProfilePic});
                         }
                       callback(mention);
                     });
