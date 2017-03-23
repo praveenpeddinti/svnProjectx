@@ -6,7 +6,7 @@
 -->
 
 
-<ion-menu [content]="content">
+<ion-menu [content]="content" side="left" type="overlay">
 
   <ion-header>
     <ion-toolbar>
@@ -17,11 +17,11 @@
   </ion-header>
 
   <ion-content>
-    <ion-buttons right class="custombuttonsmenu custombuttonsmenuborderbottom">
+   <ion-buttons right class="custombuttonsmenu custombuttonsmenuborderbottom">
       <button right menuToggle>
         <ion-icon name="md-menu"></ion-icon>
         </button>
-    </ion-buttons>
+ </ion-buttons>
     <ion-list class="icnlist">
       <ion-item *ngFor="let field of arrayList; let i=index;" id="item_{{i}}">
         <div *ngIf="!showEditableFieldOnly[i]">
