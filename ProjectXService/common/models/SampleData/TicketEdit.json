@@ -1,0 +1,982 @@
+{
+  "data": [
+    {
+      "field_type": "dropdown",
+      "values": {
+        "In progress": [
+          [
+            "New",
+            22113443
+          ],
+          [
+            "Accepted",
+            22113453
+          ],
+          [
+            "Test",
+            22113463
+          ],
+          [
+            "Specification",
+            22117213
+          ],
+          [
+            "Waiting for input",
+            22117223
+          ],
+          [
+            "Development",
+            22117233
+          ],
+          [
+            "Paused",
+            22117243
+          ],
+          [
+            "Unit Test",
+            22117253
+          ],
+          [
+            "Ready for Peer Review",
+            22117263
+          ],
+          [
+            "Peer Review",
+            22117273
+          ],
+          [
+            "Ready  for QA",
+            22117283
+          ],
+          [
+            "QA",
+            22117293
+          ],
+          [
+            "Re-opened",
+            22117303
+          ]
+        ],
+        "Closed": [
+          [
+            "Fixed",
+            22113473
+          ],
+          [
+            "Invalid",
+            22113483
+          ],
+          [
+            "Deployed",
+            22117313
+          ]
+        ]
+      },
+      "is_user_field": false,
+      "meta": null,
+      "value": 22117263,
+      "field_name": "ticket_status_id"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "Highest (1)",
+          1
+        ],
+        [
+          "High (2)",
+          2
+        ],
+        [
+          "Normal (3)",
+          3
+        ],
+        [
+          "Low (4)",
+          4
+        ],
+        [
+          "Lowest (5)",
+          5
+        ]
+      ],
+      "is_user_field": false,
+      "meta": null,
+      "value": 3,
+      "field_name": "priority"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "moin hussain",
+          "da-9_Ok6Cr4Or9acwqEsg8"
+        ],
+        [
+          "me (sateesh.mandru)",
+          "bEEzBQl8ar4Oe0acwqEsg8"
+        ],
+        [
+          "Anand Singh",
+          "drP6p4p0er5yolacwqjQXA"
+        ],
+        [
+          "hareesh.bekkam",
+          "boGg74luSr5Okudmr6bg7m"
+        ],
+        [
+          "jagadish.kesireddi",
+          "cP9d8ap0ir5zGbacwqjQXA"
+        ],
+        [
+          "kishore neelam",
+          "css_6wlVCr4Op7acwqjQYw"
+        ],
+        [
+          "Madan Gopal Rao Ongole",
+          "dx4MHKqB4r5BJdacwqEsg8"
+        ],
+        [
+          "padmajad",
+          "cPZzPOauCr5O7cacwqEsg8"
+        ],
+        [
+          "Praveen P",
+          "cuz0NGk6ir4OBNacwqjQWU"
+        ],
+        [
+          "RameshKBC",
+          "cY6Oau240r5yyedmr6bg7m"
+        ],
+        [
+          "ranjanithakur",
+          "a1dZPUp0ir5yTkacwqjQYw"
+        ],
+        [
+          "satish.peta",
+          "acXL-Gp0mr5ykAdmr6CpXy"
+        ],
+        [
+          "sravan.gangelly",
+          "cOlc2W51er5zZdacwqjQXA"
+        ],
+        [
+          "Sreeni Jakka",
+          "aFdFqqknyr4PF9acwqEsg8"
+        ]
+      ],
+      "is_user_field": true,
+      "meta": null,
+      "value": "da-9_Ok6Cr4Or9acwqEsg8",
+      "field_name": "assigned_to_id"
+    },
+    {
+      "field_type": "text",
+      "values": null,
+      "is_user_field": false,
+      "meta": null,
+      "value": null,
+      "field_name": "component_id"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "Backlog",
+          10914233
+        ],
+        [
+          "Current",
+          10914243
+        ],
+        [
+          "Groomed - Sprint Ready ",
+          10916133
+        ],
+        [
+          "Sprint 2",
+          11008393
+        ]
+      ],
+      "is_user_field": false,
+      "meta": null,
+      "value": 11008393,
+      "field_name": "milestone_id"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "None",
+          0
+        ],
+        [
+          "Subtask",
+          1
+        ]
+      ],
+      "is_user_field": false,
+      "meta": {
+        "is_epic": false,
+        "is_story": false,
+        "is_subtask": true
+      },
+      "value": 1,
+      "field_name": "hierarchy_type"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "None",
+          0
+        ],
+        [
+          "Private",
+          1
+        ],
+        [
+          "Public",
+          2
+        ]
+      ],
+      "is_user_field": false,
+      "meta": null,
+      "value": 1,
+      "field_name": "permission_type"
+    },
+    {
+      "field_type": "calendar",
+      "values": {
+        "if_format": "%Y-%m-%d",
+        "shows_time": false,
+        "single_click": true
+      },
+      "is_user_field": false,
+      "meta": null,
+      "value": null,
+      "field_name": "due_date"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "Yes",
+          "Yes"
+        ],
+        [
+          "No",
+          "No"
+        ]
+      ],
+      "is_user_field": false,
+      "meta": null,
+      "value": null,
+      "field_name": "custom_fields_1139283"
+    },
+    {
+      "field_type": "text",
+      "values": null,
+      "is_user_field": false,
+      "meta": null,
+      "value": "https://app.assembla .com/spaces/projectx-0/wiki/Developer_DOD",
+      "clean_value": "https://app.assembla.com/spaces/projectx-0 /wiki...",
+      "field_name": "custom_fields_1139293"
+    },
+    {
+      "field_type": "numeric",
+      "values": null,
+      "is_user_field": false,
+      "meta": null,
+      "value": "3",
+      "field_name": "custom_fields_1139183"
+    },
+    {
+      "field_type": "calendar",
+      "values": {
+        "if_format": "%Y-%m-%d",
+        "shows_time": false,
+        "single_click": true
+      },
+      "is_user_field": false,
+      "meta": null,
+      "value": "2017-02-02",
+      "field_name": "custom_fields_1139193"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "me  (sateesh.mandru)",
+          "bEEzBQl8ar4Oe0acwqEsg8"
+        ],
+        [
+          "Anand Singh",
+          "drP6p4p0er5yolacwqjQXA"
+        ],
+        [
+          "hareesh.bekkam",
+          "boGg74luSr5Okudmr6bg7m"
+        ],
+        [
+          "jagadish.kesireddi",
+          "cP9d8ap0ir5zGbacwqjQXA"
+        ],
+        [
+          "kishore neelam",
+          "css_6wlVCr4Op7acwqjQYw"
+        ],
+        [
+          "Madan Gopal Rao Ongole",
+          "dx4MHKqB4r5BJdacwqEsg8"
+        ],
+        [
+          "moin hussain",
+          "da-9_Ok6Cr4Or9acwqEsg8"
+        ],
+        [
+          "padmajad",
+          "cPZzPOauCr5O7cacwqEsg8"
+        ],
+        [
+          "Praveen P",
+          "cuz0NGk6ir4OBNacwqjQWU"
+        ],
+        [
+          "RameshKBC",
+          "cY6Oau240r5yyedmr6bg7m"
+        ],
+        [
+          "ranjanithakur",
+          "a1dZPUp0ir5yTkacwqjQYw"
+        ],
+        [
+          "satish.peta",
+          "acXL-Gp0mr5ykAdmr6CpXy"
+        ],
+        [
+          "sravan.gangelly",
+          "cOlc2W51er5zZdacwqjQXA"
+        ],
+        [
+          "Sreeni Jakka",
+          "aFdFqqknyr4PF9acwqEsg8"
+        ]
+      ],
+      "is_user_field": true,
+      "meta": null,
+      "value": "css_6wlVCr4Op7acwqjQYw",
+      "field_name": "custom_fields_1139203"
+    },
+    {
+      "field_type": "calendar",
+      "values": {
+        "if_format": "%Y-%m-%d",
+        "shows_time": false,
+        "single_click": true
+      },
+      "is_user_field": false,
+      "meta": null,
+      "value": "2017-01-12",
+      "field_name": "custom_fields_1139213"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "me  (sateesh.mandru)",
+          "bEEzBQl8ar4Oe0acwqEsg8"
+        ],
+        [
+          "Anand Singh",
+          "drP6p4p0er5yolacwqjQXA"
+        ],
+        [
+          "hareesh.bekkam",
+          "boGg74luSr5Okudmr6bg7m"
+        ],
+        [
+          "jagadish.kesireddi",
+          "cP9d8ap0ir5zGbacwqjQXA"
+        ],
+        [
+          "kishore neelam",
+          "css_6wlVCr4Op7acwqjQYw"
+        ],
+        [
+          "Madan Gopal Rao Ongole",
+          "dx4MHKqB4r5BJdacwqEsg8"
+        ],
+        [
+          "moin hussain",
+          "da-9_Ok6Cr4Or9acwqEsg8"
+        ],
+        [
+          "padmajad",
+          "cPZzPOauCr5O7cacwqEsg8"
+        ],
+        [
+          "Praveen P",
+          "cuz0NGk6ir4OBNacwqjQWU"
+        ],
+        [
+          "RameshKBC",
+          "cY6Oau240r5yyedmr6bg7m"
+        ],
+        [
+          "ranjanithakur",
+          "a1dZPUp0ir5yTkacwqjQYw"
+        ],
+        [
+          "satish.peta",
+          "acXL-Gp0mr5ykAdmr6CpXy"
+        ],
+        [
+          "sravan.gangelly",
+          "cOlc2W51er5zZdacwqjQXA"
+        ],
+        [
+          "Sreeni Jakka",
+          "aFdFqqknyr4PF9acwqEsg8"
+        ]
+      ],
+      "is_user_field": true,
+      "meta": null,
+      "value": "cOlc2W51er5zZdacwqjQXA",
+      "field_name": "custom_fields_1139273"
+    },
+    {
+      "field_type": "calendar",
+      "values": {
+        "if_format": "%Y-%m-%d",
+        "shows_time": false,
+        "single_click": true
+      },
+      "is_user_field": false,
+      "meta": null,
+      "value": "2017-02-09",
+      "field_name": "custom_fields_1139223"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "one",
+          "one"
+        ],
+        [
+          "two",
+          "two"
+        ]
+      ],
+      "is_user_field": false,
+      "meta": null,
+      "value": null,
+      "field_name": "custom_fields_1148923"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "me (sateesh.mandru)",
+          "bEEzBQl8ar4Oe0acwqEsg8"
+        ],
+        [
+          "Anand  Singh",
+          "drP6p4p0er5yolacwqjQXA"
+        ],
+        [
+          "hareesh.bekkam",
+          "boGg74luSr5Okudmr6bg7m"
+        ],
+        [
+          "jagadish.kesireddi",
+          "cP9d8ap0ir5zGbacwqjQXA"
+        ],
+        [
+          "kishore neelam",
+          "css_6wlVCr4Op7acwqjQYw"
+        ],
+        [
+          "Madan Gopal Rao Ongole",
+          "dx4MHKqB4r5BJdacwqEsg8"
+        ],
+        [
+          "moin  hussain",
+          "da-9_Ok6Cr4Or9acwqEsg8"
+        ],
+        [
+          "padmajad",
+          "cPZzPOauCr5O7cacwqEsg8"
+        ],
+        [
+          "Praveen P",
+          "cuz0NGk6ir4OBNacwqjQWU"
+        ],
+        [
+          "RameshKBC",
+          "cY6Oau240r5yyedmr6bg7m"
+        ],
+        [
+          "ranjanithakur",
+          "a1dZPUp0ir5yTkacwqjQYw"
+        ],
+        [
+          "satish.peta",
+          "acXL-Gp0mr5ykAdmr6CpXy"
+        ],
+        [
+          "sravan.gangelly",
+          "cOlc2W51er5zZdacwqjQXA"
+        ],
+        [
+          "Sreeni Jakka",
+          "aFdFqqknyr4PF9acwqEsg8"
+        ]
+      ],
+      "is_user_field": true,
+      "meta": null,
+      "value": "aFdFqqknyr4PF9acwqEsg8",
+      "field_name": "custom_fields_1139233"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "me (sateesh.mandru)",
+          "bEEzBQl8ar4Oe0acwqEsg8"
+        ],
+        [
+          "Anand Singh",
+          "drP6p4p0er5yolacwqjQXA"
+        ],
+        [
+          "hareesh.bekkam",
+          "boGg74luSr5Okudmr6bg7m"
+        ],
+        [
+          "jagadish.kesireddi",
+          "cP9d8ap0ir5zGbacwqjQXA"
+        ],
+        [
+          "kishore  neelam",
+          "css_6wlVCr4Op7acwqjQYw"
+        ],
+        [
+          "Madan Gopal Rao Ongole",
+          "dx4MHKqB4r5BJdacwqEsg8"
+        ],
+        [
+          "moin hussain",
+          "da-9_Ok6Cr4Or9acwqEsg8"
+        ],
+        [
+          "padmajad",
+          "cPZzPOauCr5O7cacwqEsg8"
+        ],
+        [
+          "Praveen P",
+          "cuz0NGk6ir4OBNacwqjQWU"
+        ],
+        [
+          "RameshKBC",
+          "cY6Oau240r5yyedmr6bg7m"
+        ],
+        [
+          "ranjanithakur",
+          "a1dZPUp0ir5yTkacwqjQYw"
+        ],
+        [
+          "satish.peta",
+          "acXL-Gp0mr5ykAdmr6CpXy"
+        ],
+        [
+          "sravan.gangelly",
+          "cOlc2W51er5zZdacwqjQXA"
+        ],
+        [
+          "Sreeni Jakka",
+          "aFdFqqknyr4PF9acwqEsg8"
+        ]
+      ],
+      "is_user_field": true,
+      "meta": null,
+      "value": "aFdFqqknyr4PF9acwqEsg8",
+      "field_name": "custom_fields_1139243"
+    },
+    {
+      "field_type": "text",
+      "values": null,
+      "is_user_field": false,
+      "meta": null,
+      "value": null,
+      "field_name": "custom_fields_1139303"
+    },
+    {
+      "field_type": "dropdown",
+      "values": [
+        [
+          "",
+          ""
+        ],
+        [
+          "me (sateesh.mandru)",
+          "bEEzBQl8ar4Oe0acwqEsg8"
+        ],
+        [
+          "Anand  Singh",
+          "drP6p4p0er5yolacwqjQXA"
+        ],
+        [
+          "hareesh.bekkam",
+          "boGg74luSr5Okudmr6bg7m"
+        ],
+        [
+          "jagadish.kesireddi",
+          "cP9d8ap0ir5zGbacwqjQXA"
+        ],
+        [
+          "kishore neelam",
+          "css_6wlVCr4Op7acwqjQYw"
+        ],
+        [
+          "Madan Gopal Rao Ongole",
+          "dx4MHKqB4r5BJdacwqEsg8"
+        ],
+        [
+          "moin  hussain",
+          "da-9_Ok6Cr4Or9acwqEsg8"
+        ],
+        [
+          "padmajad",
+          "cPZzPOauCr5O7cacwqEsg8"
+        ],
+        [
+          "Praveen P",
+          "cuz0NGk6ir4OBNacwqjQWU"
+        ],
+        [
+          "RameshKBC",
+          "cY6Oau240r5yyedmr6bg7m"
+        ],
+        [
+          "ranjanithakur",
+          "a1dZPUp0ir5yTkacwqjQYw"
+        ],
+        [
+          "satish.peta",
+          "acXL-Gp0mr5ykAdmr6CpXy"
+        ],
+        [
+          "sravan.gangelly",
+          "cOlc2W51er5zZdacwqjQXA"
+        ],
+        [
+          "Sreeni Jakka",
+          "aFdFqqknyr4PF9acwqEsg8"
+        ]
+      ],
+      "is_user_field": true,
+      "meta": null,
+      "value": "bEEzBQl8ar4Oe0acwqEsg8",
+      "field_name": "custom_fields_1139263"
+    },
+    {
+      "field_type": "calendar",
+      "values": {
+        "if_format": "%Y-%m-%d",
+        "shows_time": false,
+        "single_click": true
+      },
+      "is_user_field": false,
+      "meta": null,
+      "value": "2017-01-09",
+      "field_name": "custom_fields_1139253"
+    },
+    {
+      "field_type": "tags",
+      "values": {
+        "tags": [
+          
+        ],
+        "space_tags": [
+          
+        ]
+      },
+      "is_user_field": false,
+      "meta": null,
+      "value": null,
+      "field_name": "tag_names"
+    }
+  ],
+  "description": "As part of this ticket need to provide service which consumes data sent through request  and returns story/task details object to client.",
+  "fields": [
+    {
+      "title": "Created on",
+      "value": null,
+      "human_value": "2017-01-27 16:09",
+      "name": "created_on",
+      "readonly": true
+    },
+    {
+      "title": "Reported by",
+      "value": "bEEzBQl8ar4Oe0acwqEsg8",
+      "human_value": {
+        "field_type": "user",
+        "name": "me (sateesh.mandru)",
+        "url": "/user/popup_profile/sateesh.mandru"
+      },
+      "name": "reporter_id",
+      "readonly": true
+    },
+    {
+      "title": "Worked hours",
+      "value": 12.0,
+      "human_value": "12.0 hours",
+      "name": "worked_hours",
+      "readonly": true
+    },
+    {
+      "title": "Status",
+      "value": 22117263,
+      "human_value": "Ready for Peer  Review",
+      "name": "ticket_status_id",
+      "readonly": false
+    },
+    {
+      "title": "Priority",
+      "value": 3,
+      "human_value": "Normal  (3)",
+      "name": "priority",
+      "readonly": false
+    },
+    {
+      "title": "Assigned to",
+      "value": "da-9_Ok6Cr4Or9acwqEsg8",
+      "human_value": {
+        "field_type": "user",
+        "name": "moin hussain",
+        "url": "/user/popup_profile/moinhussain"
+      },
+      "name": "assigned_to_id",
+      "readonly": false
+    },
+    {
+      "title": "Milestone",
+      "value": 11008393,
+      "human_value": {
+        "name": "Sprint 2",
+        "url": "/spaces /projectx-0/milestones/11008393-sprint-2",
+        "field_type": "milestone"
+      },
+      "name": "milestone_id",
+      "readonly": true
+    },
+    {
+      "title": "Plan Level",
+      "value": 1,
+      "human_value": "Subtask",
+      "name": "hierarchy_type",
+      "readonly": true
+    },
+    {
+      "title": "Due Date",
+      "value": null,
+      "human_value": null,
+      "name": "due_date",
+      "readonly": false
+    },
+    {
+      "title": "DB  Script Req'd?",
+      "value": null,
+      "human_value": "",
+      "name": "custom_fields_1139283",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139283
+    },
+    {
+      "title": "DOD",
+      "value": "https://app.assembla.com/spaces/projectx-0 /wiki/Developer_DOD",
+      "human_value": "<a href=\"https://app.assembla.com/spaces/projectx-0/wiki/Developer_DOD \">https://app.assembla.com/spaces/projectx-0/wiki...</a>",
+      "name": "custom_fields_1139293",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139293,
+      "clean_value": "https://app.assembla.com/spaces/projectx-0 /wiki..."
+    },
+    {
+      "title": "Estimate",
+      "value": "3",
+      "human_value": "3",
+      "name": "custom_fields_1139183",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139183
+    },
+    {
+      "title": "Expected Completion ",
+      "value": "2017-02-02",
+      "human_value": "2017-02-02",
+      "name": "custom_fields_1139193",
+      "readonly": false,
+      "required": true,
+      "custom_field_id": 1139193
+    },
+    {
+      "title": "Peer",
+      "value": "css_6wlVCr4Op7acwqjQYw",
+      "human_value": {
+        "field_type": "user",
+        "name": "kishore neelam",
+        "url": "/user/popup_profile/kishore.neelam@techo2"
+      },
+      "name": "custom_fields_1139203",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139203
+    },
+    {
+      "title": "Peer Review Projection Date",
+      "value": "2017-01-12",
+      "human_value": "2017-01-12",
+      "name": "custom_fields_1139213",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139213
+    },
+    {
+      "title": "QA Engineer",
+      "value": "cOlc2W51er5zZdacwqjQXA",
+      "human_value": {
+        "field_type": "user",
+        "name": "sravan.gangelly",
+        "url": "/user/popup_profile/sravan.gangelly"
+      },
+      "name": "custom_fields_1139273",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139273
+    },
+    {
+      "title": "QA Projection Date  ",
+      "value": "2017-02-09",
+      "human_value": "2017-02-09",
+      "name": "custom_fields_1139223",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139223
+    },
+    {
+      "title": "TestList",
+      "value": null,
+      "human_value": "",
+      "name": "custom_fields_1148923",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1148923
+    },
+    {
+      "title": "Stakeholder ",
+      "value": "aFdFqqknyr4PF9acwqEsg8",
+      "human_value": {
+        "field_type": "user",
+        "name": "Sreeni Jakka",
+        "url": "/user/popup_profile/SreeniJakka"
+      },
+      "name": "custom_fields_1139233",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139233
+    },
+    {
+      "title": "Tech  Owner",
+      "value": "aFdFqqknyr4PF9acwqEsg8",
+      "human_value": {
+        "field_type": "user",
+        "name": "Sreeni Jakka",
+        "url": "/user/popup_profile/SreeniJakka"
+      },
+      "name": "custom_fields_1139243",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139243
+    },
+    {
+      "title": "Technical Spec",
+      "value": null,
+      "human_value": "",
+      "name": "custom_fields_1139303",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139303
+    },
+    {
+      "title": "UI/UX",
+      "value": "bEEzBQl8ar4Oe0acwqEsg8",
+      "human_value": {
+        "field_type": "user",
+        "name": "sateesh.mandru",
+        "url": "/user/popup_profile/sateesh.mandru"
+      },
+      "name": "custom_fields_1139263",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139263
+    },
+    {
+      "title": "UI Required Date  ",
+      "value": "2017-01-09",
+      "human_value": "2017-01-09",
+      "name": "custom_fields_1139253",
+      "readonly": false,
+      "required": false,
+      "custom_field_id": 1139253
+    },
+    {
+      "title": "Tags",
+      "value": null,
+      "human_value": {
+        "values": [
+          
+        ],
+        "field_type": "tags"
+      },
+      "name": "tag_names",
+      "readonly": false
+    }
+  ]
+}
