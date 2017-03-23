@@ -451,7 +451,7 @@
                      <div id="dropble_comment_" 
                           (drop)="fileUploadEvent($event, 'fileDrop','comments','')" >
                      </div>
-                     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img id="last_comments" [hidden]="true" src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     <div class="progress_bar"  [ngClass]="{pop_over_bg: fileUploadStatus}"><img  id="last_comments" [hidden]="true" src="assets/images/loader.gif" height="20" width="70" alt=""/>
                      </div>
                      <ckeditor #commentEditor [config]="toolbarForDetail" [(ngModel)]="commentDesc" name="commentDesc" required >
                      </ckeditor>

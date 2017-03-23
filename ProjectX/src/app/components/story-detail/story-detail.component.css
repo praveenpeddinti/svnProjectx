@@ -7,7 +7,6 @@
     top: 0;
     z-index: 1040;
     opacity: 0.5;
- 
 }
 .pop_over_bg img{
     position: absolute; top:50%; left:45%;
@@ -181,4 +180,5 @@ padding:5px 10px; cursor:pointer; margin-top:10px;
 .colapse{ background: #e0dfdf; cursor: pointer; text-align: center; display: table-cell; float: right; padding: 5px 10px; color: #fff; }
 .widgetmainbg{ border:solid 1px #f0f0f0; padding:20px; margin-top: 50px;}
 
-
+/* Progress bar */
+.progress_bar{margin-left: 43%; margin-top:15%;position:absolute;}
