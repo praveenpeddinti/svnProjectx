@@ -37,7 +37,7 @@ export class StoryDashboardComponent {
                 },
                 {
                     name: 'Assigned to',
-                    flexGrow: 1,
+                    flexGrow: 1.5,
                     sortby: 'assignedto',
                     class: ''
                 },
@@ -103,7 +103,7 @@ expanded: any = {};
                 const start = offset * limit;
                 const end = start + limit;
                 let rows = [...this.rows];
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < response.data.length; i++) {
                     rows[i + start] = response.data[i];
                 }
                 this.rows = rows;
@@ -134,7 +134,7 @@ expanded: any = {};
 collapseAll(){ 
     this.table.rowDetail.collapseAllRows()
 }
-toggleExpandRow(row) {
+toggleExpandRow(row) { 
     if(row.$$expanded!=1){jQuery("#collapsediv").click();}
     this.row1=[];
     console.log('Toggled Expand Row!', row[0].field_value);
@@ -151,10 +151,10 @@ toggleExpandRow(row) {
         });
        
     //console.log('Toggled Expand Row2!', row);
+
+   
    
     
-  
-
 }
 
       /* @Praveen P
