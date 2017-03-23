@@ -30,7 +30,7 @@
           <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item" (click)="getFieldValues(field, i)" >{{field.assignTo}}</div>
         </div>
       
-        <ion-input *ngIf="enableTextField[i]" (blur)="inputBlurMethod($event, i, field)" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}" type="number" placeholder="{{field.title}}" value="{{field.assignTo}}" ></ion-input>
+        <ion-input *ngIf="enableTextField[i]" (blur)="inputBlurMethod($event, i, field)" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}" type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="{{field.title}}" value="{{field.assignTo}}" ></ion-input>
         <ion-input *ngIf="enableTextArea[i]" id="field.title_field.id_{{i}}"  (blur)="inputBlurMethod($event, i, field)" type="text" placeholder="{{field.title}}" class="bc" value="{{field.assignTo}}" ></ion-input>
 
         <div *ngIf="enableDataPicker[i]" class="no_mar">
