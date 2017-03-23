@@ -18,6 +18,7 @@ export class Constants {
    public taskDetailsById = this.baseUrl + "story/get-ticket-details";
    public LogutUrl = this.baseUrl+"site/update-collabarator-status";
    public fieldDetailsById = this.baseUrl+"story/get-field-details-by-field-id";
+   public leftFieldUpdateInline = this.baseUrl+"story/update-story-field-inline";
 
   constructor() {
     console.log('Hello Constants Provider');

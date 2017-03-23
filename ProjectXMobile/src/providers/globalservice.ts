@@ -14,7 +14,7 @@ export class Globalservice {
 
     //private headers = new Headers({'Content-Type': 'application/json'});
     private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
-    params: {userInfo?: any, projectId?: any, ticketId?: any} = {};
+    params: {userInfo?: any, projectId?: any} = {};
 
     constructor(public http: Http, public storage: Storage) {
 
@@ -23,7 +23,7 @@ export class Globalservice {
         });
 
         this.params.projectId = 1;
-        this.params.ticketId = "";
+        // this.params.ticketId = "";
 
     }
 
@@ -43,9 +43,10 @@ export class Globalservice {
     }
 
     public getTicketDetailsById(url, data) {
-        this.params.ticketId = data;
-
-        var response = this.http.post(url, JSON.stringify(this.params), this.headers).map(
+        var tickerDetailsParams = this.params;
+        //this.params.ticketId = data;
+        tickerDetailsParams["ticketId"] = data;
+        var response = this.http.post(url, JSON.stringify(tickerDetailsParams), this.headers).map(
             res => res.json()
         );
         return response;
@@ -80,6 +81,30 @@ export class Globalservice {
         var response = this.http.post(url, JSON.stringify(fieldItemParams), this.headers).map(
             res => res.json()
         );
+        return response;
+    }
+
+    public leftFieldUpdateInline(url, selectedItem, fieldDetails){
+        console.log("the fieldUpdateParams --- " + JSON.stringify(fieldDetails));
+        var fieldUpdateParams = this.params;
+
+        fieldUpdateParams["isLeftColumn"] = 1;
+        fieldUpdateParams["id"] = fieldDetails.id;
+        fieldUpdateParams["value"] = selectedItem;
+        fieldUpdateParams["TicketId"] = fieldDetails.ticketId;
+        fieldUpdateParams["EditedId"] = fieldDetails.fieldName;
+        
+        fieldUpdateParams["projectId"] = 1;
+        fieldUpdateParams["timeZone"] = "Asia/Kolkata";
+
+        delete fieldUpdateParams["FieldId"];
+        delete fieldUpdateParams["ticketId"];
+        delete fieldUpdateParams["ProjectId"];
+
+        var response = this.http.post(url, JSON.stringify(fieldUpdateParams), this.headers).map(
+            res => res.json()
+        );
+        // response.refCount();
         return response;
     }
 
