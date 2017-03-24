@@ -844,7 +844,7 @@ var thisObj = this;
           DafaultUserList:dafaultUserList,
           SearchValue:event
         };
-         this._ajaxService.AjaxSubscribe("story/get-followers-details",followerData,(response)=>
+         this._ajaxService.AjaxSubscribe("story/get-collaborators-for-follow",followerData,(response)=>
          { 
 
           if (response.statusCode == 200) {
@@ -866,32 +866,24 @@ var thisObj = this;
     /* add the followers in the Follower div */
     public checkFollower(event)
     {
-      console.log("Follower id"+event);
       if(jQuery("#check_"+event).hasClass("glyphicon glyphicon-ok"))
       {
         jQuery("#check_"+event).removeClass("glyphicon glyphicon-ok");
         var followerData = {
           TicketId:this.ticketId,
-          ProjectId:1,
-          Follower:event,
-          Field:'follower',
-          FlagCheckbox:0
+        
+          collaboratorId:event
+        
         };
-        this._ajaxService.AjaxSubscribe("story/add-followers",followerData,(response)=>
-         {
-                if(response.statusCode==200)
-                {
-                 this.followers=[];
-                  //var follower=jQuery("#"+event).html();
-                  //this.added_follower=[];
-                  for(var i=0;i<response.data.length;i++)
-                  {
-                    this.added_follower.push(response.data[i]);
-                    this.followers.push(response.data[i]);
-                  }
-                  //this.followers.push(response.data[i]);
-                  //console.log("--Add followers removeoncheck---"+JSON.stringify(this.followers));
-                }
+        this._ajaxService.AjaxSubscribe("story/unfollow-ticket",followerData,(response)=>
+        {
+            if(response.statusCode==200)
+            {
+               jQuery("#followerdiv_"+event).remove();
+               this.followers = this.followers.filter(function(el) {
+               return el.FollowerId !== event;
+             });
+            }
         });
       }
       else{
@@ -899,23 +891,16 @@ var thisObj = this;
         //make ajax to add follower to the Ticket.....
         var followerData = {
           TicketId:this.ticketId,
-          ProjectId:1,
-          Follower:event,
-          Field:'follower',
-          FlagCheckbox:1
+        
+          collaboratorId:event,
+        
+       
         };
-        this._ajaxService.AjaxSubscribe("story/add-followers",followerData,(response)=>
+        this._ajaxService.AjaxSubscribe("story/follow-ticket",followerData,(response)=>
          {
                 if(response.statusCode==200)
                 {
-                 
-                 for(var i=0;i<response.data.length;i++)
-                  {
-                    this.added_follower.push(response.data[i]);
-                    this.followers.push(response.data[i]);
-                  }
-                  //this.followers.push(response.data[i]);
-                  //console.log("--Add followers oncheck---"+JSON.stringify(this.followers));
+                  this.followers.push(response.data);  
                 }
         });
       }
@@ -923,30 +908,21 @@ var thisObj = this;
     }
     /*when click the 'yes' in the popup div on the follower to remove the user*/
     public removefollowerId(event){
-
     jQuery("#check_"+event).removeClass("glyphicon glyphicon-ok");
     document.getElementById("followerdiv").style.display='none';
     var followerData = {
           TicketId:this.ticketId,
-          ProjectId:1,
-          Follower:event,
-          Field:'follower',
-          FlagCheckbox:0
+          collaboratorId:event,
         };
-        this._ajaxService.AjaxSubscribe("story/add-followers",followerData,(response)=>
+        this._ajaxService.AjaxSubscribe("story/unfollow-ticket",followerData,(response)=>
          {
                 if(response.statusCode==200)
                 {
-                 this.followers=[];
-                  //var follower=jQuery("#"+event).html();
-                  //this.added_follower=[];
-                  for(var i=0;i<response.data.length;i++)
-                  {
-                    this.added_follower.push(response.data[i]);
-                    this.followers.push(response.data[i]);
-                  }
-                  //this.followers.push(response.data[i]);
-                  console.log("--Add followers removeoncheck---"+JSON.stringify(this.followers));
+             
+               jQuery("#followerdiv_"+event).remove();
+               this.followers = this.followers.filter(function(el) {
+                    return el.FollowerId !== event;
+                });
                 }
         });
     }
