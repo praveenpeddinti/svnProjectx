@@ -482,7 +482,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      */
     public function updateStoryFieldInline($ticket_data){
            try{
-               
             $returnValue = 'failure';
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $checkData = $ticket_data->isLeftColumn;
@@ -550,6 +549,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             } 
                         }else{
                             $leftsideFieldVal = $ticket_data->value;
+                              if($fieldDetails["Type"] == 6 ){
+                                   $this->removefollowTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
+   
+                              }
                         }
                     }
                     $fieldtochange1= "Fields.".$field_name.".value";
@@ -580,7 +583,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     }
     
     public function removeComment($commentData){
-      error_log("-----------removeComment----------------".print_r($commentData,1));
       TicketComments::removeComment($commentData);
     }
   
@@ -723,10 +725,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     * @param type $ticketId
     * @param type $projectId
     */
-    public function removefollowTicket($collaboratorId,$ticketId,$projectId){
+    public function removefollowTicket($collaboratorId,$ticketId,$projectId,$fieldType = ""){
         try {
            $db =  TicketCollection::getCollection();
-           $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$pull'=> array('Followers' =>array("FollowerId" => (int)$collaboratorId))));
+           if($fieldType!=""){
+             $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$pull'=> array('Followers' =>array("Flag" => $fieldType))));  
+           }else{
+            $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$pull'=> array('Followers' =>array("FollowerId" => (int)$collaboratorId))));   
+           }
+           
         } catch (Exception $ex) {
           Yii::log("TicketFollowers:followTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
