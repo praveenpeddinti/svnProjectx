@@ -131,7 +131,7 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
     public function getFilteredProjectTeam($projectId,$search_query)
     {
         try{
-         $qry = "select C.Id,C.UserName as Name,C.Email,CP.ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and C.UserName like '$search_query%'";
+         $qry = "select C.Id,C.UserName as Name,C.Email,concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and C.UserName like '$search_query%'";
          $data = Yii::$app->db->createCommand($qry)->queryAll();
          return $data;
             
@@ -167,18 +167,14 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
      * @description This method is used to getting User details for add followers in the story/Task.
      * @return user List
      */
-    public function getFilteredFollowersDetailsProjectTeam($StoryData, $projectId) {
+    public function getCollaboratorsForFollow($dafaultUserList,$searchValue, $projectId) {
         try {
-            $dataPics = array();
-            $DefaultCollaboratorIds = implode(',', $StoryData->DafaultUserList);
-            $qry = "select C.Id,C.UserName as Name,C.Email,CP.ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and C.Id not in ($DefaultCollaboratorIds) and C.UserName like '$StoryData->SearchValue%'";
+            $DefaultCollaboratorIds = implode(',', $dafaultUserList);
+            $qry = "select C.Id,C.UserName as Name,C.Email,concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and C.Id not in ($DefaultCollaboratorIds) and C.UserName like '$searchValue%'";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
-            for ($i = 0; $i <= sizeof($data) - 1; $i++) {
-                $data[$i]['ProfilePic'] = Yii::$app->params['ServerURL'] . $data[$i]['ProfilePic'];
-            }
             return $data;
         } catch (Exception $ex) {
-            Yii::log("Collaborators:getFilteredProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("Collaborators:getCollaboratorsForFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

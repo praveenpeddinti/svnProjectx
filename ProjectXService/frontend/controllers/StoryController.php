@@ -426,12 +426,14 @@ class StoryController extends Controller
     * @description This method to get Follower list.
     * @return type Json
     */
-    public function actionGetFollowersDetails() {
+    public function actionGetCollaboratorsForFollow() {
         try {
             $StoryData = json_decode(file_get_contents("php://input"));
             //$projectId=1;
             $projectId = $StoryData->ProjectId;
-            $followerlist=ServiceFactory::getCollaboratorServiceInstance()->getFilteredFollowersDetailsProjectTeam($StoryData,$projectId);
+            $searchValue = $StoryData->SearchValue;
+            $ticketId = $StoryData->TicketId;
+            $followerlist=ServiceFactory::getCollaboratorServiceInstance()->getCollaboratorsForFollow($ticketId,$searchValue,$projectId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -439,7 +441,7 @@ class StoryController extends Controller
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryController:actionGetCollaboratorsforFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
@@ -491,40 +493,48 @@ class StoryController extends Controller
     * @description This method to add and remove followers in Story Details.
     * @return type Json
     */
-   public function actionAddFollowers() {
+   public function actionFollowTicket() {
         try {
             $post_data = json_decode(file_get_contents("php://input"));
             $followers_pics = array();
             //save followers to Ticket
-            if ($post_data->FlagCheckbox == 1) {
-                ServiceFactory::getStoryServiceInstance()->followTicket($post_data->Follower, $post_data->TicketId, $post_data->ProjectId, $post_data->userInfo->Id, $post_data->Field);
-                //get followers by Ticket ID and Project ID
-                $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($post_data->TicketId, $post_data->ProjectId);
-                foreach ($data['Followers'] as $follower) {
-                     if ($post_data->Follower == $follower['FollowerId']) {
-                        array_push($followers_pics, $follower);
-                    }
-                }
-            } else {
-                //remove followers to Ticket
-                ServiceFactory::getStoryServiceInstance()->removefollowTicket($post_data->Follower, $post_data->TicketId, $post_data->ProjectId);
-                //get followers by Ticket ID and Project ID
-                $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($post_data->TicketId, $post_data->ProjectId);
-                foreach ($data['Followers'] as $follower) {
-                    array_push($followers_pics, $follower);
-                }
-            }
+          
+                ServiceFactory::getStoryServiceInstance()->followTicket($post_data->collaboratorId, $post_data->TicketId, $post_data->projectId, $post_data->userInfo->Id, "follower");
+               $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);
+               $followerData = array();
+               $followerData["ProfilePicture"] = $collaboratorData["ProfilePicture"];
+               $followerData["UserName"] = $collaboratorData["UserName"];
+               $followerData["FollowerId"] =$post_data->collaboratorId;
+               $followerData["Flag"] ="follower";
+              //  array_push($followers_pics, $followerData);
+          
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $followers_pics;
+            $responseBean->data = $followerData;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
-            Yii::log("StoryController:actionAddFollowers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryController:actionAddFollower::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
+    public function actionUnfollowTicket() {
+        try {
+            $post_data = json_decode(file_get_contents("php://input"));
+            //remove followers to Ticket
+            ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->TicketId, $post_data->projectId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $post_data->collaboratorId;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionAddFollower::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
     /*
      * @author Padmaja
      * @description This method is used to save child task details.
