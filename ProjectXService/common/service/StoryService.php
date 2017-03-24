@@ -550,7 +550,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         }else{
                             $leftsideFieldVal = $ticket_data->value;
                               if($fieldDetails["Type"] == 6 ){
-                                   $this->removefollowTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
+                                   $this->unfollowTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
    
                               }
                         }
@@ -725,7 +725,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     * @param type $ticketId
     * @param type $projectId
     */
-    public function removefollowTicket($collaboratorId,$ticketId,$projectId,$fieldType = ""){
+    public function unfollowTicket($collaboratorId,$ticketId,$projectId,$fieldType = ""){
         try {
            $db =  TicketCollection::getCollection();
            if($fieldType!=""){

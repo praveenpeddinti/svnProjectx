@@ -113,12 +113,27 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
     * @return type 
     * @param type $projectId, $search_query,$defaultusers
      */      
-    public function getFilteredFollowersDetailsProjectTeam($StoryData, $projectId) {
+    public function getCollaboratorsForFollow($ticketId,$searchValue, $projectId) {
         try {
             $collaboratorModel = new Collaborators();
-            return $collaboratorModel->getFilteredFollowersDetailsProjectTeam($StoryData, $projectId);
+             $matchArray = array("TicketId" =>(int)$ticketId, "ProjectId" => (int) $projectId);
+            $query = Yii::$app->mongodb->getCollection('TicketCollection');
+            $pipeline = array(
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                        '_id' => '$TicketId',
+                        "followerData" => array('$push' => '$Followers.FollowerId'),
+                    ),
+                ),
+            );
+            $Arraytimelog = $query->aggregate($pipeline);
+           ;
+           // error_log("--data--------".print_r($Arraytimelog,1));
+            $dafaultUserList =  $Arraytimelog[0]["followerData"][0];
+            return $collaboratorModel->getCollaboratorsForFollow($dafaultUserList,$searchValue, $projectId);
         } catch (Exception $ex) {
-            Yii::log("CollaboratorService:getFilteredFollowersDetailsProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("CollaboratorService:getCollaboratorsForFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
