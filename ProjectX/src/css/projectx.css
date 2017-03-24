@@ -250,7 +250,7 @@ html-dropdown span.name {
 .customdropdown .ui-corner-all{border-radius:0}
 .customdropdown .ui-widget{font-size:12px}
 .leftreadonlyfontbluecolor{font-weight:bold;color:#3889ae;font-size:12px}
-.leftreadonlyfontgreycolor{font-weight:bold;color:#333;font-size:12px}
+.leftreadonlyfontgreycolor{font-weight:bold;color:#333;font-size:12px; word-wrap: break-word;}
 .custtextarea{min-height: 60px; resize: vertical;background: #f8f8f8 ;border: 0;max-height:300px}
 .width100per{width:100%}
 .custominput{padding-left:10px;padding-right:10px}
@@ -420,12 +420,13 @@ footer{font-size:10px}
 
 .commentlink{ color:#237ea7;font:normal 14px/18px 'robotoregular', Arial, Helvetica, sans-serif; margin-bottom:8px;}
 .commentlink a{ color:#237ea7; text-decoration:none;}
-.commentp{ color:#4c4c4c; font:normal 14px/18px 'robotoregular', Arial, Helvetica, sans-serif;}
+.commentp{ color:#4c4c4c; font:normal 14px/18px 'robotoregular', Arial, Helvetica, sans-serif; word-wrap: break-word;}
 .commentreplyp{ color:#000; font:normal 15px/18px 'robotoregular', Arial, Helvetica, sans-serif;}
 .commentp span{ color:#237ea7;}
 .commentp span a{ color:#237ea7; text-decoration:none;}
 .commedit{  float:left; margin-left:10px; width:21px; height:21px;}
 .commentp img{ max-width:100%}
+.commentp p img{width:200px; height: 100px;}
 .comment_reply{
 	position: relative;
 	background: #ebebeb;
@@ -455,6 +456,10 @@ footer{font-size:10px}
 .commentedtext{ background:#e1ebfd; border-left:solid #0199e0 5px; border-radius:2px;
 	 -moz-border-radius:2px;
 	 -webkit-border-radius:2px; padding:10px 31px 20px 10px; margin-bottom:10px;}
+
+#commentContent .commentedtext p img, video{ width: 100px; height: 100px; text-align:left; margin-right:20px;}
+#commentContent .commentedtext p{ display: table-cell; vertical-align: top;}
+
 .recommentedtext{ background:#e8fef6; border-left:solid #00bd74 5px; border-radius:2px;
 	 -moz-border-radius:2px;
 	 -webkit-border-radius:2px; padding:10px 10px 20px 10px; margin-bottom:10px;}	 
@@ -485,7 +490,7 @@ color: #0199e0;
 
 .ticketactivity{ display:block; background:#fff; height:auto; min-height:31px;  margin-bottom:10px; font:normal 13px/15px 'robotoregular', Arial, Helvetica, sans-serif; color:#4c4c4c; margin-left:40px; padding:8px 10px 8px 10px; border-radius:2px;
 	 -moz-border-radius:2px;
-	 -webkit-border-radius:2px;}
+	 -webkit-border-radius:2px;word-wrap: break-word;}
 .ticketactivity .property {color:#0199e0; cursor:pointer;}
 .ticketactivity .property  a{color:#0199e0; text-decoration:none;}
 .ticketactivity .erdate{color:#a2a2a2; font:normal 13px/15px 'robotoregular', Arial, Helvetica, sans-serif; cursor:auto;  float:right;  }
@@ -614,8 +619,14 @@ color: #0199e0;
 
 
 #replySnippetContent .replySnippet{ display:table;}
-#replySnippetContent .replySnippet p img, video{ width: 200px; height: 70px; text-align:left; margin-right:20px;}
-#replySnippetContent .replySnippet p{ display: table-cell; }
+#replySnippetContent .replySnippet p img, video{ width: 70px; height:70px; text-align:left; margin-right:20px;}
+#replySnippetContent .replySnippet p{ display: table-cell;vertical-align: top; word-wrap: break-word;
+
+ }
+/*#replySnippetContent .replySnippet p::after {
+  content: "";
+  display: table-cell; 
+}*/
 
 /*@media screen and (max-width:800px){
 

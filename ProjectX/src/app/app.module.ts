@@ -33,6 +33,7 @@ import { FileUploadService } from './services/file-upload.service';
 //import {Ng2AutoCompleteModule} from 'ng2-auto-complete';
 import {MentionService} from './services/mention.service';
 //import { GlobalPipe } from './shared/global.pipe';
+import { TruncatePipe } from 'angular2-truncate';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -71,6 +72,11 @@ const ROUTES=[
    FormsModule,
    ReactiveFormsModule ,
    HttpModule,
+
+ //  Ng2DropdownModule,
+ //  DatePickerModule,
+ //  MentionModule,
+
    CKEditorModule,
    NgxDatatableModule,
    FileDropModule,
@@ -81,7 +87,7 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES)
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe ],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,
   ],

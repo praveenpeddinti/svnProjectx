@@ -406,7 +406,7 @@ closeTitleEdit(editedText){
         },1000);
     
   }
- 
+
 private dateVal = new Date();
 //Restores the editable field to static mode.
 //Also prepares the data to be sent to service to save the changes.
@@ -424,12 +424,6 @@ private dateVal = new Date();
                       };
           switch(renderType){
             case "input":
-            if(intRegex.test(editedObj) || floatRegex.test(editedObj)) {
-             postEditedText.value = editedObj;
-            }else{
-              postEditedText.value ="--";
-            }
-            break;
             case "textarea":
             document.getElementById(restoreFieldId).innerHTML = (editedObj == "") ? "--":editedObj;
             postEditedText.value = editedObj;
@@ -458,9 +452,14 @@ private dateVal = new Date();
         }else{  
             this.showMyEditableField[fieldIndex] = true;
         }
+
        this.postDataToAjax(postEditedText);
   }
+  inputKeyDown(value,eleId){
+    
+    jQuery("#"+eleId).val(value.replace(/([^0-9])+/g,''));
 
+  }
   closeCalendar(fieldIndex){
 
     this.showMyEditableField[fieldIndex] = true;
@@ -1227,7 +1226,10 @@ public callTicketDetailPage(ticId){
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
-           // alert("fieldsData"+JSON.stringify(this.fieldsData[4].value));
+          
+          // var totalEstimated={"title":"Assigned tossssssssssss","value":"","valueId":"","readonly":false,"required":true,"elId":"247_assignedto","fieldType":"Team List","renderType":"select","type":"","Id":5}
+          // this.fieldsData.push(totalEstimated);
+          // alert("fieldsDatass"+JSON.stringify(this.fieldsData));
             this.checkPlanLevel=this.fieldsData[4].value;
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
