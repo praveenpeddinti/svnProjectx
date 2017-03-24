@@ -128,8 +128,12 @@ class CommonUtility {
     }
     static function refineActivityData($html) {
          // $html = CommonUtility::closetags($html);
-          $html = substr($html, 0, 25)."...";
-          $html = strip_tags($html);
+       
+           if(strlen($html)>35){
+               $html = substr($html, 0, 35)."...";  
+            }
+            $html = strip_tags($html);
+         
           return $html;
     }
     
