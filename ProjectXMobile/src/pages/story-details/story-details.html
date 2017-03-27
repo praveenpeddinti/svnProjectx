@@ -34,7 +34,7 @@
         <ion-input *ngIf="enableTextArea[i]" id="field.title_field.id_{{i}}"  (blur)="inputBlurMethod($event, i, field)" type="text" placeholder="{{field.title}}" class="bc" value="{{field.assignTo}}" ></ion-input>
 
         <div *ngIf="enableDataPicker[i]" class="no_mar">
-          <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM-DD-YYYY" [(ngModel)]="date" (ionChange)="dateChange($event, i,field)">03-03-2017</ion-datetime>
+          <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM-DD-YYYY" [(ngModel)]="localDate" min="{{minDate}}" max="2317" (ionChange)="dateChange($event, i,field)">{{field.assignTo}}</ion-datetime>
         </div>
          
         

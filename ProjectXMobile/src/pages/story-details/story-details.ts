@@ -44,13 +44,11 @@ export class StoryDetailsPage {
     public taskDetails = { ticketId: "", title: "", description: "", type: "" };
     public isBusy: boolean = false;
     public options = "options";
-    public localDate: Date = new Date();
+    public localDate: any = new Date();
     // public maxDate: Date = new Date(new Date().setDate(new Date().getDate() + 30));
     public minDate: any = new Date();
     public myDate: string = "2017-02-25";
     public userName: any = '';
-    
-    public date:any = new Date().toString();
 
     public ckeditorContent = "";
     public config = {
@@ -69,7 +67,9 @@ export class StoryDetailsPage {
         public popoverCtrl: PopoverController,
         private storage: Storage, public viewCtrl: ViewController, ) {
         //      menu.swipeEnable(false);
-        this.minDate = this.formatDate(new Date());
+        //this.minDate = this.formatDate(new Date());
+        this.localDate = new Date().toISOString();
+        this.minDate = new Date().toISOString();
 
         let loader = this.loadingController.create({ content: "Loading..." });
         loader.present();
@@ -98,7 +98,23 @@ export class StoryDetailsPage {
                         } else {
                             _assignTo = this.items[i].value;
                         }
-                    } else { 
+                    } else if(this.items[i].field_type == "Date"){
+//                        readable_value
+                        if(this.items[i].readable_value == ""){
+                            _assignTo = "--";
+                        } else {
+                            _assignTo = this.items[i].readable_value;
+                        }
+                    } 
+                    else if(this.items[i].field_type == "DateTime"){
+//                        readable_value
+                        if(this.items[i].readable_value == ""){
+                            _assignTo = "--";
+                        } else {
+                            _assignTo = this.items[i].readable_value;
+                        }
+                    }
+                    else { 
                         if (this.items[i].value_name == "") {
                             _assignTo = "--";
                         } else {
@@ -127,35 +143,36 @@ export class StoryDetailsPage {
         timeEnds: '2099-02-20'
 
     }
-    public dateChange(event, index, fieldDetails) {
-        
-        console.log("the date changed " + JSON.stringify(this.date));
+   public dateChange(event, index, fieldDetails) {
+       
+       console.log("the date changed " + this.localDate  + " ------- " + JSON.stringify(this.event));
+       console.log("changed date --- "+new Date(this.localDate).toLocaleString());
 
-//        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, event, fieldDetails).subscribe( 
-//            (result) => {
-//                setTimeout(() => {
-//                    document.getElementById("field.title_field.id_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
-//                    document.getElementById("item_" + index).classList.remove("item-select");
-//                }, 300);
-//            },
-//            (error) => {
-//                console.log("the error --- " + JSON.stringify(error));
-//                 let toast = this.toastCtrl.create({
-//                    message: 'Some thing Un-successfull',
-//                    duration: 3000,
-//                    position: 'bottom',
-//                    cssClass: "toast",
-//                    dismissOnPageChange: true
-//                  });
-//                  toast.present();
-//            });
+       this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe( 
+           (result) => {
+               setTimeout(() => {
+                    document.getElementById("field.title_field.id_" + index).innerHTML = this.localDate;
+                //    document.getElementById("item_" + index).classList.remove("item-select");
+               }, 300);
+           },
+           (error) => {
+               console.log("the error --- " + JSON.stringify(error));
+                let toast = this.toastCtrl.create({
+                   message: 'Some thing Un-successfull',
+                   duration: 3000,
+                   position: 'bottom',
+                   cssClass: "toast",
+                   dismissOnPageChange: true
+                 });
+                 toast.present();
+           });
 
 
-        setTimeout(() => {
-            document.getElementById("field.title_field.id_" + index).style.display = 'none';
-            //document.getElementById("item_" + index).classList.add("item-select");
-        }, 300);
-    }
+       setTimeout(() => {
+           document.getElementById("field.title_field.id_" + index).style.display = 'none';
+           //document.getElementById("item_" + index).classList.add("item-select");
+       }, 300);
+   }
 
 
     public formatDate(date) {
@@ -166,8 +183,8 @@ export class StoryDetailsPage {
 
         if (month.length < 2) month = '0' + month;
         if (day.length < 2) day = '0' + day;
-
-        return [year, month, day].join('-');
+        console.log("the date " + [month, day, year].join('-') );
+        return [month, day, year].join('-');
     }
 
     ionViewDidLoad() {
@@ -220,6 +237,8 @@ export class StoryDetailsPage {
 
         } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
             document.getElementById("field.title_field.id_" + index).style.display = 'none';
+            //@ViewChild("field.title_field.id_" + index) datePicker;
+            //jQuery("#field.title_field.id_" + index).open();
             this.enableDataPicker[index] = true;
 
         } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
