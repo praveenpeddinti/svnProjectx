@@ -6,6 +6,7 @@ import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
+import { SelectAlertless } from "./SelectAlert";
 declare var jQuery: any;
 /*
   Generated class for the StoryDetails page.
@@ -134,9 +135,6 @@ export class StoryDetailsPage {
     }
 
    public dateChange(event, index, fieldDetails) {
-       
-       console.log("the date changed " + this.localDate  + " ------- " + JSON.stringify(this.event));
-       console.log("changed date --- "+new Date(this.localDate).toLocaleString());
 
        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe( 
            (result) => {
