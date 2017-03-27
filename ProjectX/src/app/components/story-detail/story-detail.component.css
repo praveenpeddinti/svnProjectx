@@ -55,7 +55,7 @@ padding:5px 10px; cursor:pointer; margin-top:10px;
 
 .add i{ color:#fff;}
 
-.followers{ width:100%; height:auto; clear:both; margin-top:10px }
+.followers{ width:100%; height:auto; clear:both; }
 .followers_usr{width:30px; height:30px; border-radius:50%; float:left;margin-right:20px; position:relative; cursor:pointer;}
 .followers_usr img{ width:30px; height:30px; border-radius:50%; }
 .followers_delete{ width:30px; height:30px;  background: url(../assets/images/close.png) no-repeat; position:absolute; left:0px; top:0px; display:none;}
@@ -70,7 +70,7 @@ padding:5px 10px; cursor:pointer; margin-top:10px;
 	position: relative;
 	background: #ebebeb;
 	width:280px;
-	height:auto; min-height:80px;
+	height:auto; min-height:60px;
 		border-radius:2px;
 	 -moz-border-radius:2px;
 	 -webkit-border-radius:2px;
@@ -170,13 +170,13 @@ padding:5px 10px; cursor:pointer; margin-top:10px;
 
 .detailctask{ padding:10px 0px; background:#f8f8f8; margin-bottom:10px;}
 .ctasktxtbox{ background:#fff; line-height:45px; outline:none; border:none; text-indent:10px; width:100%}
-.addbut{ background:#237ea7; color:#fff; text-align:center; line-height:45px; cursor:pointer; text-transform:uppercase; font-family: 'robotoregular';}
+.addbut{ background:#237ea7; color:#fff; text-align:center; line-height:45px; cursor:pointer; text-transform:uppercase;}
 .addtask{ background:#fbfbfb; clear:both; margin-bottom:1px; width:100%; height:auto; min-height:55px;}
 .addtask_bor{ border-left:solid 1px #fff; padding-left:15px;}
 .addtask_taskno{ font-size:15px; color:#000; font-weight:bold; line-height:30px; }
 .addtask_title{ color:#000; font-size:15px; line-height:18px; margin-top:5px;}
 .addtask_status{ color:#979797;font-size:14px; line-height:24px;}
-.addtask label{ color:#4c4c4c;font-size:13px;font-family: 'robotoregular';font-weight: normal;}
+.addtask label{ color:#6d6d6d;font-size:13px;font-family: 'robotoregular';font-weight: normal;}
 .colapse{ background: #e0dfdf; cursor: pointer; text-align: center; display: table-cell; float: right; padding: 5px 10px; color: #fff; }
 .widgetmainbg{ border:solid 1px #f0f0f0; padding:20px; margin-top: 50px;}
 

@@ -129,14 +129,15 @@ background-color: #237ea7;
  .titlearea .ticketidarea{background:#f8f8f8;font-size: 20px;font-weight: bold;min-height: 50px;padding-top: 12px;text-align: center;}
  .titlearea .ticketdescriptionarea{background:#f8f8f8;padding:6px}
  .titlearea .ticketdescriptionarea .editinput{width:100%;min-height:40px;font-size:20px;background:#fff;padding:5px 10px;border:0}
- .rightdescriptionarea{padding:15px;background:#f8f8f8 }
+ .rightdescriptionarea{padding:15px;background:#f8f8f8; margin-bottom: 20px; }
  .paddingbottom10{padding-bottom:10px}
- .leftpaneldiv{border:1px solid #f8f8f8}
- .leftpanelsections{border-bottom:1px solid #f8f8f8;padding: 5px 15px}
- .leftpanelsections_noborder{border:0px solid #f8f8f8;padding: 5px 0px 15px}
+ .leftpaneldiv{border:1px solid #f0f0f0; border-bottom: none!important;}
+ .leftpanelsections{border-bottom:1px solid #f0f0f0;padding: 5px 15px}
+ .leftpanelsections_noborder{border:0px solid #f0f0f0;padding: 5px 0px 15px}
  .leftpanelsections_noborder .leftpanelsections{border-bottom:0px solid #f8f8f8;padding: 5px 2px}
- .leftpanelsections .leftlabels, .leftlabels{font-weight: normal;font-size:12px;color:#6d6d6d}
+ .leftpanelsections .leftlabels, .leftlabels{font-weight: normal;font-size:13px;color:#6d6d6d; font-family: 'robotoregular';}
  .leftpanelsections select, .leftpanelsections input{border:0px solid #ccc;background: #f8f8f8;border-radius:0}
+ .leftpanelsections input{ width:100%;}
  .uploadcomponent{position:relative;overflow: hidden;width:100px;height:40px;background: #fff}
  .uploadcomponent  .uploadbottom{position:absolute;left:0;top:0;font-size: 12px;padding:10px}
  .uploadcomponent  .uploadbottom i{font-size:15px;}
@@ -384,7 +385,7 @@ footer{font-size:10px}
 
 /* Activity*/
 
-.widgethed{ border-bottom:solid 1px #f0f0f0; padding:10px 0px; font-size:20px; color:#000; font-family: 'robotoregular';}
+.widgethed{ border-bottom:solid 1px #f0f0f0; padding:10px 0px; font-size:20px; color:#000; font-family: 'robotoregular'; margin-bottom: 20px;}
 
 .activitybg{ background:#f8f8f8; padding:20px;}
 .mt10{ margin-top:10px;}
@@ -397,7 +398,7 @@ footer{font-size:10px}
 .comment{
 	position: relative;
 	background: #fff;
-	padding:8px 8px 30px 8px;
+	padding:8px 8px 40px 8px;
 	margin-top:15px;
 	margin-bottom:20px;
 	border-radius:2px;
@@ -424,13 +425,13 @@ footer{font-size:10px}
 .commentreplyp{ color:#000; font:normal 15px/18px 'robotoregular', Arial, Helvetica, sans-serif;}
 .commentp span{ color:#237ea7;}
 .commentp span a{ color:#237ea7; text-decoration:none;}
-.commedit{  float:left; margin-left:10px; width:21px; height:21px;}
+.commedit{  float:left; margin-left:10px; width:28px; height:28px; margin-bottom: 10px;}
 .commentp img{ max-width:100%}
-.commentp p img{width:200px; height: 100px;}
+.commentp p img{width:200px; height: 100px; margin-right: 15px;}
 .comment_reply{
 	position: relative;
 	background: #ebebeb;
-	padding:10px 10px 30px 10px;
+	padding:10px 10px 40px 10px;
 	margin-top:15px;
 	margin-bottom:20px;
 	 border-radius:2px;
@@ -457,8 +458,13 @@ footer{font-size:10px}
 	 -moz-border-radius:2px;
 	 -webkit-border-radius:2px; padding:10px 31px 20px 10px; margin-bottom:10px;}
 
-#commentContent .commentedtext p img, video{ width: 100px; height: 100px; text-align:left; margin-right:20px;}
-#commentContent .commentedtext p{ display: table-cell; vertical-align: top;}
+#commentContent .commentedtext p img, video{height: 70px;
+    margin-right: 20px;
+    text-align: left;
+    width: 200px;}
+#commentContent .commentedtext p{
+    height: 63px;
+    overflow: hidden;}
 
 .recommentedtext{ background:#e8fef6; border-left:solid #00bd74 5px; border-radius:2px;
 	 -moz-border-radius:2px;
@@ -517,7 +523,7 @@ color: #0199e0;
 
 .edit_icn {
    position: relative;
-	width:21px; height:21px; 
+	width:28px; height:28px; 
 	border-radius:50px;
 	 -moz-border-radius:50px;
 	 -webkit-border-radius:50px;
@@ -533,16 +539,16 @@ color: #0199e0;
     text-decoration: inherit;
 /*--adjust as necessary--*/
     color: #4c4c4c;
-    font-size: 14px;
+    font-size: 16px;
     padding-right: 0.5em;
     position: absolute;
-    top: 0px;
-    left: 5px;
+    top: 2px;
+    left: 7px;
 }
 
 .reply_icn {
    position: relative;
-	width:21px; height:21px; 
+	width:28px; height:28px; 
 	border-radius:50px;
 	 -moz-border-radius:50px;
 	 -webkit-border-radius:50px;
@@ -558,16 +564,16 @@ color: #0199e0;
     text-decoration: inherit;
 /*--adjust as necessary--*/
     color: #4c4c4c;
-    font-size: 12px;
+   font-size: 14px;
     padding-right: 0.5em;
     position: absolute;
-    top: 3px;
-    left: 5px;
+    top: 4px;
+    left: 7px;
 }
 
 .delete_icn {
    position: relative;
-	width:21px; height:21px; 
+	width:28px; height:28px; 
 	border-radius:50px;
 	 -moz-border-radius:50px;
 	 -webkit-border-radius:50px;
@@ -583,17 +589,17 @@ color: #0199e0;
     text-decoration: inherit;
 /*--adjust as necessary--*/
     color: #4c4c4c;
-    font-size: 14px;
+   font-size: 16px;
     padding-right: 0.5em;
     position: absolute;
-    top: 0px;
-    left: 5px;
+    top: 2px;
+    left: 8px;
 }
 
 
 .close_icn {
     position: relative;
-	width:21px; height:21px; 
+	width:28px; height:28px; 
 	border-radius:50px;
 	 -moz-border-radius:50px;
 	 -webkit-border-radius:50px;
@@ -609,20 +615,24 @@ color: #0199e0;
     text-decoration: inherit;
 /*--adjust as necessary--*/
     color: #4c4c4c;
-    font-size: 15px;
+     font-size: 15px;
     padding-right: 0.5em;
     position: absolute;
     top: 0px;
     left: 5px;
 }
-.bold{font-weight: bold}
+.bold{font-weight: bold;}
 
 
 #replySnippetContent .replySnippet{ display:table;}
-#replySnippetContent .replySnippet p img, video{ width: 70px; height:70px; text-align:left; margin-right:20px;}
-#replySnippetContent .replySnippet p{ display: table-cell;vertical-align: top; word-wrap: break-word;
 
- }
+#replySnippetContent .replySnippet img, video{ width: 200px; height: 70px; text-align:left; margin-right:20px;}
+#replySnippetContent .replySnippet p{ float:left;
+  overflow: hidden;
+  
+  height:63px;
+}
+
 /*#replySnippetContent .replySnippet p::after {
   content: "";
   display: table-cell; 
@@ -655,4 +665,16 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
     color: #fff!important;
     border:none!important;
     font-weight: normal!important;
+}
+
+.submit{background:#237fa8;
+    font-size:20px;
+	font-family:'robotoregular';
+	color:#fff;
+	text-transform:uppercase;
+	padding:8px 15px;
+	display:inline-block;
+        line-height:24px;
+        border:none;
+        margin-top: 5px;
 }

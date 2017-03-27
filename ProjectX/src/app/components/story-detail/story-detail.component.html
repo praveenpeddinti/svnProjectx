@@ -421,7 +421,7 @@
     </ng-container>
 
     <!--Comment Displa area end-->
-</div></div>
+</div>
          
         <div>
            
@@ -458,24 +458,26 @@
                 </div>
                 <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
                 </div>
-                <div class="uploadcomponent margintop15">
+                <div class="uploadcomponent margintop15 pull-left">
                       <div class="uploadbottom">
                         <i class="fa fa-paperclip" aria-hidden="true"></i>
                         File upload
                       </div>
                       <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments','')"  multiple  />
                 </div>
-            </div>
-            <div class="buttonarea alignright">
-                  <button class="normal bluebutton bluebuttonmedium" (click)="submitComment()">
+                     <div class="buttonarea alignright">
+                  <button class="normal bluebutton bluebuttonmedium submit" (click)="submitComment()">
                     SUBMIT
                   </button>
                   
             </div>
+            </div>
+           
           </div>
 
         </div>
       </div>
+ </div>
 <!--Comments Section End-->
 
     </div>
