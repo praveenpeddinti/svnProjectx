@@ -9,8 +9,11 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class Constants {
-   //public baseUrl = 'http://10.10.73.62/';
-   public baseUrl = 'http://10.10.73.77/';
+  //Local URL
+  // public baseUrl = 'http://10.10.73.62/';
+  //public URL
+   public baseUrl = 'http://113.193.181.131/';
+ //  public baseUrl = 'http://10.10.73.77/';
     
    public loginUrl = this.baseUrl+"site/user-authentication";
    //public getAllTicketDetails = this.baseUrl + "story/get-all-ticket-details";
