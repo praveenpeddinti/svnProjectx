@@ -41,7 +41,7 @@
           <ion-label *ngIf="showEditableFieldOnly[i]" >{{field.title}}</ion-label>
           <select-alertless #device id="select_{{i}}" aria-hidden="true" *ngIf="showEditableFieldOnly[i]"  item-content (ionCancel)="selectCancel(i)" (ionChange)="changeOption($event, i, field)">
               <ng-container *ngIf="displayFieldvalue.length > 0" >
-                  <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Id}}" [selected]="(item.Name == field.assignTo)" > <div>{{item.Name}}</div> </ion-option>
+                  <ion-option *ngFor="let item of displayFieldvalue" value="{{item.Id}}" [selected]="(item.Name == previousSelectedValue)" > <div>{{item.Name}}</div> </ion-option>
               </ng-container> 
           </select-alertless>
           <!--<custom-alert *ngIf="showEditableFieldOnly[i]"></custom-alert>-->

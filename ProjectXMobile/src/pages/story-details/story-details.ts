@@ -19,19 +19,14 @@ declare var jQuery: any;
 })
 export class StoryDetailsPage {
 
-    public month: any;
-    public timeStarts: any;
-    public timeEnds: any;
     public items: Array<any>;
     public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any }>;
     public displayFieldvalue = [];
     public showEditableFieldOnly = [];
     public readOnlyDropDownField: boolean = false;
-    public clickedDivRef;
-
 
     public selectedValue = "";
-
+    public previousSelectedValue = "";
 
     public previousSelectIndex: any;
     public enableDataPicker = [];
@@ -137,12 +132,7 @@ export class StoryDetailsPage {
         );
 
     }
-    public event = {
-        month: '2017-02-19',
-        timeStarts: '07:43',
-        timeEnds: '2099-02-20'
 
-    }
    public dateChange(event, index, fieldDetails) {
        
        console.log("the date changed " + this.localDate  + " ------- " + JSON.stringify(this.event));
@@ -218,14 +208,13 @@ export class StoryDetailsPage {
     public getFieldValues(fieldDetails, index) {
 
         this.selectCancel(this.previousSelectIndex);
+        if((document.getElementById("field.title_field.id_" + index).innerHTML) != "--"){
+            this.previousSelectedValue = (document.getElementById("field.title_field.id_" + index).innerHTML);
+        }
 
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
             this.readOnlyDropDownField = true;
-            // setTimeout( () => {
-            //     this.showEditableFieldOnly[index] = true;
-            // }, 500);
             this.showEditableFieldOnly[index] = true;
-            this.clickedDivRef = fieldDetails.id;
             this.previousSelectIndex = index;
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
                 (result) => {
@@ -259,8 +248,8 @@ export class StoryDetailsPage {
     public changeOption(event, index, fieldDetails) {
         this.readOnlyDropDownField = false;
         this.showEditableFieldOnly[index] = false;
-        this.selectedValue = event;
-        console.log("the div id --- " + event + "---- " + index + " ---- " + this.selectedValue + "----- " + this.displayFieldvalue[event -1].Name);
+
+        //console.log("the displayfieldvalues " + JSON.stringify(this.displayFieldvalue) + "------- " + event + " &&&&&&&&& " + index)
 
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, event, fieldDetails).subscribe( 
             (result) => {

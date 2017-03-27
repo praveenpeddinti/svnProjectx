@@ -85,7 +85,7 @@ export class Globalservice {
     }
 
     public leftFieldUpdateInline(url, selectedItem, fieldDetails){
-        console.log("the fieldUpdateParams --- " + JSON.stringify(fieldDetails));
+        // console.log("the fieldUpdateParams --- " + JSON.stringify(fieldDetails));
         var fieldUpdateParams = this.params;
 
         fieldUpdateParams["isLeftColumn"] = 1;
