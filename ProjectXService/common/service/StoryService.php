@@ -490,6 +490,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $loggedInUser = $ticket_data->userInfo->Id;
             $artifacts = array();
             $valueName = "";
+            $selectFields = [];
+            $selectFields = ['ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value'];
+            $childticketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId,$selectFields); 
+            $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
             if($checkData==0){
                  if($ticket_data->id=='Title'){
                     $newData = array('$set' => array("Title" => trim($ticket_data->value)));
@@ -563,13 +567,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $selectedValue=$leftsideFieldVal;
                     $activityNewValue = $leftsideFieldVal;
             }
-             
-              $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
-               $updateStaus = $collection->update($condition, $newData);
-               if(!empty($artifacts)){
-               TicketArtifacts::saveArtifacts($ticket_data->TicketId, $ticket_data->projectId, $artifacts,$loggedInUser);
-               }
-           
+                
+                $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
+                $updateStaus = $collection->update($condition, $newData);
+                if(!empty($artifacts)){
+                TicketArtifacts::saveArtifacts($ticket_data->TicketId, $ticket_data->projectId, $artifacts,$loggedInUser);
+                }
+                if($childticketDetails['IsChild']==0){
+                  $ticketId= $ticket_data->TicketId;
+                }else{
+                    $ticketId= $childticketDetails['ParentStoryId'];
+                }
+                TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
            // if($updateStaus==1){
                 $returnValue=$selectedValue;
            // }

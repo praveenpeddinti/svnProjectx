@@ -413,6 +413,21 @@ class TicketCollection extends ActiveRecord
             Yii::log("TicketCollection:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-            
-      }  
+        /**
+     * @author Padmaja
+     * @description This method is used to updated the Total Estimated points
+     * @return type array
+     */
+       public static function updateTotalEstimatedPoints($projectId,$parentticketId, $totalEstmatedPts) {
+        try {
+            $ticketCollection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $updateTotalEstimatedPts = array('$inc' => array("TotalEstimate" => $totalEstmatedPts));
+            $ticketCollection->update(array("TicketId" => (int) $parentticketId, "ProjectId" => (int) $projectId), $updateTotalEstimatedPts);
+          
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:updateTotalEstimatedPoints::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+    }  
 ?>
