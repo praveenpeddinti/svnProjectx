@@ -412,10 +412,10 @@ private dateVal = new Date();
 //Also prepares the data to be sent to service to save the changes.
 //This is common to left Column fields.
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,where){
-    var intRegex = /^\d+$/;
+     var intRegex = /^\d+$/;
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
 
-     var postEditedText={
+      var postEditedText={
                         isLeftColumn:1,
                         id:fieldId,
                         value:"",
@@ -1226,11 +1226,11 @@ public callTicketDetailPage(ticId){
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
-          
           // var totalEstimated={"title":"Assigned tossssssssssss","value":"","valueId":"","readonly":false,"required":true,"elId":"247_assignedto","fieldType":"Team List","renderType":"select","type":"","Id":5}
           // this.fieldsData.push(totalEstimated);
-          // alert("fieldsDatass"+JSON.stringify(this.fieldsData));
-            this.checkPlanLevel=this.fieldsData[4].value;
+            //alert("fieldsDatass"+JSON.stringify(this.fieldsData));
+            //alert("fieldsDatass@@@@@@@@@@@"+JSON.stringify(this.ticketData));
+            this.checkPlanLevel=data.StoryType.Name;
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
