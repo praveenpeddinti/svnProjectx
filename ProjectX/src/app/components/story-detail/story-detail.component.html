@@ -385,7 +385,9 @@
                     </span>
                     </div>
                     <div [innerHTML]="commentsList[comment.ParentIndex].CDescription">
+                        
                     </div>
+                    <div style="clear:both;"></div>
                 </div>
                 <div style="position:relative">
                 <div id="dropble_comment_{{cmtIdx}}" 
@@ -406,17 +408,17 @@
                 </div>
                 </div>
                 <div id="Actions_{{cmtIdx}}" [hidden]="true" >
-                    <div class="uploadcomponent margintop15">
+                    <div class="uploadcomponent pull-left" style="background:#f8f8f8;">
                       <div class="uploadbottom">
                         <i class="fa fa-paperclip" aria-hidden="true"></i>
                         File upload
                       </div>
                       <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments',cmtIdx)"  multiple  />
                 </div>
-                <div class="buttonarea alignright">
+                <div class="alignright margintop15">
                   <button class="normal bluebutton bluebuttonmedium" (click)="submitEditedComment(cmtIdx,comment.Slug.$oid)">
                     SUBMIT
-                  </button>
+                  </button> &nbsp;
                   <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelEdit(cmtIdx)">
                     CANCEL
                   </button>
