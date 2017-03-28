@@ -1230,7 +1230,7 @@ public callTicketDetailPage(ticId){
           // this.fieldsData.push(totalEstimated);
             //alert("fieldsDatass"+JSON.stringify(this.fieldsData));
             //alert("fieldsDatass@@@@@@@@@@@"+JSON.stringify(this.ticketData));
-            this.checkPlanLevel=data.StoryType.Name;
+            this.checkPlanLevel=data.data.StoryType.Name;
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
