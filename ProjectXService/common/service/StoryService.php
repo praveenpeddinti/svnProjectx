@@ -418,7 +418,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                if($fieldDetails["Type"] == 6){
                                 $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$key);
                                 $value["value_name"] = $collaboratorData["UserName"];
-                                $this->followTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE);
+                                 $this->followTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE,"FullUpdate");
                                 }
                                 else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$key);
@@ -464,6 +464,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                    
                 
              }
+             $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$projectId);
+             $ticketDetails["Followers"] = $newTicketDetails["Followers"];
              //error_log(print_r($ticketDetails["Fields"],1));
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $collection->save($ticketDetails);
@@ -688,42 +690,30 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
   * @param type $fieldName
   * @param type $defaultFollower
   */
-     public function followTicket($collaboratorId,$ticketId,$projectId,$loggedInUser,$fieldName,$defaultFollower=FALSE){
+     public function followTicket($collaboratorId,$ticketId,$projectId,$loggedInUser,$fieldName,$defaultFollower=FALSE,$from=""){
         
         try {
-            //error_log($projectId."---".$ticketId."---".$collaboratorId);
+          // error_log("followTicket-----".$projectId."---".$ticketId."---".$collaboratorId."--".$fieldName);
             $db =  TicketCollection::getCollection();
            $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
            
-            $cursor1 =  $db->count( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId, "Followers" => array('$elemMatch'=> array( "FollowerId"=> (int)$collaboratorId))));   
-          
-         if($cursor1 == 0){
             if($fieldName == "assignedto" || $fieldName == "stakeholder"){
                $cursor =  $db->count( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId, "Followers" => array('$elemMatch'=> array("Flag" =>$fieldName)))); 
            }else{
               $cursor =  $db->count( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId, "Followers" => array('$elemMatch'=> array( "FollowerId"=> (int)$collaboratorId ,"Flag" =>$fieldName))));  
            }
-            
-             if($cursor == 0){
+           
+            if($cursor == 0){
                $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Followers' =>array("FollowerId" => (int)$collaboratorId,"FollowedOn" =>$currentDate,"CreatedBy"=>(int)$loggedInUser,"Flag"=>$fieldName,"DefaultFollower"=>(int)$defaultFollower ))),array('new' => 1,"upsert"=>1));
              
              }else{
                  if($fieldName == "assignedto" || $fieldName == "stakeholder"){
                    $newdata = array('$set' => array("Followers.$.FollowerId" => (int)$collaboratorId,"Followers.$.FollowedOn" => $currentDate,"Followers.$.CreatedBy" => (int)$loggedInUser));
                   $db->update(array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Followers.Flag"=>$fieldName), $newdata); 
-                  }
+                 }
                  
              } 
-             
-         }else{
-              if($fieldName == "assignedto" || $fieldName == "stakeholder"){
-                   $newdata = array('$pull' => array("Followers" => array("Flag"=>$fieldName)));
-                  $db->update(array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Followers.Flag"=>$fieldName), $newdata,array('new' => 0,"upsert"=>0)); 
-              }
-             
-         }
-       
-        
+          
         } catch (Exception $ex) {
           Yii::log("TicketFollowers:followTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
