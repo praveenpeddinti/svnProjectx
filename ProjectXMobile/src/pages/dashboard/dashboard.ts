@@ -3,6 +3,7 @@ import { NavController, NavParams, AlertController, ViewController, LoadingContr
 import { Storage } from "@ionic/storage";
 import { PopoverPage } from '../popover/popover';
 import { StoryDetailsPage } from '../story-details/story-details';
+import { StoryCreatePage } from '../story-create/story-create';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 /*
@@ -158,7 +159,9 @@ export class DashboardPage {
         var clickedItemId = { "id": item.id };
         this.navCtrl.push(StoryDetailsPage, clickedItemId);
     }
-
+public btnCreateTask(){
+    this.navCtrl.push(StoryCreatePage);
+}
 
     /**
          doInfinite(event) is called when the list is pulling down 

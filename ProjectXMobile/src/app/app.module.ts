@@ -7,6 +7,7 @@ import { Constants } from '../providers/constants'
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { LoginPage } from '../pages/login/login';
 import { StoryDetailsPage } from '../pages/story-details/story-details';
+import { StoryCreatePage } from '../pages/story-create/story-create';
 import { SelectAlertless } from '../pages/story-details/SelectAlert';
 
 import { Storage } from "@ionic/storage";
@@ -22,6 +23,7 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
     DashboardPage,
     LoginPage,
     StoryDetailsPage,
+    StoryCreatePage,
     SelectAlertless,
     PopoverPage,
     AUTOCOMPLETE_DIRECTIVES,
@@ -37,6 +39,7 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
     DashboardPage,
     LoginPage,
     StoryDetailsPage,
+    StoryCreatePage,
     SelectAlertless,
     PopoverPage
   ],

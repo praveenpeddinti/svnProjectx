@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Story Create</ion-title>
+    <ion-buttons right>
+      <a ion-button icon-only (click)="openPopover($event)">
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+      </a>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+<div>
+ 
+  <!--<form >  -->
+    <ion-input type="text" placeholder="Title" ></ion-input>
+    <ion-label>Plan Level</ion-label>
+  </ion-list>
+    
+<ion-list>
+<ion-list-header>
+    Tasks
+    </ion-list-header>
+    <ion-row>
+      <ion-col>
+  <ion-item>
+    <ion-label>UI</ion-label>
+    <ion-checkbox></ion-checkbox>
+  </ion-item>
+      </ion-col>
+    <ion-col>
+  <ion-item>
+    <ion-label>Peer Review</ion-label>
+    <ion-checkbox></ion-checkbox>
+  </ion-item>
+    </ion-col>
+    <ion-col>
+  <ion-item>
+    <ion-label>QA</ion-label>
+    <ion-checkbox></ion-checkbox>
+  </ion-item>
+    </ion-col>
+   </ion-row>
+</ion-list>
+<button ion-button center>Submit</button>
+
+  <!--</form> -->
+</div>
+</ion-content>

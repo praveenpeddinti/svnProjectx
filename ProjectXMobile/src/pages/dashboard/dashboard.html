@@ -24,8 +24,10 @@
       -->
 <!--body content-->
 <ion-content no-padding class="customcontention">
+<ion-fab bottom right>
+<button ion-fab mini color="danger" (click)="btnCreateTask()" class="e2eFabTopRight"><ion-icon name="add"></ion-icon></button>
+</ion-fab>
     <div class="padding10" >
-       
   <ion-list>
     <ion-item-sliding *ngFor="let item of arrayObject" (click)="openDetails(item)" no-padding>
         
