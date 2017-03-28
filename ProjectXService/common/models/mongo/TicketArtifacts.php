@@ -42,24 +42,12 @@ class TicketArtifacts extends ActiveRecord {
 
     public static function createArtifactsRecord($ticketNumber, $projectId, $artifactsList = array()) {
         try {
-            $tktArtifactsColl = new TicketArtifacts();
-            $tktArtifactsColl->TicketId = $ticketNumber;
-            $tktArtifactsColl->ProjectId = $projectId;
-            if (!empty($artifactsList)) {
-                $tktArtifactsColl->Artifacts = $artifactsList;
-            } else {
-                $tktArtifactsColl->Artifacts = [];
-            }
-            $res = $tktArtifactsColl->insert();
-            if ($res) {
-//                $query = new Query();
-//            $query->from('TicketArtifacts')
-//            ->select(array("_id"))
-//            ->where(['TicketId' => (int)$ticketNumber, "ProjectId" =>(int)$projectId ]);
-//         
-//           $ticketCommentDetails = $query->one();
-//           error_log("========createCommentsRecord==========".print_r($ticketCommentDetails,1));
-//           TicketCollection::updateRefFields("CommentsRef", $ticketCommentDetails,$ticketNumber,$projectId);
+            
+            
+          $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
+            foreach ($artifactsList as $artifactData){
+                 $newdata = array('$push' => array("Artifacts" => $artifactData ));
+                  $collection->update(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata);              
             }
         } catch (Exception $ex) {
             
