@@ -464,7 +464,9 @@ footer{font-size:10px}
     width: 200px;}
 #commentContent .commentedtext p{
     height: 63px;
-    overflow: hidden;}
+    overflow: hidden;
+    float:left;
+}
 
 .recommentedtext{ background:#e8fef6; border-left:solid #00bd74 5px; border-radius:2px;
 	 -moz-border-radius:2px;
