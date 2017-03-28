@@ -428,6 +428,16 @@ class CommonUtility {
                  $relatedStory = $relatedStoryDetails;
             }
             if(!empty($ticketDetails["Followers"])){
+  
+$ticketDetails["Followers"] = array_filter($ticketDetails["Followers"],function($obj){
+                    static $idList = array();
+                     if(in_array($obj["FollowerId"],$idList)) {
+                             return false;
+                     }
+                     $idList []=$obj["FollowerId"];
+                     return true;
+               }
+    );
                 foreach ($ticketDetails["Followers"] as &$followersList){
                     //error_log($followersList['FollowerId']."----Follower--1--".print_r($followersList,1));
 
