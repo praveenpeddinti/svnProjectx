@@ -301,7 +301,7 @@ class CommonUtility {
      */
     public static function prepareTicketDetails($ticketDetails,$projectId,$flag = "part"){
         try{
-             $ticketCollectionModel = new TicketCollection();
+            $ticketCollectionModel = new TicketCollection();
            // $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId);
             $storyFieldsModel = new StoryFields();
             $storyCustomFieldsModel = new StoryCustomFields();
@@ -312,6 +312,11 @@ class CommonUtility {
             $planlevelModel = new PlanLevel();
             $workFlowModel = new WorkFlowFields();
             $ticketTypeModel = new TicketType();
+          
+            if($ticketDetails["TotalEstimate"] !=0 && $ticketDetails['Fields']['planlevel']['value_name']=='Story' && !empty($ticketDetails['Tasks'])){
+                 $totalEstimateArray =  array("Id"=> 13,"title"=> "Total Estimated Points","value"=> $ticketDetails["TotalEstimate"], "value_name"=> $ticketDetails["TotalEstimate"] );
+                array_push($ticketDetails["Fields"], $totalEstimateArray); 
+            }
             foreach ($ticketDetails["Fields"] as &$value) {
                if(isset($value["custom_field_id"] )){
                 $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
@@ -391,15 +396,12 @@ class CommonUtility {
                 }
                  if($storyFieldDetails["Field_Name"] == "tickettype"){
                     $value["readable_value"]= "";
-                if($value["value"] != ""){
-                 $ticketTypeDetails = $ticketTypeModel->getTicketType($value["value"]);
-                 $value["readable_value"] = $ticketTypeDetails;
-                }
+                    if($value["value"] != ""){
+                     $ticketTypeDetails = $ticketTypeModel->getTicketType($value["value"]);
+                     $value["readable_value"] = $ticketTypeDetails;
+                    }
                 }
                
-               
-                
-                
             }
             usort($ticketDetails["Fields"], function($a, $b)
             {
