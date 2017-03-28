@@ -13,7 +13,7 @@
 <ion-content padding>
 <div>
  
-  <!--<form >  -->
+<form #createForm="ngForm" (ngSubmit)="submitted && onCreate(createForm)"> 
     <ion-input type="text" placeholder="Title" ></ion-input>
     <ion-label>Plan Level</ion-label>
     
@@ -42,8 +42,8 @@
     </ion-col>
    </ion-row>
 </ion-list>
-<button ion-button center>Submit</button>
+<button ion-button center type="submit"  (click)="submitted = true;">Submit</button>
 
-  <!--</form> -->
+</form> 
 </div>
 </ion-content>

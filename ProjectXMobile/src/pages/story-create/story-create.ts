@@ -10,11 +10,7 @@ export class StoryCreatePage {
 public showEditableFieldOnly = [];
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private globalService: Globalservice) {}
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad StoryCreatePage');
-  }
-  getCreatetask():void{
-  }
-
+     
+    onCreate(form): void {  
+ }
 }
