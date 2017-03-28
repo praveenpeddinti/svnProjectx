@@ -22,7 +22,8 @@ export class Constants {
    public LogutUrl = this.baseUrl+"site/update-collabarator-status";
    public fieldDetailsById = this.baseUrl+"story/get-field-details-by-field-id";
    public leftFieldUpdateInline = this.baseUrl+"story/update-story-field-inline";
-
+   public getNewStory = this.baseUrl+"story/new-story-template";
+   
   constructor() {
     console.log('Hello Constants Provider');
   }
