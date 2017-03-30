@@ -67,7 +67,7 @@ export class StoryDashboardComponent {
                 },
                 {
                     name: '',
-                    flexGrow: 0,
+                    flexGrow: 0.3,
                     sortby: '',
                     class: 'arrowClass'
                 }
