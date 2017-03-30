@@ -6,7 +6,6 @@ import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
-import { SelectAlertless } from "./SelectAlert";
 declare var jQuery: any;
 /*
   Generated class for the StoryDetails page.

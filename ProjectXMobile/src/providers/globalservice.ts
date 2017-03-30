@@ -107,5 +107,22 @@ export class Globalservice {
         // response.refCount();
         return response;
     }
+    
+    public newStoryTemplate(){
+        
+    }
+
+    public createStoryORTask(url, params){
+        var createStoryParams:any;
+        createStoryParams["data"] = params;
+        createStoryParams["userInfo"] = this.params.userInfo;
+        createStoryParams["projectId"] = this.params.projectId;
+        createStoryParams["timeZone"] = "Asia/Kolkata";
+        
+        var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
 
 }
