@@ -265,7 +265,7 @@ footer{font-size:10px}
 .loading{position: fixed;top:0;bottom:0;right:0;left:0;text-align: center;display: block}
 .loading img{position: absolute;top:45%;margin-top:-20px}
 .loginform .alert-danger{padding:6px}
-.datatable-body-cell-label .titlecolumn{text-overflow: ellipsis;overflow: hidden;cursor:pointer;white-space: nowrap;line-height: 16px;}
+.datatable-body-cell-label .titlecolumn{text-overflow: ellipsis;overflow: hidden;cursor:pointer;white-space: nowrap;line-height: 16px; position: relative; padding-right: 20px;}
 .titlecolumn{margin:0 0 0 9px}
 .statusbold{font-weight:bold;margin:0 0 0 23px}
 .Normal{color:#eda74c}
@@ -332,7 +332,6 @@ footer{font-size:10px}
 .story_tasks .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row, .story_tasks .ngx-datatable .datatable-scroll .datatable-body-row{margin:0 0 0;background:#f4f4f4;border-bottom:1px solid #fff;border-top:0}
 .story_tasks .datatable-scroll .datatable-row-wrapper:last-child .datatable-body-row{margin:0 0 0;background:#f4f4f4;border-bottom:1px solid #e8e8e8}
 .badge{background: #ff2200; padding: 2px 5px!important; border-radius: 2px!important;}
-
 .paddingL10{ padding-left:10px;}
 /* custom auto suggestions styles */
 .relate_story{position: relative;padding:10px;background: #f8f8f8;margin-bottom: 10px;}
@@ -679,4 +678,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
         line-height:24px;
         border:none;
         margin-top: 5px;
+}
+.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell 
+{
+padding-left:0px!important;    
+}
+.taskRstory{
+  padding-left:1.2rem;  
 }

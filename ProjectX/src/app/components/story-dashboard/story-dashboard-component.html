@@ -71,11 +71,11 @@ Row classes are also dynamically. These classes are pass to service layer-->
       <img *ngIf="row[i].field_name=='assignedto' && row[i].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
         src="{{row[i].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> 
         
-      {{row[i].field_value}}
-      <span class="badge" *ngIf="row[i].field_name=='Title' && row[i].other_data>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data}}</span>
+            {{row[i].field_value}}
+      <span class="badge" *ngIf="row[i].field_name=='Title' && row[i].other_data>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data}}</span>  
+
      
         
-
       <!--This i tag belongs to priority to column -->
       <i *ngIf="row[i].field_name=='priority'" class="fa fa-circle {{row[i].field_value}}" aria-hidden="true"></i>
       <!-- End-->

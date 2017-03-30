@@ -27,7 +27,7 @@ export class StoryDashboardComponent {
                     name: 'Id',
                     flexGrow: 1,
                     sortby: 'Id',
-                    class: ''
+                    class: 'taskRstory'
                 },
                 {
                     name: 'Title',
