@@ -11,39 +11,40 @@
 
 
 <ion-content padding>
-    <div>
-
-            <form #createForm="ngForm" (ngSubmit)="submitted && onStoryCreate(createForm)"> 
-                <ion-input type="text" placeholder="Title" ></ion-input>
-                <ion-label>Plan Level</ion-label>
-
-                <ion-list>
-                    <ion-list-header>
-                        Tasks
-                    </ion-list-header>
-                    <ion-row>
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>UI</ion-label>
-                                <ion-checkbox></ion-checkbox>
-                            </ion-item>
-                        </ion-col>
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>Peer Review</ion-label>
-                                <ion-checkbox></ion-checkbox>
-                            </ion-item>
-                        </ion-col>
-                        <ion-col>
-                            <ion-item>
-                                <ion-label>QA</ion-label>
-                                <ion-checkbox></ion-checkbox>
-                            </ion-item>
-                        </ion-col>
-                    </ion-row>
-                </ion-list>
-                <button ion-button center type="submit"  (click)="submitted = true;">Submit</button>
-
-            </form> 
+<div>
+ 
+<form #createForm="ngForm" (ngSubmit)="submitted && onStoryCreate(createForm)"> 
+    <ion-input type="file" placeholder="Title" ></ion-input>
+    <ion-label>Plan Level</ion-label>
+    <input type="file"  class="form-control" name="files[]" id="choose-file" (change)="onChange($event)"  multiple="multiple">
+<ion-list>
+<ion-list-header>
+    Tasks
+    </ion-list-header>
+    <ion-row>
+      <ion-col>
+  <ion-item>
+    <ion-label>UI</ion-label>
+    <ion-checkbox></ion-checkbox>
+  </ion-item>
+      </ion-col>
+    <ion-col>
+  <ion-item>
+    <ion-label>Peer Review</ion-label>
+    <ion-checkbox></ion-checkbox>
+  </ion-item>
+    </ion-col>
+    <ion-col>
+  <ion-item>
+    <ion-label>QA</ion-label>
+    <ion-checkbox></ion-checkbox>
+  </ion-item>
+    </ion-col>
+   </ion-row>
+</ion-list>
+<button ion-button center type="submit"  (click)="submitted = true;">Submit</button>
+<button ion-button color="primary" (click)="accessGallery()">Open Gallery</button>
+ <img [src]="base64Image" *ngIf="base64Image" /> 
+ </form> 
         </div>
 </ion-content>
