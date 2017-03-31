@@ -70,10 +70,13 @@ Row classes are also dynamically. These classes are pass to service layer-->
        <!--This img tag belongs to Assigned to column i.e UserName and Profile Pic -->
       <img *ngIf="row[i].field_name=='assignedto' && row[i].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
         src="{{row[i].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> 
-            {{row[i].field_value}}
-      <!--<span class="badge" *ngIf="row[i].field_name=='Title' && row[i].other_data>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data}}</span>  -->
-
-     
+           
+      
+      <!--<span class="badge" style="position: relative;left:0" *ngIf="row[i].field_name=='Title' && row[i].other_data>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data}}</span>  
+      -->
+          
+          {{row[i].field_value}} 
+     <span class="badge"  *ngIf="row[i].field_name=='Id' && row[i].other_data.totalSubtasks>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data.totalSubtasks}}</span>
         
 
       <!--This i tag belongs to priority to column -->
@@ -83,12 +86,11 @@ Row classes are also dynamically. These classes are pass to service layer-->
        <div *ngIf="row[i].field_name =='arrow'" class="{{column.class}}" style=" margin-right: 20px;">
              <a  *ngIf="row[i].other_data>0"
               href="javascript:void(0)"
-              [class.fa-chevron-down1]="!row.$$expanded"
-              [class.fa-chevron-up1]="row.$$expanded"
+              [class.fa-chevron-down]="!row.$$expanded"
+              [class.fa-chevron-up]="row.$$expanded"
               title="Expand/Collapse Row"
               (click)="toggleExpandRow(row)"
-              ><img class="imgrel" src="assets/images/task-icon.png"  />
-              <span class="badge" *ngIf="row[i].other_data>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data}}</span> 
+              >
             </a>
      </div>
 </template>
