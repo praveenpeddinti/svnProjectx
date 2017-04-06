@@ -306,10 +306,10 @@ class TicketCollection extends ActiveRecord
      * @use used for inserting childtickets into Tasks(array) of parentticket.
      */
     
-    public static function updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketIds) {
+    public static function updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketObjArray) {
         try {
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $tasksNew = array('$addToSet' => array("Tasks" => array('$each' => $childTicketIds)));
+            $tasksNew = array('$addToSet' => array("Tasks" => array('$each' => $childTicketObjArray)));
             $collection->update(array("TicketId" => (int)$parentTicNumber,"ProjectId"=>(int)$projectId), $tasksNew);
         } catch (Exception $ex) {
             Yii::log("TicketCollection:updateParentTicketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
