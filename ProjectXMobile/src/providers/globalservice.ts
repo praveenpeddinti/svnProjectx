@@ -124,5 +124,16 @@ export class Globalservice {
         );
         return response;
     }
+    // Ticket #91
+    public getTicketActivity(url, activityParams) {
+        var ticketActivityParams = this.params;
+        ticketActivityParams["ticketId"] = activityParams;
+        ticketActivityParams["timeZone"] = "Asia/Kolkata";
+        console.log("activity post object : "+JSON.stringify(ticketActivityParams));
+        var response = this.http.post(url, JSON.stringify(ticketActivityParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
 
 }

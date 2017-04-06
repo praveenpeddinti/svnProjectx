@@ -8,77 +8,140 @@
 
 <ion-menu [content]="content" side="left" type="overlay">
 
-  <ion-header>
-    <ion-toolbar>
-      <ion-buttons left>
-        <img src="assets/images/logo.png" />
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
+    <ion-header>
+        <ion-toolbar>
+            <ion-buttons left>
+                <img src="assets/images/logo.png" />
+            </ion-buttons>
+        </ion-toolbar>
+    </ion-header>
 
-  <ion-content>
-   <ion-buttons right class="custombuttonsmenu custombuttonsmenuborderbottom">
-      <button right menuToggle>
-        <ion-icon name="md-menu"></ion-icon>
-        </button>
- </ion-buttons>
-    <ion-list >
-      <ion-item *ngFor="let field of arrayList; let i=index;" id="item_{{i}}">
-        <div *ngIf="!showEditableFieldOnly[i]">
-          <h3>{{field.title}}</h3>
-          <div id="field.title_field.id_{{i}}" *ngIf="isColorChange(field)" ng class="item" (click)="openOptionsModal(field, i)" class="spinnerlabel">{{field.assignTo}}</div>
-          <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item" (click)="openOptionsModal(field, i)" >{{field.assignTo}}</div>
-        </div>
-      
-        <ion-input *ngIf="enableTextField[i]" (blur)="inputBlurMethod($event, i, field)" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}" type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="{{field.title}}" value="{{field.assignTo}}" ></ion-input>
-        <ion-input *ngIf="enableTextArea[i]" id="field.title_field.id_{{i}}"  (blur)="inputBlurMethod($event, i, field)" type="text" placeholder="{{field.title}}" class="bc" value="{{field.assignTo}}" ></ion-input>
+    <ion-content>
+        <ion-buttons right class="custombuttonsmenu custombuttonsmenuborderbottom">
+            <button right menuToggle>
+                <ion-icon name="md-menu"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-list>
+            <ion-item *ngFor="let field of arrayList; let i=index;" id="item_{{i}}">
+                <div *ngIf="!showEditableFieldOnly[i]">
+                    <h3>{{field.title}}</h3>
+                    <div id="field.title_field.id_{{i}}" *ngIf="isColorChange(field)" ng class="item" (click)="openOptionsModal(field, i)" class="spinnerlabel">{{field.assignTo}}</div>
+                    <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item" (click)="openOptionsModal(field, i)" >{{field.assignTo}}</div>
+                </div>
 
-        <div *ngIf="enableDataPicker[i]" class="no_mar">
-          <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM-DD-YYYY" [(ngModel)]="localDate" min="{{minDate}}" max="2317" (ionChange)="dateChange($event, i,field)">{{field.assignTo}}</ion-datetime>
-        </div>
-               
-    </ion-item>
-    </ion-list>
-  </ion-content>
+                <ion-input *ngIf="enableTextField[i]" (blur)="inputBlurMethod($event, i, field)" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}"
+                    type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="{{field.title}}"
+                    value="{{field.assignTo}}"></ion-input>
+                <ion-input *ngIf="enableTextArea[i]" id="field.title_field.id_{{i}}" (blur)="inputBlurMethod($event, i, field)" type="text"
+                    placeholder="{{field.title}}" class="bc" value="{{field.assignTo}}"></ion-input>
+
+                <div *ngIf="enableDataPicker[i]" class="no_mar">
+                    <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM-DD-YYYY" [(ngModel)]="localDate" min="{{minDate}}" max="2317"
+                                  (ionChange)="dateChange($event, i,field)">{{field.assignTo}}</ion-datetime>
+                </div>               
+            </ion-item>
+        </ion-list>
+    </ion-content>
 </ion-menu>
 
 <ion-header>
-  <ion-navbar>
-    <ion-title>Story Details</ion-title>
-    <ion-buttons right>
-      <a ion-button icon-only (click)="openPopover($event)">
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-      </a>
-    </ion-buttons>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>Story Details</ion-title>
+        <ion-buttons right>
+            <a ion-button icon-only (click)="openPopover($event)">
+               <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+            </a>
+        </ion-buttons>
+    </ion-navbar>
 </ion-header>
 
 <ion-content #content no-padding>
-  <div class="padding10trl">
-    <ion-buttons start class="custombuttonsmenu custombuttonsmenumargintop">
-      <button menuToggle>
-        <ion-icon name="md-menu"></ion-icon>
-        </button>
-    </ion-buttons>
-  </div>
-  <div>
-    <div class="dashboardbox_header">
-      <i class="{{taskDetails.type}}"></i> <span class="ticketid">#{{taskDetails.ticketId}}</span> <span id="title" *ngIf="!enableEdatable"
-        (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span>
-      <input *ngIf="enableEdatable" [(ngModel)]="titleAfterEdit" />
+    <div class="padding10trl">
+        <ion-buttons start class="custombuttonsmenu custombuttonsmenumargintop">
+            <button menuToggle>
+                <ion-icon name="md-menu"></ion-icon>
+            </button>
+        </ion-buttons>
     </div>
-    <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
-    <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
-    <div class="padding10">
-      <div style="position: relative;" class="customtoggle padding10">
-<div id="description" style="overflow:hidden;" >
-<div id="innerdesc" class="displayblock imgVideo_bg" [innerHTML]=" taskDetails.description "></div>
-</div>
-<div class="show-morediv" style="display:none">
-<button id="show" (click)="expandDescription()" class="customshowbutton">Show more</button>
-<button id="hide" (click)="collapseDescription()" class="customshowbutton" style="display:none">Show less</button>
-</div>
-</div>
-</div>
-</div>
+    <div>
+        <div class="dashboardbox_header">
+            <i class="{{taskDetails.type}}"></i> <span class="ticketid">#{{taskDetails.ticketId}}</span> <span id="title" *ngIf="!enableEdatable"
+                                                                                                               (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span>
+            <input *ngIf="enableEdatable" [(ngModel)]="titleAfterEdit" />
+        </div>
+        <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
+        <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
+        <div class="padding10">
+            <div style="position: relative;" class="customtoggle padding10">
+                <div id="description" style="overflow:hidden;">
+                    <div id="innerdesc" class="displayblock imgVideo_bg" [innerHTML]=" taskDetails.description "></div>
+                </div>
+                <div class="show-morediv" style="display:none">
+                    <button id="show" (click)="expandDescription()" class="customshowbutton">Show more</button>
+                    <button id="hide" (click)="collapseDescription()" class="customshowbutton" style="display:none">Show less</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Ticket #91-->
+    <div>
+        <div>Activities</div>
+        <div class="activitiesList" *ngFor="let eachActivity of itemsInActivities; let i=index;" id="activity_{{i}}">
+             <div id="{{i}}" data-slug="eachActivity.Slug.$oid">
+                <div class="user">
+                    <ion-img width="25" height="25" src="{{eachActivity.ActivityBy.ProfilePicture}}"></ion-img> <span>by {{eachActivity.ActivityBy.UserName}}</span> <span *ngIf="eachActivity.PropertyChanges.length == 0"
+                        class="userDate">( {{eachActivity.ActivityOn}} ) </span>
+                </div>
+                <div class="userActivity" *ngFor="let eachProperty of eachActivity.PropertyChanges;">
+                     <div class="ticketActivity">
+                        <span class="bold">{{eachProperty.ActionFieldTitle}}</span> {{eachProperty.Action}}
+                        <span *ngIf="eachProperty.type=='user'"> 
+                            <span class="property"><a href="javascript:void(0);" data-id="{{eachProperty.PreviousValue.CollaboratorId}}" data-name="{{eachProperty.PreviousValue.UserName}}">{{eachProperty.PreviousValue.UserName}}</a></span>
+                            <span *ngIf="eachProperty.PreviousValue!=''"> to</span> <span *ngIf="eachProperty.NewValue=='-none-'">{{eachProperty.NewValue}}</span>
+                            <span class="property"><a href="javascript:void(0);" *ngIf="eachProperty.NewValue!='-none-'" data-id="{{eachProperty.NewValue.CollaboratorId}}" data-name="{{eachProperty.NewValue.UserName}}">{{eachProperty.NewValue.UserName}}</a></span>
+                        </span>
+                        <span *ngIf="eachProperty.type!='user'"> 
+                            <span class="bold" [innerHTML]= "eachProperty.PreviousValue"></span><span *ngIf="eachProperty.PreviousValue!=''"> to</span>
+                            <span class="bold" [innerHTML]="eachProperty.NewValue"></span>
+                        </span>
+                        <span class="activityDate">( {{eachProperty.ActivityOn}} )</span>
+                    </div>
+                </div>
+                <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="comment{{(eachActivity.Status ==2)?'_reply':''}}">
+                    <div>
+                        <div class="commentedtext" *ngIf="eachActivity.Status ==2">
+                            <div class="user">
+                                <a href="javascript:void(0)"><ion-img width="25" height="25" src="{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.ProfilePicture}}" ></ion-img></a> by <span><a href="javascript:void(0)">{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.UserName}}</a></span>
+                            </div>
+                            <div [innerHTML]="itemsInActivities[eachActivity.ParentIndex].CDescription"></div>
+                        </div>
+                        <div>
+                            <div id="dropble_comment_{{i}}"></div>
+                            <div class="pop_over_bg" id="comments_gif_{{i}}" [hidden]="true"><ion-img width="25" height="25" src="assets/images/loader.gif" alt=""></ion-img></div>
+                            <div id="Activity_content_{{i}}">
+                                <div class="commentp" [innerHTML]="eachActivity.CDescription"></div>
+                                <div class="clearfix pull-right">
+                                    <div class="commedit reply_icn">Reply</div>
+                                    <div *ngIf="eachActivity.ActivityBy.UserName == userName" class="commedit edit_icn">Edit</div>
+                                    <div *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0" class="commedit delete_icn">Delete</div>
+                                </div>
+                            </div>
+                            <div id="Actions_{{i}}" [hidden]="true">
+                                <div class="uploadcomponent pull-left">
+                                    <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
+                                    <input class="transparentinput" type="file" multiple/>
+                                </div>
+                                <div class="alignright margintop15">
+                                    <button class="normal bluebutton bluebuttonmedium">SUBMIT</button> &nbsp;
+                                    <button class="normal bluebutton greybutton bluebuttonmedium">CANCEL</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Ticket #91 ended-->
 </ion-content>

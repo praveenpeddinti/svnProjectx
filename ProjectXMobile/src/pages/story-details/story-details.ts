@@ -24,7 +24,9 @@ export class StoryDetailsPage {
     public displayFieldvalue = [];
     public showEditableFieldOnly = [];
     public readOnlyDropDownField: boolean = false;
-
+    // Ticket #91
+    public itemsInActivities: Array<any>;
+    // Ticket #91 ended
     public selectedValue = "";
     public previousSelectedValue = "";
 
@@ -131,7 +133,17 @@ export class StoryDetailsPage {
                 console.log("the error in ticker derais " + JSON.stringify(error));
             }
         );
-
+        // Ticket #91
+        globalService.getTicketActivity(this.constants.getTicketActivity, this.navParams.get("id")).subscribe( 
+            (result)=>{
+                // console.log("the result in ticket activities " + JSON.stringify(result.data.Activities));
+                this.itemsInActivities = result.data.Activities;
+            }, (error) => {
+                // loader.dismiss();
+                console.log("the error in ticket activities " + JSON.stringify(error));
+            }
+        );
+        // Ticket #91 ended
     }
 
    public dateChange(event, index, fieldDetails) {
@@ -214,6 +226,13 @@ export class StoryDetailsPage {
                 setTimeout(() => {
                     document.getElementById("field.title_field.id_" + index).innerHTML = event.Name;
                     // document.getElementById("item_" + index).classList.remove("item-select");
+                    // this.itemsInActivities.push(result.data.activityData.data);
+                    if (result.data.activityData.referenceKey == -1) {
+                        this.itemsInActivities.push(result.data.activityData.data);
+                    }
+                    else {
+                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+                    }        
                 }, 300);
             },
             (error) => {
