@@ -232,7 +232,8 @@ export class StoryComponent
               if(tsk.Id == task) 
             this.form['default_task'].push(tsk);
       };
-    }   
+    }  
+   delete this.form['tasks']; 
    this._service.saveStory(this.form,(response)=>{
          });
     }

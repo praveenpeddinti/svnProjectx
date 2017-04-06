@@ -35,7 +35,6 @@ export class StoryEditComponent implements OnInit
   private fieldsData = [];
   private showMyEditableField =[];
   public dragdrop={extraPlugins:'dragdrop'};
-  public tasks = [];
   public taskArray:any;
   public taskIds=[];
   //ckeditor configuration options
@@ -74,9 +73,8 @@ export class StoryEditComponent implements OnInit
            var subtasks = data.data.ticket_details.Tasks;
             this.taskIds=[];
           for(let st of subtasks)
-            this.taskIds.push(st.TaskType)
+           this.taskIds.push(st.TaskType)
             for (let task of this.taskArray) {
-               this.tasks.push(task.Id)
               if(this.taskIds.some(x=>x==task.Id)){
                 task.IsDefault=task.Id;
                 task.disabled = true;
@@ -262,21 +260,17 @@ export class StoryEditComponent implements OnInit
     }
     if(edit_data.description!="" && edit_data.title!="")
     {
-      console.log("selected__task"+this.taskIds);
       var desc=this.txt_area.instance.getData();
       edit_data.description=desc;
       edit_data.default_task=[];
       if(this.defaultTasksShow){
       var selectedTask=[];
             for (let task of this.taskArray) {
-              if(this.taskIds.some(x=>x==task.Id)){
-               }else if(this.tasks.some(x=>x==task.Id)){
+              if(this.taskIds.some(x=>x==task.Id) && !task.disabled){
                edit_data.default_task.push(task);
-               }else{
                }
             }
       }
-     
        var post_data={
           'data':edit_data,
          
