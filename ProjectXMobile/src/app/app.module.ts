@@ -10,6 +10,8 @@ import { StoryDetailsPage } from '../pages/story-details/story-details';
 import { StoryCreatePage } from '../pages/story-create/story-create';
 import { SelectAlertless } from '../pages/story-details/SelectAlert';
 
+import {Options} from '../pages/story-details/story-details';
+
 import { Storage } from "@ionic/storage";
 import { PopoverPage } from '../pages/popover/popover';
 
@@ -21,6 +23,7 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
   declarations: [
     MyApp,
     DashboardPage,
+    Options,
     LoginPage,
     StoryDetailsPage,
     StoryCreatePage,
@@ -37,6 +40,7 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
   entryComponents: [
     MyApp,
     DashboardPage,
+    Options,
     LoginPage,
     StoryDetailsPage,
     StoryCreatePage,

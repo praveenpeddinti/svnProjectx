@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToastController } from 'ionic-angular';
-import { NavController, NavParams, MenuController, LoadingController, PopoverController, ViewController } from 'ionic-angular';
+import { NavController, ModalController, NavParams, MenuController, LoadingController, PopoverController, ViewController } from 'ionic-angular';
 
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
@@ -53,6 +53,7 @@ export class StoryDetailsPage {
     };
 
     constructor(menu: MenuController,
+        private modalController: ModalController,
         private toastCtrl: ToastController,
         public globalService: Globalservice,
         private constants: Constants,
@@ -202,57 +203,17 @@ export class StoryDetailsPage {
         }, 300);
     }
 
-    public getFieldValues(fieldDetails, index) {
-
-        this.selectCancel(this.previousSelectIndex);
-        if((document.getElementById("field.title_field.id_" + index).innerHTML) != "--"){
-            this.previousSelectedValue = (document.getElementById("field.title_field.id_" + index).innerHTML);
-        }
-
-        if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
-            this.readOnlyDropDownField = true;
-            this.showEditableFieldOnly[index] = true;
-            this.previousSelectIndex = index;
-            this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
-                (result) => {
-                    this.displayFieldvalue = result.getFieldDetails;
-                },
-                (error) => {
-                    console.log("the fields error --- " + error);
-                });
-
-        } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
-            document.getElementById("field.title_field.id_" + index).style.display = 'none';
-            //@ViewChild("field.title_field.id_" + index) datePicker;
-            //jQuery("#field.title_field.id_" + index).open();
-            this.enableDataPicker[index] = true;
-
-        } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
-            console.log("TextArea was enabled " + fieldDetails.fieldType);
-
-            if (fieldDetails.fieldType == "TextArea") {
-                this.enableTextArea[index] = true;
-                document.getElementById("field.title_field.id_" + index).style.display = 'none';
-            }
-            else if (fieldDetails.fieldType == "Text") {
-                this.enableTextField[index] = true;
-                document.getElementById("field.title_field.id_" + index).style.display = 'none';
-            }
-        }
-
-    }
-
     public changeOption(event, index, fieldDetails) {
         this.readOnlyDropDownField = false;
         this.showEditableFieldOnly[index] = false;
 
         //console.log("the displayfieldvalues " + JSON.stringify(this.displayFieldvalue) + "------- " + event + " &&&&&&&&& " + index)
 
-        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, event, fieldDetails).subscribe( 
+        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe( 
             (result) => {
                 setTimeout(() => {
-                    document.getElementById("field.title_field.id_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
-                    document.getElementById("item_" + index).classList.remove("item-select");
+                    document.getElementById("field.title_field.id_" + index).innerHTML = event.Name;
+                    // document.getElementById("item_" + index).classList.remove("item-select");
                 }, 300);
             },
             (error) => {
@@ -266,11 +227,6 @@ export class StoryDetailsPage {
                   });
                   toast.present();
             });
-
-        setTimeout(() => {
-            // document.getElementById("field.title_field.id_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
-            // document.getElementById("item_" + index).classList.remove("item-select");
-        }, 300);
     }
     
     public inputBlurMethod(event, index, fieldDetails){
@@ -356,5 +312,120 @@ export class StoryDetailsPage {
         }
 
     }
+
+    openOptionsModal(fieldDetails, index){
+        console.log("the model present");
+
+        if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
+            this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
+                (result) => {
+                    if(fieldDetails.fieldType == "Team List"){
+                        this.displayFieldvalue.push({"Id":"","Name":"--none--","Email":"null"})
+                        for(let data of result.getFieldDetails){
+                            this.displayFieldvalue.push(data);
+                        }                        
+                    } else {
+                        for(let data of result.getFieldDetails){
+                            this.displayFieldvalue.push(data);
+                        }
+                    }
+                     
+                    let optionsModal = this.modalController.create(Options, {activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
+                        optionsModal.onDidDismiss((data) => {
+                            if(data != null && (data.Name != data.previousValue)){
+                                this.changeOption(data, index, fieldDetails);
+                            }
+                            this.displayFieldvalue = [];
+                        }); 
+                    optionsModal.present();
+                },
+                (error) => {
+                    console.log("the fields error --- " + error);
+                });
+
+        } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
+            document.getElementById("field.title_field.id_" + index).style.display = 'none';
+            //@ViewChild("field.title_field.id_" + index) datePicker;
+            //jQuery("#field.title_field.id_" + index).open();
+            this.enableDataPicker[index] = true;
+
+        } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
+            console.log("TextArea was enabled " + fieldDetails.fieldType);
+
+            if (fieldDetails.fieldType == "TextArea") {
+                this.enableTextArea[index] = true;
+                document.getElementById("field.title_field.id_" + index).style.display = 'none';
+            }
+            else if (fieldDetails.fieldType == "Text") {
+                this.enableTextField[index] = true;
+                document.getElementById("field.title_field.id_" + index).style.display = 'none';
+            }
+        }
+
+    }
+
+}
+
+@Component({
+    styles:[`
+        .Normal {color:#eda74c}
+        .Highest{color:#ff2200}
+        .High{color:#ff7c7c}
+        .Low{color:#c5c950}
+        .Lowest{color:#e5e970}
+        .selectedMember{background-color:#78c9ee}`],
+    template: `
+            <ion-header>
+                <ion-toolbar>
+                    <ion-title>
+                        {{activatedFieldTitle}}
+                    </ion-title>
+                    <ion-buttons start>
+                        <button ion-button (click)="dismiss()">
+                        <span ion-text color="primary" showWhen="ios">Cancel</span>
+                        <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+                        </button>
+                    </ion-buttons>
+                </ion-toolbar>
+            </ion-header>
+                <ion-content padding>                        
+                    <ion-row style="height:40px;border-bottom: 1px solid #000;" 
+                            *ngFor="let item of displayFieldvalue" 
+                            [ngClass]="{'selectedMember': activatedFieldValue == item.Name}" 
+                            (click)="dismiss(item)" center> 
+
+                        <div>{{item.Name}} 
+                            <i *ngIf="isPriority" class="fa fa-circle {{item.Name}}" aria-hidden="true"></i> 
+                        </div> 
+                    </ion-row>
+                </ion-content>
+                `
+})
+export class Options {
+
+    public activatedFieldDetails: any;
+    public displayFieldvalue: any;
+    public activatedFieldTitle: string;
+    public activatedFieldValue: string;
+    public isSlected : boolean = false;
+    public isPriority: boolean = false;
+
+ constructor(public viewCtrl: ViewController, params: NavParams) {
+   this.activatedFieldDetails = params.get('activeField');
+   this.activatedFieldTitle = this.activatedFieldDetails.title
+
+   if(this.activatedFieldDetails.fieldName == "priority"){
+        // show priority color images
+        this.isPriority = true;
+   }
+
+    this.displayFieldvalue = params.get('displayList');
+    this.activatedFieldValue = document.getElementById("field.title_field.id_" + params.get('activatedFieldIndex')).innerHTML;
+ }
+
+ dismiss(selectedItem) {
+    selectedItem['previousValue'] = this.activatedFieldValue;
+    this.viewCtrl.dismiss(selectedItem);
+ }
 
 }
