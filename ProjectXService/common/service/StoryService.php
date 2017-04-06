@@ -494,7 +494,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $artifacts = array();
             $valueName = "";
             $selectFields = [];
-            $selectFields = ['ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value'];
+            $selectFields = ['ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Tasks'];
             $childticketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId,$selectFields); 
             $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
             if($checkData==0){
@@ -517,11 +517,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                   $fieldDetails =  StoryFields::getFieldDetails($field_id);
                   $fieldName = $fieldDetails["Field_Name"];
                      if(is_numeric($ticket_data->value)){
-                         if($fieldDetails["Type"] == 6 ){
+                        if($fieldDetails["Type"] == 6 ){
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
                             $this->followTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
+                            if (!empty($childticketDetails['Tasks'])){error_log("----follow if subTask");
+                                foreach($childticketDetails['Tasks'] as $childticketId){
+                                    $this->followTicket($ticket_data->value,$childticketId['TaskId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',true);
+                                }
+                            }else{error_log("----follow elseStory");
+                                $this->followTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',true);
                             }
+                        }
                         
                              else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
@@ -556,10 +563,16 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             } 
                         }else{
                             $leftsideFieldVal = $ticket_data->value;
-                              if($fieldDetails["Type"] == 6 ){
-                                   $this->unfollowTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
-   
-                              }
+                                if($fieldDetails["Type"] == 6 ){
+                                    $this->unfollowTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
+                                    if (!empty($childticketDetails['Tasks'])){
+                                        foreach($childticketDetails['Tasks'] as $childticketId){
+                                            $this->unfollowTicket($ticket_data->value,$childticketId['TaskId'],$ticket_data->projectId,$fieldDetails["Field_Name"]='follower');
+                                        }
+                                    }
+                                }else{
+                                    $this->unfollowTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$fieldDetails["Field_Name"]='follower'); 
+                                }
                         }
                     }
                     $fieldtochange1= "Fields.".$field_name.".value";
@@ -694,7 +707,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      public function followTicket($collaboratorId,$ticketId,$projectId,$loggedInUser,$fieldName,$defaultFollower=FALSE,$from=""){
         
         try {
-          // error_log("followTicket-----".$projectId."---".$ticketId."---".$collaboratorId."--".$fieldName);
+           error_log("followTicket-----".$projectId."---".$ticketId."---".$collaboratorId."--".$fieldName);
             $db =  TicketCollection::getCollection();
            $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
            
@@ -703,7 +716,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            }else{
               $cursor =  $db->count( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId, "Followers" => array('$elemMatch'=> array( "FollowerId"=> (int)$collaboratorId ,"Flag" =>$fieldName))));  
            }
-           
+           error_log("cursor===".$cursor);
             if($cursor == 0){
                $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Followers' =>array("FollowerId" => (int)$collaboratorId,"FollowedOn" =>$currentDate,"CreatedBy"=>(int)$loggedInUser,"Flag"=>$fieldName,"DefaultFollower"=>(int)$defaultFollower ))),array('new' => 1,"upsert"=>1));
              
