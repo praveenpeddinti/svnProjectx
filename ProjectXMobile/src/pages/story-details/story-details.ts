@@ -6,6 +6,7 @@ import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
+import {CustomModalPage} from '../custom-modal/custom-modal';
 declare var jQuery: any;
 /*
   Generated class for the StoryDetails page.
@@ -349,7 +350,7 @@ export class StoryDetailsPage {
                         }
                     }
                      
-                    let optionsModal = this.modalController.create(Options, {activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
+                    let optionsModal = this.modalController.create(CustomModalPage, {activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
                         optionsModal.onDidDismiss((data) => {
                             if(data != null && (data.Name != data.previousValue)){
                                 this.changeOption(data, index, fieldDetails);
@@ -382,69 +383,5 @@ export class StoryDetailsPage {
         }
 
     }
-
-}
-
-@Component({
-    styles:[`
-        .Normal {color:#eda74c}
-        .Highest{color:#ff2200}
-        .High{color:#ff7c7c}
-        .Low{color:#c5c950}
-        .Lowest{color:#e5e970}
-        .selectedMember{background-color:#78c9ee}`],
-    template: `
-            <ion-header>
-                <ion-toolbar>
-                    <ion-title>
-                        {{activatedFieldTitle}}
-                    </ion-title>
-                    <ion-buttons start>
-                        <button ion-button (click)="dismiss()">
-                        <span ion-text color="primary" showWhen="ios">Cancel</span>
-                        <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
-                        </button>
-                    </ion-buttons>
-                </ion-toolbar>
-            </ion-header>
-                <ion-content padding>                        
-                    <ion-row style="height:40px;border-bottom: 1px solid #000;" 
-                            *ngFor="let item of displayFieldvalue" 
-                            [ngClass]="{'selectedMember': activatedFieldValue == item.Name}" 
-                            (click)="dismiss(item)" center> 
-
-                        <div>{{item.Name}} 
-                            <i *ngIf="isPriority" class="fa fa-circle {{item.Name}}" aria-hidden="true"></i> 
-                        </div> 
-                    </ion-row>
-                </ion-content>
-                `
-})
-export class Options {
-
-    public activatedFieldDetails: any;
-    public displayFieldvalue: any;
-    public activatedFieldTitle: string;
-    public activatedFieldValue: string;
-    public isSlected : boolean = false;
-    public isPriority: boolean = false;
-
- constructor(public viewCtrl: ViewController, params: NavParams) {
-   this.activatedFieldDetails = params.get('activeField');
-   this.activatedFieldTitle = this.activatedFieldDetails.title
-
-   if(this.activatedFieldDetails.fieldName == "priority"){
-        // show priority color images
-        this.isPriority = true;
-   }
-
-    this.displayFieldvalue = params.get('displayList');
-    this.activatedFieldValue = document.getElementById("field.title_field.id_" + params.get('activatedFieldIndex')).innerHTML;
- }
-
- dismiss(selectedItem) {
-    selectedItem['previousValue'] = this.activatedFieldValue;
-    this.viewCtrl.dismiss(selectedItem);
- }
 
 }

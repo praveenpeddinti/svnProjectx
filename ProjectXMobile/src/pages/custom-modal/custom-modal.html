@@ -1,0 +1,22 @@
+ <ion-header>
+    <ion-toolbar>
+        <ion-title>
+            {{activatedFieldTitle}}
+        </ion-title>
+        <ion-buttons start>
+            <button ion-button (click)="dismiss({})">
+            <span ion-text color="primary" showWhen="ios">Cancel</span>
+            <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content padding>                        
+      <ion-row style="height:40px;border-bottom: 1px solid #000;" 
+              *ngFor="let item of displayFieldvalue" 
+              [ngClass]="{'selectedMember': activatedFieldValue == item.Name}"
+              (click)="dismiss(item)" center> 
+
+          <div> {{item.Name}} <i *ngIf="isPriority" class="fa fa-circle {{item.Name}}" aria-hidden="true"></i> </div> 
+      </ion-row>
+  </ion-content>
