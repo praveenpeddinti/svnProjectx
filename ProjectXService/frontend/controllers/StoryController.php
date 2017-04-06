@@ -324,7 +324,6 @@ class StoryController extends Controller
             $default_ticket_data['userInfo']=$ticket_data->userInfo;
             $default_ticket_data['projectId']=$ticket_data->projectId;
             $defaultTicketsArray = $ticket_data->data->default_task;
-              
                 $childTicketObjArray = array();
                  foreach($defaultTicketsArray as $value){
                     $default_ticket_data['data']['title'] = $value->Name."-" . $title;

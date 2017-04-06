@@ -1163,14 +1163,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         }
           
     }
-  
+  /**
+   * @author Anand
+   * @description Get default task types Ex:- UI,QA,Peer
+   * @return type
+   */
     public function getTaskTypes(){
         try {
            $taskTypes = TaskTypes::getTaskTypes();
            return $taskTypes;
         } catch (Exception $ex) {
-            
-        }   
+        Yii::log("StoryService:getTaskTypes::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+           }   
     }
 }
 
