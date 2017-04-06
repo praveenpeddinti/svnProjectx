@@ -217,7 +217,7 @@ class TicketCollection extends ActiveRecord
             $query = new Query();
             $query->from('TicketCollection')
                      ->where(["ProjectId" => $projectId ,"TicketId" => $storyId]);
-            $taskDetails = $query->all();
+            $taskDetails = $query->one();
             return $taskDetails;
         } catch (Exception $ex) {
             Yii::log("TicketCollection:getTotalTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
