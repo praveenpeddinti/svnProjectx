@@ -19,7 +19,7 @@ app.use(function(req, res, next) {
 });
 
 app.post("/upload", type, function(req, res, cb) {
-//console.log("the file-------- " + req.hostname);
+console.log("the file-------- " );
     
     if (!req.files) {
         res.send('No files were uploaded.');
@@ -30,7 +30,16 @@ app.post("/upload", type, function(req, res, cb) {
     }
     
 });
- 
-var server = app.listen(4201, function() {
-    console.log("Listening on port %s...", server.address().port);
-});
+ var http = require('http').createServer(app);
+ http.listen(4201);
+//var server = app.listen(4201, function() {
+//    console.log("Listening on port %s...", server.address().port);
+//});
+var io = require('socket.io')(http);
+io.sockets.on('connection', function(client)
+{  
+    
+    client.on('clearInterval', function() {
+        console.log('clearInterval ');
+    });
+})
