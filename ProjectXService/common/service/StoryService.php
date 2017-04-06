@@ -15,6 +15,7 @@ use common\models\mongo\TicketTimeLog;
 use common\models\mysql\Collaborators;
 use common\models\mongo\TicketComments;
 use common\models\mongo\TicketArtifacts;
+use common\models\mysql\TaskTypes;
 use Yii;
 
 /*
@@ -859,9 +860,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @param type $childTicketIds
      * @return empty
      */
-    public function updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketIds) {
+    public function updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketObjArray) {
         try {
-            $ticketDetails = TicketCollection::updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketIds);
+            $ticketDetails = TicketCollection::updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketObjArray);
         } catch (Exception $ex) {
             Yii::log("StoryService:updateParentticketTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -906,6 +907,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @author Padmaja
      * @description This method is used to save child task details.
     * @return type 
+         * Modified by Anand 
+         * Modification Update Task object before saving to the collection baesd on task type.
      */
     public function createChildTask($postData)
             {
@@ -983,9 +986,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ticketModel->IsChild = 1;
            $returnValue = TicketCollection::saveTicketDetails($ticketModel);
            if($returnValue != "failure"){
-               $lastChiledTicketId=  $ticketModel->TicketId;
+               $lastChiledTicket['TaskId']=  $ticketModel->TicketId;
+               $lastChiledTicket['TaskType']=  (int)1;
                $parentTasks = $ticketDetails['Tasks'];
-               array_push($parentTasks,$lastChiledTicketId);
+               array_push($parentTasks,$lastChiledTicket);
                TicketCollection::updateChildTaskObject($postData->TicketId,$postData->projectId,$parentTasks);
                TicketComments::createCommentsRecord($ticketNumber,$postData->projectId);
                if(!empty($ticketDetails['Followers'])){
@@ -1159,7 +1163,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         }
           
     }
-    
+  
+    public function getTaskTypes(){
+        try {
+           $taskTypes = TaskTypes::getTaskTypes();
+           return $taskTypes;
+        } catch (Exception $ex) {
+            
+        }   
+    }
 }
 
   

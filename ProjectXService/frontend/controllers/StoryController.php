@@ -112,9 +112,13 @@ class StoryController extends Controller
         try {
             $StoryData = json_decode(file_get_contents("php://input"));
             //$projectId=1;
+            $subtaskIds=array();
             $projectId = $StoryData->projectId;
             $getSubTaskIds = ServiceFactory::getStoryServiceInstance()->getSubTaskIds($StoryData->storyId,$projectId);
-            $data = ServiceFactory::getStoryServiceInstance()->getSubTaskDetails($getSubTaskIds[0]['Tasks'], $projectId);
+            foreach($getSubTaskIds[0]['Tasks'] as $task){
+               array_push($subtaskIds,$task['TaskId']);
+            }
+            $data = ServiceFactory::getStoryServiceInstance()->getSubTaskDetails($subtaskIds, $projectId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -135,7 +139,9 @@ class StoryController extends Controller
 
             $ticket_data = json_decode(file_get_contents("php://input"));
             error_log("++++++++++++++++++++++++dfsdfsdfsdf+++++++++++++".$ticket_data->ticketId);
-        $data = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,1);
+        $data['ticket_details'] = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,1);
+        $data['task_types'] = ServiceFactory::getStoryServiceInstance()->getTaskTypes();
+
         $responseBean = new ResponseBean();
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -155,27 +161,28 @@ class StoryController extends Controller
     */
     public function actionSaveTicketDetails() {
         try {
-            error_log("actionSaveTicketDetails--");
             $ticket_data = json_decode(file_get_contents("php://input"));
-            
+            error_log("actionSaveTicketDetails--eeeeeeeeeeeee".print_r($ticket_data,1));
             $title = $ticket_data->data->title;
             $description = $ticket_data->data->description;
             $parentTicNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
             $projectId=$ticket_data->projectId;
-
             $planLevelNumber = $ticket_data->data->planlevel; //story-1 or task-2
             if ($planLevelNumber == 1) {
-                $defualtTicketsArray = $ticket_data->data->tasks;
-                $childTicketIds = array();
+                $defualtTicketsArray = $ticket_data->data->default_task;
+                $childTicketObj = array();
+                $childTicketObjArray = array();
                 for ($i = 0; $i < sizeof($defualtTicketsArray); $i++) {
-                    $ticket_data->data->title = $defualtTicketsArray[$i]."-" . $title;
+                    $ticket_data->data->title = $defualtTicketsArray[$i]->Name."-" . $title;
                     $ticket_data->data->description = "Please provide description here";
                     $ticket_data->data->planlevel = 2;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data, $parentTicNumber);
-                    array_push($childTicketIds, $ticketNumber);
-                    
+                    $childTicketObj['TaskId']=$ticketNumber;
+                    $childTicketObj['TaskType']=(int)$defualtTicketsArray[$i]->Id;
+                    array_push($childTicketObjArray, $childTicketObj);
                     }
-                $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($projectId,$parentTicNumber,$childTicketIds);     
+                    error_log("childTicketObjArray".print_r($childTicketObjArray,1));
+                $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($projectId,$parentTicNumber,$childTicketObjArray);     
                 }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -200,7 +207,7 @@ class StoryController extends Controller
         $post_data = json_decode(file_get_contents("php://input"));
         $projectId = 1;
         $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getNewTicketStoryFields();
-        
+        $response_data['task_types'] = ServiceFactory::getStoryServiceInstance()->getTaskTypes();
         foreach ($response_data['story_fields'] as &$storyField){
            $fieldType = $storyField["Type"];
             $fieldName= $storyField["Field_Name"];
@@ -309,8 +316,33 @@ class StoryController extends Controller
     */
     public function actionUpdateTicketDetails(){
         try{
-             $ticket_data = json_decode(file_get_contents("php://input"));
-           $data = ServiceFactory::getStoryServiceInstance()->updateTicketDetails($ticket_data);
+            $ticket_data = json_decode(file_get_contents("php://input"));
+            $title=$ticket_data->data->title;
+            $projectId=$ticket_data->projectId;
+            $parentTicNumber=$ticket_data->data->TicketId;
+            $data = ServiceFactory::getStoryServiceInstance()->updateTicketDetails($ticket_data);
+            $defoult_ticket_data['data']['priority']=$ticket_data->data->priority;
+            if($ticket_data->data->default_task != null){
+            $defoult_ticket_data['data']['default_task']=$ticket_data->data->default_task;
+            $defoult_ticket_data['userInfo']=$ticket_data->userInfo;
+            $defoult_ticket_data['projectId']=$ticket_data->projectId;
+            $defualtTicketsArray = $ticket_data->data->default_task;
+                $childTicketObj = array();
+                $childTicketObjArray = array();
+                for ($i = 0; $i < sizeof($defualtTicketsArray); $i++) {
+                    $defoult_ticket_data['data']['title'] = $defualtTicketsArray[$i]->Name."-" . $title;
+                    $defoult_ticket_data['data']['description']= "Please provide description here";
+                    $defoult_ticket_data['data']['planlevel'] = 2;
+                    $defoult_ticket_data= json_decode(json_encode($defoult_ticket_data,true));
+                    $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($defoult_ticket_data, $parentTicNumber);
+                    $childTicketObj['TaskId']=$ticketNumber;
+                    $childTicketObj['TaskType']=(int)$defualtTicketsArray[$i]->Id;
+                    array_push($childTicketObjArray, $childTicketObj);
+                    }
+                    error_log("childTicketObjArray".print_r($childTicketObjArray,1));
+                $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($projectId,$parentTicNumber,$childTicketObjArray);     
+                  
+            }      
            $responseBean = new ResponseBean();
            $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -755,8 +787,8 @@ class StoryController extends Controller
             Yii::log("StoryController:actionGetAllRelatedTasks::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
-}
+    
+        }
 
 
 ?>
