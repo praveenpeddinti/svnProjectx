@@ -24,7 +24,8 @@ export class StoryComponent
     @Output() public options = {
         readAs: 'ArrayBuffer'
       };
-    public selectedTickets: string[] = ['UI','PeerReview','QA'];
+    public selectedTickets: string[] = [];
+    public taskArray:any;
     public defaultTasksShow:boolean=true;
     public dragTimeout;
     public storyFormData=[];
@@ -49,12 +50,16 @@ export class StoryComponent
     {
         this._service.getStoryFields(1,(response)=>
         {
+            for (let task of response.data.task_types) {
+            this.selectedTickets.push(task.Id)
+            }
+            this.taskArray=response.data.task_types;
               let jsonForm={};
               let DefaultValue;
                jsonForm['title'] ='';
                jsonForm['description'] ='';
                jsonForm['tasks']=this.selectedTickets;
-         
+               jsonForm['default_task']=[];
               if(response.statusCode==200)
               {
                   response.data.story_fields.forEach(element => {
@@ -195,6 +200,7 @@ export class StoryComponent
                 (result :Array<any>) => {
     
                 for(var i = 0; i<result.length; i++){
+                   result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
                     var uploadedFileExtension = (result[i].originalname).split('.').pop();
                     if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                         this.form['description'] = this.form['description'] + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
@@ -220,6 +226,13 @@ export class StoryComponent
 
     */
     saveStory(){
+     this.form['default_task']=[];
+     for (let task of this.form['tasks']) {
+     for(let tsk of this.taskArray) {
+              if(tsk.Id == task) 
+            this.form['default_task'].push(tsk);
+      };
+    }   
    this._service.saveStory(this.form,(response)=>{
          });
     }

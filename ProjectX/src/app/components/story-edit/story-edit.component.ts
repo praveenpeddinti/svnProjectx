@@ -35,6 +35,9 @@ export class StoryEditComponent implements OnInit
   private fieldsData = [];
   private showMyEditableField =[];
   public dragdrop={extraPlugins:'dragdrop'};
+  public tasks = [];
+  public taskArray:any;
+  public taskIds=[];
   //ckeditor configuration options
   public toolbar={toolbar : [
       [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList']
@@ -43,6 +46,7 @@ export class StoryEditComponent implements OnInit
   public hasBaseDropZoneOver:boolean = false;
   public hasFileDroped:boolean = false;
   public fileUploadStatus:boolean = false;
+  public defaultTasksShow:boolean=true;
 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,private mention:MentionService,
@@ -52,17 +56,38 @@ export class StoryEditComponent implements OnInit
 
 
   ngOnInit() 
-  {
+  { var thisObj=this;
     //getting the route param(Ticketid) for specific ticket to edit
     this.route.params.subscribe(params => {
             this.url_TicketId = params['id'];
         });
 
       this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId},(data)=>
-        {
-             this.ticketData = data.data;
-             this.description=data.data.CrudeDescription;
-             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);        
+        {   
+  
+          data.data.ticket_details.Fields.filter (function(obj){
+              if(obj.field_name=='planlevel' && obj.value==2){
+               thisObj.defaultTasksShow= false;
+              }
+            });
+           this.taskArray=data.data.task_types;
+           var subtasks = data.data.ticket_details.Tasks;
+            this.taskIds=[];
+          for(let st of subtasks)
+            this.taskIds.push(st.TaskType)
+            for (let task of this.taskArray) {
+               this.tasks.push(task.Id)
+              if(this.taskIds.some(x=>x==task.Id)){
+                task.IsDefault=task.Id;
+                task.disabled = true;
+               }else{
+                task.IsDefault=task.Id;
+                task.disabled = null; 
+               }
+            }
+             this.ticketData = data.data.ticket_details;
+             this.description= this.ticketData.CrudeDescription;
+             this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);        
         });
     
     this.minDate=new Date(); //set current date to datepicker as min date
@@ -237,8 +262,21 @@ export class StoryEditComponent implements OnInit
     }
     if(edit_data.description!="" && edit_data.title!="")
     {
+      console.log("selected__task"+this.taskIds);
       var desc=this.txt_area.instance.getData();
       edit_data.description=desc;
+      edit_data.default_task=[];
+      if(this.defaultTasksShow){
+      var selectedTask=[];
+            for (let task of this.taskArray) {
+              if(this.taskIds.some(x=>x==task.Id)){
+               }else if(this.tasks.some(x=>x==task.Id)){
+               edit_data.default_task.push(task);
+               }else{
+               }
+            }
+      }
+     
        var post_data={
           'data':edit_data,
          

@@ -80,10 +80,8 @@
             <div *ngIf="defaultTasksShow == true "  >
                 <div style="font-size:16px; font-weight:bold; margin:20px 0px 10px 0px;">Tasks</div>
                 <div class="ui-g">
-                    <div class="cbx" ><p-checkbox name="UI" [(ngModel)]="form.tasks" value="UI" label="UI" ></p-checkbox></div>
-                    <div class="cbx"><p-checkbox name="PeerReview" [(ngModel)]="form.tasks" value="PeerReview" label="Peer Review"></p-checkbox></div>
-                    <div class="cbx"><p-checkbox name="QA" [(ngModel)]="form.tasks" value="QA" label="QA" ></p-checkbox></div>
-                </div>
+                    <div class="cbx" *ngFor="let task of taskArray" ><p-checkbox name="{{task.Name}}" [(ngModel)]="form.tasks" value="{{task.Id}}" label="{{task.Name}}" ></p-checkbox></div>
+                     </div>
             </div>
             
         <div class="buttonarea alignright">

@@ -72,6 +72,13 @@
                 <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
                 <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  /></div>
         </div>
+
+        <div *ngIf="defaultTasksShow == true ">
+                <div style="font-size:16px; font-weight:bold; margin:20px 0px 10px 0px;">Tasks</div>
+                <div class="ui-g">
+                    <div class="cbx" *ngFor="let task of taskArray" ><p-checkbox name="{{task.Name}}" [(ngModel)]="tasks" value="{{task.IsDefault}}" [disabled]="task.disabled"   label="{{task.Name}}" ></p-checkbox></div>
+                     </div>
+            </div>
         <div class="buttonarea alignright">
             <button class="normal bluebutton bluebuttonmedium" (click)="editStorySubmit(editstoryForm.value)">UPDATE</button>
             <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">CANCEL</button>
