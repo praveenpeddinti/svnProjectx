@@ -1,4 +1,5 @@
 var Express = require("express");
+var spawn = require('child_process').spawn;
 var bodyParser = require("body-parser");
 var multer = require("multer");
 var uploads = multer({ dest: 'uploads/' });
@@ -6,7 +7,9 @@ var uploads = multer({ dest: 'uploads/' });
 var app = Express();
 
 var type = uploads.array("uploads[]", 12);
-
+var dir = "/usr/share/nginx/www/ProjectXService";
+var exec = require('child_process').exec;
+var child;
 console.log("entry");
  
 app.use(bodyParser.json());
@@ -39,7 +42,13 @@ var io = require('socket.io')(http);
 io.sockets.on('connection', function(client)
 {  
     
-    client.on('clearInterval', function() {
-        console.log('clearInterval ');
+    client.on('assignedTo', function(collaborator) {
+        console.log('assignedTo-----'+collaborator);
+        child=spawn("/usr/share/nginx/www/ProjectXService/yii",['notifications/hello','100']);
+        child.stdout.setEncoding('utf-8');
+        child.stdout.on('data', function(res) {
+            console.log(res);
+       });
     });
+
 })
