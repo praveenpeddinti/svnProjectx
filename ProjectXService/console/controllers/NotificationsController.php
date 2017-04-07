@@ -12,18 +12,18 @@ use yii\helpers\Console;
 use common\models\bean\FieldBean;
 use frontend\controllers;
 use common\models\mongo\TicketCollection;
-
+use common\models\bean\ResponseBean;
+use common\components\CommonUtility;
 class NotificationsController extends Controller
 {
     
-    public function actionAssignedNotify($collaborator)
+    public function actionHello($data)
     {
-        
-        error_log("===Collaborator Id==".$collaborator);
-        //logic for sending the notifications to  all the followers and the stakeholders
-        
-        //save all the followers for ticket in mongo collection
-        //TicketCollection::getAllTicketDetails($StoryData, $projectId);
+        $tic = new TicketCollection();
+        $tic->Title = $data;
+        $tic->save();
+        echo json_encode(array("status" => "success"));
+
     }
     
     public function actionFollowNotify()
