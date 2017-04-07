@@ -354,7 +354,7 @@
     <!--Comment Display area-->
     
     <ng-container *ngFor="let comment of commentsList;let cmtIdx = index;">
-        <div id="{{cmtIdx}}" data-slug="comment.Slug.$oid">
+        <div id="{{cmtIdx}}" class="{{comment.Slug.$oid}}">
             
             
                     <div class="user">
