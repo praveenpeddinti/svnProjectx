@@ -33,6 +33,31 @@ console.log("the file-------- " );
     }
     
 });
+app.post("/assignedTo", type, function(req, res, cb) {
+console.log("assignedTo-------- " );
+  child=spawn(dir+"/yii",['notifications/hello','100']);
+        child.stdout.setEncoding('utf-8');
+        child.stdout.on('data', function(data) {
+          console.log("assignedTo-------result- " );
+             res.send(data);
+       });
+          child.stderr.on('data', function(data) {
+//            logger.trace('stderr: ' + data);
+            console.log("assignedTo-------error- "+data );
+       });
+    
+//    if (!req.files) {
+//        res.send('No files were uploaded.');
+//    } else{
+//        //console.log("the responce -------- " + req.files + " --- " + JSON.stringify(req.files));
+//        //console.log( "the new file name " + typeof JSON.stringify(req.files['filename']) + "|" + typeof req.files.originalname );
+//      //  res.send(req.files);
+//    }
+    
+});
+
+
+
  var http = require('http').createServer(app);
  http.listen(4201);
 //var server = app.listen(4201, function() {
