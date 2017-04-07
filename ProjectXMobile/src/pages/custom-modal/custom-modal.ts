@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 
 /*
   Generated class for the CustomModal page.
@@ -15,7 +15,10 @@ import { NavController, NavParams, ViewController } from 'ionic-angular';
         .High{color:#ff7c7c}
         .Low{color:#c5c950}
         .Lowest{color:#e5e970}
-        .selectedMember{background-color:#78c9ee}`],
+        .selectedMember{position: relative;color:#337ab7;}
+        .selectedMember .ion-md-checkmark::before{position: absolute; right: 16px; top: 25%;}
+        .selectedMember .ion-ios-checkmark::before{position: absolute; right: 16px; top: 25%;}
+        `],
   templateUrl: 'custom-modal.html'
 })
 export class CustomModalPage {
