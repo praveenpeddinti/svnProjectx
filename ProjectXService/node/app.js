@@ -44,7 +44,7 @@ io.sockets.on('connection', function(client)
     
     client.on('assignedTo', function(collaborator) {
         console.log('assignedTo-----'+collaborator);
-        child=spawn("/usr/share/nginx/www/ProjectXService/yii",['notifications/hello','100']);
+        child=spawn(dir+"/yii",['notifications/hello','100']);
         child.stdout.setEncoding('utf-8');
         child.stdout.on('data', function(res) {
             console.log(res);
