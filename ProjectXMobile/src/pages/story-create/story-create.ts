@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams,Platform } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
 import { Camera } from 'ionic-native';
@@ -13,14 +13,14 @@ export class StoryCreatePage {
     file: File;
     public showEditableFieldOnly = [];
     private submitted: boolean = false;
-    constructor(public navCtrl: NavController,
+    constructor(
         public navParams: NavParams,
         private globalService: Globalservice,
         private constants: Constants) {
 
         this.globalService.newStoryTemplate();
     }
-     
+
     onStoryCreate(form): void { 
       console.log("create task submit button"); 
        var params = {
@@ -31,7 +31,7 @@ export class StoryCreatePage {
                 "QA"],
             "planlevel": "1",
             "priority": "2"
-        }
+ }
         this.globalService.createStoryORTask(this.constants.createStory, params);
  }
  
