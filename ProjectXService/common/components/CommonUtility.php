@@ -2,20 +2,8 @@
 
 namespace common\components;
 
-use common\models\mongo\TicketCollection;
-use common\models\mysql\Priority;
-use common\models\mysql\Projects;
-use common\models\mysql\WorkFlowFields;
-use common\models\mongo\TinyUserCollection;
-use common\models\mysql\Bucket;
-use common\models\mysql\TicketType;
-use common\models\mysql\StoryFields;
-use common\models\mysql\StoryCustomFields;
-use common\models\mysql\FieldTypes;
-use common\models\mysql\MapListCustomStoryFields;
-use common\models\mysql\PlanLevel;
-use common\models\mongo\TicketComments;
-use common\models\mongo\TicketArtifacts;
+use common\models\mongo\{TicketCollection,TinyUserCollection, TicketComments, TicketArtifacts};
+use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,FieldTypes,MapListCustomStoryFields,PlanLevel};
 use Yii;
 
 /*
