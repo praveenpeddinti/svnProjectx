@@ -54,7 +54,7 @@
                   <div  *ngFor="let field of fieldsData;let i=index;">
                       <div class="leftpanelsections" *ngIf="field.elId == ticketId+'_totalestimatepoints' && field.value !='' && checkPlanLevel !='Task'">
                              <label for="email" class="leftlabels" >{{field.title}}</label>
-                            <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elIid}}">
+                            <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elId}}">
                              {{field.value}}
                            </div>
                            </div>
@@ -64,7 +64,7 @@
                            
                            
                              <label for="email" class="leftlabels" >{{field.title}}</label>
-                            <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elIid}}">
+                            <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elId}}">
                              {{field.value}}
                            </div>
                            
