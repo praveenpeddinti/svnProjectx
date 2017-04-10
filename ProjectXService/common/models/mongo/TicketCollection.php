@@ -44,7 +44,8 @@ class TicketCollection extends ActiveRecord
             "TicketIdString",
             "TotalEstimate",
             "TotalTimeLog",
-            "IsChild"
+            "IsChild",
+            "WorkflowType"
             
            
           

@@ -34,7 +34,7 @@ class WorkFlowFields extends ActiveRecord
     public static function getWorkFlowDetails($workFlowId)
     {
         try{
-        $query = "select Id,Name from WorkFlowFields where Id=".$workFlowId;
+        $query = "select wf.Id,wf.Name,ws.Name as State , ws.Id as StateId from WorkFlowFields wf join WorkFlowState ws on wf.State=ws.Id where wf.Id=".$workFlowId;
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;   
         } catch (Exception $ex) {
@@ -45,9 +45,10 @@ Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex-
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
-      public static function getStoryWorkFlowList(){
+      public static function getStoryWorkFlowList($workflowType,$workflowId){
         try{
-        $query = "select Id,Name,Status from WorkFlowFields";
+        $query = "select   wf.Id,wf.Name,wf.Status,ws.Name as State from WorkFlowFields wf
+ join WorkFlowMapping wm on wf.Id=wm.MappedWorkFlowId join WorkFlowState ws on wf.State=ws.Id where wm.WorkFlowType=$workflowType and wm.WorkFlowId=$workflowId order by wf.Id=$workflowId desc ;";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;   
         } catch (Exception $ex) {

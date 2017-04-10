@@ -165,17 +165,22 @@ class StoryController extends Controller
             //error_log("actionSaveTicketDetails--eeeeeeeeeeeee".print_r($ticket_data,1));
             $title = $ticket_data->data->title;
             $description = $ticket_data->data->description;
+            $planLevelNumber = $ticket_data->data->planlevel;
+            $ticket_data->data->WorkflowType = (int)1;
+            //story-1 or task-2
             $parentTicNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
+            $ticket_data->data->description = "Please provide description here";
+            $ticket_data->data->planlevel = 2;
             $projectId=$ticket_data->projectId;
-            $planLevelNumber = $ticket_data->data->planlevel; //story-1 or task-2
             if ($planLevelNumber == 1) {
+                $WorkflowType=(int)1;  
                 $defaultTicketsArray = $ticket_data->data->default_task;
                 $childTicketObjArray = array();
                 foreach($defaultTicketsArray as $value){
+                    $newTicketModel = new TicketCollection();
                     $ticket_data->data->title = $value->Name."-" . $title;
-                    $ticket_data->data->description = "Please provide description here";
-                    $ticket_data->data->planlevel = 2;
-                    $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data, $parentTicNumber);
+                    $ticket_data->data->WorkflowType = (int)$value->Id;
+                    $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data,$parentTicNumber);
                     array_push($childTicketObjArray, array("TaskId"=>$ticketNumber,"TaskType"=>(int)$value->Id));
                     }
                 $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($projectId,$parentTicNumber,$childTicketObjArray);     
@@ -289,7 +294,7 @@ class StoryController extends Controller
                 $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
             }else if($postFieldData->FieldId == 7){
             //get all status details
-                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList();
+                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList($postFieldData->WorkflowType,$postFieldData->StatusId);
             }else if($postFieldData->FieldId == 6){
             //get all priority details
                 $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getPriorityList();
@@ -317,15 +322,17 @@ class StoryController extends Controller
             $projectId=$ticket_data->projectId;
             $parentTicNumber=$ticket_data->data->TicketId;
             $data = ServiceFactory::getStoryServiceInstance()->updateTicketDetails($ticket_data);
-            $default_ticket_data['data']['priority']=$ticket_data->data->priority;
-            $default_ticket_data['data']['description']= "Please provide description here";
-            $default_ticket_data['data']['planlevel'] = 2;
             if($ticket_data->data->default_task != null){
-            $default_ticket_data['userInfo']=$ticket_data->userInfo;
-            $default_ticket_data['projectId']=$ticket_data->projectId;
             $defaultTicketsArray = $ticket_data->data->default_task;
                 $childTicketObjArray = array();
                  foreach($defaultTicketsArray as $value){
+                    $default_ticket_data = array();
+                    $default_ticket_data['userInfo']=$ticket_data->userInfo;
+                    $default_ticket_data['projectId']=$ticket_data->projectId;
+                    $default_ticket_data['data']['priority']=$ticket_data->data->priority;
+                    $default_ticket_data['data']['description']= "Please provide description here";
+                    $default_ticket_data['data']['planlevel'] = 2;
+                    $default_ticket_data['data']['WorkflowType'] = (int)$value->Id; 
                     $default_ticket_data['data']['title'] = $value->Name."-" . $title;
                     $default_ticket_data= json_decode(json_encode($default_ticket_data,true));
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($default_ticket_data, $parentTicNumber);
