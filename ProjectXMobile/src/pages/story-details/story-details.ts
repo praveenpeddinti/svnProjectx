@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { ToastController, Content } from 'ionic-angular';
 import { NavController, ModalController, NavParams, MenuController, LoadingController, PopoverController, ViewController } from 'ionic-angular';
 
 import { Globalservice } from '../../providers/globalservice';
@@ -59,6 +59,8 @@ export class StoryDetailsPage {
     public minDate: any = new Date();
     public myDate: string = "2017-02-25";
     public userName: any = '';
+
+    @ViewChild(Content) content: Content;
 
     public ckeditorContent = "";
     public config = {
@@ -411,11 +413,11 @@ openPopover(myEvent) {
     // Ticket #91
     // Comments
     public navigateToParentComment(parentCommentId) {
-        // console.log('navigateToParentComment : ' + parentCommentId);
-        // var scrolltoelement = document.getElementById("#"+parentCommentId);
-        // jQuery('html, body').animate({
-        //         scrollTop: jQuery("#" + parentCommentId).offset().top
-        // }, 1000);
+        // console.log('navigateToParentComment : ' + parentCommentId + " --- " + JSON.stringify(jQuery("#"+parentCommentId).position()));
+        jQuery("#"+parentCommentId)[0].scrollIntoView({
+            behavior: "smooth", // or "auto" or "instant"
+            block: "start" // or "end"
+        });
     } 
     public replyComment(commentId) {
         // console.log('replyComment : ' + commentId);
@@ -423,10 +425,10 @@ openPopover(myEvent) {
         this.replying = true;
         this.commentAreaColor = jQuery("#commentEditorArea").css("background");
         jQuery("#commentEditorArea").addClass("replybox");
-        // var scrolltoelement = document.getElementById("#commentEditorArea");
-        // jQuery('html, body').animate({
-        //         scrollTop: jQuery("#commentEditorArea").offset().top
-        // }, 1000);
+        jQuery("#commentEditorArea")[0].scrollIntoView({
+            behavior: "smooth", // or "auto" or "instant"
+            block: "start" // or "end"
+        });
     }
     public cancelReply(){
         // console.log('cancelReply');
