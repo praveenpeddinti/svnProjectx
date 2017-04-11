@@ -429,6 +429,41 @@ class TicketCollection extends ActiveRecord
             Yii::log("TicketCollection:updateTotalEstimatedPoints::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+//    
+//      public function getAllDetailsForSearch($searchString){
+//           try {
+//                $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+//                $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
+//                $searchDetails = iterator_to_array($cursor);
+//                $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+//                $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
+//                $searchDetails = iterator_to_array($cursor);
+//                return $searchDetails;
+//        } catch (Exception $ex) {
+//            Yii::log("TicketCollection:getAllTicketDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+//        }
+//    }
+          /**
+     * @author Padmaja
+     * @description This method is used to get Ticket details by User
+     * @return type array
+     */
+     public static function getTicketDetailsByUser($collabaratorId,$projectId,$selectFields=[]){
+      try{
+            $query = new Query();
+            if(count($selectFields)>0){
+                $query->select($selectFields) ;
+            }
+            $query->from('TicketCollection')
+            ->where(['Fields.assignedto.value' => (int)$collabaratorId, "ProjectId" =>(int) $projectId ]);
+            $ticketDetails = $query->all();
+            return $ticketDetails;  
+      } catch (Exception $ex) {
+      Yii::log("TicketCollection:getTicketDetailsByUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+      }  
+    }
+   
 
     }  
 ?>

@@ -401,6 +401,35 @@ class SiteController extends Controller
          Yii::log("SiteController:actionCollaborators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+      /**
+     * @author Padmaja
+     * @description This is for getSearch results
+     * @return type json object
+     * 
+     */ 
+    public function actionGlobalSearch(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString); 
+            if(empty($searchData['ticketCollection']) && empty($searchData['ticketComments']) && empty($searchData['ticketArtifacts'])&& empty($searchData['ticketArtifacts'])){
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $searchData;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+           
+            }else{
+                   $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $searchData;
+                $response = CommonUtility::prepareResponse($responseBean,"json");
+            }
+            return $response;
+        } catch (Exception $ex) {
+              Yii::log("SiteController:actionGlobalSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     
     
 }

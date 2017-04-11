@@ -966,6 +966,120 @@ class CommonUtility {
             Yii::log("CommonUtility:prepareActivityProperty::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+     /**
+     * @author Padmaja
+     * @param type $searchString
+     * @return type
+     */
+    public static function getAllDetailsForSearch($searchString){
+        try{
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
+            $ticketCollectionData = iterator_to_array($cursor);
+            $TicketCollFinalArray = array();
+            foreach($ticketCollectionData as $extractCollection){
+                $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
+                $forTicketCollection['Title'] = $extractCollection['Title'];
+                $description = $extractCollection['Description'];
+                $refinedData = CommonUtility::refineDescription($description);
+                $forTicketCollection['description'] = $refinedData["description"];
+                $forTicketCollection['planlevel'] = $extractCollection['Fields']['planlevel']['value_name'];
+                $forTicketCollection['reportedby'] = $extractCollection['Fields']['reportedby']['value_name'];
+                $UpdatedOn = $extractCollection['UpdatedOn'];
+                $datetime = $UpdatedOn->toDateTime();
+                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $readableDate = $datetime->format('M-d-Y');
+                $forTicketCollection['UpdatedOn'] = $readableDate;
+                array_push($TicketCollFinalArray, $forTicketCollection);
+            }
+            $matchArray = array('Activities.CDescription'=>array('$regex'=>$searchString));
+            $query = Yii::$app->mongodb->getCollection('TicketComments');
+            $pipeline = array(
+                array('$unwind' => '$Activities'),
+                array('$match' => $matchArray),
+                 array(
+                    '$group' => array(
+                        '_id' => '$TicketId',
+                        "commentData" => array('$push' => '$Activities'),
+                     ),
+                ),
+            );
+            $ticketCommentsData = $query->aggregate($pipeline);
+            $commentsArray=array();
+            $commentsPositionArray=array();
+            $TicketCommentsFinalArray = array();
+            
+            foreach($ticketCommentsData as $extractComments){
+               $ticketCollectionModel = new TicketCollection();
+               $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+               $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],1,$selectFields);
+               $forTicketComments['TicketId'] =  $extractComments['_id'];
+               $forTicketComments['Title'] =$getTicketDetails['Title'];
+               $refinedData = CommonUtility::refineDescription($getTicketDetails['Description']);
+               $forTicketComments['comments'] =  $extractComments['commentData'];
+               $forTicketComments['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
+               $forTicketComments['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
+              // $forTicketComments['UpdatedOn'] =$getTicketDetails['UpdatedOn'];
+                 $UpdatedOn = $getTicketDetails['UpdatedOn'];
+                $datetime = $UpdatedOn->toDateTime();
+                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $readableDate = $datetime->format('M-d-Y');
+                $forTicketComments['UpdatedOn'] = $readableDate;
+                array_push($TicketCommentsFinalArray, $forTicketComments);
+           }
+            $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
+            $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
+            $ticketArtifactsData = iterator_to_array($cursor);
+            $TicketArtifactsFinalArray = array();
+            foreach($ticketArtifactsData as $extractArtifacts){
+                $ticketCollectionModel = new TicketCollection();
+                $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],1,$selectFields);
+                $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
+                $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
+                $refinedData = CommonUtility::refineDescription($getTicketDetails['Description']);
+                $forTicketArtifacts['description'] =$getTicketDetails['Title'];
+                $forTicketArtifacts['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
+                $forTicketArtifacts['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
+                $UpdatedOn = $getTicketDetails['UpdatedOn'];
+                $datetime = $UpdatedOn->toDateTime();
+                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $readableDate = $datetime->format('M-d-Y');
+                $forTicketArtifacts['UpdatedOn'] = $readableDate;
+                array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
+                
+            }
+            
+            $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
+            $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString)),array("UserName"=>array('$regex'=>$searchString)))));
+            $tinyUserData = iterator_to_array($cursor);
+            $TinyUserFinalArray = array();
+             foreach($tinyUserData as $extractUserData){
+                $selectedFields=['TicketId','Title','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                $getTicketDetails = TicketCollection::getTicketDetailsByUser($extractUserData['CollaboratorId'],1,$selectedFields);
+                foreach($getTicketDetails as $eachRow){
+                    $forUsercollection['TicketId'] =$eachRow['TicketId'];
+                    $forUsercollection['Title'] =$eachRow['Title'];
+                    $refinedData = CommonUtility::refineDescription($eachRow['Description']);
+                    $forUsercollection['description'] = $refinedData["description"];
+                    $forUsercollection['planlevel'] = $eachRow['Fields']['planlevel']['value_name'];
+                    $forUsercollection['reportedby'] = $eachRow['Fields']['reportedby']['value_name'];
+                    $UpdatedOn = $eachRow['UpdatedOn'];
+                    $datetime = $UpdatedOn->toDateTime();
+                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                    $readableDate = $datetime->format('M-d-Y');
+                    $forUsercollection['UpdatedOn'] = $readableDate;
+                    array_push($TinyUserFinalArray, $forUsercollection);
+                }
+               
+            }
+            $getCollectionData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
+            return $getCollectionData;
+ 
+        } catch (Exception $ex) {
+            Yii::log("CommonUtility:getAllDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
 
