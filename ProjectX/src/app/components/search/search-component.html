@@ -1,0 +1,46 @@
+
+  <div  id='main'>
+  <div class="container-fluid cleardiv">
+Search Results For {{searchString}}
+    <div class="loginsection" id="searchsection">
+      <div  *ngFor="let searchData of searchArray">
+        <div  *ngFor=" let finalData of searchData">
+          <div class="col-md-1">
+                    
+                    </div>
+                    <div class="col-md-5">
+                        <div class="addtask_bor">
+                            
+                            <div  *ngIf="finalData.description">
+                              <div class="addtask_taskno">
+                                <span><img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" /></span>
+                                <span><img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" /></span>
+                                <span >#</span> {{finalData.TicketId}}
+                                </div>
+                               <div class="addtask_title" ><a [routerLink]="['/story-detail',finalData.TicketId]" (click)="navigateToStoryDetail(finalData.TicketId)">{{finalData.Title}}</a></div>
+                              <div class="addtask_status" [innerHTML]="finalData.description">
+                              </div>
+                              <div class="addtask_status">Last modified On {{finalData.UpdatedOn}} , created By {{finalData.reportedby}}
+                              </div>
+                              </div>
+                           <div  *ngIf="!finalData.description">
+                             <div  *ngFor=" let commentData of finalData.comments">
+                               <div class="">
+                              <div class="addtask_taskno"><span><img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" /></span>
+                               <span><img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" /></span>
+                              <span >#</span> {{finalData.TicketId}}</div>
+                              <div class="addtask_title" ><a [routerLink]="['/story-detail',finalData.TicketId,commentData.Slug.$oid]" (click)="navigateToStoryDetail(finalData.TicketId,commentData.Slug.$oid)">{{finalData.Title}}</a></div>
+                               <div class="addtask_status" [innerHTML]="commentData.CDescription"></div>
+                               <div class="addtask_status">Last modified On {{finalData.UpdatedOn}} , created By {{finalData.reportedby}}
+                              </div>
+                              </div>
+                           </div>
+                        </div>
+                    </div>
+          </div>
+       </div>
+</div>
+</div>
+
+
+</div>

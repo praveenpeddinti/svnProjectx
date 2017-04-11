@@ -34,6 +34,7 @@ import { FileUploadService } from './services/file-upload.service';
 import {MentionService} from './services/mention.service';
 //import { GlobalPipe } from './shared/global.pipe';
 import { TruncatePipe } from 'angular2-truncate';
+import { SearchComponent }  from './components/search/search.component';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -43,7 +44,7 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
               {path: 'login', component: LoginComponent},
-               {path: 'story-dashboard',children:[
+                {path: 'story-dashboard',children:[
                 { path: '' , component: StoryDashboardComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
@@ -63,8 +64,11 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-              
-             
+               {path: 'search',children:[
+                { path: '' , component: SearchComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
              ];
 @NgModule({
   imports:      [
@@ -87,7 +91,7 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES)
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent ],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,
   ],

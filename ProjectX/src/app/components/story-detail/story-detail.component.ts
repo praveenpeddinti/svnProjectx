@@ -69,11 +69,18 @@ public blurTimeout=[];
   public fileUploadStatus:boolean = false;
   public hide:boolean=false;//added by Ryan
   public attachmentsData=[];
+  public searchSlug="";
 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
     private http: Http,private route: ActivatedRoute) {
-       this.filesToUpload = [];
+    this.filesToUpload = [];
+    route.queryParams.subscribe(
+      params => 
+      {
+            this.searchSlug=params['Slug'];
+       })
+            
     }
 
  private calenderClickedOutside = false;
@@ -82,6 +89,8 @@ public blurTimeout=[];
   ngOnInit() {
     var thisObj=this;
     this.callTicketDetailPage("");
+    
+    
    //@Praveen P toggle for plus button in follower list
    jQuery(document).click(function(e) {
      if( jQuery(e.target).closest('div#followerdiv').length==0 && e.target.id != 'follwersAdd' && e.target.id != 'follwersAddI'  ) {
@@ -134,6 +143,13 @@ public blurTimeout=[];
        
       })
       //jQuery('span[id^="check_"]').hide();
+    setTimeout(() => {
+           var getSlug = jQuery("."+this.searchSlug).offset().top;
+            jQuery('html, body').animate({
+        scrollTop: getSlug
+     }, 1000);
+        }, 500);
+      
     }
 
 getArtifacts(obj){
@@ -1208,6 +1224,11 @@ public callTicketDetailPage(ticId){
       jQuery("#collapse").show();//added by Ryan
       jQuery("#expand").hide();//added by Ryan
       jQuery('[id^=button_comment]').hide();
+    //  var slug = "58e63b6180a131045d008a03";
+    //  alert(jQuery("."+slug).attr('class'));
+    // jQuery('html, body').animate({
+    //     scrollTop: jQuery("."+slug).offset().top
+    // }, 1000);
     });
 
 
@@ -1245,16 +1266,15 @@ public callTicketDetailPage(ticId){
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
-          //alert("subtasksdat"+JSON.stringify(this.childTasksArray.length));
-
-
             // this.commentsList = [];
             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
               console.log(data.data.Activities);
               this.commentsList = data.data.Activities;
+
             });
 
+          
         });
         this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
             { 
