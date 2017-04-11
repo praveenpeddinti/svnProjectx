@@ -153,7 +153,6 @@ export class StoryDetailsPage {
                 // console.log("the result in ticket activities " + JSON.stringify(result.data.Activities));
                 this.itemsInActivities = result.data.Activities;
             }, (error) => {
-                // loader.dismiss();
                  console.log("the error in ticket activities " + JSON.stringify(error));
             }
          );
@@ -411,15 +410,15 @@ openPopover(myEvent) {
     
     // Ticket #91
     // Comments
-    navigateToParentComment(parentCommentId) {
-        console.log('navigateToParentComment : ' + parentCommentId);
+    public navigateToParentComment(parentCommentId) {
+        // console.log('navigateToParentComment : ' + parentCommentId);
         // var scrolltoelement = document.getElementById("#"+parentCommentId);
         // jQuery('html, body').animate({
         //         scrollTop: jQuery("#" + parentCommentId).offset().top
         // }, 1000);
     } 
-    replyComment(commentId) {
-        console.log('replyComment : ' + commentId);
+    public replyComment(commentId) {
+        // console.log('replyComment : ' + commentId);
         this.replyToComment = commentId;
         this.replying = true;
         this.commentAreaColor = jQuery("#commentEditorArea").css("background");
@@ -429,14 +428,14 @@ openPopover(myEvent) {
         //         scrollTop: jQuery("#commentEditorArea").offset().top
         // }, 1000);
     }
-    cancelReply(){
-        console.log('cancelReply');
+    public cancelReply(){
+        // console.log('cancelReply');
         this.replying = false;
         this.replyToComment = -1;
         jQuery("#commentEditorArea").removeClass("replybox");
     }
-    deleteComment(commentId,slug){
-        console.log("deleteComment : "+commentId+"-"+slug);
+    public deleteComment(commentId,slug){
+        // console.log("deleteComment : "+commentId+"-"+slug);
         var commentParams;
         var parentCommentId;
         if(this.itemsInActivities[commentId].Status == 2){
@@ -468,19 +467,17 @@ openPopover(myEvent) {
          );
     }
     public editComment(commentId){
-        console.log("editComment : "+commentId);
-        // var comment_div=document.getElementById("Activity_content_"+commentId);
+        // console.log("editComment : "+commentId);
         jQuery("#Actions_"+commentId+" .textEditor").val(this.itemsInActivities[commentId].CrudeCDescription);
         this.editTheComment[commentId]=true;//show submit and cancel button on editor replace at the bottom
     }
     public cancelEdit(commentId){
-        console.log("cancelEdit : "+commentId);
+        // console.log("cancelEdit : "+commentId);
         // jQuery("#Actions_"+commentId+" .textEditor").val('');
         this.editTheComment[commentId]=false;//hide submit and cancel button on editor replace at the bottom
-   }
-//    Check and edit
+    }
     public submitComment(){
-        console.log("submitComment");
+        // console.log("submitComment");
         var commentText = jQuery(".uploadAndSubmit .textEditor").val();
         if(commentText != "" && commentText.trim() != ""){
             this.commentDesc="";
@@ -514,9 +511,8 @@ openPopover(myEvent) {
             );
         }
     }
-
     public submitEditedComment(commentId,slug){
-        console.log("submitEditedComment : "+commentId+"-"+slug);
+        // console.log("submitEditedComment : "+commentId+"-"+slug);
         var editedContent = jQuery("#Actions_"+commentId+" .textEditor").val();
         if(editedContent != "" && editedContent.trim() != ""){
             var commentedOn = new Date();
@@ -546,7 +542,7 @@ openPopover(myEvent) {
     public fileUploadEvent(fileInput: any, comeFrom: string, where:string,comment:string):void {
         var editor_contents;
         var appended_content;
-        console.log("==FileInput=="+JSON.stringify(fileInput));
+        // console.log("==FileInput=="+JSON.stringify(fileInput));
         if(where=="edit_comments"){
             editor_contents = jQuery("#Actions_"+comment+" .textEditor").val();
             fileInput.preventDefault();
@@ -558,25 +554,17 @@ openPopover(myEvent) {
         }
         this.globalService.makeFileRequest(this.constants.filesUploading, [], this.filesToUpload).then(
             (result :Array<any>) => {
-                console.log("the result " + JSON.stringify(result));
+                // console.log("the result " + JSON.stringify(result));
                 for(var i = 0; i<result.length; i++){
-                    console.log('for : '+i);
                     var uploadedFileExtension = (result[i].originalname).split('.').pop();
-                    console.log('uploadedFileExtension : '+uploadedFileExtension);
                     if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                         if(where =="comments"){
-                            console.log('commentDesc 1 : '+this.commentDesc);
                             this.commentDesc = this.commentDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
-                            console.log('commentDesc 2 : '+this.commentDesc);
                         }else if(where == "edit_comments"){
-                            console.log('appended_content 1 : '+appended_content);
                             appended_content = editor_contents+"[[image:" +result[i].path + "|" + result[i].originalname + "]]"; 
                             jQuery("#Actions_"+comment+" .textEditor").val(appended_content);
-                            console.log('appended_content 2 : '+appended_content);
                         }else{
-                            console.log('ticketEditableDesc 1 : '+this.ticketEditableDesc);
                             this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
-                            console.log('ticketEditableDesc 2 : '+this.ticketEditableDesc);
                         }
                     }else{
                         if(where =="comments"){
