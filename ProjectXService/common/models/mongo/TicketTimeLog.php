@@ -61,7 +61,7 @@ class TicketTimeLog extends ActiveRecord
      * @description This method is used to save timelog data in ticketTimeCollection
      * @return type mongoId
      */
-    public function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours) {
+    public function saveTimeLogData1($projectId, $ticketId, $userId, $totalWorkHours) {
 
         try {
             $returnValue = 'failure';
@@ -73,6 +73,33 @@ class TicketTimeLog extends ActiveRecord
             if ($timelogObj->insert()) {
                 $returnValue = $timelogObj->_id;
             }
+            return $returnValue;
+            
+        } catch (Exception $ex) {
+            Yii::log("TicketTimeLog:saveTimeLogData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+        
+        
+        
+    }
+    
+      public function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours) {
+
+        try {
+            $returnValue = 'failure';
+//            $timelogObj = new TicketTimeLog();
+//            $timelogObj->ProjectId = (int) $projectId;
+//            $timelogObj->TicketId = (int) $ticketId;
+//            $timelogObj->CollaboratorId = (int) $userId;
+//            $timelogObj->Time = $totalWorkHours;
+//            if ($timelogObj->insert()) {
+//                $returnValue = $timelogObj->_id;
+//            }
+//            
+          $db =  TicketTimeLog::getCollection();
+           $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+          $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"Time"=>$totalWorkHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate ))),array('new' => 1,"upsert"=>1));
+            
             return $returnValue;
             
         } catch (Exception $ex) {
@@ -95,14 +122,16 @@ class TicketTimeLog extends ActiveRecord
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
                 array('$match' => $matchArray),
+                array('$unwind'=> '$TimeLog'),
                 array(
                     '$group' => array(
-                        '_id' => '$CollaboratorId',
-                        "sum" => array('$sum' => '$Time'),
+                        '_id' => '$TimeLog.CollaboratorId',
+                        "sum" => array('$sum' => '$TimeLog.Time'),
                     ),
                 ),
             );
             $Arraytimelog = $query->aggregate($pipeline);
+            error_log(print_r($Arraytimelog,1));
             return $Arraytimelog;
         } catch (Exception $ex) {
             Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
