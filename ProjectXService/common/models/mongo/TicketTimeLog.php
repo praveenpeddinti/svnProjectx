@@ -82,7 +82,14 @@ class TicketTimeLog extends ActiveRecord
         
         
     }
-    
+    /**
+     * @author Moin Hussain
+     * @param type $projectId
+     * @param type $ticketId
+     * @param type $userId
+     * @param type $totalWorkHours
+     * @return type
+     */
       public function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours) {
 
         try {
@@ -111,6 +118,7 @@ class TicketTimeLog extends ActiveRecord
     }
 
     /**
+     * @modified by Moin Hussain
      * @author suryaprakash reddy 
      * @description This method is used to getTimeLogRecords for userbased
      * @return type array
@@ -131,7 +139,7 @@ class TicketTimeLog extends ActiveRecord
                 ),
             );
             $Arraytimelog = $query->aggregate($pipeline);
-            error_log(print_r($Arraytimelog,1));
+          //  error_log(print_r($Arraytimelog,1));
             return $Arraytimelog;
         } catch (Exception $ex) {
             Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

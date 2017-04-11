@@ -1,8 +1,8 @@
 <?php
 
 namespace common\components;
-use common\models\mongo\{TicketCollection,TinyUserCollection, TicketComments, TicketArtifacts};
-use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,FieldTypes,MapListCustomStoryFields,PlanLevel};
+use common\models\mongo\{TicketCollection,TinyUserCollection};
+use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields};
 use Yii;
 
 /*

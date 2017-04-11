@@ -1125,7 +1125,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $taskArray = array();
             array_push($taskArray, (int) $parentTicketId);
             if (!empty($ticketDetails["Tasks"])) {
-                $taskArray = $ticketDetails["Tasks"];
+                foreach ($ticketDetails["Tasks"] as $task){
+                   array_push($taskArray, (int) $task["TaskId"]); 
+                }
+             //   $taskArray = $ticketDetails["Tasks"];
                 array_push($taskArray, (int) $parentTicketId);
             }
             $ticketTimeLog = TicketTimeLog::getTimeLogRecords($projectId, $taskArray);
