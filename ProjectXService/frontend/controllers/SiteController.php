@@ -411,7 +411,7 @@ class SiteController extends Controller
         try{
             $postData = json_decode(file_get_contents("php://input"));
             $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString); 
-            if(empty($searchData['ticketCollection']) && empty($searchData['ticketComments']) && empty($searchData['ticketArtifacts'])&& empty($searchData['ticketArtifacts'])){
+            if(empty($searchData['ticketCollection']) && empty($searchData['ticketComments']) && empty($searchData['ticketArtifacts'])&& empty($searchData['tinyUserData'])){
                 $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::FAILURE;
                 $responseBean->message = "failure";
