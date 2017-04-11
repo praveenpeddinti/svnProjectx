@@ -1,7 +1,6 @@
 <?php
 
 namespace common\components;
-
 use common\models\mongo\{TicketCollection,TinyUserCollection, TicketComments, TicketArtifacts};
 use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,FieldTypes,MapListCustomStoryFields,PlanLevel};
 use Yii;
@@ -382,6 +381,11 @@ class CommonUtility {
                         $value["readable_value"] = $workFlowDetails;
                     }
                 }
+                 if ($storyFieldDetails["Field_Name"] == "state") {
+                    $value["value"] =$workFlowDetails['State'];
+                    $value["readable_value"] = $workFlowDetails['State'];
+                    
+                }
                 if ($storyFieldDetails["Field_Name"] == "tickettype") {
                     $value["readable_value"] = "";
                     if ($value["value"] != "") {
@@ -465,7 +469,7 @@ class CommonUtility {
             $planlevelModel = new PlanLevel();
             $workFlowModel = new WorkFlowFields();
             $ticketTypeModel = new TicketType();
-
+            $workFlowDetails = array();
 
             foreach ($ticketDetails["Fields"] as &$value) {
                 if (isset($value["custom_field_id"])) {
@@ -534,7 +538,12 @@ class CommonUtility {
 
                     $workFlowDetails = $workFlowModel->getWorkFlowDetails($value["value"]);
                     $value["readable_value"] = $workFlowDetails;
-                    $value["meta_data"] = $workFlowModel->getStoryWorkFlowList();
+                    $value["meta_data"] = $workFlowModel->getStoryWorkFlowList($ticketDetails['WorkflowType'],$value["value"]);
+                }
+                if ($storyFieldDetails["Field_Name"] == "state") {
+                   $value["value"] =$workFlowDetails['State'];
+                   $value["readable_value"] = $workFlowDetails['State'];
+//                    $value["meta_data"] = $workFlowModel->getStoryWorkFlowList($ticketDetails['WorkflowType'],$value["value"]);
                 }
                 if ($storyFieldDetails["Field_Name"] == "tickettype") {
 
@@ -1082,5 +1091,4 @@ class CommonUtility {
     }
 
 }
-
 ?>
