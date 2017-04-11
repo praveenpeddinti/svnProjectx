@@ -169,15 +169,15 @@ class StoryController extends Controller
             $ticket_data->data->WorkflowType = (int)1;
             //story-1 or task-2
             $parentTicNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
-            $ticket_data->data->description = "Please provide description here";
-            $ticket_data->data->planlevel = 2;
+            
             $projectId=$ticket_data->projectId;
             if ($planLevelNumber == 1) {
                 $WorkflowType=(int)1;  
                 $defaultTicketsArray = $ticket_data->data->default_task;
                 $childTicketObjArray = array();
                 foreach($defaultTicketsArray as $value){
-                    $newTicketModel = new TicketCollection();
+                    $ticket_data->data->description = "Please provide description here";
+                    $ticket_data->data->planlevel = 2;
                     $ticket_data->data->title = $value->Name."-" . $title;
                     $ticket_data->data->WorkflowType = (int)$value->Id;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data,$parentTicNumber);
