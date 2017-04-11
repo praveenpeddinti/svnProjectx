@@ -1281,6 +1281,8 @@ public callTicketDetailPage(ticId){
                this.individualLog =data.data.individualLog;
                  if(data.data.TotalTimeLog > 0){
                   this.totalWorkLog = data.data.TotalTimeLog;
+                 }else{
+                  this.totalWorkLog = "0.00";
                  }
             });
 
