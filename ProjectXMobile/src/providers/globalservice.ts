@@ -108,22 +108,43 @@ export class Globalservice {
         return response;
     }
     
-    public newStoryTemplate(){
-        
-    }
-
-    public createStoryORTask(url, params){
-        var createStoryParams:any;
-        createStoryParams["data"] = params;
-        createStoryParams["userInfo"] = this.params.userInfo;
-        createStoryParams["projectId"] = this.params.projectId;
-        createStoryParams["timeZone"] = "Asia/Kolkata";
-        
-        var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
+    public newStoryTemplate(url,data){
+         var ticketParams = this.params;
+        //this.params.ticketId = data;
+        ticketParams["ticketId"] = data;
+        var response = this.http.post(url, JSON.stringify(ticketParams), this.headers).map(
             res => res.json()
         );
         return response;
     }
+public createStoryORTask(url, data){
+ var createStoryParams = this.params;
+  console.log("the create patams " +this.params);
+        var createStoryParams = this.params;
+        createStoryParams["data"] = this.params;
+        createStoryParams["timeZone"] = "Asia/Kolkata";
+
+        var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
+            res => res.json()            
+        );
+        return response;
+       
+}
+    // public createStoryORTask(url, params){
+    //     console.log("the create patams " + params);
+    //     var createStoryParams = this.params;
+    //     createStoryParams["data"] = params;
+    //     // createStoryParams["userInfo"] = this.params.userInfo;
+    //     // createStoryParams["projectId"] = this.params.projectId;
+    //     createStoryParams["timeZone"] = "Asia/Kolkata";
+        
+    //     console.log("the patams " + JSON.stringify(createStoryParams));
+    //     var response: any;
+    //     // var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
+    //     //     res => res.json()
+    //     // );
+    //     return response;
+    // }
     // Ticket #91
     public getTicketActivity(url, activityParams) {
         var ticketActivityParams = this.params;

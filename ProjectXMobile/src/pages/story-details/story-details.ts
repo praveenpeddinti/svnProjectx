@@ -190,6 +190,15 @@ export class StoryDetailsPage {
 
     ionViewDidLoad() {
         //console.log('ionViewDidLoad StoryDetailsPage');
+
+        jQuery(document).ready(function () {
+            jQuery('.jquery-notebook.editor').notebook({
+                autoFocus: true,
+                placeholder: 'Type something awesome...'
+            });
+        });
+
+
     }
     ionViewDidEnter() {
         console.log("the ionViewDidEnter --- " + jQuery('#description').height());
