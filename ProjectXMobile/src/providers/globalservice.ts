@@ -147,6 +147,7 @@ public createStoryORTask(url, data){
     // }
     // Ticket #91
     public getTicketActivity(url, activityParams) {
+        console.log("getTicketActivity : "+url+"-"+JSON.stringify(activityParams));
         var ticketActivityParams = this.params;
         ticketActivityParams["ticketId"] = activityParams;
         ticketActivityParams["timeZone"] = "Asia/Kolkata";
@@ -156,5 +157,49 @@ public createStoryORTask(url, data){
         );
         return response;
     }
+    public deleteCommentById(url, commentParams){
+        console.log("deleteCommentById : "+url+"-"+JSON.stringify(commentParams));
+        var deleteCommentParams = this.params;
+        deleteCommentParams["Comment"] = commentParams.Comment;
+        deleteCommentParams["TicketId"] = commentParams.TicketId;
+        var response = this.http.post(url, JSON.stringify(deleteCommentParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
+    public submitComment(url, commentParams){
+        console.log("submitComment : "+url+"-"+JSON.stringify(commentParams));
+        var submitCommentParams = this.params;
+        submitCommentParams["Comment"] = commentParams.Comment;
+        submitCommentParams["TicketId"] = commentParams.TicketId;
+        var response = this.http.post(url, JSON.stringify(submitCommentParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
 
+    public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
+        return new Promise((resolve, reject) => {
+            var formData: any = new FormData();
+            var xhr = new XMLHttpRequest();
+            for(var i = 0; i < files.length; i++) { 
+                console.log("the file ");
+                formData.append("uploads[]", files[i], files[i].name);
+            }
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        resolve(JSON.parse(xhr.response));
+                    } else {
+                        reject(xhr.response);
+                    }
+                }
+            };
+
+            xhr.open("POST", url, true);
+            xhr.send(formData);
+        });
+    }
+    // Ticket #91 ended
 }
