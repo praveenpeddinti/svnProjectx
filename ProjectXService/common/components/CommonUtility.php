@@ -438,10 +438,9 @@ class CommonUtility {
                     //error_log($followersList['FollowerId']."----Follower--2--".print_r($followersList,1));
                 }
             }
-            arsort($ticketDetails["Followers"], function($a, $b) {
-                return $a['DefaultFollower'] <=> $b['DefaultFollower'];
+            usort($ticketDetails["Followers"], function($a, $b) {
+                   return $a["DefaultFollower"] <= $b["DefaultFollower"];
             });
-            error_log("sort-------".print_r($ticketDetails["Followers"],1));
             unset($ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
 
