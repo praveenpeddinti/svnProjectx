@@ -1,9 +1,12 @@
-header{
-        display: block;
-        margin: 4px;
-        padding: 5px;
-        min-height: 100px;
-        border: 1px solid #eebb55;
-        border-radius: 7pt;
-        background: #ffeebb;
-    }
+header{display: block;margin: 4px;padding: 5px;min-height: 100px;border: 1px solid #eebb55;border-radius: 7pt;background: #ffeebb;}
+.searchboxarea{position:relative;}
+.searchboxarea i{position:absolute;top:25px;left:12px;font-size:18px;color:#c9dce4}
+.searchbox::-webkit-input-placeholder { color: #f4f4f4;}
+.searchbox::-moz-placeholder {color: #f4f4f4;}
+.searchbox:-ms-input-placeholder {color: #f4f4f4;}
+.searchbox:-moz-placeholder { color: #f4f4f4;}
+.searchbox {background: rgba(0, 0, 0, 0) ;border: 1px solid #c9dce4!important;box-shadow: none;color: #c9dce4;margin-top: 0px;padding: 0 5px 0 35px;transition: all 0.3s ease 0s;width: 20px;border-radius:0;height:44px}
+.searchbox:focus {border: 1px solid #c9dce4;box-shadow: none;color: #fff;font-weight: 300;margin-top: 0px;transition: all 0.3s ease 0s;width: 240px;}
+.navbar-form{margin-top:6px}
+.thumb-sm {height: 32px;width: 32px;}
+.searchboxareapaddingtop{padding-top:9px}
