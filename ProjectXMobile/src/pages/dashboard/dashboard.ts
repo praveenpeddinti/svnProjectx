@@ -52,7 +52,7 @@ export class DashboardPage {
         this.arrayObject = [];
 
 
-        this.storage.get('userCredentials').then((value) => {
+        this.storage.get('userCredentials').then( (value) => {
             this.userName = value.username;
             this.paramas.userInfo = value;
 
@@ -79,7 +79,16 @@ export class DashboardPage {
             ev: myEvent
         });
     }
+doRefresh(refresher){
+   this.storage.get('userCredentials').then( (value) => {
+            this.userName = value.username;
+            this.paramas.userInfo = value;
 
+            this.getAllStoriesList();
+            if(refresher != 0)
+            refresher.complete();
+        });
+};
     /**
         used for getting all the stories 
         author uday   

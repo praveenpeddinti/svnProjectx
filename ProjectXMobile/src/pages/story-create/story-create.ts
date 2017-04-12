@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams,Platform, LoadingController,PopoverController, ModalController } from 'ionic-angular';
+import {NavController,ToastController, NavParams,Platform, LoadingController,PopoverController, ModalController } from 'ionic-angular';
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
 import { Camera } from 'ionic-native';
@@ -23,7 +23,7 @@ export class StoryCreatePage {
     public user: any;
     base64Image
     file: File;
-    public templatedataList: Array<{ id: string, title: string, assignData: string, readOnly: string, fieldType: string, fieldName: string}>;
+    public templatedataList: Array<{ id: string, title: string, defaultValue: string, assignData: string, readOnly: string, fieldType: string, fieldName: string}>;
     public tasktypeList: Array<{id:string, name:string, IsDefault:string, selected : boolean}>;
     public showEditableFieldOnly = [];
     public previousSelectIndex: any;
@@ -35,6 +35,7 @@ export class StoryCreatePage {
         public modalController: ModalController,
         public navParams: NavParams,
         private globalService: Globalservice,
+        private toastCtrl: ToastController,
         public popoverCtrl: PopoverController,
         public loadingController: LoadingController,
         private storage: Storage, private constants: Constants) {
@@ -46,6 +47,7 @@ export class StoryCreatePage {
         globalService.newStoryTemplate(this.constants.templateForStoryCreation, this.navParams.get("id")).subscribe(
     (result) => {
             this.itemfield = result.data.story_fields;
+            console.log("result newStoryTemplate "+ JSON.stringify(this.itemfield));
             this.tasktypes = result.data.task_types;
             console.log("result newStoryTemplate "+ JSON.stringify(this.tasktypes));
             this.templatedataList = [];
@@ -54,14 +56,14 @@ export class StoryCreatePage {
                      for (let i = 0; i < this.itemfield.length;  i++) {
                     var _id = this.itemfield[i].Id;
                     var _title = this.itemfield[i].Title;
-                    var _assignData;
-                    _assignData = this.itemfield[i].data;
+                    var _defaultValue = this.itemfield[i].DefaultValue;
+                    var _assignData = this.itemfield[i].data;
                     var _readOnly = this.itemfield[i].readonly;
                     var _fieldType = this.itemfield[i].field_type;
                     var _fieldName = this.itemfield[i].Field_Name;
                     var _name = this.itemfield[i].data.Name;
                     this.templatedataList.push({
-                        id: _id, title: _title, assignData: _assignData, readOnly: _readOnly, fieldType: _fieldType, fieldName: _fieldName});
+                        id: _id, title: _title, defaultValue: _defaultValue, assignData: _assignData, readOnly: _readOnly, fieldType: _fieldType, fieldName: _fieldName});
                 }
 
                 for(let j = 0; j < this.tasktypes.length; j++){
@@ -89,29 +91,43 @@ export class StoryCreatePage {
    }
 
     onStoryCreate(form): void { 
-        debugger
       console.log("create task submit button"); 
      if (form.valid) {
-          // let loader = this.loadingController.create({ content: "Loading..."});  
-         // loader.present();
+           let loader = this.loadingController.create({ content: "Loading..."});  
+           loader.present();
           this.create.tasks = [];
           for (let taskTypeItem of this.tasktypeList) {
             if(taskTypeItem.selected == true){
                 this.create.tasks.push(taskTypeItem.name);
             }
-        }
-       // this.create.description = "<p>Testing</p>\\n";
-        this.create.planlevel = "2";
-        this.create.priority =  "2";
-           console.log("the create patams " + JSON.stringify(this.create));
+         }
+          this.create.description = "<p>Testing</p>\n";
+        
+           console.log("the create  " + JSON.stringify(this.create));
         //    this.globalService.createStoryORTask(this.constants.createStory, this.create);
-        this.globalService.createStoryORTask(this.constants.createStory, this.create).subscribe(
+        this.globalService.createStoryORTask(this.constants.createStory, (this.create)).subscribe(
             (result)=>{
-                console.log("the create tsk details are");
-             //   loader.dismiss();
+                console.log("the create tsk details are " + JSON.stringify(result));
+                loader.dismiss();
+                let toast = this.toastCtrl.create({
+                   message: 'Successfully created...',
+                   duration: 3000,
+                   position: 'bottom',
+                   cssClass: "toast",
+                   dismissOnPageChange: true
+                 });
+                 toast.present();
             },(error)=>{
-              //  loader.dismiss();
+                loader.dismiss();
                 console.log("the story create error are---------> " + JSON.stringify(error));
+                let toast = this.toastCtrl.create({
+                   message: 'Successfully not created...',
+                   duration: 3000,
+                   position: 'bottom',
+                   cssClass: "toast",
+                   dismissOnPageChange: true
+                 });
+                 toast.present();
             }
         );
      }
@@ -148,9 +164,15 @@ openOptionsModal(fieldDetails, index){
         let optionsModal = this.modalController.create(CustomModalPage, {activeField: fieldDetails, activatedFieldIndex: index, displayList: fieldDetails.assignData });
                         optionsModal.onDidDismiss((data) => {
                             console.log("the dismiss data " + index + " ----- " + JSON.stringify(data));
-                            if(data != null && (data.Name != data.previousValue)){
+                            // if(data != null && (data.Name != data.previousValue)){
+                                if(fieldDetails.fieldName == "planlevel"){
+                                    this.create.planlevel = data.Id;
+                                } else if(fieldDetails.fieldName == "priority"){
+                                    this.create.priority = data.Id;
+                                }
+
                                 document.getElementById("field.title_field.id_" + index).innerHTML = data.Name;
-                            }
+                            // }
                            // this.displayFieldvalue = [];
                         }); 
                     optionsModal.present();

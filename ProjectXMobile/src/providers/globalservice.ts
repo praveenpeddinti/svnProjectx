@@ -119,11 +119,12 @@ export class Globalservice {
     }
 public createStoryORTask(url, data){
  var createStoryParams = this.params;
-  console.log("the create patams " +this.params);
-        var createStoryParams = this.params;
-        createStoryParams["data"] = this.params;
+  console.log("the create patams " + JSON.stringify(data));
+
+        createStoryParams["data"] = data;
         createStoryParams["timeZone"] = "Asia/Kolkata";
 
+        console.log("the createStoryParams " + JSON.stringify(createStoryParams));
         var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
             res => res.json()            
         );
