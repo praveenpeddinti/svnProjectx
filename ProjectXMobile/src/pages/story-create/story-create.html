@@ -35,12 +35,13 @@
     <ion-item>
 <input placeholder="Type your message here" [(ngModel)]="create.description" required name="create_description" #create_description ="ngModel"  cols="40" 
        rows="5"  style="width:300px; height:50px;" id="create_description" [ngModelOptions]="{standalone:true}">
-    </ion-item>
+   </ion-item>
     <div [hidden]="!create_description.errors.required" *ngIf="submitted && create_description.errors " class="text-md-danger text-ios-danger text-wp-danger">
     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Description is required</div>
-<ion-item>
+   <ion-item>
     <input type="file"  class="form-control" [(ngModel)]="create.file" #create.file ="ngModel" name="files[]" id="choose-file" onchange="document.getElementById('create_description').value = this.value" multiple="multiple" [ngModelOptions]="{standalone:true}">
-</ion-item>
+   </ion-item>
+
   </ion-col>
 </ion-list>
 
