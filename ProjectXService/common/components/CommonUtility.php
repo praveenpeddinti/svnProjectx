@@ -1000,7 +1000,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             foreach($ticketCollectionData as $extractCollection){
                 $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
                 $forTicketCollection['Title'] = $extractCollection['Title'];
-                $description = $extractCollection['Description'];
+                $description = $extractCollection['CrudeDescription'];
                 $refinedData = CommonUtility::refineDescription($description);
                 $forTicketCollection['description'] = $refinedData["description"];
                 $forTicketCollection['planlevel'] = $extractCollection['Fields']['planlevel']['value_name'];
@@ -1029,24 +1029,24 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             $commentsPositionArray=array();
             $TicketCommentsFinalArray = array();
             
-            foreach($ticketCommentsData as $extractComments){
-               $ticketCollectionModel = new TicketCollection();
-               $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
-               $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],1,$selectFields);
-               $forTicketComments['TicketId'] =  $extractComments['_id'];
-               $forTicketComments['Title'] =$getTicketDetails['Title'];
-               $refinedData = CommonUtility::refineDescription($getTicketDetails['Description']);
-               $forTicketComments['comments'] =  $extractComments['commentData'];
-               $forTicketComments['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
-               $forTicketComments['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
-              // $forTicketComments['UpdatedOn'] =$getTicketDetails['UpdatedOn'];
+                foreach($ticketCommentsData as $extractComments){
+                   $ticketCollectionModel = new TicketCollection();
+                   $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                   $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],1,$selectFields);
+                   $forTicketComments['TicketId'] =  $extractComments['_id'];
+                   $forTicketComments['Title'] =$getTicketDetails['Title'];
+                   $refinedData = CommonUtility::refineDescription($getTicketDetails['Description']);
+                   $forTicketComments['comments'] =  $extractComments['commentData'];
+                   $forTicketComments['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
+                   $forTicketComments['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
+                  // $forTicketComments['UpdatedOn'] =$getTicketDetails['UpdatedOn'];
                  $UpdatedOn = $getTicketDetails['UpdatedOn'];
                 $datetime = $UpdatedOn->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                 $readableDate = $datetime->format('M-d-Y');
                 $forTicketComments['UpdatedOn'] = $readableDate;
-                array_push($TicketCommentsFinalArray, $forTicketComments);
-           }
+                    array_push($TicketCommentsFinalArray, $forTicketComments);
+               }
             $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
             $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
             $ticketArtifactsData = iterator_to_array($cursor);
@@ -1058,7 +1058,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                 $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
                 $refinedData = CommonUtility::refineDescription($getTicketDetails['Description']);
-                $forTicketArtifacts['description'] =$getTicketDetails['Title'];
+                $forTicketArtifacts['description'] =$refinedData["description"];
                 $forTicketArtifacts['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
                 $forTicketArtifacts['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
                 $UpdatedOn = $getTicketDetails['UpdatedOn'];
@@ -1070,17 +1070,17 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 
             }
             
-            $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
+             $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
             $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString)),array("UserName"=>array('$regex'=>$searchString)))));
             $tinyUserData = iterator_to_array($cursor);
             $TinyUserFinalArray = array();
              foreach($tinyUserData as $extractUserData){
-                $selectedFields=['TicketId','Title','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                $selectedFields=['TicketId','Title','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
                 $getTicketDetails = TicketCollection::getTicketDetailsByUser($extractUserData['CollaboratorId'],1,$selectedFields);
                 foreach($getTicketDetails as $eachRow){
                     $forUsercollection['TicketId'] =$eachRow['TicketId'];
                     $forUsercollection['Title'] =$eachRow['Title'];
-                    $refinedData = CommonUtility::refineDescription($eachRow['Description']);
+                    $refinedData = CommonUtility::refineDescription($eachRow['CrudeDescription']);
                     $forUsercollection['description'] = $refinedData["description"];
                     $forUsercollection['planlevel'] = $eachRow['Fields']['planlevel']['value_name'];
                     $forUsercollection['reportedby'] = $eachRow['Fields']['reportedby']['value_name'];
