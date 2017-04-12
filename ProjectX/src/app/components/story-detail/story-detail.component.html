@@ -176,7 +176,7 @@
 <div class="main_div widgetmainbg" [ngClass]="{ 'hide': hide}">
 <!--Show the Followers list start-->
     <!-- @Praveen P  Followers List Start--> 
-<div (click)="loadfollowers()" id="follwersAdd" class="add"><i id="follwersAddI" class="fa fa-plus" aria-hidden="true"></i></div>
+<div (click)="loadFollowersWidget()" id="follwersAdd" class="add"><i id="follwersAddI" class="fa fa-plus" aria-hidden="true"></i></div>
     <div class="widgethed">Followers</div>
     <div class="followers" >
     <div class="">
@@ -203,7 +203,7 @@
    <!-- Search Follower list start -->
     <div id="followerdiv" style="display:none" class="addfollowers_overlap">
     <div class="add_followersbg ">
-        <div class="padd10"><input id='followerId' type="text" placeholder="Search" class="addfollower_search" value="" (keyup)="searchfollower($event.target.value)"/> </div>
+        <div class="padd10"><input id='followerId' type="text" placeholder="Search" class="addfollower_search" value="" (keyup)="getUsersForFollow($event.target.value)"/> </div>
         <div (click)="checkFollower(flist.id)" id="{{flist.id}}" *ngFor="let flist of follower_search_results">
             <div class="addfollower_userbg">
                 <div class="row">

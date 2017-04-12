@@ -846,13 +846,13 @@ var thisObj = this;
      */
     
     /* When click the plus button to open the input box for followers*/
-    public loadfollowers(){
-      document.getElementById("followerdiv").style.display='block';
+    public loadFollowersWidget(){
+      jQuery("#followerdiv").show();
       jQuery("#followerId").val("");
       this.follower_search_results=[];
     }
     /* Enter 2 char in the follower input box*/ 
-    public searchfollower(event){
+    public getUsersForFollow(event){
       this.follower_search_results=[];
       if(event.length>=2){
         var dafaultUserList:any=[];
