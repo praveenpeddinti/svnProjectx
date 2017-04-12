@@ -509,7 +509,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $valueName = "";
             $updatedState=array();
             $selectFields = [];
-            $selectFields = ['ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Tasks'];
+            $selectFields = ['TicketId','ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Tasks'];
             $childticketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId,$selectFields); 
             $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
             if($checkData==0){
@@ -541,7 +541,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                     $this->followTicket($ticket_data->value,$childticketId['TaskId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',true);
                                 }
                             }else{error_log("----follow elseStory");
-                                $this->followTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',true);
+                                $this->followTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$loggedInUser,$childticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE);
                             }
                         }
                         
@@ -731,8 +731,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $db =  TicketCollection::getCollection();
            $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
            
-            if($fieldName == "assignedto" || $fieldName == "stakeholder"){
-               $cursor =  $db->count( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId, "Followers" => array('$elemMatch'=> array("Flag" =>$fieldName)))); 
+            if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
+                $cursor =  $db->count( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId, "Followers" => array('$elemMatch'=> array("Flag" =>$fieldName)))); 
            }else{
               $cursor =  $db->count( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId, "Followers" => array('$elemMatch'=> array( "FollowerId"=> (int)$collaboratorId ,"Flag" =>$fieldName))));  
            }
@@ -741,7 +741,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Followers' =>array("FollowerId" => (int)$collaboratorId,"FollowedOn" =>$currentDate,"CreatedBy"=>(int)$loggedInUser,"Flag"=>$fieldName,"DefaultFollower"=>(int)$defaultFollower ))),array('new' => 1,"upsert"=>1));
              
              }else{
-                 if($fieldName == "assignedto" || $fieldName == "stakeholder"){
+                 if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
                    $newdata = array('$set' => array("Followers.$.FollowerId" => (int)$collaboratorId,"Followers.$.FollowedOn" => $currentDate,"Followers.$.CreatedBy" => (int)$loggedInUser));
                   $db->update(array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Followers.Flag"=>$fieldName), $newdata); 
                  }
@@ -826,7 +826,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @param type $activityUserId
      */
     public function saveActivity($ticketId,$projectId,$actionfieldName,$newValue,$activityUserId){
-        error_log("saveActivity---------");
         $oldValue = "";
         $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
         if($actionfieldName == "Title" || $actionfieldName == "Description"){
@@ -858,14 +857,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ActivityBy"=>(int)$activityUserId,
             "Status"=>(int)1,
             "PropertyChanges"=>array(array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
-            "ParentIndex"=>""
+            "ParentIndex"=>"",
+            "PoppedFromChild"=>""
             
         );
 
             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));  
             $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId,"Activity"=>"PropertyChange"));  
             CommonUtility::prepareActivity($commentDataArray,$projectId);
-            return array("referenceKey"=>-1,"data"=>$commentDataArray);
+            $returnValue = array("referenceKey"=>-1,"data"=>$commentDataArray);
             
          }else{
              error_log("elseeeeeeeeeee----------------");
@@ -880,8 +880,27 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                  $activitiesCount = $activitiesCount-1;
              }
              CommonUtility::prepareActivityProperty($property,$projectId);
-             return array("referenceKey"=>$activitiesCount,"data"=>$property);
+             $returnValue = array("referenceKey"=>$activitiesCount,"data"=>$property);
          }
+           if($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow"){
+               error_log("elseeeeeeeeeeeeeee----update story");
+                $slug =  new \MongoDB\BSON\ObjectID();
+                        $commentDataArray=array(
+            "Slug"=>$slug,
+            "CDescription"=>  "",
+            "CrudeCDescription"=>"",
+            "ActivityOn"=>$currentDate,
+            "ActivityBy"=>(int)$activityUserId,
+            "Status"=>(int)1,
+            "PropertyChanges"=>array(array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
+            "ParentIndex"=>"",
+            "PoppedFromChild" => (int)$ticketId
+            
+        );   
+           $parentStoryId =  $ticketDetails["ParentStoryId"];
+            $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));   
+        }
+        return $returnValue;
     }
           //error_log("response-------".$v);
     }
