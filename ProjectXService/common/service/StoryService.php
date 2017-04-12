@@ -475,14 +475,31 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                      $value["value"] = "";
                                      $value["value_name"] = "";
                                     $this->unfollowTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$fieldDetails["Field_Name"]);
-                                     if (!empty($ticketDetails['Tasks'])){
+                                   
+                                     if($ticketDetails['IsChild'] == 0){
+                                    if (!empty($ticketDetails['Tasks'])){
                                         foreach($ticketDetails['Tasks'] as $childticketId){
                                             $this->unfollowTicket($ticket_data->$key,$childticketId['TaskId'],$projectId,$fieldDetails["Field_Name"]='follower');
                                         }
                                     }
-                                    else{
-                                    $this->unfollowTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$fieldDetails["Field_Name"]='follower'); 
-                                 }
+                                  
+                                }  else{
+                                   
+                               
+                                    error_log("leseeeeeeeeeeeeeeeeeeee--3--".$fieldDetails["Field_Name"]);
+                                   $fieldName =  $fieldDetails["Field_Name"];
+                                    if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
+                                       $fieldDetails["Field_Name"]= $ticket_data->TicketId."-".$fieldName;  
+                                    }else{
+                                        $fieldDetails["Field_Name"]='follower';
+                                    }
+                                     error_log("leseeeeeeeeeeeeeeeeeeee--4--".$fieldDetails["Field_Name"]);
+                                   $this->unfollowTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$fieldDetails["Field_Name"]); 
+                                
+                                    
+                                    
+                                    
+                                }
                                 }
                             }
                             
@@ -601,13 +618,26 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             $leftsideFieldVal = $ticket_data->value;
                                 if($fieldDetails["Type"] == 6 ){
                                     $this->unfollowTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
+                                      error_log("leseeeeeeeeeeeeeeeeeeee--1");
+                                    if($childticketDetails['IsChild'] == 0){
+                                          error_log("leseeeeeeeeeeeeeeeeeeee--2");
                                     if (!empty($childticketDetails['Tasks'])){
                                         foreach($childticketDetails['Tasks'] as $childticketId){
                                             $this->unfollowTicket($ticket_data->value,$childticketId['TaskId'],$ticket_data->projectId,$fieldDetails["Field_Name"]='follower');
                                         }
                                     }
-                                }else{
-                                    $this->unfollowTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$fieldDetails["Field_Name"]='follower'); 
+                                   
+                                } else{
+                                    error_log("leseeeeeeeeeeeeeeeeeeee--3--".$fieldDetails["Field_Name"]);
+                                   $fieldName =  $fieldDetails["Field_Name"];
+                                    if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
+                                       $fieldDetails["Field_Name"]= $ticket_data->TicketId."-".$fieldName;  
+                                    }else{
+                                        $fieldDetails["Field_Name"]='follower';
+                                    }
+                                     error_log("leseeeeeeeeeeeeeeeeeeee--4--".$fieldDetails["Field_Name"]);
+                                    $this->unfollowTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$fieldDetails["Field_Name"]); 
+                                  }
                                 }
                         }
                     }
