@@ -425,7 +425,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                if($fieldDetails["Type"] == 6){
                                 $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$key);
                                 $value["value_name"] = $collaboratorData["UserName"];
-                                 $this->followTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE,"FullUpdate");
+                                $this->followTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE,"FullUpdate");
+                                if (!empty($ticketDetails['Tasks'])){
+                                foreach($ticketDetails['Tasks'] as $childticketId){
+                                    $this->followTicket($ticket_data->$key,$childticketId['TaskId'],$projectId,$userId,$fieldDetails["Field_Name"]='follower',FALSE,"FullUpdate");
+                                }
+                                }else{
+                                    $this->followTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$userId,$ticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE,"FullUpdate");
+                                } 
                                 }
                                 else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$key);
