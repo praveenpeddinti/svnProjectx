@@ -10,10 +10,11 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Constants {
   // Local URL
+  public baseUrl = 'http://10.10.73.62/';
   // public baseUrl = 'http://10.10.73.62/';
   // public URL
   // public baseUrl = 'http://113.193.181.131/';
-   public baseUrl = 'http://10.10.73.77/';
+   //public baseUrl = 'http://10.10.73.77/';
   // Ticket #91 - have to change to 77 later
   // public baseUrl = 'http://10.10.73.12:802/';
   // public baseUrl = 'http://10.10.73.33/';
