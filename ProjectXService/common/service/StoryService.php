@@ -1270,6 +1270,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $projectId = $oldTicketObj['ProjectId'];
             $PeerticketId='';
             $QAticketId='';
+            $UIticketId='';
             if ($oldTicketObj['WorkflowType'] == 1 || $oldTicketObj['WorkflowType'] == 2) {
                 if ($newWorkflowId == 5) {
                     // 5 --Code complete
@@ -1284,14 +1285,17 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $PeerticketId = $task['TaskId'];// peer ticket id 
                             }else if($task['TaskType'] == 4){
                                  $QAticketId = $task['TaskId'];
+                             }else if($task['TaskType'] == 2){
+                                $UIticketId = $task['TaskId'];  
                              }
 
                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails(10);
                         // Peer status updated to re-open
                         $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                        if($oldTicketObj['Fields']['workflow']['value'] == 8)  // QA status updated to re-open
-                        $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                        // Send notification to AssignedTo person and Peer person
+                       {   $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                       }// Send notification to AssignedTo person and Peer person
                     } error_log("Send notification to AssignedTo person and Peer person");
                     return true;
                 }else {
