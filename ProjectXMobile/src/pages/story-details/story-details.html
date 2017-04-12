@@ -6,7 +6,7 @@
 -->
 
 
-<ion-menu [content]="content" side="left" type="overlay">
+<ion-menu [content]="content" side="left" type="overlay" (ionOpen)="menuOpened()" (ionClose)="menuClosed()">
 
     <ion-header>
         <ion-toolbar>
@@ -26,8 +26,9 @@
             <ion-item *ngFor="let field of arrayList; let i=index;" id="item_{{i}}">
                 <div *ngIf="!showEditableFieldOnly[i]">
                     <h3>{{field.title}}</h3>
-                    <!--<div id="field.title_field.id_{{i}}" *ngIf="isColorChange(field)" ng class="item" (click)="openOptionsModal(field, i)" class="spinnerlabel">{{field.assignTo}}</div>-->
-                    <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item" (click)="openOptionsModal(field, i)" >{{field.assignTo}}</div>
+                    <div id="field.title_field.id_{{i}}" *ngIf="isColorChange(field)" ng class="item" class="spinnerlabel">{{field.assignTo}}</div>
+                    <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item myborder" (click)="openOptionsModal(field, i)" >{{field.assignTo}}</div>
+
                 </div>
                  <ion-row>
                 <input *ngIf="enableTextField[i]" (blur)="inputBlurMethod($event, i, field)" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}"
