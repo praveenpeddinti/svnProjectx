@@ -39,32 +39,56 @@ class TicketArtifacts extends ActiveRecord {
 //            TimestampBehavior::className(),
         ];
     }
-
+/**
+ * @author Moin Hussain
+ * @param type $ticketNumber
+ * @param type $projectId
+ * @param type $artifactsList
+ */
     public static function createArtifactsRecord($ticketNumber, $projectId, $artifactsList = array()) {
         try {
-            
-            
           $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
-            foreach ($artifactsList as $artifactData){
+          if(count($artifactsList)>0){
+           foreach ($artifactsList as $artifactData){
                  $newdata = array('$push' => array("Artifacts" => $artifactData ));
-                  $collection->update(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata);              
-            }
-        } catch (Exception $ex) {
+                  $collection->findAndModify(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata,array('new' => 1,"upsert"=>1));              
+            }   
+          }else{
+               $newdata = array('$set' => array("Artifacts" => array() ));
+              $collection->findAndModify(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata,array('new' => 1,"upsert"=>1));              
+          }
             
+        } catch (Exception $ex) {
+        Yii::log("TicketArtifacts:createArtifactsRecord::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');    
         }
     }
-
+/**
+ * @author  Jagadish
+ * @param type $ticketId
+ * @param type $projectId
+ * @return type
+ */
     public static function getTicketArtifacts($ticketId, $projectId) {
-        error_log("======getTicketArtifacts=========" . $ticketId . "-------------" . $projectId);
-        $query = new Query();
+        try{
+         $query = new Query();
         $query->from('TicketArtifacts')
                 ->select(array("Artifacts"))
                 ->where(['TicketId' => (int) $ticketId, "ProjectId" => (int) $projectId]);
         $ticketArtifactsDetails = $query->one();
 
-        return $ticketArtifactsDetails;
+        return $ticketArtifactsDetails;   
+        } catch (Exception $ex) {
+Yii::log("TicketArtifacts:getTicketArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');    
+        }
+        
     }
-
+/**
+ * @author Jagadish
+ * @param type $ticketNumber
+ * @param type $projectId
+ * @param type $newArtifactArray
+ * @param type $userId
+ */
     public static function saveArtifacts($ticketNumber, $projectId, $newArtifactArray = array(), $userId) {
         try {
             if (!empty($newArtifactArray)) {
@@ -76,7 +100,8 @@ class TicketArtifacts extends ActiveRecord {
                 }
             }
         } catch (Exception $ex) {
-            
+        Yii::log("TicketArtifacts:saveArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');    
+    
         }
     }
 
