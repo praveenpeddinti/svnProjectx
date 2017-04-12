@@ -181,23 +181,17 @@
     <div class="followers" >
     <div class="">
       <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
-        <img *ngIf="follower.Flag=='reportedby'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
+        <img  data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  /> 
-        <img *ngIf="follower.Flag=='assignedto'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
-                        src="{{follower.ProfilePicture}}" title="{{follower.UserName}}" />
-        <img *ngIf="follower.Flag=='stakeholder'" data-toggle="tooltip" data-placement="top" class="profilepic_table"
-                        src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  />                                    
-        <img *ngIf="follower.Flag=='follower'"data-toggle="tooltip" data-placement="top" class="profilepic_table"
-                        src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  />
-        <div (click)="removeFollower($event.target.id)" id="follower_{{follower.FollowerId}}" *ngIf="(follower.Flag=='follower' || follower.FollowerId == getAllData.Id )" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
-         
+        <div (click)="removeFollower($event.target.id)" id="follower_{{follower.FollowerId}}" *ngIf="(follower.DefaultFollower=='0' || follower.FollowerId == getAllData.Id )" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+      
         <div id="conformRF_{{follower.FollowerId}}" class="dropdown-menu customdropdown-menu">
             <div class="delete_followersbg">  
                 Do you want to remove this user?
                 <div class="text-center">
                     <div (click)="removefollowerId(follower.FollowerId)" id="remove_yes" class="yes">Yes</div>
                     <div class="no">No</div>
-                </div> 
+        </div>
             </div>
         </div>
         </div>
