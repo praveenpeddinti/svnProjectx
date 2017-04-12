@@ -470,7 +470,21 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                  $value["value"] = $ticket_data->$key; 
                               
                              } 
-                             }
+                             }else{
+                                if($fieldDetails["Type"] == 6 ){
+                                     $value["value"] = "";
+                                     $value["value_name"] = "";
+                                    $this->unfollowTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$fieldDetails["Field_Name"]);
+                                     if (!empty($ticketDetails['Tasks'])){
+                                        foreach($ticketDetails['Tasks'] as $childticketId){
+                                            $this->unfollowTicket($ticket_data->$key,$childticketId['TaskId'],$projectId,$fieldDetails["Field_Name"]='follower');
+                                        }
+                                    }
+                                    else{
+                                    $this->unfollowTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$fieldDetails["Field_Name"]='follower'); 
+                                 }
+                                }
+                            }
                             
                              
                          }
@@ -600,6 +614,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $fieldtochange1= "Fields.".$field_name.".value";
                     $fieldtochange2 = "Fields.".$field_name.".value_name";
                     $fieldtochangeId = "Fields.".$field_name.".Id";
+                    error_log($fieldtochange1."---".$fieldtochange2."----".$fieldtochangeId."=======".$field_name);
                     $newData = array('$set' => array($fieldtochange1 => $leftsideFieldVal,$fieldtochange2 =>$valueName));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId,$fieldtochangeId=>(int)$ticket_data->id);
                     $selectedValue=$leftsideFieldVal;
