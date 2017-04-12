@@ -1260,7 +1260,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            }   
     }
     
-       
+    /**
+     * @author Anand 
+     * @description This method is responsible to update ticket status and send the notification to appropriate user.
+     * @param type $oldTicketObj
+     * @param type $newWorkflowId
+     * @return boolean
+     */   
     public function updateWorkflowAndSendNotification($oldTicketObj, $newWorkflowId) {
 
         try {
