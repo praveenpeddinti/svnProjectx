@@ -418,7 +418,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
                      if(isset($ticket_data->$key)){
-                         
                         $fieldDetails =  StoryFields::getFieldDetails($fieldId);
                         $fieldName =  $fieldDetails["Field_Name"];
                          if(is_numeric($ticket_data->$key)){
@@ -431,8 +430,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$key);
                                 $value["value_name"] = $workFlowDetail["Name"];
+                                $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$ticket_data->$key);
                                 }
-                               
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->$key);
                                 $value["value_name"] = $priorityDetail["Name"];
@@ -509,7 +508,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $valueName = "";
             $updatedState=array();
             $selectFields = [];
-            $selectFields = ['TicketId','ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Tasks'];
+            $selectFields = ['ProjectId','WorkflowType','TicketId','ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Fields.workflow.value','Tasks'];
             $childticketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId,$selectFields); 
             $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
             if($checkData==0){
@@ -548,6 +547,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                              else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
                                 $valueName = $workFlowDetail["Name"];
+                                $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value);
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->value);
@@ -1237,6 +1237,111 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         Yii::log("StoryService:getTaskTypes::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
            }   
     }
+    
+       
+    public function updateWorkflowAndSendNotification($oldTicketObj, $newWorkflowId) {
+
+        try {
+            $collection = TicketCollection::getCollection();
+            $ticketColObj = new TicketCollection();
+            $ticketId = '';
+            $projectId = $oldTicketObj['ProjectId'];
+            $PeerticketId='';
+            $QAticketId='';
+            if ($oldTicketObj['WorkflowType'] == 1 || $oldTicketObj['WorkflowType'] == 2) {
+                if ($newWorkflowId == 5) {
+                    // 5 --Code complete
+                    // Send notification to Peer person
+                    error_log("Send notification to Peer person");
+                    return true;
+                } else if ($newWorkflowId == 10) { // 10 --Re-open
+                    if (sizeof($oldTicketObj['Tasks']) != 0 || $oldTicketObj['Tasks'] != NULL) {
+                        foreach ($oldTicketObj['Tasks'] as $task) {
+                            if ($task['TaskType'] == 3)
+                              { 
+                                $PeerticketId = $task['TaskId'];// peer ticket id 
+                            }else if($task['TaskType'] == 4){
+                                 $QAticketId = $task['TaskId'];
+                             }
+
+                        $workFlowDetail = WorkFlowFields::getWorkFlowDetails(10);
+                        // Peer status updated to re-open
+                        $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                       if($oldTicketObj['Fields']['workflow']['value'] == 8)  // QA status updated to re-open
+                        $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                        // Send notification to AssignedTo person and Peer person
+                    } error_log("Send notification to AssignedTo person and Peer person");
+                    return true;
+                }else {
+                    return true;
+                }
+            }
+          } else if ($oldTicketObj['WorkflowType'] == 3) { // 3- Peer
+                if ($newWorkflowId == 6) {
+                    // 6 --Paused - 
+                    $ticketId = $oldTicketObj['ParentStoryId'];
+//               $workFlowDetail = WorkFlowFields::getWorkFlowDetails(10);  
+//               $collection->findAndModify( array("ProjectId"=> (int)$oldTicketObj['ProjectId'] ,"TicketId"=>(int)$ticketId),array('$set' => array('Fields.workflow.value' => (int)$workFlowDetail['Id'],'Fields.workflow.value_name' =>$workFlowDetail['Name'],'Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
+//              // Send notification to Developer(AssignedTo)
+                    error_log("Send notification to Developer(AssignedTo)");
+                    return true;
+                } else if ($newWorkflowId == 14) {
+                    // 14- Closed
+                    // Send Notification to QA person to start the QA for this parent ticket.
+                    error_log("Send Notification to QA person to start the QA for this parent ticket");
+                    return true;
+                } else {
+                    return true;
+                }
+            } else if ($oldTicketObj['WorkflowType'] == 4) { // 4--QA
+                if ($newWorkflowId == 6) {
+                    // 6 --Paused - 
+//               $parentTicketDetails = $ticketColObj->getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
+//               foreach($parentTicketDetails['Task'] as $task){
+//                   if($task['TaskType'] == 3)
+//                   $ticketId= $task['TaskId'];  
+//               }
+//               
+//               $workFlowDetail = WorkFlowFields::getWorkFlowDetails(10);
+//               // Peer status updated to re-open
+//               $collection->findAndModify( array("ProjectId"=> (int)$oldTicketObj['ProjectId'] ,"TicketId"=>(int)$ticketId),array('$set' => array('Fields.workflow.value' => (int)$workFlowDetail['Id'],'Fields.workflow.value_name' =>$workFlowDetail['Name'],'Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
+//              // Send notification to Peer
+//               $ticketId= $oldTicketObj['ParentStoryId'];  
+//               // Parent ticket status updated to re-open
+//              $collection->findAndModify( array("ProjectId"=> (int)$oldTicketObj['ProjectId'] ,"TicketId"=>(int)$ticketId),array('$set' => array('Fields.workflow.value' => (int)$workFlowDetail['Id'],'Fields.workflow.value_name' =>$workFlowDetail['Name'],'Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
+//              
+                    error_log("Send notification to Developer(AssignedTo) and Peer");
+                    return true;
+                } else if ($newWorkflowId == 14) {
+                    // 14- Closed
+                    $parentTicketDetails = $ticketColObj->getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
+                    foreach ($parentTicketDetails['Tasks'] as $task) {
+                        if ($task['TaskType'] == 3)
+                            $ticketId = $task['TaskId'];
+                    }
+
+                    $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Close peer ticket
+                    // Peer status updated to re-open
+                    $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                    $ticketId = $oldTicketObj['ParentStoryId'];
+                    $workFlowDetail = WorkFlowFields::getWorkFlowDetails(8); // Fixed parent ticket
+                    // Parent ticket status updated to re-open
+                    $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+
+                    // Send Notification toAll followers.
+                    error_log("Send Notification to All followers");
+                    return true;
+                }else {
+                    return true;
+                }
+            }
+         
+        
+    }catch (Exception $ex) {
+            Yii::log("StoryService:updateWorkflowAndSendNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
 }
 
   
