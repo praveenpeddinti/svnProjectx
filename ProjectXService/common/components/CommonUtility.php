@@ -1,7 +1,7 @@
 <?php
 
 namespace common\components;
-use common\models\mongo\{TicketCollection,TinyUserCollection};
+use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts};
 use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields};
 use Yii;
 
@@ -993,16 +993,15 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
      */
     public static function getAllDetailsForSearch($searchString){
         try{
+            $searchString=strtolower($searchString);
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
+            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
             $ticketCollectionData = iterator_to_array($cursor);
             $TicketCollFinalArray = array();
             foreach($ticketCollectionData as $extractCollection){
                 $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
                 $forTicketCollection['Title'] = $extractCollection['Title'];
-                $description = $extractCollection['CrudeDescription'];
-                $refinedData = CommonUtility::refineDescription($description);
-                $forTicketCollection['description'] = $refinedData["description"];
+                $forTicketCollection['description'] = $extractCollection['CrudeDescription'];
                 $forTicketCollection['planlevel'] = $extractCollection['Fields']['planlevel']['value_name'];
                 $forTicketCollection['reportedby'] = $extractCollection['Fields']['reportedby']['value_name'];
                 $UpdatedOn = $extractCollection['UpdatedOn'];
@@ -1053,12 +1052,17 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             $TicketArtifactsFinalArray = array();
             foreach($ticketArtifactsData as $extractArtifacts){
                 $ticketCollectionModel = new TicketCollection();
-                $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
                 $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],1,$selectFields);
                 $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                 $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
-                $refinedData = CommonUtility::refineDescription($getTicketDetails['Description']);
-                $forTicketArtifacts['description'] =$refinedData["description"];
+                $ticketArtifactsModel = new TicketArtifacts();
+                $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],1);
+                $getArtifactsEach=array();
+                foreach($artifacts['Artifacts'] as $getArtifact){
+                     array_push($getArtifactsEach,$getArtifact['OriginalFileName']);
+                }
+                $forTicketArtifacts['description'] =$getArtifactsEach;
                 $forTicketArtifacts['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
                 $forTicketArtifacts['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
                 $UpdatedOn = $getTicketDetails['UpdatedOn'];
@@ -1080,8 +1084,8 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 foreach($getTicketDetails as $eachRow){
                     $forUsercollection['TicketId'] =$eachRow['TicketId'];
                     $forUsercollection['Title'] =$eachRow['Title'];
-                    $refinedData = CommonUtility::refineDescription($eachRow['CrudeDescription']);
-                    $forUsercollection['description'] = $refinedData["description"];
+                    //$refinedData = CommonUtility::refineDescription($eachRow['CrudeDescription']);
+                    $forUsercollection['description'] = $eachRow['CrudeDescription'];
                     $forUsercollection['planlevel'] = $eachRow['Fields']['planlevel']['value_name'];
                     $forUsercollection['reportedby'] = $eachRow['Fields']['reportedby']['value_name'];
                     $UpdatedOn = $eachRow['UpdatedOn'];
