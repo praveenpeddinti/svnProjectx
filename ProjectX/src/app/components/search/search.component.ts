@@ -8,6 +8,7 @@ declare var jQuery:any;
 @Component({
    selector: 'search-view',
     templateUrl: 'search-component.html',
+     styleUrls: ['./search-component.css'],
     providers: [LoginService,AuthGuard]
 })
 export class SearchComponent implements OnInit{
