@@ -993,9 +993,9 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
      */
     public static function getAllDetailsForSearch($searchString){
         try{
-            $searchString=strtolower($searchString);
+           // $searchString=strtolower($searchString);
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
+            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))));
             $ticketCollectionData = iterator_to_array($cursor);
             $TicketCollFinalArray = array();
             foreach($ticketCollectionData as $extractCollection){
@@ -1005,13 +1005,15 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 $forTicketCollection['planlevel'] = $extractCollection['Fields']['planlevel']['value_name'];
                 $forTicketCollection['reportedby'] = $extractCollection['Fields']['reportedby']['value_name'];
                 $UpdatedOn = $extractCollection['UpdatedOn'];
-                $datetime = $UpdatedOn->toDateTime();
-                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $readableDate = $datetime->format('M-d-Y');
-                $forTicketCollection['UpdatedOn'] = $readableDate;
+                if(isset($UpdatedOn)){
+                    $datetime = $UpdatedOn->toDateTime();
+                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                    $readableDate = $datetime->format('M-d-Y');
+                    $forTicketCollection['UpdatedOn'] = $readableDate;
+                }
                 array_push($TicketCollFinalArray, $forTicketCollection);
             }
-            $matchArray = array('Activities.CDescription'=>array('$regex'=>$searchString));
+            $matchArray = array('Activities.CDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
             $query = Yii::$app->mongodb->getCollection('TicketComments');
             $pipeline = array(
                 array('$unwind' => '$Activities'),
@@ -1039,15 +1041,17 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                    $forTicketComments['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
                    $forTicketComments['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
                   // $forTicketComments['UpdatedOn'] =$getTicketDetails['UpdatedOn'];
-                 $UpdatedOn = $getTicketDetails['UpdatedOn'];
-                $datetime = $UpdatedOn->toDateTime();
-                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $readableDate = $datetime->format('M-d-Y');
-                $forTicketComments['UpdatedOn'] = $readableDate;
+                    $UpdatedOn = $getTicketDetails['UpdatedOn'];
+                    if(isset($UpdatedOn)){
+                        $datetime = $UpdatedOn->toDateTime();
+                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                        $readableDate = $datetime->format('M-d-Y');
+                        $forTicketComments['UpdatedOn'] = $readableDate;
+                   }
                     array_push($TicketCommentsFinalArray, $forTicketComments);
                }
             $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
-            $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString),"ProjectId" => (int)1))));
+            $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))));
             $ticketArtifactsData = iterator_to_array($cursor);
             $TicketArtifactsFinalArray = array();
             foreach($ticketArtifactsData as $extractArtifacts){
@@ -1066,16 +1070,18 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 $forTicketArtifacts['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
                 $forTicketArtifacts['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
                 $UpdatedOn = $getTicketDetails['UpdatedOn'];
-                $datetime = $UpdatedOn->toDateTime();
-                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $readableDate = $datetime->format('M-d-Y');
-                $forTicketArtifacts['UpdatedOn'] = $readableDate;
+                if(isset($UpdatedOn)){
+                    $datetime = $UpdatedOn->toDateTime();
+                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                    $readableDate = $datetime->format('M-d-Y');
+                    $forTicketArtifacts['UpdatedOn'] = $readableDate;
+                 }
                 array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
                 
             }
             
              $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
-            $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString)),array("UserName"=>array('$regex'=>$searchString)))));
+            $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))));
             $tinyUserData = iterator_to_array($cursor);
             $TinyUserFinalArray = array();
              foreach($tinyUserData as $extractUserData){
@@ -1083,16 +1089,18 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 $getTicketDetails = TicketCollection::getTicketDetailsByUser($extractUserData['CollaboratorId'],1,$selectedFields);
                 foreach($getTicketDetails as $eachRow){
                     $forUsercollection['TicketId'] =$eachRow['TicketId'];
-                    $forUsercollection['Title'] =$eachRow['Title'];
+                    $forUsercollection['Title'] =$eachRow['Title'];                                                                                                                                                                                                                                                                                                                        
                     //$refinedData = CommonUtility::refineDescription($eachRow['CrudeDescription']);
                     $forUsercollection['description'] = $eachRow['CrudeDescription'];
                     $forUsercollection['planlevel'] = $eachRow['Fields']['planlevel']['value_name'];
                     $forUsercollection['reportedby'] = $eachRow['Fields']['reportedby']['value_name'];
                     $UpdatedOn = $eachRow['UpdatedOn'];
-                    $datetime = $UpdatedOn->toDateTime();
-                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $readableDate = $datetime->format('M-d-Y');
-                    $forUsercollection['UpdatedOn'] = $readableDate;
+                    if(isset($UpdatedOn)){
+                        $datetime = $UpdatedOn->toDateTime();
+                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                        $readableDate = $datetime->format('M-d-Y');
+                        $forUsercollection['UpdatedOn'] = $readableDate;
+                     }
                     array_push($TinyUserFinalArray, $forUsercollection);
                 }
                
