@@ -863,10 +863,11 @@ class CommonUtility {
             $readableDate = $datetime->format('M-d-Y H:i:s');
             $value["ActivityOn"] = $readableDate;
             $propertyChanges = $value["PropertyChanges"];
+            $poppedFromChild = $value["PoppedFromChild"];
             if (count($propertyChanges) > 0) {
                 foreach ($value["PropertyChanges"] as &$property) {
                     error_log("----property---" . $property["ActionFieldName"]);
-                    CommonUtility::prepareActivityProperty($property, $projectId);
+                    CommonUtility::prepareActivityProperty($property,$projectId,$poppedFromChild);
                 }
             }
         } catch (Exception $ex) {
@@ -880,11 +881,11 @@ class CommonUtility {
      * @param type $projectId
      * @return type
      */
-    public static function prepareActivityProperty(&$property, $projectId) {
+    public static function prepareActivityProperty(&$property,$projectId,$poppedFromChild="") {
         try {
             $tinyUserModel = new TinyUserCollection();
             $fieldName = $property["ActionFieldName"];
-
+error_log("prepareActivityProperty-------".$poppedFromChild);
             $storyFieldDetails = StoryFields::getFieldDetails($fieldName, "Field_Name");
             $type = $storyFieldDetails["Type"];
             $actionFieldName = $property["ActionFieldName"];
@@ -892,7 +893,15 @@ class CommonUtility {
             if ($storyFieldDetails["Title"] != "" && $storyFieldDetails["Title"] != null) {
                 $property["ActionFieldTitle"] = $storyFieldDetails["Title"];
             }
-
+           if($poppedFromChild !=""){
+               error_log("heyyyyyyyyyyyyyyyyyyyyy-------------");
+                $ticketDetails = TicketCollection::getTicketDetails($poppedFromChild, $projectId,["TicketId","Title"]);
+                error_log(print_r($ticketDetails,1));
+                $ticketInfo = $ticketDetails["TicketId"]." ".$ticketDetails["Title"];
+                $property["ActionFieldTitle"] = $property["ActionFieldTitle"];
+                $property["PoppedChildTitle"] = $ticketDetails["Title"];
+                $property["PoppedChildId"] = $ticketDetails["TicketId"];
+           }
             $previousValue = $property["PreviousValue"];
             $property["NewValue"];
             $property["CreatedOn"];
