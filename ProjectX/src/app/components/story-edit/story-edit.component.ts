@@ -8,10 +8,11 @@ import {CalendarModule,AutoComplete} from 'primeng/primeng';
 import { FileUploadService } from '../../services/file-upload.service';
 import { MentionService } from '../../services/mention.service';
 import { GlobalVariable } from '../../config';
-
+import {SummerNoteEditorService} from '../../services/summernote-editor.service';
+import * as io from 'socket.io-client';
 
 declare var jQuery:any; //reference to jquery
-declare const CKEDITOR; //reference to ckeditor
+declare var summernote:any; //reference to summernote
 
 @Component({
   selector: 'app-story-edit',
@@ -49,7 +50,7 @@ export class StoryEditComponent implements OnInit
 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,private mention:MentionService,
-    private http: Http,private route: ActivatedRoute) { 
+    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) { 
            this.filesToUpload = [];
     }
 
@@ -85,7 +86,9 @@ export class StoryEditComponent implements OnInit
             }
              this.ticketData = data.data.ticket_details;
              this.description= this.ticketData.CrudeDescription;
-             this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);        
+             this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);      
+             jQuery("#description").summernote('code',this.description);      
+
         });
     
     this.minDate=new Date(); //set current date to datepicker as min date
@@ -93,45 +96,8 @@ export class StoryEditComponent implements OnInit
 
   ngAfterViewInit() 
   {
-    
-    //applying keyup event on multiple ckeditors in story edit page
-    CKEDITOR.on('instanceReady', (event)=>
-    {
-      event.editor.on('key',(evt)=>
-      {
-        var this_obj=this;
-          var at_config = {
-          at: "@",
-          callbacks: {
-                  remoteFilter: function(query, callback) {
-                    if(query.length>0)
-                    {
-                      var post_data={ProjectId:1,search_term:query};
-                      this_obj._ajaxService.AjaxSubscribe("story/get-collaborators",post_data,(data)=> {
-                        console.log("===Mention Data=="+JSON.stringify(data.data));
-                      var mention=[];
-                      var pic=[];
-                      for(let i in data.data)
-                      {
-                        //mention.push({"Name":data.data[i].Name,"Profile":data.data[i].ProfilePic});
-                        mention.push({"name":data.data[i].Name,"Profile":data.data[i].ProfilePic});
-                      }
-                    callback(mention);
-                  });
-                    }
-                },           
-              },
-          editableAtwhoQueryAttrs: {
-            "data-fr-verified": true
-            },
-          displayTpl:"<li value='${name}' name='${name}'><img width='20' height='20' src='http://10.10.73.77${Profile}'/> ${name}</li>",
-          }
-      var editor=evt.editor; 
-      this.mention.load_atwho(editor,at_config);
-      });
-
-      });
-        
+   
+    this.editor.initialize_editor('description',null,null);      
   }
 
   /*
@@ -250,17 +216,20 @@ export class StoryEditComponent implements OnInit
   {  
     jQuery("#title_error").hide();
     jQuery("#desc_error").hide();
+    var desc=jQuery("#description").summernote('code');
+    desc=jQuery(desc).text().trim();
     if(edit_data.title=='')
     {
       jQuery("#title_error").show();
     }
-    if(edit_data.description=='')
+    if(edit_data.description=='' || desc=='')
     {
       jQuery("#desc_error").show();
     }
-    if(edit_data.description!="" && edit_data.title!="")
+    if(edit_data.description!="" && edit_data.title!="" && desc!='')
     {
-      var desc=this.txt_area.instance.getData();
+      //var desc=this.txt_area.instance.getData();
+      var desc=jQuery("#description").summernote('code');
       edit_data.description=desc;
       edit_data.default_task=[];
       if(this.defaultTasksShow){
@@ -356,15 +325,18 @@ export class StoryEditComponent implements OnInit
           (result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                    this.description = this.description + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    this.description = jQuery("#description").summernote('code') + "<p>[[image:" +result[i].path + "|" + result[i].originalname + "]]</p>";
+                    jQuery("#description").summernote('code',this.description);
                 } else{
-                    this.description = this.description + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    this.description = jQuery("#description").summernote('code') + "<p>[[file:" +result[i].path + "|" + result[i].originalname + "]]</p>";
+                    jQuery("#description").summernote('code',this.description);
                 }
             }
             this.fileUploadStatus = false;
         }, (error) => {
-            this.description = this.description + "Error while uploading";
+            this.description = jQuery("#description").summernote('code')+ "Error while uploading";
             this.fileUploadStatus = false;
         });
    }
@@ -376,5 +348,40 @@ export class StoryEditComponent implements OnInit
     {
       this._router.navigate(['story-detail',this.url_TicketId]);
     }
+
+    // /**
+    //  * @author:Ryan
+    //  * @description: Send Mail to Assigned User/StakeHolder
+    //  */
+    // sendMail(field_name,collaborator_id)
+    // {
+    //   console.log("--Field Name--"+field_name);
+    //   if(field_name=='assignedto' || field_name=='stakeholder')
+    //   {
+    //     console.log("--Collaborator Id--"+collaborator_id);
+    //     // var post_data=
+    //     // {
+    //     //   'ticketId':this.url_TicketId,
+    //     //   'collaborator':collaborator_id
+    //     // };
+    //     // this._ajaxService.AjaxSubscribe("story/send-mail",post_data,(data)=>
+    //     // {
+         
+    //     // });
+
+    //     /*For Notifications */
+        
+    //     //  var socket=io("http://10.10.73.39:4201");
+    //     // //  var data={'ticketId':this.url_TicketId,'collaborator':collaborator_id};
+    //     //         socket.emit('assignedTo',collaborator_id);
+    //     var notify_data={'ticketId':this.url_TicketId,'comment_type':'assigned','collaborator':collaborator_id};
+
+    //     this._ajaxService.NodeSubscribe('/assignedTo',notify_data,(data)=>
+    //     {
+
+    //     });
+                
+    //   }
+    // }
 
 }
