@@ -727,6 +727,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ActivityBy"=>(int)$commentData->userInfo->Id,
             "Status"=>($commentData->Comment->ParentIndex == "")?(int)1:(int)2,
             "PropertyChanges"=>[],
+             "PoppedFromChild"=>"",
             "ParentIndex"=>($commentData->Comment->ParentIndex == "")?"":(int)$commentData->Comment->ParentIndex,
             "repliesCount"=>(int)0
         );
@@ -937,7 +938,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            if($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow"){
                error_log("elseeeeeeeeeeeeeee----update story");
                 $slug =  new \MongoDB\BSON\ObjectID();
-                        $commentDataArray=array(
+            $commentDataArray=array(
             "Slug"=>$slug,
             "CDescription"=>  "",
             "CrudeCDescription"=>"",
