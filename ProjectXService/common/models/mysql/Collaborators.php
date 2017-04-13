@@ -170,7 +170,12 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
     public function getCollaboratorsForFollow($dafaultUserList,$searchValue, $projectId) {
         try {
             $DefaultCollaboratorIds = implode(',', $dafaultUserList);
-            $qry = "select C.Id,C.UserName as Name,C.Email,concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and C.Id not in ($DefaultCollaboratorIds) and C.UserName like '$searchValue%'";
+            if(!empty($DefaultCollaboratorIds)){
+                $condition = "C.Id not in ($DefaultCollaboratorIds) and";
+            }else{
+               $condition=''; 
+            }
+            $qry = "select C.Id,C.UserName as Name,C.Email,concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and ".$condition." C.UserName like '$searchValue%'";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
         } catch (Exception $ex) {
