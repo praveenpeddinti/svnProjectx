@@ -457,15 +457,19 @@ footer{font-size:10px}
 	 -moz-border-radius:2px;
 	 -webkit-border-radius:2px; padding:10px 31px 20px 10px; margin-bottom:10px;}
 
-#commentContent .commentedtext p img, video{height: 70px;
-    margin-right: 20px;
-    text-align: left;
-    width: 200px;}
-#commentContent .commentedtext p{
+
+.comment_reply.commentedtext p{
     height: 63px;
     overflow: hidden;
     float:left;
 }
+
+.comment_reply .commentedtext img, video{height: 70px;
+    margin-right: 20px;
+    text-align: left;
+    width: 200px;}
+
+.comment_reply .commentedtext .user a img{ width: 30px!important; height: 30px!important;}
 
 .recommentedtext{ background:#e8fef6; border-left:solid #00bd74 5px; border-radius:2px;
 	 -moz-border-radius:2px;
@@ -629,8 +633,7 @@ color: #0199e0;
 
 #replySnippetContent .replySnippet img, video{ width: 200px; height: 70px; text-align:left; margin-right:20px;}
 #replySnippetContent .replySnippet p{ float:left;
-  overflow: hidden;
-  
+  overflow: hidden;  
   height:63px;
 }
 
