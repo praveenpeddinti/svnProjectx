@@ -991,11 +991,24 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
      * @param type $searchString
      * @return type
      */
-    public static function getAllDetailsForSearch($searchString){
+    public static function getAllDetailsForSearch($searchString,$page){
         try{
            // $searchString=strtolower($searchString);
+                $page = $page ;
+                $pageLength = 10;
+                if ($page == 1) {
+                    $offset = $page - 1;
+                    $limit = $pageLength;
+                } else {
+                    $offset = ($page - 1) * $pageLength;
+                    $limit = $pageLength;
+                }
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))));
+            $options = array(
+                "limit" =>$limit,
+                "skip" => $offset
+            );
+            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
             $ticketCollectionData = iterator_to_array($cursor);
             $TicketCollFinalArray = array();
             foreach($ticketCollectionData as $extractCollection){
@@ -1022,9 +1035,10 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                     '$group' => array(
                         '_id' => '$TicketId',
                         "commentData" => array('$push' => '$Activities'),
+                        
                      ),
-                ),
-            );
+                ),array('$limit' => $limit),array('$skip' => $offset)
+                );
             $ticketCommentsData = $query->aggregate($pipeline);
             $commentsArray=array();
             $commentsPositionArray=array();
@@ -1051,7 +1065,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                     array_push($TicketCommentsFinalArray, $forTicketComments);
                }
             $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
-            $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))));
+            $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
             $ticketArtifactsData = iterator_to_array($cursor);
             $TicketArtifactsFinalArray = array();
             foreach($ticketArtifactsData as $extractArtifacts){
@@ -1080,8 +1094,8 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 
             }
             
-             $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
-            $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))));
+            $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
+            $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
             $tinyUserData = iterator_to_array($cursor);
             $TinyUserFinalArray = array();
              foreach($tinyUserData as $extractUserData){
