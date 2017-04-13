@@ -19,8 +19,9 @@
 
   <div *ngFor="let searchData of searchArray">
  <div *ngFor=" let finalData of searchData">
-    <div  *ngIf="finalData.description">
+   
       <div class="searchdiv">
+         <div  *ngIf="finalData.description">
 <div class="searchresulttitle">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
@@ -31,25 +32,28 @@
  </span>
 </div>
 <div class="modifieddate">Last modified on <span>{{finalData.UpdatedOn}},</span> created by <span>{{finalData.reportedby}}</span></div>
+</div>
+
 
     <div  *ngIf="!finalData.description">
         <div  *ngFor=" let commentData of finalData.comments">
 <div class="searchresulttitle">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
- <a [routerLink]="['/story-detail',finalData.TicketId]" (click)="navigateToStoryDetail(finalData.TicketId)">#{{finalData.TicketId}} {{finalData.Title}}<span class="heighlight"></span></a>
+ <a [routerLink]="['/story-detail',finalData.TicketId,commentData.Slug.$oid]" (click)="navigateToStoryDetail(finalData.TicketId,commentData.Slug.$oid)">#{{finalData.TicketId}} {{finalData.Title}}<span class="heighlight"></span></a>
 </div>
 <div class="searchresultcontent" [innerHTML]="commentData.CrudeCDescription">
 <span class="not_mention">
 </span>
 </div>
+</div>
 <div class="modifieddate">Last modified on <span>{{finalData.UpdatedOn}},</span> created by <span>{{finalData.reportedby}}</span></div>
 </div>
 </div>
+
 </div>
 </div>
-</div>
-</div>
+<div id="searchsection"></div>
 </div>
 <!--
     <div class="loginsection" id="searchsection">

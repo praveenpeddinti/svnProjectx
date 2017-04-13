@@ -69,11 +69,18 @@ public blurTimeout=[];
   public fileUploadStatus:boolean = false;
   public hide:boolean=false;//added by Ryan
   public attachmentsData=[];
- 
+  public searchSlug='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) {
-       this.filesToUpload = [];
+    this.filesToUpload = [];
+    route.queryParams.subscribe(
+      params => 
+      {
+            this.searchSlug=params['Slug'];
+       })
+        // alert(this.searchSlug);    
+
     }
 
  private calenderClickedOutside = false;
@@ -100,6 +107,17 @@ public blurTimeout=[];
     ngAfterViewInit()
     {
         this.editor.initialize_editor('commentEditor',null,null); //for comment
+
+      //jQuery('span[id^="check_"]').hide();
+    setTimeout(() => {
+     // alert(jQuery("."+this.searchSlug));
+     console.log(this.searchSlug);
+           var getSlug = jQuery("."+this.searchSlug).offset().top;
+         //  alert(getSlug);
+            jQuery('html, body').animate({
+        scrollTop: getSlug
+     }, 1000);
+        }, 500);
 
     }
 

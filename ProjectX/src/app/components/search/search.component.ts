@@ -13,20 +13,64 @@ declare var jQuery:any;
 })
 export class SearchComponent implements OnInit{
     public searchString="";
-    public searchArray;
+    public searchArray=[];
     public stringPosition;
+   private page=1;
     ngOnInit(){
+        
+        this.load_contents(this.page);
+    
+    
+        //   jQuery(document).ready(function(){
+
+        //     jQuery(window).scroll(function() {
+        //     if (jQuery(window).scrollTop() >= jQuery(document).height() - jQuery(window).height() - 20)
+        //     {
+        //             alert("bottom!");
+        //               this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
+        //  { 
+        //         alert(JSON.stringify(result.data));
+        //         if(result.status !='401'){ 
+        //             this.searchArray= this.searchDataBuilder(result.data);
+        //             }else{
+        //             document.getElementById('searchsection').innerHTML='No Results Found';
+        //         }
+           
+        //   });
+
+        //     }
+        //     });
+        // })
+              var thisObj=this; 
+                console.log(thisObj.page);
+            jQuery(document).ready(function(){
+           
+            jQuery(window).scroll(function() { 
+               
+            if (jQuery(window).scrollTop() >= jQuery(document).height() - jQuery(window).height() - 20) {
+              //  alert("$$$$$$$$$$$$"+thisObj.page);
+                 thisObj.page++;console.log("###################");
+             //    console.log(thisObj.page);
+                 thisObj.load_contents(thisObj.page);  
+            }
+            });
+        })
+    }
+     load_contents(page){
+       //  alert("here");
         var post_data={
         'projectId':1,
-        'searchString':this.searchString
+        'searchString':this.searchString,
+        'page':page
       }
-        this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
+         this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
          { 
-           if(result.status !='401'){ 
-            this.searchArray= this.searchDataBuilder(result.data);
-            }else{
-               document.getElementById('searchsection').innerHTML='No Results Found';
-           }
+                 if(result.status !='401'){ 
+                    this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
+                    }else{
+                  //  document.getElementById('searchsection').innerHTML='No Results Found';
+                }
+           
           });
     }
     constructor(
@@ -44,8 +88,8 @@ export class SearchComponent implements OnInit{
          }
     
     // preparing serach data
-    searchDataBuilder(searchData){
-       let prepareData = [];
+    searchDataBuilder(searchData,prepareData){
+    //    let prepareData = [];
         //    alert(JSON.stringify(searchData));
        for(let searchArray in searchData){
         //        console.log(searchArray);
