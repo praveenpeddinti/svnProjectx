@@ -1,0 +1,1381 @@
+2017-01-23 10:27:57 [10.10.73.21][-][4o7nfrsscg4qtv9r5cjamu4a5g][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/checkAutoLogin in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('checkAutoLogin', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('/site/checkAuto...', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:27:57 [10.10.73.21][-][4o7nfrsscg4qtv9r5cjamu4a5g][info][application] $_GET = [
+    'r' => '/site/checkAutoLogin'
+]
+
+$_POST = [
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '107'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49485'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/index.php?r=/site/checkAutoLogin'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '107'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=/site/checkAutoLogin'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167277.7543
+    'REQUEST_TIME' => 1485167277
+]
+2017-01-23 10:27:57 [10.10.73.21][-][5288u1hmk8sott18lj6piq0ip6][error][yii\web\HttpException:400] yii\web\BadRequestHttpException: Unable to verify your data submission. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Controller.php:110
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php(152): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('login', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/login', Array)
+#3 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#4 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#5 {main}
+2017-01-23 10:27:57 [10.10.73.21][-][5288u1hmk8sott18lj6piq0ip6][info][application] $_GET = [
+    'r' => 'site/login'
+]
+
+$_POST = [
+    'username' => 'heheh'
+    'password' => 'asjkdhaksjdh'
+    'AccessKey' => '3fd31d9a7ae286b9c6da983b35359915'
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '187'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49484'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/index.php?r=site/login'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '187'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=site/login'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167277.7412
+    'REQUEST_TIME' => 1485167277
+]
+2017-01-23 10:29:54 [10.10.73.21][-][mcfakd03tscsh3g9p7h0gid98c][error][yii\web\HttpException:400] yii\web\BadRequestHttpException: Unable to verify your data submission. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Controller.php:110
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php(152): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('login', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/login', Array)
+#3 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#4 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#5 {main}
+2017-01-23 10:29:54 [10.10.73.21][-][mcfakd03tscsh3g9p7h0gid98c][info][application] $_GET = [
+    'r' => 'site/login'
+]
+
+$_POST = [
+    'username' => 'heheh'
+    'password' => 'asjkdhaksjdh'
+    'AccessKey' => '3fd31d9a7ae286b9c6da983b35359915'
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '187'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49498'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=site/login'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '187'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=site/login'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167394.132
+    'REQUEST_TIME' => 1485167394
+]
+2017-01-23 10:29:54 [10.10.73.21][-][v5dqkhjnm7lvve6houk0els6tf][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/checkAutoLogin in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('checkAutoLogin', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('/site/checkAuto...', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:29:54 [10.10.73.21][-][v5dqkhjnm7lvve6houk0els6tf][info][application] $_GET = [
+    'r' => '/site/checkAutoLogin'
+]
+
+$_POST = [
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CACHE_CONTROL' => 'no-cache'
+    'HTTP_PRAGMA' => 'no-cache'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '107'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49498'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=/site/checkAutoLogin'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '107'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=/site/checkAutoLogin'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167394.1452
+    'REQUEST_TIME' => 1485167394
+]
+2017-01-23 10:30:42 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/testAjax in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('testAjax', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/testAjax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:30:42 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][info][application] $_GET = [
+    'r' => 'site/testAjax'
+]
+
+$_COOKIE = [
+    'advanced-frontend' => 'tihp9kopepemca8h9gofa0d5p6'
+    '_csrf-frontend' => '8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'advanced-frontend=tihp9kopepemca8h9gofa0d5p6; _csrf-frontend=8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49499'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=site/testAjax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site/testAjax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167442.044
+    'REQUEST_TIME' => 1485167442
+]
+2017-01-23 10:30:51 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/testa\jax in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('testa\\jax', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/testa\\jax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:30:51 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][info][application] $_GET = [
+    'r' => 'site/testa\\jax'
+]
+
+$_COOKIE = [
+    'advanced-frontend' => 'tihp9kopepemca8h9gofa0d5p6'
+    '_csrf-frontend' => '8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'advanced-frontend=tihp9kopepemca8h9gofa0d5p6; _csrf-frontend=8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49499'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=site/testa\\jax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site/testa\\jax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167451.6107
+    'REQUEST_TIME' => 1485167451
+]
+2017-01-23 10:30:55 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/testajax in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('testajax', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/testajax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:30:55 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][info][application] $_GET = [
+    'r' => 'site/testajax'
+]
+
+$_COOKIE = [
+    'advanced-frontend' => 'tihp9kopepemca8h9gofa0d5p6'
+    '_csrf-frontend' => '8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'advanced-frontend=tihp9kopepemca8h9gofa0d5p6; _csrf-frontend=8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49499'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=site/testajax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site/testajax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167455.9166
+    'REQUEST_TIME' => 1485167455
+]
+2017-01-23 10:31:11 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/testajax in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('testajax', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/testajax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:31:11 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][info][application] $_GET = [
+    'r' => 'site/testajax'
+]
+
+$_COOKIE = [
+    'advanced-frontend' => 'tihp9kopepemca8h9gofa0d5p6'
+    '_csrf-frontend' => '8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'advanced-frontend=tihp9kopepemca8h9gofa0d5p6; _csrf-frontend=8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49499'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/index.php?r=site/testajax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site/testajax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167471.1924
+    'REQUEST_TIME' => 1485167471
+]
+2017-01-23 10:35:17 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/testajax in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('testajax', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/testajax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:35:17 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][info][application] $_GET = [
+    'r' => 'site/testajax'
+]
+
+$_COOKIE = [
+    'advanced-frontend' => 'tihp9kopepemca8h9gofa0d5p6'
+    '_csrf-frontend' => '8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'advanced-frontend=tihp9kopepemca8h9gofa0d5p6; _csrf-frontend=8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49505'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/index.php?r=site/testajax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site/testajax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167717.2647
+    'REQUEST_TIME' => 1485167717
+]
+2017-01-23 10:37:38 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/TestAjax in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('TestAjax', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/TestAjax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:37:38 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][info][application] $_GET = [
+    'r' => 'site/TestAjax'
+]
+
+$_COOKIE = [
+    'advanced-frontend' => 'tihp9kopepemca8h9gofa0d5p6'
+    '_csrf-frontend' => '8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'advanced-frontend=tihp9kopepemca8h9gofa0d5p6; _csrf-frontend=8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49515'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/index.php?r=site/TestAjax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site/TestAjax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167858.5418
+    'REQUEST_TIME' => 1485167858
+]
+2017-01-23 10:38:55 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/testAjax in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('testAjax', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/testAjax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:38:55 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][info][application] $_GET = [
+    'r' => 'site/testAjax'
+]
+
+$_COOKIE = [
+    'advanced-frontend' => 'tihp9kopepemca8h9gofa0d5p6'
+    '_csrf-frontend' => '8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'advanced-frontend=tihp9kopepemca8h9gofa0d5p6; _csrf-frontend=8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49515'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/index.php?r=site/testAjax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site/testAjax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167935.452
+    'REQUEST_TIME' => 1485167935
+]
+2017-01-23 10:38:58 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/testajax in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('testajax', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/testajax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:38:58 [10.10.73.21][-][tihp9kopepemca8h9gofa0d5p6][info][application] $_GET = [
+    'r' => 'site/testajax'
+]
+
+$_COOKIE = [
+    'advanced-frontend' => 'tihp9kopepemca8h9gofa0d5p6'
+    '_csrf-frontend' => '8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca:2:{i:0;s:14:\"_csrf-frontend\";i:1;s:32:\"fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_COOKIE' => 'advanced-frontend=tihp9kopepemca8h9gofa0d5p6; _csrf-frontend=8103f41024d07c84a4227f9132334cdcda044974f733253e1b2910edb39b519ca%3A2%3A%7Bi%3A0%3Bs%3A14%3A%22_csrf-frontend%22%3Bi%3A1%3Bs%3A32%3A%22fKtsxbnobhOzvMmyoKIGv5K7DFV2mUH4%22%3B%7D'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49515'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/index.php?r=site/testajax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => ''
+    'CONTENT_TYPE' => ''
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'r=site/testajax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485167938.7713
+    'REQUEST_TIME' => 1485167938
+]
+2017-01-23 10:40:47 [10.10.73.21][-][p0qnsu7v8undj1230hjlsttfd3][error][yii\web\HttpException:400] yii\web\BadRequestHttpException: Unable to verify your data submission. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Controller.php:110
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php(152): yii\web\Controller->beforeAction(Object(yii\base\InlineAction))
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('test-ajax', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/test-ajax', Array)
+#3 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#4 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#5 {main}
+2017-01-23 10:40:47 [10.10.73.21][-][p0qnsu7v8undj1230hjlsttfd3][info][application] $_GET = [
+    'r' => 'site/test-ajax'
+]
+
+$_POST = [
+    'username' => 'heheh'
+    'password' => 'asjkdhaksjdh'
+    'AccessKey' => '3fd31d9a7ae286b9c6da983b35359915'
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '187'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49554'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=site/test-ajax'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '187'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=site/test-ajax'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485168047.198
+    'REQUEST_TIME' => 1485168047
+]
+2017-01-23 10:40:47 [10.10.73.21][-][eee1kuj46krtll6ldjjpdqkqjf][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/checkAutoLogin in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('checkAutoLogin', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('/site/checkAuto...', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:40:47 [10.10.73.21][-][eee1kuj46krtll6ldjjpdqkqjf][info][application] $_GET = [
+    'r' => '/site/checkAutoLogin'
+]
+
+$_POST = [
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '107'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49555'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=/site/checkAutoLogin'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '107'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=/site/checkAutoLogin'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485168047.2645
+    'REQUEST_TIME' => 1485168047
+]
+2017-01-23 10:42:12 [10.10.73.21][-][kngae6bh5cmob1q6j630iuhr4t][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/checkAutoLogin in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('checkAutoLogin', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('/site/checkAuto...', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 10:42:12 [10.10.73.21][-][kngae6bh5cmob1q6j630iuhr4t][info][application] $_GET = [
+    'r' => '/site/checkAutoLogin'
+]
+
+$_POST = [
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '107'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49560'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=/site/checkAutoLogin'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '107'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=/site/checkAutoLogin'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485168132.439
+    'REQUEST_TIME' => 1485168132
+]
+2017-01-23 11:15:03 [10.10.73.21][-][aooglggjesfr76q84m8dc7vr9e][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/checkAutoLogin in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('checkAutoLogin', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('/site/checkAuto...', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 11:15:03 [10.10.73.21][-][aooglggjesfr76q84m8dc7vr9e][info][application] $_GET = [
+    'r' => '/site/checkAutoLogin'
+]
+
+$_POST = [
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '107'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49599'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=/site/checkAutoLogin'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '107'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=/site/checkAutoLogin'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485170103.3564
+    'REQUEST_TIME' => 1485170103
+]
+2017-01-23 11:15:03 [10.10.73.21][-][-][error][yii\base\ErrorException:8] yii\base\ErrorException: Trying to get property of non-object in /usr/share/nginx/www/ProjectXService/frontend/controllers/SiteController.php:98
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/frontend/controllers/SiteController.php(98): yii\base\ErrorHandler->handleError(8, 'Trying to get p...', '/usr/share/ngin...', 98, Array)
+#1 [internal function]: frontend\controllers\SiteController->actionLogin()
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/InlineAction.php(55): call_user_func_array(Array, Array)
+#3 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php(154): yii\base\InlineAction->runWithParams(Array)
+#4 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('login', Array)
+#5 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/login', Array)
+#6 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#7 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#8 {main}
+2017-01-23 11:15:03 [10.10.73.21][-][-][info][application] $_GET = [
+    'r' => 'site/login'
+]
+
+$_POST = [
+    'username' => 'heheh'
+    'password' => 'asjkdhaksjdh'
+    'AccessKey' => '3fd31d9a7ae286b9c6da983b35359915'
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '187'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49598'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=site/login'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '187'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=site/login'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485170103.3507
+    'REQUEST_TIME' => 1485170103
+]
+2017-01-23 11:15:18 [10.10.73.21][-][-][error][yii\base\ErrorException:8] yii\base\ErrorException: Trying to get property of non-object in /usr/share/nginx/www/ProjectXService/frontend/controllers/SiteController.php:98
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/frontend/controllers/SiteController.php(98): yii\base\ErrorHandler->handleError(8, 'Trying to get p...', '/usr/share/ngin...', 98, Array)
+#1 [internal function]: frontend\controllers\SiteController->actionLogin()
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/InlineAction.php(55): call_user_func_array(Array, Array)
+#3 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php(154): yii\base\InlineAction->runWithParams(Array)
+#4 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('login', Array)
+#5 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('site/login', Array)
+#6 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#7 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#8 {main}
+2017-01-23 11:15:18 [10.10.73.21][-][-][info][application] $_GET = [
+    'r' => 'site/login'
+]
+
+$_POST = [
+    'username' => 'heheh'
+    'password' => 'asjkdhaksjdh'
+    'AccessKey' => '3fd31d9a7ae286b9c6da983b35359915'
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '187'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49598'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=site/login'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '187'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=site/login'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485170118.7716
+    'REQUEST_TIME' => 1485170118
+]
+2017-01-23 11:15:18 [10.10.73.21][-][5bqpm9f0cn854hupd2lpo3r3pb][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/checkAutoLogin in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('checkAutoLogin', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('/site/checkAuto...', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 11:15:18 [10.10.73.21][-][5bqpm9f0cn854hupd2lpo3r3pb][info][application] $_GET = [
+    'r' => '/site/checkAutoLogin'
+]
+
+$_POST = [
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '107'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49598'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=/site/checkAutoLogin'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '107'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=/site/checkAutoLogin'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485170118.7942
+    'REQUEST_TIME' => 1485170118
+]
+2017-01-23 11:16:35 [10.10.73.21][-][156rmtcltdpgmvfdh1higm6btp][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/checkAutoLogin in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('checkAutoLogin', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('/site/checkAuto...', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 11:16:35 [10.10.73.21][-][156rmtcltdpgmvfdh1higm6btp][info][application] $_GET = [
+    'r' => '/site/checkAutoLogin'
+]
+
+$_POST = [
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '107'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49606'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=/site/checkAutoLogin'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '107'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=/site/checkAutoLogin'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485170195.0811
+    'REQUEST_TIME' => 1485170195
+]
+2017-01-23 11:17:04 [10.10.73.21][-][nk1d6e3k4puc4r02thb6jmoa52][error][yii\web\HttpException:404] yii\base\InvalidRouteException: Unable to resolve the request: site/checkAutoLogin in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Controller.php:125
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Module.php(454): yii\base\Controller->runAction('checkAutoLogin', Array)
+#1 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php(100): yii\base\Module->runAction('/site/checkAuto...', Array)
+#2 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#3 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#4 {main}
+
+Next yii\web\NotFoundHttpException: Page not found. in /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/web/Application.php:112
+Stack trace:
+#0 /usr/share/nginx/www/ProjectXService/vendor/yiisoft/yii2/base/Application.php(375): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /usr/share/nginx/www/ProjectXService/frontend/web/index.php(17): yii\base\Application->run()
+#2 {main}
+2017-01-23 11:17:04 [10.10.73.21][-][nk1d6e3k4puc4r02thb6jmoa52][info][application] $_GET = [
+    'r' => '/site/checkAutoLogin'
+]
+
+$_POST = [
+    'timezone' => 'Asia/Kolkata'
+    'mobile' => '1'
+    'codeVersion' => '10.0'
+    'deviceInfo' => [
+        'platform' => 'PC'
+        'deviceType' => 'PC'
+    ]
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_ORIGIN' => 'http://10.10.73.21:8000'
+    'HTTP_CONTENT_LENGTH' => '107'
+    'HTTP_REFERER' => 'http://10.10.73.21:8000/'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.5'
+    'HTTP_ACCEPT' => 'application/json, text/javascript, */*; q=0.01'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:46.0) Gecko/20100101 Firefox/46.0'
+    'HTTP_HOST' => '10.10.73.21'
+    'SCRIPT_FILENAME' => '/usr/share/nginx/www/ProjectXService/frontend/web/index.php'
+    'REDIRECT_STATUS' => '200'
+    'SERVER_NAME' => 'projectx.com'
+    'SERVER_PORT' => '443'
+    'SERVER_ADDR' => '10.10.73.21'
+    'REMOTE_PORT' => '49606'
+    'REMOTE_ADDR' => '10.10.73.21'
+    'SERVER_SOFTWARE' => 'nginx/1.10.0'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'HTTPS' => 'on'
+    'REQUEST_SCHEME' => 'https'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'DOCUMENT_ROOT' => '/usr/share/nginx/www/ProjectXService'
+    'DOCUMENT_URI' => '/frontend/web/index.php'
+    'REQUEST_URI' => '/frontend/web/?r=/site/checkAutoLogin'
+    'SCRIPT_NAME' => '/frontend/web/index.php'
+    'CONTENT_LENGTH' => '107'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded; charset=UTF-8'
+    'REQUEST_METHOD' => 'POST'
+    'QUERY_STRING' => 'r=/site/checkAutoLogin'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PHP_SELF' => '/frontend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1485170224.1261
+    'REQUEST_TIME' => 1485170224
+]
