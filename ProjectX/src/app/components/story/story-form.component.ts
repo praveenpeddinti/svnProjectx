@@ -7,9 +7,12 @@ import { GlobalVariable } from '../../config';
 import {AccordionModule,DropdownModule,SelectItem,CalendarModule,CheckboxModule} from 'primeng/primeng';
 import { MentionService } from '../../services/mention.service';
 import { AjaxService } from '../../ajax/ajax.service';
+import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 
 declare var jQuery:any;    //Reference to Jquery
-declare const CKEDITOR;
+//declare const CKEDITOR;
+//declare var tinymce:any;
+declare var summernote:any;
 
  @Component({
     selector: 'story-form',
@@ -41,7 +44,7 @@ export class StoryComponent
     editorData:string='';
     public fileUploadStatus:boolean = false;
 
-    constructor(private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService) {
+    constructor(private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService,private editor:SummerNoteEditorService) {
         this.filesToUpload = [];
     }
 
@@ -87,43 +90,14 @@ export class StoryComponent
 
     /**
      * @author:Ryan Marshal
-     * @description:In general,This is for getting the contents of CKEDITOR on various events and then performing 
-     *              operations based on the requirement.Here,it is used for getting @mention capabilitly.
+     * @description:This is used for initializing the summernote editor
      */
     ngAfterViewInit()
     {
-      CKEDITOR.on('instanceReady', (event)=>
-      {
-        event.editor.on('key',(evt)=>
-         {
-            var this_obj=this;
-            var at_config = {
-            at: "@",
-            callbacks: {
-                    remoteFilter: function(query, callback) {
-                      if(query.length>0)
-                      {
-                        var post_data={ProjectId:1,search_term:query};
-                        this_obj._ajaxService.AjaxSubscribe("story/get-collaborators",post_data,(data)=> {
-                        var mention=[];
-                        for(let i in data.data)
-                        {
-                          mention.push({"name":data.data[i].Name,"Profile":data.data[i].ProfilePic});
-                        }
-                      callback(mention);
-                    });
-                      }
-                  }
-                },
-            editableAtwhoQueryAttrs: {
-                    "data-fr-verified": true
-            },
-            displayTpl:"<li value='${name}' name='${name}'><img width='20' height='20' src='${Profile}'/> ${name}</li>",
-            }
-            var editor=evt.editor;
-            this.mention.load_atwho(editor,at_config);
-        });
-      })
+
+        var formobj=this;
+        this.editor.initialize_editor('summernote','keyup',formobj);
+
     }
 
     /*
@@ -203,15 +177,17 @@ export class StoryComponent
                    result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
                     var uploadedFileExtension = (result[i].originalname).split('.').pop();
                     if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                        this.form['description'] = this.form['description'] + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                        jQuery('#summernote').summernote('code',this.form['description']+"<p>[[image:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" ");
+                        this.form['description'] = jQuery('#summernote').summernote('code');
                     } else{
-                        this.form['description'] = this.form['description'] + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                        jQuery('#summernote').summernote('code',this.form['description']+"<p>[[file:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" ");
+                        this.form['description'] = jQuery('#summernote').summernote('code');
                     }
                 }
                 this.fileUploadStatus = false;
             }, (error) => {
                 console.error("Error occured in story-formcomponent::fileUploadEvent"+error);
-                this.form['description'] = this.form['description'] + "Error while uploading";
+                this.form['description'] =jQuery('#summernote').summernote('code') + "Error while uploading";
                 this.fileUploadStatus = false;
             });
     }
@@ -226,16 +202,25 @@ export class StoryComponent
 
     */
     saveStory(){
-     this.form['default_task']=[];
-     for (let task of this.form['tasks']) {
-     for(let tsk of this.taskArray) {
-              if(tsk.Id == task) 
-            this.form['default_task'].push(tsk);
-      };
-    }  
-   delete this.form['tasks']; 
-   this._service.saveStory(this.form,(response)=>{
-         });
+    
+        var editor=jQuery('#summernote').summernote('code');
+        editor=jQuery(editor).text().trim();
+        this.form['description']=jQuery('#summernote').summernote('code'); //for summernote editor
+      
+       if(editor!='')
+       {
+             this.form['default_task']=[];
+                for (let task of this.form['tasks']) {
+                for(let tsk of this.taskArray) {
+                         if(tsk.Id == task) 
+                       this.form['default_task'].push(tsk);
+                 };
+               }  
+              delete this.form['tasks']; 
+            this._service.saveStory(this.form,(response)=>{
+                    });
+       }
+       
     }
 
      /*
@@ -253,6 +238,20 @@ export class StoryComponent
 
         }
     }
+
+
+    /** Only for Testing **/
+
+    public sendMail()
+    {
+        var recepients={
+            emaillist:['ryan_marshal@hotmail.com','kishore.neelam@techo2.com']
+        }
+        this._ajaxService.AjaxSubscribe('story/send-mail',recepients,(data)=>
+        {
+
+        })
+    }     
 
 
 }
