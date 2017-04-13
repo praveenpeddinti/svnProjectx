@@ -13,7 +13,7 @@
 </vg-player>-->
 
 
-<div fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event) class="paddingbottom10">
+<div  class="paddingbottom10">
     <!--Title Part-->
         <div class="titlearea  ">
           <div class="row">
@@ -135,16 +135,19 @@
                   </div>  
              </div> 
         </div>
-        <div [hidden]="showDescEditor">
+        <div  [hidden]="showDescEditor">
             <div class="rightdescriptionarea">
+                <div fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event)>
                 <div style="position: relative">
                      <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
                           (drop)="fileUploadEvent($event, 'fileDrop','description')" >
                      </div>
                      <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/>
                      </div>
-                     <ckeditor #detailEditor [config]="toolbarForDetail" [(ngModel)]="ticketEditableDesc" name="ticketEditableDesc" required >
-                     </ckeditor>
+                     <!--<ckeditor #detailEditor [config]="toolbarForDetail" [(ngModel)]="ticketEditableDesc" name="ticketEditableDesc" required >
+                     </ckeditor>-->
+                     <textarea id="detailEditor"  name="ticketEditableDesc" required></textarea> <!--For Summernote editor --> 
+                </div>
                 </div>
                 <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
                 </div>
@@ -157,7 +160,7 @@
                 </div>
             </div>
             <div class="buttonarea alignright">
-                  <button class="normal bluebutton bluebuttonmedium" (click)="submitDesc()">
+                  <button class="normal bluebutton bluebuttonmedium" (click)="submitted=true;submitDesc()">
                     SUBMIT
                   </button>
                   <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">
@@ -389,11 +392,11 @@
                      </div>
                      <div class="pop_over_bg" id="comments_gif_{{cmtIdx}}" [hidden]="true"><img   src="assets/images/loader.gif" height="20" width="70" alt=""/>
                      </div>
-                     <div id="Activity_content_{{cmtIdx}}">
-                <div  class="commentp" [innerHTML]="comment.CDescription">
+                     <div >
+                <div id="Activity_content_{{cmtIdx}}" class="commentp" [innerHTML]="comment.CDescription">
                 
                 </div>
-                <div class="clearfix pull-right">
+                <div id="Reply_Icons_{{cmtIdx}}" class="clearfix pull-right">
 
                 <div class="commedit reply_icn" (click)="replyComment(cmtIdx)"></div> 
                 <div *ngIf="comment.ActivityBy.UserName == getAllData.username" class="commedit edit_icn" (click)="editComment(cmtIdx)"></div> 
@@ -401,7 +404,11 @@
 
                 </div>
                 </div>
-                <div id="Actions_{{cmtIdx}}" [hidden]="true" >
+                
+                
+          </div>
+        </div>
+        <div id="Actions_{{cmtIdx}}" [hidden]="true" >
                     <div class="uploadcomponent pull-left" style="background:#f8f8f8;">
                       <div class="uploadbottom">
                         <i class="fa fa-paperclip" aria-hidden="true"></i>
@@ -418,9 +425,6 @@
                   </button>
                 </div>
                 </div>
-                
-          </div>
-        </div>
             </div>
             </div>
         
@@ -446,8 +450,7 @@
                 <div class="user">
               <a href="javascript:void(0)"> <img src="{{commentsList[replyToComment].ActivityBy.ProfilePicture}}" /></a>  by <span><a href="javascript:void(0)">{{commentsList[replyToComment].ActivityBy.UserName}}</a></span>    
             </div>   
-               <div class="replySnippet" [innerHTML]="commentsList[replyToComment].CDescription">
-                        </div>
+               <div class="replySnippet" [innerHTML]="commentsList[replyToComment].CDescription"></div>
                     </div>
                  
                 </div>
@@ -460,20 +463,25 @@
                      </div>
                      <div class="progress_bar"  [ngClass]="{pop_over_bg: fileUploadStatus}"><img  id="last_comments" [hidden]="true" src="assets/images/loader.gif" height="20" width="70" alt=""/>
                      </div>
-                     <ckeditor #commentEditor [config]="toolbarForDetail" [(ngModel)]="commentDesc" name="commentDesc" required >
-                     </ckeditor>
+                     <!--<ckeditor #commentEditor [config]="toolbarForDetail" [(ngModel)]="commentDesc" name="commentDesc" required >
+                     </ckeditor>-->
+                     <textarea id="commentEditor" name="commentDesc" required></textarea>
                 </div>
-                <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
-                </div>
+                <!--<div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+                </div>-->
+
+            
+            </div>
                 <div class="uploadcomponent margintop15 pull-left">
                       <div class="uploadbottom">
                         <i class="fa fa-paperclip" aria-hidden="true"></i>
                         File upload
                       </div>
                       <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments','')"  multiple  />
-                </div>
-                     <div class="buttonarea alignright">
-                  <button class="normal bluebutton bluebuttonmedium submit" (click)="submitComment()">
+                   </div>
+            <div class="buttonarea alignright">
+                  <button class="normal bluebutton bluebuttonmedium" (click)="submitComment()">
+
                     SUBMIT
                   </button>
                   
@@ -488,4 +496,4 @@
 <!--Comments Section End-->
 
     </div>
-</div>
+<!--</div>-->
