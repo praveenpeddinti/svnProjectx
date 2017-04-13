@@ -1314,7 +1314,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     // Send notification to Peer person
                     error_log("Send notification to Peer person");
                     return true;
-                } else if ($newWorkflowId == 10 || $newWorkflowId == 7 ) { // 10 --Re-open  7 -- Invalid
+                } else if ($newWorkflowId == 10 || $newWorkflowId == 7 || $newWorkflowId == 1) { // 10 --Re-open  7 -- Invalid --New
                     if (sizeof($oldTicketObj['Tasks']) != 0 || $oldTicketObj['Tasks'] != NULL) {
                         foreach ($oldTicketObj['Tasks'] as $task) {
                             if ($task['TaskType'] == 3)
@@ -1337,7 +1337,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                         if($qaTicketDetails['Fields']['workflow']['value'] == 14&& $newWorkflowId ==10 )  // QA status updated to re-open
                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                       if($newWorkflowId ==7){ // 7 --Invalid
+                       if($newWorkflowId ==7 || $newWorkflowId ==1){ // 7 --Invalid
+                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                       }else if($newWorkflowId == 8){ // 8 --Fixed
+                           $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Get closed status details
                            $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                            $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                            $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
