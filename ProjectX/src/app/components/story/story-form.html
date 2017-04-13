@@ -9,7 +9,7 @@
                          c) Dragging File(s) to Editor
 
  -->
-<form fileDrop (dragover)="fileOverBase($event)" (dragleave)="fileDragLeave($event)"  #storyForm="ngForm" (ngSubmit)="submitted && storyForm.form.valid && saveStory()" novalidate="true">
+<form   #storyForm="ngForm" (ngSubmit)="submitted && storyForm.form.valid && saveStory()" novalidate="true">
       <div class="paddingbottom10">
         <div class="titlearea  ">
             <div class="row">
@@ -50,8 +50,8 @@
 
                 </div>
             </div>
-            <div class="rightdescriptionarea">
-
+            <div  class="rightdescriptionarea">
+                <div fileDrop (dragover)="fileOverBase($event)" (dragleave)="fileDragLeave($event)">
                 <div style="position: relative" >
                     <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
 
@@ -59,10 +59,12 @@
                 </div>
                 <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
 
-                <ckeditor  [config]="toolbar" [(ngModel)]="form.description"    name="description"  #description="ngModel" required     debounce="500"  >
-                </ckeditor>
+                <!--<ckeditor  [config]="toolbar" [(ngModel)]="form.description"    name="description"  #description="ngModel" required     debounce="500"  >
+                </ckeditor>-->
+                <textarea  name="description" id="summernote" [(ngModel)]="form.description"  #description="ngModel" required></textarea>
 
 
+            </div>
             </div>
             <div *ngIf="submitted && description.errors " class="alert alert-danger">
                 <div [hidden]="!description.errors.required">
@@ -87,11 +89,18 @@
         <div class="buttonarea alignright">
             <button type="submit" (click)="submitted = true;" class="normal bluebutton bluebuttonmedium">SUBMIT</button>
         </div>
+<!--        <div>
+            <button (click)="sendMail()" class="normal bluebutton bluebuttonmedium">Send Mail</button>
+        </div>-->
 
     </div>
 
 </div>
 </form>
+
+<!-- Button for testing send email -->
+
+<!-- End --> 
 
 
 
