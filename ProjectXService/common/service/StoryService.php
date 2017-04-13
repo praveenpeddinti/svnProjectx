@@ -1307,7 +1307,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $PeerticketId='';
             $QAticketId='';
             $UIticketId='';
-            if ($oldTicketObj['WorkflowType'] == 1 || $oldTicketObj['WorkflowType'] == 2) {
+            if ($oldTicketObj['WorkflowType'] == 1) { // 1-Story,General Task,
                 if ($newWorkflowId == 5) {
                     // 5 --Code complete
                     // Send notification to Peer person
@@ -1326,14 +1326,20 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                              }
 
                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
+                        $peerTicketDetails = $ticketColObj->getTicketDetails($PeerticketId, $projectId);
+                        $uiTicketDetails = $ticketColObj->getTicketDetails($UIticketId, $projectId);
+                        $qaTicketDetails = $ticketColObj->getTicketDetails($QAticketId, $projectId);
                         // Peer status updated to re-open
+                        if($peerTicketDetails['Fields']['workflow']['value']== 14 && $newWorkflowId ==10)
                         $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                        if($uiTicketDetails['Fields']['workflow']['value']== 14 && $newWorkflowId ==10)
                         $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                        if($oldTicketObj['Fields']['workflow']['value'] == 8 && $newWorkflowId ==10)  // QA status updated to re-open
-                       {   
-                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                       }else if($newWorkflowId ==7){ // 7 --Invalid
+                        if($qaTicketDetails['Fields']['workflow']['value'] == 14&& $newWorkflowId ==10 )  // QA status updated to re-open
                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                       if($newWorkflowId ==7){ // 7 --Invalid
+                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                        }// Send notification to AssignedTo person and Peer person
                     } error_log("Send notification to AssignedTo person and Peer person");
                     return true;
@@ -1341,7 +1347,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     return true;
                 }
             }
-          } else if ($oldTicketObj['WorkflowType'] == 3) { // 3- Peer
+          }else if($oldTicketObj['WorkflowType'] == 2 && $newWorkflowId == 5){ // 2-UI
+              // Developer should get notification 
+              error_log("Developer should get notification about UI completion");
+           }else if ($oldTicketObj['WorkflowType'] == 3) { // 3- Peer
+         
                 if ($newWorkflowId == 6) {
                     // 6 --Paused - 
                     $ticketId = $oldTicketObj['ParentStoryId'];
@@ -1364,14 +1374,19 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 } else if ($newWorkflowId == 14) {
                     // 14- Closed
                     $parentTicketDetails = $ticketColObj->getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
-                    foreach ($parentTicketDetails['Tasks'] as $task) {
-                        if ($task['TaskType'] == 3)
-                            $ticketId = $task['TaskId'];
-                    }
-
-                    $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Close peer ticket
-                    // Peer status updated to re-open
-                    $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                     foreach ($parentTicketDetails['Tasks'] as $task) {
+                            if ($task['TaskType'] == 3)
+                              { 
+                                $PeerticketId = $task['TaskId'];// peer ticket id 
+                            }else if($task['TaskType'] == 2){
+                                $UIticketId = $task['TaskId'];  // UI ticket ID
+                             }
+                     }
+                    $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId); // get close status details
+                    // Peer status updated to Close
+                    $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                    // UI status updated to Close
+                    $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                     $ticketId = $oldTicketObj['ParentStoryId'];
                     $workFlowDetail = WorkFlowFields::getWorkFlowDetails(8); // Fixed parent ticket
                     // Parent ticket status updated to re-open
