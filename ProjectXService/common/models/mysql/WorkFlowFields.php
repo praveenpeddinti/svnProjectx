@@ -41,8 +41,6 @@ class WorkFlowFields extends ActiveRecord
 Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
         }
-       
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
       public static function getStoryWorkFlowList($workflowType,$workflowId){
@@ -55,8 +53,6 @@ Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex-
 Yii::log("WorkFlowFields:getStoryWorkFlowList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
         }
-       
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
 }

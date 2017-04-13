@@ -622,7 +622,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                     }
                                    
                                 } else{
-                                    $fieldName =  $fieldDetails["Field_Name"];
+                                   $fieldName =  $fieldDetails["Field_Name"];
                                     if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
                                        $fieldDetails["Field_Name"]= $ticket_data->TicketId."-".$fieldName;  
                                     }else{
@@ -636,7 +636,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $fieldtochange1= "Fields.".$field_name.".value";
                     $fieldtochange2 = "Fields.".$field_name.".value_name";
                     $fieldtochangeId = "Fields.".$field_name.".Id";
-                    error_log($fieldtochange1."---".$fieldtochange2."----".$fieldtochangeId."=======".$field_name);
                     $newData = array('$set' => array($fieldtochange1 => $leftsideFieldVal,$fieldtochange2 =>$valueName));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId,$fieldtochangeId=>(int)$ticket_data->id);
                     $selectedValue=$leftsideFieldVal;
@@ -682,77 +681,52 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $processedDesc = $refinedData["description"];
             $artifacts = $refinedData["ArtifactsList"];
             $commentDesc = $commentData->Comment->CrudeCDescription;
-        if(isset($commentData->Comment->Slug)){
-            error_log("++++++Slug++++++++".print_r($commentData,1));
-            $collection = Yii::$app->mongodb->getCollection('TicketComments');
+            if (isset($commentData->Comment->Slug)) {
+                $collection = Yii::$app->mongodb->getCollection('TicketComments');
 //}
-          $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc,"Activities.$.CDescription" => $processedDesc));
-          $collection->update(array("TicketId" => (int)$commentData->TicketId,"ProjectId"=>(int)$commentData->projectId,"Activities.Slug"=>new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
-          $retData = array("CrudeCDescription"=>$commentDesc,
-                            "CDescription"=>$processedDesc);
-          if(!empty($artifacts)){
-            TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId,$artifacts,$commentData->userInfo->Id);   
-        }
-            return $retData;
-//            $db =  TicketComments::getCollection();
-//         $v = $db->update( array("ProjectId"=> (int)$commentData->projectId ,"TicketId"=> (int)$commentData->TicketId,"Activities.Slug"=>$commentData->Comment->Slug), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$commentData->userInfo->Id,"Activity"=>"Comment"));  
-        }else{
-        
+                $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc));
+                $collection->update(array("TicketId" => (int) $commentData->TicketId, "ProjectId" => (int) $commentData->projectId, "Activities.Slug" => new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
+                $retData = array("CrudeCDescription" => $commentDesc,
+                    "CDescription" => $processedDesc);
+                if (!empty($artifacts)) {
+                    TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
+                }
+                return $retData;
+            } else {
 
-//                 $validDate = CommonUtility::validateDate($commentData->Comment->CommentedOn);
-//                 error_log("--------------validadte----------".$validDate);
-//                            if($validDate){
-//                                error_log("in if");
-//                                $commentedOn = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000); 
-//                            }else{
-//                                error_log("in else");
-//                                $commentedOn = $commentData->Comment->CommentedOn; 
-//                            }
-                            $commentedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
-//                            error_log("++++++++++++++");
-       $slug = new \MongoDB\BSON\ObjectID();
-                            $commentDataArray=array(
-            "Slug"=>$slug,
-            "CDescription"=>  $processedDesc,
-            "CrudeCDescription"=>$commentDesc,
-            "ActivityOn"=>$commentedOn,
-            "ActivityBy"=>(int)$commentData->userInfo->Id,
-            "Status"=>($commentData->Comment->ParentIndex == "")?(int)1:(int)2,
-            "PropertyChanges"=>[],
-             "PoppedFromChild"=>"",
-            "ParentIndex"=>($commentData->Comment->ParentIndex == "")?"":(int)$commentData->Comment->ParentIndex,
-            "repliesCount"=>(int)0
-        );
-         $db =  TicketComments::getCollection();
-         $v = $db->update( array("ProjectId"=> (int)$commentData->projectId ,"TicketId"=> (int)$commentData->TicketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$commentData->userInfo->Id,"Activity"=>"Comment"));  
-        TicketComments::saveComment($commentData->TicketId, $commentData->projectId,$commentDataArray);
-        if(!empty($artifacts)){
-            TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId,$artifacts,$commentData->userInfo->Id);   
-        }
-        $tinyUserModel = new TinyUserCollection();
-        $userProfile = $tinyUserModel->getMiniUserDetails($commentDataArray["ActivityBy"]);
+                $commentedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+
+                $slug = new \MongoDB\BSON\ObjectID();
+                $commentDataArray = array(
+                    "Slug" => $slug,
+                    "CDescription" => $processedDesc,
+                    "CrudeCDescription" => $commentDesc,
+                    "ActivityOn" => $commentedOn,
+                    "ActivityBy" => (int) $commentData->userInfo->Id,
+                    "Status" => ($commentData->Comment->ParentIndex == "") ? (int) 1 : (int) 2,
+                    "PropertyChanges" => [],
+                    "PoppedFromChild" => "",
+                    "ParentIndex" => ($commentData->Comment->ParentIndex == "") ? "" : (int) $commentData->Comment->ParentIndex,
+                    "repliesCount" => (int) 0
+                );
+                $db = TicketComments::getCollection();
+                $v = $db->update(array("ProjectId" => (int) $commentData->projectId, "TicketId" => (int) $commentData->TicketId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $commentData->userInfo->Id, "Activity" => "Comment"));
+                TicketComments::saveComment($commentData->TicketId, $commentData->projectId, $commentDataArray);
+                if (!empty($artifacts)) {
+                    TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
+                }
+                $tinyUserModel = new TinyUserCollection();
+                $userProfile = $tinyUserModel->getMiniUserDetails($commentDataArray["ActivityBy"]);
                 $commentDataArray["ActivityBy"] = $userProfile;
                 $datetime = $commentDataArray["ActivityOn"]->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                 $readableDate = $datetime->format('M-d-Y H:i:s');
-                $commentDataArray["ActivityOn"]=$readableDate;
-//        $commentDataArray["userName"]=$commentData->userInfo->username;
-//        $datetime = $commentDataArray["ActivityOn"]->toDateTime();
-//        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-//        $readableDate = $datetime->format('m-d-Y H:i:s');
-//        $commentDataArray["readableDate"]=$readableDate;
-        
-        return $commentDataArray;
-        }
-//        error_log("==================");
-//        $ticketComment->Comments=[];
-//        $populateComment = $ticketComment->Comments;
-//        array_push($populateComment, $commentDataArray);
-//        $ticketComment->Comments=$populateComment;
-//        error_log("++++++++++++++++".print_r($ticketComment,1));
-//        $ticketComment->insert();
-    }catch(Exception $ex){
-        error_log("===========>".$ex->getMessage()."--------->".$ex->getTraceAsString());
+                $commentDataArray["ActivityOn"] = $readableDate;
+
+
+                return $commentDataArray;
+            }
+        }catch(Exception $ex){
         Yii::log("StoryService:saveComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
     }
         
@@ -780,7 +754,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            }else{
               $cursor =  $db->count( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId, "Followers" => array('$elemMatch'=> array( "FollowerId"=> (int)$collaboratorId ,"Flag" =>$fieldName))));  
            }
-           error_log("cursor===".$cursor);
             if($cursor == 0){
                $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Followers' =>array("FollowerId" => (int)$collaboratorId,"FollowedOn" =>$currentDate,"CreatedBy"=>(int)$loggedInUser,"Flag"=>$fieldName,"DefaultFollower"=>(int)$defaultFollower ))),array('new' => 1,"upsert"=>1));
              
@@ -891,7 +864,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
          //  error_log(print_r($record,1));
          $slug =  new \MongoDB\BSON\ObjectID();
          if($record["RecentActivityUser"] != $activityUserId || $record["Activity"] == "Comment" ){
-            error_log("iffffffffffffff----------------");
             // $dataArray = array();
              $commentDataArray=array(
             "Slug"=>$slug,
@@ -912,13 +884,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $returnValue = array("referenceKey"=>-1,"data"=>$commentDataArray);
             
          }else{
-             error_log("elseeeeeeeeeee----------------");
              $recentSlug = $record["RecentActivitySlug"];
              $property = array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate );
 
              $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>$property)),array('new' => 1,"upsert"=>1));
             
-             error_log("count------".count($v["Activities"]));
              $activitiesCount = count($v["Activities"]);
              if($activitiesCount>0){
                  $activitiesCount = $activitiesCount-1;
@@ -927,7 +897,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              $returnValue = array("referenceKey"=>$activitiesCount,"data"=>$property);
          }
            if($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow"){
-               error_log("elseeeeeeeeeeeeeee----update story");
                 $slug =  new \MongoDB\BSON\ObjectID();
             $commentDataArray=array(
             "Slug"=>$slug,
@@ -1293,12 +1262,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 
         try {
             $collection = TicketCollection::getCollection();
-            $ticketColObj = new TicketCollection();
-            $ticketId = '';
             $projectId = $oldTicketObj['ProjectId'];
-            $PeerticketId='';
-            $QAticketId='';
-            $UIticketId='';
             if ($oldTicketObj['WorkflowType'] == 1) { // 1-Story,General Task,
                 if ($newWorkflowId == 5) {
                     // 5 --Code complete
@@ -1307,52 +1271,34 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     return true;
                 } else if ($newWorkflowId == 10 || $newWorkflowId == 7 || $newWorkflowId == 1) {  // 10 --Re-open  7 -- Invalid --New
                     if (sizeof($oldTicketObj['Tasks']) != 0 || $oldTicketObj['Tasks'] != NULL) {
-                        foreach ($oldTicketObj['Tasks'] as $task) {
-                            if ($task['TaskType'] == 3)
-                              { 
-                                $PeerticketId = $task['TaskId'];// peer ticket id 
-                            }else if($task['TaskType'] == 4){
-                                 $QAticketId = $task['TaskId'];
-                             }else if($task['TaskType'] == 2){
-                                $UIticketId = $task['TaskId'];  
-                             }
-
                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
-                        $peerTicketDetails = $ticketColObj->getTicketDetails($PeerticketId, $projectId);
-                        $uiTicketDetails = $ticketColObj->getTicketDetails($UIticketId, $projectId);
-                        $qaTicketDetails = $ticketColObj->getTicketDetails($QAticketId, $projectId);
+                        foreach ($oldTicketObj['Tasks'] as $task) {
+                            //  error_log("Task type------------".$task['TaskType']);
+                            $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
+                            if ($taskDetails['Fields']['workflow']['value'] == 14 && $newWorkflowId == 10)
+                                $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                            if ($newWorkflowId == 7 || $newWorkflowId == 1) { // 7 --Invalid
+                                $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                            } else if ($newWorkflowId == 8) { // 8 --Fixed
+                                $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Get closed status details
+                                $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                            }
+                        }
                         // Peer status updated to re-open
-                        if($peerTicketDetails['Fields']['workflow']['value']== 14 && $newWorkflowId ==10)
-                        $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                        if($uiTicketDetails['Fields']['workflow']['value']== 14 && $newWorkflowId ==10)
-                        $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                        if($qaTicketDetails['Fields']['workflow']['value'] == 14&& $newWorkflowId ==10 )  // QA status updated to re-open
-                          $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                       if($newWorkflowId ==7 || $newWorkflowId ==1){ // 7 --Invalid
-                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                       }else if($newWorkflowId == 8){ // 8 --Fixed
-                           $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Get closed status details
-                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                           $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $QAticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                       }// Send notification to AssignedTo person and Peer person
+                        // Send notification to AssignedTo person and Peer person
                     } error_log("Send notification to AssignedTo person and Peer person");
                     return true;
-                }else {
+                } else {
                     return true;
                 }
-            }
-          }else if($oldTicketObj['WorkflowType'] == 2 && $newWorkflowId == 5){ // 2-UI
-              // Developer should get notification 
-              error_log("Developer should get notification about UI completion");
-           }else if ($oldTicketObj['WorkflowType'] == 3) { // 3- Peer
-         
+            } else if ($oldTicketObj['WorkflowType'] == 2 && $newWorkflowId == 5) { // 2-UI
+                // Developer should get notification 
+                error_log("Developer should get notification about UI completion");
+            } else if ($oldTicketObj['WorkflowType'] == 3) { // 3- Peer
                 if ($newWorkflowId == 6) {
                     // 6 --Paused - 
                     $ticketId = $oldTicketObj['ParentStoryId'];
-                  // Send notification to Developer(AssignedTo)
+                    // Send notification to Developer(AssignedTo)
                     error_log("Send notification to Developer(AssignedTo)");
                     return true;
                 } else if ($newWorkflowId == 14) {
@@ -1366,39 +1312,30 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             } else if ($oldTicketObj['WorkflowType'] == 4) { // 4--QA
                 if ($newWorkflowId == 6) {
                     // 6 --Paused - 
-               error_log("Send notification to Developer(AssignedTo) and Peer");
+                    error_log("Send notification to Developer(AssignedTo) and Peer");
                     return true;
                 } else if ($newWorkflowId == 14) {
                     // 14- Closed
-                    $parentTicketDetails = $ticketColObj->getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
-                     foreach ($parentTicketDetails['Tasks'] as $task) {
-                            if ($task['TaskType'] == 3)
-                              { 
-                                $PeerticketId = $task['TaskId'];// peer ticket id 
-                            }else if($task['TaskType'] == 2){
-                                $UIticketId = $task['TaskId'];  // UI ticket ID
-                             }
-                     }
-                    $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId); // get close status details
-                    // Peer status updated to Close
-                    $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $PeerticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                    // UI status updated to Close
-                    $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $UIticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                    $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
+                    $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
+                    foreach ($parentTicketDetails['Tasks'] as $task) {
+                        // get close status details
+                        // Peer status updated to Close
+                        $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                        // UI status updated to Close
+                    }
                     $ticketId = $oldTicketObj['ParentStoryId'];
                     $workFlowDetail = WorkFlowFields::getWorkFlowDetails(8); // Fixed parent ticket
                     // Parent ticket status updated to re-open
-                    $collection->findAndModify(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-
+                    $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                     // Send Notification toAll followers.
                     error_log("Send Notification to All followers");
                     return true;
-                }else {
+                } else {
                     return true;
                 }
             }
-         
-        
-    }catch (Exception $ex) {
+        }catch (Exception $ex) {
             Yii::log("StoryService:updateWorkflowAndSendNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
