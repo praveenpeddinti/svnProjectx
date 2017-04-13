@@ -35,4 +35,33 @@ AjaxSubscribe(url:string,params:Object,callback)
       err => { console.error("ERRR_____________________" + err) } //For Error Response
       );
 }
+
+/**
+ * @author : Ryan 
+ * @param url 
+ * @param params 
+ * @param callback 
+ */
+NodeSubscribe(url:string,params:Object,callback)
+{
+  var getAllData=  JSON.parse(localStorage.getItem('user'));
+   if(getAllData != null){
+      params["userInfo"] = getAllData;
+      params["projectId"] = 1;
+      params["timeZone"] = jstz.determine_timezone().name();
+    }
+      //var  options = new RequestOptions({headers: headers});
+      this.http.post(GlobalVariable.NOTIFICATION_URL+url, params, headers)
+      .subscribe(
+      (data) => {
+        // jQuery("#commonSpinner").removeClass("loading"); 
+        // jQuery("#commonSpinner").addClass("unloading"); 
+        var res = data.json();//For Success Response
+          callback(res);
+      },
+      err => { console.error("ERRR_____________________" + err) } //For Error Response
+      );
+}
+
+
 }
