@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ToastController, Content } from 'ionic-angular';
+import { ToastController, Content, Platform, App } from 'ionic-angular';
 import { NavController, ModalController, NavParams, MenuController, LoadingController, PopoverController, ViewController } from 'ionic-angular';
 
 import { Globalservice } from '../../providers/globalservice';
@@ -59,6 +59,9 @@ export class StoryDetailsPage {
     public minDate: any = new Date();
     public myDate: string = "2017-02-25";
     public userName: any = '';
+    public static optionsModal;
+    public static isMenuOpen: boolean = false;
+    public static menuControler;
 
     @ViewChild(Content) content: Content;
 
@@ -70,6 +73,8 @@ export class StoryDetailsPage {
     };
 
     constructor(menu: MenuController,
+        private platform: Platform,
+        private app: App,
         private modalController: ModalController,
         private toastCtrl: ToastController,
         public globalService: Globalservice,
@@ -79,8 +84,8 @@ export class StoryDetailsPage {
         public loadingController: LoadingController,
         public popoverCtrl: PopoverController,
         private storage: Storage, public viewCtrl: ViewController, ) {
-        //      menu.swipeEnable(false);
-        //this.minDate = this.formatDate(new Date());
+            
+        StoryDetailsPage.menuControler = menu;
         this.localDate = new Date().toISOString();
         this.minDate = new Date().toISOString();
 
@@ -161,12 +166,21 @@ export class StoryDetailsPage {
         // Ticket #91 ended
     }
     
+    public menuOpened(){
+        StoryDetailsPage.isMenuOpen = true;
+    }
+    public menuClosed(){
+        StoryDetailsPage.isMenuOpen = false;
+    }
+
    public dateChange(event, index, fieldDetails) {
 
 this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe( 
 (result) => {
     setTimeout(() => {
         document.getElementById("field.title_field.id_" + index).innerHTML = this.localDate;
+        this.enableDataPicker[index] = false;
+         document.getElementById("field.title_field.id_" + index).style.display = 'block';
         //    document.getElementById("item_" + index).classList.remove("item-select");
     }, 300);
            }, 
@@ -281,10 +295,11 @@ let toast = this.toastCtrl.create({
        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe( 
     (result) => {
         setTimeout(() => {
-            // this.enableTextField[index] = false;
-           // this.showEditableFieldOnly[index] = true;
-            document.getElementById("field.title_field.id_" + index).innerHTML = (event.target.value);
-                }, 300);
+                this.enableTextField[index] = false;
+                this.enableTextArea[index] = false;
+                document.getElementById("field.title_field.id_" + index).style.display = 'block';
+                document.getElementById("field.title_field.id_" + index).innerHTML = (event.target.value);
+                }, 200);
             },
             (error) => {
                 console.log("the error --- " + JSON.stringify(error));
@@ -363,50 +378,48 @@ openPopover(myEvent) {
         console.log("the model present");
             
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
-            this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
-                (result) => {
-                    if(fieldDetails.fieldType == "Team List"){
-                        this.displayFieldvalue.push({"Id":"","Name":"--none--","Email":"null"})
-                    for(let data of result.getFieldDetails){
-                        this.displayFieldvalue.push(data);
-   }                        
-                } else { 
-                for(let data of result.getFieldDetails){
+                this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
+                    (result) => {
+                        if(fieldDetails.fieldType == "Team List"){
+                            this.displayFieldvalue.push({"Id":"","Name":"--none--","Email":"null"})
+                        for(let data of result.getFieldDetails){
                             this.displayFieldvalue.push(data);
-                    } 
-                }
-                     
-                    let optionsModal = this.modalController.create(CustomModalPage, {activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
-                        optionsModal.onDidDismiss((data) => {
-                            if(data != null && (data.Name != data.previousValue)){
-                                this.changeOption(data, index, fieldDetails);
-                            }
-                            this.displayFieldvalue = [];
-                        }); 
-                    optionsModal.present();
-        },
-        (error) => {
-            console.log("the fields error --- " + error);
-        });
-
-} else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
-    document.getElementById("field.title_field.id_" + index).style.display = 'none';
-            //@ViewChild("field.title_field.id_" + index) datePicker;
-    //jQuery("#field.title_field.id_" + index).open();
-            this.enableDataPicker[index] = true;
-        
-        } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
-    console.log("TextArea was enabled " + fieldDetails.fieldType);
-        
-            if (fieldDetails.fieldType == "TextArea") {
-        this.enableTextArea[index] = true;
-        document.getElementById("field.title_field.id_" + index).style.display = 'none';
-            }
-            else if (fieldDetails.fieldType == "Text") {
-            this.enableTextField[index] = true;
+                           }                        
+                    } else { 
+                    for(let data of result.getFieldDetails){
+                                this.displayFieldvalue.push(data);
+                        } 
+                    }
+                         
+                        StoryDetailsPage.optionsModal = this.modalController.create(CustomModalPage, {activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
+                            StoryDetailsPage.optionsModal.onDidDismiss((data) => {
+                                if(data != null && (data.Name != data.previousValue)){
+                                    this.changeOption(data, index, fieldDetails);
+                                }
+                                this.displayFieldvalue = [];
+                            }); 
+                        StoryDetailsPage.optionsModal.present();
+            },
+            (error) => {
+                console.log("the fields error --- " + error);
+            });
+    
+    } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
+                document.getElementById("field.title_field.id_" + index).style.display = 'none';
+                this.enableDataPicker[index] = true;
+            
+    } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
+        // console.log("TextArea was enabled " + fieldDetails.fieldType);
+            
+                if (fieldDetails.fieldType == "TextArea") {
+            this.enableTextArea[index] = true;
             document.getElementById("field.title_field.id_" + index).style.display = 'none';
+                }
+                else if (fieldDetails.fieldType == "Text") {
+                this.enableTextField[index] = true;
+                document.getElementById("field.title_field.id_" + index).style.display = 'none';
+            }
         }
-    }
     }  
     
     

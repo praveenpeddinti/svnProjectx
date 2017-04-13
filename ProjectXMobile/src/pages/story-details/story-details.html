@@ -25,9 +25,11 @@
         <ion-list>
             <ion-item *ngFor="let field of arrayList; let i=index;" id="item_{{i}}">
                 <div *ngIf="!showEditableFieldOnly[i]">
-                    <h3>{{field.title}}</h3>
-                    <div id="field.title_field.id_{{i}}" *ngIf="isColorChange(field)" ng class="item" class="spinnerlabel">{{field.assignTo}}</div>
-                    <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item myborder" (click)="openOptionsModal(field, i)" >{{field.assignTo}}</div>
+                    <label class="customlabel">{{field.title}}</label>
+                    <div id="field.title_field.id_{{i}}" *ngIf="isColorChange(field)" ng class="item customdropdown spinnerlabel" >{{field.assignTo}}</div>
+                    <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item customdropdown" (click)="openOptionsModal(field, i)" >{{field.assignTo}}
+                        <span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                    </div>
 
                 </div>
                  <ion-row>
@@ -179,20 +181,6 @@
             </div>
         </div>
     </div>
-
-    <!--here added uday-->
-
-    <div class="jquery-notebook editor" contenteditable="true" >
-		
-
-            
-            A simple, clean and elegant text editor. Inspired by the awesomeness of <a href="http://medium.com" target="_blank">Medium</a>.
-            This jQuery plugin is released under the MIT license. You can check out the project and see how extremely simple it is to use this editor on your application by clicking on the Github ribbon on the top corner of this page. Feel free to contribute with this project by registering any bug that you may encounter as an issue on Github, and working on the issues that are already there. I'm looking forward to seeing your pull request!
-           <p> Now, just take a time to test the editor. Yes, <b>this div is the editor</b>. Try to edit this text, select a part of this text and don't forget to try the basic text editor keyboard shortcuts.</p>
-       
-	  </div>
-
-
     <!--Ticket #91 ended-->
 </ion-content>
 

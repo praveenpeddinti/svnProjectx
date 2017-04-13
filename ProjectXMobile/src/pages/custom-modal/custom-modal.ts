@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavParams, ViewController } from 'ionic-angular';
+import {Content} from 'ionic-angular';
+declare var jQuery: any;
 
 /*
   Generated class for the CustomModal page.
@@ -23,6 +25,7 @@ import { NavParams, ViewController } from 'ionic-angular';
 })
 export class CustomModalPage {
 
+    @ViewChild(Content) content: Content;
   
     public activatedFieldDetails: any;
     public displayFieldvalue: any;
@@ -55,6 +58,13 @@ export class CustomModalPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CustomModalPage');
+    // this.content.scrollToBottom(300);
+   }
+   public ionViewDidEnter(){
+    // this.content.scrollToBottom(300);
+    console.log("the top of item " + jQuery("#item_5").position().top);
+    let dimensions = this.content.getContentDimensions();
+    console.log("the contentBottom " + JSON.stringify(dimensions) + " ----- " + dimensions.contentBottom);
+    this.content.scrollTo(0, jQuery("#item_5").position().top, 300);
   }
-
 }

@@ -55,7 +55,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 .custombuttonsmenu.bar-buttons-md ion-icon, .custombuttonsmenu.bar-buttons-ios ion-icon, .custombuttonsmenu.bar-buttons-wp ion-icon{font-size:25px}
 .custombuttonsmenu.custombuttonsmenumargintop.bar-buttons-md ion-icon, .custombuttonsmenu.custombuttonsmenumargintop.bar-buttons-ios ion-icon, .custombuttonsmenu.custombuttonsmenumargintop.bar-buttons-wp ion-icon{margin-top:0px}
 .custombuttonsmenuborderbottom{border-bottom:1px solid #dedede;padding-bottom:5px}
-.list-md .item-block .item-inner, .list-ios .item-block .item-inner, .list-wp .item-block .item-inner{margin-left:-16px;padding-left:15px}
+.list-md .item-block .item-inner, .list-ios .item-block .item-inner, .list-wp .item-block .item-inner{margin-left:-16px;padding-left:10px}
 .expand{display: none; color: #3b9ec2; position: absolute; right: 11px; top: 2px}
 .collapse{color: #3b9ec2; position: absolute; right: 11px; top: 2px}
 .dashboardouterbox{}
@@ -321,7 +321,13 @@ border: 1px solid #f0f0f0; margin-bottom:5px; padding-left:3px; padding-top: 5px
     align-self: stretch;
     /* text-overflow: ellipsis; */
 }
-.dodlink{ background: #f8f8f8;
-border: 1px solid #f0f0f0; margin-bottom:5px; padding-left:3px; padding-top: 5px;}
- 
+.dodlink{ background: #f8f8f8;border: 1px solid #f0f0f0; margin-bottom:5px; padding-left:3px; padding-top: 5px;}
+.customdropdown{border-radius: 2px;position: relative;border: 1px solid #e8e8e8;padding:10px 20px 10px 10px;color:#4c4c4c;font-size:14px}
+.customdropdown span.custombuttonsmenuicon{border-left:1px solid #e8e8e8;position:absolute;right:0;top:0;padding:8px 10px 10px 10px; }
+.customdropdown span.custombuttonsmenuicon i{margin-top:3px;color:#7c7c7c}
+.customlabel{color:#7c7c7c;font-size:12px;padding-bottom:5px;display: inline-block}
+.label-md,.label-ios, .label-wp {margin: 13px 2px 13px 0;}
+}
+.picker-opt-disabled {
+    opacity:1!important;
 }

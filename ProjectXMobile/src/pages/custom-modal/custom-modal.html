@@ -11,17 +11,17 @@
         </ion-buttons>
     </ion-toolbar>
   </ion-header>
-  <ion-content padding>                        
+  <ion-content #scrollContent padding>                        
       <ion-row style="padding: 16px;border-bottom: 1px solid #ccc;" 
-              *ngFor="let item of displayFieldvalue" 
+              *ngFor="let item of displayFieldvalue; let i=index;" 
               [ngClass]="{'selectedMember': activatedFieldValue == item.Name}"
               (click)="dismiss(item)" center> 
 
-              <div> <ion-icon 
-                             *ngIf="activatedFieldValue == item.Name" 
+              <div id="item_{{i}}"> 
+                  <ion-icon *ngIf="activatedFieldValue == item.Name" 
                              name="checkmark"></ion-icon> 
                     {{item.Name}} 
                     <i *ngIf="isPriority" class="fa fa-circle {{item.Name}}" aria-hidden="true"></i> 
-            </div> 
+              </div> 
       </ion-row>
   </ion-content>

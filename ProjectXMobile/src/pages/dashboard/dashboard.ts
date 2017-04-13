@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController } from 'ionic-angular';
-import { Storage } from "@ionic/storage";
-import { PopoverPage } from '../popover/popover';
-import { StoryDetailsPage } from '../story-details/story-details';
-import { StoryCreatePage } from '../story-create/story-create';
-import { Globalservice } from '../../providers/globalservice';
-import { Constants } from '../../providers/constants';
+import {Component} from '@angular/core';
+import {NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController, Platform} from 'ionic-angular';
+import {Storage} from "@ionic/storage";
+import {PopoverPage} from '../popover/popover';
+import {StoryDetailsPage} from '../story-details/story-details';
+import {StoryCreatePage} from '../story-create/story-create';
+import {Globalservice} from '../../providers/globalservice';
+import {Constants} from '../../providers/constants';
 /*
   Generated class for the Dashboard page.
 
@@ -27,10 +27,10 @@ export class DashboardPage {
     arrayObject is used for saving the stories list and passing it to the html page
      ** 
     */
-    public arrayObject: Array<{ id: string, storyOrTask: string, subTasks: number, storyPointsHeading: string, title: string, assignTo: string, userThumbNail: string, priority: string, workflow: string, bucket: string, duedate: string }>;
+    public arrayObject: Array<{id: string, storyOrTask: string, subTasks: number, storyPointsHeading: string, title: string, assignTo: string, userThumbNail: string, priority: string, workflow: string, bucket: string, duedate: string}>;
     public moreDataLoaded: boolean = true;
 
-     public  loader = this.loadingController.create({ content: "Loading..." });
+    public loader = this.loadingController.create({content: "Loading..."});
 
     userName: any = '';
     /*
@@ -39,9 +39,10 @@ export class DashboardPage {
     *
     */
 
-    paramas = { "projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "asc", "userInfo": { } };
+    paramas = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "asc", "userInfo": {}};
     constructor(public navCtrl: NavController,
         public navParams: NavParams,
+        public platform: Platform,
         public loadingController: LoadingController,
         public popoverCtrl: PopoverController,
         public alertController: AlertController,
@@ -52,7 +53,26 @@ export class DashboardPage {
         this.arrayObject = [];
 
 
-        this.storage.get('userCredentials').then( (value) => {
+        this.storage.get('userCredentials').then((value) => {
+
+            platform.registerBackButtonAction(() => {
+                // console.log("the views length " + this.navCtrl.getActive().index);
+                /* checks if modal is open */
+                if (StoryDetailsPage.optionsModal && StoryDetailsPage.optionsModal.index == 0) {
+                    /* closes modal */
+                    StoryDetailsPage.optionsModal.dismiss();
+                    return;
+                } else {
+                    if (this.navCtrl.getActive().index == 0) {
+                        this.platform.exitApp();
+                    } else if (StoryDetailsPage.isMenuOpen == true) {
+                        StoryDetailsPage.menuControler.close();
+                    } else {
+                        return this.navCtrl.pop();
+                    }
+                }
+            });
+
             this.userName = value.username;
             this.paramas.userInfo = value;
 
@@ -62,7 +82,7 @@ export class DashboardPage {
     }
 
     ionViewDidLoad() {
-       
+
         // this.getAllStoriesList();
     }
 
@@ -72,23 +92,23 @@ export class DashboardPage {
        
         */
     openPopover(myEvent) {
-        let userCredentials = { username: this.userName };
+        let userCredentials = {username: this.userName};
         let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
         console.log("User name is " + this.userName);
         popover.present({
             ev: myEvent
         });
     }
-doRefresh(refresher){
-   this.storage.get('userCredentials').then( (value) => {
+    doRefresh(refresher) {
+        this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
             this.paramas.userInfo = value;
 
             this.getAllStoriesList();
-            if(refresher != 0)
-            refresher.complete();
+            if (refresher != 0)
+                refresher.complete();
         });
-};
+    };
     /**
         used for getting all the stories 
         author uday   
@@ -99,7 +119,7 @@ doRefresh(refresher){
         if (this.paramas.offset == 0) {
             this.paramas.offset = 0;
         }
-       
+
         this.globalService.getStoriesList(this.urlConstants.getAllTicketDetails, this.paramas).subscribe(
             data => {
                 if (data.statusCode == '200') {
@@ -113,17 +133,17 @@ doRefresh(refresher){
                     for (let ticket = 0; ticket < this.items.length; ticket++) {
                         var _id = this.items[ticket][0].field_value;
                         var _storyOrTask;
-                        var _storyPointHeading="";
+                        var _storyPointHeading = "";
                         if (this.items[ticket][0].other_data.planlevel == 1) {
                             _storyOrTask = "Story";
-                            _storyPointHeading="Total story points";
+                            _storyPointHeading = "Total story points";
                         }
-                        else{
+                        else {
                             _storyOrTask = "Task";
-                            _storyPointHeading="Estimated points";
+                            _storyPointHeading = "Estimated points";
                         }
-                        var _subTasks=0;
-                         _subTasks= this.items[ticket][0].other_data.totalSubtasks;
+                        var _subTasks = 0;
+                        _subTasks = this.items[ticket][0].other_data.totalSubtasks;
                         var _title = this.items[ticket][1].field_value;
                         var _assignTo = this.items[ticket][2].field_value;
                         var _thumbNail = this.items[ticket][2].other_data;
@@ -165,12 +185,12 @@ doRefresh(refresher){
        */
 
     public openDetails(item): void {
-        var clickedItemId = { "id": item.id };
+        var clickedItemId = {"id": item.id};
         this.navCtrl.push(StoryDetailsPage, clickedItemId);
     }
-public btnCreateTask(){
-    this.navCtrl.push(StoryCreatePage);
-}
+    public btnCreateTask() {
+        this.navCtrl.push(StoryCreatePage);
+    }
 
     /**
          doInfinite(event) is called when the list is pulling down 
@@ -187,4 +207,4 @@ public btnCreateTask(){
         }, 2000);
 
     }
-    }
+}
