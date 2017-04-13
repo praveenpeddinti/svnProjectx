@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { ToastController, ViewController, NavParams, LoadingController,PopoverController, ModalController } from 'ionic-angular';
+import { ToastController, ViewController, ActionSheetController,Platform , NavParams, LoadingController,PopoverController, ModalController } from 'ionic-angular';
 import { Globalservice} from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
 import {CustomModalPage } from '../custom-modal/custom-modal';
+import {Camera, File, Transfer, FilePath} from 'ionic-native';
 declare var jQuery: any;
+declare var cordova: any;
 
 @Component({
     selector: 'page-story-create',
@@ -24,12 +26,16 @@ export class StoryCreatePage {
     public previousSelectedValue = "";
     public readOnlyDropDownField: boolean = false;
     private submitted: boolean = false;
+    lastImage: string = null;
+
     constructor(
         public modalController: ModalController,
         public navParams: NavParams,
         private globalService: Globalservice,
         private toastCtrl: ToastController,
         public viewCtrl: ViewController,
+        public platform: Platform,
+        public actionSheetCtrl: ActionSheetController,
         public popoverCtrl: PopoverController,
         public loadingController: LoadingController,
         private storage: Storage, private constants: Constants) {
@@ -136,7 +142,102 @@ export class StoryCreatePage {
             //document.getElementById("item_"+index).classList.remove("item-select");
         }, 300);
     }
- 
+     public presentActionSheet() {
+        let actionSheet = this.actionSheetCtrl.create({
+            title: 'Select Image Source',
+            buttons: [
+                {
+                    text: 'Load from Library',
+                    handler: () => {
+                        this.takePicture(Camera.PictureSourceType.PHOTOLIBRARY);
+                    }
+                },
+                {
+                    text: 'Use Camera',
+                    handler: () => {
+                        this.takePicture(Camera.PictureSourceType.CAMERA);
+                    }
+                },
+                {
+                    text: 'Cancel',
+                    role: 'cancel'
+                }
+            ]
+        });
+        actionSheet.present();
+    }
+
+        public takePicture(sourceType) {
+        // Create options for the Camera Dialog
+        var options = {
+            quality: 100,
+            sourceType: sourceType,
+            destinationType: Camera.DestinationType.FILE_URI,
+            saveToPhotoAlbum: false,
+            correctOrientation: true
+        };
+
+        // Get the data of an image
+        Camera.getPicture(options).then((imagePath) => {
+            // Special handling for Android library
+            if (this.platform.is('android') && sourceType === Camera.PictureSourceType.PHOTOLIBRARY) {
+                FilePath.resolveNativePath(imagePath)
+                    .then(filePath => {
+                        let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+                        let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+                        this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+                    });
+            } else {
+                var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+                var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+                this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
+            }
+        }, (err) => {
+            this.presentToast('Error while selecting image.');
+        });
+    }
+
+    private createFileName() {
+        var d = new Date(),
+            n = d.getTime(),
+            newFileName = n + ".jpg";
+        return newFileName;
+    }
+
+    private presentToast(text) {
+        let toast = this.toastCtrl.create({
+            message: text,
+            duration: 3000,
+            position: 'top'
+        });
+        toast.present();
+    }
+
+    private copyFileToLocalDir(namePath, currentName, newFileName) {
+        File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+            this.lastImage = newFileName;
+            // my data
+            var foo = cordova.file.dataDirectory + newFileName;
+            this.globalService.makeFileRequest(this.constants.filesUploading, [], foo).then(
+            (result :Array<any>) => {
+                console.log("the result " + JSON.stringify(result));
+                for(var i = 0; i<result.length; i++){
+                    console.log(result[i]);
+                    var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                    if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                        this.create.description = this.create.description + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                    }
+                }
+            }, (error) => {
+                
+            });
+            // my data ended
+        }, error => {
+            this.presentToast('Error while storing file.');
+        });
+    }
+
+
  onChange(event: EventTarget) {
         let eventObj: MSInputMethodContext = <MSInputMethodContext> event;
         let target: HTMLInputElement = <HTMLInputElement> eventObj.target;
