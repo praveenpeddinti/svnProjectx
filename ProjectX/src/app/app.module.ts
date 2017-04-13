@@ -32,6 +32,7 @@ import {FileDropModule} from 'angular2-file-drop';
 import { FileUploadService } from './services/file-upload.service';
 //import {Ng2AutoCompleteModule} from 'ng2-auto-complete';
 import {MentionService} from './services/mention.service';
+import {SummerNoteEditorService} from './services/summernote-editor.service';
 //import { GlobalPipe } from './shared/global.pipe';
 import { TruncatePipe } from 'angular2-truncate';
 import { SearchComponent }  from './components/search/search.component';
@@ -93,7 +94,7 @@ const ROUTES=[
 
   declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent ],
   bootstrap:    [ AppComponent ],
-  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,
+  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,SummerNoteEditorService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
