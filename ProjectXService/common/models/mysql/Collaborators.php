@@ -11,6 +11,9 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+//use common\components\ApiClient; //only for testing purpose
+//use common\components\Email; //only for testing purpose
+//include_once '../../common/components/ElasticEmailClient.php';
 
 class Collaborators extends ActiveRecord 
 {
@@ -46,9 +49,8 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
 
     public static function findByUsername($userData)
     {
-         error_log("findByUsername---".print_r($userData,1));
+         
         $qry = "select * from Collaborators where Email='".$userData->username."' And Password='".$userData->password."'";
-        error_log("queryyyyyyyyyyyyyyy".$qry);
         $data = Yii::$app->db->createCommand($qry)->queryAll();
         return $data;
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -149,10 +151,37 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
     public function checkMatchedUsers($user)
     {
         try{
-            $qry="select UserName from Collaborators where UserName = '$user'";
+            $qry="select UserName,Email from Collaborators where UserName = '$user'";
             $data = Yii::$app->db->createCommand($qry)->queryOne();
             if(!empty($data))
             {
+//                try
+//                {
+//          
+//                    $recipients=json_decode(file_get_contents("php://input"));
+//                    error_log('==Email=='.print_r($data['Email'],1));
+//                    $email_recepients=[$data['Email']];
+//                    ApiClient::SetApiKey("9d55f483-0501-4005-8ada-3335f666e731");
+//                    $EEemail = new Email();
+//                    try
+//                       {
+//                           $subject="Ticket Status";
+//                           $from="marshal.ryan@techo2.com";
+//                           $fromName="techo2";
+//                           $html="<h1> Test Email </h1>";
+//                           $text="Hi,This is a Test Email";
+//                           $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $email_recepients, array(), array(), array(), array(), array(), null, null, $html, $text);		
+//                       }
+//                       catch (Exception $e)
+//                       {
+//                           echo 'Something went wrong: ', $e->getMessage(), '\n';
+//
+//                           return;
+//                       }		
+//            
+//                } catch (Exception $ex) {
+//
+//                    }
                 return $user;
             }
             
@@ -181,6 +210,13 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
         } catch (Exception $ex) {
             Yii::log("Collaborators:getCollaboratorsForFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
+    }
+    
+    public function getCollaboratorById($id)
+    {
+        $qry = "select * from Collaborators where Id=$id";
+        $data = Yii::$app->db->createCommand($qry)->queryOne();
+        return $data;
     }
 
 }
