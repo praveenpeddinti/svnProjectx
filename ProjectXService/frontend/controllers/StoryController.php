@@ -536,6 +536,7 @@ class StoryController extends Controller
                $followerData["UserName"] = $collaboratorData["UserName"];
                $followerData["FollowerId"] =$post_data->collaboratorId;
                $followerData["Flag"] ="follower";
+               $followerData["DefaultFollower"] =0;
               //  array_push($followers_pics, $followerData);
           
             $responseBean = new ResponseBean();

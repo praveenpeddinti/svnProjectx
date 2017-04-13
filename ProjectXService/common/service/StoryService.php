@@ -484,17 +484,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                     }
                                   
                                 }  else{
-                                   
-                               
-                                    error_log("leseeeeeeeeeeeeeeeeeeee--3--".$fieldDetails["Field_Name"]);
-                                   $fieldName =  $fieldDetails["Field_Name"];
+                                    $fieldName =  $fieldDetails["Field_Name"];
                                     if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
                                        $fieldDetails["Field_Name"]= $ticket_data->TicketId."-".$fieldName;  
                                     }else{
                                         $fieldDetails["Field_Name"]='follower';
                                     }
-                                     error_log("leseeeeeeeeeeeeeeeeeeee--4--".$fieldDetails["Field_Name"]);
-                                   $this->unfollowTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$fieldDetails["Field_Name"]); 
+                                    $this->unfollowTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$fieldDetails["Field_Name"]); 
                                 
                                     
                                     
@@ -618,9 +614,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             $leftsideFieldVal = $ticket_data->value;
                                 if($fieldDetails["Type"] == 6 ){
                                     $this->unfollowTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
-                                      error_log("leseeeeeeeeeeeeeeeeeeee--1");
                                     if($childticketDetails['IsChild'] == 0){
-                                          error_log("leseeeeeeeeeeeeeeeeeeee--2");
                                     if (!empty($childticketDetails['Tasks'])){
                                         foreach($childticketDetails['Tasks'] as $childticketId){
                                             $this->unfollowTicket($ticket_data->value,$childticketId['TaskId'],$ticket_data->projectId,$fieldDetails["Field_Name"]='follower');
@@ -628,14 +622,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                     }
                                    
                                 } else{
-                                    error_log("leseeeeeeeeeeeeeeeeeeee--3--".$fieldDetails["Field_Name"]);
-                                   $fieldName =  $fieldDetails["Field_Name"];
+                                    $fieldName =  $fieldDetails["Field_Name"];
                                     if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
                                        $fieldDetails["Field_Name"]= $ticket_data->TicketId."-".$fieldName;  
                                     }else{
                                         $fieldDetails["Field_Name"]='follower';
                                     }
-                                     error_log("leseeeeeeeeeeeeeeeeeeee--4--".$fieldDetails["Field_Name"]);
                                     $this->unfollowTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$fieldDetails["Field_Name"]); 
                                   }
                                 }
@@ -780,7 +772,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      public function followTicket($collaboratorId,$ticketId,$projectId,$loggedInUser,$fieldName,$defaultFollower=FALSE,$from=""){
         
         try {
-           error_log("followTicket-----".$projectId."---".$ticketId."---".$collaboratorId."--".$fieldName);
             $db =  TicketCollection::getCollection();
            $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
            
