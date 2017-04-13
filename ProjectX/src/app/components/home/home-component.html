@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="content">
+        <span>Congratulations  {{users.username}}, you have successfully logged in!!</span>
+       
+        <br />
+        <ng2-dropdown>
+            <ng2-dropdown-button>
+                Open Menu
+            </ng2-dropdown-button>
+              <ng2-dropdown-menu>
+                <div class='ng2-menu-divider'></div>
+                <ng2-menu-item>
+                    My Home
+                </ng2-menu-item>
+                 <ng2-menu-item>
+                    Profile
+                </ng2-menu-item>
+                <ng2-menu-item  (click)="logout()">
+                    Logout
+                </ng2-menu-item>
+              </ng2-dropdown-menu>
+        </ng2-dropdown>
+        <ng2-datepicker [(ngModel)]="date"></ng2-datepicker>
+        Selected date is: {{ date | json }}
+
+<!--<input type="text" [mention]="users">-->
+<br/><br/><br/><br/><br/><br/><br/>
+<!--<ckeditor
+    [(ngModel)]="ckeditorContent"
+    [config]="{uiColor: '#67000'}"
+    debounce="500">
+  </ckeditor> -->
+<br/><br/>
+<story-form></story-form>
+    </div>
+</div>

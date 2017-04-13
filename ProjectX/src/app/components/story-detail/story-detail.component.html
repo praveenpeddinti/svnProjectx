@@ -1,0 +1,491 @@
+<!--<input type="text" [(ngModel)]="vidUrl"/>
+
+<video autoplay>
+<source [src]="vidUrl" type="video/mp4">
+
+</video>-->
+
+
+<!--<vg-player>
+    <video vgMedia id="singleVideo" preload="auto" controls>
+        <source src="https://10.10.73.21/files/story/Matrix.mp4" type="video/mp4">
+    </video>
+</vg-player>-->
+
+
+<div fileDrop (dragover)="fileOverBase($event)" (dragleave)=fileDragLeave($event) class="paddingbottom10">
+    <!--Title Part-->
+        <div class="titlearea  ">
+          <div class="row">
+              <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
+                  <div class="ticketidarea">
+                       <div class="pull-left paddingL10">
+                  <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">EDIT</button>
+              </div>
+                      <img *ngIf="ticketData?.data?.StoryType?.Id==1" src="assets/images/story-icon.png"  title="{{ticketData?.data?.StoryType?.Name}}"  />
+                      <img  *ngIf="ticketData?.data?.StoryType?.Id==2" src="assets/images/task-icon.png" title="{{ticketData?.data?.StoryType?.Name}}" /> 
+                      #{{ticketData?.data?.TicketId}}
+                  </div>
+              </div>
+            <div class="col-xs-12 col-sm-9 col-md-9">
+              <div class="ticketdescriptionarea minheight50">
+                <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
+                </div>
+                <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
+                <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
+                </div>-->
+              </div>
+            </div>
+          </div>
+      </div>
+      <!--Title Part End-->
+  </div>
+
+<div  class="row">
+      <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom" style="margin:0px;padding:0px;">
+          <!--Left Pannel Starts-->
+          <div class="leftpaneldiv">
+              <!--<div class="leftpanelsections">
+                  <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">Edit</button>
+              </div>-->
+              <div>
+                  <!--Left pannel fields
+                  Loop renders the fields based on the renderType passed in fieldsData-->
+                  <div  *ngFor="let field of fieldsData;let i=index;">
+                      <div class="leftpanelsections" *ngIf="field.elId == ticketId+'_totalestimatepoints' && field.value !='' && checkPlanLevel !='Task'">
+                             <label for="email" class="leftlabels" >{{field.title}}</label>
+                            <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elId}}">
+                             {{field.value}}
+                           </div>
+                           </div>
+                      <div class="leftpanelsections" *ngIf="field.elId != ticketId+'_totalestimatepoints' ">
+                          <!--{{field.elId }}-->
+                           <!--<label for="email" class="leftlabels" *ngIf="checkPlanLevel == 'Story' && field.title == 'Total Estimate Points'"></label>-->
+                           
+                           
+                             <label for="email" class="leftlabels" >{{field.title}}</label>
+                            <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elId}}">
+                             {{field.value}}
+                           </div>
+                           
+                      
+                    <div class="leftreadonlyfontgreycolor customcalender" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
+                        <div (click)="editThisField($event,i,field.elId,field.Id,field.title,field.renderType)" [hidden]="!showMyEditableField[i]" data-text="not readonly" 
+                             id="{{field.elId}}" class="{{(field.title=='Status')? field.value:''}}">
+                            {{(field.value == "") ? '--': field.value}} 
+                            <i *ngIf="field.title == 'Priority'"  class="fa fa-circle {{field.value}}" aria-hidden="true">
+                            </i>
+                        </div>
+
+                        <input *ngSwitchCase="'input'" class="editinput" (keyup.enter)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
+                            (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" (keyup)="inputKeyDown($event.target.value,field.elId+'_'+i)" />
+
+                        <p-calendar *ngSwitchCase="'date'" [(ngModel)]="dateVal" class="primeDateComponent" name="date_{{i}}" (onBlur)="dateBlur($event,i)" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="M-dd-yy" >
+                        </p-calendar>
+
+                        <textarea *ngSwitchCase="'textarea'" class="custtextarea width100per" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
+                        </textarea>
+
+                        <div class="customdropdown">
+                            <p-dropdown *ngSwitchCase="'select'" [style]="{'width':'100%'}" [ngModel]="field.valueId"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" >
+                            </p-dropdown>
+                            <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <!--Left Pannel Loop ends here-->
+              </div>
+              </div>
+          <div class="clearfix">   
+              <div class="tworkedhours">
+                  <div class="pull-left">Total worked hours</div>
+                  <div class="pull-right">
+                      <div class="thours"><i class="fa fa-clock-o timeclr" aria-hidden="true"></i>&nbsp; {{totalWorkLog}}</div>
+                  </div>
+                  <div class="clearfix"></div>
+              </div>
+              <div class="iworkhoursbg clearfix" >
+                  <div class="ihors clearfix" *ngFor="let workLog of individualLog;">
+                       <div class="iworkhours text-left"><a href="javascript:void(0)">{{workLog.readable_value.UserName}} </a></div>
+                      <div class="iworkhours text-right">{{workLog.sum}}</div>
+                  </div>
+              </div>
+              <div class="workedhoursbg">
+                  <div class="pull-left">Worked hours</div>
+                  <div class="pull-right">
+                      <input type="text" maxlength="5" value="" id="workedhours" class="workedhourstxtbox"    placeholder="0.00" step="0.01" name="worklog" (keyup.enter)="workLogCapture($event.target.value)" />
+                  </div>
+                  <div class="clearfix"></div>
+              </div>
+              <div id="timelog" class="alert alert-danger" style="display:none;">
+
+              </div>
+                  </div>
+          <!--Left Pannel End-->
+
+    </div>
+
+    <div class="col-xs-12 col-sm-9 col-md-9">
+      <div>
+          <!--Description Part-->
+        <div class="rightdescriptionarea" [hidden]="!showDescEditor">
+             <div style="position: relative">
+                  <div class="custwordwrap artifacts" [innerHTML]="ticketDesc" id="{{ticketData?.data?.TicketId}}_desc" (dblclick)="openDescEditor()" >
+                  </div>  
+             </div> 
+        </div>
+        <div [hidden]="showDescEditor">
+            <div class="rightdescriptionarea">
+                <div style="position: relative">
+                     <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
+                          (drop)="fileUploadEvent($event, 'fileDrop','description')" >
+                     </div>
+                     <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     </div>
+                     <ckeditor #detailEditor [config]="toolbarForDetail" [(ngModel)]="ticketEditableDesc" name="ticketEditableDesc" required >
+                     </ckeditor>
+                </div>
+                <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+                </div>
+                <div class="uploadcomponent margintop15">
+                      <div class="uploadbottom">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        File upload
+                      </div>
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','description')"  multiple  />
+                </div>
+            </div>
+            <div class="buttonarea alignright">
+                  <button class="normal bluebutton bluebuttonmedium" (click)="submitDesc()">
+                    SUBMIT
+                  </button>
+                  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelDesc()">
+                    CANCEL
+                  </button>
+            </div>
+          </div>
+            <!--Description Part End-->
+
+
+
+            <div class="expand_collapse">
+            <a type="button" id="expand" (click)="expand()" class="colapse"><span class="glyphicon glyphicon-chevron-up alignright"></span></a>
+<a type="button" id="collapse" (click)="collapse()" class="colapse"><span class="glyphicon glyphicon-chevron-down alignright"></span></a>
+</div>
+<div class="main_div widgetmainbg" [ngClass]="{ 'hide': hide}">
+<!--Show the Followers list start-->
+    <!-- @Praveen P  Followers List Start--> 
+<div (click)="loadFollowersWidget()" id="follwersAdd" class="add"><i id="follwersAddI" class="fa fa-plus" aria-hidden="true"></i></div>
+    <div class="widgethed">Followers</div>
+    <div class="followers" >
+    <div class="">
+      <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
+        <img  data-toggle="tooltip" data-placement="top" class="profilepic_table"
+                        src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  /> 
+        <div (click)="removeFollower($event.target.id)" id="follower_{{follower.FollowerId}}" *ngIf="(follower.DefaultFollower=='0' || follower.FollowerId == getAllData.Id )" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+      
+        <div id="conformRF_{{follower.FollowerId}}" class="dropdown-menu customdropdown-menu">
+            <div class="delete_followersbg">  
+                Do you want to remove this user?
+                <div class="text-center">
+                    <div (click)="removefollowerId(follower.FollowerId)" id="remove_yes" class="yes">Yes</div>
+                    <div class="no">No</div>
+        </div>
+            </div>
+        </div>
+        </div>
+       
+    <div class=" clearfix"></div>
+    </div> 
+   </div>
+   
+   <!-- Search Follower list start -->
+    <div id="followerdiv" style="display:none" class="addfollowers_overlap">
+    <div class="add_followersbg ">
+        <div class="padd10"><input id='followerId' type="text" placeholder="Search" class="addfollower_search" value="" (keyup)="getUsersForFollow($event.target.value)"/> </div>
+        <div (click)="checkFollower(flist.id)" id="{{flist.id}}" *ngFor="let flist of follower_search_results">
+            <div class="addfollower_userbg">
+                <div class="row">
+                   <div class="col-md-2 col-sm-2 col-xs-2">
+                      <div class="addfollower_user">
+                          <img data-toggle="tooltip" data-placement="top" class="profilepic_table" src="{{flist.ProfilePic}}" />
+                      </div>
+                   </div>
+                   <div class="col-md-8 col-sm-8 col-xs-8">
+                       <div class="addfollower_username">{{flist.Name}}</div>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-2">
+                       <span  id="check_{{flist.id}}"  style="font-size:18px;color:#53c808"></span>  
+                   </div>
+                </div>
+            </div> 
+                  
+        </div>
+   </div>
+   </div>
+   <!-- Search follower list end -->
+ <!-- List End -->
+
+  
+<!--- Show the Followers list  End -->
+
+<div *ngIf="attachmentsData.length>0">
+<div class="widgethed">Attachments</div>
+    <div class="attatchment">
+        <div *ngFor="let attachment of attachmentsData;let i=index;">
+            <div *ngIf='attachment.ArtifactType =="other"'>
+                <div class="attatchment_url"><a href="{{attachment.FileName}}" target="_blank" download>{{attachment.OriginalFileName}}</a></div>
+                <div class="attatchment_postename">{{attachment.UploadedBy}}<span>{{attachment.UploadedOn}}</span></div>
+            </div>
+            <div *ngIf='attachment.ArtifactType =="video"' class="attatchment_url">
+                <video preload="auto" controls>
+                    <source src="{{attachment.FileName}}" type="video/mp4">
+                </video>
+                <div class="attatchment_url"><a href="{{attachment.FileName}}" target="_blank" download>{{attachment.OriginalFileName}}</a></div>
+                <div class="attatchment_postename">{{attachment.UploadedBy}}<span>{{attachment.UploadedOn}}</span></div>
+            </div>            
+            <div *ngIf='attachment.ArtifactType =="image"'>
+                <img src="{{attachment.FileName}}" />
+                <div class="attatchment_url"><a href="{{attachment.FileName}}" target="_blank" download>{{attachment.OriginalFileName}}</a></div>
+                <div class="attatchment_postename">{{attachment.UploadedBy}}<span>({{attachment.UploadedOn}})</span></div>
+            </div>
+        </div>
+
+        </div>
+       
+    </div>
+<div *ngIf='checkPlanLevel =="Story"'>
+      <div class="widgethed">Tasks</div>
+        <div class="relate_story">
+            <div class="custom_story_input">
+                    <input class="editinput" type="text" placeholder="Create a task here"  id="childtitle" value=""   name="childtitle" />
+            </div>
+             <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="savechiledTask()" type="submit">CREATE</button></div>
+   
+
+        </div>
+            <div id="subtaskerr" class="alert alert-danger" style="display:none;"></div>
+        <div  *ngFor="let childTasks of childTasksArray;let j=index;">
+                <div class="addtask">
+                    <div class="col-md-1">
+                    <div class="addtask_taskno"><span *ngIf="childTasks.TicketId">#</span>{{childTasks.TicketId}}</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="addtask_bor">
+                            <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/story-detail',childTasks.TicketId]" (click)="navigateStoryDetail(childTasks.TicketId)">{{childTasks.Title  | truncate:140}}</a></div>
+                            <div class="addtask_status" *ngIf="childTasks.TicketId">{{childTasks.Fields[2].data.value_name}}</div>
+                        </div>
+                    </div>
+                    <div *ngFor="let childTaskFields of childTasks.Fields;let k=index;" class="col-md-3">
+                        <ng-container *ngIf="k<2">
+                    <div class="">
+                    <div class="">
+                    <div class="">
+                        <label>{{childTaskFields.data.title}}</label>
+                        <div class="clearfix">
+                        <div   data-text="not readonly" [hidden]="taskFieldsEditable[j][k]" (click)="editThisField($event,j+'_'+k,childTasks.TicketId,childTaskFields.data.Id,childTaskFields.data.title,'select','Tasks')"
+                  id="{{childTasks.TicketId+'_'+childTaskFields.fieldName}}" class="{{(childTaskFields.data.title=='Priority')? childTaskFields.data.value:''}}">
+                {{(childTaskFields.data.value == "") ? '--': childTaskFields.data.value_name}} 
+     <i *ngIf="childTaskFields.data.title == 'Priority'"  class="fa fa-circle {{childTaskFields.data.value_name}}" aria-hidden="true">
+     </i>
+     </div>
+
+         <div class="customdropdown">
+     <p-dropdown [hidden]="!taskFieldsEditable[j][k]"  [style]="{'width':'100%'}" [ngModel]="childTaskFields.data.value"   name="dropdownContainer_{{j}}_{{k}}" (onFocus)="dropdownFocus($event,j+'_'+k,'Tasks')" (onBlur)="selectBlurField($event,j+'_'+k,'Tasks')"  (onChange)="restoreField($event,childTasks.TicketId+'_'+childTaskFields.fieldName,j+'_'+k,'select',childTaskFields.data.Id,'Tasks')" id="{{childTasks.TicketId}}_{{j}}_{{k}}"   [options]="dropList" >
+     </p-dropdown>
+     </div>
+                        </div>
+
+                        
+                    </div>
+                
+                    </div>
+                    </div><!-- -->
+                    </ng-container>
+                    </div><!-- 2nd loop ends -->
+                    <div class="clearfix"></div>
+                </div>
+</div><!-- 1st loop ends -->
+</div>
+    <!--AutoSuggestion for Related Tickets-->
+    <div class="widgethed">Related Stories/Tasks</div>
+<div class="relate_story">
+    <div class="custom_story_input">
+        <p-autoComplete [(ngModel)]="text" [minLength]="1" placeholder="Relate a Story/Task" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchRelateTask($event)" id="relatedTask"></p-autoComplete>
+    </div>
+   
+   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="saveRelatedTask()">RELATE</button></div>
+ </div>
+         <div id="relatedTaskerr_msg" class="alert alert-danger" style="display:none;">
+
+              </div>
+    <div class="addtask" *ngFor="let relatedTask of relatedTaskArray;">
+    <div class="col-md-1">
+       <div class="addtask_taskno">#{{relatedTask.TicketId}}</div>
+    </div>
+    <div class="col-md-10">
+        <div class="addtask_bor">
+            <div class="addtask_title"><a [routerLink]="['/story-detail',relatedTask.TicketId]" (click)="navigateStoryDetail(relatedTask.TicketId)">{{relatedTask.Title}}</a></div>
+            <div class="addtask_status">{{relatedTask.Fields.workflow.value_name}}</div>
+        </div>
+    </div>
+    <div class="col-md-1" (click)="unRelateTask(relatedTask.TicketId)" >
+        <div class="mart10"><i class="fa fa-times removetask" aria-hidden="true"></i></div>
+</div>
+    
+    <div class="clearfix"></div>
+</div> 
+
+
+
+ </div>
+<!--Comments Section-->
+ <div class="widgethed">Activity</div>
+ 
+ <div class="activitybg mt10">
+<div>
+    <!--Comment Display area-->
+    
+    <ng-container *ngFor="let comment of commentsList;let cmtIdx = index;">
+        <div id="{{cmtIdx}}" class="{{comment.Slug.$oid}}">
+            
+            
+                    <div class="user">
+              <a href="javascript:void(0)"> <img src="{{comment.ActivityBy.ProfilePicture}}" /></a>  by <span><a href="javascript:void(0)">{{comment.ActivityBy.UserName}}</a> </span> <div *ngIf="(comment.PropertyChanges.length == 0)" class="userdate">( {{comment.ActivityOn}} ) </div>    
+            </div>
+          <div *ngFor="let property of comment.PropertyChanges;">   
+    <div class="ticketactivity">
+        <a  *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/story-detail',property.PoppedChildId]" (click)="navigateStoryDetail(property.PoppedChildId)" >#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a> <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
+       <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-none-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
+                </span>
+    <span *ngIf="property.type!='user'"> 
+        <span class="bold" [innerHTML]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerHTML]= "property.NewValue"></span> 
+                </span>
+   
+   <span class="erdate">( {{property.ActivityOn}} )</span>
+</div>
+                 </div>
+            
+            
+            <div  *ngIf="(comment.PropertyChanges.length == 0)" id="commentContent" class="comment{{(comment.Status ==2)?'_reply':''}}" >
+                <div (dragover)="fileOverBase($event,'edit_comments',cmtIdx)" (dragleave)="fileDragLeave($event,'edit_comments',cmtIdx)" fileDrop>
+                <div class="commentedtext" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.ParentIndex)" >
+                    <div class="user">
+                        <a href="javascript:void(0)">
+                    <img src="{{commentsList[comment.ParentIndex].ActivityBy.ProfilePicture}}" />
+                    </a>
+                    by <span><a href="javascript:void(0)">{{commentsList[comment.ParentIndex].ActivityBy.UserName}}</a>
+                    </span>
+                    </div>
+                    <div [innerHTML]="commentsList[comment.ParentIndex].CDescription">
+                        
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div style="position:relative">
+                <div id="dropble_comment_{{cmtIdx}}" 
+                          (drop)="fileUploadEvent($event, 'fileDrop','edit_comments',cmtIdx)" >
+                     </div>
+                     <div class="pop_over_bg" id="comments_gif_{{cmtIdx}}" [hidden]="true"><img   src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     </div>
+                     <div id="Activity_content_{{cmtIdx}}">
+                <div  class="commentp" [innerHTML]="comment.CDescription">
+                
+                </div>
+                <div class="clearfix pull-right">
+
+                <div class="commedit reply_icn" (click)="replyComment(cmtIdx)"></div> 
+                <div *ngIf="comment.ActivityBy.UserName == getAllData.username" class="commedit edit_icn" (click)="editComment(cmtIdx)"></div> 
+                <div *ngIf="(comment.ActivityBy.UserName == getAllData.username && comment.repliesCount==0)" class="commedit delete_icn" (click)="deleteComment(cmtIdx,comment.Slug.$oid)"></div>
+
+                </div>
+                </div>
+                <div id="Actions_{{cmtIdx}}" [hidden]="true" >
+                    <div class="uploadcomponent pull-left" style="background:#f8f8f8;">
+                      <div class="uploadbottom">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        File upload
+                      </div>
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments',cmtIdx)"  multiple  />
+                </div>
+                <div class="alignright margintop15">
+                  <button class="normal bluebutton bluebuttonmedium" (click)="submitEditedComment(cmtIdx,comment.Slug.$oid)">
+                    SUBMIT
+                  </button> &nbsp;
+                  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelEdit(cmtIdx)">
+                    CANCEL
+                  </button>
+                </div>
+                </div>
+                
+          </div>
+        </div>
+            </div>
+            </div>
+        
+
+    </ng-container>
+
+    <!--Comment Displa area end-->
+</div>
+         
+        <div>
+           
+            <div id="commentEditorArea" >
+                
+                 <div class="commentedtext porel" [hidden]="!replying">
+     <div class="commentclose"><a href="javascript:void()" (click)="cancelReply()"><img src="assets/images/comment-close.png"/></a></div>
+                
+                
+                <div id="replyToSnippet"  >
+
+                    <div id="replySnippetContent" *ngIf="replyToComment !=-1" >
+                        <!--<span>{{commentsList[replyToComment].ActivityBy}}</span>-->
+                        
+                <div class="user">
+              <a href="javascript:void(0)"> <img src="{{commentsList[replyToComment].ActivityBy.ProfilePicture}}" /></a>  by <span><a href="javascript:void(0)">{{commentsList[replyToComment].ActivityBy.UserName}}</a></span>    
+            </div>   
+               <div class="replySnippet" [innerHTML]="commentsList[replyToComment].CDescription">
+                        </div>
+                    </div>
+                 
+                </div>
+                 </div>
+                
+                <div (dragover)="fileOverBase($event,'comments','')" (dragleave)="fileDragLeave($event,'comments','')" fileDrop>
+                <div style="position: relative">
+                     <div id="dropble_comment_" 
+                          (drop)="fileUploadEvent($event, 'fileDrop','comments','')" >
+                     </div>
+                     <div class="progress_bar"  [ngClass]="{pop_over_bg: fileUploadStatus}"><img  id="last_comments" [hidden]="true" src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     </div>
+                     <ckeditor #commentEditor [config]="toolbarForDetail" [(ngModel)]="commentDesc" name="commentDesc" required >
+                     </ckeditor>
+                </div>
+                <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+                </div>
+                <div class="uploadcomponent margintop15 pull-left">
+                      <div class="uploadbottom">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        File upload
+                      </div>
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments','')"  multiple  />
+                </div>
+                     <div class="buttonarea alignright">
+                  <button class="normal bluebutton bluebuttonmedium submit" (click)="submitComment()">
+                    SUBMIT
+                  </button>
+                  
+            </div>
+            </div>
+           
+          </div>
+
+        </div>
+      </div>
+ </div>
+<!--Comments Section End-->
+
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<div id='main'>
+  <div class="container-fluid cleardiv">
+
+    <div class="loginsection">
+      <div class="text-center loginTopheader"><img src="assets/images/homelogo.png" alt="Logo" /></div>
+      <div class="logpadding ">
+
+        <h2 class="loginheader text-center">SIGN IN</h2>
+        <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && login()" novalidate="true">
+          <div class="loginform">
+            <div *ngIf="submitted && user_name.errors == null && this.checkData" class="alert alert-danger">
+                    {{errorMsg}}
+               </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+
+                  <label class="loginformlabel" for="email">Username</label>
+                  <input [(ngModel)]="user.email" id="email" type="email" class="form-control customfield" required minlength="10" maxlength="50"
+                    (blur)="validateEmail(user.email)" (keyup)="validateEmail(user.email)" name="user_name" #user_name="ngModel">
+                  <div *ngIf="submitted && user_name.errors " class="fielderror">
+                    <div [hidden]="!user_name.errors.required">
+                      Email is required
+                    </div>
+                    <div [hidden]="!user_name.errors.minlength">
+                      Email must be at least 10 characters long.
+                    </div>
+                    <div [hidden]="!user_name.errors.maxlength">
+                      Email cannot be more than 50 characters long.
+                    </div>
+                  </div>
+                  <div *ngIf="submitted && user_name.errors == null && !isEmailValid" class="fielderror">
+                    Email invalid.
+                  </div>
+                </div>
+                   
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                  <label class="loginformlabel" for="password">Password</label>
+                  <input [(ngModel)]="user.password" id="password" type="password" id="pass" class="form-control customfield" required minlength="1"
+                    maxlength="50" name="user_password" #user_password="ngModel">
+                  <div *ngIf=" submitted && user_password.errors" class="fielderror">
+                    <div [hidden]="!user_password.errors.required">
+                      Password is required
+                    </div>
+                    <div [hidden]="!user_password.errors.minlength">
+                      Password must be at least 1 characters long.
+                    </div>
+                    <div [hidden]="!user_password.errors.maxlength">
+                      Password cannot be more than 15 characters long.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="display:none">
+<div class="input-field col s12">
+  <input [(ngModel)]="user.rememberme" id="rememberme" type="checkbox" class="form-control" name="user_rememberme" #user_rememberme="ngModel"
+    value="0"><label for="password">Remember me</label>
+</div>
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-12">
+  <div class="buttonarea text-center">
+    <button type="submit" (click)="submitted = true;validateEmail(user.email);" class="normal bluebutton bluebuttonlarge">SIGN IN</button>
+  </div>
+</div>
+</div>
+
+</div>
+</form>
+</div>
+</div>
+</div>
+
+
+</div>

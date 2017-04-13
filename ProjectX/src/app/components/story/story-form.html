@@ -1,0 +1,97 @@
+<!--
+    @events            : dragover,dragleave,change,click,drop
+    @custom-components : p-dropdown,ckeditor
+    @validation        : true
+    @DOM Elements      : Text Field,Dropdown,Button,Text titlearea
+    @Fields            : 4
+    Description        : a) Dynamic Dropdown in Plan Level,Priority
+                         b) File Upload
+                         c) Dragging File(s) to Editor
+
+ -->
+<form fileDrop (dragover)="fileOverBase($event)" (dragleave)="fileDragLeave($event)"  #storyForm="ngForm" (ngSubmit)="submitted && storyForm.form.valid && saveStory()" novalidate="true">
+      <div class="paddingbottom10">
+        <div class="titlearea  ">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="ticketdescriptionarea">
+
+                        <input class="editinput" placeholder="Title" [(ngModel)]="form.title" type="text" id="title" required minlength="3" maxlength="150" 
+                               name="title"  #title="ngModel"   >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div *ngIf="submitted && title.errors " class="alert alert-danger">
+                <div [hidden]="!title.errors.required">
+                    Title is required
+                </div>
+                <div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
+                    Title must be 3 characters long
+                </div>
+            </div>
+            <div class="leftpaneldiv leftpanelsections_noborder">
+                <div class="row">
+                    
+                    <div  *ngFor="let value of storyFormData; let i = index;" class="col-xs-12 col-sm-4 col-md-3">  
+
+                        <div *ngIf="value.type == 2 "  >
+                            <div class="leftpanelsections  customdropdown">
+                                <label for="email" class="leftlabels">{{value.lable}}</label>
+                                <p-dropdown [options]="value.values" (onChange)="dropChange($event.value,value.lable)" [style]="{'width':'100%'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="rightdescriptionarea">
+
+                <div style="position: relative" >
+                    <div id="dropble" [ngClass]="{dragdrop: hasBaseDropZoneOver}" 
+
+                         (drop)="fileUploadEvent($event, 'fileDrop')" >
+                </div>
+                <div [ngClass]="{pop_over_bg: fileUploadStatus}"><img *ngIf="fileUploadStatus" src="assets/images/loader.gif" height="20" width="70" alt=""/> </div>
+
+                <ckeditor  [config]="toolbar" [(ngModel)]="form.description"    name="description"  #description="ngModel" required     debounce="500"  >
+                </ckeditor>
+
+
+            </div>
+            <div *ngIf="submitted && description.errors " class="alert alert-danger">
+                <div [hidden]="!description.errors.required">
+                    Description is required
+                </div>
+            </div>
+            <div class="uploadcomponent margintop15">
+                <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
+                <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  />
+            </div>
+
+
+        </div>
+
+            <div *ngIf="defaultTasksShow == true "  >
+                <div style="font-size:16px; font-weight:bold; margin:20px 0px 10px 0px;">Tasks</div>
+                <div class="ui-g">
+                    <div class="cbx" *ngFor="let task of taskArray" ><p-checkbox name="{{task.Name}}" [(ngModel)]="form.tasks" value="{{task.Id}}" label="{{task.Name}}" ></p-checkbox></div>
+                     </div>
+            </div>
+            
+        <div class="buttonarea alignright">
+            <button type="submit" (click)="submitted = true;" class="normal bluebutton bluebuttonmedium">SUBMIT</button>
+        </div>
+
+    </div>
+
+</div>
+</form>
+
+
+
