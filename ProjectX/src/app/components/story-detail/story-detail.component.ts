@@ -6,6 +6,7 @@ import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
 import { MentionService } from '../../services/mention.service';
+import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 declare var jQuery:any;
 declare const CKEDITOR;
 @Component({
@@ -36,7 +37,6 @@ public blurTimeout=[];
   private ticketDesc = "";
   private ticketCrudeDesc = "";
   private showDescEditor=true;
-  public statusId='';
 
   private followers:any=[];
   private added_follower=[];
@@ -69,28 +69,22 @@ public blurTimeout=[];
   public fileUploadStatus:boolean = false;
   public hide:boolean=false;//added by Ryan
   public attachmentsData=[];
-  public searchSlug="";
-
+ 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
-    private http: Http,private route: ActivatedRoute) {
-    this.filesToUpload = [];
-    route.queryParams.subscribe(
-      params => 
-      {
-            this.searchSlug=params['Slug'];
-       })
-            
+    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) {
+       this.filesToUpload = [];
     }
 
  private calenderClickedOutside = false;
  private comment_status:boolean=true;
- 
+
+ //public form={description:''};//added by ryan
   ngOnInit() {
-    var thisObj=this;
+
+    //let jsonform={};//added by ryan
+    //jsonform['description']='';//added by ryan
     this.callTicketDetailPage("");
-    
-    
    //@Praveen P toggle for plus button in follower list
    jQuery(document).click(function(e) {
      if( jQuery(e.target).closest('div#followerdiv').length==0 && e.target.id != 'follwersAdd' && e.target.id != 'follwersAddI'  ) {
@@ -101,55 +95,12 @@ public blurTimeout=[];
 
     /**
      * @author:Ryan Marshal
-     * @description:In general,This is for getting the contents of CKEDITOR on various events and then performing 
-     *              operations based on the requirement.Here,it is used for getting @mention capabilitly.
+     * @description:This is used for initializing the summernote editor in the comment section
      */
     ngAfterViewInit()
     {
-      CKEDITOR.on('instanceReady', (event)=>
-      {
-        
-         event.editor.on('key',(evt)=>
-         {
-            var this_obj=this;
-            var at_config = {
-            at: "@",
-            callbacks: {
-                    remoteFilter: function(query, callback) {
-                      if(query.length>0)
-                      {
-                        var post_data={ProjectId:1,search_term:query};
-                        this_obj._ajaxService.AjaxSubscribe("story/get-collaborators",post_data,(data)=> {
-                        var mention=[];
-                        for(let i in data.data)
-                        {
-                          //mention.push(data.data[i].Name);
-                          mention.push({"name":data.data[i].Name,"Profile":data.data[i].ProfilePic});
-                        }
-                      callback(mention);
-                    });
-                      }
-                  }
-                },
-            editableAtwhoQueryAttrs: {
-                    "data-fr-verified": true
-            },
-            displayTpl:"<li value='${name}' name='${name}'><img width='20' height='20' src='http://10.10.73.77${Profile}'/> ${name}</li>",
-            }
-            var editor=evt.editor;
-            this.mention.load_atwho(editor,at_config);
-        });
+        this.editor.initialize_editor('commentEditor',null,null); //for comment
 
-       
-      })
-      //jQuery('span[id^="check_"]').hide();
-    setTimeout(() => {
-           var getSlug = jQuery("."+this.searchSlug).offset().top;
-            jQuery('html, body').animate({
-        scrollTop: getSlug
-     }, 1000);
-        }, 500);
-      
     }
 
 getArtifacts(obj){
@@ -167,14 +118,24 @@ getArtifacts(obj){
   * Description part
   */
   openDescEditor(){
+    var formobj=this;//added by ryan
     this.showDescEditor = false;
+    //added by Ryan for summernote
+    this.editor.initialize_editor('detailEditor',null,null);
+
   }
 
   private descError="";
   submitDesc(){
-    setTimeout(()=>{
-      var editorData = this.detail_ckeditor.instance.getData();
-          if(editorData != "" && jQuery(editorData).text().trim() != ""){
+    //setTimeout(()=>{
+      //var editorData = this.detail_ckeditor.instance.getData();
+      //this.form['description']=jQuery('#detailEditor').summernote('code'); //added by Ryan for summernote
+      var editorData=jQuery('#detailEditor').summernote('code');
+      console.log("==in submit desc=="+editorData);
+      //var editorData=this.form['description'];
+      var editorDesc=jQuery(editorData).text().trim();
+
+          if(editorDesc != ""){
           this.descError = "";
         
         // Added by Padmaja for Inline Edit
@@ -191,13 +152,12 @@ getArtifacts(obj){
         }else{
           this.descError = "Description cannot be empty.";
         }
-},250);
+//},250);
   }
 
   cancelDesc(){
     this.descError = "";
     this.ticketEditableDesc = this.ticketCrudeDesc;
-
     this.showDescEditor = true;
 
   }
@@ -212,7 +172,8 @@ public commentDesc = "";//"sdadas<img src='https://10.10.73.21/files/story/thumb
 
 public commentCount = 0;
 submitComment(){
-var commentText = this.detail_comment_ckeditor.instance.getData();
+//var commentText = this.detail_comment_ckeditor.instance.getData();
+var commentText=jQuery("#commentEditor").summernote('code');
 // alert("****comment editor data***"+commentText);
 // var commentPushData = {
 //   text:commentText,//jQuery(commentText).html(),
@@ -229,6 +190,7 @@ var commentText = this.detail_comment_ckeditor.instance.getData();
 // this.commentsList.push(commentPushData);
 if(commentText != "" && jQuery(commentText).text().trim() != ""){
 this.commentDesc="";
+jQuery("#commentEditor").summernote('reset');
 
 jQuery("#commentEditorArea").removeClass("replybox");
   console.log("comment is submitted");
@@ -240,7 +202,8 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
     Comment:{
       CrudeCDescription:commentText.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
       CommentedOn:formatedDate,
-      ParentIndex:""
+      ParentIndex:"",
+      Reply:this.replying
     },
   };
   // alert(JSON.stringify(reqData));
@@ -354,7 +317,6 @@ closeTitleEdit(editedText){
   editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType,where){ 
    // alert(event+fieldIndex+"--"+fieldId+"--"+fieldDataId+"--"+fieldTitle+"--"+renderType+"--");
     // this.dropList={};
-     var thisObj=this;
      this.dropList=[];
     // var fieldName = fieldId.split("_")[1];alert(fieldName);
     var inptFldId = fieldId+"_"+fieldIndex;
@@ -383,9 +345,7 @@ closeTitleEdit(editedText){
         var reqData = {
           FieldId:fieldDataId,
           ProjectId:this.ticketData.data.Project.PId,
-          TicketId:(where == "Tasks")?fieldId:this.ticketData.data.TicketId,
-          WorkflowType:this.ticketData.data.WorkflowType,
-          StatusId:thisObj.statusId 
+          TicketId:(where == "Tasks")?fieldId:this.ticketData.data.TicketId
         };
         //Fetches the field list data for current dropdown in edit mode.
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
@@ -638,17 +598,27 @@ public fileOverBase(fileInput:any,where:string,comment:string):void {
     
     jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
 
-    if(jQuery("#cke_Activity_content_"+comment).length >0)
+    // if(jQuery("#cke_Activity_content_"+comment).length >0)
+    // {
+    //   jQuery("#dropble_comment_"+comment).addClass("dragdrop","true");
+    // }
+
+    if(jQuery("#Activity_content_"+comment).length >0)
     {
       jQuery("#dropble_comment_"+comment).addClass("dragdrop","true");
     }
+
+
     
   }else if(where=="comments")
   {
+    
+    jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
     jQuery("#dropble_comment_").addClass("dragdrop","true");
   }
 
     else{
+      console.log("==in else fileOverBase==");
     this.hasBaseDropZoneOver = true;
   }
     
@@ -679,10 +649,9 @@ var thisObj = this;
   public fileUploadEvent(fileInput: any, comeFrom: string,where:string,comment:string):void {
     var editor_contents;
     var appended_content;
-    console.log("==FileInput=="+JSON.stringify(fileInput));
     if(where=="edit_comments"){
-      editor_contents=jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html();
-      // alert(editor_contents);
+      //editor_contents=jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html();
+      editor_contents=jQuery("#Activity_content_"+comment).summernote('code'); // for summernote editor
       fileInput.preventDefault();
     }
    if(comeFrom == 'fileChange'){
@@ -711,23 +680,32 @@ var thisObj = this;
         this.fileUploadService.makeFileRequest(GlobalVariable.FILE_UPLOAD_URL, [], this.filesToUpload).then((result :Array<any>) => {
             for(var i = 0; i<result.length; i++){
                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                     if(where =="comments"){
-                      this.commentDesc = this.commentDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                      this.commentDesc = jQuery("#commentEditor").summernote('code') + "<p>[[image:" +result[i].path + "|" + result[i].originalname + "]]</p> " + " ";
+                      jQuery("#commentEditor").summernote('code',this.commentDesc);
                     }else if(where=="edit_comments"){
-                      appended_content=editor_contents+"[[image:" +result[i].path + "|" + result[i].originalname + "]]"; 
-                    jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html(appended_content);
-                    }else{
-                      this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
+                      appended_content=editor_contents+"<p>[[image:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" "; 
+                    //jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html(appended_content);
+                    jQuery("#Activity_content_"+comment).summernote('code',appended_content);//for summernote
+                  }else{
+                      this.ticketEditableDesc = jQuery("#detailEditor").summernote('code') + "<p>[[image:" +result[i].path + "|" + result[i].originalname + "]] </p>";
+                      jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
+                        // jQuery('#detailEditor').summernote('code',this.form['description']+"[[image:" +result[i].path + "|" + result[i].originalname + "]] " +" ");
+                        // this.form['description'] = jQuery('#detailEditor').summernote('code');
                     }
                 } else{
                     if(where =="comments"){
-                      this.commentDesc = this.commentDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                      this.commentDesc = jQuery("#commentEditor").summernote('code') + "<p>[[file:" +result[i].path + "|" + result[i].originalname + "]] </p>" +" ";
+                      jQuery("#commentEditor").summernote('code',this.commentDesc);
                     }else if(where=="edit_comments"){
-                      appended_content =editor_contents+"[[file:" +result[i].path + "|" + result[i].originalname + "]]";
-                      jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html(appended_content);
+                      appended_content =editor_contents+"<p>[[file:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" ";
+                      // jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html(appended_content);
+                      jQuery("#Activity_content_"+comment).summernote('code',appended_content); //for summernote
                     }else{
-                      this.ticketEditableDesc = this.ticketEditableDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
+                      this.ticketEditableDesc = jQuery("#detailEditor").summernote('code') + "<p>[[file:" +result[i].path + "|" + result[i].originalname + "]]</p> ";
+                       jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
                     }
                 }
             }
@@ -749,12 +727,14 @@ var thisObj = this;
 //Common Ajax method to save the changes.
     public postDataToAjax(postEditedText){
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
-        { 
+        {
+          
           if(result.statusCode== 200){
-            if(result.data.updatedState!=''){
-               document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
-               this.statusId = result.data.updatedFieldData;
-          }
+          //   if(result.data.updatedState!=''){
+          //      document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
+          //      this.statusId = result.data.updatedFieldData;
+          // }
+
          if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
                 document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
                 if(postEditedText.EditedId == "desc"){
@@ -774,6 +754,39 @@ var thisObj = this;
      }        
  }
         });
+
+        /*For notification Purpose By Ryan for assigned To*/
+        // console.log("Post edited text field"+postEditedText.EditedId+"Post edited value"+postEditedText.value);
+        // if(postEditedText.EditedId=='assignedto' || postEditedText.EditedId=='stakeholder')
+        // {
+        //   var notify_data={'ticketId':this.ticketId,'comment_type':postEditedText.EditedId,'collaborator':postEditedText.value,'followers':this.followers};
+
+        //   this._ajaxService.NodeSubscribe('/assignedTo',notify_data,(data)=>
+        //   {
+
+        //   });
+        // }
+
+        // if(postEditedText.EditedId=='priority' || postEditedText.EditedId=='bucket' ||  postEditedText.EditedId=='workflow')
+        // {
+        //   var priority_data=
+        //   {
+        //     'ticketId':this.ticketId,
+        //     'comment_type':'changed',
+        //     'Activity_On':postEditedText.EditedId,
+        //     'field_value':postEditedText.value,
+        //     'Activity':this.activity_data,
+        //     'followers':this.followers
+        //   };
+
+        //   this._ajaxService.NodeSubscribe('/propertyChange',priority_data,(data)=>
+        //   {
+
+        //   });
+        // }
+
+
+        /* Notification End */
     }
 
 //Navigate back to dashboard page.
@@ -906,6 +919,23 @@ var thisObj = this;
              });
             }
         });
+
+         /*For notification Purpose By Ryan for removing followers */
+        
+          // var notify_unfollow=
+          // {
+          //   'ticketId':this.ticketId,
+          //   'comment_type':'removed',
+          //   'collaborator':event,
+          //   'followers':this.followers
+          // };
+          // this._ajaxService.NodeSubscribe('/follow',notify_unfollow,(data)=>
+          // {
+
+          // });
+
+          /* Notification End */
+
       }
       else{
         jQuery("#check_"+event).addClass("glyphicon glyphicon-ok");
@@ -923,7 +953,33 @@ var thisObj = this;
                 {
                   this.followers.push(response.data);  
                 }
+                /*socket connection for notifications*/
+                // console.log("==connecting==");
+                // var socket=io("http://localhost:5000");
+                // socket.on('connection',(data)=>
+                // {
+                //   console.log("successfully connected");
+                //   socket.emit('followers',this.followers);
+                // });
+
         });
+
+        // /*For notification Purpose By Ryan for adding followers */
+        
+        //   var notify_follow=
+        //   {
+        //     'ticketId':this.ticketId,
+        //     'comment_type':'added',
+        //     'collaborator':event,
+        //     'followers':this.followers
+        //   };
+        //   this._ajaxService.NodeSubscribe('/follow',notify_follow,(data)=>
+        //   {
+
+        //   });
+        
+        // /* Notification End */
+
       }
       
     }
@@ -944,8 +1000,30 @@ var thisObj = this;
                this.followers = this.followers.filter(function(el) {
                     return el.FollowerId !== event;
                 });
-                }
+              }
+              /*socket connection for notifications*/
+                // var socket=io("http://localhost:5000");
+                // socket.on('connection',(data)=>
+                // {
+                //   console.log("successfully connected");
+                //   socket.emit('followers',this.followers);
+                // })
         });
+
+         /*For notification Purpose By Ryan for removing followers */
+        // var notify_unfollow=
+        //   {
+        //     'ticketId':this.ticketId,
+        //     'comment_type':'removed',
+        //     'collaborator':event,
+        //     'followers':this.followers
+        //   };
+        //   this._ajaxService.NodeSubscribe('/follow',notify_unfollow,(data)=>
+        //   {
+
+        //   });
+           
+        /* Notification End */
     }
     /*when click the 'X' button in the follower div to open the popup*/
   public removeFollower(event)
@@ -987,18 +1065,22 @@ var thisObj = this;
     private commentEditorsInstance=[];
    public editComment(comment)
    {
-    //  alert(comment);
-    var comment_div=document.getElementById("Activity_content_"+comment);
-    // alert(comment_div);
-    // alert(comment_div.innerHTML);
-    var editorInstance = CKEDITOR.replace(comment_div,this.toolbarForDetail);
-    editorInstance.setData(this.commentsList[comment].CrudeCDescription);
-    this.commentEditorsInstance[comment] = editorInstance;
+    
+    //var comment_div=document.getElementById("Activity_content_"+comment);
+    //var editorInstance = CKEDITOR.replace(comment_div,this.toolbarForDetail);
+    var edit_comment='Activity_content_'+comment;
+    /* added for summernote */
+      this.editor.initialize_editor(edit_comment,null,null);
+      jQuery("#Activity_content_"+comment).summernote('code',this.commentsList[comment].CrudeCDescription);
+      jQuery("#Reply_Icons_"+comment).hide();
+    //editorInstance.setData(this.commentsList[comment].CrudeCDescription);
+    //this.commentEditorsInstance[comment] = editorInstance;
     jQuery("#Actions_"+comment).show();//show submit and cancel button on editor replace at the bottom
    }
 
    submitEditedComment(commentIndex,slug){
-     var editedContent = this.commentEditorsInstance[commentIndex].getData();
+     //var editedContent = this.commentEditorsInstance[commentIndex].getData();
+     var editedContent= jQuery("#Activity_content_"+commentIndex).summernote('code');//added for summernote
      if(editedContent != "" && jQuery(editedContent).text().trim() != ""){
      var commentedOn = new Date()
      var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear();
@@ -1021,9 +1103,18 @@ var thisObj = this;
           // "data":{"CrudeCDescription":"<p>test comment asjkdhaskjdhals edited by madan</p>\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n",
           // "CDescription":"<p>test comment asjkdhaskjdhals edited by madan</p>\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n"},"totalCount":0}
           // alert("++++++++++++++++++++"+JSON.stringify(result));
-          this.commentsList[commentIndex].CrudeCDescription = result.data.CrudeCDescription;
-          this.commentsList[commentIndex].CDescription = result.data.CDescription;
-          this.commentEditorsInstance[commentIndex].destroy(true);
+            this.commentsList[commentIndex].CrudeCDescription = result.data.CrudeCDescription;
+            this.commentsList[commentIndex].CDescription = result.data.CDescription;
+          //this.commentEditorsInstance[commentIndex].destroy(true);
+
+          
+          
+          var code= jQuery("#Activity_content_"+commentIndex).summernote('code',result.data.CDescription);
+          jQuery("#Activity_content_"+commentIndex).summernote('destroy');
+          jQuery("#Reply_Icons_"+commentIndex).show();
+         
+
+
           jQuery("#Actions_"+commentIndex).hide();
           var ticketIdObj={'ticketId': this.ticketId};
           this.getArtifacts(ticketIdObj);
@@ -1075,8 +1166,11 @@ var thisObj = this;
    cancelEdit(commentIndex){
     //  var comment_div=document.getElementById("Activity_content_"+commentIndex);
     //  var name="cke_"+comment_div;
-    this.commentEditorsInstance[commentIndex].destroy(true);
+   //this.commentEditorsInstance[commentIndex].destroy(true);
+   jQuery("#Activity_content_"+commentIndex).summernote('code',this.commentsList[commentIndex].CDescription);
+   jQuery("#Activity_content_"+commentIndex).summernote('destroy');
     jQuery("#Actions_"+commentIndex).hide();
+    jQuery("#Reply_Icons_"+commentIndex).show();
    }
 
 
@@ -1224,11 +1318,6 @@ public callTicketDetailPage(ticId){
       jQuery("#collapse").show();//added by Ryan
       jQuery("#expand").hide();//added by Ryan
       jQuery('[id^=button_comment]').hide();
-    //  var slug = "58e63b6180a131045d008a03";
-    //  alert(jQuery("."+slug).attr('class'));
-    // jQuery('html, body').animate({
-    //     scrollTop: jQuery("."+slug).offset().top
-    // }, 1000);
     });
 
 
@@ -1249,14 +1338,10 @@ public callTicketDetailPage(ticId){
         { 
 
             this.ticketData = data;
-            this.ticketData.data.Fields.filter (function(obj){
-              if(obj.field_name=='workflow'){
-               thisObj.statusId =obj.value;
-              }
-            });
             this.followers = data.data.Followers; //@Praveen P This line to show the default followers in the Follower Div section
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
+            jQuery("#detailEditor").html(this.ticketEditableDesc);//for summernote editor
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
           // var totalEstimated={"title":"Assigned tossssssssssss","value":"","valueId":"","readonly":false,"required":true,"elId":"247_assignedto","fieldType":"Team List","renderType":"select","type":"","Id":5}
           // this.fieldsData.push(totalEstimated);
@@ -1266,15 +1351,16 @@ public callTicketDetailPage(ticId){
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
+          //alert("subtasksdat"+JSON.stringify(this.childTasksArray.length));
+
+
             // this.commentsList = [];
             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
               console.log(data.data.Activities);
               this.commentsList = data.data.Activities;
-
             });
 
-          
         });
         this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
             { 
