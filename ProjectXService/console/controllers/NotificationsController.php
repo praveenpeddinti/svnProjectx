@@ -12,27 +12,55 @@ use yii\helpers\Console;
 use common\models\bean\FieldBean;
 use frontend\controllers;
 use common\models\mongo\TicketCollection;
+use common\models\mongo\NotificationCollection;
 use common\models\bean\ResponseBean;
 use common\components\CommonUtility;
+use common\models\mongo\TinyUserCollection;
+
 class NotificationsController extends Controller
 {
     
-    public function actionHello($data)
+//    public function actionMentionedNotify()
+//    {
+//        //logic for sending the notifications to all the notified people
+//    }
+    
+    /**
+     * @author Ryan
+     * @param type $data
+     * @return type json
+     */
+    public function actionGetAllNotifications($data)
     {
-        $tic = new TicketCollection();
-        $tic->Title = $data;
-        $tic->save();
-        echo json_encode(array("status" => "success"));
+        $activityFrom=array();
+        //logic for getting all the notifications for a particular loggedIn user
+        try
+        {
+            $notification_data = json_decode($data);
+            $projectId=$notification_data->projectId;
+            $notified_userid=$notification_data->userInfo->Id;
+            $notified_username=$notification_data->userInfo->username;
+            $result_data=NotificationCollection::getNotifications($notified_username,$projectId);
+            
+            echo json_encode(array('notify_result'=>$result_data));
+            
+        } catch (Exception $ex) {
+            Yii::log("NotificationsController:actionGetAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
+        }
+        
     }
     
-    public function actionFollowNotify()
-    {
-        //logic for sending the notifications to all the stakeholders
-    }
-    
-    public function actionMentionedNotify()
-    {
-        //logic for sending the notifications to all the notified people
-    }
+//    public function actionChangeProperty($data)
+//    {
+//        try{
+//            $notification_data = json_decode($data);
+//            NotificationCollection::saveNotifications($notification_data);
+//            echo json_encode(array("status" => "success"));
+//            
+//        } catch (Exception $ex) {
+//            Yii::log("NotificationsController:actionChangeProperty::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+//
+//        }
+//    }
 }
