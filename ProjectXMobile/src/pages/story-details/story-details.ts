@@ -63,6 +63,9 @@ export class StoryDetailsPage {
     public static isMenuOpen: boolean = false;
     public static menuControler;
 
+    public textFieldValue="";
+    public textAreaValue="";
+
     @ViewChild(Content) content: Content;
 
     public ckeditorContent = "";
@@ -110,17 +113,27 @@ export class StoryDetailsPage {
                     var _id = this.items[i].Id;
                     var _title = this.items[i].title;
                     var _assignTo;
-                    if ((this.items[i].field_type == "Text") || (this.items[i].field_type == "TextArea")) {
+                    if (this.items[i].field_type == "Text") {
                         if (this.items[i].value == "") {
-                                                    _assignTo = "--";
+                            _assignTo = "--";
                         } else {
                             _assignTo = this.items[i].value;
+                            if(this.items[i].field_name == "estimatedpoints"){
+                                this.textFieldValue = this.items[i].value;
+                            }
+                        }
+                    } else if (this.items[i].field_type == "TextArea") {
+                        if (this.items[i].value == "") {
+                            _assignTo = "--";
+                        } else {
+                            _assignTo = this.items[i].value;
+                            this.textAreaValue = this.items[i].value;
                         }
                     } else if(this.items[i].field_type == "Date"){
 //                        readable_value
                        if(this.items[i].readable_value == ""){
                              _assignTo = "--"; 
-                                                } else {
+                          } else {
                             _assignTo = this.items[i].readable_value;
                         }
                     } 
@@ -178,9 +191,9 @@ export class StoryDetailsPage {
 this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe( 
 (result) => {
     setTimeout(() => {
-        document.getElementById("field.title_field.id_" + index).innerHTML = this.localDate;
+        document.getElementById("field_title_" + index).innerHTML = this.localDate;
         this.enableDataPicker[index] = false;
-         document.getElementById("field.title_field.id_" + index).style.display = 'block';
+         document.getElementById("field_title_" + index).style.display = 'block';
         //    document.getElementById("item_" + index).classList.remove("item-select");
     }, 300);
            }, 
@@ -198,7 +211,7 @@ let toast = this.toastCtrl.create({
 
 
        setTimeout(() => {
-           document.getElementById("field.title_field.id_" + index).style.display = 'none';
+           document.getElementById("field_title_" + index).style.display = 'none';
        //document.getElementById("item_" + index).classList.add("item-select");
        }, 300);
    }
@@ -218,15 +231,6 @@ let toast = this.toastCtrl.create({
     
     ionViewDidLoad() {
         //console.log('ionViewDidLoad StoryDetailsPage');
-
-        jQuery(document).ready(function () {
-            jQuery('.jquery-notebook.editor').notebook({
-                autoFocus: true,
-                placeholder: 'Type something awesome...'
-            });
-        });
-
-
     }
     ionViewDidEnter() {
     console.log("the ionViewDidEnter --- " + jQuery('#description').height());
@@ -263,7 +267,8 @@ let toast = this.toastCtrl.create({
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe( 
             (result) => {
                 setTimeout(() => {
-                document.getElementById("field.title_field.id_" + index).innerHTML = event.Name;
+            //    document.getElementById("field_title_" + index).innerHTML = event.Name;
+                jQuery("#field_title_"+index+ " div").text(event.Name);
                     // document.getElementById("item_" + index).classList.remove("item-select");
                     // this.itemsInActivities.push(result.data.activityData.data);
                     if (result.data.activityData.referenceKey == -1) {
@@ -297,8 +302,8 @@ let toast = this.toastCtrl.create({
         setTimeout(() => {
                 this.enableTextField[index] = false;
                 this.enableTextArea[index] = false;
-                document.getElementById("field.title_field.id_" + index).style.display = 'block';
-                document.getElementById("field.title_field.id_" + index).innerHTML = (event.target.value);
+                document.getElementById("field_title_" + index).style.display = 'block';
+                document.getElementById("field_title_" + index).innerHTML = (event.target.value);
                 }, 200);
             },
             (error) => {
@@ -314,7 +319,7 @@ let toast = this.toastCtrl.create({
             });
 
         setTimeout(() => {
-        // document.getElementById("field.title_field.id_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
+        // document.getElementById("field_title_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
         // document.getElementById("item_" + index).classList.remove("item-select");
     }, 300);
     
@@ -378,6 +383,7 @@ openPopover(myEvent) {
         console.log("the model present");
             
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
+            
                 this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
                     (result) => {
                         if(fieldDetails.fieldType == "Team List"){
@@ -388,36 +394,39 @@ openPopover(myEvent) {
                     } else { 
                     for(let data of result.getFieldDetails){
                                 this.displayFieldvalue.push(data);
-                        } 
+                        }
                     }
                          
-                        StoryDetailsPage.optionsModal = this.modalController.create(CustomModalPage, {activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
-                            StoryDetailsPage.optionsModal.onDidDismiss((data) => {
-                                if(data != null && (data.Name != data.previousValue)){
-                                    this.changeOption(data, index, fieldDetails);
-                                }
-                                this.displayFieldvalue = [];
-                            }); 
-                        StoryDetailsPage.optionsModal.present();
+                    StoryDetailsPage.optionsModal = this.modalController.create(CustomModalPage, {activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
+                        StoryDetailsPage.optionsModal.onDidDismiss((data) => {
+                            if(data != null && (data.Name != data.previousValue)){
+                                this.changeOption(data, index, fieldDetails);
+                            }
+                            this.displayFieldvalue = [];
+                        }); 
+                    StoryDetailsPage.optionsModal.present();
             },
             (error) => {
                 console.log("the fields error --- " + error);
             });
     
     } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
-                document.getElementById("field.title_field.id_" + index).style.display = 'none';
                 this.enableDataPicker[index] = true;
+                document.getElementById("field_title_" + index).style.display = 'none';
+                
             
     } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
         // console.log("TextArea was enabled " + fieldDetails.fieldType);
             
                 if (fieldDetails.fieldType == "TextArea") {
-            this.enableTextArea[index] = true;
-            document.getElementById("field.title_field.id_" + index).style.display = 'none';
+                    this.enableTextArea[index] = true;
+                    document.getElementById("field_title_" + index).focus();
+                    document.getElementById("field_title_" + index).style.display = 'none';
                 }
                 else if (fieldDetails.fieldType == "Text") {
                 this.enableTextField[index] = true;
-                document.getElementById("field.title_field.id_" + index).style.display = 'none';
+                document.getElementById("field_title_" + index).focus();
+                document.getElementById("field_title_" + index).style.display = 'none';
             }
         }
     }  

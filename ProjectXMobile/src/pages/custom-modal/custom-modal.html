@@ -1,7 +1,7 @@
  <ion-header>
     <ion-toolbar>
         <ion-title>
-            {{activatedFieldTitle}}
+            {{activatedFieldTitle}} 
         </ion-title>
         <ion-buttons start>
             <button ion-button (click)="dismiss({})">
@@ -18,8 +18,7 @@
               (click)="dismiss(item)" center> 
 
               <div id="item_{{i}}"> 
-                  <ion-icon *ngIf="activatedFieldValue == item.Name" 
-                             name="checkmark"></ion-icon> 
+                  <ion-icon *ngIf="activatedFieldValue == item.Name" name="checkmark"></ion-icon> 
                     {{item.Name}} 
                     <i *ngIf="isPriority" class="fa fa-circle {{item.Name}}" aria-hidden="true"></i> 
               </div> 

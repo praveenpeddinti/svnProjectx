@@ -44,7 +44,9 @@ export class CustomModalPage {
    }
 
     this.displayFieldvalue = params.get('displayList');
-    this.activatedFieldValue = document.getElementById("field.title_field.id_" + params.get('activatedFieldIndex')).innerHTML;
+    // this.activatedFieldValue = document.getElementById("field_title_" + params.get('activatedFieldIndex')).innerHTML;
+    this.activatedFieldValue = jQuery("#field_title_" + params.get('activatedFieldIndex')).text();
+   
  }
 
  dismiss(selectedItem) {
@@ -62,9 +64,9 @@ export class CustomModalPage {
    }
    public ionViewDidEnter(){
     // this.content.scrollToBottom(300);
-    console.log("the top of item " + jQuery("#item_5").position().top);
-    let dimensions = this.content.getContentDimensions();
-    console.log("the contentBottom " + JSON.stringify(dimensions) + " ----- " + dimensions.contentBottom);
-    this.content.scrollTo(0, jQuery("#item_5").position().top, 300);
+//    console.log("the top of item " + jQuery("#item_5").position().top);
+//    let dimensions = this.content.getContentDimensions();
+//    console.log("the contentBottom " + JSON.stringify(dimensions) + " ----- " + dimensions.contentBottom);
+//    this.content.scrollTo(0, jQuery("#item_5").position().top, 300);
   }
 }
