@@ -1,20 +1,33 @@
-<ion-header>
+<form #createForm="ngForm" (ngSubmit)="submitted && onStoryCreate(createForm)" style="max-height:100%;height:100%" novalidate> 
+    <ion-header>
     <ion-navbar>
         <ion-title>Story Create</ion-title>
         <ion-buttons right>
+            <span class="headerlinks">
+            <a ion-button icon-only (click)="presentActionSheet()">
+              <i class="fa fa-paperclip" aria-hidden="true"></i>
+            </a>
+            </span>
+        </ion-buttons>
+         <ion-buttons right>
+             <span class="headerlinks">
+            <a ion-button icon-only (click)="submitted = true;">
+               <i class="fa fa-paper-plane" aria-hidden="true"></i>
+            </a>
+             </span>
+        </ion-buttons>
+         <ion-buttons right>
             <a ion-button icon-only (click)="openPopover($event)">
                <i class="fa fa-user-circle-o" aria-hidden="true"></i>
             </a>
         </ion-buttons>
     </ion-navbar>
 </ion-header>
-
-
 <ion-content padding>
 <div>
  
-<form #createForm="ngForm" (ngSubmit)="submitted && onStoryCreate(createForm)"> 
-    <ion-input type="file" placeholder="Title" [(ngModel)]="create.title" required name="create_title" #create_title ="ngModel" [ngModelOptions]="{standalone:true}"></ion-input>
+ <label class="customlabel">Title</label>     
+    <ion-input type="file" class="item customdropdowntext spinnerlabel" placeholder="Title" [(ngModel)]="create.title" required name="create_title" #create_title ="ngModel" [ngModelOptions]="{standalone:true}"></ion-input>
     <div [hidden]="!create_title.errors.required" *ngIf="submitted && create_title.errors " class="text-md-danger text-ios-danger text-wp-danger">
     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Title is required</div>
    
@@ -22,49 +35,41 @@
       <ion-row>
       <ion-item *ngFor="let field of templatedataList; let i=index;" id="item_{{i}}">
         <div *ngIf="!showEditableFieldOnly[i]">
-          <h3>{{field.title}}</h3>
+         <label class="customlabel">{{field.title}}</label>          
           <!--<div id="field.title_field.id_{{i}}" (click)="getFieldValues(field, i)" *ngFor="let assignValue of field.assignData" class="spinnerlabel">{{assignValue.Name}}</div>-->
-          <div id="field.title_field.id_{{i}}" (click)="openOptionsModal(field, i)" class="spinnerlabel">{{field.assignData[0].Name}}</div>
+          <div id="field.title_field.id_{{i}}" (click)="openOptionsModal(field, i)" class="item customdropdown spinnerlabel marginbottom8">{{field.assignData[0].Name}}
+        <span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+        </div>
         </div>
       </ion-item>
       </ion-row>
     </ion-list>
-
+    <div class="customtextareadiv">
 <ion-list>
-  <ion-col>
-    <ion-item>
-<input placeholder="Type your message here" [(ngModel)]="create.description" required name="create_description" #create_description ="ngModel"  cols="40" 
-       rows="5"  style="width:300px; height:50px;" id="create_description" [ngModelOptions]="{standalone:true}">
-   </ion-item>
+ <label class="customlabel">Description</label>  
+    <ion-item> 
+        <ion-row>
+            
+<textarea class="text-area  item customdropdowntext spinnerlabel" placeholder="Type your message here" [(ngModel)]="create.description" required name="create_description" #create_description ="ngModel"  
+          rows="5"   id="create_description" [ngModelOptions]="{standalone:true}"></textarea>
+    </ion-row>
+    </ion-item>
     <div [hidden]="!create_description.errors.required" *ngIf="submitted && create_description.errors " class="text-md-danger text-ios-danger text-wp-danger">
     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Description is required</div>
    <!--<ion-item>
     <input type="file"  class="form-control" [(ngModel)]="create.file" #create.file ="ngModel" name="files[]" id="choose-file" onchange="document.getElementById('create_description').value = this.value" multiple="multiple" [ngModelOptions]="{standalone:true}">
    </ion-item>-->
-   <ion-item>
-      <button ion-button icon-left (click)="presentActionSheet()">
-        <ion-icon name="camera"></ion-icon>Select Image
-      </button>
-   </ion-item>
-
-
-  </ion-col>
-</ion-list>
-
+  </ion-list>
+    </div>
+    <label class="customlabel">Tasks</label>  
 <ion-list>
      <ion-row>
-      <ion-item *ngFor = "let item of tasktypeList; let i=index;" id="item_{{i}}">
-        <ion-label>{{item.name}}</ion-label>
+      <div class="customcheckboxrow" *ngFor = "let item of tasktypeList; let i=index;" id="item_{{i}}">
         <ion-checkbox checked="false" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}"></ion-checkbox>
-    </ion-item>
+        <span>{{item.name}}</span>
+    </div>
      </ion-row>
    </ion-list>
-
-<button ion-button center type="submit"  (click)="submitted = true;">Submit</button>
-
- </form> 
   </div>
-
-  {{tasktypeList|json}}
-
 </ion-content>
+ </form> 

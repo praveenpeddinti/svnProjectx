@@ -1,24 +1,110 @@
 page-story-create {
-.my-drop-zone {
-        border: dotted 3px blue;
-        height: 100px;
-        width: 100%;
-    }
-    .nv-file-over {
-        border: dotted 3px red;
-    }
-    /* Default class applied to drop zones on over */
-    .another-file-over-class {
-        border: dotted 3px green;
-    }
-    html,
-    body {
-        height: 100%;
-    }
-    .item-md {
-        padding-right: 0;
-        padding-left: 5px;
-        font-size: 1.2rem;
-    }
+    .label-md {
+    margin: 0;
+}
+.list-md {
+    margin: 0px;
+}
+.customtextareadiv .item-md.item-block .item-inner, .customtextareadiv .item-ios.item-block .item-inner, .customtextareadiv .item-wp.item-block .item-inner{padding-right:0;padding-left:0!important}
+.list .item:last-child .item-inner{padding-right:0;padding-left:8px}
+.list .item{padding-left:0!important}
+    /*header styles*/
+    .toolbar-background-md, .toolbar-background-ios, .toolbar-background-wp{
+    background-image:none;
+   
+background: #6cbed6; /* Old browsers */
+background: -moz-linear-gradient(top, #6cbed6 0%, #3b9ec2 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #6cbed6 0%,#3b9ec2 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #6cbed6 0%,#3b9ec2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', endColorstr='#3b9ec2',GradientType=0 ); /* IE6-9 */
+    
+}
+.toolbar-title-md, .toolbar-title-ios, .toolbar-title-wp{text-align: center;color:#fff;}
+.bar-button-md[icon-only] i, .bar-button-ios[icon-only] i, .bar-button-wp[icon-only] i{font-size:2.4em;color:#fff}
+.back-button-icon-md, .back-button-icon-ios, .back-button-icon-wp{font-size:35px}
+.toolbar-title-md, .toolbar-title-ios, .toolbar-title-wp{text-align: center;color:#fff;}
+.bar-button-md[icon-only] i, .bar-button-ios[icon-only] i, .bar-button-wp[icon-only] i{font-size:2.4em;color:#fff}
+.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default, .bar-button-default-ios, .bar-button-clear-ios-default, .bar-button-ios-default, .bar-button-default-wp, .bar-button-clear-wp-default, .bar-button-wp-default{color:#fff}
 
+.list .item .customdropdown{border-radius: 2px;position: relative;border: 1px solid #e8e8e8;padding:10px 20px 10px 10px ;color:#4c4c4c;font-size:14px;padding-left:10px!important}
+.customdropdown span.custombuttonsmenuicon{border-left:1px solid #e8e8e8;position:absolute;right:0;top:0;padding:8px 10px 10px 10px; }
+.customdropdown span.custombuttonsmenuicon i{margin-top:3px;color:#7c7c7c}
+.list .item .customdropdowntext{border-radius: 2px;position: relative;border: 1px solid #e8e8e8;padding:10px 20px 10px 10px!important;color:#4c4c4c;font-size:14px}
+
+.customlabel{color:#7c7c7c;font-size:13px;padding-bottom:5px;display: inline-block}
+.text-input {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 0px 0 8px;
+    display: inline-block;
+    border: 1px solid #e8e8e8;
+    border-radius: 0px;
+    box-sizing: border-box;
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.14), 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.12);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-size:18px
+}
+textarea{ border:1px solid #999999; width:100%;resize: none; padding:3px;}
+.text-area {
+   
+    margin: 0px 0 8px;
+    display: inline-block;
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.14), 0 0px 0px 0px rgba(0, 0, 0, 0.2), 0 0px 0px 0 rgba(0, 0, 0, 0.12);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 300ms cubic-bezier(0.4, 0, 0.2, 1), color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-size:14px
+}
+input[type=submit] {
+    width: 100%;
+    
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+}
+.marginbottom8{margin-bottom:8px}
+
+.login-box input{
+    border-bottom-color:transparent;
+    box-shadow:none!important;}
+
+.item-md.item-block .item-inner, .item-ios.item-block .item-inner, .item-wp.item-block .item-inner {
+    padding-right: 8px;
+    border-bottom: transparent;
+}
+
+.text-md-danger_top, .text-md-danger, .text-ios-danger_top, .text-ios-danger, .text-wp-danger_top, .text-wp-danger{color:#ff3000;font-size:12px;position: relative;
+	background: #88b7d5;padding:0 0 5px 0px;border-radius:3px;background: rgba(255, 255, 255, 0.4);}
+.text-md-danger i, .text-md-danger_top i, .text-ios-danger i, .text-ios-danger_top i, .text-wp-danger i, .text-wp-danger_top i{color:#ff3000;font-size:20px;vertical-align: sub}
+
+.text-md-danger:after,.text-ios-danger:after, .text-wp-danger:after {
+	bottom: 100%;
+	left: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(136, 183, 213, 0);
+	border-bottom-color: rgba(255, 255, 255, 0.4);
+	border-width: 8px;
+	margin-left: -8px;
+}
+.item.item-md .checkbox-md, .item.item-wp .checkbox-wp, .item.item-ios .checkbox-ios{margin-right:10px}
+.list .item-checkbox .item-inner{padding-left:0!important;font-size:14px}
+.headerlinks{}
+.headerlinks .bar-button-md, .headerlinks .bar-button-ios, .headerlinks .bar-button-wp{font-size:1rem;margin-right:5px}
+.customcheckboxrow{margin-right:20px}
+.customcheckboxrow span{color:#4c4c4c}
+.customcheckboxrow .checkbox-md, .customcheckboxrow .checkbox-wp, .customcheckboxrow .checkbox-ios{vertical-align: text-bottom;}
+.customcheckboxrow .checkbox-md .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-wp .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-ios .checkbox-checked .checkbox-inner{left:6px;top:3px}
+.customcheckboxrow .checkbox-md .checkbox-checked, .customcheckboxrow .checkbox-wp .checkbox-checked, .customcheckboxrow .checkbox-ios .checkbox-checked{width:22px;height:22px;}
+.customcheckboxrow .checkbox-md .checkbox-icon, .customcheckboxrow .checkbox-wp .checkbox-icon, .customcheckboxrow .checkbox-wp .checkbox-icon{width:22px;height:22px;}
+.customcheckboxrow .checkbox-md .checkbox-checked, .customcheckboxrow .checkbox-wp .checkbox-checked,.customcheckboxrow .checkbox-ios .checkbox-checked {
+    background-color: #3b9ec2;
+    border-color: #3b9ec2;
+}
 }

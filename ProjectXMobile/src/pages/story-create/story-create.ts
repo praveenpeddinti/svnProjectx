@@ -147,7 +147,7 @@ export class StoryCreatePage {
             title: 'Select Image Source',
             buttons: [
                 {
-                    text: 'Load from Library',
+                    text: 'Upload from Library',
                     handler: () => {
                         this.takePicture(Camera.PictureSourceType.PHOTOLIBRARY);
                     }
