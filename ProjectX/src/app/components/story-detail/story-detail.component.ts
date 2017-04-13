@@ -753,8 +753,8 @@ var thisObj = this;
           if(result.statusCode== 200){
             if(result.data.updatedState!=''){
                document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
-            }
-          this.statusId = result.data.updatedFieldData;
+               this.statusId = result.data.updatedFieldData;
+          }
          if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
                 document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
                 if(postEditedText.EditedId == "desc"){
