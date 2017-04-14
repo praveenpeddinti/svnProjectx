@@ -179,31 +179,9 @@
 <div class="main_div widgetmainbg" [ngClass]="{ 'hide': hide}">
 <!--Show the Followers list start-->
     <!-- @Praveen P  Followers List Start--> 
-<div (click)="loadFollowersWidget()" id="follwersAdd" class="add"><i id="follwersAddI" class="fa fa-plus" aria-hidden="true"></i></div>
-    <div class="widgethed">Followers</div>
-    <div class="followers" >
-    <div class="">
-      <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
-        <img  data-toggle="tooltip" data-placement="top" class="profilepic_table"
-                        src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  /> 
-        <div (click)="removeFollower($event.target.id)" id="follower_{{follower.FollowerId}}" *ngIf="(follower.DefaultFollower=='0' || follower.FollowerId == getAllData.Id )" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
-      
-        <div id="conformRF_{{follower.FollowerId}}" class="dropdown-menu customdropdown-menu">
-            <div class="delete_followersbg">  
-                Do you want to remove this user?
-                <div class="text-center">
-                    <div (click)="removefollowerId(follower.FollowerId)" id="remove_yes" class="yes">Yes</div>
-                    <div class="no">No</div>
-        </div>
-            </div>
-        </div>
-        </div>
-       
-    <div class=" clearfix"></div>
-    </div> 
-   </div>
-   
-   <!-- Search Follower list start -->
+<div (click)="loadFollowersWidget()" id="follwersAdd" class="add"><i id="follwersAddI" class="fa fa-plus" aria-hidden="true"></i>
+    
+     <!-- Search Follower list start -->
     <div id="followerdiv" style="display:none" class="addfollowers_overlap">
     <div class="add_followersbg ">
         <div class="padd10"><input id='followerId' type="text" placeholder="Search" class="addfollower_search" value="" (keyup)="getUsersForFollow($event.target.value)"/> </div>
@@ -228,6 +206,35 @@
    </div>
    </div>
    <!-- Search follower list end -->
+    
+    
+    </div>
+    
+    
+    <div class="widgethed">Followers</div>
+    <div class="followers" >
+    <div class="">
+      <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
+        <img  data-toggle="tooltip" data-placement="top" class="profilepic_table"
+                        src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  /> 
+        <div (click)="removeFollower($event.target.id)" id="follower_{{follower.FollowerId}}" *ngIf="(follower.DefaultFollower=='0' || follower.FollowerId == getAllData.Id )" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+      
+        <div id="conformRF_{{follower.FollowerId}}" class="dropdown-menu customdropdown-menu">
+            <div class="delete_followersbg">  
+                Do you want to remove this user?
+                <div class="text-center">
+                    <div (click)="removefollowerId(follower.FollowerId)" id="remove_yes" class="yes">Yes</div>
+                    <div class="no">No</div>
+        </div>
+            </div>
+        </div>
+        </div>
+       
+    <div class=" clearfix"></div>
+    </div> 
+   </div>
+   
+  
  <!-- List End -->
 
   

@@ -79,7 +79,7 @@ padding:5px 10px; cursor:pointer; margin-top:10px;
 }
 .add_followersbg:after {
 	bottom: 100%;
-	right: 5%;
+	right: 3%;
 	border: solid transparent;
 	content: " ";
 	height: 0;
@@ -129,9 +129,11 @@ padding:5px 10px; cursor:pointer; margin-top:10px;
 
 .yes{ background:#237ea7; color:#fff;font-family: 'robotoregular'; font-size:14px; padding:5px 10px; line-height:18px; text-align:center; display:inline-block;}
 .no{background:#cacaca; color:#fff;font-family: 'robotoregular'; font-size:14px; padding:5px 10px; line-height:18px; text-align:center;display:inline-block;}
-.addfollowers_overlap{margin-top: -41px;
+.addfollowers_overlap{
+    //margin-top: -41px;
     position: absolute;
-    right: 30px;
+    right: 0px;
+    top:40px;
     z-index: 9999;}
 .followers .dropdown-toggle{box-shadow:none!important;}
 .customdropdown-menu {
