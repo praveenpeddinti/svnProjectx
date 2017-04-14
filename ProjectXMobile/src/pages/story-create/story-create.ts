@@ -45,7 +45,7 @@ export class StoryCreatePage {
         this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
         });
-
+        
         globalService.newStoryTemplate(this.constants.templateForStoryCreation, this.navParams.get("id")).subscribe(
     (result) => {
         this.itemfield = result.data.story_fields;
@@ -116,6 +116,7 @@ export class StoryCreatePage {
 
             console.log("the create  " + JSON.stringify(this.create));
             //    this.globalService.createStoryORTask(this.constants.createStory, this.create);
+            
             this.globalService.createStoryORTask(this.constants.createStory, (this.create)).subscribe(
                 (result) => {
                     console.log("the create tsk details are " + JSON.stringify(result));
@@ -195,13 +196,9 @@ export class StoryCreatePage {
         // Get the data of an image
         Camera.getPicture(options).then((imagePath) => {
            
-            this.ImageLoc = imagePath;
-            alert(this.ImageLoc);
-           // this.Url = this.ImageLoc;
-           // console.log("URL covert -----" + this.Url);
+            //this.ImageLoc = imagePath;
+            this.create.description = "<p>" + this.create.description + imagePath +"</p>";
             //this.base64Image = 'data:image/jpeg;base64,'+imagePath;
-           // var image: string = <string> <any> imagePath;
-           // alert(image);
         }, (err) => {
             this.presentToast('Error while selecting image.');
         });

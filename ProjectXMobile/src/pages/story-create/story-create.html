@@ -30,7 +30,7 @@
     <ion-input type="file" class="item customdropdowntext spinnerlabel" placeholder="Title" [(ngModel)]="create.title" required name="create_title" #create_title ="ngModel" [ngModelOptions]="{standalone:true}"></ion-input>
     <div [hidden]="!create_title.errors.required" *ngIf="submitted && create_title.errors " class="text-md-danger text-ios-danger text-wp-danger">
     <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Title is required</div>
-    
+    <img *ngIf = "ImageLoc">
     <ion-list>
       <ion-row>
       <ion-item *ngFor="let field of templatedataList; let i=index;" id="item_{{i}}">
@@ -50,7 +50,7 @@
         <ion-row>
             
 <textarea class="text-area  item customdropdowntext spinnerlabel" placeholder="Type your message here" [(ngModel)]="create.description" required name="create_description" #create_description ="ngModel"  
-          rows="5"   id="create_description" [ngModelOptions]="{standalone:true}" value="ImageLoc"></textarea>
+          rows="5"   id="create_description" [ngModelOptions]="{standalone:true}" ></textarea>
     </ion-row>
     </ion-item>
     <div [hidden]="!create_description.errors.required" *ngIf="submitted && create_description.errors " class="text-md-danger text-ios-danger text-wp-danger">
