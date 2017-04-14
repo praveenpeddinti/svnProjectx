@@ -787,6 +787,30 @@ class StoryController extends Controller
         }
     }
     
+    /**
+     * @author Anand
+     * @uses Get all bucket details for current project
+     * @return type
+     */
+    
+    public function actionGetFilterOptions(){
+        try{
+        $postData = json_decode(file_get_contents("php://input"));
+        $projectId = $postData->projectId;
+        $options=array();
+        $options['bucket'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
+        $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $options;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+      return $response;  
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetFilterOptions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+        
+    }
+    
         }
 
 
