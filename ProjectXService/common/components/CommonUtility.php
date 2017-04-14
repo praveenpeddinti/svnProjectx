@@ -310,10 +310,7 @@ class CommonUtility {
             $workFlowModel = new WorkFlowFields();
             $ticketTypeModel = new TicketType();
 
-            if ($ticketDetails["TotalEstimate"] != 0 && $ticketDetails['Fields']['planlevel']['value_name'] == 'Story' && !empty($ticketDetails['Tasks'])) {
-                $totalEstimateArray = array("Id" => 13, "title" => "Total Estimated Points", "value" => $ticketDetails["TotalEstimate"], "value_name" => $ticketDetails["TotalEstimate"]);
-                array_push($ticketDetails["Fields"], $totalEstimateArray);
-            }
+
             foreach ($ticketDetails["Fields"] as &$value) {
                 if (isset($value["custom_field_id"])) {
                     $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
