@@ -24,7 +24,7 @@ export class Globalservice {
 
         this.params.projectId = 1;
         // this.params.ticketId = "";
-
+        
     }
 
     getLoginValidation(url, data) {
@@ -74,6 +74,8 @@ export class Globalservice {
         fieldItemParams["TicketId"] = fieldDetails.ticketId;
         fieldItemParams["ProjectId"] = 1;
         fieldItemParams["timeZone"] = "Asia/Kolkata";
+        fieldItemParams["WorkflowType"] = fieldDetails.workflowType;
+        fieldItemParams["StatusId"] = fieldDetails.readableValue.StateId;
 
         delete fieldItemParams["ticketId"];
         delete fieldItemParams["projectId"];

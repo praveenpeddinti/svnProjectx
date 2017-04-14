@@ -22,7 +22,7 @@ declare var jQuery: any;
 export class StoryDetailsPage {
 
     public items: Array<any>;
-    public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any }>;
+    public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
     public displayFieldvalue = [];
     public showEditableFieldOnly = [];
     public readOnlyDropDownField: boolean = false;
@@ -51,7 +51,7 @@ export class StoryDetailsPage {
 
     public titleAfterEdit: string = "";
     public enableEdatable: boolean = false;
-    public taskDetails = { ticketId: "", title: "", description: "", type: "" };
+    public taskDetails = { ticketId: "", title: "", description: "", type: "", workflowType:"" };
     public isBusy: boolean = false;
     public options = "options";
     public localDate: any = new Date();
@@ -104,6 +104,7 @@ export class StoryDetailsPage {
                 this.taskDetails.title = result.data.Title;
                 this.taskDetails.description = result.data.Description;
                 this.taskDetails.type = result.data.StoryType.Name;
+                this.taskDetails.workflowType = result.data.WorkflowType;
                 this.titleAfterEdit = result.data.Title;
 
                 this.items = result.data.Fields;
@@ -144,7 +145,7 @@ export class StoryDetailsPage {
                         } else {
                             _assignTo = this.items[i].readable_value;
                         }
-                    }
+                    } 
                     else { 
                         if (this.items[i].value_name == "") {
                             _assignTo = "--";
@@ -155,8 +156,10 @@ export class StoryDetailsPage {
                     var _readOnly = this.items[i].readonly;
                     var _fieldType = this.items[i].field_type;
                     var _fieldName = this.items[i].field_name;
+                    var _readableValue = this.items[i].readable_value;
+
                     this.arrayList.push({
-                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, fieldType: _fieldType, fieldName: _fieldName, ticketId: this.taskDetails.ticketId
+                        id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, fieldType: _fieldType, fieldName: _fieldName, ticketId: this.taskDetails.ticketId, readableValue: _readableValue
                     });
                 }
                 //console.log("the field arrayList " + JSON.stringify(this.arrayList));
@@ -381,6 +384,7 @@ openPopover(myEvent) {
         
     openOptionsModal(fieldDetails, index){
         console.log("the model present");
+        fieldDetails['workflowType'] = this.taskDetails.workflowType;
             
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
             

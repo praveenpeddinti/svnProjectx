@@ -24,29 +24,31 @@
         </ion-buttons>
         <ion-list>
             <ion-item *ngFor="let field of arrayList; let i=index;" id="item_{{i}}">
+                
                 <div *ngIf="!showEditableFieldOnly[i]">
                     <label class="customlabel">{{field.title}}</label>
-                    <div id="field.title_field.id_{{i}}" *ngIf="isColorChange(field)" ng class="item customdropdown spinnerlabel" >{{field.assignTo}}</div>
-                    <div id="field.title_field.id_{{i}}" *ngIf="!isColorChange(field)" ng class="item customdropdown" (click)="openOptionsModal(field, i)" >{{field.assignTo}}
-                        <span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
-                    </div>
-
+                    <div id="field_title_{{i}}" *ngIf="isColorChange(field)" ng class="item customdropdown spinnerlabel" >{{field.assignTo}}</div>
+                    <div id="field_title_{{i}}" *ngIf="!isColorChange(field)" ng class="item customdropdown" (click)="openOptionsModal(field, i)" ><div>{{field.assignTo}}</div><span *ngIf="(field.fieldType != 'Date' && field.fieldType != 'TextArea'&& field.fieldType != 'Text')"  class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></div>
                 </div>
+
                  <ion-row>
-                <input *ngIf="enableTextField[i]" (blur)="inputBlurMethod($event, i, field)" class="no_mar spinnerlabel" id="field.title_field.id_{{i}}"
-                    type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="{{field.title}}"
-                    value="{{field.assignTo}}">
+                <input *ngIf="enableTextField[i]" (blur)="inputBlurMethod($event, i, field)" class="no_mar spinnerlabel" id="field_title_{{i}}" 
+                    [ngModel]="textFieldValue" (ngModelChange)="textFieldValue = $event" type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="{{field.title}}"
+                    >
                  </ion-row>
+
                  <ion-row>
-                <textarea *ngIf="enableTextArea[i]" id="field.title_field.id_{{i}}" (blur)="inputBlurMethod($event, i, field)" type="text"
-                    placeholder="{{field.title}}" class="bc" value="{{field.assignTo}}"></textarea>
+                <textarea *ngIf="enableTextArea[i]" id="field_title_{{i}}" (blur)="inputBlurMethod($event, i, field)" type="text"
+                    [ngModel]="textAreaValue" (ngModelChange)="textAreaValue = $event" placeholder="{{field.title}}" class="bc" ></textarea>
                  </ion-row>
+
                 <div *ngIf="enableDataPicker[i]" class="no_mar">
-                    <ion-datetime id="field.title_field.id_{{i}}" displayFormat="MMM-DD-YYYY" [(ngModel)]="localDate" min="{{minDate}}" max="2317"
+                    <ion-datetime id="field_title_{{i}}" displayFormat="MMM-DD-YYYY" [(ngModel)]="localDate" min="{{minDate}}" max="2317"
                                   (ionChange)="dateChange($event, i,field)">{{field.assignTo}}</ion-datetime>
                 </div>               
             </ion-item>
         </ion-list>
+    
     </ion-content>
 </ion-menu>
 
