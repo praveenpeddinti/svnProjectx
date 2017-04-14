@@ -217,6 +217,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                          $fieldBean->value= ""; 
                          $fieldBean->value_name= ""; 
                      }
+                      else if($fieldName == "totalestimatepoints"){
+                         $fieldBean->value= (int)0; 
+                         $fieldBean->value_name= ""; 
+                     }
                      else if($fieldName == "state"){
                          $fieldBean->value= (int)1; 
                          $fieldBean->value_name= "New"; 
