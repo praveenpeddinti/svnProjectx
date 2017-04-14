@@ -14,9 +14,10 @@ declare var cordova: any;
     templateUrl: 'story-create.html'
 })
 export class StoryCreatePage {
+    Url: string;
     public itemfield: Array<any>;
     public tasktypes: Array<any>;
-     create: {title?: any, description?: any, tasks?: any, planlevel?:any, priority?:any} = {};
+     create: {title?: any, description?: any, default_task?: any, planlevel?:any, priority?:any} = {};
     public userName: any = '';
     file: File;
     public templatedataList: Array<{ id: string, title: string, defaultValue: string, assignData: string, readOnly: string, fieldType: string, fieldName: string}>;
@@ -27,7 +28,8 @@ export class StoryCreatePage {
     public readOnlyDropDownField: boolean = false;
     private submitted: boolean = false;
     lastImage: string = null;
-
+    ImageLoc
+    
     constructor(
         public modalController: ModalController,
         public navParams: NavParams,
@@ -49,6 +51,7 @@ export class StoryCreatePage {
         this.itemfield = result.data.story_fields;
         console.log("result newStoryTemplate " + JSON.stringify(this.itemfield));
         this.tasktypes = result.data.task_types;
+        
         console.log("result newStoryTemplate " + JSON.stringify(this.tasktypes));
         this.templatedataList = [];
         this.tasktypeList = [];
@@ -96,13 +99,15 @@ export class StoryCreatePage {
         if (form.valid) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();
-            this.create.tasks = [];
+            this.create.default_task = [];
+
             for (let taskTypeItem of this.tasktypeList) {
                 if (taskTypeItem.selected == true) {
-                    this.create.tasks.push(taskTypeItem.name);
+                    delete taskTypeItem["selected"];
+                    this.create.default_task.push(taskTypeItem);
                 }
             }
-            this.create.description = "<p>Testing</p>\n";
+            this.create.description = "<p>"+this.create.description+"</p>";
 
             console.log("the create  " + JSON.stringify(this.create));
             //    this.globalService.createStoryORTask(this.constants.createStory, this.create);
@@ -111,25 +116,30 @@ export class StoryCreatePage {
                     console.log("the create tsk details are " + JSON.stringify(result));
                     loader.dismiss();
                     this.viewCtrl.dismiss();
-                    let toast = this.toastCtrl.create({
-                        message: 'Successfully created...',
-                        duration: 3000,
-                        position: 'bottom',
-                        cssClass: "toast",
-                        dismissOnPageChange: true
-                    });
-                    toast.present();
+                    alert("Successfully created...");
+                    // let toast = this.toastCtrl.create({
+                    //     message: 'Successfully created...',
+                    //     duration: 3000,
+                    //     position: 'bottom',
+                    //     cssClass: "toast",
+                    //     dismissOnPageChange: true
+                    // });
+                    // toast.present();
                 }, (error) => {
                     loader.dismiss();
+                    
                     console.log("the story create error are---------> " + JSON.stringify(error));
-                    let toast = this.toastCtrl.create({
-                        message: 'Successfully not created...',
-                        duration: 3000,
-                        position: 'bottom',
-                        cssClass: "toast",
-                        dismissOnPageChange: true
-                    });
-                    toast.present();
+                    alert("Unable to created the ticket...");
+                     this.viewCtrl.dismiss();
+                    // let toast = this.toastCtrl.create({
+                    //     message: 'Unable created the ticket...',
+                    //     duration: 3000,
+                    //     position: 'bottom',
+                    //     cssClass: "toast",
+                    //     dismissOnPageChange: true
+                    // });
+                   // toast.present();
+                   
                 }
             );
         }
@@ -179,19 +189,14 @@ export class StoryCreatePage {
 
         // Get the data of an image
         Camera.getPicture(options).then((imagePath) => {
-            // Special handling for Android library
-            if (this.platform.is('android') && sourceType === Camera.PictureSourceType.PHOTOLIBRARY) {
-                FilePath.resolveNativePath(imagePath)
-                    .then(filePath => {
-                        let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
-                        let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-                        this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-                    });
-            } else {
-                var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-                var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-                this.copyFileToLocalDir(correctPath, currentName, this.createFileName());
-            }
+           
+            this.ImageLoc = imagePath;
+            alert(this.ImageLoc);
+           // this.Url = this.ImageLoc;
+           // console.log("URL covert -----" + this.Url);
+            //this.base64Image = 'data:image/jpeg;base64,'+imagePath;
+           // var image: string = <string> <any> imagePath;
+           // alert(image);
         }, (err) => {
             this.presentToast('Error while selecting image.');
         });
@@ -213,31 +218,6 @@ export class StoryCreatePage {
         toast.present();
     }
 
-    private copyFileToLocalDir(namePath, currentName, newFileName) {
-        File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
-            this.lastImage = newFileName;
-            // my data
-            var foo = cordova.file.dataDirectory + newFileName;
-            this.globalService.makeFileRequest(this.constants.filesUploading, [], foo).then(
-            (result :Array<any>) => {
-                console.log("the result " + JSON.stringify(result));
-                for(var i = 0; i<result.length; i++){
-                    console.log(result[i]);
-                    var uploadedFileExtension = (result[i].originalname).split('.').pop();
-                    if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                        this.create.description = this.create.description + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
-                    }
-                }
-            }, (error) => {
-                
-            });
-            // my data ended
-        }, error => {
-            this.presentToast('Error while storing file.');
-        });
-    }
-
-
  onChange(event: EventTarget) {
         let eventObj: MSInputMethodContext = <MSInputMethodContext> event;
         let target: HTMLInputElement = <HTMLInputElement> eventObj.target;
@@ -258,15 +238,16 @@ export class StoryCreatePage {
         let optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: fieldDetails.assignData });
         optionsModal.onDidDismiss((data) => {
             console.log("the dismiss data " + index + " ----- " + JSON.stringify(data));
-            // if(data != null && (data.Name != data.previousValue)){
-            if (fieldDetails.fieldName == "planlevel") {
-                this.create.planlevel = data.Id;
-            } else if (fieldDetails.fieldName == "priority") {
-                this.create.priority = data.Id;
-            }
+            if(data != null){
+                if (fieldDetails.fieldName == "planlevel") {
+                    this.create.planlevel = data.Id;
+                } else if (fieldDetails.fieldName == "priority") {
+                    this.create.priority = data.Id;
+                }
 
-            document.getElementById("field.title_field.id_" + index).innerHTML = data.Name;
-            // }
+            // document.getElementById("field_title_" + index).innerHTML = data.Name;
+            jQuery("#field_title_"+index+ " div").text(data.Name);
+            }
             // this.displayFieldvalue = [];
         });
         optionsModal.present();
