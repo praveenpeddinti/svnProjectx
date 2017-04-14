@@ -37,7 +37,7 @@ public blurTimeout=[];
   private ticketDesc = "";
   private ticketCrudeDesc = "";
   private showDescEditor=true;
-
+  public statusId='';
   private followers:any=[];
   private added_follower=[];
   private follower_search_results:string[];
@@ -335,7 +335,9 @@ closeTitleEdit(editedText){
   editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType,where){ 
    // alert(event+fieldIndex+"--"+fieldId+"--"+fieldDataId+"--"+fieldTitle+"--"+renderType+"--");
     // this.dropList={};
+ var thisObj=this;
      this.dropList=[];
+
     // var fieldName = fieldId.split("_")[1];alert(fieldName);
     var inptFldId = fieldId+"_"+fieldIndex;
     var q =0;
@@ -363,7 +365,9 @@ closeTitleEdit(editedText){
         var reqData = {
           FieldId:fieldDataId,
           ProjectId:this.ticketData.data.Project.PId,
-          TicketId:(where == "Tasks")?fieldId:this.ticketData.data.TicketId
+           TicketId:(where == "Tasks")?fieldId:this.ticketData.data.TicketId,
+          WorkflowType:this.ticketData.data.WorkflowType,
+          StatusId:thisObj.statusId 
         };
         //Fetches the field list data for current dropdown in edit mode.
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
@@ -748,10 +752,10 @@ var thisObj = this;
         {
           
           if(result.statusCode== 200){
-          //   if(result.data.updatedState!=''){
-          //      document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
-          //      this.statusId = result.data.updatedFieldData;
-          // }
+             if(result.data.updatedState!=''){
+                document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
+                this.statusId = result.data.updatedFieldData;
+           }
 
          if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
                 document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
@@ -1351,13 +1355,18 @@ public callTicketDetailPage(ticId){
       }else{  
           this.ticketId = ticId;
       }
-    console.log("+++++++++++++iniit+++++++++");
+      console.log("+++++++++++++iniit+++++++++");
 
       var ticketIdObj={'ticketId': this.ticketId};
         this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
         { 
 
             this.ticketData = data;
+              this.ticketData.data.Fields.filter (function(obj){
+              if(obj.field_name=='workflow'){
+               thisObj.statusId =obj.value;
+              }
+            });
             this.followers = data.data.Followers; //@Praveen P This line to show the default followers in the Follower Div section
             this.ticketDesc = data.data.Description;
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
