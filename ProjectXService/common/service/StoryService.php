@@ -403,22 +403,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              $projectId =  $ticket_data->projectId;
              $userId = $userdata->Id;
              $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
-            // error_log(print_r($collaboratorData,1));
             $ticket_data = $ticket_data->data;
-            error_log(print_r($ticket_data,1));
-           // return;
             $workFlowDetail = array();
             $ticketCollectionModel = new TicketCollection();
             $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->TicketId, $projectId);
             $ticketDetails["Title"] = trim($ticket_data->title);
             $this->saveActivity($ticket_data->TicketId,$projectId,"Title", $ticketDetails["Title"],$userId);
             $description = $ticket_data->description;
-            error_log("====Description on Edit===".$description);
             $ticketDetails["CrudeDescription"] = $description;
             $refiendData = CommonUtility::refineDescription($description);
-            error_log("after refine");
-            error_log("==After refining Users==".print_r($refiendData['UsersList'],1));
-            error_log("==After refining Attachments==".print_r($refiendData['ArtifactsList'],1));
+           // error_log("after refine");
+           // error_log("==After refining Users==".print_r($refiendData['UsersList'],1));
+           // error_log("==After refining Attachments==".print_r($refiendData['ArtifactsList'],1));
             
             /* Send Mail to @mentioned users */
 //            if(!empty($refiendData['UsersList']))
@@ -437,6 +433,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             
             $ticketDetails["Description"] = $refiendData["description"];
             $this->saveActivity($ticket_data->TicketId,$projectId,"Description", $description,$userId);
+            $newworkflowId = "";
             foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
                      if(isset($ticket_data->$key)){
@@ -460,8 +457,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$key);
                                 $value["value_name"] = $workFlowDetail["Name"];
-                                $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$ticket_data->$key);
-
+                                $newworkflowId = $ticket_data->$key;
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->$key);
@@ -530,11 +526,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                              
                          }
                         $activity=$this->saveActivity($ticket_data->TicketId,$projectId,$fieldName, $value["value"],$userId);
-                        error_log("==Activity==".print_r($activity,1));
-                        //error_log('==action field name=='.$activity['data']['ActionFieldName']);
+                     
                         if(!empty($activity))
                         {
-                         NotificationCollection::saveNotifications($editticket,$fieldName,$ticket_data->$key,$projectId);
+                        // NotificationCollection::saveNotifications($editticket,$fieldName,$ticket_data->$key,$projectId);
                         }     
                         
                        }else{
@@ -546,9 +541,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                    
                 
              }
+             if($newworkflowId != ""){
+                $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId);
+
+             }
              $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$projectId);
              $ticketDetails["Followers"] = $newTicketDetails["Followers"];
-             //error_log(print_r($ticketDetails["Fields"],1));
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $collection->save($ticketDetails);
             TicketArtifacts::saveArtifacts($ticket_data->TicketId, $projectId, $refiendData["ArtifactsList"],$userId);
@@ -652,8 +650,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
                                 $valueName = $workFlowDetail["Name"];
                              //   NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
-                                $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value);
-
+                               
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->value);
@@ -723,6 +720,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
                 $updateStaus = $collection->update($condition, $newData);
                 if($field_name=='workflow'){
+                $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value);
+
                 $collection->findAndModify( array("ProjectId"=> (int)$ticket_data->projectId ,"TicketId"=>(int)$ticket_data->TicketId),array('$set' => array('Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
                 $updatedState['field_name'] ='state';
                 $updatedState['state']=$workFlowDetail['State'];
