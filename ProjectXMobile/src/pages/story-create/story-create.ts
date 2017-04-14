@@ -64,9 +64,9 @@ export class StoryCreatePage {
                 var _readOnly = this.itemfield[i].readonly;
                 var _fieldType = this.itemfield[i].field_type;
                 var _fieldName = this.itemfield[i].Field_Name;
-                if(this.itemfield[i].Field_Name == 'planlevel'){
+                if(_fieldName == 'planlevel'){
                     this.create.planlevel = this.itemfield[i].DefaultValue;
-                } else if(this.itemfield[i].Field_Name == 'priority') {
+                } else if(_fieldName == 'priority') {
                     this.create.priority = this.itemfield[i].DefaultValue;
                 }
                 this.templatedataList.push({
