@@ -331,6 +331,7 @@ footer{font-size:10px}
 .story_tasks .customdatatable.ngx-datatable.material{}
 .story_tasks .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row, .story_tasks .ngx-datatable .datatable-scroll .datatable-body-row{margin:0 0 0;background:#f4f4f4;border-bottom:1px solid #fff;border-top:0}
 .story_tasks .datatable-scroll .datatable-row-wrapper:last-child .datatable-body-row{margin:0 0 0;background:#f4f4f4;border-bottom:1px solid #e8e8e8}
+.taskRstory{margin-left:5px}
 .taskRstory .badge{background: #ACACAC; padding: 2px 5px!important; border-radius: 100px!important;  top: 0px; font-size: 10px;}
 .paddingL10{ padding-left:10px;}
 /* custom auto suggestions styles */
