@@ -122,11 +122,11 @@ class CommonUtility {
         }
     }
 
-    static function refineActivityData($html) {
+    static function refineActivityData($html,$length="35") {
         // $html = CommonUtility::closetags($html);
 
-        if (strlen($html) > 35) {
-            $html = substr($html, 0, 35) . "...";
+        if (strlen($html) > $length) {
+            $html = substr($html, 0, $length) . "...";
         }
         $html = strip_tags($html);
 
@@ -901,6 +901,8 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 error_log(print_r($ticketDetails,1));
                 $ticketInfo = $ticketDetails["TicketId"]." ".$ticketDetails["Title"];
                 $property["ActionFieldTitle"] = $property["ActionFieldTitle"];
+              
+                $ticketDetails["Title"] = self::refineActivityData($ticketDetails["Title"],30);
                 $property["PoppedChildTitle"] = $ticketDetails["Title"];
                 $property["PoppedChildId"] = $ticketDetails["TicketId"];
            }
@@ -1040,6 +1042,8 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 ),array('$limit' => $limit),array('$skip' => $offset)
                 );
             $ticketCommentsData = $query->aggregate($pipeline);
+            error_log('comment data---'.print_r($ticketCommentsData,1));
+            
             $commentsArray=array();
             $commentsPositionArray=array();
             $TicketCommentsFinalArray = array();
