@@ -175,7 +175,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
               $fieldsArray = array();
               $title =  trim($ticket_data->title);
               $description =  trim($ticket_data->description);
-              $workflowType=1;
+              $workflowType=$ticket_data->WorkflowType;
               $crudeDescription = $description;
               $refinedData = CommonUtility::refineDescription($description);
               $description = $refinedData["description"];
@@ -601,7 +601,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 error_log("Notification with Mention");
                                 if(!empty($refinedData['UsersList']))
                                 {
-                                    NotificationCollection::saveNotificationsWithMention($ticket_data,$refinedData['UsersList'],'mention');
+                                   // NotificationCollection::saveNotificationsWithMention($ticket_data,$refinedData['UsersList'],'mention');
                                 }
                             } catch (Exception $ex) {
                                 Yii::log("NotificationCollection::saveNotifications:" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -615,7 +615,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                   $fieldName = $fieldDetails["Field_Name"];
                     if($fieldName=='estimatedpoints' || $fieldName=='dod')
                     {
-                        NotificationCollection::saveNotifications($ticket_data,$fieldName,$ticket_data->value);
+                       // NotificationCollection::saveNotifications($ticket_data,$fieldName,$ticket_data->value);
                     }
                      if(is_numeric($ticket_data->value)){
                         if($fieldDetails["Type"] == 6 ){
@@ -635,7 +635,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 //                            /* Send Mail End By Ryan */
                             
                             /* Send Notifications */
-                            NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                           // NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                             /* Notifications End */
                             
                             if (!empty($childticketDetails['Tasks'])){error_log("----follow if subTask");
@@ -651,19 +651,19 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                              else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
                                 $valueName = $workFlowDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                             //   NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value);
 
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->value);
                                 $valueName = $priorityDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                               // NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
                                 $bucketDetail =  Bucket::getBucketName($ticket_data->value,(int)$ticket_data->projectId);
                                 $valueName = $bucketDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                               /// NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
                                 $planlevelDetail =  PlanLevel::getPlanLevelDetails($ticket_data->value);
@@ -672,7 +672,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->value);
                                 $valueName = $tickettypeDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                               // NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 } 
                         
                        
@@ -682,7 +682,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             $validDate = CommonUtility::validateDate($ticket_data->value);
                             if($validDate){
                                 $leftsideFieldVal = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$leftsideFieldVal);   
+                               // NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$leftsideFieldVal);   
                             }else{
                                 //error_log("===Field Name==".$leftsideFieldVal);
                                 $leftsideFieldVal = $ticket_data->value; 
