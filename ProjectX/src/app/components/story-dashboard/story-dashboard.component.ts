@@ -21,9 +21,7 @@ export class StoryDashboardComponent {
                        {label:'My Followed Stories/Task', value:{id:4,type:"general"}},
                        {label:'Current Bucket', value:{id:5,type:"general"}},
                        {label:'Closed by Bucket', value:{id:6,type:"general"}},
-                       {label:'Backlog', value:{id:1,type:"bucket"}},
-                       {label:'Sprint 1', value:{id:2,type:"bucket"}},
-                       {label:'Sprint 2', value:{id:3,type:"bucket"}}];
+                      ];
      public selectedFilter=null;                  
     @ViewChild('myTable') table: any;
     rows = [];
@@ -94,6 +92,16 @@ expanded: any = {};
         private _service: StoryService, private http: Http) { console.log("in constructor"); }
 
     ngOnInit() {
+ var thisObj = this;  
+ /*
+  @params    :  projectId
+  @Description: get bucket details
+  */  
+ this._service.getFilterOptions(1,(response) => { 
+     for(let bucket of response.data.bucket){
+         thisObj.FilterList.push({label:bucket.Name,value:{id:bucket.Id,type:'bucket'}})
+     }
+ });
         /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: Default routing

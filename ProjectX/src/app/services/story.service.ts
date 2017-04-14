@@ -67,4 +67,14 @@ getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,selectedOption,
     });
   }
 
+  getFilterOptions(projectId,getCallbackDetailsCallback) { 
+   var post_data={
+      'projectId':projectId,
+    }
+    this._ajaxService.AjaxSubscribe("story/get-filter-options",post_data,(data)=>
+    { 
+         getCallbackDetailsCallback(data);
+    });
+  }
+
 }
