@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
 declare var jQuery:any;
+
 @Component({
     selector: 'story-dashboard-view',
     providers: [StoryService],
@@ -13,6 +14,17 @@ declare var jQuery:any;
 })
 
 export class StoryDashboardComponent {
+    public FilterList=[{label:'All Stories/Task', value:null},
+                       {label:'All My Stories/Task', value:{id:1,type:"general"}},
+                       {label:'My Active Stories/Task', value:{id:2,type:"general"}},
+                       {label:'My Closed Stories/Task', value:{id:3,type:"general"}},
+                       {label:'My Followed Stories/Task', value:{id:4,type:"general"}},
+                       {label:'Current Bucket', value:{id:5,type:"general"}},
+                       {label:'Closed by Bucket', value:{id:6,type:"general"}},
+                       {label:'Backlog', value:{id:1,type:"bucket"}},
+                       {label:'Sprint 1', value:{id:2,type:"bucket"}},
+                       {label:'Sprint 2', value:{id:3,type:"bucket"}}];
+     public selectedFilter=null;                  
     @ViewChild('myTable') table: any;
     rows = [];
     row1 = [];
@@ -86,7 +98,7 @@ expanded: any = {};
         @params    :  offset,limit,sortvalue,sortorder
         @Description: Default routing
         */
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
+        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
         var ScrollHeightDataTable=jQuery(".ngx-datatable").width() - 12;
        jQuery(".ngx-datatable").css("width",ScrollHeightDataTable);
 
@@ -95,8 +107,9 @@ expanded: any = {};
         @params    :  offset,limit,sortvalue,sortorder
         @Description: StoryComponent/Task list Rendering
         */
-    page(offset, limit, sortvalue, sortorder) {
-        this._service.getAllStoryDetails(1, offset, limit, sortvalue, sortorder, (response) => {
+    page(offset, limit, sortvalue, sortorder,selectedOption ) {
+         this.rows =[];
+        this._service.getAllStoryDetails(1, offset, limit, sortvalue, sortorder,selectedOption,(response) => {
             
             let jsonForm = {};
             if (response.statusCode == 200) {
@@ -119,7 +132,7 @@ expanded: any = {};
     onPage(event) {
         this.offset = event.offset;
         this.limit = event.limit;
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
+        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
     }
 
  
@@ -129,7 +142,7 @@ expanded: any = {};
     onSort(event) {
         this.sortvalue = event.sorts[0].prop;
         this.sortorder = event.sorts[0].dir;
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder);
+        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
     }
 collapseAll(){ 
     this.table.rowDetail.collapseAllRows()
@@ -176,6 +189,11 @@ toggleExpandRow(row) {
 
     renderStoryForm() {
         this._router.navigate(['story-form']);
+    }
+
+    filterDashboard(){
+        console.log("OOOOOOOOOOOOOOOOOOOOO"+this.selectedFilter);
+      this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);  
     }
 
 }

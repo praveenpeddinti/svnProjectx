@@ -3,7 +3,12 @@
   <button id="collapsediv" hidden (click)="collapseAll()">Collapse All</button>
   <button data-toggle="tooltip" data-placement="top" title="List view" class="normal"><i class="fa fa-list" aria-hidden="true"></i></button>
   <button (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="normal bluebutton"><i class="fa fa-plus" aria-hidden="true"></i></button>
-</div>
+<div class="customdropdown">
+ <p-dropdown  [style]="{'width':'50%'}" [(ngModel)]="selectedFilter"  (onChange)="filterDashboard()"   [options]="FilterList" >
+  
+  </p-dropdown>
+ </div>
+ </div>
 
 <ngx-datatable
         #myTable 

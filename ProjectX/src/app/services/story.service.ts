@@ -41,13 +41,14 @@ var post_data={
     }
  
  }
-getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,getAllStoryDetailsCallback) { 
+getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,selectedOption,getAllStoryDetailsCallback) { 
    var post_data={
       'projectId':projectId,
       'offset':offset,
       'pagesize':pagesize,
       'sortvalue':sortvalue,
-      'sortorder':sortorder
+      'sortorder':sortorder,
+      'filterOption':selectedOption,
     }
     this._ajaxService.AjaxSubscribe("story/get-all-story-details",post_data,(data)=>
     { 
