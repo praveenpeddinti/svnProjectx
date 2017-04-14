@@ -87,7 +87,7 @@ export class Globalservice {
     }
 
     public leftFieldUpdateInline(url, selectedItem, fieldDetails){
-        // console.log("the fieldUpdateParams --- " + JSON.stringify(fieldDetails));
+        // console.log("the fieldUpdateParams --- " + JSON.stringify(selectedItem) + " --- " + JSON.stringify(fieldDetails));
         var fieldUpdateParams = this.params;
 
         fieldUpdateParams["isLeftColumn"] = 1;
@@ -95,6 +95,10 @@ export class Globalservice {
         fieldUpdateParams["value"] = selectedItem;
         fieldUpdateParams["TicketId"] = fieldDetails.ticketId;
         fieldUpdateParams["EditedId"] = fieldDetails.fieldName;
+        if(fieldDetails.fieldName == 'workflow'){
+            fieldUpdateParams["WorkflowType"] = fieldDetails.workflowType;
+            fieldUpdateParams["StatusId"] = fieldDetails.readableValue.StateId;
+        }
         
         fieldUpdateParams["projectId"] = 1;
         fieldUpdateParams["timeZone"] = "Asia/Kolkata";
