@@ -124,7 +124,7 @@ padding:5px 10px; cursor:pointer; margin-top:10px;
 .addfollower_userbg:hover{ background:#fafafa; padding:5px 10px;}
 .addfollower_user{width:30px; height:30px; border-radius:50%;  overflow:hidden; position:relative; cursor:pointer;}
 .addfollower_user img{ width:30px; height:30px; border-radius:50%; }
-.addfollower_username{font-family: 'robotoregular'; font-size:14px; color:#9b9b9b; line-height:24px; }
+.addfollower_username{font-family: 'robotoregular'; font-size:14px; color:#9b9b9b; line-height:24px; text-align: left}
 .addfollower_search{  border:none; outline:none; text-indent:8px; line-height:30px; width:100%;}
 
 .yes{ background:#237ea7; color:#fff;font-family: 'robotoregular'; font-size:14px; padding:5px 10px; line-height:18px; text-align:center; display:inline-block;}
