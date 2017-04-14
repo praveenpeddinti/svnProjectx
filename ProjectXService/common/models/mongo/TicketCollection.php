@@ -457,7 +457,7 @@ class TicketCollection extends ActiveRecord
        public static function updateTotalEstimatedPoints($projectId,$parentticketId, $totalEstmatedPts) {
         try {
             $ticketCollection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $updateTotalEstimatedPts = array('$inc' => array("TotalEstimate" => $totalEstmatedPts));
+            $updateTotalEstimatedPts = array('$inc' => array("Fields.totalestimatepoints.value" => $totalEstmatedPts));
             $ticketCollection->update(array("TicketId" => (int) $parentticketId, "ProjectId" => (int) $projectId), $updateTotalEstimatedPts);
           
         } catch (Exception $ex) {
