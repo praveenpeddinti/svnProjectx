@@ -1,19 +1,3 @@
-
-<!--
-<div class="search">
-<div class="searchresulttext">Search results for <span class="heighlight">web</span> in ProjectX.0</div>
-<div class="searchdiv">
-<div class="searchresulttitle">
-<img src="images/story-icon.png"/> <a href="#">#54 Wire frame and HTML conversion fro <span class="heighlight">web</span> app</a>
-</div>
-<div class="searchresultcontent">
-<span class="not_mention">
-" @sateeshmandru @moinhussain @hareesh.bekkam" </span> Kindly provide wireframes for <span class="heighlight">web</span> and Mobile App for below tickets #100, #88, #91, #87, #83
-</div>
-<div class="modifieddate">Last modified on <span>2017-04-11 16:38,</span> created by <span>ranjanithakur</span></div>
-</div>
-</div>
--->
 <div class="search">
 <div class="searchresulttext">Search results for <span class="heighlight">{{searchString}}</span> in ProjectX.0</div>
 
@@ -33,7 +17,6 @@
 </div>
 <div class="modifieddate">Last modified on <span>{{finalData.UpdatedOn}},</span> created by <span>{{finalData.reportedby}}</span></div>
 </div>
-
 
     <div  *ngIf="!finalData.description">
         <div  *ngFor=" let commentData of finalData.comments">
@@ -55,45 +38,5 @@
 </div>
 <div id="searchsection"></div>
 </div>
-<!--
-    <div class="loginsection" id="searchsection">
-      <div  *ngFor="let searchData of searchArray">
-        <div  *ngFor=" let finalData of searchData">
-          <div class="col-md-1">
-                    
-                    </div>
-                    <div class="col-md-5">
-                        <div class="addtask_bor">
-                            
-                            <div  *ngIf="finalData.description">
-                              <div class="addtask_taskno">
-                                <span><img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" /></span>
-                                <span><img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" /></span>
-                                <span >#</span> {{finalData.TicketId}}
-                                </div>
-                               <div class="addtask_title" ><a [routerLink]="['/story-detail',finalData.TicketId]" (click)="navigateToStoryDetail(finalData.TicketId)">{{finalData.Title}}</a></div>
-                              <div class="addtask_status imgnone" [innerHTML]="finalData.description">
-                              </div>
-                              <div class="addtask_status">Last modified On {{finalData.UpdatedOn}} , created By {{finalData.reportedby}}
-                              </div>
-                              </div>
-                           <div  *ngIf="!finalData.description">
-                             <div  *ngFor=" let commentData of finalData.comments">
-                               <div class="">
-                              <div class="addtask_taskno"><span><img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" /></span>
-                               <span><img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" /></span>
-                              <span >#</span> {{finalData.TicketId}}</div>
-                              <div class="addtask_title" ><a [routerLink]="['/story-detail',finalData.TicketId,commentData.Slug.$oid]" (click)="navigateToStoryDetail(finalData.TicketId,commentData.Slug.$oid)">{{finalData.Title}}</a></div>
-                               <div class="addtask_status" [innerHTML]="commentData.CrudeCDescription"></div>
-                               <div class="addtask_status">Last modified On {{finalData.UpdatedOn}} , created By {{finalData.reportedby}}
-                              </div>
-                              </div>
-                           </div>
-                        </div>
-                    </div>
-          </div>
-       </div>
-</div>
-</div>
--->
+
 
