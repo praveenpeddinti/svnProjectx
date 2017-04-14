@@ -590,8 +590,8 @@ private dateVal = new Date();
 
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);
+            }
       }
-    }
     return fieldsBuilt;
 
   }
@@ -1309,7 +1309,9 @@ var thisObj = this;
           jQuery("#"+id).fadeOut(4000);
             }
 
-    public navigateStoryDetail(ticketId){  
+    public navigateStoryDetail(ticketId){ 
+    this.fieldsData = []; 
+    this.showMyEditableField =[];
          this.callTicketDetailPage(ticketId);        
         }
 
