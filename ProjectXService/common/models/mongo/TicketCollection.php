@@ -167,6 +167,24 @@ class TicketCollection extends ActiveRecord
      */
         public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
         try {
+            $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
+            if($StoryData->filterOption !=null){
+               // $StoryData->offset=(int)0;
+                if($StoryData->filterOption->type=='general'){
+                switch((int)$StoryData->filterOption->id){
+                case 1:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
+                case 2:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;
+                       $conditions['Fields.state.value']=(int)3;break;
+                case 3:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;
+                       $conditions['Fields.state.value']=(int)6;break;;
+                case 4:$conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
+            }      
+           }else if($StoryData->filterOption->type=='bucket'){
+             $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
+           }
+             
+            }
+           
             if ($StoryData->sortorder == 'desc')
                 $order = -1;
             if ($StoryData->sortorder == 'asc')
@@ -183,7 +201,8 @@ class TicketCollection extends ActiveRecord
                 "skip" => $StoryData->offset * $StoryData->pagesize
             );
            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-           $cursor = $collection->find(array("ProjectId" => (int)$projectId,"IsChild" => (int)0), array(), $options);
+           
+           $cursor = $collection->find($conditions, array(), $options);
             $ticketDetails = iterator_to_array($cursor);
             return $ticketDetails;
         } catch (Exception $ex) {
@@ -196,11 +215,27 @@ class TicketCollection extends ActiveRecord
      * getting total count.
      * @return type  $projectId
      */
-    public static function getAllStoriesCount($projectId) {
+    public static function getAllStoriesCount($StoryData,$projectId) {
         try {
             $query = new Query();
+            $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
+           if($StoryData->filterOption !=null){
+                if($StoryData->filterOption->type=='general'){
+                switch((int)$StoryData->filterOption->id){
+               case 1:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
+                case 2:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;
+                       $conditions['Fields.state.value']=(int)3;break;
+                case 3:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;
+                       $conditions['Fields.state.value']=(int)6;break;;
+                case 4:$conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
+            }      
+           }else if($StoryData->filterOption->type=='bucket'){
+              $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
+           }
+             
+            }
             $query->from('TicketCollection')
-                    ->where(["ProjectId" => $projectId,"IsChild" => (int)0]);
+                    ->where($conditions);
             $totalCount = $query->count();
             return $totalCount;
         } catch (Exception $ex) {

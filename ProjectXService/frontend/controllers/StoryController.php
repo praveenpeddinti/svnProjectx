@@ -88,7 +88,7 @@ class StoryController extends Controller
             $StoryData = json_decode(file_get_contents("php://input"));
             //$projectId=1;
             $projectId = $StoryData->projectId;
-            $totalCount = ServiceFactory::getStoryServiceInstance()->getAllStoriesCount($projectId);
+            $totalCount = ServiceFactory::getStoryServiceInstance()->getAllStoriesCount($StoryData,$projectId);
             $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($StoryData, $projectId);
 
             $responseBean = new ResponseBean();

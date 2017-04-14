@@ -334,9 +334,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getMyTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-       public function getAllStoriesCount($projectId) {
+       public function getAllStoriesCount($StoryData,$projectId) {
         try {
-            $totalCount = TicketCollection::getAllStoriesCount($projectId);
+            $totalCount = TicketCollection::getAllStoriesCount($StoryData,$projectId);
             
             return $totalCount;
         } catch (Exception $ex) {
