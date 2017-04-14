@@ -59,11 +59,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 .expand{display: none; color: #3b9ec2; position: absolute; right: 11px; top: 2px}
 .collapse{color: #3b9ec2; position: absolute; right: 11px; top: 2px}
 .dashboardouterbox{}
-.High{background: #fbd8d8}
-.Normal{background: #ffead0}
-.Low{background: #faf9e3}
-.Highest{background:#ffb0b0}
-.Lowest{background:#f0f0f0}
+// .High{background: #fbd8d8}
+// .Normal{background: #ffead0}
+// .Low{background: #faf9e3}
+// .Highest{background:#ffb0b0}
+// .Lowest{background:#f0f0f0}
+
+.Normal {color:#eda74c}
+.Highest{color:#ff2200}
+.High{color:#ff7c7c}
+.Low{color:#c5c950}
+.Lowest{color:#e5e970}
+
 .dashboardbox_header{padding:8px 10px 2px;font-size:14px;line-height:16px}
 .dashboardbox_header i{width:22px;height:22px;border-radius:100px;display: inline-block;vertical-align: middle}
 .dashboardbox_header i.Story{background:#04355e;position: relative}
@@ -322,7 +329,7 @@ border: 1px solid #f0f0f0; margin-bottom:5px; padding-left:3px; padding-top: 5px
     /* text-overflow: ellipsis; */
 }
 .dodlink{ background: #f8f8f8;border: 1px solid #f0f0f0; margin-bottom:5px; padding-left:3px; padding-top: 5px;}
-.customdropdown{border-radius: 2px;position: relative;border: 1px solid #e8e8e8;padding:10px 20px 10px 10px;color:#4c4c4c;font-size:14px}
+.customdropdown{border-radius: 2px;position: relative;border: 1px solid #e8e8e8;padding:10px 20px 10px 10px;color:#4c4c4c;font-size:14px;height: 40px;}
 .customdropdown span.custombuttonsmenuicon{border-left:1px solid #e8e8e8;position:absolute;right:0;top:0;padding:8px 10px 10px 10px; }
 .customdropdown span.custombuttonsmenuicon i{margin-top:3px;color:#7c7c7c}
 .customlabel{color:#7c7c7c;font-size:13px;padding-bottom:5px;display: inline-block}

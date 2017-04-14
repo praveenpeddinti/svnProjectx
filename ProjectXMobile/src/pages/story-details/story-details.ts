@@ -65,6 +65,7 @@ export class StoryDetailsPage {
 
     public textFieldValue="";
     public textAreaValue="";
+    public displayedClassColorValue="";
 
     @ViewChild(Content) content: Content;
 
@@ -156,6 +157,9 @@ export class StoryDetailsPage {
                     var _readOnly = this.items[i].readonly;
                     var _fieldType = this.items[i].field_type;
                     var _fieldName = this.items[i].field_name;
+                    if(_fieldName == 'priority'){
+                        this.displayedClassColorValue = _assignTo;
+                    }
                     var _readableValue = this.items[i].readable_value;
 
                     this.arrayList.push({
@@ -272,6 +276,9 @@ let toast = this.toastCtrl.create({
                 setTimeout(() => {
             //    document.getElementById("field_title_" + index).innerHTML = event.Name;
                 jQuery("#field_title_"+index+ " div").text(event.Name);
+                if(fieldDetails.fieldName == 'priority'){
+                    this.displayedClassColorValue = event.Name;
+                }
                     // document.getElementById("item_" + index).classList.remove("item-select");
                     // this.itemsInActivities.push(result.data.activityData.data);
                     if (result.data.activityData.referenceKey == -1) {
