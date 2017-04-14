@@ -18,7 +18,19 @@ export class SearchComponent implements OnInit{
    private page=1;
     ngOnInit(){
         
-        this.load_contents(this.page);
+        
+     this.route.queryParams.subscribe(
+      params => 
+      {
+             this.searchString=params['SearchString'];
+             console.log('serach--'+this.searchString);
+             this.page=1;
+             this.searchArray=[];
+             this.load_contents(this.page);
+           })
+        
+        
+       // this.load_contents(this.page);
     
               var thisObj=this; 
                 console.log(thisObj.page);
@@ -45,9 +57,12 @@ export class SearchComponent implements OnInit{
          this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
          { 
                  if(result.status !='401'){ 
+                 console.log("if-----------------------");
+                    jQuery('#searchsection').html('');
                     this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
                     }else{
-                 document.getElementById('searchsection').innerHTML='No Results Found';
+                    console.log("else-----------------------");
+                 jQuery('#searchsection').html('No Results Found');
                 }
            
           });
@@ -59,11 +74,7 @@ export class SearchComponent implements OnInit{
         private route: ActivatedRoute,
         private _ajaxService: AjaxService
         ) {
-        route.queryParams.subscribe(
-      params => 
-      {
-             this.searchString=params['SearchString'];
-           })
+       
          }
     
     // preparing serach data
