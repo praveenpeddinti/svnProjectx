@@ -95,7 +95,7 @@ public blurTimeout=[];
    //@Praveen P toggle for plus button in follower list
    jQuery(document).click(function(e) {
      if( jQuery(e.target).closest('div#followerdiv').length==0 && e.target.id != 'follwersAdd' && e.target.id != 'follwersAddI'  ) {
-        jQuery("#followerdiv").css( "display",'none' );
+      jQuery("#followerdiv").css( "display",'none' );
     }
    });
 }
@@ -881,10 +881,13 @@ var thisObj = this;
      */
     
     /* When click the plus button to open the input box for followers*/
-    public loadFollowersWidget(){
+    public loadFollowersWidget(event){ console.log("load foloer");
+    if( event.target.id== "follwersAdd" || event.target.id == "follwersAddI" ){
+
       jQuery("#followerdiv").show();
       jQuery("#followerId").val("");
       this.follower_search_results=[];
+      }
     }
     /* Enter 2 char in the follower input box*/ 
     public getUsersForFollow(event){
