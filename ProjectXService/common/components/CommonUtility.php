@@ -5,8 +5,12 @@ use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts};
 use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields};
 use Yii;
 
-/*
- *
+use common\components\ApiClient; //only for testing purpose
+use common\components\Email; //only for testing purpose
+include_once 'ElasticEmailClient.php';
+
+
+ /*
  * @author Moin Hussain
  */
 
@@ -583,46 +587,53 @@ class CommonUtility {
      * @param type $description
      * @return type
      */
-    public static function refineDescription($description) {
-        try {
-            error_log("descriopt---------------" . $description);
-            $description = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $description);
 
-            $uploadedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
-            $matches = [];
-            $mention_matches = []; //added by Ryan
-            //preg_match_all('/(@\w+.\w+)/', $description, $mention_matches);//added by ryan
-            preg_match_all('/@([\w_\.]+)/', $description, $mention_matches);
-            $mentionmatches = $mention_matches[0]; //added by Ryan
-            for ($i = 0; $i < count($mentionmatches); $i++) {//added by Ryan
-                $value = explode('@', $mentionmatches[$i]);
-                //query for matching users 
-                $user = ServiceFactory::getCollaboratorServiceInstance()->getMatchedCollaborator($value[1]);
-                if (!empty($user)) {
-                    //replace the @mention with <a> tag
-                    $userMention = '@' . $user;
-                    $user_link = "<a name=" . $user . " " . "href='javascript:void(0)'>" . $userMention . "</a>";
-                    //replace the link of @mention in description
-                    $description = str_replace($userMention, $user_link, $description);
-                }
-            }//code end .... By Ryan
-            preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
-            $filematches = $matches[0];
-            $artifactsList = array();
-            for ($i = 0; $i < count($filematches); $i++) {
-                $value = $filematches[$i];
-                $firstArray = explode("/", $value);
-                $secondArray = explode("|", $firstArray[1]);
-                $tempFileName = $secondArray[0];
-                $originalFileName = $secondArray[1];
-                $originalFileName = str_replace("]]", "", $originalFileName);
-                $storyArtifactPath = Yii::$app->params['ProjectRoot'] . Yii::$app->params['StoryArtifactPath'];
-                if (!is_dir($storyArtifactPath)) {
-                    if (!mkdir($storyArtifactPath, 0775, true)) {
-                        Yii::log("CommonUtility:refineDescription::Unable to create folder--" . $ex->getTraceAsString(), 'error', 'application');
-                    }
-                }
-                $newPath = Yii::$app->params['ServerURL'] . Yii::$app->params['StoryArtifactPath'] . "/" . $tempFileName . "-" . $originalFileName;
+  public static function refineDescription($description){
+      try{
+          error_log("descriopt---------------".$description);
+           $description = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $description);
+           
+           $uploadedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+              $matches=[];
+              $userlist=[];//for email purpose added by ryan
+              $mention_matches=[];//added by Ryan
+              //preg_match_all('/(@\w+.\w+)/', $description, $mention_matches);//added by ryan
+              preg_match_all('/@([\w_\.]+)/', $description, $mention_matches);
+              $mentionmatches=$mention_matches[0];//added by Ryan
+              for($i=0;$i<count($mentionmatches);$i++)//added by Ryan
+              {
+                  $value=explode('@',$mentionmatches[$i]);
+                  //query for matching users 
+                  $user=ServiceFactory::getCollaboratorServiceInstance()->getMatchedCollaborator($value[1]);
+                  if(!empty($user))
+                  {
+                      array_push($userlist,$user);//added by ryan for email purpose
+                      //replace the @mention with <a> tag
+                      $userMention='@'.$user;
+                      $user_link="<a name=".$user." ". "href='javascript:void(0)'>".$userMention."</a>";
+                      //replace the link of @mention in description
+                      $description=  str_replace($userMention, $user_link, $description);
+                  }
+                  
+              }//code end .... By Ryan
+              
+              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
+              $filematches = $matches[0];
+              $artifactsList=array();
+              for($i = 0; $i< count($filematches); $i++){
+                   $value = $filematches[$i];
+                   $firstArray =  explode("/", $value);
+                   $secondArray = explode("|", $firstArray[1]);
+                   $tempFileName = $secondArray[0];
+                   $originalFileName = $secondArray[1];
+                   $originalFileName = str_replace("]]", "", $originalFileName);
+                   $storyArtifactPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['StoryArtifactPath'] ;
+                   if(!is_dir($storyArtifactPath)){
+                       if(!mkdir($storyArtifactPath, 0775,true)){
+                           Yii::log("CommonUtility:refineDescription::Unable to create folder--" . $ex->getTraceAsString(), 'error', 'application');
+                       }
+                   }
+                $newPath = Yii::$app->params['ServerURL'].Yii::$app->params['StoryArtifactPath']."/".$tempFileName."-".$originalFileName;
                 $push = true;
                 if (file_exists($storyArtifactPath . "/" . $tempFileName . "-" . $originalFileName)) {
                     $push = false;
@@ -660,15 +671,15 @@ class CommonUtility {
                     array_push($artifactsList, $artifactData);
                 }
 //               TicketArtifacts::saveArtifacts($ticketNumber, $projectId);
-            }
-            $returnData = array("description" => $description, "ArtifactsList" => $artifactsList);
-            return $returnData;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
-    }
-
-    /**
+              } 
+              $returnData = array("description"=>$description,"ArtifactsList"=>$artifactsList,"UsersList"=>$userlist);//modified by Ryan,added UsersList as key
+              return $returnData;
+      } catch (Exception $ex) {
+Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+      }
+  }
+  
+    /*
      * @author Jagadish
      * @return array
      */
@@ -986,6 +997,73 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             return $property;
         } catch (Exception $ex) {
             Yii::log("CommonUtility:prepareActivityProperty::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+  
+    /**
+      * @author Ryan Marshal
+      * @param type $artifacts
+      * @param type $recipients
+      * @return type
+      */
+    public static function sendMail($loggedInUser,$recipients,$ticketdetails,$artifacts=null)
+    {
+        error_log("==Recipients==".$recipients);
+        $recipient_list=array();
+        $attachment_list=array();
+        try
+        {
+          
+            ApiClient::SetApiKey("9d55f483-0501-4005-8ada-3335f666e731");
+            $qry="select UserName,Email from Collaborators where UserName = '$loggedInUser'";
+            $from = Yii::$app->db->createCommand($qry)->queryOne();
+            if(is_array($recipients))
+            {
+                for($i=0;$i<count($recipients);$i++)
+                {
+                    $qry="select UserName,Email from Collaborators where UserName = '$recipients[$i]'";
+                    $data = Yii::$app->db->createCommand($qry)->queryOne();
+                    array_push($recipient_list,$data['Email']);
+                }
+            }
+            else
+            {
+                $qry="select UserName,Email from Collaborators where UserName = '$recipients'";
+                $data = Yii::$app->db->createCommand($qry)->queryOne();
+                array_push($recipient_list,$data['Email']);
+            }
+            error_log("===Recipient List==".print_r($recipient_list,1));
+            
+//            foreach($artifacts as $artifact)
+//            {
+//                $filename=$artifact['FileName'].'.'.$artifact['Extension'];
+//                error_log("==File Name==".$filename);
+//                $filename='/usr/share/nginx/www/ProjectXService/frontend/web/files/story/'.$filename;
+//                array_push($attachment_list,$filename);
+//            }
+            
+            //$email_recepients=[$recipient_list]; //list of recepient email address
+            //$recipient_list=['marshal.ryan@techo2.com'];
+            $attachments=$attachment_list;//list of artifacts
+            $EEemail = new Email();
+             try
+                {
+                    $subject="Ticket Status";
+                    $from=$from['Email'];
+                    $fromName="ProjectX";
+                    $html="<h1> Test Email </h1>";
+                    $text="Hi,This is a Test Email";
+                    $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
+                }
+                catch (Exception $e)
+                {
+                    echo 'Something went wrong: ', $e->getMessage(), '\n';
+                    return;
+                }		
+            
+        } catch (Exception $ex) {
+
         }
     }
      /**
