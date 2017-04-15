@@ -218,19 +218,20 @@ export class StoryEditComponent implements OnInit
     jQuery("#desc_error").hide();
     var desc=jQuery("#description").summernote('code');
     desc=jQuery(desc).text().trim();
+    var error = 0;
     if(edit_data.title=='')
     {
       jQuery("#title_error").show();
+       error=1;
     }
-    if(edit_data.description=='' || desc=='')
+    if(desc=='')
     {
       jQuery("#desc_error").show();
+       error=1;
     }
-    if(edit_data.description!="" && edit_data.title!="" && desc!='')
+    if(error == 0)
     {
-      //var desc=this.txt_area.instance.getData();
-      var desc=jQuery("#description").summernote('code');
-      edit_data.description=desc;
+      edit_data.description= jQuery("#description").summernote('code');
       edit_data.default_task=[];
       if(this.defaultTasksShow){
       var selectedTask=[];
