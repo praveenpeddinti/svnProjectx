@@ -176,7 +176,7 @@ class StoryController extends Controller
                 $defaultTicketsArray = $ticket_data->data->default_task;
                 $childTicketObjArray = array();
                 foreach($defaultTicketsArray as $value){
-                    $ticket_data->data->description = "Please provide description here";
+                    $ticket_data->data->description = "<p>Please provide description here</p>";
                     $ticket_data->data->planlevel = 2;
                     $ticket_data->data->title = $value->Name."-" . $title;
                     $ticket_data->data->WorkflowType = (int)$value->Id;
@@ -330,7 +330,7 @@ class StoryController extends Controller
                     $default_ticket_data['userInfo']=$ticket_data->userInfo;
                     $default_ticket_data['projectId']=$ticket_data->projectId;
                     $default_ticket_data['data']['priority']=$ticket_data->data->priority;
-                    $default_ticket_data['data']['description']= "Please provide description here";
+                    $default_ticket_data['data']['description']= "<p>Please provide description here</p>";
                     $default_ticket_data['data']['planlevel'] = 2;
                     $default_ticket_data['data']['WorkflowType'] = (int)$value->Id; 
                     $default_ticket_data['data']['title'] = $value->Name."-" . $title;
