@@ -1087,7 +1087,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->TicketId, $postData->projectId);
             $storyField = new StoryFields();
             $standardFields = $storyField->getStoryFieldList();
-            $description = "Please provide description here";
+            $description = "<p>Please provide description here</p>";
             foreach ($standardFields as $field) {
                      $fieldBean = new FieldBean();
                      $fieldId =  $field["Id"];
