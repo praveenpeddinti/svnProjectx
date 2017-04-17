@@ -80,7 +80,9 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
     }
      public static function getCollboratorByFieldType($fieldName,$value)
     {
-        $qry = "select * from Collaborators where ".$fieldName."=".$value;
+       // error_log("==Value==".$value);
+        $value=(int)$value;
+        $qry = "select * from Collaborators where `". $fieldName."`=$value";
         $data = Yii::$app->db->createCommand($qry)->queryOne();
         return $data;
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -214,9 +216,23 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
     
     public function getCollaboratorById($id)
     {
+        $id=(int)$id;
         $qry = "select * from Collaborators where Id=$id";
+        error_log("==query==".$qry);
         $data = Yii::$app->db->createCommand($qry)->queryOne();
         return $data;
+    }
+    
+    public function getCollaboratorByUserName($user)
+    {
+        try{
+            $qry = "select concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic,C.UserName from CollaboratorProfile CP join Collaborators C on CP.CollaboratorId=C.Id where C.UserName='$user'";
+            $data = Yii::$app->db->createCommand($qry)->queryOne();   
+            return $data;
+            
+        } catch (Exception $ex) {
+
+        }
     }
 
 }
