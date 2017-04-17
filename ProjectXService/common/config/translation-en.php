@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "mention" => "has mentioned",
+    "mention" => "mentioned",
     "changed" =>"has changed",
     "assignedTo" => "assigned",
     "stakeholder"=>"as a stakeholder",
@@ -12,7 +12,9 @@ return [
     "removed"=>"removed",
     "removedyou"=>"removed you as follower",
     "follower"=>"as follower",
-    "set"=>"set to"
+    "set"=>"set",
+    "setduedate"=>"set duedate to",
+    
     
 ];
 
