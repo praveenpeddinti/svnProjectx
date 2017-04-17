@@ -1,5 +1,4 @@
 import { Component,OnInit } from '@angular/core';
-import { LoginService, Collaborator } from '../../services/login.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
@@ -9,59 +8,49 @@ declare var jQuery:any;
    selector: 'search-view',
     templateUrl: 'search-component.html',
      styleUrls: ['./search-component.css'],
-    providers: [LoginService,AuthGuard]
+    providers: [AuthGuard]
 })
 export class SearchComponent implements OnInit{
     public searchString="";
     public searchArray=[];
     public stringPosition;
-   private page=1;
+    private page=1;
+    
     ngOnInit(){
-        
-        
      this.route.queryParams.subscribe(
       params => 
       {
              this.searchString=params['SearchString'];
-             console.log('serach--'+this.searchString);
-             this.page=1;
+              this.page=1;
              this.searchArray=[];
-             this.load_contents(this.page);
+             this.load_contents(this.page,this.searchString);
            })
         
         
        // this.load_contents(this.page);
-    
+   
               var thisObj=this; 
-                console.log(thisObj.page);
-            jQuery(document).ready(function(){
-           
-            jQuery(window).scroll(function() { 
-               
+             jQuery(document).ready(function(){
+           jQuery(window).scroll(function() { 
             if (jQuery(window).scrollTop() >= jQuery(document).height() - jQuery(window).height() - 20) {
-              //  alert("$$$$$$$$$$$$"+thisObj.page);
-                 thisObj.page++;console.log("###################");
-             //    console.log(thisObj.page);
-                 thisObj.load_contents(thisObj.page);  
+                 thisObj.page++;
+                 thisObj.load_contents(thisObj.page,thisObj.searchString);  
             }
             });
         })
     }
-     load_contents(page){
-       //  alert("here");
+   public  load_contents(page,searchString){
         var post_data={
         'projectId':1,
-        'searchString':this.searchString,
+        'searchString':searchString,
         'page':page
       }
          this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
          { 
                  if(result.status !='401'){ 
-                 console.log("if-----------------------");
                     jQuery('#searchsection').html('');
                     this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
                     }else{
-                    console.log("else-----------------------");
                  jQuery('#searchsection').html('No Results Found');
                 }
            
@@ -69,27 +58,22 @@ export class SearchComponent implements OnInit{
     }
     constructor(
         private _router: Router,
-        private _service: LoginService,
-        private _authGuard:AuthGuard,
+         private _authGuard:AuthGuard,
         private route: ActivatedRoute,
         private _ajaxService: AjaxService
         ) {
-       
+
          }
-    
+
     // preparing serach data
     searchDataBuilder(searchData,prepareData){
-    //    let prepareData = [];
-        //    alert(JSON.stringify(searchData));
-       for(let searchArray in searchData){
-        //        console.log(searchArray);
+        for(let searchArray in searchData){
         prepareData.push(searchData[searchArray]);
        }
        return prepareData;
     }
     navigateToStoryDetail(ticketId,slug){
          this._router.navigate(['/story-detail',ticketId],{queryParams: {Slug:slug}});
-        // this._router.navigate(['story-detail', ticketId]);
-    }
+     }
 }
 
