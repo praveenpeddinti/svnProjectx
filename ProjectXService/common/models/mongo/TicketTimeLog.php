@@ -123,7 +123,7 @@ class TicketTimeLog extends ActiveRecord
      * @description This method is used to getTimeLogRecords for userbased
      * @return type array
      */
-    public function getTimeLogRecords($projectId, $ticketsList) {
+    public static function getTimeLogRecords($projectId, $ticketsList) {
         try {
           
             $matchArray = array("TicketId" => array('$in' => $ticketsList), "ProjectId" => (int) $projectId);
