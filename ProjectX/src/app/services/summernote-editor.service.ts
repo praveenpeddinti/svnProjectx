@@ -82,8 +82,8 @@ export class SummerNoteEditorService
                             
                             },
                             template: function (item) {
-                                console.log("==Profile=="+item.Profile);
-                               return '<li value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + GlobalVariable.FILE_UPLOAD_URL+item.Profile + '"/>'+item.name+'</li>';
+                                console.log("==Profile==**"+item.Profile);
+                               return '<li value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>'+item.name+'</li>';
                             },
                             content: function (item) {
                                 console.log("===Item=="+item);
@@ -173,7 +173,7 @@ export class SummerNoteEditorService
                             },
                             template: function (item) {
                                 console.log("==Profile=="+item.Profile);
-                               return '<li value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + GlobalVariable.FILE_UPLOAD_URL+item.Profile + '"/>'+item.name+'</li>';
+                               return '<li value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>&nbsp;'+item.name+'</li>';
                             },
                             content: function (item) {
                                 console.log("===Item=="+item);
