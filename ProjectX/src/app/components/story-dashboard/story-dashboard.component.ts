@@ -14,14 +14,7 @@ declare var jQuery:any;
 })
 
 export class StoryDashboardComponent {
-    public FilterList=[{label:'All Stories/Task', value:null},
-                       {label:'All My Stories/Task', value:{id:1,type:"general"}},
-                       {label:'My Active Stories/Task', value:{id:2,type:"general"}},
-                       {label:'My Closed Stories/Task', value:{id:3,type:"general"}},
-                       {label:'My Followed Stories/Task', value:{id:4,type:"general"}},
-                       {label:'Current Bucket', value:{id:5,type:"general"}},
-                       {label:'Closed by Bucket', value:{id:6,type:"general"}},
-                      ];
+    public FilterList=[];
      public selectedFilter=null;                  
     @ViewChild('myTable') table: any;
     rows = [];
@@ -98,8 +91,8 @@ expanded: any = {};
   @Description: get bucket details
   */  
  this._service.getFilterOptions(1,(response) => { 
-     for(let bucket of response.data.bucket){
-         thisObj.FilterList.push({label:bucket.Name,value:{id:bucket.Id,type:'bucket'}})
+     for(let option of response.data){
+         thisObj.FilterList.push({label:option.Label,value:{id:option.Id,type:option.Type}})
      }
  });
         /*
@@ -118,7 +111,7 @@ expanded: any = {};
     page(offset, limit, sortvalue, sortorder,selectedOption ) {
          this.rows =[];
         this._service.getAllStoryDetails(1, offset, limit, sortvalue, sortorder,selectedOption,(response) => {
-            
+           
             let jsonForm = {};
             if (response.statusCode == 200) {
                 const start = offset * limit;
@@ -200,7 +193,7 @@ toggleExpandRow(row) {
     }
 
     filterDashboard(){
-        console.log("OOOOOOOOOOOOOOOOOOOOO"+this.selectedFilter);
+        this.offset=0;
       this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);  
     }
 
