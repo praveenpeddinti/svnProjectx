@@ -1000,13 +1000,16 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
   
     /**
       * @author Ryan Marshal
-      * @param type $artifacts
+      * @param type $loggedInUser
       * @param type $recipients
+      * @param type $ticketdetails
+      * @param type $artifacts
       * @return type
       */
     public static function sendMail($loggedInUser,$recipients,$ticketdetails,$artifacts=null)
     {
-        error_log("==Recipients==".$recipients);
+        error_log("==Followers==".print_r($ticketdetails['Followers'],1));
+        $followers=$ticketdetails['Followers'];
         $recipient_list=array();
         $attachment_list=array();
         try
@@ -1015,7 +1018,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             ApiClient::SetApiKey("9d55f483-0501-4005-8ada-3335f666e731");
             $qry="select UserName,Email from Collaborators where UserName = '$loggedInUser'";
             $from = Yii::$app->db->createCommand($qry)->queryOne();
-            if(is_array($recipients))
+            if(is_array($recipients)) // for @mentioned users
             {
                 for($i=0;$i<count($recipients);$i++)
                 {
@@ -1023,14 +1026,27 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                     $data = Yii::$app->db->createCommand($qry)->queryOne();
                     array_push($recipient_list,$data['Email']);
                 }
+                
+                // for followers
+                foreach($followers as $follower)
+                {
+                    $followerid=$follower['FollowerId'];
+                    error_log("==Follower Id==".$followerid);
+                    $qry="select UserName,Email from Collaborators where Id = '$followerid'";
+                    $data = Yii::$app->db->createCommand($qry)->queryOne();
+                    if($data['UserName']!=$loggedInUser) //To avoidloggedin user @mentioning himself
+                    {
+                        array_push($recipient_list,$data['Email']);
+                    }
+                }
             }
-            else
+            else // for assigned to and stakeholder
             {
                 $qry="select UserName,Email from Collaborators where UserName = '$recipients'";
                 $data = Yii::$app->db->createCommand($qry)->queryOne();
                 array_push($recipient_list,$data['Email']);
             }
-            error_log("===Recipient List==".print_r($recipient_list,1));
+            //error_log("===Recipient List==".print_r($recipient_list,1));
             
 //            foreach($artifacts as $artifact)
 //            {
@@ -1060,7 +1076,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 }		
             
         } catch (Exception $ex) {
-
+            Yii::log("CommonUtility:sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
      /**
