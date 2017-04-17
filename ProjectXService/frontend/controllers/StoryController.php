@@ -20,7 +20,11 @@ use common\components\ServiceFactory;
 use common\models\mongo\TicketCollection;
 use common\models\User;
 use common\models\mongo\TinyUserCollection;
-
+use common\models\mysql\Collaborators;
+use common\components\ApiClient; //only for testing purpose
+use common\components\Email; //only for testing purpose
+use common\models\mongo\NotificationCollection;
+include_once '../../common/components/ElasticEmailClient.php';
 /**
  * Story Controller
  */
@@ -169,7 +173,7 @@ class StoryController extends Controller
             $ticket_data->data->WorkflowType = (int)1;
             //story-1 or task-2
             $parentTicNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
-            
+
             $projectId=$ticket_data->projectId;
             if ($planLevelNumber == 1) {
                 $WorkflowType=(int)1;  
@@ -529,7 +533,7 @@ class StoryController extends Controller
             $followers_pics = array();
             //save followers to Ticket
           
-                ServiceFactory::getStoryServiceInstance()->followTicket($post_data->collaboratorId, $post_data->TicketId, $post_data->projectId, $post_data->userInfo->Id, "follower");
+               ServiceFactory::getStoryServiceInstance()->followTicket($post_data->collaboratorId, $post_data->TicketId, $post_data->projectId, $post_data->userInfo->Id, "follower");
                $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);
                $followerData = array();
                $followerData["ProfilePicture"] = $collaboratorData["ProfilePicture"];
@@ -538,6 +542,22 @@ class StoryController extends Controller
                $followerData["Flag"] ="follower";
                $followerData["DefaultFollower"] =0;
               //  array_push($followers_pics, $followerData);
+//               if($followerData["UserName"]!='') // added by Ryan for email purpose
+//               {
+//                   try
+//                   {
+//                    CommonUtility::sendMail(null, $followerData["UserName"]);
+//                   }
+//                   catch(Exception $ex)
+//                   {
+//                      Yii::log("CommonUtility::sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
+//                   }
+//               } //end by Ryan
+               
+               /* added by Ryan for notifications */
+               
+               //NotificationCollection::saveNotifications($post_data, 'added', $followerData["UserName"]);
+               /* notifications end */
           
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -555,6 +575,25 @@ class StoryController extends Controller
             $post_data = json_decode(file_get_contents("php://input"));
             //remove followers to Ticket
             ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->TicketId, $post_data->projectId);
+            
+            $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);//added by Ryan
+//            if($collaboratorData['UserName']!='') //added by Ryan for email purpose
+//            {
+//               try
+//                   {
+//                    CommonUtility::sendMail(null, $followerData["UserName"]);
+//                   }
+//                   catch(Exception $ex)
+//                   {
+//                      Yii::log("CommonUtility::sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
+//                   } 
+//            }//end by Ryan
+            
+            /* added by Ryan for notifications */
+               
+               //NotificationCollection::saveNotifications($post_data, 'removed', $collaboratorData["UserName"]);
+               /* notifications end */
+               
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -786,7 +825,42 @@ class StoryController extends Controller
             Yii::log("StoryController:actionGetAllRelatedTasks::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
+
+    /**
+     * @author Ryan Marshal
+     * @description Send Mail for AssignedTo and StakeHolder dropdown select in the story-edit page
+     * @return 
+     */
+    public function actionSendMail()
+    {
+        try
+        {
+            error_log("==in send mail==");
+            $ticketData=json_decode(file_get_contents("php://input"));
+            $loggedinuser=$ticketData->userInfo->username;
+            error_log("logged in".$loggedinuser);
+            $collaboratorData=Collaborators::getCollboratorByFieldType("Id",$ticketData->collaborator);
+            $assigned_member=$collaboratorData['UserName'];
+            error_log("==assigned member==".$assigned_member);
+            $ticketDetails = TicketCollection::getTicketDetails($ticketData->ticketId,$ticketData->projectId); 
+            error_log("==Recepients==".print_r($ticketDetails,1));
+            
+             try
+                {
+                 CommonUtility::sendMail($loggedinuser, $assigned_member, $ticketDetails); 		
+                }
+                catch (Exception $e)
+                {
+                    echo 'Something went wrong with email sending: ', $e->getMessage(), '\n';
+
+                    return;
+                }		
+            
+        } catch (Exception $ex) {
+            
+            Yii::log("StoryController:actionSendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     /**
      * @author Anand
      * @uses Get all bucket details for current project
@@ -811,7 +885,57 @@ class StoryController extends Controller
         
     }
     
+        
+    
+    /**
+     * @author Ryan
+     * @uses Deleting Specific Notification
+     * @return type
+     */
+    public function actionDeleteNotification()
+    {
+        error_log("in delete notification");
+        $notifyData=json_decode(file_get_contents("php://input"));
+        
+        try
+        {
+            NotificationCollection::deleteNotification($notifyData);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = true;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionDeleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
+    }
+    
+     /**
+     * @author Ryan
+     * @uses Deleting all Notifications
+     * @return type
+     */
+    public function actionDeleteAllNotification()
+    {
+        $notifyData=json_decode(file_get_contents("php://input"));
+        
+        try
+        {
+            NotificationCollection::deleteAllNotification($notifyData);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = true;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionDeleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
+}
+
 
 
 ?>
