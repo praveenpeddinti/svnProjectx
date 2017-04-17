@@ -39,7 +39,7 @@ export class DashboardPage {
     *
     */
 
-    paramas = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "asc", "userInfo": {}};
+    paramas = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "desc", "userInfo": {}};
     constructor(public navCtrl: NavController,
         public navParams: NavParams,
         public platform: Platform,
