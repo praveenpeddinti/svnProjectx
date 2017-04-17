@@ -92,7 +92,7 @@ class NotificationCollection extends ActiveRecord
             {
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $Date = $datetime->format('M-d-Y');
+                $Date = $datetime->format('M-d-Y H:i:s');
                 $selectfields=['Title','TicketId','Fields.planlevel'];
                 $ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
                 $ticket_msg='to'. ' '.'#'. $notification['TicketId'] .' ' .$ticket_data['Title'];
@@ -289,7 +289,7 @@ class NotificationCollection extends ActiveRecord
                     {
                         $datetime = $notification['NotificationDate']->toDateTime();
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                        $Date = $datetime->format('M-d-Y');
+                        $Date = $datetime->format('M-d-Y H:i:s');
                         $collaborator=new Collaborators();
                         $collaborator=$collaborator->getCollaboratorByUserName($notification['ActivityFrom']);
                         error_log("===Collaborator==".print_r($collaborator,1));                       
