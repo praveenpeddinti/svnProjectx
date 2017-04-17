@@ -85,6 +85,10 @@ export class HeaderComponent implements OnInit {
       {
         this.notify_count--;
         jQuery('#'+notify_id).remove();
+        if(this.notify_count==0)
+        {
+          jQuery(".notificationdiv").hide();
+        }
         
       }
     })
