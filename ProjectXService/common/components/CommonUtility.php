@@ -1113,8 +1113,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 $UpdatedOn = $extractCollection['UpdatedOn'];
                 if(isset($UpdatedOn)){
                     $datetime = $UpdatedOn->toDateTime();
-                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $readableDate = $datetime->format('M-d-Y');
+                    $readableDate =$datetime->format('Y-m-d H:i');
                     $forTicketCollection['UpdatedOn'] = $readableDate;
                 }
                 array_push($TicketCollFinalArray, $forTicketCollection);
@@ -1133,8 +1132,6 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 ),array('$limit' => $limit),array('$skip' => $offset)
                 );
             $ticketCommentsData = $query->aggregate($pipeline);
-           // error_log('comment data---'.print_r($ticketCommentsData,1));
-            
             $commentsArray=array();
             $commentsPositionArray=array();
             $TicketCommentsFinalArray = array();
@@ -1153,8 +1150,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                     $UpdatedOn = $getTicketDetails['UpdatedOn'];
                     if(isset($UpdatedOn)){
                         $datetime = $UpdatedOn->toDateTime();
-                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                        $readableDate = $datetime->format('M-d-Y');
+                        $readableDate = $datetime->format('Y-m-d H:i');
                         $forTicketComments['UpdatedOn'] = $readableDate;
                    }
                     array_push($TicketCommentsFinalArray, $forTicketComments);
@@ -1181,8 +1177,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 $UpdatedOn = $getTicketDetails['UpdatedOn'];
                 if(isset($UpdatedOn)){
                     $datetime = $UpdatedOn->toDateTime();
-                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $readableDate = $datetime->format('M-d-Y');
+                    $readableDate =$datetime->format('Y-m-d H:i');
                     $forTicketArtifacts['UpdatedOn'] = $readableDate;
                  }
                 array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
@@ -1193,26 +1188,17 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
             $tinyUserData = iterator_to_array($cursor);
             $TinyUserFinalArray = array();
-             foreach($tinyUserData as $extractUserData){
-                $selectedFields=['TicketId','Title','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
-                $getTicketDetails = TicketCollection::getTicketDetailsByUser($extractUserData['CollaboratorId'],1,$selectedFields);
-                foreach($getTicketDetails as $eachRow){
-                    $forUsercollection['TicketId'] =$eachRow['TicketId'];
-                    $forUsercollection['Title'] =$eachRow['Title'];                                                                                                                                                                                                                                                                                                                        
-                    //$refinedData = CommonUtility::refineDescription($eachRow['CrudeDescription']);
-                    $forUsercollection['description'] = $eachRow['CrudeDescription'];
-                    $forUsercollection['planlevel'] = $eachRow['Fields']['planlevel']['value_name'];
-                    $forUsercollection['reportedby'] = $eachRow['Fields']['reportedby']['value_name'];
-                    $UpdatedOn = $eachRow['UpdatedOn'];
-                    if(isset($UpdatedOn)){
-                        $datetime = $UpdatedOn->toDateTime();
-                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                        $readableDate = $datetime->format('M-d-Y');
-                        $forUsercollection['UpdatedOn'] = $readableDate;
-                     }
-                    array_push($TinyUserFinalArray, $forUsercollection);
-                }
-               
+            foreach($tinyUserData as $extractUserData){
+                $forUsercollection['Title']=  $extractUserData['UserName'];
+                $forUsercollection['ProfilePicture']=  $extractUserData['ProfilePicture'];
+                $forUsercollection['description']=  $extractUserData['Email'];
+                $UpdatedOn=  $extractUserData['UpdatedOn'];
+                if(isset($UpdatedOn)){
+                    $datetime = $UpdatedOn->toDateTime();
+                    $readableDate =$datetime->format('Y-m-d H:i');
+                    $forUsercollection['UpdatedOn'] = $readableDate; 
+                  }
+                 array_push($TinyUserFinalArray, $forUsercollection);
             }
             $getCollectionData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
             return $getCollectionData;
