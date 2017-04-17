@@ -1,4 +1,3 @@
-.addtask_status p img{ display: none !important;}
 .search{}.search .searchresulttext{border-bottom:solid 1px #f0f0f0;padding:10px 0px;font-size:16px;color:#000;margin-bottom:20px;font-weight:600;}
 .search .searchdiv{padding:10px 0;border-bottom:1px dotted #ccc;}
 .search .searchdiv .searchresulttitle a{color:#0199e0;font-size:16px;font-weight:600}
@@ -7,3 +6,6 @@
 .search .searchdiv .modifieddate{font-size:12px;color:#7b7b7b;}
 .search .searchdiv .modifieddate span{color:#0199e0}
 .heighlight{background-color:#faf6d4;}
+.searchresulttitleusericon{width:30px;height:30px;max-width:30px;max-height:30px;display: inline-block;vertical-align: middle}
+.searchresulttitleusericon img{max-width:100%;border-radius:100px;border:1px solid #e8e8e8;}
+#searchsection{font-size:18px;font-weight: 600;text-align: center;color:#005072;padding-top:10px}

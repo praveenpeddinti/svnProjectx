@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit {
          if(searchString=='' || searchString=='undefined'){ 
            this.showErrorFunction("searchError","Please Search.")
          }else{
-           this._router.navigate(['search'],{queryParams: {SearchString:searchString}});
+           this._router.navigate(['search'],{queryParams: {v:searchString}});
          }
       
     }

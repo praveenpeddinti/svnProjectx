@@ -15,12 +15,13 @@ export class SearchComponent implements OnInit{
     public searchArray=[];
     public stringPosition;
     private page=1;
+    public ready=true;
     
     ngOnInit(){
      this.route.queryParams.subscribe(
       params => 
       {
-             this.searchString=params['SearchString'];
+             this.searchString=params['v'];
               this.page=1;
              this.searchArray=[];
              this.load_contents(this.page,this.searchString);
@@ -28,15 +29,16 @@ export class SearchComponent implements OnInit{
         
         
        // this.load_contents(this.page);
-   
+
               var thisObj=this; 
              jQuery(document).ready(function(){
-           jQuery(window).scroll(function() { 
-            if (jQuery(window).scrollTop() >= jQuery(document).height() - jQuery(window).height() - 20) {
-                 thisObj.page++;
-                 thisObj.load_contents(thisObj.page,thisObj.searchString);  
-            }
-            });
+           jQuery(window).scroll(function() {
+                if (thisObj.ready && jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height())) {
+                    thisObj.ready=false;
+                    thisObj.page++;
+                    thisObj.load_contents(thisObj.page,thisObj.searchString);  
+                }
+                });
         })
     }
    public  load_contents(page,searchString){
@@ -50,11 +52,12 @@ export class SearchComponent implements OnInit{
                  if(result.status !='401'){ 
                     jQuery('#searchsection').html('');
                     this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
+                    this.ready=true;
                     }else{
                  jQuery('#searchsection').html('No Results Found');
                 }
-           
-          });
+           });
+         
     }
     constructor(
         private _router: Router,

@@ -2,20 +2,28 @@
 <div class="searchresulttext">Search results for <span class="heighlight">{{searchString}}</span> in ProjectX</div>
 
   <div *ngFor="let searchData of searchArray">
- <div *ngFor=" let finalData of searchData">
+
    
-      <div class="searchdiv">
+      <div *ngFor=" let finalData of searchData" class="searchdiv">
          <div  *ngIf="finalData.description">
-<div class="searchresulttitle">
+<div class="searchresulttitle" *ngIf="!finalData.ProfilePicture">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
  <a [routerLink]="['/story-detail',finalData.TicketId]" (click)="navigateToStoryDetail(finalData.TicketId)">#{{finalData.TicketId}} {{finalData.Title}}</a>
+</div>
+<div class="searchresulttitle" *ngIf="finalData.ProfilePicture">
+    <span class="searchresulttitleusericon">
+<img *ngIf="finalData.ProfilePicture" src="assets/images/user_noimage.png" />
+</span>
+
+ <a> {{finalData.Title}}</a>
 </div>
 <div class="searchresultcontent"  [innerHTML]="finalData.description">
 <span class="not_mention">
  </span>
 </div>
-<div class="modifieddate">Last modified on <span>{{finalData.UpdatedOn}},</span> created by <span>{{finalData.reportedby}}</span></div>
+<div class="modifieddate" *ngIf="!finalData.ProfilePicture">Last modified on <span>{{finalData.UpdatedOn}},</span> created by <span>{{finalData.reportedby}}</span></div>
+<div class="modifieddate" *ngIf="finalData.ProfilePicture">Last modified on <span>{{finalData.UpdatedOn}},</span> created by <span>{{finalData.Title}}</span></div>
 </div>
 
     <div  *ngIf="!finalData.description">
@@ -34,7 +42,7 @@
 </div>
 </div>
 
-</div>
+
 </div>
 <div id="searchsection"></div>
 </div>
