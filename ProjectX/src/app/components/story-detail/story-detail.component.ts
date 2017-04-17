@@ -253,7 +253,7 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
 private replyToComment=-1;
 private replying=false;
 private commentAreaColor="";
-replyComment(commentId){
+replyComment(commentId,userId){ 
 // var commentEditorObject = document.getElementById("commentEditorArea");
 // var offset = commentEditorObject.offsetTop;
 // alert(commentId);

@@ -405,7 +405,7 @@
                 </div>
                 <div id="Reply_Icons_{{cmtIdx}}" class="clearfix pull-right">
 
-                <div class="commedit reply_icn" (click)="replyComment(cmtIdx)"></div> 
+                <div class="commedit reply_icn" (click)="replyComment(cmtIdx,comment.ActivityBy.CollaboratorId)"></div> 
                 <div *ngIf="comment.ActivityBy.UserName == getAllData.username" class="commedit edit_icn" (click)="editComment(cmtIdx)"></div> 
                 <div *ngIf="(comment.ActivityBy.UserName == getAllData.username && comment.repliesCount==0)" class="commedit delete_icn" (click)="deleteComment(cmtIdx,comment.Slug.$oid)"></div>
 
