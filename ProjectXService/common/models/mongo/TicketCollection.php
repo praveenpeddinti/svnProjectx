@@ -18,7 +18,7 @@ use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
 use yii\web\IdentityInterface;
 use common\components\CommonUtility;
-
+use common\models\mysql\Bucket;
 class TicketCollection extends ActiveRecord 
 {
     public static function collectionName()
@@ -168,23 +168,29 @@ class TicketCollection extends ActiveRecord
         public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
         try {
             $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
-            if($StoryData->filterOption !=null){
-               // $StoryData->offset=(int)0;
+            if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
                 if($StoryData->filterOption->type=='general'){
                 switch((int)$StoryData->filterOption->id){
-                case 1:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
-                case 2:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;
-                       $conditions['Fields.state.value']=(int)3;break;
-                case 3:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;
-                       $conditions['Fields.state.value']=(int)6;break;;
-                case 4:$conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
+               case 2:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
+               case 3:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
+               case 4:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
+                      $conditions['Fields.state.value']=(int)3;break; // in progress
+               case 5:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+                       $conditions['Fields.state.value']=(int)6;break; // my closed
+               case 6:$conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
+               case 7:
+                   $bucket=Bucket::getActiveBucketId($projectId);
+                   if($bucket!='failure'){
+                    $conditions['Fields.bucket.value']=(int)$bucket['Id'];   
+                   }
+                   break;
+              case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
+               default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             }      
            }else if($StoryData->filterOption->type=='bucket'){
-             $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
+            $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
            }
-             
-            }
-           
+        }
             if ($StoryData->sortorder == 'desc')
                 $order = -1;
             if ($StoryData->sortorder == 'asc')
@@ -219,21 +225,30 @@ class TicketCollection extends ActiveRecord
         try {
             $query = new Query();
             $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
-           if($StoryData->filterOption !=null){
+           if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
                 if($StoryData->filterOption->type=='general'){
-                switch((int)$StoryData->filterOption->id){
-               case 1:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
-                case 2:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;
-                       $conditions['Fields.state.value']=(int)3;break;
-                case 3:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;
-                       $conditions['Fields.state.value']=(int)6;break;;
-                case 4:$conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
-            }      
+                  switch((int)$StoryData->filterOption->id){
+               case 2:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
+               case 3:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
+               case 4:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
+                      $conditions['Fields.state.value']=(int)3;break;
+               case 5:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+                       $conditions['Fields.state.value']=(int)6;break;
+               case 6:$conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
+               case 7:
+                   $bucket=Bucket::getActiveBucketId($projectId);
+                   
+                   if($bucket!='failure'){
+                    $conditions['Fields.bucket.value']=(int)$bucket['Id'];   
+                   }
+                   break;
+               case 8:$conditions['Fields.state.value']=(int)6;break;    
+               default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
+            }   
            }else if($StoryData->filterOption->type=='bucket'){
-              $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
+            $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
            }
-             
-            }
+        }
             $query->from('TicketCollection')
                     ->where($conditions);
             $totalCount = $query->count();

@@ -872,11 +872,13 @@ class StoryController extends Controller
         $postData = json_decode(file_get_contents("php://input"));
         $projectId = $postData->projectId;
         $options=array();
+        $options['general'] = ServiceFactory::getStoryServiceInstance()->getFilterOptions();
         $options['bucket'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
+        $preparedFilters = CommonUtility::prepareFilterOption($options);
         $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $options;
+            $responseBean->data = $preparedFilters;
             $response = CommonUtility::prepareResponse($responseBean, "json");
       return $response;  
         } catch (Exception $ex) {

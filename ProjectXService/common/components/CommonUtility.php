@@ -1221,6 +1221,36 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             Yii::log("CommonUtility:getAllDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    /**
+     * @author Anand
+     * @uses prepare the filter options
+     * @param type $options
+     * @return string
+     */
+    public static function prepareFilterOption($options){
+        try{
+           $refinedFilter=array();
+           $type='';
+           foreach($options as $key=>$value){
+             
+                 foreach($value as $val){
+                      if($key=='bucket'){
+                         $type= 'bucket';  
+                      }else{
+                         $type= $val['Type'];  
+                      }
+             array_push($refinedFilter,array("Label"=>$val['Name'],"Id"=>$val['Id'],"Type"=>$type));
+               }
+                
+           }
+           return $refinedFilter;
+        }catch (Exception $ex) {
+            Yii::log("CommonUtility:prepareFilterOption::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+ 
+}
 
 }
+
 ?>

@@ -16,6 +16,7 @@ use common\models\mysql\Collaborators;
 use common\models\mongo\TicketComments;
 use common\models\mongo\TicketArtifacts;
 use common\models\mysql\TaskTypes;
+use common\models\mysql\Filters;
 use Yii;
 use common\models\mongo\NotificationCollection;
 
@@ -1441,6 +1442,22 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         }catch (Exception $ex) {
             Yii::log("StoryService:updateWorkflowAndSendNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
+    }
+    
+    
+    /**
+     * @author Anand
+     * @uses Get all active filter options
+     * @return type
+     */
+    
+      public function getFilterOptions(){
+        try {
+           $filters = Filters::getAllActiveFilters();
+           return $filters;
+        } catch (Exception $ex) {
+        Yii::log("StoryService:getFilterOptions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+           }   
     }
 
 }
