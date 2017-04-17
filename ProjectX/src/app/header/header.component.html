@@ -19,6 +19,7 @@
                                 <span class="badge badge-sm up bg-pink count">{{notify_count}}</span>
                             </a>
                           <ul class="dropdown-menu extended fadeInUp animated notification" tabindex="5002" style="outline: none;">
+                            <li *ngIf="notify_count==0">No Message</li>
 <!--Notification Msg start                            -->
 <li *ngFor="let notify of notification_msg "  class="notificationlist">
 <div class="notificationdiv">
@@ -63,14 +64,14 @@
 <!--<div class="not_date">(Mar-17-2017 06:00)</div>-->
 <!--<div class="not_date">{{notify.date}}</div>-->
 </div>
-<a type="button"   (click)="deleteNotification(notify.id.$oid)" class="notificationdelete">
+<a type="button"   (click)="deleteNotification(notify.id.$oid,$event)" class="notificationdelete">
 <i class="fa fa-times" aria-hidden="true"></i>
 </a>
 </div>
 </li>
 <!--Notification Msg End -->
 
-<li><div class="notbuttonarea"><button (click)="allRead()" class="normal bluebutton bluebuttonmedium clearfix margin-right5">MARK ALL AS READ</button> <button class="normal bluebutton bluebuttonmedium clearfix">VIEW ALL</button></div></li>
+<li *ngIf="notify_count!=0"><div class="notbuttonarea"><button (click)="allRead()" class="normal bluebutton bluebuttonmedium clearfix margin-right5">MARK ALL AS READ</button> <button class="normal bluebutton bluebuttonmedium clearfix">VIEW ALL</button></div></li>
 </ul>
                         </li>
                             <li class="dropdown text-center">

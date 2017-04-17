@@ -40,7 +40,12 @@ export class HeaderComponent implements OnInit {
           
         }
         this.notification_msg.filter(((item, index) => index <5 ))
-         //console.log("===Notification Msg=="+this.notification_msg);
+        //  if(data.notify_result.length==0)
+        //  {
+        //    console.log("empty");
+        //    //this.notify_count=0;
+        //    jQuery('.notbuttonarea').remove();
+        //  }
       });
      
     }
@@ -69,9 +74,9 @@ export class HeaderComponent implements OnInit {
           jQuery("#"+id).fadeOut(4000);
   }
 
-  deleteNotification(notify_id)
+  deleteNotification(notify_id,event)
   {
-    
+    event.stopPropagation();
     //ajax call for delete notificatin
     var post_data={'notifyid':notify_id};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
@@ -103,7 +108,7 @@ export class HeaderComponent implements OnInit {
       if(data)
       {
         this.notify_count=0;
-        jQuery('.not_description').remove();
+        jQuery('.notbuttonarea').remove();
         
       }
     })
