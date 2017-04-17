@@ -924,7 +924,7 @@ class StoryController extends Controller
         
         try
         {
-            NotificationCollection::deleteAllNotification($notifyData);
+            NotificationCollection::deleteAllNotifications($notifyData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
