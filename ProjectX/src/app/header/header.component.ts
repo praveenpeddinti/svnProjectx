@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
         //  {
         //    console.log("empty");
         //    //this.notify_count=0;
-        //    jQuery('.notbuttonarea').remove();
+        //   jQuery(".readAll").show();
         //  }
       });
      
@@ -88,6 +88,7 @@ export class HeaderComponent implements OnInit {
         if(this.notify_count==0)
         {
           jQuery(".notificationdiv").hide();
+          jQuery(".readAll").show();
         }
         
       }
@@ -112,8 +113,7 @@ export class HeaderComponent implements OnInit {
       if(data)
       {
         this.notify_count=0;
-        jQuery('.notbuttonarea').remove();
-        
+        jQuery('.notificationdiv').hide();
       }
     })
   }

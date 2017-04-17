@@ -19,7 +19,7 @@
                                 <span class="badge badge-sm up bg-pink count">{{notify_count}}</span>
                             </a>
                           <ul class="dropdown-menu extended fadeInUp animated notification" tabindex="5002" style="outline: none;">
-                            <li *ngIf="notify_count==0">No Message</li>
+                            <li class="notificationlist" *ngIf="notify_count==0">No Message</li>
 <!--Notification Msg start                            -->
 <li *ngFor="let notify of notification_msg "  class="notificationlist">
 <div class="notificationdiv" id="{{notify.id.$oid}}">
@@ -71,7 +71,7 @@
 </li>
 <!--Notification Msg End -->
 
-<li *ngIf="notify_count!=0"><div class="notbuttonarea"><button (click)="allRead()" class="normal bluebutton bluebuttonmedium clearfix margin-right5">MARK ALL AS READ</button> <button class="normal bluebutton bluebuttonmedium clearfix">VIEW ALL</button></div></li>
+<li><div class="notbuttonarea"><button *ngIf="notify_count!=0" (click)="allRead()" class="normal bluebutton bluebuttonmedium clearfix margin-right5">MARK ALL AS READ</button> <button  class="normal bluebutton bluebuttonmedium clearfix">VIEW ALL</button></div></li>
 </ul>
                         </li>
                             <li class="dropdown text-center">
