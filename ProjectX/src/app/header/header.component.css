@@ -1,6 +1,6 @@
 header{display: block;margin: 4px;padding: 5px;min-height: 100px;border: 1px solid #eebb55;border-radius: 7pt;background: #ffeebb;}
-.searchboxarea{position:relative;}
-.searchboxarea i{position:absolute;top:27px;left:12px;font-size:18px;color:#c9dce4}
+.searchboxarea{}
+.searchboxarea i{position:absolute;top:23px;left:12px;font-size:18px;color:#c9dce4}
 .searchbox::-webkit-input-placeholder { color: #f4f4f4;}
 .searchbox::-moz-placeholder {color: #f4f4f4;}
 .searchbox:-ms-input-placeholder {color: #f4f4f4;}
@@ -11,8 +11,8 @@ header{display: block;margin: 4px;padding: 5px;min-height: 100px;border: 1px sol
 .thumb-sm {height: 32px;width: 32px;}
 .searchboxareapaddingtop{padding-top:9px;padding-right:10px}
 .customnotheader{position: relative}
-.customnotheader i{font-size:30px;color:#FFF;margin-top:2px}
-.customnotheader .badge{top:0;background: #ff0000;left: 33px; position: absolute;top: 11px;}
+.customnotheader i{font-size:24px;color:#FFF;margin-top:5px}
+.customnotheader .badge{top:0;background: #ff0000;left: 25px; position: absolute;top: 13px;}
 .top-right-menu{padding-right:10px}
 .nav > li > a{padding-left:12px;padding-right:12px}
 /* notification div */
