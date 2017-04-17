@@ -350,25 +350,27 @@ export class StoryEditComponent implements OnInit
       this._router.navigate(['story-detail',this.url_TicketId]);
     }
 
-    // /**
-    //  * @author:Ryan
-    //  * @description: Send Mail to Assigned User/StakeHolder
-    //  */
-    // sendMail(field_name,collaborator_id)
-    // {
-    //   console.log("--Field Name--"+field_name);
-    //   if(field_name=='assignedto' || field_name=='stakeholder')
-    //   {
-    //     console.log("--Collaborator Id--"+collaborator_id);
-    //     // var post_data=
-    //     // {
-    //     //   'ticketId':this.url_TicketId,
-    //     //   'collaborator':collaborator_id
-    //     // };
-    //     // this._ajaxService.AjaxSubscribe("story/send-mail",post_data,(data)=>
-    //     // {
+    /**
+     * @author:Ryan
+     * @description: Send Mail to Assigned User/StakeHolder
+     */
+    sendMail(field_name,collaborator_id)
+    {
+      console.log("--Field Name--"+field_name);
+      if(field_name=='assignedto' || field_name=='stakeholder')
+      {
+        console.log("--Collaborator Id--"+collaborator_id);
+        var post_data=
+        {
+          'ticketId':this.url_TicketId,
+          'collaborator':collaborator_id
+        };
+        this._ajaxService.AjaxSubscribe("story/send-mail",post_data,(data)=>
+        {
          
-    //     // });
+        });
+      }
+    }
 
     //     /*For Notifications */
         

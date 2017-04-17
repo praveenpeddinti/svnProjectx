@@ -36,7 +36,7 @@
                                 <input class="editinput custominput width100per" *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value">  
                                 <div class="customdropdown" *ngSwitchCase="'select'">
                                     <!--(onChange)="sendMail(field.fieldName,$event.value)" -->
-                                    <p-dropdown   [style]="{'width':'100%'}"  [ngModel]="field.fieldDataId" name="{{field.fieldName}}"  [options]="field.listdata" ></p-dropdown>    
+                                    <p-dropdown (onChange)="sendMail(field.fieldName,$event.value)"   [style]="{'width':'100%'}"  [ngModel]="field.fieldDataId" name="{{field.fieldName}}"  [options]="field.listdata" ></p-dropdown>    
                                 </div>  
 
                                 <div class="calbg customcalender" *ngSwitchCase="'date'" >
