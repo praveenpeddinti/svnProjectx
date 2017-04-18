@@ -63,7 +63,20 @@ class NotificationCollection extends ActiveRecord
      * @param type $user
      * @param type $projectId
      * @return array
-     */   
+     */ 
+    
+    
+     public static function getNotificationsCount($user,$projectId)
+    {
+          $query=new Query();
+            $query->from('NotificationCollection')
+            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0]);
+            $notificationsCount=$query->count();
+            return $notificationsCount;
+     }
+    
+    
+    
     public static function getNotifications($user,$projectId)
     {
         error_log("==in get notifications".$user);
