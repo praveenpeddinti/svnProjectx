@@ -3,7 +3,7 @@
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-      <a class="navbar-brand" href="#/story-dashboard"><img src="assets/images/logo.png" alt=""/></a> </div>
+      <a  class="navbar-brand"><img src="assets/images/logo.png" alt=""/></a> </div>
     
     <!-- Collect the nav links, forms, and other content for toggling -->
     <ul class="nav navbar-nav navbar-right top-menu top-right-menu">  
@@ -14,14 +14,14 @@
             <div id="searchError" class="alert alert-danger" style="display:none;"></div>
                           </li>
                            <li class="dropdown">
-                            <a data-toggle="dropdown" class="dropdown-toggle customnotheader" href="#" aria-expanded="false">
+                            <a class="customnotheader" (click)="showNotifications()" aria-expanded="false">
                                 <i class="fa fa-bell" aria-hidden="true"></i>
-                                <span class="badge badge-sm up bg-pink count">{{notify_count}}</span>
+                                <span *ngIf="notify_count!=0" class="badge badge-sm up bg-pink count">{{notify_count}}</span>
                             </a>
-                          <ul class="dropdown-menu extended fadeInUp animated notification" tabindex="5002" style="outline: none;">
+                          <ul id="notifications_list" class="dropdown-menu extended fadeInUp animated notification" tabindex="5002" style="outline: none;">
                             <li class="notificationlist" *ngIf="notify_count==0">No Notifications</li>
 <!--Notification Msg start                            -->
-<li *ngFor="let notify of notification_msg "  class="notificationlist">
+<li  *ngFor="let notify of notification_msg "  class="notificationlist">
 <div class="notificationdiv" id="{{notify.id.$oid}}">
 <span class="notificationusericon">
 <img src="{{notify.Profile}}"/>
@@ -30,32 +30,32 @@
 <div class="not_header">
 <span class="not_profilename"></span>
 </div>
-<div (click)="goToTicket(notify.TicketId)"  *ngIf="notify.type=='changed'"  class="not_content">
+<div (click)="goToTicket(notify.TicketId,notify.id.$oid)"  *ngIf="notify.type=='changed'"  class="not_content">
 <span class="not_mention">
 {{notify.from}}
 </span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> from {{notify.Old}} to {{notify.New}} for <span class="not_mention">#{{notify.TicketId}}  {{notify.Title}} </span>
 <!--@sateeshmandru @moinhussain @hareesh.bekkam-->
 </div>
 
-<div (click)="goToTicket(notify.TicketId)"  *ngIf="notify.type!='changed' && !notify.stakeholder && !notify.status && notify.type!='commented on' && notify.type!='mentioned'" class="not_content">
+<div [style]="{cursor:pointer}" (click)="goToTicket(notify.TicketId,notify.id.$oid)"  *ngIf="notify.type!='changed' && !notify.stakeholder && !notify.status && notify.type!='commented on' && notify.type!='mentioned'" class="not_content">
 <span  class="not_mention">
 {{notify.from}}
 </span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} </span>
 <div class="not_date">{{notify.date}}</div>
 </div>
-<div (click)="goToTicket(notify.TicketId)"  *ngIf="notify.stakeholder" class="not_content">
+<div [style]="{cursor:pointer}" (click)="goToTicket(notify.TicketId,notify.id.$oid)"  *ngIf="notify.stakeholder" class="not_content">
 <span  class="not_mention">
 {{notify.from}}
 </span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} {{notify.stakeholder}}</span>
 <div class="not_date">{{notify.date}}</div>
 </div>
-<div (click)="goToTicket(notify.TicketId)"  *ngIf="notify.status=='set'" class="not_content">
+<div [style]="{cursor:pointer}" (click)="goToTicket(notify.TicketId,notify.id.$oid)"  *ngIf="notify.status=='set'" class="not_content">
 <span  class="not_mention">
 {{notify.from}}
 </span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} </span>
 <div class="not_date">{{notify.date}}</div>
 </div>
-<div (click)="goToComment(notify.TicketId,notify.Slug.$oid)"  *ngIf="notify.type=='mentioned'||notify.type=='commented on'" class="not_content">
+<div [style]="{cursor:pointer}" (click)="goToComment(notify.TicketId,notify.Slug.$oid,notify.id.$oid)"  *ngIf="notify.type=='mentioned'||notify.type=='commented on'" class="not_content">
 <span  class="not_mention">
 {{notify.from}}
 </span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/> <img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} </span>
