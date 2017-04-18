@@ -114,6 +114,7 @@ export class HeaderComponent implements OnInit {
       {
         this.notify_count=0;
         jQuery('.notificationdiv').hide();
+        jQuery(".readAll").show();
       }
     })
   }
