@@ -39,7 +39,8 @@ export class DashboardPage {
     *
     */
 
-    paramas = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "desc", "userInfo": {}};
+    paramas = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "desc","filterOption":null,"timeZone":"Asia/Kolkata", "userInfo": {}};
+
     constructor(public navCtrl: NavController,
         public navParams: NavParams,
         public platform: Platform,
