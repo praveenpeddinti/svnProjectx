@@ -52,16 +52,31 @@ class NotificationsController extends Controller
         
     }
     
-//    public function actionChangeProperty($data)
-//    {
-//        try{
-//            $notification_data = json_decode($data);
-//            NotificationCollection::saveNotifications($notification_data);
-//            echo json_encode(array("status" => "success"));
-//            
-//        } catch (Exception $ex) {
-//            Yii::log("NotificationsController:actionChangeProperty::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-//
-//        }
-//    }
+    /**
+     * @author Ryan
+     * @param type $data
+     * @return type json
+     */
+    public function actionGetAllNotificationsCount($data)
+    {
+        $activityFrom=array();
+        //logic for getting all the notifications for a particular loggedIn user
+        try
+        {
+            $notification_data = json_decode($data);
+            $projectId=$notification_data->projectId;
+            $notified_userid=$notification_data->userInfo->Id;
+            $notified_username=$notification_data->userInfo->username;
+            //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
+            $result_data=NotificationCollection::getNotificationsCount($notified_userid,$projectId);
+            echo json_encode(array('notify_result'=>$result_count));
+            
+        } catch (Exception $ex) {
+            Yii::log("NotificationsController:actionGetAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
+        
+    }
+    
+
 }
