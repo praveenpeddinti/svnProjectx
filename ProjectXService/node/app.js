@@ -83,6 +83,21 @@ app.post("/getAllNotifications",function(req,res,cb)
             console.log("assignedTo-------error- "+data );
        });
 });
+app.post("/getAllNotificationsCount",function(req,res,cb)
+{
+    var request = req.body;
+    console.log(JSON.stringify(request));
+  child=spawn(dir+"/yii",['notifications/get-all-notifications-count',JSON.stringify(request)]);
+        child.stdout.setEncoding('utf-8');
+        child.stdout.on('data', function(data) {
+          console.log("assignedTo-------result- " +data);
+             res.send(data);
+       });
+          child.stderr.on('data', function(data) {
+//            logger.trace('stderr: ' + data);
+            console.log("assignedTo-------error- "+data );
+       });
+});
 
 app.post("/propertyChange",function(req,res,cb)
 {
