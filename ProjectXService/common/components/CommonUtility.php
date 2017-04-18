@@ -1085,7 +1085,6 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
      */
     public static function getAllDetailsForSearch($searchString,$page){
         try{
-           // $searchString=strtolower($searchString);
                 $page = $page ;
                 $pageLength = 10;
                 if ($page == 1) {
@@ -1100,13 +1099,24 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 "limit" =>$limit,
                 "skip" => $offset
             );
-            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("Description"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
+            if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
+                if(strpos($searchString, '#') !== false){
+                    $searchString=str_replace("#","",$searchString); 
+                    $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
+                }else{
+                    $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
+                }
+               
+            }else{
+               $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("CrudeDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
+            }
+           // $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("CrudeDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
             $ticketCollectionData = iterator_to_array($cursor);
             $TicketCollFinalArray = array();
             foreach($ticketCollectionData as $extractCollection){
                 $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
                 $forTicketCollection['Title'] = $extractCollection['Title'];
-                $forTicketCollection['description'] = $extractCollection['CrudeDescription'];
+                $forTicketCollection['description'] = strip_tags($extractCollection['CrudeDescription']);
                 $forTicketCollection['planlevel'] = $extractCollection['Fields']['planlevel']['value_name'];
                 $forTicketCollection['reportedby'] = $extractCollection['Fields']['reportedby']['value_name'];
                 $UpdatedOn = $extractCollection['UpdatedOn'];
@@ -1117,7 +1127,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 }
                 array_push($TicketCollFinalArray, $forTicketCollection);
             }
-            $matchArray = array('Activities.CDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
+            $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
             $query = Yii::$app->mongodb->getCollection('TicketComments');
             $pipeline = array(
                 array('$unwind' => '$Activities'),
@@ -1141,7 +1151,6 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                    $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],1,$selectFields);
                    $forTicketComments['TicketId'] =  $extractComments['_id'];
                    $forTicketComments['Title'] =$getTicketDetails['Title'];
-                   $refinedData = CommonUtility::refineDescription($getTicketDetails['Description']);
                    $forTicketComments['comments'] =  $extractComments['commentData'];
                    $forTicketComments['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
                    $forTicketComments['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
@@ -1160,7 +1169,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             $TicketArtifactsFinalArray = array();
             foreach($ticketArtifactsData as $extractArtifacts){
                 $ticketCollectionModel = new TicketCollection();
-                $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
+                $selectFields = ['Title', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
                 $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],1,$selectFields);
                 $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                 $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
