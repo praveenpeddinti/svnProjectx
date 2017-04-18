@@ -705,8 +705,8 @@ class NotificationCollection extends ActiveRecord
             $notification=NotificationCollection::getCollection();
             foreach($notification as $notify)
             {
-                $notifyid=$notify->notifyid;
-                $db->update(array('_id'=>$notifyid,'NotifiedUser'=>$user), array("Status"=>1));
+                
+                $notification->update(array('NotifiedUser'=>$user), array("Status"=>1));
             }
             return;
         }catch(Exception $ex)
