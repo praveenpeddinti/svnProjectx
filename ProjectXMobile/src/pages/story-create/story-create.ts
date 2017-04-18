@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { ToastController, ViewController, ActionSheetController,Platform , NavParams, LoadingController,PopoverController, ModalController } from 'ionic-angular';
+import { ToastController,NavController, ViewController, ActionSheetController,Platform , NavParams, LoadingController,PopoverController, ModalController } from 'ionic-angular';
 import { Globalservice} from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
 import {CustomModalPage } from '../custom-modal/custom-modal';
 import {Camera, File, Transfer, FilePath} from 'ionic-native';
+import {DashboardPage} from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var cordova: any;
 
@@ -31,6 +32,7 @@ export class StoryCreatePage {
     ImageLoc
     
     constructor(
+        public navCtrl: NavController,
         public modalController: ModalController,
         public navParams: NavParams,
         private globalService: Globalservice,
@@ -98,7 +100,7 @@ export class StoryCreatePage {
     ionViewDidLoad() {
         console.log('loaded at every Load the page');
     }
-
+  
     onStoryCreate(form): void {
         console.log("create task submit button");
         if (form.valid) {
@@ -126,31 +128,21 @@ export class StoryCreatePage {
             this.globalService.createStoryORTask(this.constants.createStory, (this.create)).subscribe(
                 (result) => {
                     console.log("the create tsk details are " + JSON.stringify(result));
-                    loader.dismiss();
-                    this.viewCtrl.dismiss();
-                    alert("Successfully created...");
-                    // let toast = this.toastCtrl.create({
-                    //     message: 'Successfully created...',
-                    //     duration: 3000,
-                    //     position: 'bottom',
-                    //     cssClass: "toast",
-                    //     dismissOnPageChange: true
-                    // });
-                    // toast.present();
+                    // loader.dismiss();
+                    loader.dismiss().then( () => {
+                        alert("Successfully created...");
+                        //this.viewCtrl.dismiss();
+                         this.navCtrl.setRoot(DashboardPage);
+                    }, (error) => {
+                        console.log("error while dismissing the loader");
+                    });
+                    
+                    
                 }, (error) => {
                     loader.dismiss();
                     
                     console.log("the story create error are---------> " + JSON.stringify(error));
-                   // alert("Unable to created the ticket...");
-                     //this.viewCtrl.dismiss();
-                    // let toast = this.toastCtrl.create({
-                    //     message: 'Unable created the ticket...',
-                    //     duration: 3000,
-                    //     position: 'bottom',
-                    //     cssClass: "toast",
-                    //     dismissOnPageChange: true
-                    // });
-                   // toast.present();
+                   alert("Unable to created the ticket...");
                    
                 }
             );
@@ -255,6 +247,9 @@ export class StoryCreatePage {
 
             // document.getElementById("field_title_" + index).innerHTML = data.Name;
             jQuery("#field_title_"+index+ " div").text(data.Name);
+            } else {
+                alert("the else block");
+                console.log("the else block");
             }
             // this.displayFieldvalue = [];
         });

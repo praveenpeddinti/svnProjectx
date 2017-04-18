@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, Request, RequestMethod, URLSearchParams, RequestOptions } from '@angular/http';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { ActivatedRoute } from '@angular/router';
-import {Observable} from 'rxjs/Rx';
 import {Constants} from './constants';
 declare var $: any;
 
@@ -24,7 +22,6 @@ requestUrl: string;
   }
  postWithFile (url: string, postData: any, files: File[]) {
 
-    let headers = new Headers();
     let formData:FormData = new FormData();
     formData.append('files', files[0], files[0].name);
     // For multiple files
