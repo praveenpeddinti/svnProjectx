@@ -83,12 +83,12 @@ export class SummerNoteEditorService
                             },
                             template: function (item) {
                                 console.log("==Profile==**"+item.Profile);
-                               return '<li value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>'+item.name+'</li>';
+                               return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>'+item.name+'</div>';
                             },
                             content: function (item) {
                                 console.log("===Item=="+item);
                                     return '@' + item.name;
-                                    //return '<li value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="http://10.10.73.77"'+item.Profile+'"/>'+item.name+'</li>';
+                                    //return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="http://10.10.73.77"'+item.Profile+'"/>'+item.name+'</div>';
                                     
                                     }    
                         },
@@ -173,12 +173,12 @@ export class SummerNoteEditorService
                             },
                             template: function (item) {
                                 console.log("==Profile=="+item.Profile);
-                               return '<li value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>&nbsp;'+item.name+'</li>';
+                               return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>&nbsp;'+item.name+'</div>';
                             },
                             content: function (item) {
                                 console.log("===Item=="+item);
                                     return '@' + item.name;
-                                    //return '<li value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="http://10.10.73.77"'+item.Profile+'"/>'+item.name+'</li>';
+                                    //return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="http://10.10.73.77"'+item.Profile+'"/>'+item.name+'</div>';
                                     
                                     }    
                         },
