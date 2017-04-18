@@ -33,26 +33,26 @@
 <div (click)="goToTicket(notify.TicketId)"  *ngIf="notify.type=='changed'"  class="not_content">
 <span class="not_mention">
 {{notify.from}}
-</span> {{notify.type}} {{notify.ActivityOn}} <img src="images/story-icon.png"/> from {{notify.Old}} to {{notify.New}} for <span class="not_mention">#{{notify.TicketId}}  {{notify.Title}} </span>
+</span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> from {{notify.Old}} to {{notify.New}} for <span class="not_mention">#{{notify.TicketId}}  {{notify.Title}} </span>
 <!--@sateeshmandru @moinhussain @hareesh.bekkam-->
 </div>
 
 <div (click)="goToTicket(notify.TicketId)"  *ngIf="notify.type!='changed' && !notify.stakeholder && !notify.status && notify.type!='commented on' && notify.type!='mentioned'" class="not_content">
 <span  class="not_mention">
 {{notify.from}}
-</span> {{notify.type}} {{notify.ActivityOn}} <img src="images/story-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} </span>
+</span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} </span>
 <div class="not_date">{{notify.date}}</div>
 </div>
 <div (click)="goToTicket(notify.TicketId)"  *ngIf="notify.stakeholder" class="not_content">
 <span  class="not_mention">
 {{notify.from}}
-</span> {{notify.type}} {{notify.ActivityOn}} <img src="images/story-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} {{notify.stakeholder}}</span>
+</span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} {{notify.stakeholder}}</span>
 <div class="not_date">{{notify.date}}</div>
 </div>
 <div (click)="goToTicket(notify.TicketId)"  *ngIf="notify.status=='set'" class="not_content">
 <span  class="not_mention">
 {{notify.from}}
-</span> {{notify.type}} {{notify.ActivityOn}} <img src="images/story-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} </span>
+</span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title}} </span>
 <div class="not_date">{{notify.date}}</div>
 </div>
 <div (click)="goToComment(notify.TicketId,notify.Slug.$oid)"  *ngIf="notify.type=='mentioned'||notify.type=='commented on'" class="not_content">
