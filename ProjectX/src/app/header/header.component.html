@@ -19,7 +19,7 @@
                                 <span class="badge badge-sm up bg-pink count">{{notify_count}}</span>
                             </a>
                           <ul class="dropdown-menu extended fadeInUp animated notification" tabindex="5002" style="outline: none;">
-                            <li class="notificationlist" *ngIf="notify_count==0">No Message</li>
+                            <li class="notificationlist" *ngIf="notify_count==0">No Notifications</li>
 <!--Notification Msg start                            -->
 <li *ngFor="let notify of notification_msg "  class="notificationlist">
 <div class="notificationdiv" id="{{notify.id.$oid}}">
