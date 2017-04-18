@@ -60,9 +60,9 @@
    </ion-item>-->
 </ion-list>
     </div>
-    <label class="customlabel">Tasks</label>  
+    <label class="customlabel" *ngIf="create.planlevel==1 ">Tasks</label>  
 <ion-list>
-     <ion-row>
+     <ion-row *ngIf="create.planlevel==1 ">
       <div class="customcheckboxrow" *ngFor = "let item of tasktypeList; let i=index;" id="item_{{i}}">
         <ion-checkbox checked="false" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}"></ion-checkbox>
         <span>{{item.name}}</span>
