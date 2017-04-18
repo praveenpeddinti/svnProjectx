@@ -239,10 +239,21 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
      * @description This method is used to getting User details Profile.
      * @return user List
      */
-    public function getCollaboratorWithProfile($user)
+    public static function getCollaboratorWithProfile($user)
     {
         try{
-            $qry = "select concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic,C.UserName from CollaboratorProfile CP join Collaborators C on CP.CollaboratorId=C.Id where C.Id='$user'";
+            $qry = "select concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic,C.UserName from CollaboratorProfile CP join Collaborators C on CP.CollaboratorId=C.Id where C.UserName='$user'";
+            $data = Yii::$app->db->createCommand($qry)->queryOne();   
+            return $data;
+            
+        } catch (Exception $ex) {
+            Yii::log("Collaborators:getCollaboratorWithProfile::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    public static function getCollaboratorId($user)
+    {
+        try{
+            $qry = "select Id from Collaborators where UserName='$user'";
             $data = Yii::$app->db->createCommand($qry)->queryOne();   
             return $data;
             
