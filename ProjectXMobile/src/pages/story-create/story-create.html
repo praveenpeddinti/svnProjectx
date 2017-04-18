@@ -1,4 +1,4 @@
-<form #createForm="ngForm" (ngSubmit)="submitted && onStoryCreate(createForm)" style="max-height:100%;height:100%" novalidate> 
+<form #createForm="ngForm" (ngSubmit)="submitted && createForm.form.Valid && onStoryCreate(createForm)" style="max-height:100%;height:100%" novalidate="true"> 
     <ion-header>
     <ion-navbar>
         <ion-title>Story Create</ion-title>
@@ -9,9 +9,9 @@
             </a>
             </span>
         </ion-buttons>
-         <ion-buttons right>
+         <ion-buttons right (click)="onStoryCreate(createForm)">
              <span class="headerlinks">
-            <a ion-button icon-only type="submit" (click)="submitted = true && onStoryCreate(createForm);" form="createForm">
+            <a ion-button icon-only type="submit" (click)="submitted = true;" form="createForm">
                <i class="fa fa-paper-plane" aria-hidden="true"></i>
             </a>
              </span>
@@ -47,9 +47,8 @@
 <ion-list>
  <label class="customlabel">Description</label>  
     <ion-item> 
-        <ion-row>
-            
-<textarea class="text-area  item customdropdowntext spinnerlabel" placeholder="Type your message here" [(ngModel)]="create.description" required name="create_description" #create_description ="ngModel"  
+        <ion-row>   
+         <textarea class="text-area  item customdropdowntext spinnerlabel" placeholder="Type your message here" [(ngModel)]="create.description" required name="create_description" #create_description ="ngModel"  
           rows="5"   id="create_description" [ngModelOptions]="{standalone:true}" ></textarea>
     </ion-row>
     </ion-item>

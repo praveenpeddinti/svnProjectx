@@ -112,7 +112,13 @@ export class StoryCreatePage {
                     this.create.default_task.push(taskTypeItem);
                 }
             }
-            this.create.description = "<p>"+this.create.description+"</p>";
+            for(let descption of this.templatedataList){
+                if(this.create.description== null){
+
+                }else{
+                     this.create.description = "<p>"+this.create.description+"</p>";
+                }
+            }
 
             console.log("the create  " + JSON.stringify(this.create));
             //    this.globalService.createStoryORTask(this.constants.createStory, this.create);
@@ -135,8 +141,8 @@ export class StoryCreatePage {
                     loader.dismiss();
                     
                     console.log("the story create error are---------> " + JSON.stringify(error));
-                    alert("Unable to created the ticket...");
-                     this.viewCtrl.dismiss();
+                   // alert("Unable to created the ticket...");
+                     //this.viewCtrl.dismiss();
                     // let toast = this.toastCtrl.create({
                     //     message: 'Unable created the ticket...',
                     //     duration: 3000,
