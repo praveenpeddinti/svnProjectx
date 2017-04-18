@@ -108,7 +108,7 @@ export class HeaderComponent implements OnInit {
   allRead()
   {
     var post_data={};
-    this._ajaxService.AjaxSubscribe('story/delete-all-notification',post_data,(data)=>
+    this._ajaxService.AjaxSubscribe('story/delete-notifications',post_data,(data)=>
     {
       if(data)
       {
