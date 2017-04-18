@@ -2,7 +2,8 @@
 namespace common\service;
 use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
 use common\components\{CommonUtility};
-use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,FieldBean,Collaborators,TaskTypes,Filters};
+use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters};
+use common\models\bean\FieldBean;
 use Yii;
 //use common\service\ServiceTraitOne;
 /*
