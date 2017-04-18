@@ -140,6 +140,8 @@ getArtifacts(obj){
     this.showDescEditor = false;
     //added by Ryan for summernote
     this.editor.initialize_editor('detailEditor',null,null);
+     jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
+    //  jQuery("#detailEditor").summernote('code',jQuery("#detailEditor").html());
 
   }
 
@@ -149,6 +151,7 @@ getArtifacts(obj){
       //var editorData = this.detail_ckeditor.instance.getData();
       //this.form['description']=jQuery('#detailEditor').summernote('code'); //added by Ryan for summernote
       var editorData=jQuery('#detailEditor').summernote('code');
+      this.ticketEditableDesc = editorData;
       console.log("==in submit desc=="+editorData);
       //var editorData=this.form['description'];
       var editorDesc=jQuery(editorData).text().trim();
@@ -762,7 +765,7 @@ var thisObj = this;
                 if(postEditedText.EditedId == "desc"){
                   var ticketIdObj={'ticketId': this.ticketId};
                   this.getArtifacts(ticketIdObj);
-                }
+                 }
          }
 
 

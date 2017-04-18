@@ -101,9 +101,19 @@ expanded: any = {};
         */
         this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
         var ScrollHeightDataTable=jQuery(".ngx-datatable").width() - 12;
+        jQuery("#filterDropdown").css("paddingRight",10);
        jQuery(".ngx-datatable").css("width",ScrollHeightDataTable);
-
-    }
+       var thisObj = this;
+       
+          jQuery( window ).resize(function() { 
+if( thisObj.checkScrollBar() == true){
+ jQuery("#filterDropdown").css("paddingRight",0);
+}else{
+ jQuery("#filterDropdown").css("paddingRight",12);
+}
+});
+ 
+}
         /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: StoryComponent/Task list Rendering
@@ -196,6 +206,18 @@ toggleExpandRow(row) {
         this.offset=0;
       this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);  
     }
+     checkScrollBar() {
+    var hContent = jQuery("body").height(); // get the height of your content
+    var hWindow = jQuery(window).height();  // get the height of the visitor's browser window
 
+    // if the height of your content is bigger than the height of the 
+    // browser window, we have a scroll bar
+    if(hContent>hWindow) { 
+        return true;    
+    }
+
+    return false;
 }
+
+    }
 
