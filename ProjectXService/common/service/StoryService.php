@@ -606,7 +606,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 if(!empty($refinedData['UsersList']))
                                 {
                                     error_log("===in if mail sending.....==");
-                                    //NotificationCollection::saveNotificationsWithMention($ticket_data,$refinedData['UsersList'],'mention');
+                                    NotificationCollection::saveNotificationsWithMention($ticket_data,$refinedData['UsersList'],'mention');
                                     //CommonUtility::sendMail($ticket_data->userInfo->username, $refinedData['UsersList'],$childticketDetails);
                                     CommonUtility::sendMail($ticket_data->userInfo->username, $refinedData['UsersList'],$ticketDetails);
                                     
@@ -635,7 +635,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             try
                             {
                                 $text="A new ticket has been assigned to you by ".$ticket_data->userInfo->username;
-                                CommonUtility::sendMail($ticket_data->userInfo->username, $valueName,$childticketDetails); 
+                                CommonUtility::sendMail($ticket_data->userInfo->username, $valueName,$ticketDetails); 
                             } 
                             catch (Exception $ex) {
                                 Yii::log("CommonUtility::sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -643,7 +643,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             /* Send Mail End By Ryan */
                             
                             /* Send Notifications */
-                            //NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                            error_log("coming in notifications");
+                            NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                             /* Notifications End */
                             
                             if (!empty($childticketDetails['Tasks'])){error_log("----follow if subTask");
@@ -1478,6 +1479,48 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         } catch (Exception $ex) {
         Yii::log("StoryService:getFilterOptions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
            }   
+    }
+    
+    /**
+     * @author Ryan
+     * @uses Gets the field change value name for notification purpose
+     * @params  $notifyType,$Value
+     * @return type string
+     */
+    public function getFieldChangeValue($notifyType,$Value)
+    {
+        try
+        {
+            if($notifyType=='priority')
+            {
+               $priorityObj = new Priority();
+               $priorityDetails = $priorityObj->getPriorityDetails($Value);
+               $priorityValue=$priorityDetails['Name'];
+               return $priorityValue;
+            }
+            if($notifyType=='bucket')
+            {
+                $bucketDetails=Bucket::getBucketName($Value,1);
+                $bucketValue=$bucketDetails['Name'];
+                return $bucketValue;
+            }
+            if($notifyType=='workflow')
+            {
+                $workflowDetails=WorkFlowFields::getWorkFlowDetails($Value);
+                $workflowValue=$workflowDetails['Name'];
+                return $workflowValue;
+            }
+            if($notifyType=='tickettype')
+            {
+                $tickettypeDetails=TicketType::getTicketType($Value);
+                $tickettypeValue=$tickettypeDetails['Name'];
+                return $tickettypeValue;
+            }
+        }catch(Exception $ex)
+        {
+            Yii::log("StoryService:getFieldChangeValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+        
     }
 
 }
