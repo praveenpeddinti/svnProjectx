@@ -697,7 +697,7 @@ class NotificationCollection extends ActiveRecord
     public static function deleteAllNotifications($notify)
     {
         
-        $user=$notify->userInfo->username;
+        $user=$notify->userInfo->Id;
         
         try
         {
