@@ -1,25 +1,10 @@
 <?php
 namespace common\service;
-use common\models\mongo\TicketCollection;
-use common\models\mongo\TinyUserCollection;
-use common\components\CommonUtility;
-use common\models\mysql\WorkFlowFields;
-use common\models\mysql\StoryFields;
-use common\models\mysql\Priority;
-use common\models\mysql\PlanLevel;
-use common\models\mysql\TicketType;
-use common\models\mysql\Bucket;
-use common\models\bean\FieldBean;
-use common\models\mongo\ProjectTicketSequence;
-use common\models\mongo\TicketTimeLog;
-use common\models\mysql\Collaborators;
-use common\models\mongo\TicketComments;
-use common\models\mongo\TicketArtifacts;
-use common\models\mysql\TaskTypes;
-use common\models\mysql\Filters;
+use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
+use common\components\{CommonUtility};
+use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,FieldBean,Collaborators,TaskTypes,Filters};
 use Yii;
-use common\models\mongo\NotificationCollection;
-
+//use common\service\ServiceTraitOne;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -28,6 +13,7 @@ use common\models\mongo\NotificationCollection;
 
 class StoryService {
 
+    //use ServiceTraitOne;
     /**
      * @author Moin Hussain
      * @param type $ticketId
@@ -388,6 +374,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
          */
         public function getMyTickets() {
             try {
+               $this->sampleMethod();
                $priorityModel = new TicketCollection();
            return $priorityModel->getMyAssignedTickets();
           //return $priorityModel->updateTicketField();
@@ -584,7 +571,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $childticketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId,$selectFields); 
             $ticketDetails=TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId);//added by Ryan for Email Purpose
             $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
+            error_log("updateStoryFieldInline---1");
             if($checkData==0){
+                 error_log("updateStoryFieldInline---2");
                  if($ticket_data->id=='Title'){
                     $newData = array('$set' => array("Title" => trim($ticket_data->value)));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
@@ -619,11 +608,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 }
                 $fieldName = $ticket_data->id;
             }else{
+                 error_log("updateStoryFieldInline---3");
                   $fieldDetails =  StoryFields::getFieldDetails($field_id);
                   $fieldName = $fieldDetails["Field_Name"];
                     if($fieldName=='estimatedpoints' || $fieldName=='dod')
                     {
-                       NotificationCollection::saveNotifications($ticket_data,$fieldName,$ticket_data->value);
+                      // NotificationCollection::saveNotifications($ticket_data,$fieldName,$ticket_data->value);
                     }
                      if(is_numeric($ticket_data->value)){
                         if($fieldDetails["Type"] == 6 ){
@@ -634,6 +624,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             /*Send Mail to Assigned to User by Ryan*/
                             try
                             {
+                                 error_log("updateStoryFieldInline---4");
                                 $text="A new ticket has been assigned to you by ".$ticket_data->userInfo->username;
                                 CommonUtility::sendMail($ticket_data->userInfo->username, $valueName,$ticketDetails); 
                             } 
@@ -658,20 +649,21 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         }
                         
                              else if($fieldDetails["Field_Name"] == "workflow"){
-                                $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
+                                error_log("updateStoryFieldInline---5");
+                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
                                 $valueName = $workFlowDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
-                               
+                                //NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                                error_log("updateStoryFieldInline---6");
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->value);
                                 $valueName = $priorityDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                               // NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
                                 $bucketDetail =  Bucket::getBucketName($ticket_data->value,(int)$ticket_data->projectId);
                                 $valueName = $bucketDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                                //NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
                                 $planlevelDetail =  PlanLevel::getPlanLevelDetails($ticket_data->value);
@@ -680,22 +672,25 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->value);
                                 $valueName = $tickettypeDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                               // NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 } 
                         
-                       
+                        error_log("updateStoryFieldInline---7");
                          $leftsideFieldVal = (int)$ticket_data->value;  
                     }else{
+                         error_log("updateStoryFieldInline---8");
                         if($ticket_data->value != ""){
+                             error_log("updateStoryFieldInline---9");
                             $validDate = CommonUtility::validateDate($ticket_data->value);
                             if($validDate){
                                 $leftsideFieldVal = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$leftsideFieldVal);   
+                               // NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$leftsideFieldVal);   
                             }else{
                                 //error_log("===Field Name==".$leftsideFieldVal);
                                 $leftsideFieldVal = $ticket_data->value; 
                             } 
                         }else{
+                             error_log("updateStoryFieldInline---10");
                             $leftsideFieldVal = $ticket_data->value;
                             //error_log("===Ticket Data Value==".$leftsideFieldVal);
                                 if($fieldDetails["Type"] == 6 ){
@@ -719,6 +714,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 }
                         }
                     }
+                     error_log("updateStoryFieldInline---12");
                     $fieldtochange1= "Fields.".$field_name.".value";
                     $fieldtochange2 = "Fields.".$field_name.".value_name";
                     $fieldtochangeId = "Fields.".$field_name.".Id";
@@ -727,12 +723,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $selectedValue=$leftsideFieldVal;
                     $activityNewValue = $leftsideFieldVal;
             }
-   
+    error_log("updateStoryFieldInline---13");
                 $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
                 $updateStaus = $collection->update($condition, $newData);
                 if($field_name=='workflow'){
                 $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value);
-
+ error_log("updateStoryFieldInline---14");
                 $collection->findAndModify( array("ProjectId"=> (int)$ticket_data->projectId ,"TicketId"=>(int)$ticket_data->TicketId),array('$set' => array('Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
                 $updatedState['field_name'] ='state';
                 $updatedState['state']=$workFlowDetail['State'];
@@ -745,10 +741,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 }else{
                     $ticketId= $childticketDetails['ParentStoryId'];
                 }
+                 error_log("updateStoryFieldInline---15");
                 TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
            // if($updateStaus==1){
                 $returnValue=$selectedValue;
            // }
+                 error_log("updateStoryFieldInline---16");
             $returnValue =  array("updatedFieldData" =>$returnValue,"activityData"=>$activityData,'updatedState'=>$updatedState);
             return $returnValue;
 
@@ -969,6 +967,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      */
     public function saveActivity($ticketId,$projectId,$actionfieldName,$newValue,$activityUserId){
         $oldValue = "";
+        error_log("saveActivity----".$ticketId."---".$actionfieldName."--".$newValue);
         $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
         if($actionfieldName == "Title" || $actionfieldName == "Description"){
          $oldValue = $ticketDetails[$actionfieldName]; 
@@ -982,6 +981,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         }else{
             $action = "changed from"; 
         }
+        error_log("-------saveActivity-------------".$newValue);
            $db =  TicketComments::getCollection();
            $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
           $record = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId));
@@ -1002,13 +1002,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "PoppedFromChild"=>""
             
         );
-
+        error_log("if---------------------");
             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));  
             $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId,"Activity"=>"PropertyChange"));  
             CommonUtility::prepareActivity($commentDataArray,$projectId);
             $returnValue = array("referenceKey"=>-1,"data"=>$commentDataArray);
             
          }else{
+               error_log("else---------------------");
              $recentSlug = $record["RecentActivitySlug"];
              $property = array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate );
 

@@ -128,12 +128,10 @@ class CommonUtility {
 
     static function refineActivityData($html,$length="35") {
         // $html = CommonUtility::closetags($html);
-
+         $html = strip_tags($html);
         if (strlen($html) > $length) {
             $html = substr($html, 0, $length) . "...";
         }
-        $html = strip_tags($html);
-
         return $html;
     }
 
@@ -643,6 +641,7 @@ class CommonUtility {
                 $fileName = explode(".", $originalFileName);
 
                 $extension = CommonUtility::getExtension($originalFileName);
+                $extension = strtolower($extension);
                 $imageExtensions = array("jpg", "jpeg", "gif", "png");
                 $videoExtensions = array("mp4", "mov", "ogg", "avi");
                 error_log("+++++++++++++++++" . $extension);
