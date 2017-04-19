@@ -27,7 +27,7 @@
 </div>
 
     <div  *ngIf="!finalData.description">
-        <div  *ngFor=" let commentData of finalData.comments">
+        <div  *ngFor=" let commentData of finalData.comments" class="searchdiv">
 <div class="searchresulttitle">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
@@ -37,8 +37,9 @@
 <span class="not_mention">
 </span>
 </div>
-</div>
 <div class="modifieddate">Last modified on <span>{{finalData.UpdatedOn}},</span> created by <span>{{finalData.reportedby}}</span></div>
+</div>
+
 </div>
 </div>
 
