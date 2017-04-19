@@ -27,13 +27,17 @@ export class HeaderComponent implements OnInit {
     /* For Notifications */
     if(this.users)
     {
-      var post_data={}; 
-      this._ajaxService.NodeSubscribe('/getAllNotificationsCount',post_data,(data)=>
+    var thisObj = this;
+    setInterval(function(){
+var post_data={}; 
+      thisObj._ajaxService.NodeSubscribe('/getAllNotificationsCount',post_data,(data)=>
       {
-       
-        this.notify_count=data.count;
+      
+        thisObj.notify_count=data.count;
        
       });
+},5000)
+      
      
     }
   }
