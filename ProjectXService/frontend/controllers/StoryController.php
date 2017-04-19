@@ -918,7 +918,7 @@ class StoryController extends Controller
      * @uses Deleting all Notifications
      * @return type
      */
-    public function actionDeleteAllNotification()
+    public function actionDeleteNotifications()
     {
         $notifyData=json_decode(file_get_contents("php://input"));
         
