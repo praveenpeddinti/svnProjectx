@@ -709,7 +709,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
      * @param type $flag
      * @return array
      */
-    public static function prepareDashboardDetails($ticketDetails, $projectId, $fieldsOrderArray, $flag = "part") {
+    public static function prepareDashboardDetails($ticketDetails, $projectId, $fieldsOrderArray, $flag = "part",$filter=null) {
         try {
             $ticketCollectionModel = new TicketCollection();
             $storyFieldsModel = new StoryFields();
@@ -846,9 +846,21 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             foreach ($fieldsOrderArray as $key) {
                 array_push($arr2ordered, $newArray[$key]);
             }
-            $arrow = array("field_name" => "arrow", "value_id" => "", "field_value" => "", "other_data" => "");
-            $arrow['other_data'] = sizeof($ticketDetails["Tasks"]);
-            array_push($arr2ordered, $arrow);
+              $arrow = array("field_name" => "arrow", "value_id" => "", "field_value" => "", "other_data" => "");
+             if($filter != null){
+                $filterId = $filter->id ;
+               $filterType = $filter->type ;
+                if($filterType == "general" && ($filterId == 2 || $filterId == 3 || $filterId == 4 || $filterId == 5 || $filterId == 6)){
+                   $arrow['other_data'] = 0; 
+                }else{
+                     $arrow['other_data'] = sizeof($ticketDetails["Tasks"]);  
+                } 
+             }else{
+                 $arrow['other_data'] = sizeof($ticketDetails["Tasks"]);   
+             }
+
+              
+               array_push($arr2ordered, $arrow);
             unset($ticketDetails["Fields"]);
             $ticketDetails = $arr2ordered;
             return $ticketDetails;
@@ -1062,7 +1074,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
              try
                 {
                     $subject="Ticket Status";
-                    $from=$from['Email'];
+                    $from=Yii::$app->params['ProjectEmail'];
                     $fromName="ProjectX";
                     $html="<h1> Test Email </h1>";
                     $text="Hi,This is a Test Email";

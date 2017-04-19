@@ -302,8 +302,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $finalData = array();
             $fieldsOrderArray = [5,6,7,3,10];
            //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
+            $fitlerOption=null;
+              if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
+                   //error_log("fitler-------ss----".$StoryData->filterOption);
+                   $fitlerOption=$StoryData->filterOption;
+              }
+          
             foreach ($ticketDetails as $ticket) {
-                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
+                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray,"part",$fitlerOption);
                 array_push($finalData, $details);
             }
             return $finalData;
@@ -445,7 +451,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 }else{
                                     $this->followTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$userId,$ticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE,"FullUpdate");
                                 } 
-                                 //NotificationCollection::saveNotifications($editticket,$fieldDetails["Field_Name"],$ticket_data->$key,$projectId);
+                                 NotificationCollection::saveNotifications($editticket,$fieldDetails["Field_Name"],$ticket_data->$key,$projectId);
                                 }
                                 else if($fieldDetails["Field_Name"] == "workflow"){
                                 $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->$key);
@@ -455,12 +461,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->$key);
                                 $value["value_name"] = $priorityDetail["Name"];
-                                //NotificationCollection::saveNotifications($editticket,$fieldDetails["Field_Name"],$ticket_data->$key,$projectId);
+                                NotificationCollection::saveNotifications($editticket,$fieldDetails["Field_Name"],$ticket_data->$key,$projectId);
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
                                 $bucketDetail =  Bucket::getBucketName($ticket_data->$key,$projectId);
                                 $value["value_name"] = $bucketDetail["Name"];
-                                //NotificationCollection::saveNotifications($editticket,$fieldDetails["Field_Name"],$ticket_data->$key,$projectId);
+                                NotificationCollection::saveNotifications($editticket,$fieldDetails["Field_Name"],$ticket_data->$key,$projectId);
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
                                 $planlevelDetail = PlanLevel::getPlanLevelDetails($ticket_data->$key);
@@ -469,7 +475,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->$key);
                                 $value["value_name"] = $tickettypeDetail["Name"];
-                                //NotificationCollection::saveNotifications($editticket,$fieldDetails["Field_Name"],$ticket_data->$key,$projectId);
+                                NotificationCollection::saveNotifications($editticket,$fieldDetails["Field_Name"],$ticket_data->$key,$projectId);
                                 }
                                         
                          }else{
@@ -479,7 +485,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                        $validDate = CommonUtility::validateDate($ticket_data->$key);
                                       if($validDate){
                                      $value["value"] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                                     //NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                                     NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                  }
                                 
                              }else{
@@ -522,7 +528,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                      
                         if(!empty($activity))
                         {
-                        // NotificationCollection::saveNotifications($editticket,$fieldName,$ticket_data->$key,$projectId);
+                        NotificationCollection::saveNotifications($editticket,$fieldName,$ticket_data->$key,$projectId);
                         }     
                         
                        }else{

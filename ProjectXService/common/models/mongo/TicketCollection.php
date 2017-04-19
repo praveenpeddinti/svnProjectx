@@ -172,12 +172,20 @@ class TicketCollection extends ActiveRecord
                 if($StoryData->filterOption->type=='general'){
                 switch((int)$StoryData->filterOption->id){
                case 2:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
-               case 3:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
-               case 4:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
+               case 3:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
+               case 4:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
+                     $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
                       $conditions['Fields.state.value']=(int)3;break; // in progress
-               case 5:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+               case 5:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
                        $conditions['Fields.state.value']=(int)6;break; // my closed
-               case 6:$conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
+               case 6:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
                case 7:
                    $bucket=Bucket::getActiveBucketId($projectId);
                    if($bucket!='failure'){
@@ -228,13 +236,20 @@ class TicketCollection extends ActiveRecord
            if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
                 if($StoryData->filterOption->type=='general'){
                   switch((int)$StoryData->filterOption->id){
-               case 2:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
-               case 3:$conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
-               case 4:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
+               case 2:$conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
+               case 3:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
+               case 4:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
                       $conditions['Fields.state.value']=(int)3;break;
-               case 5:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+               case 5:$conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
                        $conditions['Fields.state.value']=(int)6;break;
-               case 6:$conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
+               case 6:$conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
                case 7:
                    $bucket=Bucket::getActiveBucketId($projectId);
                    

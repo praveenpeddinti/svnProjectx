@@ -70,7 +70,8 @@ class NotificationCollection extends ActiveRecord
     {
           $query=new Query();
             $query->from('NotificationCollection')
-            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0]);
+            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0])
+            ->andWhere(['!=','ActivityFrom', (int)$user]);
             $notificationsCount=$query->count();
             return $notificationsCount;
      }
@@ -89,35 +90,18 @@ class NotificationCollection extends ActiveRecord
             $query->from('NotificationCollection')
             ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0]);
             $notifications=$query->all();
-            error_log("==Notifications==".print_r($notifications,1));
-            
-            $query=new Query();
-            $query->from('NotificationCollection')
-            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int)0,"Notification_Type"=>['comment','reply']]);
-            $commented_notifications=$query->all();
-            error_log("==Commented Notifications==".print_r($commented_notifications,1));
-            
-            $query=new Query();
-            $query->from('NotificationCollection')
-            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int)0,"Notification_Type"=>"mention"]);
-            $mentioned_notifications=$query->all();
-//            $query=NotificationCollection::getCollection();
-//            $cursor=$query->find(array('$or'=>array(array('Notification_Type'=>array('$in'=>array('comment','mention')),"NotifiedUser" => $user,'ProjectId'=>(int)$projectId,'Status'=>0))));
-//            $mentioned_notifications = iterator_to_array($cursor);
-            error_log("==mentioned Notifications==".print_r($mentioned_notifications,1));
-            
             //constucting the notifications for the user
             foreach($notifications as $notification)
             {
+                 error_log("==Notification Type==".$notification['Notification_Type']);
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                 $Date = $datetime->format('M-d-Y H:i:s');
                 $selectfields=['Title','TicketId','Fields.planlevel'];
                 $ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
                 $ticket_msg='to'. ' '.'#'. $notification['TicketId'] .' ' .$ticket_data['Title'];
-                $from_user=Collaborators::getCollaboratorWithProfile($notification['ActivityFrom']);
-                
-                error_log("==Notification Type==".$notification['Notification_Type']);
+                $from_user= TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
+               
                   
                    /*************** Left Panel Field Values newly assigned *********************/
                     if($notification['Notification_Type']=='assignedto') //newly assigned 
@@ -130,18 +114,18 @@ class NotificationCollection extends ActiveRecord
                             //for logged in user
                             //Eg : moin.hussain assigned you to ticket #33 
                             $notification['ActivityOn']='You to';
-                            $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePic']);
+                            $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                             array_push($result_msg,$message);
                         }
                         else
                         {
                             $action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
                             //for other followers
-                            if($notification['ActivityFrom']!=$action_user['UserName'])
+                            if($from_user['UserName']!=$action_user['UserName'])
                             {
                                 //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
-                                //$msg=$notification['ActivityFrom'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
-                                $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePic']);
+                                //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
+                                $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                                 array_push($result_msg,$message);
                             }
                         }
@@ -156,7 +140,7 @@ class NotificationCollection extends ActiveRecord
                             //for Logged In User
                             //Eg : moin.hussain assigned you to ticket #33 as a stakeholder
                             $notification['ActivityOn']='You to';
-                            $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['stakeholder'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePic']);
+                            $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['stakeholder'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                             array_push($result_msg,$message);
                         }
                         else
@@ -164,16 +148,16 @@ class NotificationCollection extends ActiveRecord
                             //for other followers
                             //Eg : moin.hussain assigned sateesh.mandru to ticket #33 as a stakeholder
                             $action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
-                            if($notification['ActivityFrom']!=$action_user['UserName'])
+                            if($from_user['UserName']!=$action_user['UserName'])
                             {
-                                $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['stakeholder'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePic']);
+                                $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['stakeholder'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                                 array_push($result_msg,$message);
                             }
                         }
                     }
                     if($notification['Notification_Type']=='duedate' || $notification['Notification_Type']=='dod' || $notification['Notification_Type']=='estimatedpoints')
                     {
-                         if($notification['ActivityFrom']!=$action_user['UserName'])
+                         if($from_user['UserName']!=$action_user['UserName'])
                             {
                              //Eg : moin.hussain set duedate to 'apr-14-2017'
                              if($notification['Notification_Type']=='duedate')
@@ -182,13 +166,13 @@ class NotificationCollection extends ActiveRecord
                                  $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                                  $duedate = $datetime->format('M-d-Y');
                                  
-                                 $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['setduedate'],'ActivityOn'=>$duedate,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>'set','id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePic']);
+                                 $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['setduedate'],'ActivityOn'=>$duedate,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>'set','id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                                  array_push($result_msg,$message);
                              }
                              else
                              {
                                  $notification['Notification_Type']=Yii::$app->params['set'].' '.$notification['Notification_Type'].' '.'to';
-                                 $message=array('from'=>$notification['ActivityFrom'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>'set','id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePic']);
+                                 $message=array('from'=>$from_user['UserName'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>'set','id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                                  array_push($result_msg,$message);
                                  
                              }
@@ -207,21 +191,21 @@ class NotificationCollection extends ActiveRecord
                             if($notification['ActivityOn']=='assignedto')
                             {
                                     
-                                    //$msg=$notification['ActivityFrom'].' '. $notification['Notification_Type'].' '. $notification['ActivityOn'].' '.'from'.' '.$notification['OldValue']['UserName'].' '.'to'.' '.$notification['NewValue']['UserName'].' '.'for'.' '. $ticket_msg;
-                                if($notification['ActivityFrom']!=$user && $notification['OldValue']['UserName']!='')
+                                    //$msg=$from_user['UserName'].' '. $notification['Notification_Type'].' '. $notification['ActivityOn'].' '.'from'.' '.$notification['OldValue']['UserName'].' '.'to'.' '.$notification['NewValue']['UserName'].' '.'for'.' '. $ticket_msg;
+                                if($from_user['UserName']!=$user && $notification['OldValue']['UserName']!='')
                                 {
                                    
                                     if($notification['NewValue']['UserName']==$user)
                                     {
                                         //Eg : moin.hussain assigned you to Ticket #33
                                         $notification['ActivityOn']='You to';
-                                        $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
+                                        $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
                                         array_push($result_msg,$message);
                                     }
                                     else
                                     {
                                          //Eg: moin.hussain changed assignedTo from madan.ongole to praveen.peddinti
-                                        $message=array('from'=>$notification['ActivityFrom'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Old'=>$notification['OldValue']['UserName'],'New'=>$notification['NewValue']['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
+                                        $message=array('from'=>$from_user['UserName'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Old'=>$notification['OldValue']['UserName'],'New'=>$notification['NewValue']['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
                                         array_push($result_msg,$message);
                                     }
                                 }
@@ -234,14 +218,14 @@ class NotificationCollection extends ActiveRecord
                                         //for Logged In User
                                         //Eg : moin.hussain assigned you to ticket #33 as a stakeholder
                                          $notification['ActivityOn']='You to';
-                                         $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['stakeholder'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
+                                         $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['stakeholder'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
                                          array_push($result_msg,$message);
                                          
                                     }
                                     else
                                     {
                                          //Eg: moin.hussain changed stakeholder from madan.ongole to praveen.peddinti
-                                        $message=array('from'=>$notification['ActivityFrom'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Old'=>$notification['OldValue']['UserName'],'New'=>$notification['NewValue']['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
+                                        $message=array('from'=>$from_user['UserName'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Old'=>$notification['OldValue']['UserName'],'New'=>$notification['NewValue']['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
                                         array_push($result_msg,$message);
                                     }
                             }
@@ -253,25 +237,17 @@ class NotificationCollection extends ActiveRecord
                                     error_log("changed priority");
                                     
                                     error_log("==User==".print_r($action_user['UserName'],1));
-                                    //$msg=$notification['ActivityFrom'].' '. $notification['Notification_Type'].' '. $notification['ActivityOn'].' '.'from'.' '.$notification['OldValue'].' '.'to'.' '.$notification['NewValue'].' '.'for'.' '. $ticket_msg;
-                                    if($notification['ActivityFrom']!=$action_user['UserName'])
+                                    //$msg=$from_user['UserName'].' '. $notification['Notification_Type'].' '. $notification['ActivityOn'].' '.'from'.' '.$notification['OldValue'].' '.'to'.' '.$notification['NewValue'].' '.'for'.' '. $ticket_msg;
+                                    if($from_user['UserName']!=$action_user['UserName'])
                                     {
-                                        error_log("==from==".print_r($notification['ActivityFrom'],1)."== ".print_r($action_user['UserName'],1));
+                                        error_log("==from==".print_r($from_user['UserName'],1)."== ".print_r($action_user['UserName'],1));
                                        //Eg : moin.hussain changed Priority from Low to High
                                        
-                                        $message=array('from'=>$notification['ActivityFrom'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Old'=>$notification['OldValue'],'New'=>$notification['NewValue'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePic']);
+                                        $message=array('from'=>$from_user['UserName'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Old'=>$notification['OldValue'],'New'=>$notification['NewValue'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                                         array_push($result_msg,$message);
                                     }
                                 }
-//                                else //old value is null i.e The field is newly set
-//                                {
-//                                    if($notification['ActivityFrom']!=$user)
-//                                    {
-//                                       //Eg : moin.hussain set Priority to High
-//                                        $notification['Notification_Type']="set".$notification['Notification_Type']."to";
-//                                        $message=array('from'=>$notification['ActivityFrom'],'type'=> $notification['Notification_Type'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date);
-//                                    }
-//                                }
+
                             }  
                     }
                     
@@ -320,29 +296,29 @@ class NotificationCollection extends ActiveRecord
 //                        error_log("==Message==".print_r($message,1));
 //                        array_push($result_msg,$message);
 //                    }
-            } 
+          
                     
                     /******* Followers Message End **********/
                     
                     
                     /***** Any changes in Editor ***********/
-                    foreach($commented_notifications as $notification)
-                    {
+                    error_log("notifc t-------------------".$notification['Notification_Type']);
+                   if($notification['Notification_Type'] == "comment" || $notification['Notification_Type'] == "reply"){
                         $datetime = $notification['NotificationDate']->toDateTime();
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                         $Date = $datetime->format('M-d-Y H:i:s');
                         $collaborator=new Collaborators();
-                        //$collaborator=$collaborator->getCollaboratorByUserName($notification['ActivityFrom']);
+                        //$collaborator=$collaborator->getCollaboratorByUserName($from_user['UserName']);
                         //error_log("===Collaborator==".print_r($collaborator,1));                       
                         $selectfields=['Title','TicketId','Fields.planlevel'];
                         $ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
-                        $collaborator=Collaborators::getCollaboratorWithProfile($notification['ActivityFrom']);
+                      //  $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
                         if($notification['Notification_Type']=='comment')
                         {
                          //Eg : moin.hussain commented on #33 Ticket 
-                             if($notification['ActivityFrom']!=$action_user['UserName'])
+                             if($from_user['UserName']!=$action_user['UserName'])
                              {
-                              $message=array('from'=>$notification['ActivityFrom'],'type'=>Yii::$app->params['comment'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
+                              $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['comment'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
                               array_push($result_msg,$message);
                               
                              }
@@ -351,58 +327,31 @@ class NotificationCollection extends ActiveRecord
                         if($notification['Notification_Type']=='reply')
                         {
                             //Eg: moin.hussain replied on #33 Ticket
-                            if($notification['ActivityFrom']!=$action_user['UserName'])
+                            error_log(print_r($from_user,1)."---".print_r($action_user,1));
+                            if($from_user['UserName']!=$action_user['UserName'])
                             {
-                             $message=array('from'=>$notification['ActivityFrom'],'type'=>Yii::$app->params['reply'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
+                             $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['reply'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
                              array_push($result_msg,$message);
                             }
                         }
-//                        if($notification['Notification_Type']=='mention')
-//                        {
-//                            error_log("==in mention==");
-//                            if($notification['ActivityFrom']!=$action_user['UserName'])
-//                            {
-//                                if($notification['NotifiedUser']==$user)
-//                                {
-//                                    //Eg : moin.hussain mentioned you in a comment or
-//                                    //     moin.hussain mentioned you in a reply
-//                                    //     moin.hussain mentined you on Ticket #33
-//                                    $notification['NotifiedUser']='You';
-//                                    $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
-//                                    array_push($result_msg,$message);
-//                                    
-//                                }
-//                                else
-//                                {
-//                                    //Eg : moin.hussain mentioned madan.ongole in a comment or
-//                                    //     moin.hussain mentioned madan.ongole in a reply
-//                                    //     moin.hussain mentined madan.ongole on Ticket #33
-//                                    $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
-//                                    array_push($result_msg,$message);
-//                                }
-//                            }
-//                        }
-//                         if(!empty($message))
-//                        {
-//                            array_push($result_msg,$message);
-//                        }
-                   }
+
+                 }
                    
-                   foreach($mentioned_notifications as $notification)
+                  if($notification['Notification_Type'] == "mention" )
                    {
                        $datetime = $notification['NotificationDate']->toDateTime();
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                         $Date = $datetime->format('M-d-Y H:i:s');
                         $collaborator=new Collaborators();
-                        //$collaborator=$collaborator->getCollaboratorByUserName($notification['ActivityFrom']);
+                        //$collaborator=$collaborator->getCollaboratorByUserName($from_user['UserName']);
                         //error_log("===Collaborator==".print_r($collaborator,1));                       
                         $selectfields=['Title','TicketId','Fields.planlevel'];
                         $ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
-                        $collaborator=Collaborators::getCollaboratorWithProfile($notification['ActivityFrom']);
+                       // $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
                         if($notification['Notification_Type']=='mention')
                         {
                             error_log("==in mention==");
-                            if($notification['ActivityFrom']!=$action_user['UserName'])
+                            if($from_user['UserName']!=$action_user['UserName'])
                             {
                                 if($notification['NotifiedUser']==$notification['MentionedUser'])
                                 {
@@ -410,7 +359,7 @@ class NotificationCollection extends ActiveRecord
                                     //     moin.hussain mentioned you in a reply
                                     //     moin.hussain mentined you on Ticket #33
                                     $notification['NotifiedUser']='You';
-                                    $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
+                                    $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
                                     array_push($result_msg,$message);
                                     
                                 }
@@ -419,7 +368,7 @@ class NotificationCollection extends ActiveRecord
                                     //Eg : moin.hussain mentioned madan.ongole in a comment or
                                     //     moin.hussain mentioned madan.ongole in a reply
                                     //     moin.hussain mentined madan.ongole on Ticket #33
-                                    $message=array('from'=>$notification['ActivityFrom'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePic']);
+                                    $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
                                     array_push($result_msg,$message);
                                 }
                             }
@@ -427,13 +376,14 @@ class NotificationCollection extends ActiveRecord
                    }
                     /**** Changes in Editor End *************/
                     
-                         
+            }
                 
                 
                 error_log("==Result Msg==".print_r($result_msg,1));
-            //}
+          
            // return $notifications;
             return $result_msg;
+          
         } catch (Exception $ex) {
 
         }
@@ -448,7 +398,6 @@ class NotificationCollection extends ActiveRecord
     public static function saveNotifications($notification_data,$notifyType,$collaborator_name,$project=null)
     {
         error_log("in save notifications");
-        error_log("===status==".$notifyType);
         try{
             //$collaborator='';
             //$activity='';
@@ -476,7 +425,6 @@ class NotificationCollection extends ActiveRecord
             if(!($notify_type=='added' || $notify_type=='removed'))
             {
                 
-                //$activityData=ServiceFactory::getStoryServiceInstance()->saveActivity($ticketId,$projectId,$notifyType,$collaborator_name,$loggedInUser);
                     $oldValue = "";
                     $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
                     if($notifyType == "Title" || $notifyType == "Description"){
@@ -495,21 +443,13 @@ class NotificationCollection extends ActiveRecord
                         $newValue=$collaborator_name;
                         
                     }
-                    error_log("==Old Value==".$oldValue);
-                    error_log("==New Value==".$newValue);                    
-                    //$oldvalue=$oldValue;
-                    //$newvalue=$collaborator_name; //THIS IS A FIELD NAME
                 
             }
             $followers=$data['Followers'];
-            
-            //if($notify_type=='priority' || $notify_type=='bucket' || $notify_type=='workflow') //checking the left side 
             if($oldValue!='')
             {
-                
                 $activity=$notify_type;
                 $notify_type='changed';   
-                
             }
             else
             {
@@ -523,7 +463,7 @@ class NotificationCollection extends ActiveRecord
                     $tic->ProjectId =$projectId;
                     $tic->NotifiedUser=$collaborator;
                     $tic->Notification_Type=$notify_type;
-                    $tic->ActivityFrom=$from;
+                    $tic->ActivityFrom=$loggedInUser;
                     error_log("==In saving the assigned to==");
                     $tic->ActivityOn=$collaborator;
                     $tic->NotificationDate=$currentDate;
@@ -537,11 +477,8 @@ class NotificationCollection extends ActiveRecord
             
             foreach($followers as $follower)
             {
-//                if($follower['UserName']!=$collaborator_name)
-//                {
-               
+              
                     $tic = new NotificationCollection();
-                    //$tic->NotifiedUser=$follower;
                     $tic->NotifiedUser=$follower['FollowerId'];
                     $tic->TicketId =$ticketId;
                     $tic->ProjectId =$projectId;
@@ -555,7 +492,7 @@ class NotificationCollection extends ActiveRecord
                     {
                         $tic->ActivityOn=$collaborator_name;
                     }
-                    $tic->ActivityFrom=$from;
+                    $tic->ActivityFrom=$loggedInUser;
                     $tic->NotificationDate=$currentDate;
                     
                     if($notify_type=='added')
@@ -582,7 +519,7 @@ class NotificationCollection extends ActiveRecord
                     $tic->save();
                 //}
             }
-            
+           
         } catch (Exception $ex) {
             Yii::log("NotificationsCollection:saveNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -599,6 +536,7 @@ class NotificationCollection extends ActiveRecord
         try
         {
             $from=$ticket_data->userInfo->username;
+             $loggedinUser=$ticket_data->userInfo->Id;
             $ticketId=$ticket_data->TicketId;
             $projectId=$ticket_data->projectId;
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
@@ -613,7 +551,7 @@ class NotificationCollection extends ActiveRecord
                     $tic->TicketId =$ticketId;
                     $tic->ProjectId =$projectId;
                     $tic->NotifiedUser=(int)$user['Id'];
-                    $tic->ActivityFrom=$from;
+                    $tic->ActivityFrom=(int)$loggedinUser;
                     $tic->NotificationDate=$currentDate;
 //                    if($notifyType=='mention')
 //                    {
@@ -649,6 +587,7 @@ class NotificationCollection extends ActiveRecord
         {
             error_log("in comment".$notify_type);
             $from=$commentData->userInfo->username;
+              $loggedinUser=$ticket_data->userInfo->Id;
             $ticketId=$commentData->TicketId;
             $projectId=$commentData->projectId;
             $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticketId,$projectId);
@@ -662,7 +601,7 @@ class NotificationCollection extends ActiveRecord
                             $tic->NotifiedUser=$follower['FollowerId'];
                             $tic->TicketId =$ticketId;
                             $tic->ProjectId =$projectId;
-                            $tic->ActivityFrom=$from;
+                            $tic->ActivityFrom=(int)$loggedinUser;
                             $tic->NotificationDate=$currentDate;
                             $tic->Notification_Type=$notify_type;
                             $tic->CommentSlug=$slug;
