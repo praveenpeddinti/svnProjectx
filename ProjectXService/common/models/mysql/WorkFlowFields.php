@@ -46,7 +46,7 @@ Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex-
       public static function getStoryWorkFlowList($workflowType,$workflowId){
         try{
         $query = "select   wf.Id,wf.Name,wf.Status,ws.Name as State from WorkFlowFields wf
- join WorkFlowMapping wm on wf.Id=wm.MappedWorkFlowId join WorkFlowState ws on wf.State=ws.Id where wm.WorkFlowType=$workflowType and wm.WorkFlowId=$workflowId order by wf.Id=$workflowId desc ;";
+ join WorkFlowMapping wm on wf.Id=wm.MappedWorkFlowId join WorkFlowState ws on wf.State=ws.Id where wm.WorkFlowType=$workflowType and wm.WorkFlowId=$workflowId order by wm.Position asc ;";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;   
         } catch (Exception $ex) {
