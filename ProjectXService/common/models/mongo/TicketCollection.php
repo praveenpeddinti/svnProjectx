@@ -171,7 +171,9 @@ class TicketCollection extends ActiveRecord
             if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
                 if($StoryData->filterOption->type=='general'){
                 switch((int)$StoryData->filterOption->id){
-               case 2:$conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
+               case 2:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
                case 3:
                    $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
