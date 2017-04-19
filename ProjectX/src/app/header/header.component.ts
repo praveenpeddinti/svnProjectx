@@ -27,7 +27,16 @@ export class HeaderComponent implements OnInit {
     /* For Notifications */
     if(this.users)
     {
-    var thisObj = this;
+     var thisObj = this;
+    var post_data={}; 
+      thisObj._ajaxService.NodeSubscribe('/getAllNotificationsCount',post_data,(data)=>
+      {
+      
+        thisObj.notify_count=data.count;
+       
+      });
+    
+   
     setInterval(function(){
 var post_data={}; 
       thisObj._ajaxService.NodeSubscribe('/getAllNotificationsCount',post_data,(data)=>
@@ -36,7 +45,7 @@ var post_data={};
         thisObj.notify_count=data.count;
        
       });
-},5000)
+},150000)
       
      
     }
@@ -142,6 +151,10 @@ var post_data={};
 
   showNotifications()
   {
+  
+  if(jQuery("#notifications_list").is(":visible")){
+    jQuery("#notifications_list").hide();
+   }else{
     console.log("show notify");
  var post_data={};
  this.notification_msg=[];
@@ -166,5 +179,6 @@ var post_data={};
       });
 
     jQuery("#notifications_list").show();
+    }
   }
 }
