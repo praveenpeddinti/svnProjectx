@@ -39,6 +39,7 @@ export class StoryDetailsPage {
     public filesToUpload: Array<File>;
     public fileUploadStatus:boolean = false;
     private ticketEditableDesc="";
+    private openCommentMenuList = [];
     // Ticket #91 ended
     public selectedValue = "";
     public previousSelectedValue = "";
@@ -505,6 +506,9 @@ openPopover(myEvent) {
         // console.log("editComment : "+commentId);
         jQuery("#Actions_"+commentId+" .textEditor").val(this.itemsInActivities[commentId].CrudeCDescription);
         this.editTheComment[commentId]=true;//show submit and cancel button on editor replace at the bottom
+    }
+ public openCommentMenu(commentId){
+        this.openCommentMenuList[commentId]=true;//show submit and cancel button on editor replace at the bottom
     }
     public cancelEdit(commentId){
         // console.log("cancelEdit : "+commentId);
