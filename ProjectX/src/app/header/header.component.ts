@@ -27,11 +27,11 @@ export class HeaderComponent implements OnInit {
     /* For Notifications */
     if(this.users)
     {
-      var post_data={};
+      var post_data={}; 
       this._ajaxService.NodeSubscribe('/getAllNotificationsCount',post_data,(data)=>
       {
        
-        this.notify_count=data.notify_result.length;
+        this.notify_count=data.count;
        
       });
      
@@ -140,11 +140,12 @@ export class HeaderComponent implements OnInit {
   {
     console.log("show notify");
  var post_data={};
+ this.notification_msg=[];
       this._ajaxService.NodeSubscribe('/getAllNotifications',post_data,(data)=>
       {
         console.log("==Notify length=="+data.notify_result.length);
-        this.notify_count=data.notify_result.length;
-        console.log("==Data=="+JSON.stringify(data.notify_result));
+     //   this.notify_count=data.notify_result.length;
+      //  console.log("==Data=="+JSON.stringify(data.notify_result));
         for(var i=0;i<data.notify_result.length;i++)
         {
          

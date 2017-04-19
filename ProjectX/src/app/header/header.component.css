@@ -10,7 +10,7 @@ header{display: block;margin: 4px;padding: 5px;min-height: 100px;border: 1px sol
 .navbar-form{margin-top:6px}
 .thumb-sm {height: 32px;width: 32px;}
 .searchboxareapaddingtop{padding-top:9px;padding-right:10px}
-.customnotheader{position: relative}
+.customnotheader{position: relative;cursor: pointer}
 .customnotheader i{font-size:24px;color:#FFF;margin-top:5px}
 .customnotheader .badge{top:0;background: #ff0000;left: 25px; position: absolute;top: 13px;}
 .top-right-menu{padding-right:10px}
