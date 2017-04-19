@@ -32,7 +32,7 @@ class Filters extends ActiveRecord
     public static function getAllActiveFilters()
     {
         try{
-        $query = "select Id,Name,Type from Filters where Status = 1 Order by Position asc";
+        $query = "select Id,Name,Type,ShowChild from Filters where Status = 1 Order by Position asc";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;  
         } catch (Exception $ex) {

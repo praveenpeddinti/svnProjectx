@@ -740,9 +740,9 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                    // $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]);
                     
                       if($filter != null){
-                $filterId = $filter->id ;
+                $showChild = $filter->showChild ;
                $filterType = $filter->type ;
-            if($filterType == "general" && ($filterId == 2 || $filterId == 3 || $filterId == 4 || $filterId == 5 || $filterId == 6)){
+            if($filterType == "general" && $showChild==0){
                 $Othervalue["totalSubtasks"] = "";
             }else{
               $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]); 
@@ -863,9 +863,9 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             }
               $arrow = array("field_name" => "arrow", "value_id" => "", "field_value" => "", "other_data" => "");
              if($filter != null){
-                $filterId = $filter->id ;
+                $showChild = $filter->showChild ;
                $filterType = $filter->type ;
-                if($filterType == "general" && ($filterId == 2 || $filterId == 3 || $filterId == 4 || $filterId == 5 || $filterId == 6)){
+                if($filterType == "general" && $showChild==0){
                    $arrow['other_data'] = 0; 
                 }else{
                      $arrow['other_data'] = sizeof($ticketDetails["Tasks"]);  
@@ -1255,11 +1255,13 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
              
                  foreach($value as $val){
                       if($key=='bucket'){
-                         $type= 'bucket';  
+                         $type= 'bucket'; 
+                         $showchild=1;
                       }else{
-                         $type= $val['Type'];  
+                         $type= $val['Type'];
+                         $showchild=$val['ShowChild'];
                       }
-             array_push($refinedFilter,array("Label"=>$val['Name'],"Id"=>$val['Id'],"Type"=>$type));
+             array_push($refinedFilter,array("Label"=>$val['Name'],"Id"=>$val['Id'],"Type"=>$type,"ShowChild"=>$showchild));
                }
                 
            }
