@@ -68,8 +68,8 @@ class NotificationsController extends Controller
             $notified_userid=$notification_data->userInfo->Id;
             $notified_username=$notification_data->userInfo->username;
             //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
-            $result_data=NotificationCollection::getNotificationsCount($notified_userid,$projectId);
-            echo json_encode(array('notify_result'=>$result_count));
+            $result_count=NotificationCollection::getNotificationsCount($notified_userid,$projectId);
+            echo json_encode(array('count'=>$result_count));
             
         } catch (Exception $ex) {
             Yii::log("NotificationsController:actionGetAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
