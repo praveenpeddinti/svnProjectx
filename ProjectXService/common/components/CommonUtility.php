@@ -1169,14 +1169,25 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 );
             $ticketCommentsData = $query->aggregate($pipeline);
             $TicketCommentsFinalArray = array();
-            
+            $commentsArray= array();
+           
                 foreach($ticketCommentsData as $extractComments){
                    $ticketCollectionModel = new TicketCollection();
                    $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
                    $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],1,$selectFields);
                    $forTicketComments['TicketId'] =  $extractComments['_id'];
                    $forTicketComments['Title'] =$getTicketDetails['Title'];
-                   $forTicketComments['comments'] =  $extractComments['commentData'];
+                 //  $forTicketComments['comments'] =  $extractComments['commentData'];
+                    $commentsfinalArray =array();
+                   foreach($extractComments['commentData'] as $eachOne){
+                      $commentsArray['CrudeCDescription']=strip_tags($eachOne['CrudeCDescription']);
+                      $commentsArray['Slug']=$eachOne['Slug'];
+                      $commentsArray['ActivityOn']=$eachOne['ActivityOn'];
+                      if(strpos($commentsArray['CrudeCDescription'],$searchString) !==false){
+                        array_push($commentsfinalArray,$commentsArray);
+                      }
+                   }
+                    $forTicketComments['comments']=$commentsfinalArray;
                    $forTicketComments['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
                    $forTicketComments['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
                   // $forTicketComments['UpdatedOn'] =$getTicketDetails['UpdatedOn'];
