@@ -4,9 +4,9 @@ import { Globalservice} from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
-import {CustomModalPage } from '../custom-modal/custom-modal';
-import {Camera, File, Transfer, FilePath} from 'ionic-native';
-import {DashboardPage} from '../dashboard/dashboard';
+import { CustomModalPage } from '../custom-modal/custom-modal';
+import { Camera, File, Transfer, FilePath} from 'ionic-native';
+import { DashboardPage } from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var cordova: any;
 
