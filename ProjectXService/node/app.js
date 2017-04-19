@@ -75,7 +75,7 @@ app.post("/getAllNotifications",function(req,res,cb)
   child=spawn(dir+"/yii",['notifications/get-all-notifications',JSON.stringify(request)]);
         child.stdout.setEncoding('utf-8');
         child.stdout.on('data', function(data) {
-          console.log("assignedTo-------result- " +data);
+          console.log("getAllNotifications-- " +data);
              res.send(data);
        });
           child.stderr.on('data', function(data) {
@@ -87,10 +87,10 @@ app.post("/getAllNotificationsCount",function(req,res,cb)
 {
     var request = req.body;
     console.log(JSON.stringify(request));
-  child=spawn(dir+"/yii",['notifications/get-all-notifications-count',JSON.stringify(request)]);
+          child=spawn(dir+"/yii",['notifications/get-all-notifications-count',JSON.stringify(request)]);
         child.stdout.setEncoding('utf-8');
         child.stdout.on('data', function(data) {
-          console.log("assignedTo-------result- " +data);
+          console.log("get-all-notifications-count-- " +data);
              res.send(data);
        });
           child.stderr.on('data', function(data) {
