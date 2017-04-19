@@ -632,8 +632,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             try
                             {
                                  error_log("updateStoryFieldInline---4");
-                                $text="A new ticket has been assigned to you by ".$ticket_data->userInfo->username;
-                                CommonUtility::sendMail($ticket_data->userInfo->username, $valueName,$ticketDetails); 
+                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketDetails['TicketId'];
+                                 $text="A new ticket has been assigned to you by ".$ticket_data->userInfo->username." to <a href=$link>".'#'.$ticketDetails['TicketId'].' '.$ticketDetails['Title']."</a>";
+                                
+                                CommonUtility::sendMail($ticket_data->userInfo->username, $valueName,$ticketDetails,$text); 
                             } 
                             catch (Exception $ex) {
                                 Yii::log("CommonUtility::sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -822,30 +824,36 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 /* Send Notifications to @mentioned user by Ryan and send email in the comment section*/
                             try
                             {
-                                error_log("Notification with Mention");
+                                
+                                $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketDetails['TicketId']."?Slug=".$slug;
+                                $comment="A ticket has been commented by ".$commentData->userInfo->username." for <a href=$link>".'#'.$ticketDetails['TicketId'].' '.$ticketDetails['Title']."</a>";
+                                $reply="A ticket has been replied by ".$commentData->userInfo->username." for <a href=$link>".'#'.$ticketDetails['TicketId'].' '.$ticketDetails['Title']."</a>";
+                               
                                 if(!empty($refinedData['UsersList']))
                                 {
                                     if($commentData->Comment->Reply==false)
                                     {
                                         NotificationCollection::saveNotificationsWithMention($commentData,$refinedData['UsersList'],'comment',$slug);
-                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList'],$ticketDetails);
+                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList'],$ticketDetails,$comment);
                                     }
                                     else
                                     {
                                         NotificationCollection::saveNotificationsWithMention($commentData,$refinedData['UsersList'],'reply',$slug);
-                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList'],$ticketDetails);
+                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList'],$ticketDetails,$reply);
                                     }
                                 }
                                 else
                                 {
-                                    error_log("==in else==comment".$slug);
+                                    
                                     if($commentData->Comment->Reply==false)
                                     {
-                                        NotificationCollection::saveNotificationsForComment($commentData,'comment',$slug);
+                                        NotificationCollection::saveNotificationsForComment($commentData,'comment',$slug,$comment);
+                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList']=array(),$ticketDetails,$comment);
                                     }
                                     else
                                     {
-                                        NotificationCollection::saveNotificationsForComment($commentData,'reply',$slug);
+                                        NotificationCollection::saveNotificationsForComment($commentData,'reply',$slug,$reply);
+                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList']=array(),$ticketDetails,$reply);
                                     }
                                 }
                             } catch (Exception $ex) {
