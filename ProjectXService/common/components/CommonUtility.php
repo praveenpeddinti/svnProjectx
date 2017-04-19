@@ -1141,8 +1141,6 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 ),array('$limit' => $limit),array('$skip' => $offset)
                 );
             $ticketCommentsData = $query->aggregate($pipeline);
-            $commentsArray=array();
-            $commentsPositionArray=array();
             $TicketCommentsFinalArray = array();
             
                 foreach($ticketCommentsData as $extractComments){
