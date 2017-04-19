@@ -461,9 +461,9 @@ class NotificationCollection extends ActiveRecord
                     //$notify_type=$notification_data->comment_type;
                     $tic->TicketId =$ticketId;
                     $tic->ProjectId =$projectId;
-                    $tic->NotifiedUser=$collaborator;
+                    $tic->NotifiedUser=(int)$collaborator;
                     $tic->Notification_Type=$notify_type;
-                    $tic->ActivityFrom=$loggedInUser;
+                    $tic->ActivityFrom=(int)$loggedInUser;
                     error_log("==In saving the assigned to==");
                     $tic->ActivityOn=$collaborator;
                     $tic->NotificationDate=$currentDate;
@@ -479,7 +479,7 @@ class NotificationCollection extends ActiveRecord
             {
               
                     $tic = new NotificationCollection();
-                    $tic->NotifiedUser=$follower['FollowerId'];
+                    $tic->NotifiedUser=(int)$follower['FollowerId'];
                     $tic->TicketId =$ticketId;
                     $tic->ProjectId =$projectId;
                     if($notify_type=='changed')
@@ -492,7 +492,7 @@ class NotificationCollection extends ActiveRecord
                     {
                         $tic->ActivityOn=$collaborator_name;
                     }
-                    $tic->ActivityFrom=$loggedInUser;
+                    $tic->ActivityFrom=(int)$loggedInUser;
                     $tic->NotificationDate=$currentDate;
                     
                     if($notify_type=='added')
@@ -598,7 +598,7 @@ class NotificationCollection extends ActiveRecord
                     if($follower['UserName']!=$from)
                     {
                             $tic = new NotificationCollection();
-                            $tic->NotifiedUser=$follower['FollowerId'];
+                            $tic->NotifiedUser=(int)$follower['FollowerId'];
                             $tic->TicketId =$ticketId;
                             $tic->ProjectId =$projectId;
                             $tic->ActivityFrom=(int)$loggedinUser;
