@@ -4,8 +4,8 @@
   <div *ngFor="let searchData of searchArray">
 
    
-      <div *ngFor=" let finalData of searchData" class="searchdiv">
-         <div  *ngIf="finalData.description">
+      <div *ngFor=" let finalData of searchData" >
+         <div  *ngIf="finalData.description" class="searchdiv">
 <div class="searchresulttitle" *ngIf="!finalData.ProfilePicture">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
