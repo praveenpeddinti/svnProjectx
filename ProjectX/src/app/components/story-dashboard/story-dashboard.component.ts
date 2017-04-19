@@ -10,6 +10,7 @@ declare var jQuery:any;
     selector: 'story-dashboard-view',
     providers: [StoryService],
     templateUrl: 'story-dashboard-component.html',
+    styleUrls: ['./story-dashboard.component.css']
 
 })
 
@@ -85,14 +86,15 @@ expanded: any = {};
         private _service: StoryService, private http: Http) { console.log("in constructor"); }
 
     ngOnInit() {
- var thisObj = this;  
+ var thisObj = this;
+
  /*
   @params    :  projectId
   @Description: get bucket details
   */  
  this._service.getFilterOptions(1,(response) => { 
      for(let option of response.data){
-         thisObj.FilterList.push({label:option.Label,value:{id:option.Id,type:option.Type}})
+         thisObj.FilterList.push({label:option.Label,value:{id:option.Id,type:option.Type,showChild:option.ShowChild}})
      }
  });
         /*
@@ -114,6 +116,11 @@ if( thisObj.checkScrollBar() == true){
 });
  
 }
+    // ngAfterViewInit()
+    // {
+    //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.general:eq(0)').before('<label>Filter</label>');
+    //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.bucket:eq(0)').before('<label>Bucket</label>');
+    // }
         /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: StoryComponent/Task list Rendering
