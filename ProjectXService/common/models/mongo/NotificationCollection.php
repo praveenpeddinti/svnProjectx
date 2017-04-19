@@ -88,9 +88,11 @@ class NotificationCollection extends ActiveRecord
         try{
             $query=new Query();
             $query->from('NotificationCollection')
-            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0]);
+            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0])
+            ->andWhere(['!=','ActivityFrom', (int)$user]);
             $notifications=$query->all();
             //constucting the notifications for the user
+            error_log("not cont--------------------".count($notifications));
             foreach($notifications as $notification)
             {
                  error_log("==Notification Type==".$notification['Notification_Type']);
@@ -359,7 +361,7 @@ class NotificationCollection extends ActiveRecord
                                     //     moin.hussain mentioned you in a reply
                                     //     moin.hussain mentined you on Ticket #33
                                     $notification['NotifiedUser']='You';
-                                    $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
+                                    $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                                     array_push($result_msg,$message);
                                     
                                 }
@@ -368,7 +370,7 @@ class NotificationCollection extends ActiveRecord
                                     //Eg : moin.hussain mentioned madan.ongole in a comment or
                                     //     moin.hussain mentioned madan.ongole in a reply
                                     //     moin.hussain mentined madan.ongole on Ticket #33
-                                    $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$collaborator['ProfilePicture']);
+                                    $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                                     array_push($result_msg,$message);
                                 }
                             }
@@ -461,9 +463,9 @@ class NotificationCollection extends ActiveRecord
                     //$notify_type=$notification_data->comment_type;
                     $tic->TicketId =$ticketId;
                     $tic->ProjectId =$projectId;
-                    $tic->NotifiedUser=(int)$collaborator;
+                    $tic->NotifiedUser=$collaborator;
                     $tic->Notification_Type=$notify_type;
-                    $tic->ActivityFrom=(int)$loggedInUser;
+                    $tic->ActivityFrom=$loggedInUser;
                     error_log("==In saving the assigned to==");
                     $tic->ActivityOn=$collaborator;
                     $tic->NotificationDate=$currentDate;
@@ -479,7 +481,7 @@ class NotificationCollection extends ActiveRecord
             {
               
                     $tic = new NotificationCollection();
-                    $tic->NotifiedUser=(int)$follower['FollowerId'];
+                    $tic->NotifiedUser=$follower['FollowerId'];
                     $tic->TicketId =$ticketId;
                     $tic->ProjectId =$projectId;
                     if($notify_type=='changed')
@@ -492,7 +494,7 @@ class NotificationCollection extends ActiveRecord
                     {
                         $tic->ActivityOn=$collaborator_name;
                     }
-                    $tic->ActivityFrom=(int)$loggedInUser;
+                    $tic->ActivityFrom=$loggedInUser;
                     $tic->NotificationDate=$currentDate;
                     
                     if($notify_type=='added')
@@ -598,7 +600,7 @@ class NotificationCollection extends ActiveRecord
                     if($follower['UserName']!=$from)
                     {
                             $tic = new NotificationCollection();
-                            $tic->NotifiedUser=(int)$follower['FollowerId'];
+                            $tic->NotifiedUser=$follower['FollowerId'];
                             $tic->TicketId =$ticketId;
                             $tic->ProjectId =$projectId;
                             $tic->ActivityFrom=(int)$loggedinUser;
