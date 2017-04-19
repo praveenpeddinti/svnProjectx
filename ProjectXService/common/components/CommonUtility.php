@@ -730,14 +730,29 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
 
             array_push($arr2ordered, $ticketId);
             array_push($arr2ordered, $ticketTitle);
-            $arr2ordered[1]["other_data"] = sizeof($ticketDetails["Tasks"]);
+               $arr2ordered[1]["other_data"] = sizeof($ticketDetails["Tasks"]); 
             $Othervalue = array();
             foreach ($ticketDetails["Fields"] as $key => $value) {
 
                 if ($key == "planlevel") {
                     //$arr2ordered[0]["other_data"] = $value["value"];
                     $Othervalue["planlevel"] = $value["value"];
-                    $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]);
+                   // $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]);
+                    
+                      if($filter != null){
+                $filterId = $filter->id ;
+               $filterType = $filter->type ;
+            if($filterType == "general" && ($filterId == 2 || $filterId == 3 || $filterId == 4 || $filterId == 5 || $filterId == 6)){
+                $Othervalue["totalSubtasks"] = "";
+            }else{
+              $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]); 
+            }
+             }else{
+               $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]);   
+             }
+                    
+                    
+                    
                     $arr2ordered[0]["other_data"] = $Othervalue;
                 }
                 if (in_array($value["Id"], $fieldsOrderArray)) {
