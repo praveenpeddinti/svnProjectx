@@ -1402,7 +1402,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     // Send notification to Peer person
                     error_log("Send notification to Peer person");
                     return true;
-                } else if ($newWorkflowId == 10 || $newWorkflowId == 7 || $newWorkflowId == 1) {  // 10 --Re-open  7 -- Invalid --New
+                } else if ($newWorkflowId == 10 || $newWorkflowId == 7 || $newWorkflowId == 1 || $newWorkflowId == 8) {  // 10 --Re-open  7 -- Invalid 1--New 8--Fixed
                     if (sizeof($oldTicketObj['Tasks']) != 0 || $oldTicketObj['Tasks'] != NULL) {
                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
                         foreach ($oldTicketObj['Tasks'] as $task) {
