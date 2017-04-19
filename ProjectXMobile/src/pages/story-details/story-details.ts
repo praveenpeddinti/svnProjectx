@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import {DatePipe} from '@angular/common';
 import { ToastController, Content, Platform, App } from 'ionic-angular';
 import { NavController, ModalController, NavParams, MenuController, LoadingController, PopoverController, ViewController } from 'ionic-angular';
 
@@ -17,7 +18,8 @@ declare var jQuery: any;
 */
 @Component({
     selector: 'page-story-details',
-    templateUrl: 'story-details.html'
+    templateUrl: 'story-details.html',
+    providers: [DatePipe]
 })
 export class StoryDetailsPage {
 
@@ -88,7 +90,9 @@ export class StoryDetailsPage {
         public navParams: NavParams,
         public loadingController: LoadingController,
         public popoverCtrl: PopoverController,
-        private storage: Storage, public viewCtrl: ViewController, ) {
+        private storage: Storage, 
+        public viewCtrl: ViewController, 
+        private datePipe: DatePipe ) {
             
         StoryDetailsPage.menuControler = menu;
         this.localDate = new Date().toISOString();
@@ -195,11 +199,13 @@ export class StoryDetailsPage {
     }
 
    public dateChange(event, index, fieldDetails) {
+       
+    //    console.log("the selected date " + JSON.stringify(this.datePipe.transform(this.localDate, 'MMM-dd-yyyy')));
 
 this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe( 
 (result) => {
     setTimeout(() => {
-        document.getElementById("field_title_" + index).innerHTML = this.localDate;
+        document.getElementById("field_title_" + index).innerHTML = this.datePipe.transform(this.localDate, 'MMM-dd-yyyy');
         this.enableDataPicker[index] = false;
          document.getElementById("field_title_" + index).style.display = 'block';
         //    document.getElementById("item_" + index).classList.remove("item-select");
