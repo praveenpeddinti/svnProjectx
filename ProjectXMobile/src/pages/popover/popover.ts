@@ -53,8 +53,11 @@ logoutApp() {
   this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
         data =>{
              this.storage.remove('userCredentials');  
-                 this.storage.clear();
-                 this.app.getRootNav().setRoot(LoginPage); 
+                 this.storage.clear().then (()=>{
+                    this.app.getRootNav().setRoot(LoginPage); 
+                   console.log("clear the local storage");
+                 });
+                //  this.app.getRootNav().setRoot(LoginPage); 
             },
         error=>{ 
             console.log("the error " + JSON.stringify(error)); 

@@ -83,8 +83,15 @@ export class DashboardPage {
     }
 
     ionViewDidLoad() {
-
+    // this.getAllStoriesList();
+console.log("the ionViewDidLoad after dismiss");
         // this.getAllStoriesList();
+    }
+
+    ionViewWillEnter(){
+            this.getAllStoriesList();
+console.log("the ionViewWillEnter after dismiss");
+
     }
 
 
@@ -116,7 +123,7 @@ export class DashboardPage {
     
      */
     getAllStoriesList(): void {
-
+        
         if (this.paramas.offset == 0) {
             this.paramas.offset = 0;
         }
