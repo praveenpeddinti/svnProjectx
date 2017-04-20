@@ -38,7 +38,7 @@
          <label class="customlabel">{{field.title}}</label>          
           <!--<div id="field.title_field.id_{{i}}" (click)="getFieldValues(field, i)" *ngFor="let assignValue of field.assignData" class="spinnerlabel">{{assignValue.Name}}</div>-->
           <div id="field_title_{{i}}" *ngIf="field.fieldName == 'planlevel'" (click)="openOptionsModal(field, i)" class="item customdropdown spinnerlabel marginbottom8"><div>{{field.assignData[0].Name}}</div><span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></div>
-          <div id="field_title_{{i}}" *ngIf="field.fieldName == 'priority'" (click)="openOptionsModal(field, i)" class="item customdropdown spinnerlabel marginbottom8"><div>{{field.assignData[2].Name}}</div><span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></div>
+          <div id="field_title_{{i}}" *ngIf="field.fieldName == 'priority'" (click)="openOptionsModal(field, i)" class="item customdropdown spinnerlabel marginbottom8"><div style="float:left; margin-right:5px">{{field.assignData[2].Name}}</div><span style="display:table-cell;"><i class="fa fa-circle {{displayedClassColorValue}}" aria-hidden="true"></i></span><span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></div>
         
       </ion-item>
       </ion-row>

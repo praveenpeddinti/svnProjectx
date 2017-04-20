@@ -28,6 +28,7 @@ export class StoryCreatePage {
     public previousSelectedValue = "";
     public readOnlyDropDownField: boolean = false;
     private submitted: boolean = false;
+    public displayedClassColorValue="";
     lastImage: string = null;
     ImageLoc
     
@@ -70,6 +71,7 @@ export class StoryCreatePage {
                     this.create.planlevel = _defaultValue;
                 } else if(_fieldName == 'priority') {
                     this.create.priority = _defaultValue;
+                    this.displayedClassColorValue = _assignData[2].Name;
                 }
                 this.templatedataList.push({
                     id: _id, title: _title, defaultValue: _defaultValue, assignData: _assignData, readOnly: _readOnly, fieldType: _fieldType, fieldName: _fieldName
@@ -243,6 +245,7 @@ export class StoryCreatePage {
                     this.create.planlevel = data.Id;
                 } else if (fieldDetails.fieldName == "priority") {
                     this.create.priority = data.Id;
+                    this.displayedClassColorValue = data.Name;
                 }
 
             // document.getElementById("field_title_" + index).innerHTML = data.Name;
