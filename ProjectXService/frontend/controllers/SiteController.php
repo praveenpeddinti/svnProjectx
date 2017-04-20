@@ -179,13 +179,14 @@ class SiteController extends Controller
             $CollabaratorData = json_decode(file_get_contents("php://input"));
             $model = new LoginForm();
             $getcollaboratorData = $model->checkLoginData($CollabaratorData);
-             if(count($getcollaboratorData)==1 && $getcollaboratorData !='failure'){
+              if(count($getcollaboratorData)==1 && $getcollaboratorData !='failure'){
                 $collabaratorId=$getcollaboratorData[0]['Id'];
+                $collaboratorProfileData = TinyUserCollection::getMiniUserDetails($collabaratorId);
                 $remembermeStatus=isset($CollabaratorData->rememberme)?1:0;
                 $collabaratorTokenData = ServiceFactory::getCollaboratorServiceInstance()->getCollabaratorAccesstoken($collabaratorId);
                 if(count($collabaratorTokenData)==0){
                     $accesstoken =  $this->GeneratingAccesstoken($collabaratorId);
-                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken);
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture']);
                     $browserType=$_SERVER['HTTP_USER_AGENT'];
                     $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
                     $responseBean = new ResponseBean;
@@ -195,7 +196,7 @@ class SiteController extends Controller
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==1) {
                     $collabaratorLastToken= $collabaratorTokenData[0]['Accesstoken'];
-                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$collabaratorLastToken);
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$collabaratorLastToken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture']);
                     $accesstoken="response";
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::SUCCESS;
@@ -204,7 +205,7 @@ class SiteController extends Controller
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==0){
                     $accesstoken =  $this->GeneratingAccesstoken($collabaratorId);
-                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken);
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture']);
                     $browserType=$_SERVER['HTTP_USER_AGENT'];
                     $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
                     $responseBean = new ResponseBean;
