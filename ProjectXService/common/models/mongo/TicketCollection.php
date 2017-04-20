@@ -422,7 +422,7 @@ class TicketCollection extends ActiveRecord
      * @description This method is used to update TotalTime log in collection
      * @return type mongoId
      */
-      public function updateTotalTimeLog($projectId, $ticketId, $totalWorkHours) {
+      public static function updateTotalTimeLog($projectId, $ticketId, $totalWorkHours) {
         try {
 
             if ($totalWorkHours > 0) {
