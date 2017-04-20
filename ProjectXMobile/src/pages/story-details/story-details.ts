@@ -68,7 +68,6 @@ export class StoryDetailsPage {
     public localDate: any = new Date();
     // public maxDate: Date = new Date(new Date().setDate(new Date().getDate() + 30));
     public minDate: any = new Date();
-    public myDate: string = "2017-02-25";
     public userName: any = '';
     public static optionsModal;
     public static isMenuOpen: boolean = false;
@@ -106,7 +105,7 @@ export class StoryDetailsPage {
         public viewCtrl: ViewController, 
         private datePipe: DatePipe ) {
         StoryDetailsPage.menuControler = menu;
-        this.localDate = new Date().toISOString();
+        
         this.minDate = new Date().toISOString();
 
         let loader = this.loadingController.create({ content: "Loading..." });
@@ -147,14 +146,16 @@ export class StoryDetailsPage {
                             _assignTo = this.items[i].value;
                             this.textAreaValue = this.items[i].value;
                         }
-                    } else if (this.items[i].field_type == "Date") {
-                        //                        readable_value
-                        if (this.items[i].readable_value == "") {
-                            _assignTo = "--";
-                        } else {
+                    } else if(this.items[i].field_type == "Date"){
+//                        readable_value
+                       if(this.items[i].readable_value == ""){
+                             _assignTo = "--"; 
+                            this.localDate = new Date().toISOString();
+                          } else {
                             _assignTo = this.items[i].readable_value;
-                            this.textDate = this.items[i].value;
-                            console.log("the selected date is" +this.textDate);
+                            var date = new Date(this.items[i].readable_value);
+                            date.setTime( date.getTime() + date.getTimezoneOffset()*-60*1000 );
+                            this.localDate = new Date(date.setDate(date.getDate() )).toISOString();
                         }
                     }
                     else if (this.items[i].field_type == "DateTime") {
