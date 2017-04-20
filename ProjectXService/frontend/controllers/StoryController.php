@@ -166,7 +166,7 @@ class StoryController extends Controller
     public function actionSaveTicketDetails() {
         try {
             $ticket_data = json_decode(file_get_contents("php://input"));
-            //error_log("actionSaveTicketDetails--eeeeeeeeeeeee".print_r($ticket_data,1));
+            error_log("actionSaveTicketDetails--eeeeeeeeeeeee".print_r($ticket_data,1));
             $title = $ticket_data->data->title;
             $description = $ticket_data->data->description;
             $planLevelNumber = $ticket_data->data->planlevel;
@@ -179,23 +179,29 @@ class StoryController extends Controller
                 $WorkflowType=(int)1;  
                 $defaultTicketsArray = $ticket_data->data->default_task;
                 $childTicketObjArray = array();
+                error_log("actionSaveTicketDetails--1111111111");
                 foreach($defaultTicketsArray as $value){
                     $ticket_data->data->description = "<p>Please provide description here</p>";
                     $ticket_data->data->planlevel = 2;
                     $ticket_data->data->title = $value->Name."-" . $title;
                     $ticket_data->data->WorkflowType = (int)$value->Id;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data,$parentTicNumber);
+                    error_log("before array push");
                     array_push($childTicketObjArray, array("TaskId"=>$ticketNumber,"TaskType"=>(int)$value->Id));
+                    error_log("after array push");
                     }
                 $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($projectId,$parentTicNumber,$childTicketObjArray);     
+                error_log("last");
                 }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = "success";
             $response = CommonUtility::prepareResponse($responseBean,"json");
+            error_log("the save ticket " . print_r($response, 1));
             return $response;
         } catch (Exception $ex) {
+            error_log("the save ticket error " . ($ex->getMessage()));
             Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
@@ -887,6 +893,7 @@ class StoryController extends Controller
         
     }
     
+
         
     
     /**
@@ -935,7 +942,48 @@ class StoryController extends Controller
             Yii::log("StoryController:actionDeleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
+    
+//    Ticket #91
+    /**
+     * @author Kavya
+     * @uses Upload functionality
+     * @return type
+     */
+    
+    public function actionUploadCommentArtifacts(){
+        $postData = array();
+        $data_array = array();
+        $originalname = '';
+        try{
+            if(is_array($_POST) && !empty($_POST)){
+                $postData = $_POST;
+                $directory = $postData['directory'];
+                $location = (__DIR__) . '/../../node/'.$directory;
+                $uploadfile = $postData['filename'];
+                $uploadfilename = $_FILES['commentFile']['tmp_name'];
+                $originalname = $postData['originalname'];
+                if(move_uploaded_file($uploadfilename, $location.$uploadfile)){
+                    $data_array['status'] = '1';
+                    $data_array['statusMessage'] = 'File successfully uploaded!';
+                    $data_array['originalname'] = $originalname;
+                    $data_array['path'] = $directory.$uploadfile;
+                } else {
+                    $data_array['status'] = '0';
+                    $data_array['statusMessage'] = 'Upload error!';
+                } 
+            } 
+            else{
+                $data_array['status'] = '0';
+                $data_array['statusMessage'] = 'No image uploaded';
+            }
+            return json_encode($data_array);
+        } catch (Exception $ex) {
+            error_log("catch".$ex->getMessage(). "--" . $ex->getTraceAsString());
+            Yii::log("StoryController:actionUploadCommentArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+//    Ticket #91 ended
+   
 }
 
 
