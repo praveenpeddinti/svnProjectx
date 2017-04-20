@@ -211,6 +211,10 @@ toggleExpandRow(row) {
 
     filterDashboard(){
         this.offset=0;
+        if(this.selectedFilter.id==8){
+           this.sortvalue='bucket' ;
+           this.sortorder='asc'; 
+        }
       this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);  
     }
      checkScrollBar() {
