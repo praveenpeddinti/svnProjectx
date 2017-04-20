@@ -87,14 +87,9 @@ var post_data={};
       if(this.notify_count >0){
        this.notify_count--;
       }
-       
+      
         jQuery('#'+notify_id).remove();
-        if(this.notify_count==0)
-        {
-        jQuery("#notificationMessage").hide();
-         
-          jQuery(".readAll").show();
-        }
+      
         
       }
     })
@@ -155,9 +150,11 @@ var post_data={};
       if(data)
       {
         this.notify_count=0;
-         jQuery("#notificationMessage").hide();
+        
+         jQuery(".notificationlist").empty();
+        // jQuery("#notificationMessage").show();
        
-        jQuery(".readAll").show();
+       
       }
     })
   }
@@ -168,6 +165,8 @@ var post_data={};
   if(jQuery("#notifications_list").is(":visible")){
     jQuery("#notifications_list").hide();
    }else{
+     jQuery("#notifications_list").show();
+   if(this.notify_count>0){
     console.log("show notify");
  var post_data={};
  this.notification_msg=[];
@@ -175,6 +174,8 @@ var post_data={};
       {
       console.log("--leing-------"+data.notify_result.length);
       if(data.notify_result.length >0){
+      
+     
   jQuery("#notificationMessage").hide();
     
         for(var i=0;i<data.notify_result.length;i++)
@@ -189,7 +190,8 @@ var post_data={};
      
       });
 
-    jQuery("#notifications_list").show();
+  
+    }
     }
   }
   
