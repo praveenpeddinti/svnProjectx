@@ -44,7 +44,8 @@ class NotificationCollection extends ActiveRecord
      "OldValue",
      "NewValue",
      "CommentSlug",
-     "MentionedUser"
+     "MentionedUser",
+     "CommentOwner"
     
    
         ];
@@ -105,7 +106,7 @@ class NotificationCollection extends ActiveRecord
                 $ticket_msg='to'. ' '.'#'. $notification['TicketId'] .' ' .$ticket_data['Title'];
                 error_log("activtiy form---------------".$notification['ActivityFrom']);
                 $from_user= TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
-               
+                
                   
                    /*************** Left Panel Field Values newly assigned *********************/
                     if($notification['Notification_Type']=='assignedto') //newly assigned 
@@ -257,47 +258,55 @@ class NotificationCollection extends ActiveRecord
                     
                     if($notification['Notification_Type']=='added')
                     {
+                        error_log("added");
                         
-                        $action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
-                        if($action_user['UserName']==$user) //if logged in user has been added
-                        {
-                            //Eg : moin.hussain added you as a follower to ticket #33
-                            $msg=$user .  Yii::$app->params['addedyou'].Yii::$app->params['follower'] .$ticket_msg;
-                        }
-                        else
-                        {
-                            //Eg : moin.hussain added sateesh.mandru as a follower to Ticket #33
-                            $msg=$user .  Yii::$app->params['added'] .$notification['NotifiedUser.UserName'] .Yii::$app->params['follower'].$ticket_msg;
-                        }
+                            if($notification['NotifiedUser']==$notification['ActivityOn']) //if logged in user has been added
+                            {
+                                //Eg : moin.hussain added you as a follower to ticket #33
+                                $notification['ActivityOn']='You to';
+                                $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['added'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['follower'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
+                                array_push($result_msg,$message);
+                            }
+//                            else
+//                            {
+//                                //Eg : moin.hussain added sateesh.mandru as a follower to Ticket #33
+//                                $action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
+//                                $message=array('from'=>$action_user['UserName'],'type'=> Yii::$app->params['added'],'ActivityOn'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['follower'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
+//                                array_push($result_msg,$message);
+//                            }
+                       
                     }
                     
                     if($notification['Notification_Type']=='removed')
                     {
-                        $action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
-                        if($action_user['UserName']==$user) //if logged in user has been added
-                        {
-                            //Eg : moin.hussain removed you as a follower to ticket #33
-                            $msg=$user .  Yii::$app->params['removedyou'] .Yii::$app->params['follower'] .$ticket_msg;
-                        }
-                        else
-                        {
-                            //Eg : moin.hussain removed sateesh.mandru as a follower to Ticket #33
-                            $msg=$user .  Yii::$app->params['removed'] .$notification['NotifiedUser.UserName'] .Yii::$app->params['follower'].$ticket_msg;
-                        }
+                       
+                            if($notification['NotifiedUser']==$notification['ActivityOn']) //if logged in user has been added
+                            {
+                                //Eg : moin.hussain added you as a follower to ticket #33
+                                $notification['ActivityOn']='You from';
+                                $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['removed'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['follower'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
+                            }
+//                            else
+//                            {
+//                                //Eg : moin.hussain added sateesh.mandru as a follower to Ticket #33
+//                                $action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
+//                                $message=array('from'=>$action_user['UserName'],'type'=> Yii::$app->params['removed'],'ActivityOn'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['follower'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
+//                            }
+                       
                     }
-                    if($notification['Notification_Type']=='followed' || $notification['Notification_Type']=='unfollowed')
+                    if($notification['Notification_Type']=='followed')
                     {
                         $action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
-                        $msg=$action_user['UserName'] .  $notification['Notification_Type'] .$ticket_msg;
+                        $message=array('from'=>$action_user['UserName'],'type'=> Yii::$app->params['follow'],'ActivityOn'=>'on','Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['follower'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
+                        array_push($result_msg,$message);
                     }
-                    //array_push($result_msg,$msg);
-//                    if(!empty($message))
-//                    {
-//                        error_log("==Message==".print_r($message,1));
-//                        array_push($result_msg,$message);
-//                    }
-          
-                    
+                    if($notification['Notification_Type']=='unfollowed')
+                    {
+                        $action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
+                        $message=array('from'=>$action_user['UserName'],'type'=> Yii::$app->params['unfollowed'],'ActivityOn'=>'on','Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['follower'],'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
+                        array_push($result_msg,$message);
+                    }
+                   
                     /******* Followers Message End **********/
                     
                     
@@ -316,9 +325,11 @@ class NotificationCollection extends ActiveRecord
                         if($notification['Notification_Type']=='comment')
                         {
                          //Eg : moin.hussain commented on #33 Ticket 
-                            
+                             if($from_user['UserName']!=$action_user['UserName'])
+                             {
                               $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['comment'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
                               array_push($result_msg,$message);
+                             }
                            
                              
                         }
@@ -326,10 +337,24 @@ class NotificationCollection extends ActiveRecord
                         {
                             //Eg: moin.hussain replied on #33 Ticket
                             error_log(print_r($from_user,1)."---".print_r($action_user,1));
-                          
-                             $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['reply'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture']);
-                             array_push($result_msg,$message);
-                           
+                            
+                            // For replied on your comment
+                            if($from_user['UserName']!=$action_user['UserName'])
+                            {
+                                if($user==$notification['CommentOwner']) //logged in user is a comment owner
+                                {
+                                    //Eg: ranjani.thakur replied on your comment
+                                      $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['replyyou'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture'],'Reply'=>1);
+                                      array_push($result_msg,$message);
+                                }
+                                else
+                                {
+                                    //Eg: ranjani.thakur replied on the comment
+                                    $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['reply'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture'],'Reply'=>1);
+                                    array_push($result_msg,$message);
+                                }
+                            }
+
                         }
 
                  }
@@ -459,9 +484,10 @@ class NotificationCollection extends ActiveRecord
                     $tic->ProjectId =$projectId;
                     $tic->NotifiedUser=(int)$collaborator;
                     $tic->Notification_Type=$notify_type;
-                    $tic->ActivityFrom= (int)$loggedInUser;
+                    $tic->ActivityFrom=(int)$loggedInUser;
+
                     error_log("==In saving the assigned to==");
-                    $tic->ActivityOn=$collaborator;
+                    $tic->ActivityOn=(int)$collaborator;
                     $tic->NotificationDate=$currentDate;
                     $tic->Status=0;
                     $result = $tic->save();
@@ -497,15 +523,37 @@ class NotificationCollection extends ActiveRecord
                     
                     if($notify_type=='added')
                     {
-                        $tic->Notification_Type='followed';
+                        if($follower['FollowerId']!=$collaborator_name)
+                        {
+                            $tic->Notification_Type='followed';
+                            $tic->Status=0;
+                            $tic->save();
+                        }
                     }
                     else if($notify_type=='removed')
                     {
-                        $tic->Notification_Type='unfollowed';
+                        if($follower['FollowerId']!=$collaborator_name)
+                        {
+                            $tic->Notification_Type='unfollowed';
+                            $tic->Status=0;
+                            $tic->save();
+                        }
+                        
+                    }
+                    else if($notify_type=='assignedTo' || $notify_type='stakeholder')
+                    {
+                        if($follower['FollowerId']!=$collaborator_name)
+                        {
+                            $tic->Notification_Type=$notify_type;
+                            $tic->Status=0;
+                            $tic->save();
+                        }
                     }
                     else
                     {
                         $tic->Notification_Type=$notify_type;
+                        $tic->Status=0;
+                        $tic->save();
                     }
 //                    if($notify_type=='assignedto')
 //                    {
@@ -515,11 +563,9 @@ class NotificationCollection extends ActiveRecord
 //                    {
 //                        $tic->Notification_Type=$notify_type;
 //                    }
-                    $tic->Status=0;
-                    $tic->save();
-                //}
-            }
-           
+                    
+                }
+            
         } catch (Exception $ex) {
             Yii::log("NotificationsCollection:saveNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -586,16 +632,34 @@ class NotificationCollection extends ActiveRecord
         try
         {
             error_log("in comment".$notify_type);
-            $from=$commentData->userInfo->username;
-              $loggedinUser=$commentData->userInfo->Id;
+            error_log("==comment data==");
+            $commentOwner=$commentData->Comment->OrigianalCommentorId; //added by Ryan for reply
+            error_log("==comment owner==".$commentOwner);
+            $loggedinUser=$commentData->userInfo->Id;
             $ticketId=$commentData->TicketId;
             $projectId=$commentData->projectId;
-            $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticketId,$projectId);
-            $followers=$data['Followers'];
+            $followers= TicketCollection::getTicketDetails($ticketId,$projectId,['Followers']);
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+            
+            //For Reply....
+            if($commentOwner!='')
+            {
+                $tic = new NotificationCollection();
+                $tic->NotifiedUser=(int)$commentOwner;
+                $tic->TicketId =$ticketId;
+                $tic->ProjectId =$projectId;
+                $tic->ActivityFrom=(int)$loggedinUser;
+                $tic->NotificationDate=$currentDate;
+                $tic->Notification_Type=$notify_type;
+                $tic->CommentSlug=$slug;
+                $tic->Status=0;
+                $tic->CommentOwner=(int)$commentOwner;
+                $tic->save();
+            }
+            
             foreach($followers as $follower)
                 {
-                    if($follower['UserName']!=$from)
+                    if($follower['FollowerId']!=$loggedinUser)
                     {
                             $tic = new NotificationCollection();
                             $tic->NotifiedUser=(int)$follower['FollowerId'];
