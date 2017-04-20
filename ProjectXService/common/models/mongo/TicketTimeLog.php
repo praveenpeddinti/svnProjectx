@@ -90,7 +90,7 @@ class TicketTimeLog extends ActiveRecord
      * @param type $totalWorkHours
      * @return type
      */
-      public function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours) {
+      public static function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours) {
 
         try {
             $returnValue = 'failure';
