@@ -166,39 +166,32 @@ class StoryController extends Controller
     public function actionSaveTicketDetails() {
         try {
             $ticket_data = json_decode(file_get_contents("php://input"));
-            error_log("actionSaveTicketDetails--eeeeeeeeeeeee".print_r($ticket_data,1));
             $title = $ticket_data->data->title;
             $description = $ticket_data->data->description;
             $planLevelNumber = $ticket_data->data->planlevel;
             $ticket_data->data->WorkflowType = (int)1;
             //story-1 or task-2
             $parentTicNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data);
-
             $projectId=$ticket_data->projectId;
             if ($planLevelNumber == 1) {
                 $WorkflowType=(int)1;  
                 $defaultTicketsArray = $ticket_data->data->default_task;
                 $childTicketObjArray = array();
-                error_log("actionSaveTicketDetails--1111111111");
                 foreach($defaultTicketsArray as $value){
                     $ticket_data->data->description = "<p>Please provide description here</p>";
                     $ticket_data->data->planlevel = 2;
                     $ticket_data->data->title = $value->Name."-" . $title;
                     $ticket_data->data->WorkflowType = (int)$value->Id;
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data,$parentTicNumber);
-                    error_log("before array push");
                     array_push($childTicketObjArray, array("TaskId"=>$ticketNumber,"TaskType"=>(int)$value->Id));
-                    error_log("after array push");
                     }
                 $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($projectId,$parentTicNumber,$childTicketObjArray);     
-                error_log("last");
                 }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = "success";
             $response = CommonUtility::prepareResponse($responseBean,"json");
-            error_log("the save ticket " . print_r($response, 1));
             return $response;
         } catch (Exception $ex) {
             error_log("the save ticket error " . ($ex->getMessage()));
@@ -892,7 +885,7 @@ class StoryController extends Controller
         }
         
     }
-    
+ 
 
         
     
@@ -903,16 +896,25 @@ class StoryController extends Controller
      */
     public function actionDeleteNotification()
     {
-        error_log("in delete notification");
         $notifyData=json_decode(file_get_contents("php://input"));
         
         try
         {
             NotificationCollection::deleteNotification($notifyData);
+            
+            $projectId=$notifyData->projectId;
+            $notified_userid=$notifyData->userInfo->Id;
+            $notified_username=$notifyData->userInfo->username;
+            //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
+            $result_data=NotificationCollection::getNotifications($notified_userid,$projectId,0,5);
+            $count = NotificationCollection::getNotificationsCount($notified_userid,$projectId);
+            $result =  count($result_data)>0 ? $result_data : "nodata";
+            
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = true;
+             $responseBean->totalCount = $count;
+            $responseBean->data =  array('notify_result'=>$result);
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
