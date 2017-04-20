@@ -3,7 +3,7 @@
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-      <a  class="navbar-brand"><img src="assets/images/logo.png" alt=""/></a> </div>
+      <a  class="navbar-brand"  href="#/story-dashboard"><img src="assets/images/logo.png" alt=""/></a> </div>
     
     <!-- Collect the nav links, forms, and other content for toggling -->
     <ul class="nav navbar-nav navbar-right top-menu top-right-menu">  
@@ -19,7 +19,7 @@
                                 <span *ngIf="notify_count!=0" class="badge badge-sm up bg-pink count">{{notify_count}}</span>
                             </a>
                           <ul id="notifications_list" class="dropdown-menu extended fadeInUp animated notification" tabindex="5002" style="outline: none;">
-                            <li class="notificationlist" *ngIf="notify_count==0">
+                            <li class="notificationlist" *ngIf="notify_count==0" id="notificationMessage">
                               <div class="notificationdiv nonotification">No Notifications</div>
                               </li>
 <!--Notification Msg start                            -->
@@ -35,7 +35,7 @@
 <div (click)="goToTicket(notify.TicketId,notify.id.$oid)"  *ngIf="notify.type=='changed'"  class="not_content">
 <span class="not_mention">
 {{notify.from}}
-</span> {{notify.type}} {{notify.ActivityOn}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> from {{notify.Old}} to {{notify.New}} for <span class="not_mention">#{{notify.TicketId}}  {{notify.Title | truncate:30 }} </span>
+</span> {{notify.type}} {{notify.ActivityOn}} from {{notify.Old}} to {{notify.New}} for <span class="not_mention"><img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> #{{notify.TicketId}}  {{notify.Title | truncate:30 }} </span>
 <!--@sateeshmandru @moinhussain @hareesh.bekkam-->
 </div>
 

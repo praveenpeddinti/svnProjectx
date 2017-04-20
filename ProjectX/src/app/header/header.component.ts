@@ -83,11 +83,15 @@ var post_data={};
     {
       if(data)
       {
-        this.notify_count--;
+      if(this.notify_count >0){
+       this.notify_count--;
+      }
+       
         jQuery('#'+notify_id).remove();
         if(this.notify_count==0)
         {
-          jQuery(".notificationdiv").hide();
+        jQuery("#notificationMessage").hide();
+         
           jQuery(".readAll").show();
         }
         
@@ -104,17 +108,21 @@ var post_data={};
     {
       if(data)
       {
-        this.notify_count--;
+       if(this.notify_count >0){
+       this.notify_count--;
+      }
         jQuery('#'+notify_id).remove();
         if(this.notify_count==0)
         {
-          jQuery(".notificationdiv").hide();
+        jQuery("#notificationMessage").hide();
+        
           jQuery(".readAll").show();
         }
         
       }
+      this._router.navigate(['story-detail',ticketid]);
     })
-    this._router.navigate(['story-detail',ticketid]);
+    
   }
   goToComment(ticketid,comment,notify_id)
   {
@@ -123,11 +131,14 @@ var post_data={};
     {
       if(data)
       {
-        this.notify_count--;
+        if(this.notify_count >0){
+       this.notify_count--;
+      }
         jQuery('#'+notify_id).remove();
         if(this.notify_count==0)
         {
-          jQuery(".notificationdiv").hide();
+         jQuery("#notificationMessage").hide();
+        
           jQuery(".readAll").show();
         }
         
@@ -143,7 +154,8 @@ var post_data={};
       if(data)
       {
         this.notify_count=0;
-        jQuery('.notificationdiv').hide();
+         jQuery("#notificationMessage").hide();
+       
         jQuery(".readAll").show();
       }
     })
@@ -160,25 +172,24 @@ var post_data={};
  this.notification_msg=[];
       this._ajaxService.NodeSubscribe('/getAllNotifications',post_data,(data)=>
       {
-        console.log("==Notify length=="+data.notify_result.length);
-     //   this.notify_count=data.notify_result.length;
-      //  console.log("==Data=="+JSON.stringify(data.notify_result));
+      console.log("--leing-------"+data.notify_result.length);
+      if(data.notify_result.length >0){
+  jQuery("#notificationMessage").hide();
+    
         for(var i=0;i<data.notify_result.length;i++)
         {
          
             this.notification_msg.push(data.notify_result[i]);
           
         }
-        this.notification_msg.filter(((item, index) => index <5 ))
-        //  if(data.notify_result.length==0)
-        //  {
-        //    console.log("empty");
-        //    //this.notify_count=0;
-        //   jQuery(".readAll").show();
-        //  }
+        }else{
+          jQuery("#notificationMessage").show();
+        }
+     
       });
 
     jQuery("#notifications_list").show();
     }
   }
+  
 }

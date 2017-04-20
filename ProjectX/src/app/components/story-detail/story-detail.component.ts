@@ -79,7 +79,7 @@ public blurTimeout=[];
       {
             this.searchSlug=params['Slug'];
        })
-        // alert(this.searchSlug);    
+        // alert(this.searchSlug);   
 
     }
 
@@ -91,13 +91,24 @@ public blurTimeout=[];
 
     //let jsonform={};//added by ryan
     //jsonform['description']='';//added by ryan
-    this.callTicketDetailPage("");
+   
    //@Praveen P toggle for plus button in follower list
    jQuery(document).click(function(e) {
      if( jQuery(e.target).closest('div#followerdiv').length==0 && e.target.id != 'follwersAdd' && e.target.id != 'follwersAddI'  ) {
       jQuery("#followerdiv").css( "display",'none' );
     }
    });
+   this.route.queryParams.subscribe(
+      params => 
+      { 
+      this.route.params.subscribe(params => {
+            this.ticketId = params['id'];
+            jQuery("#notifications_list").hide();
+            this.callTicketDetailPage(this.ticketId);
+             
+        });
+             
+           })
 }
 
     /**
@@ -224,12 +235,14 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
       CrudeCDescription:commentText.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
       CommentedOn:formatedDate,
       ParentIndex:"",
-      Reply:this.replying
+      Reply:this.replying,
+      OrigianalCommentorId:""
     },
   };
   // alert(JSON.stringify(reqData));
   if(this.replying == true){
     if(this.replyToComment != -1){
+    reqData.Comment.OrigianalCommentorId = jQuery("#replySnippetContent").attr("class");
     reqData.Comment.ParentIndex=this.replyToComment+"";
     }
 
