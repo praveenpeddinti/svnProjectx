@@ -47,6 +47,8 @@ login(user,loginCallback) {
     this._ajaxService.AjaxSubscribe("site/user-authentication",this.collaboratorObj,(result)=>
     { 
       var userdata = result.data;
+      localStorage.setItem("profilePicture",userdata.ProfilePicture);
+      delete userdata.ProfilePicture;
       localStorage.setItem("user",JSON.stringify(userdata));
       //this.collaboratorObj.AccessKey=token;//alert(this.collaboratorObj.headers);
       loginCallback(result);
