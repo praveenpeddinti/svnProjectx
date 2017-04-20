@@ -45,7 +45,6 @@ export class StoryDetailsPage {
     // public filesToUpload: Array<File>;
     public filesToUpload: Array<any>;
     public fileUploadStatus:boolean = false;
-    private ticketEditableDesc="";
     private openCommentMenuList = [];
     // Ticket #91 ended
     // Plugins

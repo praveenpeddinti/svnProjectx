@@ -18,7 +18,7 @@ export class StoryCreatePage {
     Url: string;
     public itemfield: Array<any>;
     public tasktypes: Array<any>;
-     create: {title?: any, description?: any, default_task?: any, planlevel?:any, priority?:any} = {};
+    public create: {title?: any, description?: any, default_task?: any, planlevel?:any, priority?:any} = {};
     public userName: any = '';
     file: File;
     public templatedataList: Array<{ id: string, title: string, defaultValue: string, assignData: string, readOnly: string, fieldType: string, fieldName: string}>;
@@ -240,7 +240,7 @@ export class StoryCreatePage {
         let optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: fieldDetails.assignData });
         optionsModal.onDidDismiss((data) => {
             console.log("the dismiss data " + index + " ----- " + JSON.stringify(data));
-            if(data != null){
+            if(Object.keys(data).length > 0 && data != null){
                 if (fieldDetails.fieldName == "planlevel") {
                     this.create.planlevel = data.Id;
                 } else if (fieldDetails.fieldName == "priority") {
@@ -248,13 +248,9 @@ export class StoryCreatePage {
                     this.displayedClassColorValue = data.Name;
                 }
 
-            // document.getElementById("field_title_" + index).innerHTML = data.Name;
-            jQuery("#field_title_"+index+ " div").text(data.Name);
-            } else {
-                alert("the else block");
-                console.log("the else block");
-            }
-            // this.displayFieldvalue = [];
+                // document.getElementById("field_title_" + index).innerHTML = data.Name;
+                jQuery("#field_title_"+index+ " div").text(data.Name);
+             } 
         });
         optionsModal.present();
     }
