@@ -64,7 +64,7 @@
      <ion-row *ngIf="create.planlevel==1 ">
       <div class="customcheckboxrow" *ngFor = "let item of tasktypeList; let i=index;" id="item_{{i}}">
         <ion-checkbox checked="false" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}"></ion-checkbox>
-        <span>{{item.name}}</span>
+        <span>{{item.Name}}</span>
     </div>
      </ion-row>
    </ion-list>

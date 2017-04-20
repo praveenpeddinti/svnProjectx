@@ -22,7 +22,7 @@ export class StoryCreatePage {
     public userName: any = '';
     file: File;
     public templatedataList: Array<{ id: string, title: string, defaultValue: string, assignData: string, readOnly: string, fieldType: string, fieldName: string}>;
-    public tasktypeList: Array<{id:string, name:string, IsDefault:string, selected : boolean}>;
+    public tasktypeList: Array<{Id:string, Name:string, IsDefault:string, selected : boolean}>;
     public showEditableFieldOnly = [];
     public previousSelectIndex: any;
     public previousSelectedValue = "";
@@ -88,7 +88,7 @@ export class StoryCreatePage {
                 }
 
                 this.tasktypeList.push({
-                    id: _id, name: _Name, IsDefault: _IsDefault, selected: _selected
+                    Id: _id, Name: _Name, IsDefault: _IsDefault, selected: _selected
                 });
 
             }
@@ -144,7 +144,7 @@ export class StoryCreatePage {
                     loader.dismiss();
                     
                     console.log("the story create error are---------> " + JSON.stringify(error));
-                   alert("Unable to created the ticket...");
+                  // alert("Unable to created the ticket...");
                    
                 }
             );

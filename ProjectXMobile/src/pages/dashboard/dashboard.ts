@@ -88,10 +88,8 @@ console.log("the ionViewDidLoad after dismiss");
         // this.getAllStoriesList();
     }
 
-    ionViewWillEnter(){
-            this.getAllStoriesList();
-console.log("the ionViewWillEnter after dismiss");
-
+    ionViewWillEnter() {
+        console.log("the ionViewWillEnter after dismiss");
     }
 
 
