@@ -13,6 +13,7 @@
             <input class="form-control searchbox" id="globalsearch" placeholder="Search ..." (keyup.enter)="globalSearchNavigate()"></span>
             <div id="searchError" class="alert alert-danger" style="display:none;"></div>
                           </li>
+                             <span class="timereport" (click)="navigateToTimeReport()">Time Report</span>
                            <li class="dropdown">
                             <a class="customnotheader" (click)="showNotifications()" aria-expanded="false">
                                 <i class="fa fa-bell" aria-hidden="true"></i>
@@ -78,7 +79,7 @@
                         </li>
                             <li class="dropdown text-center">
                             <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">
-                                <img alt="" src="assets/images/user_noimage.png" class="img-circle profile-img thumb-sm">
+                                <img alt="" src="{{users.ProfilePicture}}" class="img-circle profile-img thumb-sm">
                                 <span class="username">{{users.username}} </span> <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu pro-menu fadeInUp animated" tabindex="5003" style="outline: none;">
