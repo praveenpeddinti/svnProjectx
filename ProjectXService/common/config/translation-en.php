@@ -6,7 +6,7 @@ return [
     "assignedTo" => "assigned",
     "stakeholder"=>"as a stakeholder",
     "comment"=>"commented on",
-    "reply"=>"replied on your comment",
+    "reply"=>"replied on comment",
     "addedyou"=>"added you as follower",
     "added"=>"added",
     "removed"=>"removed",
@@ -14,6 +14,9 @@ return [
     "follower"=>"as follower",
     "set"=>"set",
     "setduedate"=>"set duedate to",
+    "follow"=>"followed",
+    "unfollow"=>"unfollowed",
+    "replyyou"=>"replied on your comment"
     
     
 ];
