@@ -26,7 +26,6 @@
 <ion-content padding>
 <div>
  
-    
  <label class="customlabel">Title</label>     
     <ion-input type="file" class="item customdropdowntext spinnerlabel" placeholder="Title" [(ngModel)]="create.title" required name="create_title" #create_title ="ngModel" [ngModelOptions]="{standalone:true}"></ion-input>
     <div [hidden]="!create_title.errors.required" *ngIf="submitted && create_title.errors " class="text-md-danger text-ios-danger text-wp-danger">
