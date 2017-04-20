@@ -1282,6 +1282,7 @@ var thisObj = this;
             var TimeLog={
                 TicketId:this.ticketId,
                 workHours:event,
+                projectId:1
               };
             this._ajaxService.AjaxSubscribe("story/insert-time-log",TimeLog,(data)=>
               { 
