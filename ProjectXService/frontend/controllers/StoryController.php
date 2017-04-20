@@ -556,7 +556,7 @@ class StoryController extends Controller
                
                /* added by Ryan for notifications */
                
-               //NotificationCollection::saveNotifications($post_data, 'added', $followerData["UserName"]);
+               NotificationCollection::saveNotifications($post_data, 'added',  $post_data->collaboratorId);
                /* notifications end */
           
             $responseBean = new ResponseBean();
@@ -591,7 +591,7 @@ class StoryController extends Controller
             
             /* added by Ryan for notifications */
                
-               //NotificationCollection::saveNotifications($post_data, 'removed', $collaboratorData["UserName"]);
+               NotificationCollection::saveNotifications($post_data, 'removed', $post_data->collaboratorId);
                /* notifications end */
                
             $responseBean = new ResponseBean();
