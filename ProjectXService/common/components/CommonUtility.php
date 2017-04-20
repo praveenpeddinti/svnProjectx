@@ -585,7 +585,6 @@ class CommonUtility {
 
   public static function refineDescription($description){
       try{
-          error_log("descriopt---------------".$description);
            $description = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $description);
            
            $uploadedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
@@ -644,13 +643,11 @@ class CommonUtility {
                 $extension = strtolower($extension);
                 $imageExtensions = array("jpg", "jpeg", "gif", "png");
                 $videoExtensions = array("mp4", "mov", "ogg", "avi");
-                error_log("+++++++++++++++++" . $extension);
                 if (in_array($extension, $imageExtensions)) {
                     $replaceString = "<img src='" . $newPath . "'/>";
                     $artifactType = "image";
                 } else if (in_array($extension, $videoExtensions)) {
                     $filename = $tempFileName . "-" . $originalFileName;
-                    error_log("++++++++ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath/thumb1.png");
                     exec("ffmpeg -i $storyArtifactPath/$filename -vf scale=320:-1 $storyArtifactPath/thumb1.png");
                     $replaceString = "<video controls width='50%' height='50%'><source src='" . $newPath . "' type='video/mp4'/></video>";
                     $artifactType = "video";
@@ -660,8 +657,6 @@ class CommonUtility {
                 }
                 $description = str_replace($value, $replaceString, $description);
 
-                error_log("-----in if----------" . $storyArtifactPath . "/" . $tempFileName . "-" . $originalFileName);
-                error_log("-----in push if----------" . $push);
                 if ($push) {
                     $artifactData = CommonUtility::getArtifact($tempFileName, $originalFileName, $extension, $fileName, $artifactType);
                     array_push($artifactsList, $artifactData);
@@ -902,7 +897,6 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             $poppedFromChild = $value["PoppedFromChild"];
             if (count($propertyChanges) > 0) {
                 foreach ($value["PropertyChanges"] as &$property) {
-                    error_log("----property---" . $property["ActionFieldName"]);
                     CommonUtility::prepareActivityProperty($property,$projectId,$poppedFromChild);
                 }
             }
@@ -921,7 +915,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
         try {
             $tinyUserModel = new TinyUserCollection();
             $fieldName = $property["ActionFieldName"];
-error_log("prepareActivityProperty-------".$poppedFromChild);
+
             $storyFieldDetails = StoryFields::getFieldDetails($fieldName, "Field_Name");
             $type = $storyFieldDetails["Type"];
             $actionFieldName = $property["ActionFieldName"];
@@ -930,7 +924,6 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                 $property["ActionFieldTitle"] = $storyFieldDetails["Title"];
             }
            if($poppedFromChild !=""){
-               error_log("heyyyyyyyyyyyyyyyyyyyyy-------------");
                 $ticketDetails = TicketCollection::getTicketDetails($poppedFromChild, $projectId,["TicketId","Title"]);
                 error_log(print_r($ticketDetails,1));
                 $ticketInfo = $ticketDetails["TicketId"]." ".$ticketDetails["Title"];
