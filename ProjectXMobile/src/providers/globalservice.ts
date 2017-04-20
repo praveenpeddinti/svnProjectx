@@ -123,49 +123,34 @@ export class Globalservice {
         );
         return response;
     }
-public createStoryORTask(url, data){
- var createStoryParams = this.params;
-  console.log("the create patams " + JSON.stringify(data));
+    public createStoryORTask(url, data) {
+        var createStoryParams = this.params;
+        console.log("the create patams " + JSON.stringify(data));
 
         createStoryParams["data"] = data;
         createStoryParams["timeZone"] = "Asia/Kolkata";
 
         console.log("the createStoryParams " + JSON.stringify(createStoryParams));
         var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
-            res => res.json()            
+            res => res.json()
         );
         return response;
-       
-}
-    // public createStoryORTask(url, params){
-    //     console.log("the create patams " + params);
-    //     var createStoryParams = this.params;
-    //     createStoryParams["data"] = params;
-    //     // createStoryParams["userInfo"] = this.params.userInfo;
-    //     // createStoryParams["projectId"] = this.params.projectId;
-    //     createStoryParams["timeZone"] = "Asia/Kolkata";
-        
-    //     console.log("the patams " + JSON.stringify(createStoryParams));
-    //     var response: any;
-    //     // var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
-    //     //     res => res.json()
-    //     // );
-    //     return response;
-    // }
+
+    }
+    
     // Ticket #91
     public getTicketActivity(url, activityParams) {
-        console.log("getTicketActivity : "+url+"-"+JSON.stringify(activityParams));
+        // console.log("getTicketActivity : "+url+"-"+JSON.stringify(activityParams));
         var ticketActivityParams = this.params;
         ticketActivityParams["ticketId"] = activityParams;
         ticketActivityParams["timeZone"] = "Asia/Kolkata";
-        console.log("activity post object : "+JSON.stringify(ticketActivityParams));
         var response = this.http.post(url, JSON.stringify(ticketActivityParams), this.headers).map(
             res => res.json()
         );
         return response;
     }
     public deleteCommentById(url, commentParams){
-        console.log("deleteCommentById : "+url+"-"+JSON.stringify(commentParams));
+        // console.log("deleteCommentById : "+url+"-"+JSON.stringify(commentParams));
         var deleteCommentParams = this.params;
         deleteCommentParams["Comment"] = commentParams.Comment;
         deleteCommentParams["TicketId"] = commentParams.TicketId;
@@ -175,7 +160,7 @@ public createStoryORTask(url, data){
         return response;
     }
     public submitComment(url, commentParams){
-        console.log("submitComment : "+url+"-"+JSON.stringify(commentParams));
+        // console.log("submitComment : "+url+"-"+JSON.stringify(commentParams));
         var submitCommentParams = this.params;
         submitCommentParams["Comment"] = commentParams.Comment;
         submitCommentParams["TicketId"] = commentParams.TicketId;
@@ -183,30 +168,6 @@ public createStoryORTask(url, data){
             res => res.json()
         );
         return response;
-    }
-
-    public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
-        return new Promise((resolve, reject) => {
-            var formData: any = new FormData();
-            var xhr = new XMLHttpRequest();
-            for(var i = 0; i < files.length; i++) { 
-                console.log("the file ");
-                formData.append("uploads[]", files[i], files[i].name);
-            }
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        resolve(JSON.parse(xhr.response));
-                    } else {
-                        reject(xhr.response);
-                    }
-                }
-            };
-
-            xhr.open("POST", url, true);
-            xhr.send(formData);
-        });
     }
     // Ticket #91 ended
 }
