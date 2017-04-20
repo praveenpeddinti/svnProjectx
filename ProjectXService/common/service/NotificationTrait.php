@@ -23,12 +23,28 @@ use common\models\mongo\{TicketCollection,NotificationCollection};
         try
         {
             error_log("in comment".$notify_type);
+            $commentOwner=$commentData->Comment->OrigianalCommentorId;
             $loggedinUser=$commentData->userInfo->Id;
             $ticketId=$commentData->TicketId;
             $projectId=$commentData->projectId;
             $data = TicketCollection::getTicketDetails($ticketId,$projectId);
             $followers=$data['Followers'];
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+            //For Reply....added by Ryan
+            if($commentOwner!='')
+            {
+                $tic = new NotificationCollection();
+                $tic->NotifiedUser=(int)$commentOwner;
+                $tic->TicketId =$ticketId;
+                $tic->ProjectId =$projectId;
+                $tic->ActivityFrom=(int)$loggedinUser;
+                $tic->NotificationDate=$currentDate;
+                $tic->Notification_Type=$notify_type;
+                $tic->CommentSlug=$slug;
+                $tic->Status=0;
+                $tic->CommentOwner=(int)$commentOwner;
+                $tic->save();
+            }
             foreach($followers as $follower)
                 {             
                     if($follower['FollowerId']!=$loggedinUser)
@@ -41,6 +57,10 @@ use common\models\mongo\{TicketCollection,NotificationCollection};
                             $tic->NotificationDate=$currentDate;
                             $tic->Notification_Type=$notify_type;
                             $tic->CommentSlug=$slug;
+                            if($commentOwner!="")  //added by Ryan for Reply
+                            {
+                                $tic->CommentOwner=$commentOwner;
+                            }
                             $tic->Status=0;
                             $tic->save();
                     }
