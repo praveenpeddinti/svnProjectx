@@ -95,7 +95,7 @@
     <!--Activities and Comments-->
    <div class="padding10">
         <!--Activities-->
-        <div>Activities</div>
+       
         
   <!-- Nav tabs -->
   <ul class="custnavtabs" role="tablist">
@@ -115,14 +115,16 @@
                   <span>by <b>{{eachActivity.ActivityBy.UserName}}</b></span> 
                   <span *ngIf="eachActivity.PropertyChanges.length == 0" class="userDate">({{eachActivity.ActivityOn}}) </span>
                   <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="comments_menuouter {{(eachActivity.Status ==2)?'_reply':''}}">
-                  <div class="comments_menu" (click)="openCommentMenu(i)" ><i class="fa fa-ellipsis-v" aria-hidden="true"></i></div>
-                  <div class="comments_menulist" [hidden]="!openCommentMenuList[i]">
-                      <ul>
-                          <li *ngIf="eachActivity.ActivityBy.UserName == userName" (click)="editComment(i)"><i class="fa fa-pencil" aria-hidden="true"></i></li>
-                          <li *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0"  (click)="deleteComment(i,eachActivity.Slug.$oid)"><i class="fa fa-trash" aria-hidden="true"></i></li>
-                          <li (click)="replyComment(i)"><i class="fa fa-reply" aria-hidden="true"></i></li>
-                      </ul>
-                  </div>
+                  <ion-fab top right >
+  <button ion-fab><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
+    <ion-fab-list side="left">
+    <button ion-fab (click)="replyComment(i)"><i class="fa fa-reply" aria-hidden="true"></i></button>
+     <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0"  (click)="deleteComment(i,eachActivity.Slug.$oid)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+      <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName" (click)="editComment(i)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+      
+  </ion-fab-list>
+</ion-fab>
+                      
                   </div>
               </div>
               <div class="cust_com_content">
@@ -145,30 +147,40 @@
                 </div>
                 <!--Display Comments-->
                 <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="comment{{(eachActivity.Status ==2)?'_reply':''}}">
-                    <div>
+                        <div style="position:relative">  
+                            
                         <div class="commentedtext" (click)="navigateToParentComment(eachActivity.ParentIndex)" *ngIf="eachActivity.Status ==2">
-                            <div class="user">
-                                <a href="javascript:void(0)"><ion-img src="{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.ProfilePicture}}" ></ion-img></a> by <span><a href="javascript:void(0)">{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.UserName}}</a></span>
+                                        
+                                <div class="user">      
+                                    <a href="javascript:void(0)"><ion-img src="{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.ProfilePicture}}" ></ion-img></a> by <span><a href="javascript:void(0)">{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.UserName}}</a></span>
                             </div>
                             <div [innerHTML]="itemsInActivities[eachActivity.ParentIndex].CDescription"></div>
                         </div>
-                        <div>
+                        <div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
                             <div id="Activity_content_{{i}}">
                                 <div class="commentp" [innerHTML]="eachActivity.CDescription"></div>
                                
                             </div>
-                            <div class="uploadAndSubmit" id="Actions_{{i}}" [hidden]="!editTheComment[i]">
+                            <div class="uploadAndSubmit uploadAndSubmitclose" id="Actions_{{i}}" [hidden]="!editTheComment[i]" style="position: relative;">
+                                <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
                                 <!--Have to change Text area-->
+                                
                                 <textarea class="textEditor" placeholder="Enter text here..."></textarea>
+                                
                                 <!--<div class="textEditor" contenteditable="true" placeholder="Enter text here..."></div>-->
-                                <div class="uploadcomponent pull-left">
-                                    <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
-                                    <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments',i)" multiple/>
-                                </div>
-                                <div class="alignright margintop15">
-                                    <button class="normal bluebutton bluebuttonmedium" (click)="submitEditedComment(i,eachActivity.Slug.$oid)">SUBMIT</button> &nbsp;
-                                    <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelEdit(i)">CANCEL</button>
-                                </div>
+                                 <div class="customrow">
+                        <div class="col50">
+                            <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> 
+                        <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments',i)" multiple />
+                 </div>
+                        </div>
+                            <div class="col50 col50textright"> 
+                                <button class="buttonicon " (click)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                                
+                
+                            </div>
+                        </div>
+                              
                             </div>
                         </div>
                     </div>
@@ -186,7 +198,7 @@
                 <div class="commentedtext porel" [hidden]="!replying">
                     <!--Replace Close(X) with image : <img src="assets/images/comment-close.png" />-->
                     
-                    <a href="javascript:void(0)"  class="commentedtextdelete" (click)="cancelReply()"><i class="fa fa-times" aria-hidden="true"></i></a>
+            <a href="javascript:void(0)"  class="commentedtextdelete" (click)="cancelReply()"><i class="fa fa-times" aria-hidden="true"></i></a>
                     <div id="replyToSnippet">
                         <div id="replySnippetContent" *ngIf="replyToComment !=-1">
                             <div class="user"><a href="javascript:void(0)"> <img src="{{itemsInActivities[replyToComment].ActivityBy.ProfilePicture}}" /></a> by <span><a href="javascript:void(0)">{{itemsInActivities[replyToComment].ActivityBy.UserName}}</a></span></div>
@@ -194,7 +206,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="uploadAndSubmit">
+                <div class="uploadAndSubmit ">  
                     <!--Have to change Text area-->
                     <textarea class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
                     <!--<div class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" contenteditable="true" placeholder="Enter text here..." ngDefaultControl></div>-->
