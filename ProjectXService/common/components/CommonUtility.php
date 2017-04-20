@@ -1032,7 +1032,7 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
       * @param type $artifacts
       * @return type
       */
-    public static function sendMail($loggedInUser,$recipients,$ticketdetails,$artifacts=null)
+    public static function sendMail($loggedInUser,$recipients,$ticketdetails,$text_message=null)
     {
         error_log("==Followers==".print_r($ticketdetails['Followers'],1));
         $followers=$ticketdetails['Followers'];
@@ -1046,11 +1046,14 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
             $from = Yii::$app->db->createCommand($qry)->queryOne();
             if(is_array($recipients)) // for @mentioned users
             {
-                for($i=0;$i<count($recipients);$i++)
+                if(!empty($recipients))
                 {
-                    $qry="select UserName,Email from Collaborators where UserName = '$recipients[$i]'";
-                    $data = Yii::$app->db->createCommand($qry)->queryOne();
-                    array_push($recipient_list,$data['Email']);
+                    for($i=0;$i<count($recipients);$i++)
+                    {
+                        $qry="select UserName,Email from Collaborators where UserName = '$recipients[$i]'";
+                        $data = Yii::$app->db->createCommand($qry)->queryOne();
+                        array_push($recipient_list,$data['Email']);
+                    }
                 }
                 
                 // for followers
@@ -1091,8 +1094,8 @@ error_log("prepareActivityProperty-------".$poppedFromChild);
                     $subject="Ticket Status";
                     $from=Yii::$app->params['ProjectEmail'];
                     $fromName="ProjectX";
-                    $html="<h1> Test Email </h1>";
-                    $text="Hi,This is a Test Email";
+                    $html="<h1> $text_message </h1>";
+                    $text=$text_message;
                     $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
                 }
                 catch (Exception $e)
