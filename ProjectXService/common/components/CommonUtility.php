@@ -841,7 +841,6 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     $tempArray = array("field_name" => "", "value_id" => "", "field_value" => "", "other_data" => "");
                     $tempArray["field_name"] = $value["field_name"];
                     $tempArray["value_id"] = $value["value"];
-
                     if (isset($value["readable_value"]["UserName"])) {
                         $tempArray["field_value"] = $value["readable_value"]["UserName"];
                         $tempArray["other_data"] = $value["readable_value"]["ProfilePicture"];
@@ -850,11 +849,14 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     } else {
                         $tempArray["field_value"] = $value["readable_value"];
                     }
+                    if ($key == "workflow") {
+                        $tempArray["other_data"] = $ticketDetails['Fields']['state']['value_name'];
+                    }
                     $newArray[$value["Id"]] = $tempArray;
                 }
-            }
+           }
             foreach ($fieldsOrderArray as $key) {
-                array_push($arr2ordered, $newArray[$key]);
+               array_push($arr2ordered, $newArray[$key]);
             }
               $arrow = array("field_name" => "arrow", "value_id" => "", "field_value" => "", "other_data" => "");
              if($filter != null){
