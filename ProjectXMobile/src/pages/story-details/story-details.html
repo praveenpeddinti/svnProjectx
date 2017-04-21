@@ -103,9 +103,11 @@
                      <div id="{{i}}" data-slug="eachActivity.Slug.$oid">
                         <div class="cust_commentsbox">
                             <div class="cust_com_title">
-                                <ion-img class="usericon" src="{{eachActivity.ActivityBy.ProfilePicture}}"></ion-img> 
-                                <span>by <b>{{eachActivity.ActivityBy.UserName}}</b></span> 
-                                <span *ngIf="eachActivity.PropertyChanges.length == 0" class="userDate">({{eachActivity.ActivityOn}}) </span>
+                                <div class="user">
+                                    <img class="usericon" src="{{eachActivity.ActivityBy.ProfilePicture}}" alt="">
+                                    <span>by <b>{{eachActivity.ActivityBy.UserName}}</b></span>
+                                    <span *ngIf="eachActivity.PropertyChanges.length == 0" class="userDate">({{eachActivity.ActivityOn}}) </span>
+                                </div>
                                 <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="comments_menuouter {{(eachActivity.Status ==2)?'_reply':''}}">
                                     <ion-fab top right>
                                         <button ion-fab><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
@@ -140,7 +142,7 @@
                                     <div style="position:relative">  
                                         <div class="commentedtext" (click)="navigateToParentComment(eachActivity.ParentIndex)" *ngIf="eachActivity.Status ==2">
                                             <div class="user">      
-                                                <a href="javascript:void(0)"><ion-img src="{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.ProfilePicture}}" ></ion-img></a> by <span><a href="javascript:void(0)">{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.UserName}}</a></span>
+                                                <a href="javascript:void(0)"><img class="usericon" src="{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.ProfilePicture}}" ></a> by <span><a href="javascript:void(0)">{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.UserName}}</a></span>
                                             </div>
                                             <div [innerHTML]="itemsInActivities[eachActivity.ParentIndex].CDescription"></div>
                                         </div>
@@ -150,26 +152,17 @@
                                             </div>
                                             <div class="uploadAndSubmitclose" id="Actions_{{i}}" [hidden]="!editTheComment[i]" style="position: relative;">
                                                 <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
-                                                <!--Have to change Text area-->
+                                                <!--Have to change Text area to editor-->
                                                 <textarea class="textEditor" placeholder="Enter text here..."></textarea>
-                                                <!--<div class="textEditor" contenteditable="true" placeholder="Enter text here..."></div>-->
-                                                <!--<div class="uploadcomponent pull-left">
-                                                    <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
-                                                    <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments',i)" multiple/>
-                                                </div>
-                                                <div class="alignright margintop15">
-                                                    <button class="normal bluebutton bluebuttonmedium" (click)="submitEditedComment(i,eachActivity.Slug.$oid)">SUBMIT</button> &nbsp;
-                                                    <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelEdit(i)">CANCEL</button>
-                                                </div>-->
+                                                <span *ngIf="ticketEditableDesc!=''">{{ticketEditableDesc}}</span>
                                                 <div class="customrow">
                                                     <div class="col50">
-                                                        <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> 
-                                                            <!--<input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments',i)" multiple />-->
-                                                            <button ion-button icon-left (click)="presentActionSheet()"><ion-icon name="camera"></ion-icon>Select Image</button>
+                                                        <div class="uploadbottom">
+                                                            <button class="buttonicon" (click)="presentActionSheet('fileChange','edit_comments',i)"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
                                                         </div>
                                                     </div>
                                                     <div class="col50 col50textright"> 
-                                                        <button class="buttonicon " (click)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                                                        <button class="buttonicon" (click)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -185,11 +178,10 @@
             <div class="cust_commentsbox margintop10">
                 <div id="commentEditorArea" class="activitiesList">
                     <div class="commentedtext porel" [hidden]="!replying">
-                        <!--Replace Close(X) with image : <img src="assets/images/comment-close.png" />-->
                         <a href="javascript:void(0)"  class="commentedtextdelete" (click)="cancelReply()"><i class="fa fa-times" aria-hidden="true"></i></a>
                         <div id="replyToSnippet">
                             <div id="replySnippetContent" *ngIf="replyToComment !=-1" class="{{itemsInActivities[replyToComment].ActivityBy.CollaboratorId}}">
-                                <div class="user"><a href="javascript:void(0)"> <img src="{{itemsInActivities[replyToComment].ActivityBy.ProfilePicture}}" /></a> by <span><a href="javascript:void(0)">{{itemsInActivities[replyToComment].ActivityBy.UserName}}</a></span></div>
+                                <div class="user"><a href="javascript:void(0)"> <img class="usericon" src="{{itemsInActivities[replyToComment].ActivityBy.ProfilePicture}}"></a> by <span><a href="javascript:void(0)">{{itemsInActivities[replyToComment].ActivityBy.UserName}}</a></span></div>
                                 <div class="replySnippet" [innerHTML]="itemsInActivities[replyToComment].CDescription"></div>
                             </div>
                         </div>
@@ -197,12 +189,11 @@
                     <div class="uploadAndSubmit ">  
                         <!--Have to change Text area to editor-->
                         <textarea class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
-                        <!--<div class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" contenteditable="true" placeholder="Enter text here..." ngDefaultControl></div>-->
+                        <span *ngIf="ticketEditableDesc!=''">{{ticketEditableDesc}}</span>
                         <div class="customrow">
                             <div class="col50">
-                                <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> 
-                                    <!--<input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments','')" multiple />-->
-                                    <button ion-button icon-left (click)="presentActionSheet()"><ion-icon name="camera"></ion-icon>Select Image</button>
+                                <div class="uploadbottom">
+                                    <button class="buttonicon" (click)="presentActionSheet('fileChange','comments','')"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
                                 </div>
                             </div>
                             <div class="col50 col50textright"> 
@@ -219,15 +210,3 @@
     <!--Editor For Comments and File upload-->
     <!--Ticket #91 ended-->
 </ion-content>
-<!--Plugins-->
-<!--<ion-footer>
-    <ion-toolbar color="primary">
-        <ion-buttons>
-            <button ion-button icon-left (click)="presentActionSheet()"><ion-icon name="camera"></ion-icon>Select Image</button>
-            <button ion-button icon-left (click)="uploadImage()" [disabled]="lastImage === null">
-              <ion-icon name="cloud-upload"></ion-icon>Upload
-            </button>
-        </ion-buttons>
-    </ion-toolbar>
-</ion-footer>-->
-<!--Plugins ended-->

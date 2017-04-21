@@ -43,7 +43,7 @@ export class StoryDetailsPage {
     // File upload
     // public filesToUpload: Array<File>;
     public filesToUpload: Array<any>;
-    public fileUploadStatus:boolean = false;
+    private ticketEditableDesc="";
     private openCommentMenuList = [];
     // Ticket #91 ended
     // Plugins
@@ -186,7 +186,7 @@ export class StoryDetailsPage {
                 loader.dismiss();
             }, error => {
                 loader.dismiss();
-                console.log("the error in ticker derais " + JSON.stringify(error));
+                console.log("the error in ticket details " + JSON.stringify(error));
             }
         );
         // Ticket #91
@@ -536,7 +536,7 @@ export class StoryDetailsPage {
         this.openCommentMenuList[commentId]=true;//show submit and cancel button on editor replace at the bottom
     }
     public submitComment() {
-        console.log("submitComment");
+        // console.log("submitComment");
         var commentText = jQuery(".uploadAndSubmit .textEditor").val();
         if (commentText != "" && commentText.trim() != "") {
             this.commentDesc = "";
@@ -572,6 +572,10 @@ export class StoryDetailsPage {
                 }
             );
         }
+        else{
+            console.log("Text required");
+            this.ticketEditableDesc="Text required.";
+        }
     }
     public submitEditedComment(commentId, slug) {
         // console.log("submitEditedComment : "+commentId+"-"+slug);
@@ -599,24 +603,26 @@ export class StoryDetailsPage {
                 }
             );
         }
+        else{
+            console.log("Text required");
+            this.ticketEditableDesc="Text required.";
+        }
     }
-    // Ticket #91 ended
-    
     // Plugins
-    public presentActionSheet() {
+    public presentActionSheet(comeFrom: string, where:string, comment:string) {
         let actionSheet = this.actionSheetCtrl.create({
             title: 'Select Image Source',
             buttons: [
                 {
                     text: 'Load from Library',
                     handler: () => {
-                        this.takePicture(Camera.PictureSourceType.PHOTOLIBRARY);
+                        this.takePicture(Camera.PictureSourceType.PHOTOLIBRARY,comeFrom, where, comment);
                     }
                 },
                 {
                     text: 'Use Camera',
                     handler: () => {
-                        this.takePicture(Camera.PictureSourceType.CAMERA);
+                        this.takePicture(Camera.PictureSourceType.CAMERA,comeFrom, where, comment);
                     }
                 },
                 {
@@ -627,7 +633,7 @@ export class StoryDetailsPage {
             });
         actionSheet.present();
     }
-    public takePicture(sourceType) {
+    public takePicture(sourceType,comeFrom: string, where:string, comment:string) {
         // Create options for the Camera Dialog
         // Destination could be : DATA_URL or FILE_URI
         var options = {
@@ -642,21 +648,19 @@ export class StoryDetailsPage {
 
         // Get the data of an image
         Camera.getPicture(options).then((imagePath) => {
-            console.log('imagePath'+imagePath);
+            // console.log('imagePath'+imagePath);
             if (this.platform.is('android') && sourceType === Camera.PictureSourceType.PHOTOLIBRARY) {
-                console.log('if'+imagePath);
                 FilePath.resolveNativePath(imagePath).then((filePath) => {
                     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
                     let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-                    this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
+                    this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
                 }, (err) => {
                     console.log('Error while resolveNativePath.');
                 });
             } else {
-                console.log('else'+imagePath);
                 var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
                 var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-                this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
+                this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
             }
         }, (err) => {
             this.presentToast('Error while selecting image.');
@@ -664,27 +668,20 @@ export class StoryDetailsPage {
     }
     // Create a new name for the image
     private createFileName(originalName) {
-        console.log('createFileName : ');
-        if(originalName!='' || originalName!=null || originalName!=undefined){
-            console.log('originalName : '+originalName);
-        }
-        else{
-            console.log('No original name');
-        }
+        // console.log('createFileName');
         var d = new Date(),
         n = d.getTime(),
-        newFileName =  n + ".jpg";
-        console.log('createFileName'+newFileName);
+        // newFileName =  n + ".jpg";
+        newFileName =  "image"+n;
         return newFileName;
     }
     
     // Copy the image to a local folder
-    private copyFileToLocalDir(namePath, currentName, newFileName) {
-        console.log('copyFileToLocalDir'+newFileName);
+    private copyFileToLocalDir(namePath, currentName, newFileName, comeFrom: string, where:string, comment:string) {
+        // console.log('copyFileToLocalDir');
         File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
-            console.log('copyFile'+newFileName);
             this.lastImage = newFileName;
-            this.uploadImage(currentName,newFileName);
+            this.uploadImage(currentName, newFileName, comeFrom, where, comment);
         }, error => {
             this.presentToast('Error while storing file.');
         });
@@ -705,17 +702,14 @@ export class StoryDetailsPage {
         });
         toast.present();
     }
-    public uploadImage(originalname,savedname) {
-        console.log('uploadImage');
+    public uploadImage(originalname, savedname, comeFrom: string, where:string, comment:string) {
+        // console.log('uploadImage');
         // Destination URL
         var url = this.constants.filesUploading;
-        console.log('url'+url);
         // File for Upload
         var targetPath = this.pathForImage(this.lastImage);
-        console.log('target path'+targetPath);
         // File name only
         var filename = this.lastImage;
-        console.log('filename'+filename);
         var options = {
             fileKey: "commentFile",
             fileName: filename,
@@ -726,70 +720,41 @@ export class StoryDetailsPage {
         const fileTransfer = new Transfer();
         // Use the FileTransfer to upload the image
         fileTransfer.upload(targetPath, url, options).then((data) => {
-            console.log('data'+JSON.stringify(data));
-            this.uploadedInserver(data);
+            // console.log('data'+JSON.stringify(data));
+            this.uploadedInserver(data, comeFrom, where, comment);
         }, (err) => {
             console.log('Error while uploading file.'+ JSON.stringify(err));
         });
     }
-    public uploadedInserver(dataUploaded){
-        console.log('dataUploaded'+JSON.stringify(dataUploaded));
+    public uploadedInserver(dataUploaded, comeFrom: string, where:string, comment:string){
+        // console.log('uploadedInserver');
         var serverResponse = JSON.parse(dataUploaded.response);
-        console.log('serverResponse'+JSON.stringify(serverResponse));
-        if(serverResponse['status']=='1'){
-            console.log(serverResponse['status']);
-            this.commentDesc = this.commentDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-            console.log(this.commentDesc);
-            this.presentToast('Image succesfully uploaded.');
+        if (serverResponse['status'] == '1') {
+            var editor_contents;
+            var appended_content;
+            if(where=="edit_comments"){
+                editor_contents = jQuery("#Actions_"+comment+" .textEditor").val();
+            }
+            // this.commentDesc = this.commentDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+            var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
+            if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                if (where == "comments") {
+                    this.commentDesc = this.commentDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                } else if (where == "edit_comments") {
+                    appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                    jQuery("#Actions_" + comment + " .textEditor").val(appended_content);
+                } else {
+                    this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                }
+            }
+            console.log('Image succesfully uploaded.');
+            // this.presentToast('Image succesfully uploaded.');
         }else{
-            console.log(serverResponse['status']);
-            this.commentDesc = this.commentDesc + " No image ";
-            console.log(this.commentDesc);
-            this.presentToast('Error while uploading file.');
+            console.log('Error while uploading file.');
+            this.ticketEditableDesc = "Error while uploading file.";
+            // this.presentToast('Error while uploading file.');
         }
     }
-    
-    // public fileUploadEvent(fileInput: any, comeFrom: string, where:string,comment:string):void {
-    //     var editor_contents;
-    //     var appended_content;
-    //     // console.log("==FileInput=="+JSON.stringify(fileInput));
-    //     if(where=="edit_comments"){
-    //         editor_contents = jQuery("#Actions_"+comment+" .textEditor").val();
-    //         fileInput.preventDefault();
-    //     }
-    //     if(comeFrom == 'fileChange'){
-    //             this.filesToUpload = <Array<File>> fileInput.target.files;
-    //     } else{
-    //             this.filesToUpload = <Array<File>> fileInput.target.files;
-    //     }
-    //     this.globalService.makeFileRequest(this.constants.filesUploadingNode, [], this.filesToUpload).then(
-    //         (result :Array<any>) => {
-    //             // console.log("the result " + JSON.stringify(result));
-    //             for(var i = 0; i<result.length; i++){
-    //                 var uploadedFileExtension = (result[i].originalname).split('.').pop();
-    //                 if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-    //                     if(where =="comments"){
-    //                         this.commentDesc = this.commentDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
-    //                     }else if(where == "edit_comments"){
-    //                         appended_content = editor_contents+"[[image:" +result[i].path + "|" + result[i].originalname + "]]"; 
-    //                         jQuery("#Actions_"+comment+" .textEditor").val(appended_content);
-    //                     }else{
-    //                         this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +result[i].path + "|" + result[i].originalname + "]] ";
-    //                     }
-    //                 }else{
-    //                     if(where =="comments"){
-    //                         this.commentDesc = this.commentDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
-    //                     }else if(where == "edit_comments"){
-    //                         appended_content = editor_contents+"[[file:" +result[i].path + "|" + result[i].originalname + "]]";
-    //                         jQuery("#Actions_"+comment+" .textEditor").val(appended_content);
-    //                     }else{
-    //                         this.ticketEditableDesc = this.ticketEditableDesc + "[[file:" +result[i].path + "|" + result[i].originalname + "]] ";
-    //                     }
-    //                 }
-    //             }
-    //         }, (error) => {
-    //             this.ticketEditableDesc = this.ticketEditableDesc + "Error while uploading";
-    //     });
-    // }
     // Plugins ended
+    // Ticket #91 ended
 }
