@@ -103,6 +103,8 @@ export class StoryCreatePage {
     }
   
     onStoryCreate(form): void {
+        setTimeout( ()=>{
+
         if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false ) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();
@@ -151,6 +153,7 @@ export class StoryCreatePage {
                 }
             );
         }
+        }, 100);
     }
 
     public selectCancel(index) {
