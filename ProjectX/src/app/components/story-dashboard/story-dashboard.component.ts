@@ -52,9 +52,9 @@ export class StoryDashboardComponent {
                     class: 'prioritycolumn'
                 },
                 {
-                    name: 'Status',
+                    name: 'State',
                     flexGrow: 1,
-                    sortby: 'workflow',
+                    sortby: 'status',
                     class: 'statusbold'
                 },
                 {

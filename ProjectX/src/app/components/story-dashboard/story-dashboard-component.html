@@ -90,8 +90,9 @@ Row classes are also dynamically. These classes are pass to service layer-->
       
       <!--<span class="badge" style="position: relative;left:0" *ngIf="row[i].field_name=='Title' && row[i].other_data>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data}}</span>  
       -->
-          
-          {{row[i].field_value}} 
+        <p *ngIf="row[i].field_name=='workflow'" ></p>
+          {{row[i].field_value}}
+       <p style="color:#777" *ngIf="row[i].field_name=='workflow'" >{{row[i].other_data}}</p>
      <span class="badge"  *ngIf="row[i].field_name=='Id' && row[i].other_data.totalSubtasks>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data.totalSubtasks}}</span>
         
 
