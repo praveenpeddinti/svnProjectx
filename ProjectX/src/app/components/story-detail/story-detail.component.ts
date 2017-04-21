@@ -912,6 +912,7 @@ var thisObj = this;
         var dafaultUserList:any=[];
       for(var x=0;x<this.followers.length;x++){
            dafaultUserList.push(this.followers[x].FollowerId);
+           dafaultUserList.push(this.followers[x].CreatedBy);
       }
          var followerData = {
           TicketId:this.ticketId,
