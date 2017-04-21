@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {DatePipe} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { ToastController, Content, Platform, App } from 'ionic-angular';
 // Plugins
 import { NavController, ModalController, NavParams, MenuController, LoadingController, PopoverController, ViewController, ActionSheetController } from 'ionic-angular';
@@ -12,8 +12,8 @@ import { CustomModalPage } from '../custom-modal/custom-modal';
 // Plugins
 import {Camera, File, Transfer, FilePath} from 'ionic-native';
 declare var cordova: any;
-// Plugins ended
 declare var jQuery: any;
+declare var cordova: any;
 /*
   Generated class for the StoryDetails page.
 
@@ -74,7 +74,6 @@ export class StoryDetailsPage {
 
     public textFieldValue = "";
     public textAreaValue = "";
-    public textDate = "";
     public displayedClassColorValue = "";
 
     @ViewChild(Content) content: Content;
@@ -214,39 +213,38 @@ export class StoryDetailsPage {
 
     public dateChange(event, index, fieldDetails) {
 
-   this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe( 
-(result) => {
-    setTimeout(() => {
-        document.getElementById("field_title_" + index).innerHTML = this.datePipe.transform(this.localDate, 'MMM-dd-yyyy');
-        this.enableDataPicker[index] = false;
-         document.getElementById("field_title_" + index).style.display = 'block';
-        //    document.getElementById("item_" + index).classList.remove("item-select");
-               if (result.data.activityData.referenceKey == -1) {
+        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe(
+            (result) => {
+                setTimeout(() => {
+                    document.getElementById("field_title_" + index).innerHTML = this.datePipe.transform(this.localDate, 'MMM-dd-yyyy');
+                    this.enableDataPicker[index] = false;
+                    document.getElementById("field_title_" + index).style.display = 'block';
+                    //    document.getElementById("item_" + index).classList.remove("item-select");
+                    if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
-             }else{
+                    } else {
                         this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
-          }
-    }, 300);
-           }, 
-    (error) => {
-        console.log("the error --- " + JSON.stringify(error));
-let toast = this.toastCtrl.create({
-  message: 'Some thing Un-successfull',
-                   duration: 3000,
-                   position: 'bottom',
-                   cssClass: "toast",
-            dismissOnPageChange: true
-          });
-          toast.present();
-    });
+                    }
+                }, 300);
+            },
+            (error) => {
+                console.log("the error --- " + JSON.stringify(error));
+                let toast = this.toastCtrl.create({
+                    message: 'Some thing Un-successfull',
+                    duration: 3000,
+                    position: 'bottom',
+                    cssClass: "toast",
+                    dismissOnPageChange: true
+                });
+                toast.present();
+            });
 
-       
+
         setTimeout(() => {
             document.getElementById("field_title_" + index).style.display = 'none';
             //document.getElementById("item_" + index).classList.add("item-select");
         }, 300);
     }
-
 
     public formatDate(date) {
         var d = new Date(date),
@@ -305,7 +303,7 @@ let toast = this.toastCtrl.create({
                     }
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
-                    }else{
+                    } else {
                         this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
                     }
                 }, 300);
@@ -337,10 +335,9 @@ let toast = this.toastCtrl.create({
 
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
-                    }else{
+                    } else {
                         this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
                     }
-
                 }, 200);
             },
             (error) => {
