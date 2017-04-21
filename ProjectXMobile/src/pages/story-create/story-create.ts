@@ -5,7 +5,7 @@ import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
 import { CustomModalPage } from '../custom-modal/custom-modal';
-import { Camera, File, Transfer, FilePath} from 'ionic-native';
+import { Camera, File } from 'ionic-native';
 import { DashboardPage } from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var cordova: any;
@@ -202,13 +202,6 @@ export class StoryCreatePage {
         }, (err) => {
             this.presentToast('Error while selecting image.');
         });
-    }
-
-    private createFileName() {
-        var d = new Date(),
-            n = d.getTime(),
-            newFileName = n + ".jpg";
-        return newFileName;
     }
 
     private presentToast(text) {

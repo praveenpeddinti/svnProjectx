@@ -13,7 +13,6 @@ import { CustomModalPage } from '../custom-modal/custom-modal';
 import {Camera, File, Transfer, FilePath} from 'ionic-native';
 declare var cordova: any;
 declare var jQuery: any;
-declare var cordova: any;
 /*
   Generated class for the StoryDetails page.
 
