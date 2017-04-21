@@ -18,7 +18,7 @@ export class StoryCreatePage {
     Url: string;
     public itemfield: Array<any>;
     public tasktypes: Array<any>;
-    public create: {title?: any, description?: any, default_task?: any, planlevel?:any, priority?:any} = {};
+    public create: {title?: string, description?: string, default_task?: any, planlevel?:any, priority?:any} = {};
     public userName: any = '';
     file: File;
     public templatedataList: Array<{ id: string, title: string, defaultValue: string, assignData: string, readOnly: string, fieldType: string, fieldName: string}>;
@@ -103,25 +103,28 @@ export class StoryCreatePage {
     }
   
     onStoryCreate(form): void {
-        console.log("create task submit button");
-        if (form.valid) {
+        if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false ) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();
             this.create.default_task = [];
 
-            for (let taskTypeItem of this.tasktypeList) {
-                if (taskTypeItem.selected == true) {
-                    delete taskTypeItem["selected"];
-                    this.create.default_task.push(taskTypeItem);
+            //if((this.create.title) != undefined && (this.create.description) != undefined) {
+                for (let taskTypeItem of this.tasktypeList) {
+                    if (taskTypeItem.selected == true) {
+                        delete taskTypeItem["selected"];
+                        this.create.default_task.push(taskTypeItem);
+                    }
                 }
-            }
-            for(let descption of this.templatedataList){
-                if(this.create.description== null){
+           // }
 
-                }else{
-                     this.create.description = "<p>"+this.create.description+"</p>";
-                }
+            if(typeof(this.create.title) == 'string' && this.create.title.length > 0){
+                this.create.title.trim();
+            } 
+            
+            if(this.create.description != null){
+               this.create.description = "<p>"+this.create.description+"</p>";
             }
+               
 
             console.log("the create  " + JSON.stringify(this.create));
             //    this.globalService.createStoryORTask(this.constants.createStory, this.create);
@@ -346,5 +349,9 @@ export class StoryCreatePage {
         optionsModal.present();
     }
 
+public callFormValidation(){
+  //  alert("formSubmit---"+jQuery('#formSubmit').length);
+    jQuery('#formSubmit').click();
+}
 
   }

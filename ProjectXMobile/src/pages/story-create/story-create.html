@@ -8,7 +8,7 @@
             </a>
             </span>
         </ion-buttons>
-         <ion-buttons right (click)="onStoryCreate(createForm)">
+         <ion-buttons right (click)="callFormValidation()">
              <span class="headerlinks">
             <a ion-button icon-only type="submit" (click)="submitted = true;" form="createForm">
                <i class="fa fa-paper-plane" aria-hidden="true"></i>
@@ -24,14 +24,14 @@
 </ion-header>
 
 <ion-content padding>
-<form #createForm="ngForm" (ngSubmit)="submitted && createForm.form.Valid && onStoryCreate(createForm)" style="max-height:100%;height:100%" novalidate="true">
+<form #createForm="ngForm" (ngSubmit)="onStoryCreate(createForm)" style="max-height:100%;height:100%" novalidate="true">
 <div>
  
  <label class="customlabel">Title</label>     
-    <ion-input type="file" class="item customdropdowntext spinnerlabel" placeholder="Title" [(ngModel)]="create.title" required name="create_title" #create_title ="ngModel" [ngModelOptions]="{standalone:true}"></ion-input>
+    <ion-input type="text" class="item customdropdowntext spinnerlabel" placeholder="Title" [(ngModel)]="create.title" required name="create_title" #create_title ="ngModel" [ngModelOptions]="{standalone:true}"></ion-input>
     <div [hidden]="!create_title.errors.required" *ngIf="submitted && create_title.errors " class="text-md-danger text-ios-danger text-wp-danger">
-    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Title is required</div>
-    <img *ngIf = "ImageLoc">
+    <i class="fa fa-exclamation-circle" aria-hidden="true" id="createTitleError"></i> Title is required</div>
+
     <ion-list>
       <ion-row>
       <ion-item *ngFor="let field of templatedataList; let i=index;" id="item_{{i}}">
@@ -47,14 +47,14 @@
     <div class="customtextareadiv">
 <ion-list>
  <label class="customlabel">Description</label>  
-    <ion-item> 
+    <ion-item>
         <ion-row>   
          <textarea class="text-area  item customdropdowntext spinnerlabel" placeholder="Type your message here" [(ngModel)]="create.description" required name="create_description" #create_description ="ngModel"  
           rows="5"   id="create_description" [ngModelOptions]="{standalone:true}" ></textarea>
     </ion-row>
     </ion-item>
     <div [hidden]="!create_description.errors.required" *ngIf="submitted && create_description.errors " class="text-md-danger text-ios-danger text-wp-danger">
-    <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Description is required</div>
+    <i class="fa fa-exclamation-circle" aria-hidden="true" id="createDescriptionError"></i> Description is required</div>
    <!--<ion-item>
     <input type="file"  class="form-control" [(ngModel)]="create.file" #create.file ="ngModel" name="files[]" id="choose-file" onchange="document.getElementById('create_description').value = this.value" multiple="multiple" [ngModelOptions]="{standalone:true}">
    </ion-item>-->
@@ -65,12 +65,13 @@
         <ion-list>
             <ion-row>
                 <div class="customcheckboxrow" *ngFor = "let item of tasktypeList; let i=index;" id="item_{{i}}">
-                    <ion-checkbox checked="false" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}"></ion-checkbox>
+                    <ion-checkbox [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}"></ion-checkbox>
                     <span>{{item.Name}}</span>
                 </div>
             </ion-row>
         </ion-list>
    </div>
+   <button id="formSubmit" style="display: none" ion-button center type="submit" (click)="submitted = true;" class="normal big-btn">Submit</button>
   </div>
  </form> 
  </ion-content>
