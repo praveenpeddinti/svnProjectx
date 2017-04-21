@@ -538,6 +538,7 @@ class StoryController extends Controller
                $followerData["ProfilePicture"] = $collaboratorData["ProfilePicture"];
                $followerData["UserName"] = $collaboratorData["UserName"];
                $followerData["FollowerId"] =$post_data->collaboratorId;
+               $followerData["CreatedBy"] =$post_data->userInfo->Id;
                $followerData["Flag"] ="follower";
                $followerData["DefaultFollower"] =0;
               //  array_push($followers_pics, $followerData);
