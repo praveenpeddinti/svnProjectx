@@ -5,7 +5,7 @@ import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
 import { CustomModalPage } from '../custom-modal/custom-modal';
-import { Camera, File } from 'ionic-native';
+import { Camera, File,FilePath,Transfer } from 'ionic-native';
 import { DashboardPage } from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var cordova: any;
@@ -30,7 +30,6 @@ export class StoryCreatePage {
     private submitted: boolean = false;
     public displayedClassColorValue="";
     lastImage: string = null;
-    ImageLoc
     
     constructor(
         public navCtrl: NavController,
@@ -185,24 +184,123 @@ export class StoryCreatePage {
 
         public takePicture(sourceType) {
         // Create options for the Camera Dialog
+        // Destination could be : DATA_URL or FILE_URI
         var options = {
             quality: 100,
             sourceType: sourceType,
             destinationType: Camera.DestinationType.FILE_URI,
+            encodingType: Camera.EncodingType.JPEG,
             saveToPhotoAlbum: false,
-            correctOrientation: true
+            correctOrientation: true,
+            // mediaType: Camera.MediaType.ALLMEDIA
         };
 
         // Get the data of an image
         Camera.getPicture(options).then((imagePath) => {
-           
-            //this.ImageLoc = imagePath;
-            this.create.description = "<p>" + this.create.description + imagePath +"</p>";
-            //this.base64Image = 'data:image/jpeg;base64,'+imagePath;
+            // console.log('imagePath'+imagePath);
+            if (this.platform.is('android') && sourceType === Camera.PictureSourceType.PHOTOLIBRARY) {
+                FilePath.resolveNativePath(imagePath).then((filePath) => {
+                    let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+                    let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+                    this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
+                }, (err) => {
+                    console.log('Error while resolveNativePath.');
+                });
+            } else {
+                var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+                var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+                this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
+            }
         }, (err) => {
             this.presentToast('Error while selecting image.');
         });
     }
+
+ private createFileName(originalName) {
+        // console.log('createFileName');
+        var d = new Date(),
+        n = d.getTime(),
+        // newFileName =  n + ".jpg";
+        newFileName =  "image"+n;
+        return newFileName;
+    }
+       private copyFileToLocalDir(namePath, currentName, newFileName) {
+        // console.log('copyFileToLocalDir');
+        File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+            this.lastImage = newFileName;
+            this.uploadImage(currentName, newFileName);
+        }, error => {
+            this.presentToast('Error while storing file.');
+        });
+    }
+
+       public uploadImage(originalname, savedname) {
+        // console.log('uploadImage');
+        // Destination URL
+        var url = this.constants.filesUploading;
+        // File for Upload
+        var targetPath = this.pathForImage(this.lastImage);
+        // File name only
+        var filename = this.lastImage;
+        var options = {
+            fileKey: "commentFile",
+            fileName: filename,
+            chunkedMode: false,
+            mimeType: "image/jpeg",
+            params : {'filename': filename,'directory':this.constants.fileUploadsFolder,'originalname': originalname}
+        };
+        const fileTransfer = new Transfer();
+        // Use the FileTransfer to upload the image
+        fileTransfer.upload(targetPath, url, options).then((data) => {
+            // console.log('data'+JSON.stringify(data));
+            this.uploadedInserver(data);
+        }, (err) => {
+            console.log('Error while uploading file.'+ JSON.stringify(err));
+        });
+    }
+    public pathForImage(img) {
+        if (img === null) {
+            return '';
+        } else {
+            return cordova.file.dataDirectory + img;
+        }
+    }
+        public uploadedInserver(dataUploaded){
+        // console.log('uploadedInserver');
+        var serverResponse = JSON.parse(dataUploaded.response);
+        if (serverResponse['status'] == '1') {
+            var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
+            if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                this.create.description = "<p>" +  this.create.description + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] " +"</p>";
+            }
+            console.log('Image succesfully uploaded.');
+            // this.presentToast('Image succesfully uploaded.');
+        }else{
+            console.log('Error while uploading file.');
+            // this.presentToast('Error while uploading file.');
+        }
+    }
+
+    //     public takePicture(sourceType) {
+    //     // Create options for the Camera Dialog
+    //     var options = {
+    //         quality: 100,
+    //         sourceType: sourceType,
+    //         destinationType: Camera.DestinationType.FILE_URI,
+    //         saveToPhotoAlbum: false,
+    //         correctOrientation: true
+    //     };
+
+    //     // Get the data of an image
+    //     Camera.getPicture(options).then((imagePath) => {
+           
+    //         //this.ImageLoc = imagePath;
+    //         this.create.description = "<p>" + this.create.description + imagePath +"</p>";
+    //         //this.base64Image = 'data:image/jpeg;base64,'+imagePath;
+    //     }, (err) => {
+    //         this.presentToast('Error while selecting image.');
+    //     });
+    // }
 
     private presentToast(text) {
         let toast = this.toastCtrl.create({
