@@ -154,7 +154,7 @@
                                                 <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
                                                 <!--Have to change Text area to editor-->
                                                 <textarea class="textEditor" placeholder="Enter text here..."></textarea>
-                                                <span *ngIf="ticketEditableDesc!=''">{{ticketEditableDesc}}</span>
+                                                <!--<span *ngIf="ticketEditableDesc!=''">{{ticketEditableDesc}}</span>-->
                                                 <div class="customrow">
                                                     <div class="col50">
                                                         <div class="uploadbottom">
@@ -189,7 +189,7 @@
                     <div class="uploadAndSubmit ">  
                         <!--Have to change Text area to editor-->
                         <textarea class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
-                        <span *ngIf="ticketEditableDesc!=''">{{ticketEditableDesc}}</span>
+                        <!--<span *ngIf="ticketEditableDesc!=''">{{ticketEditableDesc}}</span>-->
                         <div class="customrow">
                             <div class="col50">
                                 <div class="uploadbottom">

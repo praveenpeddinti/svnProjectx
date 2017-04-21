@@ -43,7 +43,7 @@ export class StoryDetailsPage {
     // File upload
     // public filesToUpload: Array<File>;
     public filesToUpload: Array<any>;
-    private ticketEditableDesc="";
+    // private ticketEditableDesc="";
     private openCommentMenuList = [];
     // Ticket #91 ended
     // Plugins
@@ -574,7 +574,7 @@ export class StoryDetailsPage {
         }
         else{
             console.log("Text required");
-            this.ticketEditableDesc="Text required.";
+            // this.ticketEditableDesc="Text required.";
         }
     }
     public submitEditedComment(commentId, slug) {
@@ -605,7 +605,7 @@ export class StoryDetailsPage {
         }
         else{
             console.log("Text required");
-            this.ticketEditableDesc="Text required.";
+            // this.ticketEditableDesc="Text required.";
         }
     }
     // Plugins
@@ -744,14 +744,14 @@ export class StoryDetailsPage {
                     appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
                     jQuery("#Actions_" + comment + " .textEditor").val(appended_content);
                 } else {
-                    this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                    // this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
                 }
             }
             console.log('Image succesfully uploaded.');
             // this.presentToast('Image succesfully uploaded.');
         }else{
             console.log('Error while uploading file.');
-            this.ticketEditableDesc = "Error while uploading file.";
+            // this.ticketEditableDesc = "Error while uploading file.";
             // this.presentToast('Error while uploading file.');
         }
     }
