@@ -62,6 +62,7 @@
                       <img *ngIf="row[j].other_data.planlevel==2" src="assets/images/task-icon.png" /> 
                       <img *ngIf="row[j].field_name=='assignedto' && row[j].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{row[j].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[j].field_value}}"  /> 
+                       <div class="stateStyle"  *ngIf="row[j].field_name=='workflow'" >{{row[j].other_data}}</div>
                       {{row[j].field_value}}
                        
                       <i *ngIf="row[j].field_name=='priority'" class="fa fa-circle {{row[j].field_value}}" aria-hidden="true"></i>
