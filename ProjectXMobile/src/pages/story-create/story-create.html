@@ -8,7 +8,7 @@
             </a>
             </span>
         </ion-buttons>
-         <ion-buttons right (click)="callFormValidation()">
+         <ion-buttons right (click)="createForm.ngSubmit.emit()">
              <span class="headerlinks">
             <a ion-button icon-only type="submit" (click)="submitted = true;" form="createForm">
                <i class="fa fa-paper-plane" aria-hidden="true"></i>

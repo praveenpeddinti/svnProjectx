@@ -352,7 +352,7 @@ export class StoryCreatePage {
       //  alert("formSubmit---"+jQuery('#formSubmit').length);
         console.log(" in callFormValidation");
       setTimeout(function() {
-          jQuery('#formSubmit').click();
+          //jQuery('#formSubmit').click();
       }, 300);
 
     }
