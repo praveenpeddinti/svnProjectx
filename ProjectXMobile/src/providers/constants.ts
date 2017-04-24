@@ -15,7 +15,7 @@ export class Constants {
   // Ticket #91 - have to change to 77 later
   // public baseUrl = 'http://10.10.73.12:802/';
   // Public URL
-  public baseUrl = 'http://113.193.181.131/';
+   public baseUrl = 'http://113.193.181.131/';
   //  public baseUrl = 'http://10.10.73.77/';
     
    public loginUrl = this.baseUrl+"site/user-authentication";

@@ -348,13 +348,4 @@ export class StoryCreatePage {
         optionsModal.present();
     }
 
-    public callFormValidation(){
-      //  alert("formSubmit---"+jQuery('#formSubmit').length);
-        console.log(" in callFormValidation");
-      setTimeout(function() {
-          //jQuery('#formSubmit').click();
-      }, 300);
-
-    }
-
   }
