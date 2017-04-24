@@ -267,7 +267,7 @@ footer{font-size:10px}
 .loginform .alert-danger{padding:6px}
 .datatable-body-cell-label .titlecolumn{text-overflow: ellipsis;overflow: hidden;cursor:pointer;white-space: nowrap;line-height: 16px; position: relative; padding-right: 20px;}
 .titlecolumn{margin:0 0 0 9px}
-.statusbold{font-weight:bold;margin:0 0 0 23px}
+.statusbold{font-weight:normal;margin:0 0 0 23px;color:#acacac;font-size: 11px;}
 .Normal{color:#eda74c}
 .Highest{color:#ff2200}
 .High{color:#ff7c7c}
@@ -687,3 +687,4 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 {
 padding-left:0px!important;    
 }
+
