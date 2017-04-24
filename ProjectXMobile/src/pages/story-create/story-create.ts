@@ -18,7 +18,7 @@ export class StoryCreatePage {
     Url: string;
     public itemfield: Array<any>;
     public tasktypes: Array<any>;
-    public create: {title?: string, description?: string, default_task?: any, planlevel?:any, priority?:any} = {};
+    public create: {title?: string, description?: string, default_task?: any, planlevel?:any, priority?:any} = {title:"", description:"", default_task:[], planlevel:"", priority:""};
     public userName: any = '';
     file: File;
     public templatedataList: Array<{ id: string, title: string, defaultValue: string, assignData: string, readOnly: string, fieldType: string, fieldName: string}>;
@@ -118,15 +118,13 @@ export class StoryCreatePage {
                     }
                 }
            // }
-
             if(typeof(this.create.title) == 'string' && this.create.title.length > 0){
                 this.create.title.trim();
             } 
             
             if(this.create.description != null){
-               this.create.description = "<p>"+this.create.description+"</p>";
+                this.create.description = "<p>"+this.create.description+"</p>";
             }
-               
 
             console.log("the create  " + JSON.stringify(this.create));
             //    this.globalService.createStoryORTask(this.constants.createStory, this.create);
@@ -277,7 +275,7 @@ export class StoryCreatePage {
         if (serverResponse['status'] == '1') {
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                this.create.description = "<p>" +  this.create.description + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] " +"</p>";
+                this.create.description = this.create.description + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
             }
             console.log('Image succesfully uploaded.');
             // this.presentToast('Image succesfully uploaded.');
