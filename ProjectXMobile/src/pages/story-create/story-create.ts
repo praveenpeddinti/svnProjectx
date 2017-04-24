@@ -333,7 +333,7 @@ export class StoryCreatePage {
         let optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: fieldDetails.assignData });
         optionsModal.onDidDismiss((data) => {
             console.log("the dismiss data " + index + " ----- " + JSON.stringify(data));
-            if(Object.keys(data).length > 0 && data != null){
+            if(data != null && Object.keys(data).length > 0){
                 if (fieldDetails.fieldName == "planlevel") {
                     this.create.planlevel = data.Id;
                 } else if (fieldDetails.fieldName == "priority") {
