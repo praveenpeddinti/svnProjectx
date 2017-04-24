@@ -960,6 +960,8 @@ class StoryController extends Controller
         try{
             if(is_array($_POST) && !empty($_POST)){
                 $postData = $_POST;
+                error_log("comments post data : ".print_r($postData,1));
+                error_log("comments files data : ".print_r($_FILES,1));
                 $directory = $postData['directory'];
                 $location = (__DIR__) . '/../../node/'.$directory;
                 $uploadfile = $postData['filename'];
