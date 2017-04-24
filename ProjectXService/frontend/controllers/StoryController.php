@@ -968,6 +968,7 @@ class StoryController extends Controller
                 $uploadfilename = $_FILES['commentFile']['tmp_name'];
                 $originalname = $postData['originalname'];
                 if(move_uploaded_file($uploadfilename, $location.$uploadfile)){
+                    chmod($location.$uploadfile, 0777);
                     $data_array['status'] = '1';
                     $data_array['statusMessage'] = 'File successfully uploaded!';
                     $data_array['originalname'] = $originalname;
