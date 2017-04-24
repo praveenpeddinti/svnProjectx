@@ -103,9 +103,7 @@ export class StoryCreatePage {
     }
   
     onStoryCreate(form): void {
-        setTimeout( ()=>{
-
-        if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false ) {
+      if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false ) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();
             this.create.default_task = [];
@@ -151,7 +149,6 @@ export class StoryCreatePage {
                 }
             );
         }
-        }, 100);
     }
 
     public selectCancel(index) {
@@ -350,9 +347,12 @@ export class StoryCreatePage {
         optionsModal.present();
     }
 
-public callFormValidation(){
-  //  alert("formSubmit---"+jQuery('#formSubmit').length);
-    jQuery('#formSubmit').click();
-}
+    public callFormValidation(){
+      //  alert("formSubmit---"+jQuery('#formSubmit').length);
+      setTimeout(function() {
+          jQuery('#formSubmit').click();
+      }, 300);
+
+    }
 
   }
