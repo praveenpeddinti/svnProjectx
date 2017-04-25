@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ToastController,NavController, ActionSheetController,Platform , NavParams, LoadingController,PopoverController, ModalController } from 'ionic-angular';
+import { ToastController,NavController, ActionSheetController,Platform , NavParams, LoadingController,PopoverController, ModalController, AlertController } from 'ionic-angular';
 import { Globalservice} from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
@@ -34,6 +34,7 @@ export class StoryCreatePage {
         public platform: Platform,
         public actionSheetCtrl: ActionSheetController,
         public popoverCtrl: PopoverController,
+        private alertCtrl: AlertController,
         public loadingController: LoadingController,
         private storage: Storage, private constants: Constants) 
         {
@@ -102,7 +103,12 @@ export class StoryCreatePage {
             this.globalService.createStoryORTask(this.constants.createStory, (this.create)).subscribe(
                 (result) => {
                     loader.dismiss().then( () => {
-                        alert("Successfully created...");
+                        let alert = this.alertCtrl.create({
+                            title: 'Alert',
+                            subTitle: 'Successfully created.',
+                            buttons: ['OK']
+                        });
+                        alert.present();
                         this.navCtrl.setRoot(DashboardPage);
                     }, (error) => {
                         
