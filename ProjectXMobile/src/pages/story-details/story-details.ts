@@ -1,15 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ToastController, Content, Platform, App } from 'ionic-angular';
-// Plugins
-import { NavController, ModalController, NavParams, MenuController, LoadingController, PopoverController, ViewController, ActionSheetController } from 'ionic-angular';
-// Plugins ended
+import { ModalController, NavParams, MenuController, LoadingController, PopoverController, ActionSheetController } from 'ionic-angular';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
 import { CustomModalPage } from '../custom-modal/custom-modal';
-// Plugins
 import {Camera, File, Transfer, FilePath} from 'ionic-native';
 declare var cordova: any;
 declare var jQuery: any;
@@ -25,64 +22,36 @@ declare var jQuery: any;
     providers: [DatePipe]
 })
 export class StoryDetailsPage {
-
     public items: Array<any>;
     public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
     public displayFieldvalue = [];
     public showEditableFieldOnly = [];
     public readOnlyDropDownField: boolean = false;
-    // Ticket #91
-    // Activities
     public itemsInActivities: Array<any>;
-    // Comments
     private replyToComment = -1;
     private replying = false;
-    private commentAreaColor = "";
     private editTheComment = [];
     public commentDesc = "";
-    // File upload
-    // public filesToUpload: Array<File>;
-    public filesToUpload: Array<any>;
-    // private ticketEditableDesc="";
     private openCommentMenuList = [];
-    // Ticket #91 ended
-    // Plugins
     private lastImage: string = null;
-    // Plugins ended
-    public selectedValue = "";
-    public previousSelectedValue = "";
-
-    public previousSelectIndex: any;
     public enableDataPicker = [];
-
     public enableTextField = [];
     public enableTextArea = [];
-
     public titleAfterEdit: string = "";
     public enableEdatable: boolean = false;
     public taskDetails = { ticketId: "", title: "", description: "", type: "", workflowType: "" };
-    public isBusy: boolean = false;
     public options = "options";
     public localDate: any = new Date();
-    // public maxDate: Date = new Date(new Date().setDate(new Date().getDate() + 30));
     public minDate: any = new Date();
     public userName: any = '';
     public static optionsModal;
     public static isMenuOpen: boolean = false;
     public static menuControler;
-
     public textFieldValue = "";
     public textAreaValue = "";
     public displayedClassColorValue = "";
 
     @ViewChild(Content) content: Content;
-
-    public ckeditorContent = "";
-    public config = {
-        toolbar: [
-            ['Heading 1', '-', 'Bold', '-', 'Italic', '-', 'Underline', 'Link', 'NumberedList', 'BulletedList']
-        ], removePlugins: 'elementspath,magicline', resize_enabled: true
-    };
 
     constructor(menu: MenuController,
         private app: App,
@@ -90,24 +59,17 @@ export class StoryDetailsPage {
         private toastCtrl: ToastController,
         public globalService: Globalservice,
         private constants: Constants,
-        public navCtrl: NavController,
         public navParams: NavParams,
         public loadingController: LoadingController,
         public popoverCtrl: PopoverController,
-        // Plugins
         public actionSheetCtrl: ActionSheetController,
         public platform: Platform,
-        // Plugins ended
         private storage: Storage, 
-        public viewCtrl: ViewController, 
         private datePipe: DatePipe ) {
         StoryDetailsPage.menuControler = menu;
-        
         this.minDate = new Date().toISOString();
-
         let loader = this.loadingController.create({ content: "Loading..." });
         loader.present();
-
         this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
         });
@@ -119,9 +81,7 @@ export class StoryDetailsPage {
                 this.taskDetails.type = result.data.StoryType.Name;
                 this.taskDetails.workflowType = result.data.WorkflowType;
                 this.titleAfterEdit = result.data.Title;
-
                 this.items = result.data.Fields;
-                //console.log("the count value is from Appcomponent" + this.items.length);
                 this.arrayList = [];
                 for (let i = 0; i < this.items.length; i++) {
                     var _id = this.items[i].Id;
@@ -156,7 +116,7 @@ export class StoryDetailsPage {
                         }
                     }
                     else if (this.items[i].field_type == "DateTime") {
-                        //                        readable_value
+//                        readable_value
                         if (this.items[i].readable_value == "") {
                             _assignTo = "--";
                         } else {
@@ -177,48 +137,36 @@ export class StoryDetailsPage {
                         this.displayedClassColorValue = _assignTo;
                     }
                     var _readableValue = this.items[i].readable_value;
-
                     this.arrayList.push({
                         id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, fieldType: _fieldType, fieldName: _fieldName, ticketId: this.taskDetails.ticketId, readableValue: _readableValue
                     });
                 }
-                //console.log("the field arrayList " + JSON.stringify(this.arrayList));
                 loader.dismiss();
             }, error => {
                 loader.dismiss();
-                console.log("the error in ticket details " + JSON.stringify(error));
             }
         );
-        // Ticket #91
-        // Activities
         this.itemsInActivities = [];
         globalService.getTicketActivity(this.constants.getTicketActivity, this.navParams.get("id")).subscribe(
             (result) => {
-                // console.log("the result in ticket activities " + JSON.stringify(result.data.Activities));
                 this.itemsInActivities = result.data.Activities;
             }, (error) => {
-                console.log("the error in ticket activities " + JSON.stringify(error));
             }
         );
-        // Ticket #91 ended
     }
-
     public menuOpened() {
         StoryDetailsPage.isMenuOpen = true;
     }
     public menuClosed() {
         StoryDetailsPage.isMenuOpen = false;
     }
-
     public dateChange(event, index, fieldDetails) {
-
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
                     document.getElementById("field_title_" + index).innerHTML = this.datePipe.transform(this.localDate, 'MMM-dd-yyyy');
                     this.enableDataPicker[index] = false;
                     document.getElementById("field_title_" + index).style.display = 'block';
-                    //    document.getElementById("item_" + index).classList.remove("item-select");
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
                     } else {
@@ -227,41 +175,25 @@ export class StoryDetailsPage {
                 }, 300);
             },
             (error) => {
-                console.log("the error --- " + JSON.stringify(error));
-                let toast = this.toastCtrl.create({
-                    message: 'Some thing Un-successfull',
-                    duration: 3000,
-                    position: 'bottom',
-                    cssClass: "toast",
-                    dismissOnPageChange: true
-                });
-                toast.present();
+                this.presentToast('Unsuccessful');
             });
-
-
         setTimeout(() => {
             document.getElementById("field_title_" + index).style.display = 'none';
-            //document.getElementById("item_" + index).classList.add("item-select");
         }, 300);
     }
-
     public formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
             day = '' + d.getDate(),
             year = d.getFullYear();
-
         if (month.length < 2) month = '0' + month;
         if (day.length < 2) day = '0' + day;
-        console.log("the date " + [month, day, year].join('-'));
         return [month, day, year].join('-');
     }
-
     ionViewDidLoad() {
-        //console.log('ionViewDidLoad StoryDetailsPage');
+    
     }
     ionViewDidEnter() {
-        console.log("the ionViewDidEnter --- " + jQuery('#description').height());
         if (jQuery('#description').height() > 200) {
             jQuery('#description').css("height", "200px");
             jQuery('.show-morediv').show();
@@ -269,33 +201,21 @@ export class StoryDetailsPage {
         }
     }
     ionViewWillEnter() {
-        console.log("the ionViewWillEnter --- " + jQuery('#description').height());
         if (jQuery('#description').height() > 200) {
             jQuery('#description').css("height", "200px");
             jQuery('.show-morediv').show();
             jQuery('#show').show();
         }
     }
-
-
     public selectCancel(index) {
-        console.log("selectCancel --- " + index);
         this.showEditableFieldOnly[index] = false;
-        setTimeout(() => {
-            //document.getElementById("item_"+index).classList.remove("item-select");
-        }, 300);
     }
-
     public changeOption(event, index, fieldDetails) {
         this.readOnlyDropDownField = false;
         this.showEditableFieldOnly[index] = false;
-
-        //console.log("the displayfieldvalues " + JSON.stringify(this.displayFieldvalue) + "------- " + event + " &&&&&&&&& " + index)
-
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
-                    //    document.getElementById("field_title_" + index).innerHTML = event.Name;
                     jQuery("#field_title_" + index + " div").text(event.Name);
                     if (fieldDetails.fieldName == 'priority') {
                         this.displayedClassColorValue = event.Name;
@@ -308,22 +228,10 @@ export class StoryDetailsPage {
                 }, 300);
             },
             (error) => {
-                console.log("the error --- " + JSON.stringify(error));
-                let toast = this.toastCtrl.create({
-                    message: 'Some thing Un-successfull',
-                    duration: 3000,
-                    position: 'bottom',
-                    cssClass: "toast",
-                    dismissOnPageChange: true
-                });
-                toast.present();
+                this.presentToast('Unsuccessful');
             });
     }
-
     public inputBlurMethod(event, index, fieldDetails) {
-
-        console.log("inside the input blur method " + event.target.value);
-
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
@@ -331,7 +239,6 @@ export class StoryDetailsPage {
                     this.enableTextArea[index] = false;
                     document.getElementById("field_title_" + index).style.display = 'block';
                     document.getElementById("field_title_" + index).innerHTML = (event.target.value);
-
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
                     } else {
@@ -340,37 +247,16 @@ export class StoryDetailsPage {
                 }, 200);
             },
             (error) => {
-                console.log("the error --- " + JSON.stringify(error));
-                let toast = this.toastCtrl.create({
-                    message: 'Some thing Un-successfull',
-                    duration: 3000,
-                    position: 'bottom',
-                    cssClass: "toast",
-                    dismissOnPageChange: true
-                });
-                toast.present();
+                this.presentToast('Unsuccessful');
             });
-
-        setTimeout(() => {
-            // document.getElementById("field_title_" + index).innerHTML = this.displayFieldvalue[event-1].Name;
-            // document.getElementById("item_" + index).classList.remove("item-select");
-        }, 300);
-
     }
-
-
-    openPopover(myEvent) {
+    public openPopover(myEvent) {
         let userCredentials = { username: this.userName };
         let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
         popover.present({
             ev: myEvent
         });
     }
-
-    public titleEdit(event) {
-        //this.enableEdatable = true;
-    }
-
     public updateTitleSubmit() {
         this.enableEdatable = false;
         this.taskDetails.title = this.titleAfterEdit;
@@ -379,7 +265,6 @@ export class StoryDetailsPage {
         this.enableEdatable = false;
         this.titleAfterEdit = this.taskDetails.title;
     }
-
     public expandDescription() {
         jQuery('#description').css('height', 'auto');
         jQuery('#show').hide();
@@ -391,33 +276,23 @@ export class StoryDetailsPage {
         jQuery('#description').css("height", "200px");
         jQuery('#description').css("overflow", "hidden");
     }
-
-
     public isColorChange(fieldDetails) {
         if (fieldDetails.title == "Created on") {
             return true;
         }
-
         else if (fieldDetails.title == "Reported by") {
             return true;
         }
-
-
         else if (fieldDetails.title == "Plan Level") {
             return true;
         }
         else {
             return false;
         }
-
     }
-
-    openOptionsModal(fieldDetails, index) {
-        console.log("the model present");
+    public openOptionsModal(fieldDetails, index) {
         fieldDetails['workflowType'] = this.taskDetails.workflowType;
-
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
-
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
                 (result) => {
                     if (fieldDetails.fieldType == "Team List") {
@@ -440,16 +315,11 @@ export class StoryDetailsPage {
                     StoryDetailsPage.optionsModal.present();
                 },
                 (error) => {
-                    console.log("the fields error --- " + error);
                 });
-
         } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
             this.enableDataPicker[index] = true;
             document.getElementById("field_title_" + index).style.display = 'none';
-
-
         } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
-
             if (fieldDetails.fieldType == "TextArea") {
                 this.enableTextArea[index] = true;
                 document.getElementById("field_title_" + index).focus();
@@ -462,22 +332,25 @@ export class StoryDetailsPage {
             }
         }
     }
-
-
-    // Ticket #91
-    // Comments
+    private presentToast(text) {
+        let toast = this.toastCtrl.create({
+            message: text,
+            duration: 3000,
+            position: 'bottom',
+            cssClass: "toast",
+            dismissOnPageChange: true
+        });
+        toast.present();
+    }
     public navigateToParentComment(parentCommentId) {
-        // console.log('navigateToParentComment : ' + parentCommentId + " --- " + JSON.stringify(jQuery("#"+parentCommentId).position()));
         jQuery("#"+parentCommentId)[0].scrollIntoView({
             behavior: "smooth", // or "auto" or "instant"
             block: "start" // or "end"
         });
     }
     public replyComment(commentId) {
-        // console.log('replyComment : ' + commentId);
         this.replyToComment = commentId;
         this.replying = true;
-        this.commentAreaColor = jQuery("#commentEditorArea").css("background");
         jQuery("#commentEditorArea").addClass("replybox");
         jQuery("#commentEditorArea")[0].scrollIntoView({
             behavior: "smooth", // or "auto" or "instant"
@@ -485,13 +358,11 @@ export class StoryDetailsPage {
         });
     }
     public cancelReply() {
-        // console.log('cancelReply');
         this.replying = false;
         this.replyToComment = -1;
         jQuery("#commentEditorArea").removeClass("replybox");
     }
     public deleteComment(commentId, slug) {
-        // console.log("deleteComment : "+commentId+"-"+slug);
         var commentParams;
         var parentCommentId;
         if (this.itemsInActivities[commentId].Status == 2) {
@@ -518,25 +389,21 @@ export class StoryDetailsPage {
                 }
                 this.itemsInActivities.splice(commentId, 1);
             }, (error) => {
-                console.log("the error in deleteCommentById " + JSON.stringify(error));
+                this.presentToast('Unsuccessful');
             }
         );
     }
     public editComment(commentId) {
-        // console.log("editComment : "+commentId);
         jQuery("#Actions_" + commentId + " .textEditor").val(this.itemsInActivities[commentId].CrudeCDescription);
         this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
     }
     public cancelEdit(commentId){
-        // console.log("cancelEdit : "+commentId);
-        // jQuery("#Actions_"+commentId+" .textEditor").val('');
         this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
     }
     public openCommentMenu(commentId){
         this.openCommentMenuList[commentId]=true;//show submit and cancel button on editor replace at the bottom
     }
     public submitComment() {
-        // console.log("submitComment");
         var commentText = jQuery(".uploadAndSubmit .textEditor").val();
         if (commentText != "" && commentText.trim() != "") {
             this.commentDesc = "";
@@ -568,17 +435,12 @@ export class StoryDetailsPage {
                     this.replying = false;
                     jQuery(".uploadAndSubmit .textEditor").val('');
                 }, (error) => {
-                    console.log("the error in submitComment " + JSON.stringify(error));
+                    this.presentToast('Unsuccessful');
                 }
             );
         }
-        else{
-            console.log("Text required");
-            // this.ticketEditableDesc="Text required.";
-        }
     }
     public submitEditedComment(commentId, slug) {
-        // console.log("submitEditedComment : "+commentId+"-"+slug);
         var editedContent = jQuery("#Actions_" + commentId + " .textEditor").val();
         if (editedContent != "" && editedContent.trim() != "") {
             var commentedOn = new Date();
@@ -596,19 +458,13 @@ export class StoryDetailsPage {
                 (result) => {
                     this.itemsInActivities[commentId].CrudeCDescription = result.data.CrudeCDescription;
                     this.itemsInActivities[commentId].CDescription = result.data.CDescription;
-                    // jQuery("#Actions_"+commentId+" .textEditor").val('');
                     this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
                 }, (error) => {
-                    console.log("the error in submitComment " + JSON.stringify(error));
+                    this.presentToast('Unsuccessful');
                 }
             );
         }
-        else{
-            console.log("Text required");
-            // this.ticketEditableDesc="Text required.";
-        }
     }
-    // Plugins
     public presentActionSheet(comeFrom: string, where:string, comment:string) {
         let actionSheet = this.actionSheetCtrl.create({
             title: 'Select Image Source',
@@ -634,8 +490,6 @@ export class StoryDetailsPage {
         actionSheet.present();
     }
     public takePicture(sourceType,comeFrom: string, where:string, comment:string) {
-        // Create options for the Camera Dialog
-        // Destination could be : DATA_URL or FILE_URI
         var options = {
             quality: 100,
             sourceType: sourceType,
@@ -643,12 +497,8 @@ export class StoryDetailsPage {
             encodingType: Camera.EncodingType.JPEG,
             saveToPhotoAlbum: false,
             correctOrientation: true,
-            // mediaType: Camera.MediaType.ALLMEDIA
         };
-
-        // Get the data of an image
         Camera.getPicture(options).then((imagePath) => {
-            // console.log('imagePath'+imagePath);
             if (this.platform.is('android') && sourceType === Camera.PictureSourceType.PHOTOLIBRARY) {
                 FilePath.resolveNativePath(imagePath).then((filePath) => {
                     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
@@ -663,30 +513,23 @@ export class StoryDetailsPage {
                 this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
             }
         }, (err) => {
-            this.presentToast('Error while selecting image.');
+            this.presentToast('Unable to select the image.');
         });
     }
-    // Create a new name for the image
     private createFileName(originalName) {
-        // console.log('createFileName');
         var d = new Date(),
         n = d.getTime(),
-        // newFileName =  n + ".jpg";
         newFileName =  "image"+n;
         return newFileName;
     }
-    
-    // Copy the image to a local folder
     private copyFileToLocalDir(namePath, currentName, newFileName, comeFrom: string, where:string, comment:string) {
-        // console.log('copyFileToLocalDir');
         File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
             this.lastImage = newFileName;
             this.uploadImage(currentName, newFileName, comeFrom, where, comment);
         }, error => {
-            this.presentToast('Error while storing file.');
+            console.log('Error while storing file.');
         });
     }
-    // Always get the accurate path to your apps folder
     public pathForImage(img) {
         if (img === null) {
             return '';
@@ -694,21 +537,9 @@ export class StoryDetailsPage {
             return cordova.file.dataDirectory + img;
         }
     }
-    private presentToast(text) {
-        let toast = this.toastCtrl.create({
-            message: text,
-            duration: 3000,
-            position: 'top'
-        });
-        toast.present();
-    }
     public uploadImage(originalname, savedname, comeFrom: string, where:string, comment:string) {
-        // console.log('uploadImage');
-        // Destination URL
         var url = this.constants.filesUploading;
-        // File for Upload
         var targetPath = this.pathForImage(this.lastImage);
-        // File name only
         var filename = this.lastImage;
         var options = {
             fileKey: "commentFile",
@@ -718,16 +549,13 @@ export class StoryDetailsPage {
             params : {'filename': filename,'directory':this.constants.fileUploadsFolder,'originalname': originalname}
         };
         const fileTransfer = new Transfer();
-        // Use the FileTransfer to upload the image
         fileTransfer.upload(targetPath, url, options).then((data) => {
-            // console.log('data'+JSON.stringify(data));
             this.uploadedInserver(data, comeFrom, where, comment);
         }, (err) => {
-            console.log('Error while uploading file.'+ JSON.stringify(err));
+            this.presentToast('Unable to upload the image.');
         });
     }
     public uploadedInserver(dataUploaded, comeFrom: string, where:string, comment:string){
-        // console.log('uploadedInserver');
         var serverResponse = JSON.parse(dataUploaded.response);
         if (serverResponse['status'] == '1') {
             var editor_contents;
@@ -735,7 +563,6 @@ export class StoryDetailsPage {
             if(where=="edit_comments"){
                 editor_contents = jQuery("#Actions_"+comment+" .textEditor").val();
             }
-            // this.commentDesc = this.commentDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                 if (where == "comments") {
@@ -744,17 +571,11 @@ export class StoryDetailsPage {
                     appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
                     jQuery("#Actions_" + comment + " .textEditor").val(appended_content);
                 } else {
-                    // this.ticketEditableDesc = this.ticketEditableDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                    
                 }
             }
-            console.log('Image succesfully uploaded.');
-            // this.presentToast('Image succesfully uploaded.');
         }else{
-            console.log('Error while uploading file.');
-            // this.ticketEditableDesc = "Error while uploading file.";
-            // this.presentToast('Error while uploading file.');
+            this.presentToast('Unable to upload the image.');
         }
     }
-    // Plugins ended
-    // Ticket #91 ended
 }
