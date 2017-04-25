@@ -152,7 +152,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
  */
        public function saveTicketDetails($ticket_data,$parentTicNumber="") {
         try {
-             
+             $newticket_data=$ticket_data; //added by Ryan
              $userdata =  $ticket_data->userInfo;
              $projectId =  $ticket_data->projectId;
              $userId = $userdata->Id;
@@ -168,7 +168,23 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
               $refinedData = CommonUtility::refineDescription($description);
               $description = $refinedData["description"];
             
-              
+              /* Send Notifications to @mentioned user by Ryan and send mail to @mentioned user*/
+                            try
+                            {
+                                error_log("Notification with Mention");
+                                if(!empty($refinedData['UsersList']))
+                                {
+                                    error_log("===in if mail sending.....==");
+                                    NotificationCollection::saveNotificationsWithMention($newticket_data,$refinedData['UsersList'],'mention');
+                                    //CommonUtility::sendMail($ticket_data->userInfo->username, $refinedData['UsersList'],$childticketDetails);
+                                    //CommonUtility::sendMail($newticket_data->userInfo->username, $refinedData['UsersList'],$ticketDetails);
+                                    
+                                }
+                            } catch (Exception $ex) {
+                                Yii::log("NotificationCollection::saveNotifications:" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+                            }
+
+              /* Notification End By Ryan */
              
               unset($ticket_data->title);
               unset($ticket_data->description);
@@ -519,7 +535,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 
              }
              if($newworkflowId != ""){
-                $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId);
+                $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId,$userdata);
 
              }
              $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$projectId);
@@ -715,7 +731,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
                 $updateStaus = $collection->update($condition, $newData);
                 if($field_name=='workflow'){
-                $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value);
+                $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value,$loggedInUser);
  error_log("updateStoryFieldInline---14");
                 $collection->findAndModify( array("ProjectId"=> (int)$ticket_data->projectId ,"TicketId"=>(int)$ticket_data->TicketId),array('$set' => array('Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
                 $updatedState['field_name'] ='state';
@@ -1378,16 +1394,19 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @param type $newWorkflowId
      * @return boolean
      */   
-    public function updateWorkflowAndSendNotification($oldTicketObj, $newWorkflowId) {
+    public function updateWorkflowAndSendNotification($oldTicketObj, $newWorkflowId,$loggedInUser) {
 
         try {
             $collection = TicketCollection::getCollection();
             $projectId = $oldTicketObj['ProjectId'];
+            $ticket_array=array('TicketId'=>$oldTicketObj['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
+            $ticket_data=json_decode(json_encode($ticket_array,1));//added by Ryan
             if ($oldTicketObj['WorkflowType'] == 1) { // 1-Story,General Task,
                 if ($newWorkflowId == 5) {
                     // 5 --Code complete
                     // Send notification to Peer person
-                    error_log("Send notification to Peer person");
+                    NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                    //Send notification end.....
                     return true;
                 } else if ($newWorkflowId == 10 || $newWorkflowId == 7 || $newWorkflowId == 1 || $newWorkflowId == 8) {  // 10 --Re-open  7 -- Invalid 1--New 8--Fixed
                     if (sizeof($oldTicketObj['Tasks']) != 0 || $oldTicketObj['Tasks'] != NULL) {
@@ -1395,11 +1414,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         foreach ($oldTicketObj['Tasks'] as $task) {
                             //  error_log("Task type------------".$task['TaskType']);
                             $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
-                           switch($newWorkflowId)
+                            $task_array=array('TicketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));
+                            $ticket_data=json_decode(json_encode($task_array,1));
+                            switch($newWorkflowId)
                             {
                             case 1 :
                             case 7 :   // 1-New,7 -- Invalid
                             $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                            NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             break;
 
                             case 8 : // 8-Fixed
@@ -1408,8 +1430,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Get closed status details
                             if ($taskDetails['WorkflowType'] == 1) {
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $fixedworkflowDetail['Id'], 'Fields.workflow.value_name' => $fixedworkflowDetail['Name'], 'Fields.state.value' => (int) $fixedworkflowDetail['StateId'], 'Fields.state.value_name' => $fixedworkflowDetail['State'])));
+                                NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                                
                             } else {
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                                NotificationCollection::saveNotifications($ticket_data,'workflow',14);
                             }
                             break;
 
@@ -1418,8 +1443,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                             } else if ($taskDetails['Fields']['state']['value'] == 6 && ($taskDetails['WorkflowType'] == 3 || $taskDetails['WorkflowType'] == 4)) {
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                                    //send notification to Peer  
                             }
-
+                            NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             break;
                         }
 
@@ -1431,9 +1457,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 }
             } else if ($oldTicketObj['WorkflowType'] == 2 && $newWorkflowId == 5) { // 2-UI
                 // Developer should get notification 
+                NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);
                 error_log("Developer should get notification about UI completion");
             } else if ($oldTicketObj['WorkflowType'] == 3) { // 3- Peer
                 
+                $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId); 
+                $ticket_array=array('TicketId'=>$parentTicketDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
+                $ticket_data=json_decode(json_encode($ticket_array,1));
                 switch($newWorkflowId)
                 {
                     case 6:
@@ -1448,15 +1478,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         // Send Notification to QA person to start the QA for this parent ticket.
                         error_log("Send Notification to QA person to start the QA for this parent ticket");
                         break;
-                    
+                     NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);
                 }
                
             } else if ($oldTicketObj['WorkflowType'] == 4) { // 4--QA
-                
+                $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
+                $ticket_array=array('TicketId'=>$parentTicketDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
+                $ticket_data=json_decode(json_encode($ticket_array,1));
                 switch($newWorkflowId)
                 {
                    case 6:
                         error_log("Send notification to Developer(AssignedTo) and Peer");
+                        NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);  
                         break;
                 
                     case 14 :
@@ -1465,6 +1498,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
                     foreach ($parentTicketDetails['Tasks'] as $task) {
                        $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
+                       $task_array=array('TicketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser)); 
                         // Peer UI QA status updated to Close
                         $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                         if($taskDetails['WorkflowType']==1){
@@ -1472,6 +1506,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                          $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $fixedworkflowDetail['Id'], 'Fields.workflow.value_name' => $fixedworkflowDetail['Name'], 'Fields.state.value' => (int) $fixedworkflowDetail['StateId'], 'Fields.state.value_name' => $fixedworkflowDetail['State'])));
    
                         }
+                        NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);  
                         
                     }
                     $ticketId = $oldTicketObj['ParentStoryId'];
@@ -1480,6 +1515,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                     // Send Notification toAll followers.
                     error_log("Send Notification to All followers");
+                   // NotificationCollection::saveNotifications($ticket_data, $workFlowDetail['Name'],$followers);  
                     break;
                 }
                 
@@ -1545,6 +1581,30 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getFieldChangeValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
         
+    }
+    
+    
+    public function getAssignedToUser($oldTicketObj,$type,$projectId)
+    {
+        try
+        {
+        foreach($oldTicketObj['Tasks'] as $task) //added By Ryan
+            {
+                if($task['TaskType']==$type)//peer ticket
+                {
+                    error_log("==Type==".$type);
+                    //get peer task details
+                    $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
+                    error_log("==Task details==".print_r($taskDetails,1));
+                    $collaborator=$taskDetails['Fields']['assignedto']['value'];
+                    error_log("==collaborator==".$collaborator);
+                    return $collaborator;   
+                }
+            }
+        }catch(Exception $ex)
+        {
+            Yii::log("StoryService:getQA::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
     }
 
 }
