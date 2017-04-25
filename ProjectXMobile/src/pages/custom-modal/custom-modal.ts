@@ -24,49 +24,28 @@ declare var jQuery: any;
   templateUrl: 'custom-modal.html'
 })
 export class CustomModalPage {
-
     @ViewChild(Content) content: Content;
-  
     public activatedFieldDetails: any;
     public displayFieldvalue: any;
     public activatedFieldTitle: string;
     public activatedFieldValue: string = "";
-    public isSlected : boolean = false;
     public isPriority: boolean = false;
 
- constructor(public viewCtrl: ViewController, params: NavParams) {
-   this.activatedFieldDetails = params.get('activeField');
-   this.activatedFieldTitle = this.activatedFieldDetails.title;
-
-   if(this.activatedFieldDetails.fieldName == "priority"){
-        // show priority color images
-        this.isPriority = true;
-   }
-
-    this.displayFieldvalue = params.get('displayList');
-    // this.activatedFieldValue = document.getElementById("field_title_" + params.get('activatedFieldIndex')).innerHTML;
-    this.activatedFieldValue = jQuery("#field_title_" + params.get('activatedFieldIndex')).text();
-   
- }
-
- dismiss(selectedItem) {
-   console.log("the dismiss item " + JSON.stringify(selectedItem));
-   if(Object.keys(selectedItem).length > 0){
-      selectedItem['previousValue'] = this.activatedFieldValue;
-   }
-      this.viewCtrl.dismiss(selectedItem);
- }
-
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CustomModalPage');
-    // this.content.scrollToBottom(300);
-   }
-   public ionViewDidEnter(){
-    // this.content.scrollToBottom(300);
-//    console.log("the top of item " + jQuery("#item_5").position().top);
-//    let dimensions = this.content.getContentDimensions();
-//    console.log("the contentBottom " + JSON.stringify(dimensions) + " ----- " + dimensions.contentBottom);
-//    this.content.scrollTo(0, jQuery("#item_5").position().top, 300);
+  constructor(public viewCtrl: ViewController, params: NavParams) {
+    this.activatedFieldDetails = params.get('activeField');
+    this.activatedFieldTitle = this.activatedFieldDetails.title;
+    if(this.activatedFieldDetails.fieldName == "priority"){
+          this.isPriority = true;
+    }
+      this.displayFieldvalue = params.get('displayList');
+      this.activatedFieldValue = jQuery("#field_title_" + params.get('activatedFieldIndex')).text();
   }
+  public dismiss(selectedItem) {
+      if(Object.keys(selectedItem).length > 0){
+          selectedItem['previousValue'] = this.activatedFieldValue;
+      }
+          this.viewCtrl.dismiss(selectedItem);
+  }
+  ionViewDidLoad() {}
+  public ionViewDidEnter(){}
 }
