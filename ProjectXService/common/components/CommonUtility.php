@@ -1119,6 +1119,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     $offset = ($page - 1) * $pageLength;
                     $limit = $pageLength;
                 }
+            $searchString=strtolower($searchString);    
+            if (preg_match('/[^@!%^&*()<>.,#\\-$]/', $searchString) && !empty($searchString)) {
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $options = array(
                 "limit" =>$limit,
@@ -1141,7 +1143,10 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             foreach($ticketCollectionData as $extractCollection){
                 $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
                 $forTicketCollection['Title'] = $extractCollection['Title'];
-                $forTicketCollection['description'] = strip_tags($extractCollection['CrudeDescription']);
+                $description = strip_tags($extractCollection['CrudeDescription']);
+                if(strpos($description,$searchString) !==false){
+                   $forTicketCollection['description']= $description;
+                }
                 $forTicketCollection['planlevel'] = $extractCollection['Fields']['planlevel']['value_name'];
                 $forTicketCollection['reportedby'] = $extractCollection['Fields']['reportedby']['value_name'];
                 $UpdatedOn = $extractCollection['UpdatedOn'];
@@ -1242,7 +1247,11 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                   }
                  array_push($TinyUserFinalArray, $forUsercollection);
             }
-            $getCollectionData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
+               $getCollectionData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
+        }else{
+            $getCollectionData=array();
+        }
+         
             return $getCollectionData;
  
         } catch (Exception $ex) {
