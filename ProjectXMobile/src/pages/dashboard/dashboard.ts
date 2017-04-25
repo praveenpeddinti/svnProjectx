@@ -27,7 +27,7 @@ export class DashboardPage {
     arrayObject is used for saving the stories list and passing it to the html page
      ** 
     */
-    public arrayObject: Array<{id: string, storyOrTask: string, subTasks: number, storyPointsHeading: string, title: string, assignTo: string, userThumbNail: string, priority: string, workflow: string, bucket: string, duedate: string}>;
+    public arrayObject: Array<{id: string, storyOrTask: string, subTasks: number, storyPointsHeading: string, title: string, assignTo: string, userThumbNail: string, priority: string, workflow: string, bucket: string, duedate: string, state: string}>;
     public moreDataLoaded: boolean = true;
 
     public loader = this.loadingController.create({content: "Loading..."});
@@ -157,9 +157,11 @@ console.log("the ionViewDidLoad after dismiss");
                         var _workflow = this.items[ticket][4].field_value;
                         var _bucket = this.items[ticket][5].field_value;
                         var _dudate = this.items[ticket][6].field_value;
+                        var _state = this.items[ticket][4].other_data;
+                        console.log("other data value in dashbord" + _state);
 
                         this.arrayObject.push({
-                            id: _id, storyOrTask: _storyOrTask, subTasks: _subTasks, storyPointsHeading: _storyPointHeading, title: _title, assignTo: _assignTo, userThumbNail: _thumbNail, priority: _priority, workflow: _workflow, bucket: _bucket, duedate: _dudate
+                            id: _id, storyOrTask: _storyOrTask, subTasks: _subTasks, storyPointsHeading: _storyPointHeading, title: _title, assignTo: _assignTo, userThumbNail: _thumbNail, priority: _priority, workflow: _workflow, bucket: _bucket, duedate: _dudate, state: _state
                         });
                     }
 

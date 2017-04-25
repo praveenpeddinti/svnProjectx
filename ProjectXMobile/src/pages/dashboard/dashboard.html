@@ -43,15 +43,16 @@
               
               <div class="dashboardbox_content">
                   <div class="dashboardbox_contentouterdiv">
-                      <div class="width33per collabels">Status</div>
+                      <div class="width33per collabels">State</div>
                       <div class="width33per collabels">Due date</div>
                       <div class="width34per collabels">{{item.storyPointsHeading}}</div>
                   </div>
                   <div class="dashboardbox_contentouterdiv">
-                      <div class="width33per colresults">{{item.workflow}}&nbsp; </div>
+                      <div class="width33per colresults">{{item.state}}&nbsp; </div>
                       <div class="width33per collabels">{{item.duedate}}&nbsp;</div>
                       <div class="width34per colresults">{{item.subTasks}}&nbsp;</div>
                   </div>
+                 <div class="width33per colresults"> {{item.workflow}}</div>
               </div>
               <div class="dashboardbox_footer">
                   <span class="assignlabel"> Assigned to </span> <i class="fa fa-user-circle-o usericon" aria-hidden="true"></i> <span class="username">{{item.assignTo}}</span>
