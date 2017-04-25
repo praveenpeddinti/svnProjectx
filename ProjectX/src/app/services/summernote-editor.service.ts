@@ -83,7 +83,7 @@ export class SummerNoteEditorService
                             },
                             template: function (item) {
                                 console.log("==Profile==**"+item.Profile);
-                               return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>'+item.name+'</div>';
+                               return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>&nbsp;'+item.name+'</div>';
                             },
                             content: function (item) {
                                 console.log("===Item=="+item);

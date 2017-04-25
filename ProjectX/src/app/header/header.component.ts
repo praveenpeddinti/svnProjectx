@@ -46,7 +46,7 @@ var post_data={};
         thisObj.notify_count=data.count;
        
       });
-},150000)
+},15000)
       
      
     }
@@ -82,15 +82,21 @@ var post_data={};
     var post_data={'notifyid':notify_id};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
+    this.notification_msg=[];
       if(data)
       {
-      if(this.notify_count >0){
-       this.notify_count--;
-      }
-      
+        this.notify_count = data.totalCount;
         jQuery('#'+notify_id).remove();
-      
-        
+      if(data.data.notify_result != "nodata"){
+    
+       for(var i=0;i<data.data.notify_result.length;i++)
+        {
+         
+            this.notification_msg.push(data.data.notify_result[i]);
+          
+        }
+}
+       
       }
     })
 

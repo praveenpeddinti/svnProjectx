@@ -123,11 +123,13 @@ public blurTimeout=[];
     setTimeout(() => {
      // alert(jQuery("."+this.searchSlug));
      console.log(this.searchSlug);
+      if(typeof this.searchSlug != "undefined"){ console.log("in--");
            var getSlug = jQuery("."+this.searchSlug).offset().top;
-         //  alert(getSlug);
+        
             jQuery('html, body').animate({
-        scrollTop: getSlug
-     }, 1000);
+               scrollTop: getSlug
+             }, 1000);
+             }
         }, 500);
 
     }
