@@ -612,17 +612,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                  error_log("updateStoryFieldInline---3");
                   $fieldDetails =  StoryFields::getFieldDetails($field_id);
                   $fieldName = $fieldDetails["Field_Name"];
-                    if($fieldName=='estimatedpoints' || $fieldName=='dod')
-                    {
-                      NotificationCollection::saveNotifications($ticket_data,$fieldName,$ticket_data->value);
-                    }
+                   
                      if(is_numeric($ticket_data->value)){
                         if($fieldDetails["Type"] == 6 ){
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
                           
                             $this->followTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
-                             NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
+                           //  NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
 
                             /*Send Mail to Assigned to User by Ryan*/
                             try
@@ -656,18 +653,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 error_log("updateStoryFieldInline---5");
                                  $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
                                 $valueName = $workFlowDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 error_log("updateStoryFieldInline---6");
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->value);
                                 $valueName = $priorityDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
                                 $bucketDetail =  Bucket::getBucketName($ticket_data->value,(int)$ticket_data->projectId);
                                 $valueName = $bucketDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
                                 $planlevelDetail =  PlanLevel::getPlanLevelDetails($ticket_data->value);
@@ -676,7 +670,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->value);
                                 $valueName = $tickettypeDetail["Name"];
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                                 } 
                         
                         error_log("updateStoryFieldInline---7");
@@ -687,8 +680,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                              error_log("updateStoryFieldInline---9");
                             $validDate = CommonUtility::validateDate($ticket_data->value);
                             if($validDate){
-                                $leftsideFieldVal = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                                NotificationCollection::saveNotifications($ticket_data,$fieldDetails["Field_Name"],$leftsideFieldVal);   
+                               $ticket_data->value = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+                               $leftsideFieldVal = $ticket_data->value; 
                             }else{
                                 //error_log("===Field Name==".$leftsideFieldVal);
                                 $leftsideFieldVal = $ticket_data->value; 
@@ -709,11 +702,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 } else{
                                    $fieldName =  $fieldDetails["Field_Name"];
                                     if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
-                                       $fieldDetails["Field_Name"]= $ticket_data->TicketId."-".$fieldName;  
+                                        $fieldNameModified = $ticket_data->TicketId."-".$fieldName;  
                                     }else{
-                                        $fieldDetails["Field_Name"]='follower';
+                                        $fieldNameModified ='follower';
                                     }
-                                    $this->unfollowTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$fieldDetails["Field_Name"]); 
+                                    $this->unfollowTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$fieldNameModified); 
                                   }
                                 }
                         }
@@ -726,6 +719,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId,$fieldtochangeId=>(int)$ticket_data->id);
                     $selectedValue=$leftsideFieldVal;
                     $activityNewValue = $leftsideFieldVal;
+             error_log("==call check==".$ticket_data->value);       
+       NotificationCollection::saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldDetails["Type"]);
+   
             }
     error_log("updateStoryFieldInline---13");
                 $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
@@ -766,6 +762,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
   
     public function saveComment($commentData){
         try{
+            error_log("saveComment-------------1");
             $slug="";
             $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
             $ticketDetails=TicketCollection::getTicketDetails($commentData->TicketId,$commentData->projectId);//added By Ryan
@@ -775,6 +772,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $artifacts = $refinedData["ArtifactsList"];
             $commentDesc = $commentData->Comment->CrudeCDescription;
             if (isset($commentData->Comment->Slug)) {
+                 error_log("saveComment-------------2");
                 $collection = Yii::$app->mongodb->getCollection('TicketComments');
 //}
                 $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc));
@@ -786,7 +784,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 }
                 return $retData;
             } else {
-
+ error_log("saveComment-------------3");
                 $commentedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
 
                 $slug = new \MongoDB\BSON\ObjectID();
@@ -822,43 +820,29 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             {
                                 
                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketDetails['TicketId']."?Slug=".$slug;
-                                $comment="A ticket has been commented by ".$commentData->userInfo->username." for <a href=$link>".'#'.$ticketDetails['TicketId'].' '.$ticketDetails['Title']."</a>";
-                                $reply="A ticket has been replied by ".$commentData->userInfo->username." for <a href=$link>".'#'.$ticketDetails['TicketId'].' '.$ticketDetails['Title']."</a>";
-                               
-                                if(!empty($refinedData['UsersList']))
-                                {
+                                $mentionArray = $refinedData['UsersList'];
                                     if($commentData->Comment->Reply==false)
                                     {
-                                        NotificationCollection::saveNotificationsWithMention($commentData,$refinedData['UsersList'],'comment',$slug);
-                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList'],$ticketDetails,$comment);
+                                       $notify_type = "comment";
+                                       $actionName = "commented";
                                     }
                                     else
                                     {
-                                        NotificationCollection::saveNotificationsWithMention($commentData,$refinedData['UsersList'],'reply',$slug);
-                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList'],$ticketDetails,$reply);
-                                    }
-                                }
-                                else
-                                {
-                                    
-                                    if($commentData->Comment->Reply==false)
-                                    {
-                                        $this->saveNotificationsForComment($commentData,'comment',$slug,$comment);
-                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList']=array(),$ticketDetails,$comment);
-                                    }
-                                    else
-                                    {
-                                        $this->saveNotificationsForComment($commentData,'reply',$slug,$reply);
-                                        CommonUtility::sendMail($commentData->userInfo->username, $refinedData['UsersList']=array(),$ticketDetails,$reply);
-                                    }
-                                }
+                                       $notify_type = "reply";
+                                        $actionName = "replied";
+                                     }
+                               $emailBody = "A ticket has been ".$actionName." by ".$commentData->userInfo->username." for <a href=$link>".'#'.$ticketDetails['TicketId'].' '.$ticketDetails['Title']."</a>";
+                               error_log("==notify type==".$notify_type);
+                               $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
+                               CommonUtility::sendMail($commentData->userInfo->username, $mentionArray,$ticketDetails,$emailBody);
+
                             } catch (Exception $ex) {
                                 Yii::log("NotificationCollection::saveNotifications:" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
                             }
 
                             
                             /* Send Notification End By Ryan */
-
+ error_log("saveComment-------------4");
                 return $commentDataArray;
             }
         }catch(Exception $ex){
@@ -1405,7 +1389,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 if ($newWorkflowId == 5) {
                     // 5 --Code complete
                     // Send notification to Peer person
-                    NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                   // NotificationCollection::saveNotifications($ticket_data,'workflow',$newWorkflowId);
                     //Send notification end.....
                     return true;
                 } else if ($newWorkflowId == 10 || $newWorkflowId == 7 || $newWorkflowId == 1 || $newWorkflowId == 8) {  // 10 --Re-open  7 -- Invalid 1--New 8--Fixed
@@ -1576,6 +1560,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $tickettypeValue=$tickettypeDetails['Name'];
                 return $tickettypeValue;
             }
+            
         }catch(Exception $ex)
         {
             Yii::log("StoryService:getFieldChangeValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

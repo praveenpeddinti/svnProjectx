@@ -219,7 +219,7 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
      * @description This method is used to getting User details By Collab Id.
      * @return user List
      */
-    public function getCollaboratorById($id)
+    public static function getCollaboratorById($id)
     {
         try
         {

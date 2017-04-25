@@ -8,14 +8,8 @@
 namespace console\controllers;
 use Yii;
 use yii\console\Controller;
-use yii\helpers\Console;
-use common\models\bean\FieldBean;
-use frontend\controllers;
-use common\models\mongo\TicketCollection;
 use common\models\mongo\NotificationCollection;
-use common\models\bean\ResponseBean;
-use common\components\CommonUtility;
-use common\models\mongo\TinyUserCollection;
+use common\components\ServiceFactory;
 
 class NotificationsController extends Controller
 {
@@ -35,13 +29,16 @@ class NotificationsController extends Controller
         $activityFrom=array();
         //logic for getting all the notifications for a particular loggedIn user
         try
-        {
+        { 
+            $offset = 0;
+            $limit = 5;
             $notification_data = json_decode($data);
             $projectId=$notification_data->projectId;
             $notified_userid=$notification_data->userInfo->Id;
             $notified_username=$notification_data->userInfo->username;
             //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
-            $result_data=NotificationCollection::getNotifications($notified_userid,$projectId);
+            $result_data = ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,$offset,$limit);
+           // $result_data=NotificationCollection::getNotifications($notified_userid,$projectId,$offset,$limit);
             
             echo json_encode(array('notify_result'=>$result_data));
             

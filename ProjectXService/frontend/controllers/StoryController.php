@@ -480,6 +480,7 @@ class StoryController extends Controller
 
 
    public function actionSubmitComment(){
+       error_log("submit comment==============");
        $comment_post_data=json_decode(file_get_contents("php://input"));
        error_log(print_r($comment_post_data,1));
        $returnData = ServiceFactory::getStoryServiceInstance()->saveComment($comment_post_data);
@@ -556,7 +557,7 @@ class StoryController extends Controller
                
                /* added by Ryan for notifications */
                
-               NotificationCollection::saveNotifications($post_data, 'added',  $post_data->collaboratorId);
+               NotificationCollection::saveNotifications($post_data, 'add',  $post_data->collaboratorId,"FollowObj");
                /* notifications end */
           
             $responseBean = new ResponseBean();
@@ -954,6 +955,7 @@ class StoryController extends Controller
      */
     
     public function actionUploadCommentArtifacts(){
+        error_log("actionUploadCommentArtifacts---------------------");
         $postData = array();
         $data_array = array();
         $originalname = '';

@@ -44,8 +44,8 @@ class FieldTypes extends ActiveRecord
        
     }
     
-}
-
-
+        }
+       
+    
 
 ?>

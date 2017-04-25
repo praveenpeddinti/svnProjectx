@@ -308,7 +308,6 @@ class CommonUtility {
             $workFlowModel = new WorkFlowFields();
             $ticketTypeModel = new TicketType();
 
-
             foreach ($ticketDetails["Fields"] as &$value) {
                 if (isset($value["custom_field_id"])) {
                     $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
@@ -417,16 +416,8 @@ class CommonUtility {
                 $relatedStory = $relatedStoryDetails;
             }
             if (!empty($ticketDetails["Followers"])) {
-
-                $ticketDetails["Followers"] = array_filter($ticketDetails["Followers"], function($obj) {
-                    static $idList = array();
-                    if (in_array($obj["FollowerId"], $idList)) {
-                        return false;
-                    }
-                    $idList [] = $obj["FollowerId"];
-                    return true;
-                }
-                );
+        $ticketDetails["Followers"] = CommonUtility::filterFollowers($ticketDetails["Followers"]);
+             
                 foreach ($ticketDetails["Followers"] as &$followersList) {
                     //error_log($followersList['FollowerId']."----Follower--1--".print_r($followersList,1));
 
@@ -1091,7 +1082,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     $fromName="ProjectX";
                     $html="<h1> $text_message </h1>";
                     $text=$text_message;
-                    $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
+                   // $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
                 }
                 catch (Exception $e)
                 {
@@ -1288,6 +1279,23 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             Yii::log("CommonUtility:prepareFilterOption::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
  
+}
+
+public static function filterFollowers($followers){
+    try{
+          $followers = array_filter($followers, function($obj) {
+                    static $idList = array();
+                    if (in_array($obj["FollowerId"], $idList)) {
+                        return false;
+                    }
+                    $idList [] = $obj["FollowerId"];
+                    return true;
+                }
+             );
+             return $followers;
+    } catch (Exception $ex) {
+
+    }
 }
 
 }

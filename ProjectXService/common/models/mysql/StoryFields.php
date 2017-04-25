@@ -37,6 +37,7 @@ class StoryFields extends ActiveRecord
         try{
         $query = "select sf.*,ft.Name from StoryFields sf join FieldTypes ft on sf.Type=ft.Id  where sf.".$col."='".$fieldId."'";
         $data = Yii::$app->db->createCommand($query)->queryOne();
+        error_log($query);
         return $data;  
         } catch (Exception $ex) {
      Yii::log("StoryFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -76,8 +77,8 @@ class StoryFields extends ActiveRecord
         }
     }
     
-}
-
+        }
+    
 
 
 ?>
