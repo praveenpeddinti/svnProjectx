@@ -11,12 +11,12 @@ import 'rxjs/add/operator/map';
 export class Constants {
   // Local URL
   // public baseUrl = 'http://10.10.73.62/';
-  // public baseUrl = 'http://10.10.73.33/';
+  public baseUrl = 'http://10.10.73.33/';
   // Ticket #91 - have to change to 77 later
-  // public baseUrl = 'http://10.10.73.12:802/';
+  //  public baseUrl = 'http://10.10.73.12:802/';
   // Public URL
-   public baseUrl = 'http://113.193.181.131/';
-  //  public baseUrl = 'http://10.10.73.77/';
+  // public baseUrl = 'http://113.193.181.131/';
+  // public baseUrl = 'http://10.10.73.77/';
     
    public loginUrl = this.baseUrl+"site/user-authentication";
    //public getAllTicketDetails = this.baseUrl + "story/get-all-ticket-details";
