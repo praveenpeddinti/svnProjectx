@@ -62,11 +62,11 @@ var post_data={};
     var searchString=jQuery("#globalsearch").val().trim();
      //this.searchresults=searchString;
     //  var searchString=searchString.replace("#","");
-         if(searchString=='' || searchString=='undefined'){ 
-           this.showErrorFunction("searchError","Please Search.")
-         }else{
+        // if(searchString=='' || searchString=='undefined'){ 
+        //   this.showErrorFunction("searchError","Please Search.")
+        // }else{
            this._router.navigate(['search'],{queryParams: {v:searchString}});
-         }
+        // }
       
     }
   showErrorFunction(id,message){
