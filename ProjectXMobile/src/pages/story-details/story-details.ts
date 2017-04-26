@@ -513,7 +513,7 @@ export class StoryDetailsPage {
                 this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
             }
         }, (err) => {
-            this.presentToast('Unable to select the image.');
+           // this.presentToast('Unable to select the image.');
         });
     }
     private createFileName(originalName) {
