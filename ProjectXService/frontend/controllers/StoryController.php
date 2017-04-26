@@ -557,7 +557,7 @@ class StoryController extends Controller
                
                /* added by Ryan for notifications */
                
-               NotificationCollection::saveNotifications($post_data, 'add',  $post_data->collaboratorId,"FollowObj");
+              ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'add',  $post_data->collaboratorId,"FollowObj");
                /* notifications end */
           
             $responseBean = new ResponseBean();
