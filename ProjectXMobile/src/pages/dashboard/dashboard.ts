@@ -14,8 +14,7 @@ import {Constants} from '../../providers/constants';
 */
 @Component({
     selector: 'page-dashboard',
-    templateUrl: 'dashboard.html',
-
+    templateUrl: 'dashboard.html'
 })
 export class DashboardPage {
     public items: Array<any>;
@@ -35,11 +34,11 @@ export class DashboardPage {
     userName: any = '';
     /*
     *
-        paramas are used while getting List Results from the webservice.
+        params are used while getting List Results from the webservice.
     *
     */
 
-    paramas = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "desc","filterOption":null,"timeZone":"Asia/Kolkata", "userInfo": {}};
+    params = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "desc","filterOption":null,"timeZone":"Asia/Kolkata", "userInfo": {}};
 
     constructor(public navCtrl: NavController,
         public navParams: NavParams,
@@ -55,9 +54,10 @@ export class DashboardPage {
 
 
         this.storage.get('userCredentials').then((value) => {
-
+            this.userName = value.username;
+            this.params.userInfo = value;
+            this.getAllStoriesList();
             platform.registerBackButtonAction(() => {
-                // console.log("the views length " + this.navCtrl.getActive().index);
                 /* checks if modal is open */
                 if (StoryDetailsPage.optionsModal && StoryDetailsPage.optionsModal.index == 0) {
                     /* closes modal */
@@ -73,13 +73,7 @@ export class DashboardPage {
                     }
                 }
             });
-
-            this.userName = value.username;
-            this.paramas.userInfo = value;
-
-            this.getAllStoriesList();
         });
-
     }
 
     ionViewDidLoad() {
@@ -108,7 +102,7 @@ console.log("the ionViewDidLoad after dismiss");
     doRefresh(refresher) {
         this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
-            this.paramas.userInfo = value;
+            this.params.userInfo = value;
 
             this.getAllStoriesList();
             if (refresher != 0)
@@ -122,14 +116,14 @@ console.log("the ionViewDidLoad after dismiss");
      */
     getAllStoriesList(): void {
         
-        if (this.paramas.offset == 0) {
-            this.paramas.offset = 0;
+        if (this.params.offset == 0) {
+            this.params.offset = 0;
         }
 
-        this.globalService.getStoriesList(this.urlConstants.getAllTicketDetails, this.paramas).subscribe(
+        this.globalService.getStoriesList(this.urlConstants.getAllTicketDetails, this.params).subscribe(
             data => {
                 if (data.statusCode == '200') {
-                    if (this.paramas.offset == 0) {
+                    if (this.params.offset == 0) {
                         this.loader.present();
                     }
                     this.items = data.data;
@@ -165,10 +159,10 @@ console.log("the ionViewDidLoad after dismiss");
                         });
                     }
 
-                    if (this.paramas.offset == 0) {
+                    if (this.params.offset == 0) {
                         this.loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                     }
-                    this.paramas.offset = (this.paramas.offset) + 1;
+                    this.params.offset = (this.params.offset) + 1;
 
                 }
             },
