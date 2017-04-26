@@ -16,6 +16,7 @@ return [
     "setduedate"=>"set Due Date to",
     "follow"=>"followed",
     "unfollow"=>"unfollowed",
+    "follower"=>"as a follower",
   
     
     
