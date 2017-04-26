@@ -141,10 +141,17 @@
                                             <div id="Activity_content_{{i}}" [hidden]="editTheComment[i]">
                                                 <div class="commentp" [innerHTML]="eachActivity.CDescription"></div>
                                             </div>
-                                            <div class="uploadAndSubmitclose" id="Actions_{{i}}" [hidden]="!editTheComment[i]" style="position: relative;">
+                                            <div class="editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i]" style="position: relative;">
                                                 <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
                                                 <!--Have to change Text area to editor-->
                                                 <textarea class="textEditor" placeholder="Enter text here..."></textarea>
+                                                <!--Progress bar-->
+                                                <div [hidden]='progressEdit==0'>
+                                                    <progress [value]="progressEdit" max="100">{{progressEdit}}%</progress>
+                                                    <span>{{progressEdit}}%</span>
+                                                </div>
+                                                <div id="progressFileUploadEdit"></div>
+                                                <!--Progress bar-->
                                                 <div class="customrow">
                                                     <div class="col50">
                                                         <div class="uploadbottom">
@@ -175,9 +182,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="uploadAndSubmit ">  
+                    <div class="uploadAndSubmit editorDiv">
                         <!--Have to change Text area to editor-->
                         <textarea class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
+                        <!--Progress bar-->
+                        <div [hidden]='progressNew==0'>
+                            <progress [value]="progressNew" max="100">{{progressNew}}%</progress>
+                            <span>{{progressNew}}%</span>
+                        </div>
+                        <div id="progressFileUploadNew"></div>
+                        <!--Progress bar-->
                         <div class="customrow">
                             <div class="col50">
                                 <div class="uploadbottom">

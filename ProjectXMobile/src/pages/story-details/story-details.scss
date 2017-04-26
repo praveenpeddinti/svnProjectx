@@ -433,9 +433,9 @@ border: 1px solid #f0f0f0; margin-bottom:5px; padding-left:3px; padding-top: 5px
 .commentedtextdelete:hover i{color:#7f7f7f}
 .user a img{border:0;outline:0}
 .user a {vertical-align: middle;display: inline-block}
-.uploadAndSubmit{}
+.editorDiv{}
 /*.margintop10{margin-top:10px}*/
-.uploadAndSubmit .textEditor{border:1px solid #ccc;width:100%;min-height:40px;resize: vertical;
+.editorDiv .textEditor{border:1px solid #ccc;width:100%;min-height:40px;resize: vertical;
     overflow: auto;padding:10px}
 .uploadbottom{width:30px;height:30px;overflow: hidden;position: relative;}
 .uploadbottom i{font-size:30px}
@@ -498,10 +498,16 @@ ion-fab-list {
 ion-fab-list[side="left"] .fab-in-list, ion-fab-list[side="right"] .fab-in-list {
     margin: 0 4px 0 0;
 }
-.uploadAndSubmitclose{background: #f4f4f4;border:1px solid #e8e8e8;padding:0px 5px 5px 5px;position: relative}
+.editorDivclose{background: #f4f4f4;border:1px solid #e8e8e8;padding:0px 5px 5px 5px;position: relative}
 .commentedtextdeletenoabsolute{position: static;}
 .deletediv{text-align: right}
 }
 .picker-opt-disabled {
     opacity:1!important;
+}
+.uploading {
+    background-color: black;
+    text-align: center;
+    color: white;    
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }

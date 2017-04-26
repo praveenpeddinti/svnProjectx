@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ToastController, Content, Platform, App } from 'ionic-angular';
 import { ModalController, NavParams, MenuController, LoadingController, PopoverController, ActionSheetController } from 'ionic-angular';
@@ -34,6 +34,8 @@ export class StoryDetailsPage {
     public commentDesc = "";
     private openCommentMenuList = [];
     private lastImage: string = null;
+    private progressNew: number;
+    private progressEdit: number;
     public enableDataPicker = [];
     public enableTextField = [];
     public enableTextArea = [];
@@ -65,7 +67,8 @@ export class StoryDetailsPage {
         public actionSheetCtrl: ActionSheetController,
         public platform: Platform,
         private storage: Storage, 
-        private datePipe: DatePipe ) {
+        private datePipe: DatePipe,
+        private ngZone: NgZone ) {
         StoryDetailsPage.menuControler = menu;
         this.minDate = new Date().toISOString();
         let loader = this.loadingController.create({ content: "Loading..." });
@@ -153,6 +156,8 @@ export class StoryDetailsPage {
             }, (error) => {
             }
         );
+        this.progressNew = 0;
+        this.progressEdit = 0;
     }
     public menuOpened() {
         StoryDetailsPage.isMenuOpen = true;
@@ -537,6 +542,36 @@ export class StoryDetailsPage {
             return cordova.file.dataDirectory + img;
         }
     }
+    public onProgressNew = (progressEvent: ProgressEvent) : void => {
+        this.ngZone.run(() => {
+            if (progressEvent.lengthComputable) {
+                let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+                this.progressNew = progress;
+                document.getElementById('progressFileUploadNew').innerHTML = progress + "% loaded...";
+            } else {
+                if (document.getElementById('progressFileUploadNew').innerHTML == "") {
+                    document.getElementById('progressFileUploadNew').innerHTML = "Loading";
+                } else {
+                    document.getElementById('progressFileUploadNew').innerHTML += ".";
+                }
+            }
+        });
+    }
+    public onProgressEdit = (progressEvent: ProgressEvent) : void => {
+        this.ngZone.run(() => {
+            if (progressEvent.lengthComputable) {
+                let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+                this.progressEdit = progress;
+                document.getElementById('progressFileUploadEdit').innerHTML = progress + "% loaded...";
+            } else {
+                if (document.getElementById('progressFileUploadEdit').innerHTML == "") {
+                    document.getElementById('progressFileUploadEdit').innerHTML = "Loading";
+                } else {
+                    document.getElementById('progressFileUploadEdit').innerHTML += ".";
+                }
+            }
+        });
+    }
     public uploadImage(originalname, savedname, comeFrom: string, where:string, comment:string) {
         var url = this.constants.filesUploading;
         var targetPath = this.pathForImage(this.lastImage);
@@ -549,10 +584,29 @@ export class StoryDetailsPage {
             params : {'filename': filename,'directory':this.constants.fileUploadsFolder,'originalname': originalname}
         };
         const fileTransfer = new Transfer();
-        fileTransfer.upload(targetPath, url, options).then((data) => {
-            this.uploadedInserver(data, comeFrom, where, comment);
-        }, (err) => {
-            this.presentToast('Unable to upload the image.');
+        if(where == "comments"){
+            fileTransfer.onProgress(this.onProgressNew);
+        }
+        if(where=="edit_comments"){
+            fileTransfer.onProgress(this.onProgressEdit);
+        }
+        fileTransfer.upload(targetPath, url, options).then(
+            (data) => {
+                var statusUpload = this.uploadedInserver(data, comeFrom, where, comment);
+                if(statusUpload=='uploaded'){
+                    if(where == "comments"){
+                        this.progressNew = 0;
+                        document.getElementById('progressFileUploadNew').innerHTML = "";
+                    }
+                    if(where=="edit_comments"){
+                        this.progressEdit = 0;
+                        document.getElementById('progressFileUploadEdit').innerHTML = "";
+                    }
+                }else if(statusUpload=='notuploaded'){
+                    this.presentToast('Unable to upload the image.');
+                }
+            }, (err) => {
+                this.presentToast('Unable to upload the image.');
         });
     }
     public uploadedInserver(dataUploaded, comeFrom: string, where:string, comment:string){
@@ -570,12 +624,11 @@ export class StoryDetailsPage {
                 } else if (where == "edit_comments") {
                     appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
                     jQuery("#Actions_" + comment + " .textEditor").val(appended_content);
-                } else {
-                    
-                }
+                } 
             }
+            return 'uploaded';
         }else{
-            this.presentToast('Unable to upload the image.');
+            return 'notuploaded';
         }
     }
 }
