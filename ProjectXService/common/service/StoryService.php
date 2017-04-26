@@ -24,7 +24,7 @@ class StoryService {
     public function getTicketDetails($ticketId, $projectId) {
         try {
              $ticketCollectionModel = new TicketCollection();
-         $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId);  
+         $ticketDetails = $ticketCollectionModel::getTicketDetails($ticketId,$projectId);  
          $details =  CommonUtility::prepareTicketDetails($ticketDetails, $projectId);
          return $details;
         } catch (Exception $ex) {
