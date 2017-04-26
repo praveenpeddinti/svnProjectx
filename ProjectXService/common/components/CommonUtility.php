@@ -1134,9 +1134,9 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             foreach($ticketCollectionData as $extractCollection){
                 $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
                 $forTicketCollection['Title'] = $extractCollection['Title'];
-                $description = strip_tags($extractCollection['CrudeDescription']);
-                if(strpos($description,$searchString) !==false){
-                   $forTicketCollection['description']= $description;
+                $forTicketCollection['description'] = strip_tags($extractCollection['CrudeDescription']);
+                if(strpos($forTicketCollection['description'],$searchString) !==false){
+                   $forTicketCollection['description']= $forTicketCollection['description'];
                 }
                 $forTicketCollection['planlevel'] = $extractCollection['Fields']['planlevel']['value_name'];
                 $forTicketCollection['reportedby'] = $extractCollection['Fields']['reportedby']['value_name'];
