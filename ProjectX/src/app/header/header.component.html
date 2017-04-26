@@ -43,7 +43,7 @@
 <div [style]="{cursor:pointer}" (click)="goToTicket(notify.TicketId,notify.id.$oid)"  *ngIf="notify.type!='changed' && !notify.stakeholder && !notify.status && notify.type!='commented on' && notify.type!='mentioned'" class="not_content">
 <span  class="not_mention">
 {{notify.from}}
-    </span> {{notify.type}} <span  class="not_mention">{{notify.to}}</span> <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title | truncate:30}} </span>{{notify.OtherMessage}}
+    </span> {{notify.type}} <span  class="not_mention">{{notify.to}}</span> {{notify.OtherMessage}} <img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title | truncate:30}} </span>
 <div class="not_date">{{notify.date}}</div>
 </div>
 
