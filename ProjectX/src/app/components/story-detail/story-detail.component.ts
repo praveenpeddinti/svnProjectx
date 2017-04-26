@@ -104,6 +104,7 @@ public blurTimeout=[];
       this.route.params.subscribe(params => {
             this.ticketId = params['id'];
             jQuery("#notifications_list").hide();
+            console.log("started-------------");
             this.callTicketDetailPage(this.ticketId);
              
         });
@@ -120,17 +121,7 @@ public blurTimeout=[];
         this.editor.initialize_editor('commentEditor',null,null); //for comment
 
       //jQuery('span[id^="check_"]').hide();
-    setTimeout(() => {
-     // alert(jQuery("."+this.searchSlug));
-     console.log(this.searchSlug);
-      if(typeof this.searchSlug != "undefined"){ console.log("in--");
-           var getSlug = jQuery("."+this.searchSlug).offset().top;
-        
-            jQuery('html, body').animate({
-               scrollTop: getSlug
-             }, 1000);
-             }
-        }, 500);
+   
 
     }
 
@@ -1411,6 +1402,18 @@ public callTicketDetailPage(ticId){
             { 
               console.log(data.data.Activities);
               this.commentsList = data.data.Activities;
+               setTimeout(() => { 
+                    if(typeof this.searchSlug != "undefined"){ 
+                        if(jQuery("."+this.searchSlug).length>0){
+                         var getSlug = jQuery("."+this.searchSlug).offset().top;
+
+                          jQuery('html, body').animate({
+                             scrollTop: getSlug
+                           }, 1000);
+                           }
+                     }
+              }, 500);
+              
             });
 
         });
