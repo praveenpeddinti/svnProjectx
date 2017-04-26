@@ -397,7 +397,7 @@ use common\models\mysql\StoryFields;
         $msg='';
         $message=array();
         $result_msg=array();
-        $action_user=Collaborators::getCollaboratorById($user);
+       // $action_user=Collaborators::getCollaboratorById($user);
         try{
             $notifications = NotificationCollection::getNotifications($user, $projectId,$offset,$limit);
             //constucting the notifications for the user
@@ -429,15 +429,15 @@ use common\models\mysql\StoryFields;
                            
                             //for logged in user
                             //Eg : moin.hussain assigned you to ticket #33 
-                            $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'to'=>"you to",'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder']);
+                            $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'to'=>"you",'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder']);
                             array_push($result_msg,$message);
                         }
                         else
                         {
-                           
+                           $action_user=Collaborators::getCollaboratorById($notification['NewValue']);
                                 //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
                                 //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
-                                $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'to'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$ticket_data['StoryType']['Id'],'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder']);
+                                $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'to'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder']);
                                 array_push($result_msg,$message);
                            
                         }
@@ -491,7 +491,7 @@ use common\models\mysql\StoryFields;
                         if($notification['Notification_Type']=='comment')
                         {
                          //Eg : moin.hussain commented on #33 Ticket 
-                             if($from_user['UserName']!=$action_user['UserName'])
+                             if($notification['ActivityFrom']!=$user)
                              {
                               $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['comment'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
                               array_push($result_msg,$message);
@@ -573,7 +573,7 @@ use common\models\mysql\StoryFields;
                                  $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$oldValue,"NewValue"=>$newValue,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
                                  array_push($result_msg,$message);
                              }
-                             else
+                             else if($storyField['Type']!=6 )
                              {
                                 $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
                                 $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
