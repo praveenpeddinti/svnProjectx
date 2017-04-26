@@ -468,23 +468,10 @@ use common\models\mysql\StoryFields;
                                 $activityOn =$action_user['UserName'];
                               
                             }
-                         $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['added'],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder']);
+                         $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower']);
                                 array_push($result_msg,$message);
                     }
-                    
-                    if($notification['Notification_Type']=='removed')
-                    {
-                       
-                            if($notification['NotifiedUser']==$notification['ActivityOn']) //if logged in user has been added
-                            {
-                                //Eg : moin.hussain added you as a follower to ticket #33
-                                $notification['ActivityOn']='You from';
-                                $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['removed'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'stakeholder'=>Yii::$app->params['follower'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
-                            }
-
-                       
-                    }
-                  
+                              
                    
                     /******* Followers Message End **********/
                     
