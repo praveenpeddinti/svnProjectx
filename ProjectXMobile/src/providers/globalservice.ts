@@ -14,13 +14,20 @@ export class Globalservice {
     private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
     params: {userInfo?: any, projectId?: any} = {};
     constructor(public http: Http, public storage: Storage) {
-        console.log('Globalservice Provider');
+        // this.storage.get("userCredentials").then((value) => {
+        //     this.params.userInfo = value;
+        // });
+        // this.params.projectId = 1;
+    }
+    public getUserInfo(): any{
         this.storage.get("userCredentials").then((value) => {
             this.params.userInfo = value;
         });
         this.params.projectId = 1;
+        return this.params;
     }
     public getLoginValidation(url, data) {
+        this.getUserInfo();
         var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
             res => res.json()
         );
@@ -33,7 +40,7 @@ export class Globalservice {
         return response;
     }
     public getTicketDetailsById(url, data) {
-        var ticketDetailsParams = this.params;
+        var ticketDetailsParams = this.getUserInfo();
         ticketDetailsParams["ticketId"] = data;
         var response = this.http.post(url, JSON.stringify(ticketDetailsParams), this.headers).map(
             res => res.json()
@@ -47,7 +54,7 @@ export class Globalservice {
         return response;
     }
     public getFieldItemById(url, fieldDetails) {
-        var fieldItemParams = this.params;
+        var fieldItemParams = this.getUserInfo();
         fieldItemParams["FieldId"] = fieldDetails.id;
         fieldItemParams["TicketId"] = fieldDetails.ticketId;
         fieldItemParams["ProjectId"] = 1;
@@ -62,7 +69,7 @@ export class Globalservice {
         return response;
     }
     public leftFieldUpdateInline(url, selectedItem, fieldDetails){
-        var fieldUpdateParams = this.params;
+        var fieldUpdateParams = this.getUserInfo();
         fieldUpdateParams["isLeftColumn"] = 1;
         fieldUpdateParams["id"] = fieldDetails.id;
         fieldUpdateParams["value"] = selectedItem;
@@ -83,7 +90,7 @@ export class Globalservice {
         return response;
     }
     public newStoryTemplate(url,data){
-        var ticketParams = this.params;
+        var ticketParams = this.getUserInfo();
         ticketParams["ticketId"] = data;
         var response = this.http.post(url, JSON.stringify(ticketParams), this.headers).map(
             res => res.json()
@@ -91,7 +98,7 @@ export class Globalservice {
         return response;
     }
     public createStoryORTask(url, data) {
-        var createStoryParams = this.params;
+        var createStoryParams = this.getUserInfo();
         createStoryParams["data"] = data;
         createStoryParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
@@ -100,7 +107,7 @@ export class Globalservice {
         return response;
     }
     public getTicketActivity(url, activityParams) {
-        var ticketActivityParams = this.params;
+        var ticketActivityParams = this.getUserInfo();
         ticketActivityParams["ticketId"] = activityParams;
         ticketActivityParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(ticketActivityParams), this.headers).map(
@@ -109,7 +116,7 @@ export class Globalservice {
         return response;
     }
     public deleteCommentById(url, commentParams){
-        var deleteCommentParams = this.params;
+        var deleteCommentParams = this.getUserInfo();
         deleteCommentParams["Comment"] = commentParams.Comment;
         deleteCommentParams["TicketId"] = commentParams.TicketId;
         var response = this.http.post(url, JSON.stringify(deleteCommentParams), this.headers).map(
@@ -118,7 +125,7 @@ export class Globalservice {
         return response;
     }
     public submitComment(url, commentParams){
-        var submitCommentParams = this.params;
+        var submitCommentParams = this.getUserInfo();
         submitCommentParams["Comment"] = commentParams.Comment;
         submitCommentParams["TicketId"] = commentParams.TicketId;
         var response = this.http.post(url, JSON.stringify(submitCommentParams), this.headers).map(
