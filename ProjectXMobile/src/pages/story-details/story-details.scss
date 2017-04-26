@@ -505,9 +505,19 @@ ion-fab-list[side="left"] .fab-in-list, ion-fab-list[side="right"] .fab-in-list 
 .picker-opt-disabled {
     opacity:1!important;
 }
+
+.page-story-details .uploadbottom {
+    width: 35px!important;
+    height: 35px!important;
+}
+
+.txteditor_width{ width:100%!important;}
+
 .uploading {
     background-color: black;
     text-align: center;
     color: white;    
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
+
+.fab-ios .fab-close-active{font-size: larger;}

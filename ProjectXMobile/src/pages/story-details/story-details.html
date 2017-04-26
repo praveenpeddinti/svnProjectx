@@ -144,7 +144,7 @@
                                             <div class="editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i]" style="position: relative;">
                                                 <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
                                                 <!--Have to change Text area to editor-->
-                                                <textarea class="textEditor" placeholder="Enter text here..."></textarea>
+                                                <textarea class="textEditor txteditor_width" placeholder="Enter text here..."></textarea>
                                                 <!--Progress bar-->
                                                 <div [hidden]='progressEdit==0'>
                                                     <progress [value]="progressEdit" max="100">{{progressEdit}}%</progress>
