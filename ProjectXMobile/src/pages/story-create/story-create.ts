@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { ToastController,NavController, ActionSheetController,Platform , NavParams, LoadingController,PopoverController, ModalController, AlertController } from 'ionic-angular';
-import { Globalservice} from '../../providers/globalservice';
+import { Component, NgZone } from '@angular/core';
+import { ToastController, NavController, ActionSheetController, Platform, NavParams, LoadingController, PopoverController, ModalController, AlertController } from 'ionic-angular';
+import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
 import { Storage } from "@ionic/storage";
 import { CustomModalPage } from '../custom-modal/custom-modal';
-import { Camera, File,FilePath,Transfer } from 'ionic-native';
+import { Camera, File, FilePath, Transfer } from 'ionic-native';
 import { DashboardPage } from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var cordova: any;
@@ -17,14 +17,15 @@ declare var cordova: any;
 export class StoryCreatePage {
     public itemfield: Array<any>;
     public tasktypes: Array<any>;
-    public create: {title?: string, description?: string, default_task?: any, planlevel?:any, priority?:any} = {title:"", description:"", default_task:[], planlevel:"", priority:""};
+    public create: { title?: string, description?: string, default_task?: any, planlevel?: any, priority?: any } = { title: "", description: "", default_task: [], planlevel: "", priority: "" };
     public userName: any = '';
-    public templatedataList: Array<{ id: string, title: string, defaultValue: string, assignData: string, readOnly: string, fieldType: string, fieldName: string}>;
-    public tasktypeList: Array<{Id:string, Name:string, IsDefault:string, selected : boolean}>;
+    public templatedataList: Array<{ id: string, title: string, defaultValue: string, assignData: string, readOnly: string, fieldType: string, fieldName: string }>;
+    public tasktypeList: Array<{ Id: string, Name: string, IsDefault: string, selected: boolean }>;
     public showEditableFieldOnly = [];
-    public displayedClassColorValue="";
+    public displayedClassColorValue = "";
     private lastImage: string = null;
-    
+    private progressFile: number;
+
     constructor(
         public navCtrl: NavController,
         public modalController: ModalController,
@@ -35,9 +36,8 @@ export class StoryCreatePage {
         public actionSheetCtrl: ActionSheetController,
         public popoverCtrl: PopoverController,
         private alertCtrl: AlertController,
-        public loadingController: LoadingController,
-        private storage: Storage, private constants: Constants) 
-        {
+        public loadingController: LoadingController,private ngZone: NgZone,
+        private storage: Storage, private constants: Constants) {
         this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
         });
@@ -80,29 +80,30 @@ export class StoryCreatePage {
             }, (error) => {
             }
         );
+         this.progressFile = 0;
     }
     ionViewDidLoad() {
     }
     public onStoryCreate(form): void {
-      if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false ) {
+        if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();
             this.create.default_task = [];
-                for (let taskTypeItem of this.tasktypeList) {
-                    if (taskTypeItem.selected == true) {
-                        delete taskTypeItem["selected"];
-                        this.create.default_task.push(taskTypeItem);
-                    }
+            for (let taskTypeItem of this.tasktypeList) {
+                if (taskTypeItem.selected == true) {
+                    delete taskTypeItem["selected"];
+                    this.create.default_task.push(taskTypeItem);
                 }
-            if(typeof(this.create.title) == 'string' && this.create.title.length > 0){
+            }
+            if (typeof (this.create.title) == 'string' && this.create.title.length > 0) {
                 this.create.title.trim();
-            } 
-            if(this.create.description != null){
-                this.create.description = "<p>"+this.create.description+"</p>";
+            }
+            if (this.create.description != null) {
+                this.create.description = "<p>" + this.create.description + "</p>";
             }
             this.globalService.createStoryORTask(this.constants.createStory, (this.create)).subscribe(
                 (result) => {
-                    loader.dismiss().then( () => {
+                    loader.dismiss().then(() => {
                         let alert = this.alertCtrl.create({
                             title: 'Alert',
                             subTitle: 'Successfully created.',
@@ -111,7 +112,7 @@ export class StoryCreatePage {
                         alert.present();
                         this.navCtrl.setRoot(DashboardPage);
                     }, (error) => {
-                        
+
                     });
                 }, (error) => {
                     loader.dismiss();
@@ -184,76 +185,94 @@ export class StoryCreatePage {
             //this.presentToast('Unable to select the image.');
         });
     }
-        private createFileName(originalName) {
-            var d = new Date(),
-                n = d.getTime(),
-                newFileName = "image" + n;
-            return newFileName;
+    private createFileName(originalName) {
+        var d = new Date(),
+            n = d.getTime(),
+            newFileName = "image" + n;
+        return newFileName;
+    }
+    private copyFileToLocalDir(namePath, currentName, newFileName) {
+        File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+            this.lastImage = newFileName;
+            this.uploadImage(currentName, newFileName);
+        }, error => {
+            console.log('Error while storing file.');
+        });
+    }
+    public uploadImage(originalname, savedname) {
+        var url = this.constants.filesUploading;
+        var targetPath = this.pathForImage(this.lastImage);
+        var filename = this.lastImage;
+        var options = {
+            fileKey: "commentFile",
+            fileName: filename,
+            chunkedMode: false,
+            mimeType: "image/jpeg",
+            params: { 'filename': filename, 'directory': this.constants.fileUploadsFolder, 'originalname': originalname }
+        };
+        const fileTransfer = new Transfer();
+        fileTransfer.onProgress(this.onProgressFile);
+        fileTransfer.upload(targetPath, url, options).then((data) => {
+            this.uploadedInserver(data);    
+             this.progressFile = 0;
+             document.getElementById('progressFileUploadFile').innerHTML = "";
+        }, (err) => {
+            this.presentToast('Unable to upload the image.');
+        });
+    }
+    public pathForImage(img) {
+        if (img === null) {
+            return '';
+        } else {
+            return cordova.file.dataDirectory + img;
         }
-        private copyFileToLocalDir(namePath, currentName, newFileName) {
-            File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
-                this.lastImage = newFileName;
-                this.uploadImage(currentName, newFileName);
-            }, error => {
-                console.log('Error while storing file.');
-            });
-        }
-        public uploadImage(originalname, savedname) {
-            var url = this.constants.filesUploading;
-            var targetPath = this.pathForImage(this.lastImage);
-            var filename = this.lastImage;
-            var options = {
-                fileKey: "commentFile",
-                fileName: filename,
-                chunkedMode: false,
-                mimeType: "image/jpeg",
-                params: {'filename': filename, 'directory': this.constants.fileUploadsFolder, 'originalname': originalname}
-            };
-            const fileTransfer = new Transfer();
-            fileTransfer.upload(targetPath, url, options).then((data) => {
-                this.uploadedInserver(data);
-            }, (err) => {
-                this.presentToast('Unable to upload the image.');
-            });
-        }
-       public pathForImage(img) {
-           if (img === null) {
-               return '';
-           } else {
-               return cordova.file.dataDirectory + img;
-           }
-       }
-       public uploadedInserver(dataUploaded) {
-           var serverResponse = JSON.parse(dataUploaded.response);
-           if (serverResponse['status'] == '1') {
-               var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
-               if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                   this.create.description = this.create.description + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-               }
-           } else {
-               this.presentToast('Unable to upload the image.');
-           }
-       }
-        public openPopover(myEvent) {
-            let userCredentials = {username: this.userName};
-            let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
-            popover.present({
-                ev: myEvent
-            });
-        }
-        public openOptionsModal(fieldDetails, index) {
-            let optionsModal = this.modalController.create(CustomModalPage, {activeField: fieldDetails, activatedFieldIndex: index, displayList: fieldDetails.assignData});
-            optionsModal.onDidDismiss((data) => {
-                if (data != null && Object.keys(data).length > 0) {
-                    if (fieldDetails.fieldName == "planlevel") {
-                        this.create.planlevel = data.Id;
-                    } else if (fieldDetails.fieldName == "priority") {
-                        this.create.priority = data.Id;
-                        this.displayedClassColorValue = data.Name;
-                    }
-                    jQuery("#field_title_" + index + " div").text(data.Name);
+    }
+       public onProgressFile = (progressEvent: ProgressEvent) : void => {
+        this.ngZone.run(() => {
+            if (progressEvent.lengthComputable) {
+                let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+                this.progressFile = progress;
+                document.getElementById('progressFileUploadFile').innerHTML = progress + "% Loading...";
+            } else {
+                if (document.getElementById('progressFileUploadFile').innerHTML == "") {
+                    document.getElementById('progressFileUploadFile').innerHTML = "Loading";
+                } else {
+                    document.getElementById('progressFileUploadFile').innerHTML += ".";
                 }
-            });
-            optionsModal.present();
+            }
+        });
+    }
+    public uploadedInserver(dataUploaded) {
+        var serverResponse = JSON.parse(dataUploaded.response);
+        if (serverResponse['status'] == '1') {
+            var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
+            if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                this.create.description = this.create.description + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+            }
+        } else {
+            this.presentToast('Unable to upload the image.');
         }
- }
+    }
+    public openPopover(myEvent) {
+        let userCredentials = { username: this.userName };
+        let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
+        popover.present({
+            ev: myEvent
+        });
+    }
+    public openOptionsModal(fieldDetails, index) {
+        let optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: fieldDetails.assignData });
+        optionsModal.onDidDismiss((data) => {
+            if (data != null && Object.keys(data).length > 0) {
+                if (fieldDetails.fieldName == "planlevel") {
+                    this.create.planlevel = data.Id;
+                } else if (fieldDetails.fieldName == "priority") {
+                    this.create.priority = data.Id;
+                    this.displayedClassColorValue = data.Name;
+                }
+                jQuery("#field_title_" + index + " div").text(data.Name);
+            }
+        });
+        optionsModal.present();
+    }
+}

@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title>Story Create</ion-title>
-        <ion-buttons right>
+        <!--<ion-buttons right>
             <span class="headerlinks">
             <a ion-button icon-only (click)="presentActionSheet()">
               <i class="fa fa-paperclip" aria-hidden="true"></i>
@@ -14,7 +14,7 @@
                <i class="fa fa-paper-plane" aria-hidden="true"></i>
             </a>
              </span>
-        </ion-buttons>
+        </ion-buttons>-->
         <ion-buttons right>
             <a ion-button icon-only (click)="openPopover($event)">
                 <i class="fa fa-user-circle-o" aria-hidden="true"></i>
@@ -56,6 +56,13 @@
         <div [hidden]="!create_description.errors.required" *ngIf="submitted && create_description.errors " class="text-md-danger text-ios-danger text-wp-danger">
             <i class="fa fa-exclamation-circle" aria-hidden="true" id="createDescriptionError"></i> Description is required
         </div>
+        <!--Progress bar-->
+        <div [hidden]='progressFile==0'>
+            <progress [value]="progressFile" max="100">{{progressFile}}%</progress>
+            <span>{{progressFile}}%</span>
+        </div>
+        <div id="progressFileUploadFile"></div>
+        <!--Progress bar-->
     </ion-list>
 </div>
 <div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
