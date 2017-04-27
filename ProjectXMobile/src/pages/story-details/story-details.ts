@@ -227,6 +227,8 @@ export class StoryDetailsPage {
                     jQuery("#field_title_" + index + " div").text(event.Name);
                     if (fieldDetails.fieldName == 'priority') {
                         this.displayedClassColorValue = event.Name;
+                    } else if(fieldDetails.fieldName == "workflow"){
+                        jQuery("#field_title_" + (index-1) + " div").text(result.data.updatedState.state);
                     }
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
