@@ -20,8 +20,10 @@
                                 <span *ngIf="notify_count!=0" class="badge badge-sm up bg-pink count">{{notify_count}}</span>
                             </a>
                           <ul id="notifications_list" class="dropdown-menu extended fadeInUp animated notification" tabindex="5002" style="outline: none;">
-                          
-                              <div class="notificationdiv nonotification" *ngIf="notify_count==0" id="notificationMessage">No Notifications</div>
+                              <li style="padding: 5px 10px">
+                                                             <div class="notificationdiv nonotification" *ngIf="notify_count==0" id="notificationMessage">No Notifications</div>
+   
+                              </li>
                             
 <!--Notification Msg start                            -->
 <li  *ngFor="let notify of notification_msg "  class="notificationlist">
