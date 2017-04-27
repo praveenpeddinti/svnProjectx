@@ -56,111 +56,115 @@
 </ion-header>
 
 <ion-content #content no-padding>
-    <div class="padding10trl">
-        <ion-buttons start class="custombuttonsmenu custombuttonsmenumargintop">
-            <button menuToggle>
-                <ion-icon name="md-menu"></ion-icon>
-            </button>
-        </ion-buttons>
-    </div>
+     <!--(click)='hideSubmitUpload($event)'-->
     <div>
-        <div class="dashboardbox_header">
-            <i class="{{taskDetails.type}}"></i> 
-            <span class="ticketid">#{{taskDetails.ticketId}}</span>
-            <span id="title" *ngIf="!enableEdatable" (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span> 
+        <div class="padding10trl">
+            <ion-buttons start class="custombuttonsmenu custombuttonsmenumargintop">
+                <button menuToggle>
+                    <ion-icon name="md-menu"></ion-icon>
+                </button>
+            </ion-buttons>
         </div>
-        <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
-        <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
-        <div class="padding10">
-            <div style="position: relative;" class="customtoggle padding10">
-                <div id="description" style="overflow:hidden;">
-                    <div id="innerdesc" class="displayblock imgVideo_bg" [innerHTML]=" taskDetails.description "></div>
-                </div>
-                <div class="show-morediv" style="display:none">
-                    <button id="show" (click)="expandDescription()" class="customshowbutton">Show more</button>
-                    <button id="hide" (click)="collapseDescription()" class="customshowbutton" style="display:none">Show less</button>
+        <div>
+            <div class="dashboardbox_header">
+                <i class="{{taskDetails.type}}"></i> 
+                <span class="ticketid">#{{taskDetails.ticketId}}</span>
+                <span id="title" *ngIf="!enableEdatable" (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span> 
+            </div>
+            <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
+            <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
+            <div class="padding10">
+                <div style="position: relative;" class="customtoggle padding10">
+                    <div id="description" style="overflow:hidden;">
+                        <div id="innerdesc" class="displayblock imgVideo_bg" [innerHTML]=" taskDetails.description "></div>
+                    </div>
+                    <div class="show-morediv" style="display:none">
+                        <button id="show" (click)="expandDescription()" class="customshowbutton">Show more</button>
+                        <button id="hide" (click)="collapseDescription()" class="customshowbutton" style="display:none">Show less</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="padding10">
-        <ul class="custnavtabs" role="tablist">
-            <li class="t_comments active"><a aria-controls="t_comments" ><i class="fa fa-weixin" aria-hidden="true"></i></a></li>
-            <li class="t_tasks "><a aria-controls="t_tasks" ><span>T</span></a></li>
-            <li class="t_worklog "><a  aria-controls="t_worklog" ><i class="fa fa-clock-o" aria-hidden="true"></i></a></li>
-        </ul>
-        <div class="custab-content">
-            <div role="tabpanel" class="custtab-pane  active" id="t_comments" >
-                <div class="activitiesList" style="margin-bottom:10px" *ngFor="let eachActivity of itemsInActivities; let i=index;" id="activity_{{i}}">
-                     <div id="{{i}}" data-slug="eachActivity.Slug.$oid">
-                        <div class="cust_commentsbox" >
-                            <div class="cust_com_title">
-                                <div class="user">
-                                    <img class="usericon" src="{{eachActivity.ActivityBy.ProfilePicture}}" alt="">
-                                    <span>by <b>{{eachActivity.ActivityBy.UserName}}</b></span>
-                                    <span *ngIf="eachActivity.PropertyChanges.length == 0" class="userDate">({{eachActivity.ActivityOn}}) </span>
-                                </div>
-                                <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="comments_menuouter {{(eachActivity.Status ==2)?'_reply':''}}">
-                                    <ion-fab top right>
-                                        <button ion-fab><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
-                                        <ion-fab-list side="left">
-                                            <button ion-fab (click)="replyComment(i,eachActivity.ActivityBy.CollaboratorId)"><i class="fa fa-reply" aria-hidden="true"></i></button>
-                                            <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0"  (click)="deleteComment(i,eachActivity.Slug.$oid)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                                            <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName" (click)="editComment(i)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                        </ion-fab-list>
-                                    </ion-fab>
-                                </div>
-                            </div>
-                            <div class="cust_com_content">
-                                <div class="userActivity" *ngFor="let eachProperty of eachActivity.PropertyChanges;">
-                                     <div class="ticketActivity" >
-                                        <span class="bold">{{eachProperty.ActionFieldTitle}}</span> {{eachProperty.Action}}
-                                        <span *ngIf="eachProperty.type=='user'"> 
-                                            <span class="property"><a href="javascript:void(0);" data-id="{{eachProperty.PreviousValue.CollaboratorId}}" data-name="{{eachProperty.PreviousValue.UserName}}">{{eachProperty.PreviousValue.UserName}}</a></span>
-                                            <span *ngIf="eachProperty.PreviousValue!=''"> to</span> <span *ngIf="eachProperty.NewValue=='-none-'">{{eachProperty.NewValue}}</span>
-                                            <span class="property"><a href="javascript:void(0);" *ngIf="eachProperty.NewValue!='-none-'" data-id="{{eachProperty.NewValue.CollaboratorId}}" data-name="{{eachProperty.NewValue.UserName}}">{{eachProperty.NewValue.UserName}}</a></span>
-                                        </span>
-                                        <span *ngIf="eachProperty.type!='user'"> 
-                                            <span class="bold" [innerHTML]= "eachProperty.PreviousValue"></span><span *ngIf="eachProperty.PreviousValue!=''"> to</span>
-                                            <span class="bold" [innerHTML]="eachProperty.NewValue"></span>
-                                        </span>
-                                        <div class="activityDate">({{eachProperty.ActivityOn}})</div>
+        <div class="padding10">
+            <ul class="custnavtabs" role="tablist">
+                <li class="t_comments active"><a aria-controls="t_comments" ><i class="fa fa-weixin" aria-hidden="true"></i></a></li>
+                <li class="t_tasks "><a aria-controls="t_tasks" ><span>T</span></a></li>
+                <li class="t_worklog "><a  aria-controls="t_worklog" ><i class="fa fa-clock-o" aria-hidden="true"></i></a></li>
+            </ul>
+            <div class="custab-content">
+                <div role="tabpanel" class="custtab-pane  active" id="t_comments" >
+                    <div class="activitiesList" style="margin-bottom:10px" *ngFor="let eachActivity of itemsInActivities; let i=index;" id="activity_{{i}}">
+                        <div id="{{i}}" data-slug="eachActivity.Slug.$oid">
+                            <div class="cust_commentsbox" >
+                                <div class="cust_com_title">
+                                    <div class="user">
+                                        <img class="usericon" src="{{eachActivity.ActivityBy.ProfilePicture}}" alt="">
+                                        <span>by <b>{{eachActivity.ActivityBy.UserName}}</b></span>
+                                        <span *ngIf="eachActivity.PropertyChanges.length == 0" class="userDate">({{eachActivity.ActivityOn}}) </span>
                                     </div>
-                                    <div class="divider"></div>
+                                    <div *ngIf="eachActivity.PropertyChanges.length == 0" class="comments_menuouter{{(eachActivity.Status ==2)?'_reply':''}}">
+                                        <ion-fab top right>
+                                            <button ion-fab><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
+                                            <ion-fab-list side="left">
+                                                <button ion-fab (click)="replyComment(i,eachActivity.ActivityBy.CollaboratorId)"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                                                <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0"  (click)="presentConfirmDelete(i,eachActivity.Slug.$oid)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                                <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName" (click)="editComment(i)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                            </ion-fab-list>
+                                        </ion-fab>
+                                    </div>
                                 </div>
-                                <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="comment{{(eachActivity.Status ==2)?'_reply':''}}">
-                                    <div style="position:relative">  
-                                        <div class="commentedtext" (click)="navigateToParentComment(eachActivity.ParentIndex)" *ngIf="eachActivity.Status ==2">
-                                            <div class="user">      
-                                                <a href="javascript:void(0)"><img class="usericon" src="{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.ProfilePicture}}" ></a> by <span><a href="javascript:void(0)">{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.UserName}}</a></span>
-                                            </div>
-                                            <div [innerHTML]="itemsInActivities[eachActivity.ParentIndex].CDescription"></div>
+                                <div class="cust_com_content">
+                                    <div class="userActivity" *ngFor="let eachProperty of eachActivity.PropertyChanges;">
+                                        <div class="ticketActivity" >
+                                            <span class="bold">{{eachProperty.ActionFieldTitle}}</span> {{eachProperty.Action}}
+                                            <span *ngIf="eachProperty.type=='user'"> 
+                                                <span class="property"><a href="javascript:void(0);" data-id="{{eachProperty.PreviousValue.CollaboratorId}}" data-name="{{eachProperty.PreviousValue.UserName}}">{{eachProperty.PreviousValue.UserName}}</a></span>
+                                                <span *ngIf="eachProperty.PreviousValue!=''"> to</span> <span *ngIf="eachProperty.NewValue=='-none-'">{{eachProperty.NewValue}}</span>
+                                                <span class="property"><a href="javascript:void(0);" *ngIf="eachProperty.NewValue!='-none-'" data-id="{{eachProperty.NewValue.CollaboratorId}}" data-name="{{eachProperty.NewValue.UserName}}">{{eachProperty.NewValue.UserName}}</a></span>
+                                            </span>
+                                            <span *ngIf="eachProperty.type!='user'"> 
+                                                <span class="bold" [innerHTML]= "eachProperty.PreviousValue"></span><span *ngIf="eachProperty.PreviousValue!=''"> to</span>
+                                                <span class="bold" [innerHTML]="eachProperty.NewValue"></span>
+                                            </span>
+                                            <div class="activityDate">({{eachProperty.ActivityOn}})</div>
                                         </div>
-                                        <div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-                                            <div id="Activity_content_{{i}}" [hidden]="editTheComment[i] && editCommentOpenClose[i]">
-                                                <div class="commentp" [innerHTML]="eachActivity.CDescription"></div>
-                                            </div>
-                                            <div class="editorDiv editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i] && !editCommentOpenClose[i]" style="position: relative;">
-                                                <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
-                                                <!--Have to change Text area to editor-->
-                                                <textarea (focus)="showSubmit(i)" (blur)="hideSubmit(i)" class="textEditor" placeholder="Enter text here..."></textarea>
-                                                <!--Progress bar-->
-                                                <div [hidden]='progressEdit==0'>
-                                                    <progress [value]="progressEdit" max="100">{{progressEdit}}%</progress>
-                                                    <span>{{progressEdit}}%</span>
+                                        <div class="divider"></div>
+                                    </div>
+                                    <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="preventBlur comment{{(eachActivity.Status ==2)?'_reply':''}}">
+                                        <div style="position:relative">  
+                                            <div class="commentedtext" (click)="navigateToParentComment(eachActivity.ParentIndex)" *ngIf="eachActivity.Status ==2">
+                                                <div class="user">      
+                                                    <a href="javascript:void(0)"><img class="usericon" src="{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.ProfilePicture}}" ></a> by <span><a href="javascript:void(0)">{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.UserName}}</a></span>
                                                 </div>
-                                                <div id="progressFileUploadEdit"></div>
-                                                <!--Progress bar-->
-                                                <div class="customrow" [hidden]='editSubmitOpenClose[i]'>
-                                                    <div class="col50">
-                                                        <div class="">
-                                                            <button class="buttonicon linkbutton" (click)="presentActionSheet('fileChange','edit_comments',i)"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
+                                                <div [innerHTML]="itemsInActivities[eachActivity.ParentIndex].CDescription"></div>
+                                            </div>
+                                            <div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+                                                <div id="Activity_content_{{i}}" [hidden]="editTheComment[i] && editCommentOpenClose[i]">
+                                                    <div class="commentp" [innerHTML]="eachActivity.CDescription"></div>
+                                                </div>
+                                                <div class="editorDiv editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i] && !editCommentOpenClose[i]" style="position: relative;">
+                                                    <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
+                                                    <!--Have to change Text area to editor-->
+                                                     <!--(focus)="showSubmit(i)" (blur)="hideSubmit(i,$event)"-->
+                                                    <textarea class="textEditor" placeholder="Enter text here..."></textarea>
+                                                    <!--Progress bar-->
+                                                    <div [hidden]='progressEdit==0'>
+                                                        <progress [value]="progressEdit" max="100">{{progressEdit}}%</progress>
+                                                        <span>{{progressEdit}}%</span>
+                                                    </div>
+                                                    <div id="progressFileUploadEdit"></div>
+                                                    <!--Progress bar-->
+                                                    <div class="customrow" [hidden]='editSubmitOpenClose[i]'>
+                                                        <div class="col50">
+                                                            <div class="">
+                                                                <button class="buttonicon linkbutton" (click)="presentActionSheet('fileChange','edit_comments',i)"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col50 col50textright"> 
+                                                            <button class="buttonicon submitbutton" (click)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                                                         </div>
                                                     </div>
-                                                    <div class="col50 col50textright"> 
-                                                        <button class="buttonicon submitbutton" (click)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,44 +173,45 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>   
-            <div class="cust_commentsbox margintop10">
-                <div id="commentEditorArea" class="activitiesList" [hidden]='!newCommentOpenClose'>
-                    <div class="commentedtext porel" [hidden]="!replying">
-                        <a href="javascript:void(0)"  class="commentedtextdelete" (click)="cancelReply()"><i class="fa fa-times" aria-hidden="true"></i></a>
-                        <div id="replyToSnippet">
-                            <div id="replySnippetContent" *ngIf="replyToComment !=-1" class="{{itemsInActivities[replyToComment].ActivityBy.CollaboratorId}}">
-                                <div class="user"><a href="javascript:void(0)"> <img class="usericon" src="{{itemsInActivities[replyToComment].ActivityBy.ProfilePicture}}"></a> by <span><a href="javascript:void(0)">{{itemsInActivities[replyToComment].ActivityBy.UserName}}</a></span></div>
-                                <div class="replySnippet" [innerHTML]="itemsInActivities[replyToComment].CDescription"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="uploadAndSubmit editorDiv">
-                        <!--Have to change Text area to editor-->
-                        <textarea (focus)="showSubmit(-1)" (blur)="hideSubmit(-1)" class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
-                        <!--Progress bar-->
-                        <div [hidden]='progressNew==0'>
-                            <progress [value]="progressNew" max="100">{{progressNew}}%</progress>
-                            <span>{{progressNew}}%</span>
-                            <div id="progressFileUploadNew"></div>
-                        </div>
-                        <!--Progress bar-->
-                        <div class="customrow" [hidden]='newSubmitOpenClose'>
-                            <div class="col50">
-                                <div class="">
-                                    <button class="buttonicon linkbutton" (click)="presentActionSheet('fileChange','comments','')"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
+                </div>   
+                <div class="cust_commentsbox margintop10">
+                    <div id="commentEditorArea" class="activitiesList preventBlur" [hidden]='!newCommentOpenClose'>
+                        <div class="commentedtext porel" [hidden]="!replying">
+                            <a href="javascript:void(0)"  class="commentedtextdelete" (click)="cancelReply()"><i class="fa fa-times" aria-hidden="true"></i></a>
+                            <div id="replyToSnippet">
+                                <div id="replySnippetContent" *ngIf="replyToComment !=-1" class="{{itemsInActivities[replyToComment].ActivityBy.CollaboratorId}}">
+                                    <div class="user"><a href="javascript:void(0)"> <img class="usericon" src="{{itemsInActivities[replyToComment].ActivityBy.ProfilePicture}}"></a> by <span><a href="javascript:void(0)">{{itemsInActivities[replyToComment].ActivityBy.UserName}}</a></span></div>
+                                    <div class="replySnippet" [innerHTML]="itemsInActivities[replyToComment].CDescription"></div>
                                 </div>
                             </div>
-                            <div class="col50 col50textright"> 
-                                <button class="buttonicon submitbutton " (click)="submitComment()"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="uploadAndSubmit editorDiv">
+                            <!--Have to change Text area to editor-->
+                             <!--(focus)="showSubmit(-1)" (blur)="hideSubmit(-1,$event)"-->
+                            <textarea class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
+                            <!--Progress bar-->
+                            <div [hidden]='progressNew==0'>
+                                <progress [value]="progressNew" max="100">{{progressNew}}%</progress>
+                                <span>{{progressNew}}%</span>
+                                <div id="progressFileUploadNew"></div>
                             </div>
-                        </div>                                                                                                                                  
+                            <!--Progress bar-->
+                            <div class="customrow" [hidden]='newSubmitOpenClose'>
+                                <div class="col50">
+                                    <div class="">
+                                        <button class="buttonicon linkbutton" (click)="presentActionSheet('fileChange','comments','')"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col50 col50textright"> 
+                                    <button class="buttonicon submitbutton " (click)="submitComment()"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                                </div>
+                            </div>                                                                                                                                  
+                        </div>
                     </div>
                 </div>
             </div>
+            <div role="tabpanel" class="custtab-pane " id="t_tasks">..pp.</div>
+            <div role="tabpanel" class="custtab-pane " id="t_worklog">.mm..</div>
         </div>
-        <div role="tabpanel" class="custtab-pane " id="t_tasks">..pp.</div>
-        <div role="tabpanel" class="custtab-pane " id="t_worklog">.mm..</div>
     </div>
 </ion-content>

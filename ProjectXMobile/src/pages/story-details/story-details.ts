@@ -1,7 +1,7 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ToastController, Content, Platform, App } from 'ionic-angular';
-import { ModalController, NavParams, MenuController, LoadingController, PopoverController, ActionSheetController } from 'ionic-angular';
+import { ModalController, NavParams, MenuController, LoadingController, PopoverController, ActionSheetController, AlertController } from 'ionic-angular';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { PopoverPage } from '../popover/popover';
@@ -33,8 +33,12 @@ export class StoryDetailsPage {
     private editTheComment = [];
     private editCommentOpenClose = [];
     private newCommentOpenClose = true;
+    // changed
+    // private editSubmitOpenClose = [];
+    // private newSubmitOpenClose = true;
     private editSubmitOpenClose = [];
-    private newSubmitOpenClose = true;
+    private newSubmitOpenClose = false;
+    // changed
     public commentDesc = "";
     private lastImage: string = null;
     private progressNew: number;
@@ -71,7 +75,8 @@ export class StoryDetailsPage {
         public platform: Platform,
         private storage: Storage, 
         private datePipe: DatePipe,
-        private ngZone: NgZone ) {
+        private ngZone: NgZone,
+        private alertController: AlertController ) {
         StoryDetailsPage.menuControler = menu;
         this.minDate = new Date().toISOString();
         let loader = this.loadingController.create({ content: "Loading..." });
@@ -372,6 +377,26 @@ export class StoryDetailsPage {
         this.replyToComment = -1;
         jQuery("#commentEditorArea").removeClass("replybox");
     }
+    public presentConfirmDelete(commentId, slug) {
+        let alert = this.alertController.create({
+            title: 'Confirm Delete',
+            message: 'Do you want to delete this comment?',
+            buttons: [
+            {
+                text: 'CANCEL',
+                role: 'cancel',
+                handler: () => {}
+            },
+            {
+                text: 'OK',
+                handler: () => {
+                    this.deleteComment(commentId, slug);
+                }
+            }
+            ]
+        });
+        alert.present();
+    }
     public deleteComment(commentId, slug) {
         var commentParams;
         var parentCommentId;
@@ -408,13 +433,13 @@ export class StoryDetailsPage {
         this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
         this.newCommentOpenClose = false;
         this.editCommentOpenClose[commentId] = true;
-        this.editSubmitOpenClose[commentId] = true;
+        // this.editSubmitOpenClose[commentId] = true;
     }
     public cancelEdit(commentId){
         this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
         this.editCommentOpenClose[commentId] = false;
         this.newCommentOpenClose = true;
-        this.editSubmitOpenClose[commentId] = true;
+        // this.editSubmitOpenClose[commentId] = true;
     }
     public showSubmit(commentId){
         if(commentId==-1){
@@ -424,12 +449,23 @@ export class StoryDetailsPage {
             this.editSubmitOpenClose[commentId] = false;
         }
     }
-    public hideSubmit(commentId){
-        if(commentId==-1){
-            this.newSubmitOpenClose = true;
+    public hideSubmit(commentId,event){
+        if (jQuery(event.target).hasClass('preventBlur')){
+            event.stopImmediatePropagation();
+            jQuery(event.target).off("blur");
+        }else{
+            if(commentId==-1){
+                this.newSubmitOpenClose = true;
+            }
+            else{
+                this.editSubmitOpenClose[commentId] = true;
+            }
         }
-        else{
-            this.editSubmitOpenClose[commentId] = true;
+    }
+    public hideSubmitUpload(event){
+        if (jQuery(event.target).hasClass('editorDiv')){
+            event.stopImmediatePropagation();
+            jQuery(this).off("blur");
         }
     }
     public submitComment() {
@@ -463,11 +499,11 @@ export class StoryDetailsPage {
                     }
                     this.replying = false;
                     jQuery(".uploadAndSubmit .textEditor").val('');
-                    if (commentText != "" && commentText.trim() != ""){
-                        this.newSubmitOpenClose = true;
-                    }else{
-                        this.newSubmitOpenClose = false;
-                    }
+                    // if (commentText != "" && commentText.trim() != ""){
+                    //     this.newSubmitOpenClose = true;
+                    // }else{
+                    //     this.newSubmitOpenClose = false;
+                    // }
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
@@ -495,11 +531,11 @@ export class StoryDetailsPage {
                     this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
                     this.editCommentOpenClose[commentId] = false;
                     this.newCommentOpenClose = true;
-                    if (editedContent != "" && editedContent.trim() != ""){
-                        this.editSubmitOpenClose[commentId] = true;
-                    }else{
-                        this.editSubmitOpenClose[commentId] = false;
-                    }
+                    // if (editedContent != "" && editedContent.trim() != ""){
+                    //     this.editSubmitOpenClose[commentId] = true;
+                    // }else{
+                    //     this.editSubmitOpenClose[commentId] = false;
+                    // }
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
