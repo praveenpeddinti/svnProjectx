@@ -33,6 +33,8 @@ export class StoryDetailsPage {
     private editTheComment = [];
     private editCommentOpenClose = [];
     private newCommentOpenClose = true;
+    private editSubmitOpenClose = [];
+    private newSubmitOpenClose = true;
     public commentDesc = "";
     private lastImage: string = null;
     private progressNew: number;
@@ -404,11 +406,29 @@ export class StoryDetailsPage {
         this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
         this.newCommentOpenClose = false;
         this.editCommentOpenClose[commentId] = true;
+        this.editSubmitOpenClose[commentId] = true;
     }
     public cancelEdit(commentId){
         this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
         this.editCommentOpenClose[commentId] = false;
         this.newCommentOpenClose = true;
+        this.editSubmitOpenClose[commentId] = true;
+    }
+    public showSubmit(commentId){
+        if(commentId==-1){
+            this.newSubmitOpenClose = false;
+        }
+        else{
+            this.editSubmitOpenClose[commentId] = false;
+        }
+    }
+    public hideSubmit(commentId){
+        if(commentId==-1){
+            this.newSubmitOpenClose = true;
+        }
+        else{
+            this.editSubmitOpenClose[commentId] = true;
+        }
     }
     public submitComment() {
         var commentText = jQuery(".uploadAndSubmit .textEditor").val();
@@ -441,6 +461,11 @@ export class StoryDetailsPage {
                     }
                     this.replying = false;
                     jQuery(".uploadAndSubmit .textEditor").val('');
+                    if (commentText != "" && commentText.trim() != ""){
+                        this.newSubmitOpenClose = true;
+                    }else{
+                        this.newSubmitOpenClose = false;
+                    }
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
@@ -468,6 +493,11 @@ export class StoryDetailsPage {
                     this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
                     this.editCommentOpenClose[commentId] = false;
                     this.newCommentOpenClose = true;
+                    if (editedContent != "" && editedContent.trim() != ""){
+                        this.editSubmitOpenClose[commentId] = true;
+                    }else{
+                        this.editSubmitOpenClose[commentId] = false;
+                    }
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
