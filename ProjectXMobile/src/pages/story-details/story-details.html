@@ -141,7 +141,7 @@
                                             <div id="Activity_content_{{i}}" [hidden]="editTheComment[i]">
                                                 <div class="commentp" [innerHTML]="eachActivity.CDescription"></div>
                                             </div>
-                                            <div class="editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i]" style="position: relative;">
+                                            <div class="editorDiv editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i]" style="position: relative;">
                                                 <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
                                                 <!--Have to change Text area to editor-->
                                                 <textarea class="textEditor txteditor_width" placeholder="Enter text here..."></textarea>
