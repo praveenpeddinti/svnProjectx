@@ -908,7 +908,7 @@ class StoryController extends Controller
             $notified_userid=$notifyData->userInfo->Id;
             $notified_username=$notifyData->userInfo->username;
             //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
-            $result_data=NotificationCollection::getNotifications($notified_userid,$projectId,0,5);
+            $result_data=ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,0,5);
             $count = NotificationCollection::getNotificationsCount($notified_userid,$projectId);
             $result =  count($result_data)>0 ? $result_data : "nodata";
             
