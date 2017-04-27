@@ -31,8 +31,9 @@ export class StoryDetailsPage {
     private replyToComment = -1;
     private replying = false;
     private editTheComment = [];
+    private editCommentOpenClose = [];
+    private newCommentOpenClose = true;
     public commentDesc = "";
-    private openCommentMenuList = [];
     private lastImage: string = null;
     private progressNew: number;
     private progressEdit: number;
@@ -401,12 +402,13 @@ export class StoryDetailsPage {
     public editComment(commentId) {
         jQuery("#Actions_" + commentId + " .textEditor").val(this.itemsInActivities[commentId].CrudeCDescription);
         this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
+        this.newCommentOpenClose = false;
+        this.editCommentOpenClose[commentId] = true;
     }
     public cancelEdit(commentId){
         this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
-    }
-    public openCommentMenu(commentId){
-        this.openCommentMenuList[commentId]=true;//show submit and cancel button on editor replace at the bottom
+        this.editCommentOpenClose[commentId] = false;
+        this.newCommentOpenClose = true;
     }
     public submitComment() {
         var commentText = jQuery(".uploadAndSubmit .textEditor").val();
@@ -464,6 +466,8 @@ export class StoryDetailsPage {
                     this.itemsInActivities[commentId].CrudeCDescription = result.data.CrudeCDescription;
                     this.itemsInActivities[commentId].CDescription = result.data.CDescription;
                     this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
+                    this.editCommentOpenClose[commentId] = false;
+                    this.newCommentOpenClose = true;
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
