@@ -50,6 +50,17 @@ var post_data={};
       
      
     }
+    
+     jQuery(document).ready(function(){
+      jQuery(document).bind("click",function(event){   
+//alert(jQuery(event.target).closest('ul#notifications_list').length); 
+          if(jQuery(event.target).closest('ul#notifications_list').length == 0 && jQuery(event.target).closest('li#notificationIcon').length == 0){
+           jQuery("#notifications_list").hide();
+          }
+      });
+     
+    });
+    
   }
   logout() { 
         this._service.logout((data)=>{ 
@@ -157,7 +168,7 @@ var post_data={};
       {
         this.notify_count=0;
         
-         jQuery(".notificationlist").empty();
+         jQuery(".notificationlist").remove();
         // jQuery("#notificationMessage").show();
        
        
