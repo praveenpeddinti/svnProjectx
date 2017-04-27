@@ -36,11 +36,8 @@
         <ion-row>
             <ion-item *ngFor="let field of templatedataList; let i=index;" id="item_{{i}}">
                 <label class="customlabel">{{field.title}}</label>
-                <div id="field_title_{{i}}" *ngIf="field.fieldName == 'planlevel'" (click)="openOptionsModal(field, i)" class="item customdropdown spinnerlabel marginbottom8">
-                    <div>{{field.assignData[0].Name}}</div><span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></div>
-                <div id="field_title_{{i}}" *ngIf="field.fieldName == 'priority'" (click)="openOptionsModal(field, i)" class="item customdropdown spinnerlabel marginbottom8">
-                    <div style="float:left; margin-right:5px">{{field.assignData[2].Name}}</div>
-<span style="display:table-cell;"><i class="fa fa-circle {{displayedClassColorValue}}" aria-hidden="true"></i></span><span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></div>
+                <div id="field_title_{{i}}" *ngIf="field.fieldName == 'planlevel'" (click)="openOptionsModal(field, i)" class="item customdropdown spinnerlabel marginbottom8"><div>{{field.assignData[0].Name}}</div><span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></div>
+                <div id="field_title_{{i}}" *ngIf="field.fieldName == 'priority'" (click)="openOptionsModal(field, i)" class="item customdropdown spinnerlabel marginbottom8"><div style="float:left; margin-right:5px">{{field.assignData[2].Name}}</div><span style="display:table-cell;"><i class="fa fa-circle {{displayedClassColorValue}}" aria-hidden="true"></i></span><span class="custombuttonsmenuicon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span></div>
 </ion-item>
 </ion-row>
 </ion-list>
@@ -79,7 +76,7 @@
 
 <button id="formSubmit" style="opacity: 0;" ion-button center type="submit" (click)="submitted = true;" class="normal big-btn">Submit</button>
 </div>
-</form>
+    </form> 
 </ion-content>
 <ion-footer>
     <ion-toolbar>
