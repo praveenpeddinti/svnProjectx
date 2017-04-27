@@ -6,6 +6,7 @@ import {StoryDetailsPage} from '../story-details/story-details';
 import {StoryCreatePage} from '../story-create/story-create';
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
+declare var jQuery: any;
 /*
   Generated class for the Dashboard page.
 
@@ -26,7 +27,19 @@ export class DashboardPage {
     arrayObject is used for saving the stories list and passing it to the html page
      ** 
     */
-    public arrayObject: Array<{id: string, storyOrTask: string, subTasks: number, storyPointsHeading: string, title: string, assignTo: string, userThumbNail: string, priority: string, workflow: string, bucket: string, duedate: string, state: string}>;
+    public arrayObject: Array<{storyOrTask: any, 
+                                storyPointsHeading: string, 
+                                id: string, 
+                                subTasks: any, 
+                                title: string, 
+                                assignTo: string, 
+                                priority: string, 
+                                state: string,  
+                                workflow: string, 
+                                bucket: string, 
+                                estimatedPoints: string, 
+                                duedate: string, 
+                                arrow: string}>;
     public moreDataLoaded: boolean = true;
 
     public loader = this.loadingController.create({content: "Loading..."});
@@ -68,7 +81,12 @@ export class DashboardPage {
                         this.platform.exitApp();
                     } else if (StoryDetailsPage.isMenuOpen == true) {
                         StoryDetailsPage.menuControler.close();
-                    } else {
+                    } 
+                    // else if(jQuery("#picker-wrapper").is(":visible")){
+                    //     console.log("the visisble ", jQuery("#picker-wrapper").is(":visible"));
+                    //     jQuery("ion-picker-cmp").remove();
+                    // } 
+                    else {
                         return this.navCtrl.pop();
                     }
                 }
@@ -131,7 +149,9 @@ console.log("the ionViewDidLoad after dismiss");
                         this.moreDataLoaded = false;
                     }
                     for (let ticket = 0; ticket < this.items.length; ticket++) {
-                        var _id = this.items[ticket][0].field_value;
+
+                        for(let ticketData = 0; ticketData< this.items[ticket].length; ticketData++){
+                        
                         var _storyOrTask;
                         var _storyPointHeading = "";
                         if (this.items[ticket][0].other_data.planlevel == 1) {
@@ -142,20 +162,59 @@ console.log("the ionViewDidLoad after dismiss");
                             _storyOrTask = "Task";
                             _storyPointHeading = "Estimated points";
                         }
-                        var _subTasks = 0;
-                        _subTasks = this.items[ticket][0].other_data.totalSubtasks;
-                        var _title = this.items[ticket][1].field_value;
-                        var _assignTo = this.items[ticket][2].field_value;
-                        var _thumbNail = this.items[ticket][2].other_data;
-                        var _priority = this.items[ticket][3].field_value;
-                        var _workflow = this.items[ticket][4].field_value;
-                        var _bucket = this.items[ticket][5].field_value;
-                        var _dudate = this.items[ticket][6].field_value;
-                        var _state = this.items[ticket][4].other_data;
-                        console.log("other data value in dashbord" + _state);
+
+                        switch(this.items[ticket][ticketData].field_name){
+                            case "Id":
+                                var _id = this.items[ticket][ticketData].field_value;
+                                var _subTasks = 0;
+                                    _subTasks = this.items[ticket][0].other_data.totalSubtasks;
+                            break;
+                            case "Title":
+                                var _title = this.items[ticket][ticketData].field_value;
+                            break;
+                            case "assignedto":
+                                var _assignTo = this.items[ticket][ticketData].field_value;
+                            break;
+                            case "priority":
+                                var _priority = this.items[ticket][ticketData].field_value;
+                            break;
+                            case "workflow":
+                                var _state = this.items[ticket][ticketData].other_data;                                
+                                var _workflow = this.items[ticket][ticketData].field_value;
+                            break;
+                            case "bucket":
+                                var _bucket = this.items[ticket][ticketData].field_value;
+                            break;
+                            case "estimatedpoints":
+                                var _estimatedPoints = this.items[ticket][ticketData].field_value;
+                            break;
+                            case "duedate":
+                                var _dudate = this.items[ticket][ticketData].field_value;
+                            break;
+                            case "arrow":
+                                var _arrow = this.items[ticket][ticketData].other_data;
+                            break;
+                            
+                            default:
+                            break;
+                        
+                        }
+                    }
 
                         this.arrayObject.push({
-                            id: _id, storyOrTask: _storyOrTask, subTasks: _subTasks, storyPointsHeading: _storyPointHeading, title: _title, assignTo: _assignTo, userThumbNail: _thumbNail, priority: _priority, workflow: _workflow, bucket: _bucket, duedate: _dudate, state: _state
+                            storyOrTask: _storyOrTask, 
+                            storyPointsHeading: _storyPointHeading, 
+                            id: _id, 
+                            subTasks: _subTasks, 
+                            title: _title, 
+                            assignTo: _assignTo,  
+                            priority: _priority, 
+                            state: _state, 
+                            workflow: _workflow, 
+                            bucket: _bucket, 
+                            estimatedPoints: _estimatedPoints, 
+                            duedate: _dudate, 
+                            arrow: _arrow
                         });
                     }
 
