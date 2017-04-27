@@ -91,10 +91,10 @@
             <li class="t_worklog "><a  aria-controls="t_worklog" ><i class="fa fa-clock-o" aria-hidden="true"></i></a></li>
         </ul>
         <div class="custab-content">
-            <div role="tabpanel" class="custtab-pane  active" id="t_comments">
-                <div class="activitiesList" *ngFor="let eachActivity of itemsInActivities; let i=index;" id="activity_{{i}}">
+            <div role="tabpanel" class="custtab-pane  active" id="t_comments" >
+                <div class="activitiesList" style="margin-bottom:10px" *ngFor="let eachActivity of itemsInActivities; let i=index;" id="activity_{{i}}">
                      <div id="{{i}}" data-slug="eachActivity.Slug.$oid">
-                        <div class="cust_commentsbox">
+                        <div class="cust_commentsbox" >
                             <div class="cust_com_title">
                                 <div class="user">
                                     <img class="usericon" src="{{eachActivity.ActivityBy.ProfilePicture}}" alt="">
