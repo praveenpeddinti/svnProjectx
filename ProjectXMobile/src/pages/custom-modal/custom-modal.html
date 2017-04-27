@@ -15,7 +15,7 @@
     <ion-row style="padding: 16px;border-bottom: 1px solid #ccc;" 
               *ngFor="let item of displayFieldvalue; let i=index;" 
               [ngClass]="{'selectedMember': activatedFieldValue == item.Name}"
-              
+              (press)="dismiss(item)"
               (click)="dismiss(item)" center> 
               <div id="item_{{i}}"> 
                   <ion-icon *ngIf="activatedFieldValue == item.Name" name="checkmark"></ion-icon> 
