@@ -1,10 +1,10 @@
 <?php
 namespace common\service;
-use common\models\mongo\{TicketCollection,NotificationCollection,TinyUserCollection};
-use common\components\CommonUtility;
-use common\models\mysql\{Collaborators,WorkFlowFields};
+use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
+use common\components\{CommonUtility};
+use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters};
 use yii;
-use common\models\mysql\StoryFields;
+
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -428,20 +428,20 @@ use common\models\mysql\StoryFields;
                         {
                            
                             //for logged in user
-                            //Eg : moin.hussain assigned you to ticket #33 
-                            $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'to'=>"you",'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder']);
-                            array_push($result_msg,$message);
+                            //Eg : moin.hussain assigned you to ticket #33
+                             $to =  "you";
                         }
                         else
                         {
                            $action_user=Collaborators::getCollaboratorById($notification['NewValue']);
                                 //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
                                 //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
-                                $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['assignedTo'],'to'=>$action_user['UserName'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder']);
-                                array_push($result_msg,$message);
+                            $to =  $action_user['UserName']; 
                            
                         }
-                         
+                          $preposition =  "to";
+                          $message=array('from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assignedTo'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder'],"Preposition"=>$preposition);
+                                array_push($result_msg,$message); 
                     }
             
                     
@@ -458,7 +458,7 @@ use common\models\mysql\StoryFields;
                             if($notification['NotifiedUser']==$notification['NewValue']) //if logged in user has been added
                             {
                                 //Eg : moin.hussain added you as a follower to ticket #33
-                                $activityOn ='You';
+                                $activityOn ='you';
                              
                             }
                             else
@@ -468,7 +468,8 @@ use common\models\mysql\StoryFields;
                                 $activityOn =$action_user['UserName'];
                               
                             }
-                         $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower']);
+                           $preposition =  $notification['Notification_Type'] == "added" ? "to" : "from";
+                         $message=array('from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower'],"Preposition"=>$preposition);
                                 array_push($result_msg,$message);
                     }
                               
@@ -493,26 +494,19 @@ use common\models\mysql\StoryFields;
                          //Eg : moin.hussain commented on #33 Ticket 
                              if($notification['ActivityFrom']!=$user)
                              {
-                              $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['comment'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
-                              array_push($result_msg,$message);
+                                  $preposition = "on";
+                                  $object = "comment";
+                           $type =  Yii::$app->params['comment'];
                              }
-                           
-                             
                         }
-                        if($notification['Notification_Type']=='reply')
-                        {
-                            //Eg: moin.hussain replied on #33 Ticket
-                           // error_log(print_r($from_user,1)."---".print_r($action_user,1));
-                            
-                            // For replied on your comment
-                           
-                                    //Eg: ranjani.thakur replied on the comment
-                                    $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params['reply'],'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'Reply'=>1);
-                                    array_push($result_msg,$message);
-                               
+                        if($notification['Notification_Type']=='reply'){
+                                   $preposition = "";
+                                  $object = "reply";
+                             $type =  Yii::$app->params['reply'];
                            
                         }
-
+                     $message=array('from'=>$from_user['UserName'],'object'=>$object,'type'=>$type,'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
+                     array_push($result_msg,$message);
                  }
                    
                   if($notification['Notification_Type'] == "mention" )
@@ -534,8 +528,8 @@ use common\models\mysql\StoryFields;
                                     //Eg : moin.hussain mentioned you in a comment or
                                     //     moin.hussain mentioned you in a reply
                                     //     moin.hussain mentined you on Ticket #33
-                                    $notification['NotifiedUser']='You';
-                                    $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
+                                    $notification['NotifiedUser']='you';
+                                    $message=array('from'=>$from_user['UserName'],'object'=>"mention",'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
                                     array_push($result_msg,$message);
                                     
                                 }
@@ -569,15 +563,16 @@ use common\models\mysql\StoryFields;
                                  $oldValue = $datetime->format('M-d-Y');
                                  }
                                 
-                                 
-                                 $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$oldValue,"NewValue"=>$newValue,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
+                                 $preposition =  $notification['Notification_Type'] == "set" ? "to" : "**";
+                                 $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$oldValue,"NewValue"=>$newValue,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                                  array_push($result_msg,$message);
                              }
                              else if($storyField['Type']!=6 )
                              {
                                 $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
                                 $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
-                                 $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
+                               $preposition =  $notification['Notification_Type'] == "set" ? "to" : "**";
+                                 $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                                  array_push($result_msg,$message);
                                  
                              }

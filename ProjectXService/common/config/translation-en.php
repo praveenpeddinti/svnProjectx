@@ -1,15 +1,15 @@
 <?php
 
 return [
-    "mention" => "mentioned",
+    "mention" => "has mentioned",
     "changed" =>"has changed",
-    "assignedTo" => "assigned",
+    "assignedTo" => "has assigned",
     "stakeholder"=>"as a stakeholder",
-    "comment"=>"commented on",
-    "reply"=>"replied on your comment for",
+    "comment"=>"has commented",
+    "reply"=>"has replied to your comment on",
     "addedyou"=>"added you as follower",
-    "added"=>"added",
-    "removed"=>"removed",
+    "added"=>"has added",
+    "removed"=>"has removed",
     "removedyou"=>"removed you as follower",
     "follower"=>"as follower",
     "set"=>"set",

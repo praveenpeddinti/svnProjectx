@@ -1077,7 +1077,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             $EEemail = new Email();
              try
                 {
-                    $subject="Ticket Status";
+                    $subject="ProjectX";
                     $from=Yii::$app->params['ProjectEmail'];
                     $fromName="ProjectX";
                     $html="<h1> $text_message </h1>";
