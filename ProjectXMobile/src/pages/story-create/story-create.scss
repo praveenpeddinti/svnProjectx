@@ -93,6 +93,11 @@ input[type=submit] {
 	border-width: 8px;
 	margin-left: -8px;
 }
+
+.checkbox-md .checkbox-checked .checkbox-inner {
+    margin-left: 4px!important;
+}
+
 .item.item-md .checkbox-md, .item.item-wp .checkbox-wp, .item.item-ios .checkbox-ios{margin-right:10px}
 .list .item-checkbox .item-inner{padding-left:0!important;font-size:14px}
 .headerlinks{}
