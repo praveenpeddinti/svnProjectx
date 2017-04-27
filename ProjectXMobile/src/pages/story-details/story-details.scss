@@ -502,6 +502,23 @@ ion-fab-list[side="left"] .fab-in-list, ion-fab-list[side="right"] .fab-in-list 
 .editorDivclose{background: #f4f4f4;border:1px solid #e8e8e8;padding:0px 5px 5px 5px;position: relative}
 .commentedtextdeletenoabsolute{position: static;}
 .deletediv{text-align: right}
+.submitbutton{  border-radius: 50%;margin:1px 2px 1px 0;
+    background-color: #3b9ec2; height: 40px;
+     width: 40px;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.14), 0 4px 5px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0s, background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0s, color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
+}
+.buttonicon.submitbutton i{font-size:1.4em;color:#fff}
+
+.linkbutton{border-radius: 50%;margin-right:10px;
+    background-color: transparent; height: 40px;
+     width: 40px;
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px rgba(0, 0, 0, 0);
+    color: #3b9ec2;
+    transition: box-shadow 0ms cubic-bezier(0, 0, 0, 0) 0s, background-color 0ms cubic-bezier(0, 0, 0, 0) 0s, color 0ms cubic-bezier(0, 0, 0, 0) 0s;}
+
+.buttonicon.linkbutton i{font-size:2em;color:#3b9ec2}
 }
 .picker-opt-disabled {
     opacity:1!important;

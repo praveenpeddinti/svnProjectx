@@ -44,6 +44,17 @@
 </ion-item>
 </ion-row>
 </ion-list>
+    <div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
+    <label class="customlabel">Tasks</label>
+    <ion-list>
+        <ion-row>
+            <div class="customcheckboxrow" *ngFor="let item of tasktypeList; let i=index;" id="item_{{i}}">
+                <input type="checkbox" name="task_1" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}">
+                <span class="tasks-list-desc">{{item.Name}}</span>
+            </div>
+        </ion-row>
+    </ion-list>
+</div>
 <div class="customtextareadiv">
     <ion-list>
         <label class="customlabel">Description</label>
@@ -65,17 +76,7 @@
         <!--Progress bar-->
     </ion-list>
 </div>
-<div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
-    <label class="customlabel">Tasks</label>
-    <ion-list>
-        <ion-row>
-            <div class="customcheckboxrow" *ngFor="let item of tasktypeList; let i=index;" id="item_{{i}}">
-                <input type="checkbox" name="task_1" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}">
-                <span class="tasks-list-desc">{{item.Name}}</span>
-            </div>
-        </ion-row>
-    </ion-list>
-</div>
+
 <button id="formSubmit" style="opacity: 0;" ion-button center type="submit" (click)="submitted = true;" class="normal big-btn">Submit</button>
 </div>
 </form>
@@ -83,15 +84,15 @@
 <ion-footer>
     <ion-toolbar>
         <ion-buttons left>
-            <span class="headerlinks">
-            <a ion-button icon-only (click)="presentActionSheet()">
+            <span class="">
+            <a ion-button icon-only class="linkbutton" (click)="presentActionSheet()">
               <i class="fa fa-paperclip" aria-hidden="true"></i>
             </a>
             </span>
         </ion-buttons>
         <ion-buttons right (click)="createForm.ngSubmit.emit()">
-            <span class="headerlinks">
-            <a ion-button icon-only type="submit" (click)="submitted = true;" form="createForm">
+            <span class="">
+            <a ion-button icon-only class="submitbutton" type="submit" (click)="submitted = true;" form="createForm">
                <i class="fa fa-paper-plane" aria-hidden="true"></i>
             </a>
              </span>

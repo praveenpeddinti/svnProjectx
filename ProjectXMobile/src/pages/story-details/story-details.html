@@ -159,7 +159,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col50 col50textright"> 
-                                                        <button class="buttonicon" (click)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                                                        <button class="buttonicon submitbutton" (click)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,12 +194,12 @@
                         <!--Progress bar-->
                         <div class="customrow" [hidden]='newSubmitOpenClose'>
                             <div class="col50">
-                                <div class="uploadbottom">
-                                    <button class="buttonicon" (click)="presentActionSheet('fileChange','comments','')"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
+                                <div class="">
+                                    <button class="buttonicon linkbutton" (click)="presentActionSheet('fileChange','comments','')"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
                                 </div>
                             </div>
                             <div class="col50 col50textright"> 
-                                <button class="buttonicon " (click)="submitComment()"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                                <button class="buttonicon submitbutton " (click)="submitComment()"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                             </div>
                         </div>                                                                                                                                  
                     </div>
