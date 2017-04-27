@@ -67,32 +67,15 @@
 </div>
 <div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
     <label class="customlabel">Tasks</label>
-   <!--<fieldset class="tasks-list">-->
   <ion-list>
     <ion-row>
       <div class="customcheckboxrow" *ngFor="let item of tasktypeList; let i=index;" id="item_{{i}}">
         <input type="checkbox" name="task_1"[(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}">
-        <span class="tasks-list-mark"></span>
         <span class="tasks-list-desc">{{item.Name}}</span>
      </div>
      </ion-row>
  </ion-list>
-   <!--</fieldset>-->
-    <!--<ion-list>
-        <ion-row>
-            <div class="customcheckboxrow" *ngFor="let item of tasktypeList; let i=index;" id="item_{{i}}">
-                <ion-checkbox [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}"></ion-checkbox>
-                <span>{{item.Name}}</span>
-            </div>
-        </ion-row>
-    </ion-list>-->
-</div>
-<button id="formSubmit" style="opacity: 0;" ion-button center type="submit" (click)="submitted = true;" class="normal big-btn">Submit</button>
-</div>
-</form>
-</ion-content>
-<ion-footer>
-    <ion-toolbar>
+      <div class="submitbg">
         <ion-buttons left>
             <span class="headerlinks">
             <a ion-button icon-only (click)="presentActionSheet()">
@@ -107,5 +90,9 @@
             </a>
              </span>
         </ion-buttons>
-    </ion-toolbar>
-</ion-footer>
+      </div>
+</div>
+<button id="formSubmit" style="opacity: 0;" ion-button center type="submit" (click)="submitted = true;" class="normal big-btn">Submit</button>
+</div>
+</form>
+</ion-content>
