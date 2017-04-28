@@ -108,11 +108,19 @@ input[type=submit] {
 .customcheckboxrow span{color:#4c4c4c}
 .customcheckboxrow .checkbox-md, .customcheckboxrow .checkbox-wp, .customcheckboxrow .checkbox-ios{vertical-align: text-bottom;}
 .customcheckboxrow .checkbox-md .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-wp .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-ios .checkbox-checked .checkbox-inner{left:6px;top:3px}
+.customcheckboxrow ,.checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-ios .checkbox-checked .checkbox-inner{left:11px;top:9px}
+
 .customcheckboxrow .checkbox-md .checkbox-checked, .customcheckboxrow .checkbox-wp .checkbox-checked, .customcheckboxrow .checkbox-ios .checkbox-checked{width:22px;height:22px;}
 .customcheckboxrow .checkbox-md .checkbox-icon, .customcheckboxrow .checkbox-wp .checkbox-icon, .customcheckboxrow .checkbox-wp .checkbox-icon{width:22px;height:22px;}
 .customcheckboxrow .checkbox-md .checkbox-checked, .customcheckboxrow .checkbox-wp .checkbox-checked,.customcheckboxrow .checkbox-ios .checkbox-checked {
     background-color: #3b9ec2;
     border-color: #3b9ec2;
+}
+.customcheckboxrow ,.customcheckboxrow .checkbox-ios .checkbox-checked {
+    background-color: #3b9ec2;
+    border-color: #3b9ec2;
+    width: 30px;
+    height: 30px;
 }
 .Normal {color:#eda74c}
 .Highest{color:#ff2200}
