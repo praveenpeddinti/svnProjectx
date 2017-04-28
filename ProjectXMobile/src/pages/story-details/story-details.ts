@@ -367,10 +367,13 @@ export class StoryDetailsPage {
         this.replyToComment = commentId;
         this.replying = true;
         jQuery("#commentEditorArea").addClass("replybox");
-        jQuery("#commentEditorArea")[0].scrollIntoView({
-            behavior: "smooth", // or "auto" or "instant"
-            block: "start" // or "end"
-        });
+        this.content.resize();
+        setTimeout(function(){
+            jQuery("#uploadAndSubmit")[0].scrollIntoView({
+                behavior: "smooth", // or "auto" or "instant"
+                block: "end" // or "start"
+            });
+        },500);
     }
     public cancelReply() {
         this.replying = false;
