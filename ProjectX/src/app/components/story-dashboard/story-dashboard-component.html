@@ -10,8 +10,8 @@
     <div class="col-xs-12 col-sm-8 col-md-8 ">
       <div class="pull-right">
         <div class="customdropdown customdropdownheader" id="filterDropdown">
-          <p-dropdown [style]="{'width':'220px'}" [(ngModel)]="selectedFilter" (onChange)="filterDashboard()" [options]="FilterList">
-
+          <p-dropdown [style]="{'width':'220px'}" [(ngModel)]="selectedFilter" (onChange)="filterDashboard()" [displayOptions]="FilterOptionToDisplay" [options]="FilterOption">
+      
           </p-dropdown>
 
         </div>

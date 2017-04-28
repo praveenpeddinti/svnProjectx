@@ -15,7 +15,8 @@ declare var jQuery:any;
 })
 
 export class StoryDashboardComponent {
-    public FilterList=[];
+    public FilterOption=[];
+    public FilterOptionToDisplay=[];
      public selectedFilter=null;                  
     @ViewChild('myTable') table: any;
     rows = [];
@@ -93,9 +94,8 @@ expanded: any = {};
   @Description: get bucket details
   */  
  this._service.getFilterOptions(1,(response) => { 
-     for(let option of response.data){
-         thisObj.FilterList.push({label:option.Label,value:{id:option.Id,type:option.Type,showChild:option.ShowChild}})
-     }
+  thisObj.FilterOption=response.data[0].filterValue;
+  thisObj.FilterOptionToDisplay=response.data;
  });
         /*
         @params    :  offset,limit,sortvalue,sortorder

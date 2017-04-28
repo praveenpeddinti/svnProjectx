@@ -108,12 +108,12 @@ export class StoryEditComponent implements OnInit
   fieldsDataBuilder(fieldsArray,ticketId)
   {
     let fieldsBuilt = [];
-    let data = {title:"",value:"",readonly:true,required:true,id:"",fieldDataId:"",fieldName:"",fieldType:"",renderType:"",type:"",listdata:[]};
+    let data = {title:"",value:"",readonly:true,required:true,id:"",fieldDataId:"",fieldName:"",fieldType:"",renderType:"",type:"",listdata:[],listDisplayData:[]};
     for(let field of fieldsArray)
     {
       if(field.field_name != "customfield_2")
       {
-          data = {title:"",value:"",readonly:true,required:true,id:"",fieldDataId:"",fieldName:"",fieldType:"",renderType:"",type:"",listdata:[]};
+          data = {title:"",value:"",readonly:true,required:true,id:"",fieldDataId:"",fieldName:"",fieldType:"",renderType:"",type:"",listdata:[],listDisplayData:[]};
           switch(field.field_type)
           {
             case "Text":
@@ -129,6 +129,7 @@ export class StoryEditComponent implements OnInit
             data.value = field.readable_value.Name;
             data.renderType = "select";
             data.listdata = field.meta_data;
+            data.listDisplayData = field.meta_data;
             data.fieldDataId = field.readable_value.Id;
             break;
             case "Numeric":
@@ -154,6 +155,7 @@ export class StoryEditComponent implements OnInit
             data.value = field.readable_value.UserName;
             data.renderType = "select";
             data.listdata = this.ticketData.collaborators;
+            data.listDisplayData = this.ticketData.collaborators;;
             data.fieldDataId = field.readable_value.CollaboratorId;
             break;
             case "Bucket":
@@ -161,6 +163,7 @@ export class StoryEditComponent implements OnInit
             data.value = field.readable_value.Name;
             data.renderType = "select";
             data.listdata = field.meta_data;
+            data.listDisplayData = field.meta_data;
             data.fieldDataId = field.readable_value.Id;
             break;
             }
@@ -176,7 +179,8 @@ export class StoryEditComponent implements OnInit
           // }
           var priority=(data.title=="Priority"?true:false);
           var status=data.title;
-          data.listdata=this.prepareItemArray(data.listdata,priority,status);
+          data.listDisplayData=this.prepareItemArray(data.listdata,priority,status);
+          data.listdata=data.listDisplayData[0].filterValue;
           fieldsBuilt.push(data);
           this.showMyEditableField.push((field.readonly == 1)?false:true);
       }
@@ -193,6 +197,7 @@ export class StoryEditComponent implements OnInit
  public prepareItemArray(list:any,priority:boolean,status)
  {
      var listItem=[];
+     var listMainArray=[];
      if(list.length>0)
      { 
        if(status == "Assigned to" || status == "Stake Holder")
@@ -204,7 +209,8 @@ export class StoryEditComponent implements OnInit
           listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
        }
      }
-    return listItem;
+    listMainArray.push({type:"",filterValue:listItem});
+  return listMainArray;
  }
 
   /*

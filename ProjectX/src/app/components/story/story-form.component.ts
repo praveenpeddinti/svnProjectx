@@ -76,9 +76,11 @@ export class StoryComponent
                     }           
                     jsonForm[item] = element.DefaultValue;
                     var priority=(element.Title=="Priority"?true:false);
-                    var listItemArray=this.prepareItemArray(DefaultValue,priority,element.Title);
+                    var listItemArray: any;
+                     listItemArray=this.prepareItemArray(DefaultValue,priority,element.Title);
+                 //   alert(JSON.stringify(listItemArray[0].filterValue));
                     this.storyFormData.push(
-                       {'lable':element.Title,'model':element.Field_Name,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray}
+                       {'lable':element.Title,'model':element.Field_Name,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray[0].filterValue,"labels":listItemArray}
                        )
                   });
                 this.form = jsonForm;
@@ -108,6 +110,7 @@ export class StoryComponent
     public prepareItemArray(list:any,priority:boolean,status:string)
     {
       var listItem=[];
+        var listMainArray=[];
       if(list.length>0)
       {
         for(var i=0;list.length>i;i++)
@@ -115,7 +118,11 @@ export class StoryComponent
             listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
         }
       }
-        return listItem;
+       listMainArray.push({type:"",filterValue:listItem});
+     // listMainArray["type"]="sfads";
+     // listMainArray["filterValue"]=listItem;
+     // alert(JSON.stringify(listMainArray)+"---"+listMainArray["type"]);
+        return listMainArray;
     }
 
 /*

@@ -3,6 +3,8 @@ import { Router} from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { LoginService, Collaborator } from '../services/login.service';
 import { AjaxService } from '../ajax/ajax.service';
+import { GlobalVariable } from '../config';
+
 declare var jQuery:any;
 @Component({
   selector: 'app-header',
@@ -15,7 +17,8 @@ export class HeaderComponent implements OnInit {
   public users=JSON.parse(localStorage.getItem('user'));
   public profilePicture=localStorage.getItem('profilePicture');
   public notification_msg=[];
-  public notify_count=0;
+  public notify_count:any=0;
+  public pageNo=1;
   public searchresults;
    constructor(
     private _ajaxService: AjaxService,
@@ -90,7 +93,7 @@ var post_data={};
   {
     event.stopPropagation();
     //ajax call for delete notificatin
-    var post_data={'notifyid':notify_id};
+    var post_data={'notifyid':notify_id,viewAll:0,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
     this.notification_msg=[];
@@ -116,7 +119,7 @@ var post_data={};
 
   goToTicket(ticketid,notify_id)
   {
-    var post_data={'notifyid':notify_id};
+    var post_data={'notifyid':notify_id,viewAll:0,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
       if(data)
@@ -139,7 +142,7 @@ var post_data={};
   }
   goToComment(ticketid,comment,notify_id)
   {
-    var post_data={'notifyid':notify_id};
+    var post_data={'notifyid':notify_id,viewAll:0,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
       if(data)
@@ -185,7 +188,7 @@ var post_data={};
      jQuery("#notifications_list").show();
    if(this.notify_count>0){
     console.log("show notify");
- var post_data={};
+ var post_data={viewAll:0,page:1};
  this.notification_msg=[];
       this._ajaxService.NodeSubscribe('/getAllNotifications',post_data,(data)=>
       {
@@ -210,6 +213,11 @@ var post_data={};
   
     }
     }
+  }
+
+
+  viewAllNotifications(){
+    this._router.navigate(['notification']);
   }
   
 }

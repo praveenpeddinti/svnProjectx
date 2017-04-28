@@ -42,7 +42,7 @@
                         <div *ngIf="value.type == 2 "  >
                             <div class="leftpanelsections  customdropdown">
                                 <label for="email" class="leftlabels">{{value.lable}}</label>
-                                <p-dropdown [options]="value.values" (onChange)="dropChange($event.value,value.lable)" [style]="{'width':'100%'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
+                                <p-dropdown [displayOptions]="value.labels" [options]="value.values" (onChange)="dropChange($event.value,value.lable)" [style]="{'width':'100%'}" [required]="(value.required == 1) ? true : null"  [(ngModel)]="form[value.model]" name="name_{{value.model}}"></p-dropdown>
                             </div>
                         </div>
 

@@ -61,7 +61,7 @@ public blurTimeout=[];
 
   //common array for Dropdown's option.
   private dropList=[];
-
+  private dropDisplayList=[];
   public filesToUpload: Array<File>;
   public hasBaseDropZoneOver:boolean = false;
   public hasBaseDropZoneOverComment:boolean = false;
@@ -387,7 +387,8 @@ closeTitleEdit(editedText){
                   list:data.getFieldDetails
                 };
                  var priority=(fieldTitle=="Priority"?true:false);
-                this.dropList=this.prepareItemArray(listData.list,priority,fieldTitle);
+                this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
+                this.dropList=this.dropDisplayList[0].filterValue;
                 //alert("#"+inptFldId+" div");
                 //sets the dropdown prefocused
                 jQuery("#"+inptFldId+" div").click();
@@ -612,6 +613,7 @@ private dateVal = new Date();
 //Prepares the Custom Dropdown's Options array.
  public prepareItemArray(list:any,priority:boolean,status:string){
   var listItem=[];
+    var listMainArray=[];
      if(list.length>0){
        if(status == "Assigned to" || status == "Stake Holder"){
        listItem.push({label:"--Select a Member--", value:"",priority:priority,type:status});
@@ -620,7 +622,8 @@ private dateVal = new Date();
            listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
        }
      }
-  return listItem;
+      listMainArray.push({type:"",filterValue:listItem});
+  return listMainArray;
 }
 
 //----------------------File Upload codes---------------------------------

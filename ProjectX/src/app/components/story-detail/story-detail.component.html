@@ -87,7 +87,7 @@
                         </textarea>
 
                         <div class="customdropdown">
-                            <p-dropdown *ngSwitchCase="'select'" [style]="{'width':'100%'}" [ngModel]="field.valueId"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [options]="dropList" >
+                            <p-dropdown *ngSwitchCase="'select'" [style]="{'width':'100%'}" [ngModel]="field.valueId"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [displayOptions]="dropDisplayList" [options]="dropList" >
                             </p-dropdown>
                             <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
                         </div>
@@ -302,7 +302,7 @@
      </div>
 
          <div class="customdropdown">
-     <p-dropdown [hidden]="!taskFieldsEditable[j][k]"  [style]="{'width':'100%'}" [ngModel]="childTaskFields.data.value"   name="dropdownContainer_{{j}}_{{k}}" (onFocus)="dropdownFocus($event,j+'_'+k,'Tasks')" (onBlur)="selectBlurField($event,j+'_'+k,'Tasks')"  (onChange)="restoreField($event,childTasks.TicketId+'_'+childTaskFields.fieldName,j+'_'+k,'select',childTaskFields.data.Id,'Tasks')" id="{{childTasks.TicketId}}_{{j}}_{{k}}"   [options]="dropList" >
+     <p-dropdown [hidden]="!taskFieldsEditable[j][k]"  [style]="{'width':'100%'}" [ngModel]="childTaskFields.data.value"   name="dropdownContainer_{{j}}_{{k}}" (onFocus)="dropdownFocus($event,j+'_'+k,'Tasks')" (onBlur)="selectBlurField($event,j+'_'+k,'Tasks')"  (onChange)="restoreField($event,childTasks.TicketId+'_'+childTaskFields.fieldName,j+'_'+k,'select',childTaskFields.data.Id,'Tasks')" id="{{childTasks.TicketId}}_{{j}}_{{k}}" [displayOptions]="dropDisplayList"  [options]="dropList" >
      </p-dropdown>
      </div>
                         </div>

@@ -36,6 +36,7 @@ import {SummerNoteEditorService} from './services/summernote-editor.service';
 //import { GlobalPipe } from './shared/global.pipe';
 import { TruncatePipe } from 'angular2-truncate';
 import { SearchComponent }  from './components/search/search.component';
+import { NotificationComponent }  from './components/notification/notification.component';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -70,6 +71,11 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
+               {path: 'notification',children:[
+                { path: '' , component: NotificationComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
              ];
 @NgModule({
   imports:      [
@@ -92,7 +98,7 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES)
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent ],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,SummerNoteEditorService
   ],
