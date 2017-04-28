@@ -118,7 +118,7 @@ input[type=submit] {
     width: 30px;
     height: 30px;
 }
-.customcheckboxrow .checkbox-ios{vertical-align: middle;border-radius:0}
+.customcheckboxrow .checkbox-ios, .checkbox-ios{vertical-align: middle;border-radius:0}
 .Normal {color:#eda74c}
 .Highest{color:#ff2200}
 .High{color:#ff7c7c}
