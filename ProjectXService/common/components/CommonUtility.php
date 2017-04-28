@@ -1258,21 +1258,23 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
      */
     public static function prepareFilterOption($options){
         try{
-           $refinedFilter=array();
+            $refinedFilter=array();
+            $temp=array('type'=>'','filterValue'=>array());
            $type='';
            foreach($options as $key=>$value){
-             
+             $temp['type']=$key;
                  foreach($value as $val){
-                      if($key=='bucket'){
+                      if($key=='Buckets'){
                          $type= 'bucket'; 
                          $showchild=1;
                       }else{
                          $type= $val['Type'];
                          $showchild=$val['ShowChild'];
                       }
-             array_push($refinedFilter,array("Label"=>$val['Name'],"Id"=>$val['Id'],"Type"=>$type,"ShowChild"=>$showchild));
+             array_push($temp['filterValue'],array("label"=>$val['Name'],"value"=>array("label"=>$val['Name'],"id"=>$val['Id'],"type"=>$type,"showChild"=>$showchild)));
                }
-                
+             array_push($refinedFilter,$temp); 
+             $temp=array('type'=>'','filterValue'=>array());
            }
            return $refinedFilter;
         }catch (Exception $ex) {

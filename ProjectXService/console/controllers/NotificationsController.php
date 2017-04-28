@@ -30,14 +30,22 @@ class NotificationsController extends Controller
         //logic for getting all the notifications for a particular loggedIn user
         try
         { 
+            
             $offset = 0;
             $limit = 5;
             $notification_data = json_decode($data);
+            error_log("Post__DATA".print_r($notification_data,1));
+            $page=$notification_data->page;
+            $viewAll=$notification_data->viewAll;
+            if($viewAll==1) {
+              $limit=15; 
+              $offset=($page-1) * $limit;
+            }
             $projectId=$notification_data->projectId;
             $notified_userid=$notification_data->userInfo->Id;
             $notified_username=$notification_data->userInfo->username;
             //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
-            $result_data = ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,$offset,$limit);
+            $result_data = ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,$offset,$limit,$viewAll);
            // $result_data=NotificationCollection::getNotifications($notified_userid,$projectId,$offset,$limit);
             
             echo json_encode(array('notify_result'=>$result_data));

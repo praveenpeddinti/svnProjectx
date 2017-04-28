@@ -38,7 +38,7 @@ class StoryService {
      * @param type $projectId
      * @return type
      */
-       public function getTicketEditDetails($ticketId, $projectId) {
+       public function getTicketEditDetails($getNotiticketId, $projectId) {
         try {
          $editDetails =  CommonUtility::prepareTicketEditDetails($ticketId, $projectId);
          return $editDetails;
@@ -1402,6 +1402,7 @@ EOD;
                             {
                             case 1 :
                             case 7 :   // 1-New,7 -- Invalid
+                                // send notification to assigned to person
                             $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                             //$this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             break;
@@ -1411,6 +1412,7 @@ EOD;
                             $fixedworkflowDetail = WorkFlowFields::getWorkFlowDetails(8);
                             $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Get closed status details
                             if ($taskDetails['WorkflowType'] == 1) {
+                                
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $fixedworkflowDetail['Id'], 'Fields.workflow.value_name' => $fixedworkflowDetail['Name'], 'Fields.state.value' => (int) $fixedworkflowDetail['StateId'], 'Fields.state.value_name' => $fixedworkflowDetail['State'])));
                               //  $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                                 
@@ -1423,7 +1425,10 @@ EOD;
                             case 10 : // 10 -Reopen
                             if ($taskDetails['Fields']['workflow']['value'] == 7) {
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                            // send notification to all child ticket
+                                
                             } else if ($taskDetails['Fields']['state']['value'] == 6 && ($taskDetails['WorkflowType'] == 3 || $taskDetails['WorkflowType'] == 4)) {
+                                  // send notification to Peer and QA
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                                     //send notification to Peer  
                             }

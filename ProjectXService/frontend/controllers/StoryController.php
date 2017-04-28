@@ -873,8 +873,8 @@ class StoryController extends Controller
         $postData = json_decode(file_get_contents("php://input"));
         $projectId = $postData->projectId;
         $options=array();
-        $options['general'] = ServiceFactory::getStoryServiceInstance()->getFilterOptions();
-        $options['bucket'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
+        $options['Filters'] = ServiceFactory::getStoryServiceInstance()->getFilterOptions();
+        $options['Buckets'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
         $preparedFilters = CommonUtility::prepareFilterOption($options);
         $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -907,8 +907,15 @@ class StoryController extends Controller
             $projectId=$notifyData->projectId;
             $notified_userid=$notifyData->userInfo->Id;
             $notified_username=$notifyData->userInfo->username;
+            $viewAll=$notifyData->viewAll;
+            $page=$notifyData->page;
+            $limit=5;
+            if($viewAll==1){
+                $limit= 15 * $page;
+            }
             //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
-            $result_data=ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,0,5);
+            $result_data=NotificationCollection::getNotifications($notified_userid,$projectId,0,$limit,$viewAll);
+
             $count = NotificationCollection::getNotificationsCount($notified_userid,$projectId);
             $result =  count($result_data)>0 ? $result_data : "nodata";
             
