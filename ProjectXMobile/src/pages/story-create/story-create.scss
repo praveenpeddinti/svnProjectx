@@ -98,6 +98,7 @@ input[type=submit] {
 
 .checkbox-md,.checkbox-ios,.checkbox-wp .checkbox-checked .checkbox-inner {
     margin-left: 4px!important;
+    
 }
 
 .item.item-md .checkbox-md, .item.item-wp .checkbox-wp, .item.item-ios .checkbox-ios{margin-right:10px}
@@ -106,7 +107,7 @@ input[type=submit] {
 .headerlinks .bar-button-md, .headerlinks .bar-button-ios, .headerlinks .bar-button-wp{font-size:1rem;margin-right:5px}
 .customcheckboxrow{margin-right:20px}
 .customcheckboxrow span{color:#4c4c4c}
-.customcheckboxrow .checkbox-md, .customcheckboxrow .checkbox-wp, .customcheckboxrow .checkbox-ios{vertical-align: text-bottom;}
+.customcheckboxrow .checkbox-md, .customcheckboxrow .checkbox-wp, .customcheckboxrow .checkbox-ios{vertical-align: middle;}
 .customcheckboxrow .checkbox-md .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-wp .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-ios .checkbox-checked .checkbox-inner{left:11px;top:9px}
 
 .customcheckboxrow .checkbox-md .checkbox-checked, .customcheckboxrow .checkbox-wp .checkbox-checked, .customcheckboxrow .checkbox-ios .checkbox-checked{width:22px;height:22px;}
@@ -117,6 +118,7 @@ input[type=submit] {
     width: 30px;
     height: 30px;
 }
+.customcheckboxrow .checkbox-ios{vertical-align: middle;border-radius:0}
 .Normal {color:#eda74c}
 .Highest{color:#ff2200}
 .High{color:#ff7c7c}
