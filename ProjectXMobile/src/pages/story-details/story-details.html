@@ -105,7 +105,7 @@
                                     </div>
                                     <div *ngIf="eachActivity.PropertyChanges.length == 0" class="comments_menuouter{{(eachActivity.Status ==2)?'_reply':''}}">
                                         <ion-fab top right>
-                                            <button ion-fab><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
+                                            <button ion-fab class="commentAction"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
                                             <ion-fab-list side="left">
                                                 <button ion-fab (click)="replyComment(i,eachActivity.ActivityBy.CollaboratorId)"><i class="fa fa-reply" aria-hidden="true"></i></button>
                                                 <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0"  (click)="presentConfirmDelete(i,eachActivity.Slug.$oid)"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -143,7 +143,7 @@
                                                 <div id="Activity_content_{{i}}" [hidden]="editTheComment[i] && editCommentOpenClose[i]">
                                                     <div class="commentp" [innerHTML]="eachActivity.CDescription"></div>
                                                 </div>
-                                                <div class="editorDiv editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i] && !editCommentOpenClose[i]" style="position: relative;">
+                                                <div class="commentingTextArea editorDiv editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i] && !editCommentOpenClose[i]" style="position: relative;">
                                                     <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
                                                     <!--Have to change Text area to editor-->
                                                      <!--(focus)="showSubmit(i)" (blur)="hideSubmit(i,$event)"-->

@@ -374,6 +374,7 @@ export class StoryDetailsPage {
         });
     }
     public replyComment(commentId) {
+        jQuery(".fab-close-active").trigger("click");
         this.replyToComment = commentId;
         this.replying = true;
         jQuery("#commentEditorArea").addClass("replybox");
@@ -391,6 +392,7 @@ export class StoryDetailsPage {
         jQuery("#commentEditorArea").removeClass("replybox");
     }
     public presentConfirmDelete(commentId, slug) {
+        jQuery(".fab-close-active").trigger("click");
         let alert = this.alertController.create({
             title: 'Confirm Delete',
             message: 'Do you want to delete this comment?',
@@ -442,6 +444,17 @@ export class StoryDetailsPage {
         );
     }
     public editComment(commentId) {
+        var thisObj = this;
+        jQuery(".fab-close-active").trigger("click");
+        jQuery("div").each(function (index,element) {
+            if(jQuery(element).hasClass("commentingTextArea")) {
+                // alert(jQuery(element).attr('id'));
+                var actionIdArray =  jQuery(element).attr('id').split('_'); 
+                var commentid = actionIdArray[1];
+                thisObj.editTheComment[commentid] = false;
+                thisObj.editCommentOpenClose[commentid] = false;
+            }
+        });
         jQuery("#Actions_" + commentId + " .textEditor").val(this.itemsInActivities[commentId].CrudeCDescription);
         this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
         this.newCommentOpenClose = false;
