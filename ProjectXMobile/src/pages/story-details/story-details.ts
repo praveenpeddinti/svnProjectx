@@ -35,9 +35,10 @@ export class StoryDetailsPage {
     private newCommentOpenClose = true;
     // changed
     // private editSubmitOpenClose = [];
-    // private newSubmitOpenClose = true;
-    private editSubmitOpenClose = [];
-    private newSubmitOpenClose = false;
+    private newSubmitOpenClose = true;
+    private editSubmitUploadClose = true;
+    // private editSubmitOpenClose = [];
+    // private newSubmitOpenClose = false;
     // changed
     public commentDesc = "";
     private lastImage: string = null;
@@ -212,6 +213,15 @@ export class StoryDetailsPage {
             jQuery('.show-morediv').show();
             jQuery('#show').show();
         }
+         var thisObj = this;
+         jQuery(document).ready(function(){
+            jQuery(document).bind("click",function(event){ 
+                if(jQuery(event.target).closest('.submitcommentupload').length == 0 && jQuery(event.target).closest('.commentTextArea').length == 0){ 
+                    thisObj.newSubmitOpenClose = true;
+                    thisObj.editSubmitUploadClose = true;
+                }
+            })
+        })
     }
     ionViewWillEnter() {
         if (jQuery('#description').height() > 200) {
@@ -449,28 +459,25 @@ export class StoryDetailsPage {
             this.newSubmitOpenClose = false;
         }
         else{
-            this.editSubmitOpenClose[commentId] = false;
+            // this.editSubmitOpenClose[commentId] = false;
+            this.editSubmitUploadClose = false; 
         }
     }
-    public hideSubmit(commentId,event){
-        if (jQuery(event.target).hasClass('preventBlur')){
-            event.stopImmediatePropagation();
-            jQuery(event.target).off("blur");
-        }else{
-            if(commentId==-1){
-                this.newSubmitOpenClose = true;
-            }
-            else{
-                this.editSubmitOpenClose[commentId] = true;
-            }
-        }
-    }
-    public hideSubmitUpload(event){
-        if (jQuery(event.target).hasClass('editorDiv')){
-            event.stopImmediatePropagation();
-            jQuery(this).off("blur");
-        }
-    }
+    // public hideSubmit(commentId,event){
+    //     if(commentId==-1){
+    //         this.newSubmitOpenClose = true;
+    //     }
+    //     else{
+    //         this.editSubmitOpenClose[commentId] = true;
+    //     }
+    // }
+
+    // public hideSubmitUpload(event){
+    //     if (jQuery(event.target).hasClass('editorDiv')){
+    //         event.stopImmediatePropagation();
+    //         jQuery(this).off("blur");
+    //     }
+    // }
     public submitComment() {
         var commentText = jQuery(".uploadAndSubmit .textEditor").val();
         if (commentText != "" && commentText.trim() != "") {
@@ -706,4 +713,7 @@ export class StoryDetailsPage {
             return 'notuploaded';
         }
     }
+   
 }
+
+

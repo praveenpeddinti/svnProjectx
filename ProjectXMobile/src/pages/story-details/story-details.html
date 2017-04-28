@@ -131,7 +131,7 @@
                                         </div>
                                         <div class="divider"></div>
                                     </div>
-                                    <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="preventBlur comment{{(eachActivity.Status ==2)?'_reply':''}}">
+                                    <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="comment{{(eachActivity.Status ==2)?'_reply':''}}">
                                         <div style="position:relative">  
                                             <div class="commentedtext" (click)="navigateToParentComment(eachActivity.ParentIndex)" *ngIf="eachActivity.Status ==2">
                                                 <div class="user">      
@@ -147,15 +147,17 @@
                                                     <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
                                                     <!--Have to change Text area to editor-->
                                                      <!--(focus)="showSubmit(i)" (blur)="hideSubmit(i,$event)"-->
-                                                    <textarea class="textEditor" placeholder="Enter text here..."></textarea>
+                                                    <textarea (focus)="showSubmit(i)" class="textEditor commentTextArea" placeholder="Enter text here..."></textarea>
                                                     <!--Progress bar-->
-                                                    <div [hidden]='progressEdit==0'>
-                                                        <progress [value]="progressEdit" max="100">{{progressEdit}}%</progress>
-                                                        <span>{{progressEdit}}%</span>
+                                                    <div class="uploadProgress" [hidden]='progressEdit==0'>
+                                                        <!--{{progressEdit}}%-->
+                                                        <progress [value]="progressEdit" max="100"></progress>
+                                                        <!--<span>{{progressEdit}}%</span>-->
                                                     </div>
                                                     <div id="progressFileUploadEdit"></div>
                                                     <!--Progress bar-->
-                                                    <div class="customrow" [hidden]='editSubmitOpenClose[i]'>
+                                                    <!--editSubmitOpenClose[i] && -->
+                                                    <div class="customrow submitcommentupload" [hidden]='editSubmitUploadClose'>
                                                         <div class="col50">
                                                             <div class="">
                                                                 <button class="buttonicon linkbutton" (click)="presentActionSheet('fileChange','edit_comments',i)"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
@@ -175,7 +177,7 @@
                     </div>
                 </div>   
                 <div class="cust_commentsbox margintop10">
-                    <div id="commentEditorArea" class="activitiesList preventBlur" [hidden]='!newCommentOpenClose'>
+                    <div id="commentEditorArea" class="activitiesList" [hidden]='!newCommentOpenClose'>
                         <div class="commentedtext porel" [hidden]="!replying">
                             <a href="javascript:void(0)"  class="commentedtextdelete" (click)="cancelReply()"><i class="fa fa-times" aria-hidden="true"></i></a>
                             <div id="replyToSnippet">
@@ -188,15 +190,16 @@
                         <div class="uploadAndSubmit editorDiv" id="uploadAndSubmit">
                             <!--Have to change Text area to editor-->
                              <!--(focus)="showSubmit(-1)" (blur)="hideSubmit(-1,$event)"-->
-                            <textarea class="textEditor" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
+                            <textarea (focus)="showSubmit(-1)" class="textEditor commentTextArea" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
                             <!--Progress bar-->
-                            <div [hidden]='progressNew==0'>
-                                <progress [value]="progressNew" max="100">{{progressNew}}%</progress>
-                                <span>{{progressNew}}%</span>
+                            <div class="uploadProgress" [hidden]='progressNew==0'>
+                                <!--{{progressNew}}%-->
+                                <progress [value]="progressNew" max="100"></progress>
+                                <!--<span>{{progressNew}}%</span>-->
                                 <div id="progressFileUploadNew"></div>
                             </div>
                             <!--Progress bar-->
-                            <div class="customrow" [hidden]='newSubmitOpenClose'>
+                            <div class="customrow submitcommentupload" [hidden]='newSubmitOpenClose'>
                                 <div class="col50">
                                     <div class="">
                                         <button class="buttonicon linkbutton" (click)="presentActionSheet('fileChange','comments','')"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
