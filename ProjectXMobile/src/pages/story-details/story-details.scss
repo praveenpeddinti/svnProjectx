@@ -519,7 +519,8 @@ ion-fab-list[side="left"] .fab-in-list, ion-fab-list[side="right"] .fab-in-list 
     transition: box-shadow 0ms cubic-bezier(0, 0, 0, 0) 0s, background-color 0ms cubic-bezier(0, 0, 0, 0) 0s, color 0ms cubic-bezier(0, 0, 0, 0) 0s;}
 
 .buttonicon.linkbutton i{font-size:2em;color:#3b9ec2}
-.ion-md-close:before, .ion-ios-close:before, .ion-wp-close:before{font-size:30px}
+.ion-md-close:before{font-size:30px!important}
+.ion-ios-close:before, .ion-wp-close:before{font-size:50px!important}
 }
 .picker-opt-disabled {
     opacity:1!important;
