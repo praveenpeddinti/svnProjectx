@@ -401,8 +401,8 @@ class StoryController extends Controller
              $projectId =  $StoryData->projectId;
              $sortorder =  $StoryData->sortorder;
              $sortvalue = $StoryData->sortvalue;
-             $pageLength = $StoryData->offset;
-             $offset = $StoryData->pagesize;
+             $pageLength = $StoryData->pagesize;
+             $offset = $StoryData->offset;
             
 //            $userId=11;
 //            $projectId=1;
