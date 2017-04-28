@@ -69,11 +69,15 @@ class NotificationCollection extends ActiveRecord
             return $notificationsCount;
      }
     
-      public static function getNotifications($user,$projectId,$offset=0,$limit=5)
-    {
+      public static function getNotifications($user,$projectId,$offset=0,$limit=5,$viewAll)
+    { 
+          $cond=["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0] ; 
+          if($viewAll==1){
+            $cond=["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId] ; 
+          }
          $query=new Query();
             $query->from('NotificationCollection')
-            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0])
+            ->where($cond)
             ->andWhere(['!=','ActivityFrom', (int)$user])
             ->orderBy(["_id"=>SORT_DESC])
              ->offset($offset)      
