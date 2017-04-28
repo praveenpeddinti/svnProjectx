@@ -375,7 +375,8 @@ export class StoryDetailsPage {
     }
     public replyComment(commentId) {
         // jQuery(".fab-close-active").trigger("click");
-        jQuery(".fab-close-active").click();
+        jQuery(".commentAction").removeClass("fab-close-active");
+        jQuery(".fab-list-active").removeClass("fab-list-active");
         this.replyToComment = commentId;
         this.replying = true;
         jQuery("#commentEditorArea").addClass("replybox");
@@ -394,7 +395,8 @@ export class StoryDetailsPage {
     }
     public presentConfirmDelete(commentId, slug) {
         // jQuery(".fab-close-active").trigger("click");
-        jQuery(".fab-close-active").click();
+        jQuery(".commentAction").removeClass("fab-close-active");
+        jQuery(".fab-list-active").removeClass("fab-list-active");
         let alert = this.alertController.create({
             title: 'Confirm Delete',
             message: 'Do you want to delete this comment?',
@@ -448,7 +450,8 @@ export class StoryDetailsPage {
     public editComment(commentId) {
         var thisObj = this;
         // jQuery(".fab-close-active").trigger("click");
-        jQuery(".fab-close-active").click();
+        jQuery(".commentAction").removeClass("fab-close-active");
+        jQuery(".fab-list-active").removeClass("fab-list-active");
         jQuery("div").each(function (index,element) {
             if(jQuery(element).hasClass("commentingTextArea")) {
                 // alert(jQuery(element).attr('id'));
