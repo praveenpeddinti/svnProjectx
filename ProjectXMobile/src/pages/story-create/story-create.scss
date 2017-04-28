@@ -1,3 +1,4 @@
+
 page-story-create {
     .label-md {
     margin: 0;
@@ -97,7 +98,6 @@ input[type=submit] {
 
 .checkbox-md,.checkbox-ios,.checkbox-wp .checkbox-checked .checkbox-inner {
     margin-left: 4px!important;
-    left: 10px!important;
 }
 
 .item.item-md .checkbox-md, .item.item-wp .checkbox-wp, .item.item-ios .checkbox-ios{margin-right:10px}
@@ -154,4 +154,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endCol
     transition: box-shadow 0ms cubic-bezier(0, 0, 0, 0) 0s, background-color 0ms cubic-bezier(0, 0, 0, 0) 0s, color 0ms cubic-bezier(0, 0, 0, 0) 0s;}
 .footer .bar-button-md[icon-only] i, .footer .bar-button-ios[icon-only] i, .footer .bar-button-wp[icon-only] i{font-size:1.4em;color:#fff}
 .footer .linkbutton.bar-button-md[icon-only] i, .footer .linkbutton.bar-button-ios[icon-only] i, .footer .linkbutton.bar-button-wp[icon-only] i{font-size:2em;color:#3b9ec2}
+
+
 }

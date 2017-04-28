@@ -41,17 +41,38 @@
 </ion-item>
 </ion-row>
 </ion-list>
-    <div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
-    <label class="customlabel">Tasks</label>
-    <ion-list>
-        <ion-row>
-            <div class="customcheckboxrow" *ngFor="let item of tasktypeList; let i=index;" id="item_{{i}}">
-                <input type="checkbox" name="task_1" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}">
-                <span class="tasks-list-desc">{{item.Name}}</span>
-            </div>
-        </ion-row>
-    </ion-list>
-</div>
+<!--    <div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
+        <label class="customlabel">Tasks</label>
+        <ion-list>
+            <ion-row>
+                <div class="customcheckboxrow" *ngFor="let item of tasktypeList; let i=index;" id="item_{{i}}">
+                     <input type="checkbox" name="task_1" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}">
+                    <span class="tasks-list-desc">{{item.Name}}</span>
+                </div>
+            </ion-row>
+        </ion-list>
+    </div>-->
+<div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
+        <label class="customlabel">Tasks</label>
+        <ion-list>
+            <ion-row>
+                <div class="customcheckboxrow" *ngFor="let item of tasktypeList; let i=index;" id="item_{{i}}">
+<!--                     <input type="checkbox" name="task_1" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}">-->
+                    <ion-checkbox name="task_1" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}"></ion-checkbox>
+                    <span class="tasks-list-desc">{{item.Name}}</span>
+                </div>
+            </ion-row>
+        </ion-list>
+    </div>
+
+<!--   <div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
+<button ion-item class="customcheckboxrow" *ngFor="let item of tasktypeList; let i=index;" id="item_{{i}}">
+  <ion-checkbox name="task_1" [(ngModel)]="item.selected" [ngModelOptions]="{standalone:true}"></ion-checkbox>
+  <span class="tasks-list-desc">{{item.Name}}</span>
+</button>
+  </div>-->
+
+
 <div class="customtextareadiv">
     <ion-list>
         <label class="customlabel">Description</label>
