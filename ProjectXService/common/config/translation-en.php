@@ -18,7 +18,8 @@ return [
     "unfollow"=>"unfollowed",
     "follower"=>"as a follower",
     "assignedto" => "",
-    "stakeholder"=>"Stake Holder"
+    "stakeholder"=>"Stake Holder",
+    "followed" => "is following"
   
     
     
