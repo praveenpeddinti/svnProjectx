@@ -181,11 +181,10 @@ var post_data={};
 
   showNotifications()
   {
-  
   if(jQuery("#notifications_list").is(":visible")){
     jQuery("#notifications_list").hide();
    }else{
-     jQuery("#notifications_list").show();
+     
    if(this.notify_count>0){
     console.log("show notify");
  var post_data={viewAll:0,page:1};
@@ -195,7 +194,7 @@ var post_data={};
       console.log("--leing-------"+data.notify_result.length);
       if(data.notify_result.length >0){
       
-     
+  jQuery("#notifications_list").show();
   jQuery("#notificationMessage").hide();
     
         for(var i=0;i<data.notify_result.length;i++)
@@ -211,7 +210,11 @@ var post_data={};
       });
 
   
+    }else{
+      jQuery("#notifications_list").show();
+  jQuery("#notificationMessage").show();
     }
+
     }
   }
 

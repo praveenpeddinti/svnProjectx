@@ -59,6 +59,7 @@ export class NotificationComponent implements OnInit{
 
     deleteNotification(notify_id,event) 
   {
+    jQuery("#notifications_list").hide();
     event.stopPropagation();
     //ajax call for delete notificatin
     var post_data={'notifyid':notify_id,viewAll:1,page:this.pageNo};
@@ -69,7 +70,7 @@ export class NotificationComponent implements OnInit{
           this.notify_count=data.totalCount;
        if(data.data.notify_result != "nodata"){
         jQuery('#mark_'+notify_id).remove(); 
-        jQuery('#'+notify_id).removeClass('unreadnotification'); 
+        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
        }
        
       }
@@ -86,6 +87,8 @@ export class NotificationComponent implements OnInit{
       if(data)
       {
        // do something
+      jQuery('#mark_'+notify_id).remove(); 
+      jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
       }
       this._router.navigate(['story-detail',ticketid]);
     })
@@ -98,11 +101,13 @@ export class NotificationComponent implements OnInit{
     {
       if(data)
       {
+        jQuery('#mark_'+notify_id).remove(); 
+        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
       }
     })
     this._router.navigate(['story-detail',ticketid],{queryParams: {Slug:comment}});
   }
-  allRead()
+  markAllRead()
   {
     var post_data={};
     this._ajaxService.AjaxSubscribe('story/delete-notifications',post_data,(data)=>

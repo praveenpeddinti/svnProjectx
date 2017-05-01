@@ -20,7 +20,7 @@ header{display: block;margin: 4px;padding: 5px;min-height: 100px;border: 1px sol
 .notification .notificationlist{padding:5px 10px 5px;}
 .notification .notificationdiv{position:relative;padding:10px 5px;background:#fff;border-radius:3px}
 .notification .notificationlist .notificationdiv .notificationusericon{position:absolute;width:30px;height:30px;max-width:30px;max-height:30px}
-.notification .notificationlist .notificationdiv .notificationusericon img{max-width:100%;border-radius:100px;}
+.notification .notificationlist .notificationdiv .notificationusericon img{width:30px; height:30px;border-radius:100px;}
 .notification .notificationlist .notificationdiv .not_description{padding:0px 40px 0px 40px}
 .notification .notificationlist .notificationdiv .not_description .not_header{color:#a2a2a2;font-size:12px}
 .notification .notificationlist .notificationdiv .not_description .not_content{color:#7b7b7b;font-size:14px;line-height:16px;cursor: pointer}
