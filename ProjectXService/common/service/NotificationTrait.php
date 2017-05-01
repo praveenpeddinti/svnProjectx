@@ -305,12 +305,10 @@ use \ArrayObject;
                     }
                      else if($fieldType== "FollowObj")
                     {
-                         if($loggedInUser == $activityOn){
-                             $notification_Type = ($notifyType=='add') ? 'followed' : 'unfollowed';
-                             
-                         }else{
+                         if($loggedInUser != $activityOn){
+                        
                              $notification_Type =  ($notifyType=='add') ? 'added' : 'removed';
-                         }
+                        
                             $tic = new NotificationCollection();
                             $tic->TicketId =$ticketId;
                             $tic->ProjectId =$projectId;
@@ -334,7 +332,7 @@ use \ArrayObject;
                                 error_log("before sendign assing to notircioant--");
                                  self::sendEmailNotification(array($notificationId),$projectId);
                        } 
-                        //}
+                         }
                     } 
                     else if($fieldType!= "Description" && $fieldType!= "Title"){ //This is for left hand property changes
                         $oldFieldId=$oldValue;
@@ -364,11 +362,13 @@ use \ArrayObject;
                     
             foreach($followers as $follower)
             {
+                error_log("foloowerid-----------------------".$follower['FollowerId']);
                error_log("===Notify Type".$notify_type);
               if($follower['FollowerId'] == $loggedInUser){
-                
+                  error_log("continure----------------");
                   continue;
               }
+              error_log("procssin----------------");
                     $tic = new NotificationCollection();
                     $tic->NotifiedUser=(int)$follower['FollowerId'];
                     $tic->TicketId =$ticketId;
@@ -452,7 +452,7 @@ use \ArrayObject;
     
     
     
-     public static function getNotifications($user,$projectId,$offset=0,$limit=5,$viewAll)
+     public static function getNotifications($user,$projectId,$offset=0,$limit=5,$viewAll=0)
     {
         error_log("==in get notifications---".$user."---".$projectId."---".$offset."---".$limit);
         $msg='';
@@ -529,8 +529,18 @@ use \ArrayObject;
                                 $activityOn =$action_user['UserName'];
                               
                             }
-                           $preposition =  $notification['Notification_Type'] == "added" ? "to" : "from";
-                         $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower'],"Preposition"=>$preposition);
+                         
+
+                            if($notification['Notification_Type'] == "followed"){
+                                $to="";
+                                $otherMessage = "";
+                                $preposition = "";
+                            }else{
+                                $to= $activityOn;
+                                $otherMessage = Yii::$app->params['follower'];
+                                 $preposition =  $notification['Notification_Type'] == "added" ? "to" : "from";
+                            }
+                         $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>$otherMessage,"Preposition"=>$preposition);
                                 array_push($result_msg,$message);
                     }
                               
