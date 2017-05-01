@@ -14,9 +14,9 @@ export class Constants {
   // Sandbox URL
   // public baseUrl = 'http://10.10.73.77/';
   // Public URL
-   public baseUrl = 'http://113.193.181.131/';
+  // public baseUrl = 'http://113.193.181.131/';
   // Mobile team URL
-  // public baseUrl = 'http://10.10.73.12:802/';
+   public baseUrl = 'http://10.10.73.12:802/';
     
    public loginUrl = this.baseUrl+"site/user-authentication";
    public getAllTicketDetails = this.baseUrl + "story/get-my-tickets-details";

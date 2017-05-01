@@ -12,11 +12,11 @@ import {App} from 'ionic-angular';
   Ionic pages and navigation.
 */
 @Component({
-  selector: 'page-popover',
-  templateUrl: 'popover.html',
+  selector: 'page-logout',
+  templateUrl: 'logout.html',
   providers: [Globalservice, Constants]
 })
-export class PopoverPage {
+export class LogoutPage {
   userName: string='';
   login: {username?: string, password?: string,token?:any} = {};
   logoutParams = {"userInfo":{"Id":"","username":"","token":""},"projectId":1}

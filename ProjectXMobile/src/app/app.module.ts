@@ -13,7 +13,7 @@ import { SelectAlertless } from '../pages/story-details/SelectAlert';
 import {CustomModalPage} from '../pages/custom-modal/custom-modal';
 
 import { Storage } from "@ionic/storage";
-import { PopoverPage } from '../pages/popover/popover';
+import { LogoutPage } from '../pages/logout/logout';
 
 import { CKEditorModule } from 'ng2-ckeditor';
 import { AUTOCOMPLETE_DIRECTIVES, AUTOCOMPLETE_PIPES } from 'ionic2-auto-complete';
@@ -28,7 +28,7 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
     StoryDetailsPage,
     StoryCreatePage,
     SelectAlertless,
-    PopoverPage,
+    LogoutPage,
     AUTOCOMPLETE_DIRECTIVES,
     AUTOCOMPLETE_PIPES
   ],
@@ -45,7 +45,7 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
     StoryDetailsPage,
     StoryCreatePage,
     SelectAlertless,
-    PopoverPage
+    LogoutPage
   ],
   providers: [AutoCompleteProvider, Globalservice, Constants, Storage, {provide: ErrorHandler, useClass: IonicErrorHandler}]
 

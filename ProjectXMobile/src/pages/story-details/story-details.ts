@@ -4,7 +4,7 @@ import { ToastController, Content, Platform, App } from 'ionic-angular';
 import { ModalController, NavParams, MenuController, LoadingController, PopoverController, ActionSheetController, AlertController } from 'ionic-angular';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
-import { PopoverPage } from '../popover/popover';
+import { LogoutPage } from '../logout/logout';
 import { Storage } from "@ionic/storage";
 import { CustomModalPage } from '../custom-modal/custom-modal';
 import {Camera, File, Transfer, FilePath} from 'ionic-native';
@@ -270,7 +270,7 @@ export class StoryDetailsPage {
     }
     public openPopover(myEvent) {
         let userCredentials = { username: this.userName };
-        let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
+        let popover = this.popoverCtrl.create(LogoutPage, userCredentials);
         popover.present({
             ev: myEvent
         });

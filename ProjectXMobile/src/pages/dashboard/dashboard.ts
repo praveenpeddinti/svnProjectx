@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController, Platform} from 'ionic-angular';
 import {Storage} from "@ionic/storage";
-import {PopoverPage} from '../popover/popover';
+import {LogoutPage} from '../logout/logout';
 import {StoryDetailsPage} from '../story-details/story-details';
 import {StoryCreatePage} from '../story-create/story-create';
 import {Globalservice} from '../../providers/globalservice';
@@ -74,7 +74,7 @@ export class DashboardPage {
     ionViewWillEnter() {}
     public openPopover(myEvent) {
         let userCredentials = {username: this.userName};
-        let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
+        let popover = this.popoverCtrl.create(LogoutPage, userCredentials);
         popover.present({
             ev: myEvent
         });

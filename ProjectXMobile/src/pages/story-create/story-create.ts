@@ -2,7 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { ToastController, NavController, ActionSheetController, Platform, NavParams, LoadingController, PopoverController, ModalController, AlertController } from 'ionic-angular';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
-import { PopoverPage } from '../popover/popover';
+import { LogoutPage } from '../logout/logout';
 import { Storage } from "@ionic/storage";
 import { CustomModalPage } from '../custom-modal/custom-modal';
 import { Camera, File, FilePath, Transfer } from 'ionic-native';
@@ -247,7 +247,7 @@ export class StoryCreatePage {
     }
     public openPopover(myEvent) {
         let userCredentials = { username: this.userName };
-        let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
+        let popover = this.popoverCtrl.create(LogoutPage, userCredentials);
         popover.present({
             ev: myEvent
         });
