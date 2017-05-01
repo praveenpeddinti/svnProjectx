@@ -914,7 +914,7 @@ class StoryController extends Controller
                 $limit= 15 * $page;
             }
             //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
-            $result_data=NotificationCollection::getNotifications($notified_userid,$projectId,0,$limit,$viewAll);
+            $result_data=ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,0,$limit);
 
             $count = NotificationCollection::getNotificationsCount($notified_userid,$projectId);
             $result =  count($result_data)>0 ? $result_data : "nodata";
