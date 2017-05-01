@@ -910,20 +910,24 @@ class StoryController extends Controller
             $viewAll=$notifyData->viewAll;
             $page=$notifyData->page;
             $limit=5;
-            if($viewAll==1){
-                $limit= 15 * $page;
-            }
+            if($viewAll==0){
+             
+          
             //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
             $result_data=ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,0,$limit);
 
             $count = NotificationCollection::getNotificationsCount($notified_userid,$projectId);
             $result =  count($result_data)>0 ? $result_data : "nodata";
-            
+             $responseData = array('notify_result'=>$result);
+            }else{
+                  $count = 0;
+                  $responseData = "";
+              }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
              $responseBean->totalCount = $count;
-            $responseBean->data =  array('notify_result'=>$result);
+            $responseBean->data = $responseData ;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
