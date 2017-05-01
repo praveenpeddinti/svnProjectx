@@ -50,7 +50,7 @@ export class NotificationComponent implements OnInit{
             this.allNotification.push(data.notify_result[i]);
           
         }
-        }else{
+        }else if(this.pageNo >1){
           this.nomorenotifications = true;
         }
      
@@ -123,7 +123,7 @@ export class NotificationComponent implements OnInit{
  @HostListener('window:scroll', ['$event']) 
     doSomething(event) {
      // console.debug("Scroll Event", window.pageYOffset );
-      if (jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
+      if (this.allNotification.length > 0 && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
 
           this.pageNo +=1; 
           this.getAllNotification(this.pageNo)     

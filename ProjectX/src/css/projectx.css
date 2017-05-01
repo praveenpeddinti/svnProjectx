@@ -688,3 +688,5 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 padding-left:0px!important;    
 }
 
+.searchresulttext{border-bottom:solid 1px #f0f0f0;padding:10px 0px;font-size:16px;color:#000;margin-bottom:20px;font-weight:600;}
+
