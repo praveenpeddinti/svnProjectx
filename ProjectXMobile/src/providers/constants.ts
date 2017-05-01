@@ -32,6 +32,6 @@ export class Constants {
    public filesUploading = this.baseUrl+'story/upload-comment-artifacts';
    public fileUploadsFolder = 'uploads/';
    constructor() {
-      console.log('Constants Provider');
+      console.log('Constants');
    }
 }

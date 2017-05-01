@@ -14,11 +14,7 @@ export class Globalservice {
     private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
     params: {userInfo?: any, projectId?: any} = {};
     constructor(public http: Http, public storage: Storage) {
-        console.log('Globalservice Provider');
-        // this.storage.get("userCredentials").then((value) => {
-        //     this.params.userInfo = value;
-        // });
-        // this.params.projectId = 1;
+        console.log('Globalservice');
     }
     public getUserInfo(): any{
         this.storage.get("userCredentials").then((value) => {
