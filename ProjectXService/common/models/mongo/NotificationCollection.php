@@ -79,7 +79,7 @@ class NotificationCollection extends ActiveRecord
             return $notificationsCount;
      }
     
-      public static function getNotifications($user,$projectId,$offset=0,$limit=5,$viewAll)
+      public static function getNotifications($user,$projectId,$offset=0,$limit=5,$viewAll=0)
     { 
           $cond=["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0] ; 
           if($viewAll==1){
