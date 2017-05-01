@@ -33,13 +33,8 @@ export class StoryDetailsPage {
     private editTheComment = [];
     private editCommentOpenClose = [];
     private newCommentOpenClose = true;
-    // changed
-    // private editSubmitOpenClose = [];
     private newSubmitOpenClose = true;
     private editSubmitUploadClose = true;
-    // private editSubmitOpenClose = [];
-    // private newSubmitOpenClose = false;
-    // changed
     public commentDesc = "";
     private lastImage: string = null;
     private progressNew: number;
@@ -204,24 +199,22 @@ export class StoryDetailsPage {
         if (day.length < 2) day = '0' + day;
         return [month, day, year].join('-');
     }
-    ionViewDidLoad() {
-    
-    }
+    ionViewDidLoad() {}
     ionViewDidEnter() {
         if (jQuery('#description').height() > 200) {
             jQuery('#description').css("height", "200px");
             jQuery('.show-morediv').show();
             jQuery('#show').show();
         }
-         var thisObj = this;
-         jQuery(document).ready(function(){
+        var thisObj = this;
+        jQuery(document).ready(function(){
             jQuery(document).bind("click",function(event){ 
                 if(jQuery(event.target).closest('.submitcommentupload').length == 0 && jQuery(event.target).closest('.commentTextArea').length == 0){ 
                     thisObj.newSubmitOpenClose = true;
                     thisObj.editSubmitUploadClose = true;
                 }
-            })
-        })
+            });
+        });
     }
     ionViewWillEnter() {
         if (jQuery('#description').height() > 200) {
@@ -374,7 +367,6 @@ export class StoryDetailsPage {
         });
     }
     public replyComment(commentId) {
-        // jQuery(".fab-close-active").trigger("click");
         jQuery(".commentAction").removeClass("fab-close-active");
         jQuery(".fab-list-active").removeClass("fab-list-active");
         this.replyToComment = commentId;
@@ -394,7 +386,6 @@ export class StoryDetailsPage {
         jQuery("#commentEditorArea").removeClass("replybox");
     }
     public presentConfirmDelete(commentId, slug) {
-        // jQuery(".fab-close-active").trigger("click");
         jQuery(".commentAction").removeClass("fab-close-active");
         jQuery(".fab-list-active").removeClass("fab-list-active");
         let alert = this.alertController.create({
@@ -449,12 +440,10 @@ export class StoryDetailsPage {
     }
     public editComment(commentId) {
         var thisObj = this;
-        // jQuery(".fab-close-active").trigger("click");
         jQuery(".commentAction").removeClass("fab-close-active");
         jQuery(".fab-list-active").removeClass("fab-list-active");
         jQuery("div").each(function (index,element) {
             if(jQuery(element).hasClass("commentingTextArea")) {
-                // alert(jQuery(element).attr('id'));
                 var actionIdArray =  jQuery(element).attr('id').split('_'); 
                 var commentid = actionIdArray[1];
                 thisObj.editTheComment[commentid] = false;
@@ -465,38 +454,20 @@ export class StoryDetailsPage {
         this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
         this.newCommentOpenClose = false;
         this.editCommentOpenClose[commentId] = true;
-        // this.editSubmitOpenClose[commentId] = true;
     }
     public cancelEdit(commentId){
         this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
         this.editCommentOpenClose[commentId] = false;
         this.newCommentOpenClose = true;
-        // this.editSubmitOpenClose[commentId] = true;
     }
     public showSubmit(commentId){
         if(commentId==-1){
             this.newSubmitOpenClose = false;
         }
         else{
-            // this.editSubmitOpenClose[commentId] = false;
             this.editSubmitUploadClose = false; 
         }
     }
-    // public hideSubmit(commentId,event){
-    //     if(commentId==-1){
-    //         this.newSubmitOpenClose = true;
-    //     }
-    //     else{
-    //         this.editSubmitOpenClose[commentId] = true;
-    //     }
-    // }
-
-    // public hideSubmitUpload(event){
-    //     if (jQuery(event.target).hasClass('editorDiv')){
-    //         event.stopImmediatePropagation();
-    //         jQuery(this).off("blur");
-    //     }
-    // }
     public submitComment() {
         var commentText = jQuery(".uploadAndSubmit .textEditor").val();
         if (commentText != "" && commentText.trim() != "") {
@@ -528,11 +499,6 @@ export class StoryDetailsPage {
                     }
                     this.replying = false;
                     jQuery(".uploadAndSubmit .textEditor").val('');
-                    // if (commentText != "" && commentText.trim() != ""){
-                    //     this.newSubmitOpenClose = true;
-                    // }else{
-                    //     this.newSubmitOpenClose = false;
-                    // }
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
@@ -560,11 +526,6 @@ export class StoryDetailsPage {
                     this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
                     this.editCommentOpenClose[commentId] = false;
                     this.newCommentOpenClose = true;
-                    // if (editedContent != "" && editedContent.trim() != ""){
-                    //     this.editSubmitOpenClose[commentId] = true;
-                    // }else{
-                    //     this.editSubmitOpenClose[commentId] = false;
-                    // }
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
@@ -610,17 +571,13 @@ export class StoryDetailsPage {
                     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
                     let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
                     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
-                }, (err) => {
-                    console.log('Error while resolveNativePath.');
-                });
+                }, (err) => {});
             } else {
                 var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
                 var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
                 this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
             }
-        }, (err) => {
-           // this.presentToast('Unable to select the image.');
-        });
+        }, (err) => {});
     }
     private createFileName(originalName) {
         var d = new Date(),
@@ -632,9 +589,7 @@ export class StoryDetailsPage {
         File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
             this.lastImage = newFileName;
             this.uploadImage(currentName, newFileName, comeFrom, where, comment);
-        }, error => {
-            console.log('Error while storing file.');
-        });
+        }, error => {});
     }
     public pathForImage(img) {
         if (img === null) {
@@ -732,7 +687,4 @@ export class StoryDetailsPage {
             return 'notuploaded';
         }
     }
-   
 }
-
-

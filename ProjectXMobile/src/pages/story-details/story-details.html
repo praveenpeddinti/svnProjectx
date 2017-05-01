@@ -56,7 +56,6 @@
 </ion-header>
 
 <ion-content #content no-padding>
-     <!--(click)='hideSubmitUpload($event)'-->
     <div>
         <div class="padding10trl">
             <ion-buttons start class="custombuttonsmenu custombuttonsmenumargintop">
@@ -146,17 +145,11 @@
                                                 <div class="commentingTextArea editorDiv editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i] && !editCommentOpenClose[i]" style="position: relative;">
                                                     <div class="deletediv"> <a href="javascript:void(0)"  class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>      </div>
                                                     <!--Have to change Text area to editor-->
-                                                     <!--(focus)="showSubmit(i)" (blur)="hideSubmit(i,$event)"-->
                                                     <textarea (focus)="showSubmit(i)" class="textEditor commentTextArea" placeholder="Enter text here..."></textarea>
-                                                    <!--Progress bar-->
                                                     <div class="uploadProgress" [hidden]='progressEdit==0'>
-                                                        <!--{{progressEdit}}%-->
                                                         <progress [value]="progressEdit" max="100"></progress>
-                                                        <!--<span>{{progressEdit}}%</span>-->
                                                     </div>
                                                     <div id="progressFileUploadEdit"></div>
-                                                    <!--Progress bar-->
-                                                    <!--editSubmitOpenClose[i] && -->
                                                     <div class="customrow submitcommentupload" [hidden]='editSubmitUploadClose'>
                                                         <div class="col50">
                                                             <div class="">
@@ -189,16 +182,11 @@
                         </div>
                         <div class="uploadAndSubmit editorDiv" id="uploadAndSubmit">
                             <!--Have to change Text area to editor-->
-                             <!--(focus)="showSubmit(-1)" (blur)="hideSubmit(-1,$event)"-->
                             <textarea (focus)="showSubmit(-1)" class="textEditor commentTextArea" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}" placeholder="Enter text here..."></textarea>
-                            <!--Progress bar-->
                             <div class="uploadProgress" [hidden]='progressNew==0'>
-                                <!--{{progressNew}}%-->
                                 <progress [value]="progressNew" max="100"></progress>
-                                <!--<span>{{progressNew}}%</span>-->
                                 <div id="progressFileUploadNew"></div>
                             </div>
-                            <!--Progress bar-->
                             <div class="customrow submitcommentupload" [hidden]='newSubmitOpenClose'>
                                 <div class="col50">
                                     <div class="">

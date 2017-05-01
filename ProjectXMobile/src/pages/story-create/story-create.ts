@@ -82,8 +82,7 @@ export class StoryCreatePage {
         );
          this.progressFile = 0;
     }
-    ionViewDidLoad() {
-    }
+    ionViewDidLoad() {}
     public onStoryCreate(form): void {
         if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false) {
             let loader = this.loadingController.create({ content: "Loading..." });
@@ -116,7 +115,6 @@ export class StoryCreatePage {
                     });
                 }, (error) => {
                     loader.dismiss();
-                    // alert("Unable to create the ticket.");
                 }
             );
         }
@@ -173,17 +171,13 @@ export class StoryCreatePage {
                     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
                     let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
                     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
-                }, (err) => {
-                    console.log('Error while resolveNativePath.');
-                });
+                }, (err) => {});
             } else {
                 var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
                 var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
                 this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
             }
-        }, (err) => {
-            //this.presentToast('Unable to select the image.');
-        });
+        }, (err) => {});
     }
     private createFileName(originalName) {
         var d = new Date(),
@@ -195,9 +189,7 @@ export class StoryCreatePage {
         File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
             this.lastImage = newFileName;
             this.uploadImage(currentName, newFileName);
-        }, error => {
-            console.log('Error while storing file.');
-        });
+        }, error => {});
     }
     public uploadImage(originalname, savedname) {
         var url = this.constants.filesUploading;
@@ -227,7 +219,7 @@ export class StoryCreatePage {
             return cordova.file.dataDirectory + img;
         }
     }
-       public onProgressFile = (progressEvent: ProgressEvent) : void => {
+    public onProgressFile = (progressEvent: ProgressEvent) : void => {
         this.ngZone.run(() => {
             if (progressEvent.lengthComputable) {
                 let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);

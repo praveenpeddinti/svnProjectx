@@ -21,12 +21,6 @@ export class DashboardPage {
     public items: Array<any>;
     public start: number = 10;//no of items showing in each page by default 10
     public offsetIndex: number = 0;//offset Index default value is 0 while pulling the list screen down the value will be incremented
-
-    /*
-    ***
-    arrayObject is used for saving the stories list and passing it to the html page
-     ** 
-    */
     public arrayObject: Array<{storyOrTask: any, 
                                 storyPointsHeading: string, 
                                 id: string, 
@@ -41,18 +35,9 @@ export class DashboardPage {
                                 duedate: string, 
                                 arrow: string}>;
     public moreDataLoaded: boolean = true;
-
     public loader = this.loadingController.create({content: "Loading..."});
-
     userName: any = '';
-    /*
-    *
-        params are used while getting List Results from the webservice.
-    *
-    */
-
     params = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "desc","filterOption":null,"timeZone":"Asia/Kolkata", "userInfo": {}};
-
     constructor(public navCtrl: NavController,
         public navParams: NavParams,
         public platform: Platform,
@@ -63,81 +48,50 @@ export class DashboardPage {
         public viewCtrl: ViewController,
         private globalService: Globalservice,
         private urlConstants: Constants) {
-        this.arrayObject = [];
-
-
-        this.storage.get('userCredentials').then((value) => {
-            this.userName = value.username;
-            this.params.userInfo = value;
-            this.getAllStoriesList();
-            platform.registerBackButtonAction(() => {
-                /* checks if modal is open */
-                if (StoryDetailsPage.optionsModal && StoryDetailsPage.optionsModal.index == 0) {
-                    /* closes modal */
-                    StoryDetailsPage.optionsModal.dismiss();
-                    return;
-                } else {
-                    if (this.navCtrl.getActive().index == 0) {
-                        this.platform.exitApp();
-                    } else if (StoryDetailsPage.isMenuOpen == true) {
-                        StoryDetailsPage.menuControler.close();
-                    } 
-                    // else if(jQuery("#picker-wrapper").is(":visible")){
-                    //     console.log("the visisble ", jQuery("#picker-wrapper").is(":visible"));
-                    //     jQuery("ion-picker-cmp").remove();
-                    // } 
-                    else {
-                        return this.navCtrl.pop();
+            this.arrayObject = [];
+            this.storage.get('userCredentials').then((value) => {
+                this.userName = value.username;
+                this.params.userInfo = value;
+                this.getAllStoriesList();
+                platform.registerBackButtonAction(() => {
+                    if (StoryDetailsPage.optionsModal && StoryDetailsPage.optionsModal.index == 0) {
+                        StoryDetailsPage.optionsModal.dismiss();
+                        return;
+                    } else {
+                        if (this.navCtrl.getActive().index == 0) {
+                            this.platform.exitApp();
+                        } else if (StoryDetailsPage.isMenuOpen == true) {
+                            StoryDetailsPage.menuControler.close();
+                        } 
+                        else {
+                            return this.navCtrl.pop();
+                        }
                     }
-                }
+                });
             });
-        });
     }
-
-    ionViewDidLoad() {
-    // this.getAllStoriesList();
-console.log("the ionViewDidLoad after dismiss");
-        // this.getAllStoriesList();
-    }
-
-    ionViewWillEnter() {
-        console.log("the ionViewWillEnter after dismiss");
-    }
-
-
-    /**
-           pop up for logout
-       
-        */
-    openPopover(myEvent) {
+    ionViewDidLoad() {}
+    ionViewWillEnter() {}
+    public openPopover(myEvent) {
         let userCredentials = {username: this.userName};
         let popover = this.popoverCtrl.create(PopoverPage, userCredentials);
-        console.log("User name is " + this.userName);
         popover.present({
             ev: myEvent
         });
     }
-    doRefresh(refresher) {
+    public doRefresh(refresher) {
         this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
             this.params.userInfo = value;
-
             this.getAllStoriesList();
             if (refresher != 0)
                 refresher.complete();
         });
     };
-    /**
-        used for getting all the stories 
-        author uday   
-    
-     */
-    getAllStoriesList(): void {
-        
+    public getAllStoriesList(): void {
         if (this.params.offset == 0) {
             this.params.offset = 0;
         }
-
         this.globalService.getStoriesList(this.urlConstants.getAllTicketDetails, this.params).subscribe(
             data => {
                 if (data.statusCode == '200') {
@@ -149,58 +103,53 @@ console.log("the ionViewDidLoad after dismiss");
                         this.moreDataLoaded = false;
                     }
                     for (let ticket = 0; ticket < this.items.length; ticket++) {
-
                         for(let ticketData = 0; ticketData< this.items[ticket].length; ticketData++){
-                        
-                        var _storyOrTask;
-                        var _storyPointHeading = "";
-                        if (this.items[ticket][0].other_data.planlevel == 1) {
-                            _storyOrTask = "Story";
-                            _storyPointHeading = "Total story points";
+                            var _storyOrTask;
+                            var _storyPointHeading = "";
+                            if (this.items[ticket][0].other_data.planlevel == 1) {
+                                _storyOrTask = "Story";
+                                _storyPointHeading = "Total story points";
+                            }
+                            else {
+                                _storyOrTask = "Task";
+                                _storyPointHeading = "Estimated points";
+                            }
+                            switch(this.items[ticket][ticketData].field_name){
+                                case "Id":
+                                    var _id = this.items[ticket][ticketData].field_value;
+                                    var _subTasks = 0;
+                                        _subTasks = this.items[ticket][0].other_data.totalSubtasks;
+                                break;
+                                case "Title":
+                                    var _title = this.items[ticket][ticketData].field_value;
+                                break;
+                                case "assignedto":
+                                    var _assignTo = this.items[ticket][ticketData].field_value;
+                                break;
+                                case "priority":
+                                    var _priority = this.items[ticket][ticketData].field_value;
+                                break;
+                                case "workflow":
+                                    var _state = this.items[ticket][ticketData].other_data;                                
+                                    var _workflow = this.items[ticket][ticketData].field_value;
+                                break;
+                                case "bucket":
+                                    var _bucket = this.items[ticket][ticketData].field_value;
+                                break;
+                                case "estimatedpoints":
+                                    var _estimatedPoints = this.items[ticket][ticketData].field_value;
+                                break;
+                                case "duedate":
+                                    var _dudate = this.items[ticket][ticketData].field_value;
+                                break;
+                                case "arrow":
+                                    var _arrow = this.items[ticket][ticketData].other_data;
+                                break;
+                                
+                                default:
+                                break;
+                            }
                         }
-                        else {
-                            _storyOrTask = "Task";
-                            _storyPointHeading = "Estimated points";
-                        }
-
-                        switch(this.items[ticket][ticketData].field_name){
-                            case "Id":
-                                var _id = this.items[ticket][ticketData].field_value;
-                                var _subTasks = 0;
-                                    _subTasks = this.items[ticket][0].other_data.totalSubtasks;
-                            break;
-                            case "Title":
-                                var _title = this.items[ticket][ticketData].field_value;
-                            break;
-                            case "assignedto":
-                                var _assignTo = this.items[ticket][ticketData].field_value;
-                            break;
-                            case "priority":
-                                var _priority = this.items[ticket][ticketData].field_value;
-                            break;
-                            case "workflow":
-                                var _state = this.items[ticket][ticketData].other_data;                                
-                                var _workflow = this.items[ticket][ticketData].field_value;
-                            break;
-                            case "bucket":
-                                var _bucket = this.items[ticket][ticketData].field_value;
-                            break;
-                            case "estimatedpoints":
-                                var _estimatedPoints = this.items[ticket][ticketData].field_value;
-                            break;
-                            case "duedate":
-                                var _dudate = this.items[ticket][ticketData].field_value;
-                            break;
-                            case "arrow":
-                                var _arrow = this.items[ticket][ticketData].other_data;
-                            break;
-                            
-                            default:
-                            break;
-                        
-                        }
-                    }
-
                         this.arrayObject.push({
                             storyOrTask: _storyOrTask, 
                             storyPointsHeading: _storyPointHeading, 
@@ -217,12 +166,10 @@ console.log("the ionViewDidLoad after dismiss");
                             arrow: _arrow
                         });
                     }
-
                     if (this.params.offset == 0) {
                         this.loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                     }
                     this.params.offset = (this.params.offset) + 1;
-
                 }
             },
             error => {
@@ -232,19 +179,6 @@ console.log("the ionViewDidLoad after dismiss");
             () => console.log('listing stories api call complete')
         );
     }
-
-    /**
-      used for click event on list
-      author uday   
-  
-   */
-
-
-    /**
-          openDetails() is use ful for calling while swiping/clicking on the stories list item  
-      
-       */
-
     public openDetails(item): void {
         var clickedItemId = {"id": item.id};
         this.navCtrl.push(StoryDetailsPage, clickedItemId);
@@ -252,12 +186,7 @@ console.log("the ionViewDidLoad after dismiss");
     public btnCreateTask() {
         this.navCtrl.push(StoryCreatePage);
     }
-
-    /**
-         doInfinite(event) is called when the list is pulling down 
-     
-      */
-    doInfinite(infiniteScroll) {
+    public doInfinite(infiniteScroll) {
         setTimeout(() => {
             if (this.moreDataLoaded == true) {
                 this.getAllStoriesList();
