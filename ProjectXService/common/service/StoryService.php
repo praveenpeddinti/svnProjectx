@@ -457,6 +457,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "bucket"){
                                 $bucketDetail =  Bucket::getBucketName($ticket_data->$key,$projectId);
                                 $value["value_name"] = $bucketDetail["Name"];
+                                if (!empty($ticketDetails['Tasks'])){
+                                   $db =  TicketCollection::getCollection();
+                                foreach ($ticketDetails["Tasks"] as $task) {
+                                   $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.bucket.value' => (int) $bucketDetail['Id'], 'Fields.bucket.value_name' => $bucketDetail['Name'])));
+                                }
+                                }
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
                                 $planlevelDetail = PlanLevel::getPlanLevelDetails($ticket_data->$key);
@@ -559,6 +565,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $field_name = $ticket_data->EditedId;
             $field_id = $ticket_data->id;
             $loggedInUser = $ticket_data->userInfo->Id;
+            $projectId=$ticket_data->projectId;
             $artifacts = array();
             $workFlowDetail=array();
             $valueName = "";
@@ -657,6 +664,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 else if($fieldDetails["Field_Name"] == "bucket"){
                                 $bucketDetail =  Bucket::getBucketName($ticket_data->value,(int)$ticket_data->projectId);
                                 $valueName = $bucketDetail["Name"];
+                                 if (!empty($ticketDetails['Tasks'])){
+                                   $db =  TicketCollection::getCollection();
+                                foreach ($ticketDetails["Tasks"] as $task) {
+                                   $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.bucket.value' => (int) $bucketDetail['Id'], 'Fields.bucket.value_name' => $bucketDetail['Name'])));
+                                }
+                                }
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
                                 $planlevelDetail =  PlanLevel::getPlanLevelDetails($ticket_data->value);

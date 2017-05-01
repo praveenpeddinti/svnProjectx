@@ -352,6 +352,9 @@ class CommonUtility {
                     $value["readable_value"] = "";
                     if ($value["value"] != "") {
                         $bucketName = $bucketModel->getBucketName($value["value"], $ticketDetails["ProjectId"]);
+                        if($ticketDetails["IsChild"]==1){
+                          $value["readonly"] = 1;  
+                        }
                         $value["readable_value"] = $bucketName;
                     }
                 }
@@ -511,6 +514,9 @@ class CommonUtility {
                     $bucketName = $bucketModel->getBucketName($value["value"], $ticketDetails["ProjectId"]);
                     $value["readable_value"] = $bucketName;
                     $value["meta_data"] = $bucketModel->getBucketsList($projectId);
+                    if($ticketDetails['IsChild']==1){
+                        $value["readonly"] = 1; 
+                    }
                 }
                 if ($storyFieldDetails["Field_Name"] == "priority") {
 
