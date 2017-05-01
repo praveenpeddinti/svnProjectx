@@ -3,7 +3,7 @@
 return [
     "mention" => "has mentioned",
     "changed" =>"has changed",
-    "assignedTo" => "has assigned",
+    "assigned" => "has assigned",
     "stakeholder"=>"as a stakeholder",
     "comment"=>"has commented",
     "reply"=>"has replied to your comment on",
@@ -17,6 +17,8 @@ return [
     "follow"=>"followed",
     "unfollow"=>"unfollowed",
     "follower"=>"as a follower",
+    "assignedto" => "",
+    "stakeholder"=>"Stake Holder"
   
     
     

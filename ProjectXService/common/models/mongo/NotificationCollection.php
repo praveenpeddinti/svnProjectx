@@ -57,7 +57,17 @@ class NotificationCollection extends ActiveRecord
      * @return array
      */ 
     
-    
+    public static function getNotificationDetails($notificationIds){
+        try{
+           $query=new Query();
+            $query->from('NotificationCollection')
+            ->where(["_id" => array('$in'=>$notificationIds)]);
+            $notifications = $query->all();
+            return $notifications;  
+        } catch (Exception $ex) {
+
+        }
+    }
      public static function getNotificationsCount($user,$projectId)
     {
           $query=new Query();

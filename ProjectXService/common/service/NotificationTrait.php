@@ -4,7 +4,7 @@ use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequen
 use common\components\{CommonUtility};
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters};
 use yii;
-
+use \ArrayObject;
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -66,15 +66,17 @@ use yii;
      * @return type 
      * @description  Used for saving the notifications in submit Description and comments  
      */
-    public static function saveNotificationsWithMention($ticket_data,$userslist,$notifyType=null,$slug=null)
+    public static function saveNotificationsToMentionOnly($ticket_data,$userslist,$notifyType=null,$slug=null)
     {
         try
         {
+            error_log("----saveNotificationsToMentionOnly---");
             $from=$ticket_data->userInfo->username;
              $loggedinUser=$ticket_data->userInfo->Id;
             $ticketId=$ticket_data->TicketId;
             $projectId=$ticket_data->projectId;
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+           $ticket_data = TicketCollection::getTicketDetails($ticketId,$projectId);
             if(!empty($userslist))
             {
                 foreach($userslist as $user)
@@ -100,7 +102,11 @@ use yii;
                      $tic->ActivityOn=$user['Id'];
                      $tic->Status=0;
                      $tic->CommentSlug=$slug;
-                    $tic->save();
+                   $result = $tic->save();
+                   if($result){
+                     $notificationId = $tic->_id;
+                     self::sendEmailNotification(array($notificationId),$projectId);
+                  }   
                 }
             }
         }catch(Exception $ex)
@@ -149,10 +155,16 @@ use yii;
                     $tic->ActivityOn=$notify_type;
                     $tic->Status=0;
                     $tic->CommentSlug=$slug;
-                    $tic->save();
+                    $result = $tic->save();
+                   if($result){
+                     $notificationId = $tic->_id;
+                     self::sendEmailNotification(array($notificationId),$projectId);
+                  }    
+                                 
+                    
                 }
             }
-            
+            $notificationIdsArray = array();
             foreach($followers as $follower)
                 {             
                     if($follower['FollowerId']!=$loggedinUser && !in_array($follower['FollowerId'],$mentionUserIdlist))
@@ -178,10 +190,16 @@ use yii;
                                  $tic->ActivityOn="comment"; //added for consistency
                             }
                             $tic->Status=0;
-                            $tic->save();
+                            $result = $tic->save();
+                            if($result){
+                              $notificationId = $tic->_id;
+                              array_push($notificationIdsArray, $notificationId);
+                           }    
+                         
                     }
 
                 }
+                  self::sendEmailNotification($notificationIdsArray,$projectId);
         }catch(Exception $ex)
         {
             Yii::log("NotificationTrait:saveNotificationsForComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -196,7 +214,7 @@ use yii;
      */
     public static function saveNotifications($notification_data,$notifyType,$activityOn,$fieldType="")
     {
-        error_log("in save notifications--".$notifyType."----------".$activityOn."--------".$fieldType);
+        error_log("in save notifications--".$notifyType."----------".$activityOn."--------".$fieldType."---");
         try{
             
             $oldValue='';
@@ -204,7 +222,8 @@ use yii;
             $oldCollaborator='';
             $newCollaborator='';
                 //For Story Detail Page Use Case.....
-            $ticketId=$notification_data->TicketId;
+           $ticketId =  isset($notification_data->TicketId) ? $notification_data->TicketId : $notification_data->data->TicketId;
+           // $ticketId=$notification_data->TicketId;
             $projectId=$notification_data->projectId;
             $from=$notification_data->userInfo->username;
             $loggedInUser=$notification_data->userInfo->Id;         
@@ -271,7 +290,17 @@ use yii;
                              error_log("==In saving the assigned to==");
                             //$tic->ActivityOn= $activityOn; //previous use case
                              //new use case eg: assignedTo,stakeholder,priority,etc... 
-                            $tic->save();
+                              $result =  $tic->save();
+                            if($result){
+                                $notificationId = $tic->_id;
+                                error_log("before sendign assing to notircioant--");
+                                 self::sendEmailNotification(array($notificationId),$projectId);
+                       } 
+   
+                               //self::sendMail($ticketDetails,$loggedInUser, $newCollaborator,$notify_type);    
+                            
+                            
+                            
                         //}
                     }
                      else if($fieldType== "FollowObj")
@@ -299,11 +328,15 @@ use yii;
                              error_log("==In saving the assigned to==");
                             //$tic->ActivityOn= $activityOn; //previous use case
                              //new use case eg: assignedTo,stakeholder,priority,etc... 
-                            $tic->save();
+                           $result = $tic->save();
+                             if($result){
+                                $notificationId = $tic->_id;
+                                error_log("before sendign assing to notircioant--");
+                                 self::sendEmailNotification(array($notificationId),$projectId);
+                       } 
                         //}
                     } 
-                    else
-                    {
+                    else if($fieldType!= "Description" && $fieldType!= "Title"){ //This is for left hand property changes
                         $oldFieldId=$oldValue;
                         $newFieldId=$activityOn;
                         error_log("==Old Value==".$oldFieldId);
@@ -327,7 +360,8 @@ use yii;
             
 
             /* notification for all followers and the stakeholders */
-            
+            $notificationIds = array();
+                    
             foreach($followers as $follower)
             {
                error_log("===Notify Type".$notify_type);
@@ -343,7 +377,22 @@ use yii;
                     $tic->ActivityFrom=(int)$loggedInUser;
                     $tic->NotificationDate=$currentDate;
                     
-                    if($fieldType== "FollowObj"){
+                         if($fieldType == "Description" || $fieldType == "Title"){
+                             error_log("in descrioton--------");
+                            $tic->Notification_Type=$fieldType;
+                            $tic->ActivityOn= $fieldType;
+                            $tic->OldValue=$oldValue;
+                            $tic->NewValue=$activityOn;
+                            $tic->Status=0;
+                            $result =  $tic->save();
+                            if($result){
+                              $notificationId = $tic->_id;
+                             array_push($notificationIds,$notificationId);
+                              }
+            }
+                    
+                    
+                   else if($fieldType== "FollowObj"){
                         
                         if($follower['FollowerId'] != $activityOn){
                          $tic->ActivityOn=$fieldType;
@@ -357,7 +406,11 @@ use yii;
                         $tic->OldValue="";
                         $tic->NewValue=$activityOn;
                         $tic->Status=0;
-                         $tic->save();
+                        $result =  $tic->save();
+//                             if($result){
+//                              $notificationId = $tic->_id;
+//                              array_push($notificationIds,$notificationId);
+//                              }
                         }
                     }
                     else if($fieldType == 6)
@@ -369,7 +422,11 @@ use yii;
                             $tic->Status=0;
                             $tic->OldValue=$oldCollaborator;
                             $tic->NewValue=$newCollaborator;
-                            $tic->save();
+                            $result =  $tic->save();
+                             if($result){
+                              $notificationId = $tic->_id;
+                              array_push($notificationIds,$notificationId);
+                              }
                         }
                     }
                     else
@@ -378,10 +435,14 @@ use yii;
                         $tic->Status=0;
                         $tic->OldValue=$oldValue;
                         $tic->NewValue=$newValue;
-                        $tic->save();
+                        $tic->save(); //here not sending emails for left hand side propert change excpet Assinged to , stake holder
                     }
                     
                 }
+                     
+                                error_log("before sendign assing to notircioant-****-".print_r($notificationIds,1));
+                                self::sendEmailNotification($notificationIds,$projectId);
+                     
             
         } catch (Exception $ex) {
             Yii::log("NotificationTrait:saveNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -440,7 +501,7 @@ use yii;
                            
                         }
                           $preposition =  "to";
-                          $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assignedTo'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder'],"Preposition"=>$preposition);
+                          $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assigned'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params[$activityOn],"Preposition"=>$preposition);
                                 array_push($result_msg,$message); 
                     }
             
@@ -600,6 +661,368 @@ use yii;
         } catch (Exception $ex) {
             Yii::log("NotificationTrait:getNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
+        }
+    }
+    public static function sendEmailNotification($notificationIds,$projectId){
+        
+         $msg='';
+        $message=array();
+        $result_msg=array(); 
+        
+        
+         error_log("sendEmailNotification--".print_r($notificationIds,1));
+        $notifications = NotificationCollection::getNotificationDetails($notificationIds);
+        error_log("count-------------".count($notifications));
+     foreach($notifications as $notification){
+          $recipient_list=array();
+         
+                 error_log($notification['_id']."==Notification Type==".$notification['Notification_Type']);
+                $datetime = $notification['NotificationDate']->toDateTime();
+                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $Date = $datetime->format('M-d-Y H:i:s');
+                $selectfields=['Title','TicketId','Fields.planlevel'];
+                $ticket_data= TicketCollection::getTicketDetails($notification['TicketId'],$projectId,$selectfields);
+                $ticket_msg='to'. ' '.'#'. $notification['TicketId'] .' ' .$ticket_data['Title'];
+                $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
+                error_log("activtiy form---------------".$notification['ActivityFrom']);
+                $from_user= TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
+                
+                  
+                   /*************** Left Panel Field Values newly assigned *********************/
+                 $activityOn = $notification['ActivityOn'];
+                 $storyField = StoryFields::getFieldDetails($activityOn,"Field_Name");;
+                 $activityOnFieldType = $storyField["Type"]; 
+                 $ticketId = $notification['TicketId'];
+                 $title = $ticket_data['Title'];
+                 $fromUser = $from_user['UserName'];
+                 if($activityOn == "Description" || $activityOn == "Title"){
+                   
+                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+                                $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> </br>
+{$activityOn} has been changed by {$fromUser}
+EOD;
+ 
+         array_push($recipient_list,$notification['NotifiedUser']);                       
+                 }
+                 
+                else if($activityOnFieldType== 6) //newly assigned 
+                    {
+                        //$action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
+                       
+                        if($notification['NotifiedUser']==$notification['NewValue'])
+                        {
+                           
+                            //for logged in user
+                            //Eg : moin.hussain assigned you to ticket #33
+                             $to =  "you";
+                        }
+                        else
+                        {
+                           $action_user=Collaborators::getCollaboratorById($notification['NewValue']);
+                                //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
+                                //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
+                            $to =  $action_user['UserName']; 
+                           
+                        }
+                          $preposition =  "to";
+                        //  $message=array('from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assignedTo'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder'],"Preposition"=>$preposition);
+        $fieldName = "";
+        if($activityOn != "assignedto" ){
+                 $fieldName = $storyField["Title"];   
+        }
+       $fieldName =  $fieldName == "" ? "":"as a ".$fieldName;
+                   
+                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+                                $text_message = <<<EOD
+{$fromUser} has assigned {$to} {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
+EOD;
+ 
+         array_push($recipient_list,$notification['NotifiedUser']);  
+                    }
+            
+                    
+                    /* Left Panel newly assigned Field Values End */
+                    
+                   
+                    
+                    /********* Followers Messages *****************/
+                    
+                    else if($notification['ActivityOn']=='FollowObj')
+                    {
+                        error_log("added");
+                        
+                            if($notification['NotifiedUser']==$notification['NewValue']) //if logged in user has been added
+                            {
+                                //Eg : moin.hussain added you as a follower to ticket #33
+                                $activityOn ='you';
+                             
+                            }
+                            else
+                            {
+                                //Eg : moin.hussain added sateesh.mandru as a follower to Ticket #33
+                                $action_user=Collaborators::getCollaboratorById($notification['NewValue']);
+                                $activityOn =$action_user['UserName'];
+                              
+                            }
+                           $preposition =  $notification['Notification_Type'] == "added" ? "to" : "from";
+                        // $message=array('from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower'],"Preposition"=>$preposition);
+                        
+                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+                               $message =  Yii::$app->params[$notification['Notification_Type']];
+                                $text_message = <<<EOD
+{$fromUser}  {$message} {$activityOn} as follower {$preposition} <a href={$link}>#{$ticketId} {$title} </a>
+EOD;
+ 
+         array_push($recipient_list,$notification['NotifiedUser']);     
+                    }
+                              
+                   
+                    /******* Followers Message End **********/
+                    
+                    
+                    /***** Any changes in Editor ***********/
+                  else if($notification['Notification_Type'] == "comment" || $notification['Notification_Type'] == "reply"){
+                        $datetime = $notification['NotificationDate']->toDateTime();
+                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                        $Date = $datetime->format('M-d-Y H:i:s');
+                        $collaborator=new Collaborators();
+                        //$collaborator=$collaborator->getCollaboratorByUserName($from_user['UserName']);
+                        //error_log("===Collaborator==".print_r($collaborator,1));                       
+                        $selectfields=['Title','TicketId','Fields.planlevel'];
+                        //$ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
+                      //  $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
+                      
+                    // $message=array('from'=>$from_user['UserName'],'object'=>$object,'type'=>$type,'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
+                    // array_push($result_msg,$message);
+                     
+          if($notification['Notification_Type'] == "comment"){
+              error_log("comment-----------------------");
+               $preposition = "on";
+                           $object = "comment";
+                           $type =  Yii::$app->params['comment'];
+               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+            $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> <br/> commented by {$fromUser}
+EOD;
+            
+    } 
+              if($notification['Notification_Type'] == "reply"){
+                   error_log("replyyyyyyyyyyyyy-----------------------");
+                      $preposition = "";
+                       $object = "reply";
+                             $type =  Yii::$app->params['reply'];
+               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+            $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> <br/> replied by {$fromUser}
+EOD;
+            
+    } 
+                     
+                array_push($recipient_list,$notification['NotifiedUser']);     
+                 }
+                   
+                  else if($notification['Notification_Type'] == "mention" )
+                   {
+                       $datetime = $notification['NotificationDate']->toDateTime();
+                        $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                        $Date = $datetime->format('M-d-Y H:i:s');
+                        $collaborator=new Collaborators();
+                        //$collaborator=$collaborator->getCollaboratorByUserName($from_user['UserName']);
+                        //error_log("===Collaborator==".print_r($collaborator,1));                       
+                        $selectfields=['Title','TicketId','Fields.planlevel'];
+                       // $ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
+                       // $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
+                        if($notification['Notification_Type']=='mention')
+                        {
+                            error_log("==in mention==");
+                      
+ $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+            $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$fromUser}
+EOD;
+           
+                    array_push($recipient_list,$notification['NotifiedUser']);          
+                             
+                            
+                        }
+                   }
+                   
+                       
+                    //if($notification['Notification_Type']=='duedate' || $notification['Notification_Type']=='dod' || $notification['Notification_Type']=='estimatedpoints')
+                   // {
+                  // $storyField = StoryFields::getFieldDetails($notification['ActivityOn'],"Field_Name");
+                         if(isset($storyField['Title'])){
+                             error_log("*******************************************")  ;
+                      
+                         $storyFieldName=$storyField['Title'];
+                             //Eg : moin.hussain set duedate to 'apr-14-2017'
+                             if($storyField['Type']==4)
+                             {
+                                 $newValue ="";
+                                 $oldValue = "";
+                                if($notification['NewValue'] != ""){
+                                 $datetime = $notification['NewValue']->toDateTime();
+                                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                                 $newValue = $datetime->format('M-d-Y');
+                                   }
+                                 
+                                 if($notification['OldValue'] != ""){
+                                $datetime = $notification['OldValue']->toDateTime();
+                                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                                 $oldValue = $datetime->format('M-d-Y');
+                                 }
+                                
+                                 $preposition =  $notification['Notification_Type'] == "set" ? "to" : "**";
+                                 $message=array('from'=>$from_user['UserName'],'type'=> Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$oldValue,"NewValue"=>$newValue,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
+                                 array_push($result_msg,$message);
+                             }
+                             else if($storyField['Type']!=6 )
+                             {
+                                $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
+                                $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
+                               $preposition =  $notification['Notification_Type'] == "set" ? "to" : "**";
+                                 $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
+                                 array_push($result_msg,$message);
+                                 
+                             }
+                             
+                              }
+                              
+                       /*Left Panel Changed Field Values Start*/
+                    
+          
+                    
+                    /*********Left Panel  Changed Field Values End *******************/        
+              
+                   
+                    /**** Changes in Editor End *************/
+                     error_log("sendEmailNotification--snedin eaml--");
+                  
+           
+             error_log("send eamil--------------------".print_r($recipient_list,1));
+             foreach ($recipient_list as &$value) {
+                  $collaboratorData = TinyUserCollection::getMiniUserDetails($value);
+                  $value = $collaboratorData['Email'];
+             }
+                  
+                  
+                      CommonUtility::sendEmail($recipient_list,$text_message);
+            }
+               
+        
+    }
+    
+    /**
+      * @author Ryan Marshal
+      * @param type $loggedInUser
+      * @param type $recipients
+      * @param type $ticketdetails
+      * @param type $artifacts
+      * @return type
+      */
+    public static function sendMail($ticketData,$loggedInUser,$recipients,$notificationType,$toFollower = false)
+    {
+        error_log("sendMail--".$loggedInUser."---".$recipients."--".$notificationType);
+      //  error_log("==Followers==".print_r($ticketdetails['Followers'],1));
+       // $followers=$ticketdetails['Followers'];
+       // $recipient_list=array();
+        $attachment_list=array();
+        try
+        {
+            $collaboratorData = TinyUserCollection::getMiniUserDetails($loggedInUser);
+            $actionByUser = $collaboratorData["UserName"];
+            $ticketId = $ticketData["TicketId"];
+            $title = $ticketData["Title"];
+            error_log("sending email-------");
+            if($notificationType == "mention"){
+               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+            $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$actionByUser}
+EOD;
+            
+    } 
+          if($notificationType == "comment"){
+               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+            $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> <br/> commented by {$actionByUser}
+EOD;
+            
+    } 
+              if($notificationType == "reply"){
+               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+            $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> <br/> replied by {$actionByUser}
+EOD;
+            
+    } 
+    if($notificationType == "assignedto" || $notificationType == "stakeholder"){
+        $fieldName = "";
+        if($notificationType != "assignedto" ){
+           $storyField = StoryFields::getFieldDetails($notificationType,"Field_Name");
+                 $fieldName = $storyField["Title"];   
+        }
+       $fieldName =  $fieldName == "" ? "":"as a ".$fieldName;
+                    
+                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+                                $text_message = <<<EOD
+{$actionByUser} has assigned you {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
+EOD;
+ 
+   } 
+  
+    
+    
+         //   $qry="select UserName,Email from Collaborators where UserName = '$loggedInUser'";
+           // $from = Yii::$app->db->createCommand($qry)->queryOne();
+//            if(is_array($recipients)) // for @mentioned users
+//            {
+//                if(!empty($recipients))
+//                {
+//                    for($i=0;$i<count($recipients);$i++)
+//                    {
+//                        $qry="select UserName,Email from Collaborators where UserName = '$recipients[$i]'";
+//                        $data = Yii::$app->db->createCommand($qry)->queryOne();
+//                        array_push($recipient_list,$data['Email']);
+//                    }
+//                }
+//                
+//                // for followers
+//                foreach($followers as $follower)
+//                {
+//                    $followerid=$follower['FollowerId'];
+//                    error_log("==Follower Id==".$followerid);
+//                    $qry="select UserName,Email from Collaborators where Id = '$followerid'";
+//                    $data = Yii::$app->db->createCommand($qry)->queryOne();
+//                    if($data['UserName']!=$loggedInUser) //To avoidloggedin user @mentioning himself
+//                    {
+//                        array_push($recipient_list,$data['Email']);
+//                    }
+//                }
+//            }
+//            else // for assigned to and stakeholder
+//            {
+//                $qry="select UserName,Email from Collaborators where UserName = '$recipients'";
+//                $data = Yii::$app->db->createCommand($qry)->queryOne();
+//                array_push($recipient_list,$data['Email']);
+//            }
+    
+         $recipient_list=array();
+             if(!is_array($recipients)){
+                 array_push($recipient_list,$recipients);
+             }else{
+                 $recipient_list = $recipients;
+             }
+             error_log("send eamil--------------------".print_r($recipient_list,1));
+             foreach ($recipient_list as &$value) {
+                  $collaboratorData = TinyUserCollection::getMiniUserDetails($value);
+                  $value = $collaboratorData['Email'];
+             }
+            CommonUtility::sendEmail($recipient_list,$text_message);
+ 
+            
+        } catch (Exception $ex) {
+            Yii::log("NotificationTrait:sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     

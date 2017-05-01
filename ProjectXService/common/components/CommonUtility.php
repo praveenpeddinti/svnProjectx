@@ -1010,89 +1010,27 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
     }
 
   
-    /**
-      * @author Ryan Marshal
-      * @param type $loggedInUser
-      * @param type $recipients
-      * @param type $ticketdetails
-      * @param type $artifacts
-      * @return type
-      */
-    public static function sendMail($loggedInUser,$recipients,$ticketdetails,$text_message=null)
-    {
-        error_log("==Followers==".print_r($ticketdetails['Followers'],1));
-        $followers=$ticketdetails['Followers'];
-        $recipient_list=array();
-        $attachment_list=array();
-        try
-        {
-          
-            ApiClient::SetApiKey("9d55f483-0501-4005-8ada-3335f666e731");
-            $qry="select UserName,Email from Collaborators where UserName = '$loggedInUser'";
-            $from = Yii::$app->db->createCommand($qry)->queryOne();
-            if(is_array($recipients)) // for @mentioned users
-            {
-                if(!empty($recipients))
-                {
-                    for($i=0;$i<count($recipients);$i++)
-                    {
-                        $qry="select UserName,Email from Collaborators where UserName = '$recipients[$i]'";
-                        $data = Yii::$app->db->createCommand($qry)->queryOne();
-                        array_push($recipient_list,$data['Email']);
-                    }
-                }
-                
-                // for followers
-                foreach($followers as $follower)
-                {
-                    $followerid=$follower['FollowerId'];
-                    error_log("==Follower Id==".$followerid);
-                    $qry="select UserName,Email from Collaborators where Id = '$followerid'";
-                    $data = Yii::$app->db->createCommand($qry)->queryOne();
-                    if($data['UserName']!=$loggedInUser) //To avoidloggedin user @mentioning himself
-                    {
-                        array_push($recipient_list,$data['Email']);
-                    }
-                }
-            }
-            else // for assigned to and stakeholder
-            {
-                $qry="select UserName,Email from Collaborators where UserName = '$recipients'";
-                $data = Yii::$app->db->createCommand($qry)->queryOne();
-                array_push($recipient_list,$data['Email']);
-            }
-            //error_log("===Recipient List==".print_r($recipient_list,1));
-            
-//            foreach($artifacts as $artifact)
-//            {
-//                $filename=$artifact['FileName'].'.'.$artifact['Extension'];
-//                error_log("==File Name==".$filename);
-//                $filename='/usr/share/nginx/www/ProjectXService/frontend/web/files/story/'.$filename;
-//                array_push($attachment_list,$filename);
-//            }
-            
-            //$email_recepients=[$recipient_list]; //list of recepient email address
-            //$recipient_list=['marshal.ryan@techo2.com'];
-            $attachments=$attachment_list;//list of artifacts
-            $EEemail = new Email();
-             try
-                {
-                    $subject="ProjectX";
+    
+    
+    public static function sendEmail($recipient_list,$text_message,$subject="ProjectX",$attachment_list=array()){
+         try{
+           
+             error_log("send eamil-------after-------------".print_r($recipient_list,1));
+             ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
+             $attachments=$attachment_list;//list of artifacts
+             $EEemail = new Email();
+             
                     $from=Yii::$app->params['ProjectEmail'];
                     $fromName="ProjectX";
                     $html="<h1> $text_message </h1>";
                     $text=$text_message;
-                   // $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
+                  //  $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
                 }
                 catch (Exception $e)
                 {
                     echo 'Something went wrong: ', $e->getMessage(), '\n';
                     return;
-                }		
-            
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+                }
     }
      /**
      * @author Padmaja

@@ -38,7 +38,7 @@ class StoryService {
      * @param type $projectId
      * @return type
      */
-       public function getTicketEditDetails($getNotiticketId, $projectId) {
+       public function getTicketEditDetails($ticketId, $projectId) {
         try {
          $editDetails =  CommonUtility::prepareTicketEditDetails($ticketId, $projectId);
          return $editDetails;
@@ -287,7 +287,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 {
                     error_log("===in if mail sending.....==");
                     $newticket_data->TicketId = $ticketNumber;
-                    self::saveNotificationsWithMention($newticket_data,$refinedData['UsersList'],'mention');
+                    self::saveNotificationsToMentionOnly($newticket_data,$refinedData['UsersList'],'mention');
 
                 }
                            
@@ -572,11 +572,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             if($checkData==0){
                  error_log("updateStoryFieldInline---2");
                  if($ticket_data->id=='Title'){
+                     $fieldType = "Title";
+                      $field_name = "Title";
                     $newData = array('$set' => array("Title" => trim($ticket_data->value)));
                     $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$ticket_data->value;
                     $activityNewValue = $ticket_data->value;
                 }else if($ticket_data->id=='Description'){
+                    $field_name = "Description";
+                    $fieldType = "Description";
                     $refinedData = CommonUtility::refineDescription($ticket_data->value);
                     $actualdescription = $refinedData["description"];
                     $artifacts=$refinedData["ArtifactsList"];
@@ -592,9 +596,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 if(!empty($refinedData['UsersList']))
                                 {
                                     error_log("===in if mail sending.....==");
-                                    NotificationCollection::saveNotificationsWithMention($ticket_data,$refinedData['UsersList'],'mention');
-                                    //CommonUtility::sendMail($ticket_data->userInfo->username, $refinedData['UsersList'],$childticketDetails);
-                                    CommonUtility::sendMail($ticket_data->userInfo->username, $refinedData['UsersList'],$ticketDetails);
+                                   self::saveNotificationsToMentionOnly($ticket_data,$refinedData['UsersList'],'mention');
+                                  //  CommonUtility::sendMail($ticket_data->userInfo->username, $refinedData['UsersList'],$ticketDetails);
                                     
                                 }
                             } catch (Exception $ex) {
@@ -608,7 +611,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                  error_log("updateStoryFieldInline---3");
                   $fieldDetails =  StoryFields::getFieldDetails($field_id);
                   $fieldName = $fieldDetails["Field_Name"];
-                   
+                  $fieldType =  $fieldDetails["Type"];
                      if(is_numeric($ticket_data->value)){
                         if($fieldDetails["Type"] == 6 ){
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
@@ -620,13 +623,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             /*Send Mail to Assigned to User by Ryan*/
                             try
                             {
-                                 error_log("updateStoryFieldInline---4");
-                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketDetails['TicketId'];
-                                 $text="A new ticket has been assigned to you by ".$ticket_data->userInfo->username." to <a href=$link>".'#'.$ticketDetails['TicketId'].' '.$ticketDetails['Title']."</a>";
-                                $text = <<<EOD
-<a href={$link}>#{$ticketDetails['TicketId']} {$ticketDetails['Title']} </a> <br/> Assigned to set to you by {$ticket_data->userInfo->username}
-EOD;
-                                CommonUtility::sendMail($ticket_data->userInfo->username, $valueName,$ticketDetails,$text); 
+                                
                             } 
                             catch (Exception $ex) {
                                 Yii::log("CommonUtility::sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -718,9 +715,10 @@ EOD;
                     $selectedValue=$leftsideFieldVal;
                     $activityNewValue = $leftsideFieldVal;
              error_log("==call check==".$ticket_data->value);       
-       $this->saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldDetails["Type"]);
+       
    
             }
+            $this->saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldType);
     error_log("updateStoryFieldInline---13");
                 $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
                 $updateStaus = $collection->update($condition, $newData);
@@ -829,10 +827,7 @@ EOD;
                                        $notify_type = "reply";
                                         $actionName = "replied";
                                      }
-                               $emailBody = "A ticket has been ".$actionName." by ".$commentData->userInfo->username." for <a href=$link>".'#'.$ticketDetails['TicketId'].' '.$ticketDetails['Title']."</a>";
-                               error_log("==notify type==".$notify_type);
                                $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
-                               CommonUtility::sendMail($commentData->userInfo->username, $mentionArray,$ticketDetails,$emailBody);
 
                             } catch (Exception $ex) {
                                 Yii::log("$this->saveNotifications:" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -920,7 +915,7 @@ EOD;
            // $ticketModel = new TicketCollection();
             $ticketDetails = TicketCollection::getMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array();
-            $fieldsOrderArray = [5,6,7,3,10];
+            $fieldsOrderArray = [5,6,7,3,9,10];
            //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             foreach ($ticketDetails as $ticket) {
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
