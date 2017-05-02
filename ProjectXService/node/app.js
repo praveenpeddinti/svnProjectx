@@ -118,19 +118,39 @@ app.post("/propertyChange",function(req,res,cb)
 
 
 
- //var http = require('http').createServer(app);
- app.listen(4201);
-// var io = require('socket.io')(http);
-//    io.sockets.on('connection', function(client)
-//    {  
-//
-//        client.on('assignedTo', function(collaborator) {
-//            console.log('assignedTo-----'+collaborator);
-//            child=spawn(dir+"/yii",['notifications/hello','100']);
-//            child.stdout.setEncoding('utf-8');
-//            child.stdout.on('data', function(res) {
-//                console.log(res);
-//           });
-//       });
-//
-//    });
+ var http = require('http').createServer(app);
+ var server = app.listen(4201);
+ var io = require('socket.io')(server);
+ console.log("in");
+    io.sockets.on('connection', function(client)
+    {  
+
+        client.on('getAllNotificationsCount', function(request) {
+            console.log('******************getAllNotificationsCount1***************'+request);
+     getUnreadNotificationsCount(request,client);
+        setInterval(function(){
+    
+       getUnreadNotificationsCount(request,client);
+
+
+        },15000)
+  
+
+       });
+       
+        function getUnreadNotificationsCount(request,client){
+                      child=spawn(dir+"/yii",['notifications/get-all-notifications-count',JSON.stringify(request)]);
+            child.stdout.setEncoding('utf-8');
+            child.stdout.on('data', function(data) {
+              console.log("get-all-notifications-count-- " +data);
+                 client.emit("getAllNotificationsCountResponse",data);
+           });
+              child.stderr.on('data', function(data) {
+    //            logger.trace('stderr: ' + data);
+                console.log("assignedTo-------error- "+data );
+           });
+    }
+
+    });
+    
+   
