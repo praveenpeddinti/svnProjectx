@@ -101,6 +101,9 @@ var post_data={};
       {
         this.notify_count = data.totalCount;
         jQuery('#'+notify_id).remove();
+        // for view all notification page
+        jQuery('#mark_'+notify_id).remove(); 
+        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
       if(data.data.notify_result != "nodata"){
     
        for(var i=0;i<data.data.notify_result.length;i++)
@@ -128,6 +131,9 @@ var post_data={};
        this.notify_count--;
       }
         jQuery('#'+notify_id).remove();
+         // for view all notification page
+        jQuery('#mark_'+notify_id).remove(); 
+        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
         if(this.notify_count==0)
         {
         jQuery("#notificationMessage").hide();
@@ -151,6 +157,9 @@ var post_data={};
        this.notify_count--;
       }
         jQuery('#'+notify_id).remove();
+         // for view all notification page
+        jQuery('#mark_'+notify_id).remove(); 
+        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
         if(this.notify_count==0)
         {
          jQuery("#notificationMessage").hide();
@@ -172,6 +181,8 @@ var post_data={};
         this.notify_count=0;
         
          jQuery(".notificationlist").remove();
+         jQuery(".notificationdelete").remove();
+         jQuery('.notificationdiv').removeClass('unreadnotification'); 
         // jQuery("#notificationMessage").show();
        
        
