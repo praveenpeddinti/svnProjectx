@@ -3,6 +3,8 @@ import { Headers, Http } from '@angular/http';
 //import { Headers,RequestOptions, Http } from '@angular/http';
 import { GlobalVariable } from '../../app/config';
 declare var jstz:any;
+declare var io:any;
+declare var socket:any;
 var headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
 
 declare var jQuery:any;
@@ -63,5 +65,19 @@ NodeSubscribe(url:string,params:Object,callback)
       );
 }
 
+
+SocketSubscribe(url:string,params:Object)
+{ 
+  var getAllData=  JSON.parse(localStorage.getItem('user'));
+   if(getAllData != null){
+      params["userInfo"] = getAllData;
+      params["projectId"] = 1;
+      params["timeZone"] = jstz.determine_timezone().name();
+    }
+  
+      socket.emit(url,params);
+     
+}
+       
 
 }

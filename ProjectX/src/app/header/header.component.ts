@@ -4,7 +4,8 @@ import { Headers, Http } from '@angular/http';
 import { LoginService, Collaborator } from '../services/login.service';
 import { AjaxService } from '../ajax/ajax.service';
 import { GlobalVariable } from '../config';
-
+declare var io:any;
+declare var socket:any;
 declare var jQuery:any;
 @Component({
   selector: 'app-header',
@@ -33,23 +34,22 @@ export class HeaderComponent implements OnInit {
     {
      var thisObj = this;
     var post_data={}; 
-      thisObj._ajaxService.NodeSubscribe('/getAllNotificationsCount',post_data,(data)=>
-      {
-      
-        thisObj.notify_count=data.count;
-       
-      });
+      thisObj._ajaxService.SocketSubscribe('getAllNotificationsCount',post_data);
     
-   
-    setInterval(function(){
-var post_data={}; 
-      thisObj._ajaxService.NodeSubscribe('/getAllNotificationsCount',post_data,(data)=>
-      {
       
-        thisObj.notify_count=data.count;
-       
-      });
-},15000)
+        socket.on('getAllNotificationsCountResponse', function(data) {
+            data = JSON.parse(data); 
+            thisObj.notify_count=data.count;
+            if(data.count == 0){
+            jQuery("#notificationCount").hide();
+            }else{
+            jQuery("#notificationCount").show();
+            jQuery("#notificationCount").html(data.count);
+            }
+
+        });
+
+
       
      
     }
