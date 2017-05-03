@@ -769,7 +769,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      $res = TicketComments::removeComment($commentData);
      $notify_type = "delete";
      $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
-     $mentionArray = $refinedData['UsersList'];  
+     $mentionArray = $refinedData['UsersList']; 
+     $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
      $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$commentData->Comment->Slug);
      
     }
@@ -798,6 +799,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
                 }
                  $notify_type = "edit";
+                 $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
                 $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
                 return $retData;
             } else {
