@@ -91,7 +91,7 @@ export class StoryCreatePage {
 //        RE.editor.addEventListener("touchend", RE.touchend);
     }
     public onStoryCreate(form): void {
-        this.myHTML = document.getElementById('editor').innerHTML;
+       // this.myHTML = document.getElementById('editor').innerHTML;
         if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();
