@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 return [
     "mention" => "has mentioned",
@@ -21,7 +21,8 @@ return [
     "follower"=>"as a follower",
     "assignedto" => "",
     "stakeholder"=>"Stake Holder",
-    "followed" => "is following"
+    "followed" => "is following",
+    "unfollowed" => "is unfollowed"
   
     
     
