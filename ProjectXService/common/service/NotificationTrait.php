@@ -125,7 +125,7 @@ use \ArrayObject;
         try
         {
             error_log("saveNotificationsForComment---".$notify_type);
-            $commentOwner=$commentData->Comment->OrigianalCommentorId;
+            $commentOwner=$commentData->Comment->OriginalCommentorId;
             $loggedinUser=$commentData->userInfo->Id;
             $ticketId=$commentData->TicketId;
             $projectId=$commentData->projectId;
@@ -182,11 +182,11 @@ use \ArrayObject;
                             if($commentOwner == $follower['FollowerId'])  //added by Ryan for Reply
                             {
                                 error_log("==reply==");
-                                $tic->Notification_Type=$notify_type;
-                                $tic->ActivityOn=$notify_type; //added for consistency
+                                $tic->Notification_Type="reply";
+                                $tic->ActivityOn="comment"; //added for consistency
                             }else{
                                 error_log("==comment==");
-                                 $tic->Notification_Type="comment";
+                                 $tic->Notification_Type=$notify_type;
                                  $tic->ActivityOn="comment"; //added for consistency
                             }
                             $tic->Status=0;
@@ -558,7 +558,7 @@ use \ArrayObject;
                     
                     /***** Any changes in Editor ***********/
                     error_log("notifc t-------------------".$notification['Notification_Type']);
-                   if($notification['Notification_Type'] == "comment" || $notification['Notification_Type'] == "reply"){
+                   if($notification['ActivityOn']=="comment"){
                         $datetime = $notification['NotificationDate']->toDateTime();
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                         $Date = $datetime->format('M-d-Y H:i:s');
@@ -578,11 +578,19 @@ use \ArrayObject;
                            $type =  Yii::$app->params['comment'];
                              }
                         }
-                        if($notification['Notification_Type']=='reply'){
+                        else if($notification['Notification_Type']=='reply'){
                                    $preposition = "";
                                   $object = "reply";
                              $type =  Yii::$app->params['reply'];
                            
+                        }else if($notification['Notification_Type']=='edit'){
+                              $preposition = "on";
+                                  $object = "edit";
+                             $type =  Yii::$app->params['edit'];
+                        }else if($notification['Notification_Type']=='delete'){
+                              $preposition = "on";
+                                  $object = "delete";
+                             $type =  Yii::$app->params['delete'];
                         }
                      $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>$object,'type'=>$type,'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                      array_push($result_msg,$message);
@@ -688,9 +696,9 @@ use \ArrayObject;
         $result_msg=array(); 
         
         
-         error_log("sendEmailNotification--".print_r($notificationIds,1));
+        // error_log("sendEmailNotification--".print_r($notificationIds,1));
         $notifications = NotificationCollection::getNotificationDetails($notificationIds);
-        error_log("count-------------".count($notifications));
+       // error_log("count-------------".count($notifications));
      foreach($notifications as $notification){
           $recipient_list=array();
          
@@ -702,7 +710,7 @@ use \ArrayObject;
                 $ticket_data= TicketCollection::getTicketDetails($notification['TicketId'],$projectId,$selectfields);
                 $ticket_msg='to'. ' '.'#'. $notification['TicketId'] .' ' .$ticket_data['Title'];
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
-                error_log("activtiy form---------------".$notification['ActivityFrom']);
+              //  error_log("activtiy form---------------".$notification['ActivityFrom']);
                 $from_user= TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
                 
                   
@@ -768,7 +776,7 @@ EOD;
                     
                     else if($notification['ActivityOn']=='FollowObj')
                     {
-                        error_log("added");
+                      //  error_log("added");
                         
                             if($notification['NotifiedUser']==$notification['NewValue']) //if logged in user has been added
                             {
@@ -800,7 +808,7 @@ EOD;
                     
                     
                     /***** Any changes in Editor ***********/
-                  else if($notification['Notification_Type'] == "comment" || $notification['Notification_Type'] == "reply"){
+                  else if($notification['ActivityOn']=="comment"){
                         $datetime = $notification['NotificationDate']->toDateTime();
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                         $Date = $datetime->format('M-d-Y H:i:s');
@@ -813,9 +821,9 @@ EOD;
                       
                     // $message=array('from'=>$from_user['UserName'],'object'=>$object,'type'=>$type,'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                     // array_push($result_msg,$message);
-                     
+          error_log("Notification___Type___________########################".$notification['Notification_Type'] );       
           if($notification['Notification_Type'] == "comment"){
-              error_log("comment-----------------------");
+            //  error_log("comment-----------------------22222");
                $preposition = "on";
                            $object = "comment";
                            $type =  Yii::$app->params['comment'];
@@ -825,14 +833,35 @@ EOD;
 EOD;
             
     } 
-              if($notification['Notification_Type'] == "reply"){
-                   error_log("replyyyyyyyyyyyyy-----------------------");
+              else if($notification['Notification_Type'] == "reply"){
+                 //  error_log("replyyyyyyyyyyyyy-----------------------111111111111s");
                       $preposition = "";
                        $object = "reply";
-                             $type =  Yii::$app->params['reply'];
+                             $type =  Yii::$app->params['reply']; 
                $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
             $text_message = <<<EOD
 <a href={$link}>#{$ticketId} {$title} </a> <br/> replied by {$fromUser}
+EOD;
+            
+    } 
+                  else if($notification['Notification_Type'] == "edit"){
+                 //  error_log("replyyyyyyyyyyyyy-----------------------111111111111s");
+                      $preposition = "";
+                       $object = "edit";
+                             $type =  Yii::$app->params['reply']; 
+               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+            $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> <br/> comment edited by {$fromUser}
+EOD;
+            
+    }    else if($notification['Notification_Type'] == "delete"){
+                 //  error_log("replyyyyyyyyyyyyy-----------------------111111111111s");
+                      $preposition = "";
+                       $object = "delete";
+                             $type =  Yii::$app->params['delete'];
+               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+            $text_message = <<<EOD
+<a href={$link}>#{$ticketId} {$title} </a> <br/> comment deleted by {$fromUser}
 EOD;
             
     } 
@@ -853,7 +882,7 @@ EOD;
                        // $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
                         if($notification['Notification_Type']=='mention')
                         {
-                            error_log("==in mention==");
+                        //    error_log("==in mention==");
                       
  $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
             $text_message = <<<EOD
@@ -871,7 +900,7 @@ EOD;
                    // {
                   // $storyField = StoryFields::getFieldDetails($notification['ActivityOn'],"Field_Name");
                          if(isset($storyField['Title'])){
-                             error_log("*******************************************")  ;
+                        //     error_log("*******************************************")  ;
                       
                          $storyFieldName=$storyField['Title'];
                              //Eg : moin.hussain set duedate to 'apr-14-2017'
@@ -915,13 +944,14 @@ EOD;
               
                    
                     /**** Changes in Editor End *************/
-                     error_log("sendEmailNotification--snedin eaml--");
+                  //   error_log("sendEmailNotification--snedin eaml--");
                   
            
-             error_log("send eamil--------------------".print_r($recipient_list,1));
+           //  error_log("send eamil--------------------".print_r($recipient_list,1));
              foreach ($recipient_list as &$value) {
                   $collaboratorData = TinyUserCollection::getMiniUserDetails($value);
                   $value = $collaboratorData['Email'];
+               //   error_log("EMAIL________________+++++++++++_____________".$value);
              }
                   
                   

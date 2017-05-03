@@ -766,7 +766,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     }
     
     public function removeComment($commentData){
-      TicketComments::removeComment($commentData);
+     $res = TicketComments::removeComment($commentData);
+     $notify_type = "delete";
+     $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
+     $mentionArray = $refinedData['UsersList'];  
+     $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$commentData->Comment->Slug);
+     
     }
   
     public function saveComment($commentData){
@@ -776,12 +781,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
             $ticketDetails=TicketCollection::getTicketDetails($commentData->TicketId,$commentData->projectId);//added By Ryan
             
-                            
+            $mentionArray = $refinedData['UsersList'];               
             $processedDesc = $refinedData["description"];
             $artifacts = $refinedData["ArtifactsList"];
             $commentDesc = $commentData->Comment->CrudeCDescription;
             if (isset($commentData->Comment->Slug)) {
                  error_log("saveComment-------------2");
+                $slug=$commentData->Comment->Slug;
                 $collection = Yii::$app->mongodb->getCollection('TicketComments');
 //}
                 $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc));
@@ -791,6 +797,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 if (!empty($artifacts)) {
                     TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
                 }
+                 $notify_type = "edit";
+                $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
                 return $retData;
             } else {
  error_log("saveComment-------------3");
@@ -830,16 +838,16 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 
                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketDetails['TicketId']."?Slug=".$slug;
                                 $mentionArray = $refinedData['UsersList'];
-                                    if($commentData->Comment->Reply==false)
-                                    {
+                                   // if($commentData->Comment->Reply==false)
+                                   // {
                                        $notify_type = "comment";
                                        $actionName = "commented";
-                                    }
-                                    else
-                                    {
-                                       $notify_type = "reply";
-                                        $actionName = "replied";
-                                     }
+                                   // }
+//                                    else
+//                                    {
+//                                       $notify_type = "reply";
+//                                        $actionName = "replied";
+//                                    }
                                $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
 
                             } catch (Exception $ex) {
