@@ -483,6 +483,10 @@ class StoryController extends Controller
        error_log("submit comment==============");
        $comment_post_data=json_decode(file_get_contents("php://input"));
        error_log(print_r($comment_post_data,1));
+       
+                if(isset($comment_post_data->Comment->OrigianalCommentorId)){
+                $comment_post_data->Comment->OriginalCommentorId=$comment_post_data->Comment->OrigianalCommentorId;
+            }
        $returnData = ServiceFactory::getStoryServiceInstance()->saveComment($comment_post_data);
        $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
