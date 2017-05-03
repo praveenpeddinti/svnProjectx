@@ -9,6 +9,7 @@ import { Camera, File, FilePath, Transfer } from 'ionic-native';
 import { DashboardPage } from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var cordova: any;
+declare var RE: any;
 
 @Component({
     selector: 'page-story-create',
@@ -25,6 +26,7 @@ export class StoryCreatePage {
     public displayedClassColorValue = "";
     private lastImage: string = null;
     private progressFile: number;
+    public myHTML: any;
 
     constructor(
         public navCtrl: NavController,
@@ -82,8 +84,14 @@ export class StoryCreatePage {
         );
          this.progressFile = 0;
     }
-    ionViewDidLoad() {}
+
+    ionViewDidLoad() {
+        RE.editor = document.getElementById('editor');
+        RE.editor.addEventListener("touchstart", RE.touchstart);
+        RE.editor.addEventListener("touchend", RE.touchend);
+    }
     public onStoryCreate(form): void {
+        this.myHTML = document.getElementById('editor').innerHTML;
         if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();
