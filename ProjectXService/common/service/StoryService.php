@@ -524,7 +524,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         if($activity != "noupdate")
                         {
                             error_log("sending notificiaont------".$fieldName);
-                        $this->saveNotifications($editticket,$fieldName,$ticket_data->$key,$projectId);
+                        $this->saveNotifications($editticket,$fieldName,$ticket_data->$key,$fieldDetails["Type"]);
                         }     
                         
                        }else{
