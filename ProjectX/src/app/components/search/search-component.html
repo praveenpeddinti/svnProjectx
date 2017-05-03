@@ -1,9 +1,21 @@
 <div class="search">
-<div class="searchresulttext">Search results for <span class="heighlight">{{searchString}}</span> in ProjectX</div>
+<div class="searchresulttext searchresulttextmarginzero">Search results for <span class="heighlight">{{searchString}}</span> in ProjectX</div>
+ <div class="tabbable tabs-left row">
+ 
+ <div class="col-xs-12 col-sm-3 col-md-3 tabpaddingrightzero">
+<ul class="nav nav-tabs">
+<li class="active"><a (click)="callsearchByClick(1)" data-toggle="tab">All</a></li>
+<li ><a (click)="callsearchByClick(2)" data-toggle="tab">Comments</a></li>
+<li><a (click)="callsearchByClick(3)" data-toggle="tab">Users</a></li>
+<li><a (click)="callsearchByClick(4)" data-toggle="tab">Artifacts</a></li>
+</ul>
 
-  <div *ngFor="let searchData of searchArray">
+ </div>
+  <div class="col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero">
+      
+     <div class="tab-content tab-content_content" >
+  <div id="mainSearchDiv" *ngFor="let searchData of searchArray">
 
-   
       <div *ngFor=" let finalData of searchData" >
          <div  *ngIf="finalData.description" class="searchdiv">
 <div class="searchresulttitle" *ngIf="!finalData.ProfilePicture">
@@ -46,6 +58,11 @@
 
 </div>
 <div id="searchsection"></div>
+</div>
+</div>
+
+</div>
+
 </div>
 
 
