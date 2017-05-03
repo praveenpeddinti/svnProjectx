@@ -234,6 +234,13 @@ use \ArrayObject;
             if($notifyType == "Title" || $notifyType == "Description")
             {
                 $oldValue = $ticketDetails[$notifyType]; 
+                 if($oldValue!=''){
+                            $notification_Type='changed';
+                        }
+                        else{
+                            $notification_Type='set';
+                          
+                        }
             }
             else if(isset($ticketDetails["Fields"][$notifyType]))
             {
@@ -385,7 +392,7 @@ use \ArrayObject;
                     
                          if($fieldType == "Description" || $fieldType == "Title"){
                              error_log("in descrioton--------");
-                            $tic->Notification_Type=$fieldType;
+                            $tic->Notification_Type=$notification_Type;
                             $tic->ActivityOn= $fieldType;
                             $tic->OldValue=$oldValue;
                             $tic->NewValue=$activityOn;
@@ -512,7 +519,13 @@ use \ArrayObject;
                           $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assigned'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params[$activityOn],"Preposition"=>$preposition);
                                 array_push($result_msg,$message); 
                     }
-            
+              else if($notification['ActivityOn']=='Description'){
+                    $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
+                                $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
+                   $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
+                     array_push($result_msg,$message);
+             }
+                 
                     
                     /* Left Panel newly assigned Field Values End */
                     
@@ -520,7 +533,7 @@ use \ArrayObject;
                     
                     /********* Followers Messages *****************/
                     
-                    if($notification['ActivityOn']=='FollowObj')
+                   else if($notification['ActivityOn']=='FollowObj')
                     {
                         error_log("added");
                         
@@ -630,7 +643,7 @@ use \ArrayObject;
                     //if($notification['Notification_Type']=='duedate' || $notification['Notification_Type']=='dod' || $notification['Notification_Type']=='estimatedpoints')
                    // {
                   // $storyField = StoryFields::getFieldDetails($notification['ActivityOn'],"Field_Name");
-                         if(isset($storyField['Title'])){
+                        else if(isset($storyField['Title'])){
                              error_log("*******************************************")  ;
                       
                          $storyFieldName=$storyField['Title'];
