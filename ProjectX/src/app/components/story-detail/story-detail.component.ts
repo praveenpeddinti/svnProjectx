@@ -229,13 +229,14 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
       CommentedOn:formatedDate,
       ParentIndex:"",
       Reply:this.replying,
-      OrigianalCommentorId:""
+      OriginalCommentorId:""
+
     },
   };
   // alert(JSON.stringify(reqData));
   if(this.replying == true){
     if(this.replyToComment != -1){
-    reqData.Comment.OrigianalCommentorId = jQuery("#replySnippetContent").attr("class");
+    reqData.Comment.OriginalCommentorId = jQuery("#replySnippetContent").attr("class");
     reqData.Comment.ParentIndex=this.replyToComment+"";
     }
 
@@ -1101,9 +1102,10 @@ var thisObj = this;
      * @param comment 
      */
     private commentEditorsInstance=[];
+    public commentorId:any;
    public editComment(comment)
    {
-    
+    this.commentorId=this.commentsList[comment].ActivityBy.CollaboratorId
     //var comment_div=document.getElementById("Activity_content_"+comment);
     //var editorInstance = CKEDITOR.replace(comment_div,this.toolbarForDetail);
     var edit_comment='Activity_content_'+comment;
@@ -1122,14 +1124,14 @@ var thisObj = this;
      if(editedContent != "" && jQuery(editedContent).text().trim() != ""){
      var commentedOn = new Date()
      var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear();
-
      var reqData = {
     TicketId:this.ticketId,
     Comment:{
       CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
       CommentedOn:formatedDate,
       ParentIndex:"",
-      Slug:slug
+      Slug:slug,
+      OriginalCommentorId:this.commentorId
     },
   };
   // alert(JSON.stringify(reqData)+"<---->edited content");
@@ -1165,22 +1167,29 @@ var thisObj = this;
    }
 
    deleteComment(commentIndex,slug){
+     var editedContent= jQuery("#Activity_content_"+commentIndex).summernote('code');
+     var CrudeCDescription=editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,"");
      var reqData;
      var parent;
-     if(this.commentsList[commentIndex].Status == 2){
+     this.commentorId=this.commentsList[commentIndex].ActivityBy.CollaboratorId ; 
+        if(this.commentsList[commentIndex].Status == 2){
             parent = parseInt(this.commentsList[commentIndex].ParentIndex);
              reqData = {
                   TicketId:this.ticketId,
                   Comment:{
                     Slug:slug,
-                    ParentIndex:parent
+                    ParentIndex:parent,
+                    OriginalCommentorId:this.commentorId,
+                    CrudeCDescription:CrudeCDescription
                   },
                 };
           }else{
               reqData = {
                 TicketId:this.ticketId,
                 Comment:{
-                  Slug:slug
+                  Slug:slug,
+                  OriginalCommentorId:this.commentorId,
+                  CrudeCDescription:CrudeCDescription
                 },
               };
           }
