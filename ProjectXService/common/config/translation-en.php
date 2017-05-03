@@ -7,6 +7,8 @@ return [
     "stakeholder"=>"as a stakeholder",
     "comment"=>"has commented",
     "reply"=>"has replied to your comment on",
+    "edit"=>"has edited comment",
+    "delete"=>"has deleted comment",
     "addedyou"=>"added you as follower",
     "added"=>"has added",
     "removed"=>"has removed",
