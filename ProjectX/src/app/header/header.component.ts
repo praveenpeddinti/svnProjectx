@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
             thisObj.notify_count=data.count;
             if(data.count == 0){
             jQuery("#notificationCount").hide();
+             jQuery(".notificationlist").remove();
             }else{
             jQuery("#notificationCount").show();
             jQuery("#notificationCount").html(data.count);
