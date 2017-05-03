@@ -86,9 +86,9 @@ export class StoryCreatePage {
     }
 
     ionViewDidLoad() {
-        RE.editor = document.getElementById('editor');
-        RE.editor.addEventListener("touchstart", RE.touchstart);
-        RE.editor.addEventListener("touchend", RE.touchend);
+//        RE.editor = document.getElementById('editor');
+//        RE.editor.addEventListener("touchstart", RE.touchstart);
+//        RE.editor.addEventListener("touchend", RE.touchend);
     }
     public onStoryCreate(form): void {
         this.myHTML = document.getElementById('editor').innerHTML;
