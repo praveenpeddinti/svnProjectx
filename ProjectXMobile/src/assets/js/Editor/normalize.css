@@ -411,3 +411,10 @@ td,
 th {
   padding: 0;
 }
+
+#editor {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-user-modify:read-write;
+
+}
