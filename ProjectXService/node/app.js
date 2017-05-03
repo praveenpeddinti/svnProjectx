@@ -75,29 +75,17 @@ app.post("/getAllNotifications",function(req,res,cb)
   child=spawn(dir+"/yii",['notifications/get-all-notifications',JSON.stringify(request)]);
         child.stdout.setEncoding('utf-8');
         child.stdout.on('data', function(data) {
-          console.log("getAllNotifications-- " +data);
-             res.send(data);
+            if(data!="" && data!=0 && data!=null){
+                console.log("getAllNotifications-- " +data+"---"+data.length);
+                  res.send(data);  
+            }
        });
           child.stderr.on('data', function(data) {
 //            logger.trace('stderr: ' + data);
             console.log("assignedTo-------error- "+data );
        });
 });
-app.post("/getAllNotificationsCount",function(req,res,cb)
-{
-    var request = req.body;
-    console.log(JSON.stringify(request));
-          child=spawn(dir+"/yii",['notifications/get-all-notifications-count',JSON.stringify(request)]);
-        child.stdout.setEncoding('utf-8');
-        child.stdout.on('data', function(data) {
-          console.log("get-all-notifications-count-- " +data);
-             res.send(data);
-       });
-          child.stderr.on('data', function(data) {
-//            logger.trace('stderr: ' + data);
-            console.log("assignedTo-------error- "+data );
-       });
-});
+
 
 app.post("/propertyChange",function(req,res,cb)
 {
@@ -126,13 +114,14 @@ app.post("/propertyChange",function(req,res,cb)
     {  
 
         client.on('getAllNotificationsCount', function(request) {
-            console.log('******************getAllNotificationsCount1***************'+request);
+            console.log('******************getAllNotificationsCount1***************'+JSON.stringify(request));
      getUnreadNotificationsCount(request,client);
-        setInterval(function(){
-    
-       getUnreadNotificationsCount(request,client);
-
-
+     var interval = "";
+     if(interval != ""){
+         clearInterval(interval); 
+     }
+     interval = setInterval(function(){
+           getUnreadNotificationsCount(request,client);
         },15000)
   
 
@@ -143,7 +132,10 @@ app.post("/propertyChange",function(req,res,cb)
             child.stdout.setEncoding('utf-8');
             child.stdout.on('data', function(data) {
               console.log("get-all-notifications-count-- " +data);
-                 client.emit("getAllNotificationsCountResponse",data);
+                if(data!="" && data!=0 && data!=null){
+                     client.emit("getAllNotificationsCountResponse",data);
+                }
+                
            });
               child.stderr.on('data', function(data) {
     //            logger.trace('stderr: ' + data);
