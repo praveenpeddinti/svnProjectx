@@ -521,7 +521,7 @@ use \ArrayObject;
                     }
               else if($notification['ActivityOn']=='Description'){
                     $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
-                                $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
+                     $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
                    $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
                      array_push($result_msg,$message);
              }
@@ -552,7 +552,7 @@ use \ArrayObject;
                             }
                          
 
-                            if($notification['Notification_Type'] == "followed"){
+                            if($notification['Notification_Type'] == "followed" || $notification['Notification_Type'] == "unfollowed"){
                                 $to="";
                                 $otherMessage = "";
                                 $preposition = "";
