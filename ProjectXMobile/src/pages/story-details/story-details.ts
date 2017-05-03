@@ -408,6 +408,7 @@ export class StoryDetailsPage {
         alert.present();
     }
     public deleteComment(commentId, slug) {
+        var editedContent= jQuery("#Activity_content_"+commentId+" .commentp").html();
         var commentParams;
         var parentCommentId;
         if (this.itemsInActivities[commentId].Status == 2) {
@@ -416,14 +417,16 @@ export class StoryDetailsPage {
                 TicketId: this.taskDetails.ticketId,
                 Comment: {
                     Slug: slug,
-                    ParentIndex: parentCommentId
+                    ParentIndex: parentCommentId,
+                    CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
                 },
             };
         } else {
             commentParams = {
                 TicketId: this.taskDetails.ticketId,
                 Comment: {
-                    Slug: slug
+                    Slug: slug,
+                    CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
                 },
             };
         }
@@ -482,12 +485,12 @@ export class StoryDetailsPage {
                     CommentedOn: formatedDate,
                     ParentIndex: "",
                     Reply:this.replying,
-                    OrigianalCommentorId:""
+                    OriginalCommentorId:""
                 },
             };
             if (this.replying == true) {
                 if (this.replyToComment != -1) {
-                    commentData.Comment.OrigianalCommentorId = jQuery("#replySnippetContent").attr("class");
+                    commentData.Comment.OriginalCommentorId = jQuery("#replySnippetContent").attr("class");
                     commentData.Comment.ParentIndex = this.replyToComment + "";
                 }
             }
