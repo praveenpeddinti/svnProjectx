@@ -494,8 +494,12 @@ use \ArrayObject;
                   
                    /*************** Left Panel Field Values newly assigned *********************/
                  $activityOn = $notification['ActivityOn'];
-                 $storyField = StoryFields::getFieldDetails($activityOn,"Field_Name");;
-                 $activityOnFieldType = $storyField["Type"];   
+                 $activityOnFieldType = "";
+                 if($activityOn !="Title" && $activityOn != "Description"){
+                     $storyField = StoryFields::getFieldDetails($activityOn,"Field_Name");;
+                    $activityOnFieldType = $storyField["Type"];  
+                 }
+                  
                  if($activityOnFieldType== 6) //newly assigned 
                     {
                         //$action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
@@ -693,7 +697,7 @@ use \ArrayObject;
             }
                 
                 
-                error_log("==Result Msg==".print_r($result_msg,1));
+               // error_log("==Result Msg==".print_r($result_msg,1));
           
            // return $notifications;
             return $result_msg;
