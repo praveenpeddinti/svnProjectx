@@ -558,7 +558,8 @@ use \ArrayObject;
                     
                     /***** Any changes in Editor ***********/
                     error_log("notifc t-------------------".$notification['Notification_Type']);
-                   if($notification['ActivityOn']=="comment"){
+                   $commentAllowedArray = ["comment","reply","edit","delete"];
+                   if($notification['ActivityOn']=="comment" && (in_array($notification['Notification_Type'],$commentAllowedArray))){
                         $datetime = $notification['NotificationDate']->toDateTime();
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                         $Date = $datetime->format('M-d-Y H:i:s');
@@ -596,7 +597,7 @@ use \ArrayObject;
                      array_push($result_msg,$message);
                  }
                    
-                  if($notification['Notification_Type'] == "mention" )
+                 else if($notification['Notification_Type'] == "mention" )
                    {
                        $datetime = $notification['NotificationDate']->toDateTime();
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
