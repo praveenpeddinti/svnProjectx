@@ -826,7 +826,8 @@ EOD;
                     
                     
                     /***** Any changes in Editor ***********/
-                  else if($notification['ActivityOn']=="comment"){
+                    $commentAllowedArray = ["comment","reply","edit","delete"];
+                   if($notification['ActivityOn']=="comment" && (in_array($notification['Notification_Type'],$commentAllowedArray))){
                         $datetime = $notification['NotificationDate']->toDateTime();
                         $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                         $Date = $datetime->format('M-d-Y H:i:s');
