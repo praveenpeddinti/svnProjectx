@@ -34,7 +34,7 @@ class NotificationsController extends Controller
             $offset = 0;
             $limit = 5;
             $notification_data = json_decode($data);
-            error_log("Post__DATA".print_r($notification_data,1));
+           // error_log("Post__DATA".print_r($notification_data,1));
             $page=$notification_data->page;
             $viewAll=$notification_data->viewAll;
             if($viewAll==1) {
