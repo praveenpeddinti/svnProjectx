@@ -257,6 +257,12 @@ use \ArrayObject;
                                 $activityOn='set';
                                 $oldValue='';
                             }
+                          if($fieldType == 4){
+                                       $validDate = CommonUtility::validateDate($newValue);
+                                      if($validDate){
+                                     $newValue = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+                                       }
+                             }    
                     }
                     else if($fieldType==6)
                     {
@@ -430,7 +436,9 @@ use \ArrayObject;
                         }
                     }
                     else
-                    {
+                    {                
+                          
+                        
                         $tic->Notification_Type=$activityOn;
                         $tic->Status=0;
                         $tic->OldValue=$oldValue;
@@ -440,8 +448,8 @@ use \ArrayObject;
                     
                 }
                      
-                                error_log("before sendign assing to notircioant-****-".print_r($notificationIds,1));
-                                self::sendEmailNotification($notificationIds,$projectId);
+             error_log("before sendign assing to notircioant-****-".print_r($notificationIds,1));
+             self::sendEmailNotification($notificationIds,$projectId);
                      
             
         } catch (Exception $ex) {
