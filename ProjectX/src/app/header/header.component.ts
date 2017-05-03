@@ -38,7 +38,9 @@ export class HeaderComponent implements OnInit {
     
       
         socket.on('getAllNotificationsCountResponse', function(data) {
+       
             data = JSON.parse(data); 
+             console.log("getAllNotificationsCountResponse-----------"+data.count);
             thisObj.notify_count=data.count;
             if(data.count == 0){
             jQuery("#notificationCount").hide();
