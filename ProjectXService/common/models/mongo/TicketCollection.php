@@ -107,8 +107,8 @@ class TicketCollection extends ActiveRecord
 
       }  
     }
-
     
+              
      /**
      * @author Moin Hussain
      * @param type $ticketId

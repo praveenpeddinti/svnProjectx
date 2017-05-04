@@ -503,7 +503,7 @@ class StoryController extends Controller
        $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $returnData;
+            $responseBean->data = "success";
             $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
    }

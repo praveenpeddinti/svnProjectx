@@ -152,7 +152,7 @@ use \ArrayObject;
                     $tic->Notification_Type='mention';
                     //$tic->ActivityOn=$user['Id']; //previous use case
                     //eg: moin.hussain mentioned you
-                    $tic->ActivityOn=$notify_type;
+                    $tic->ActivityOn="comment";
                     $tic->Status=0;
                     $tic->CommentSlug=$slug;
                     $result = $tic->save();
@@ -225,12 +225,14 @@ use \ArrayObject;
            $ticketId =  isset($notification_data->TicketId) ? $notification_data->TicketId : $notification_data->data->TicketId;
            // $ticketId=$notification_data->TicketId;
             $projectId=$notification_data->projectId;
-            $from=$notification_data->userInfo->username;
+           // $from=$notification_data->userInfo->username;
             $loggedInUser=$notification_data->userInfo->Id;         
             $notify_type=$notifyType;//this will be changed to ActivityOn in the below code....
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
             $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
             $followers=$ticketDetails['Followers'];
+            
+            $followers = CommonUtility::filterFollowers($followers);
             if($notifyType == "Title" || $notifyType == "Description")
             {
                 $oldValue = $ticketDetails[$notifyType]; 
@@ -479,7 +481,7 @@ use \ArrayObject;
             //constucting the notifications for the user
             error_log("not cont--------------------".count($notifications));
             foreach($notifications as $notification)
-            {
+            {  
                  error_log($notification['_id']."==Notification Type==".$notification['Notification_Type']);
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -784,7 +786,17 @@ EOD;
  
          array_push($recipient_list,$notification['NotifiedUser']);  
                     }
-            
+              else if($notification['ActivityOn']=='Description'){
+                    $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
+                     $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
+                   $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
+                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+                                $text_message = <<<EOD
+{$fromUser} has assigned {$to} {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
+EOD;
+ 
+         array_push($recipient_list,$notification['NotifiedUser']); 
+             }
                     
                     /* Left Panel newly assigned Field Values End */
                     

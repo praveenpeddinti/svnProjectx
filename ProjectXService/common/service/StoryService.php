@@ -768,10 +768,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     public function removeComment($commentData){
      $res = TicketComments::removeComment($commentData);
      $notify_type = "delete";
-     $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
-     $mentionArray = $refinedData['UsersList']; 
+    // $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
+    // $mentionArray = $refinedData['UsersList']; 
      $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
-     $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$commentData->Comment->Slug);
+     $this->saveNotificationsForComment($commentData,array(),$notify_type,$commentData->Comment->Slug);
      
     }
   
@@ -1117,10 +1117,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         try{
             $returnStatus="failure";
             $ticketCollectionModel = new TicketCollection();
-            $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->TicketId, $postData->projectId);
+           $loggedInUserId =  $postData->userInfo->Id;
+           $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->TicketId, $postData->projectId);
+             // $ticketDetails = $ticketCollectionModel->getTicketDetails1($postData->TicketId, $postData->projectId);
             $storyField = new StoryFields();
             $standardFields = $storyField->getStoryFieldList();
             $description = "<p>Please provide description here</p>";
+            $newFollowersArray = array();
             foreach ($standardFields as $field) {
                      $fieldBean = new FieldBean();
                      $fieldId =  $field["Id"];
@@ -1134,8 +1137,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $fieldBean->value_name = $ticketDetails['Fields']['bucket']['value_name'];
                      }
                     else if($fieldName == "reportedby"){
-                         $fieldBean->value= $ticketDetails['Fields']['reportedby']['value']; 
-                         $fieldBean->value_name= $ticketDetails['Fields']['reportedby']['value_name']; 
+                         $fieldBean->value= (int)$loggedInUserId; 
+                          $collaboratorData = TinyUserCollection::getMiniUserDetails($loggedInUserId);
+                         $fieldBean->value_name= $collaboratorData["UserName"]; 
                      }
                      else if($fieldName == "tickettype"){
                           $fieldBean->value= (int)1; 
@@ -1174,6 +1178,16 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                           $fieldBean->value=""; 
                      }
                      $dataArray[$fieldName]= $fieldBean;
+                     if($fieldType == 6){
+                        $collaboratorId = $ticketDetails["Fields"][$fieldName]["value"];
+                        if($collaboratorId != ""){
+                            $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+                            $follower =  array("FollowerId" => (int)$collaboratorId,"FollowedOn" =>$currentDate,"CreatedBy"=>(int)$loggedInUserId,"Flag"=>$fieldName,"DefaultFollower"=>(int)1 );
+                            array_push($newFollowersArray, $follower);
+                        }
+                      
+                         
+                     }
                    }
            $ticketModel = new TicketCollection();
            $ticketModel->WorkflowType = (int)1;
@@ -1199,8 +1213,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                array_push($parentTasks,$lastChiledTicket);
                TicketCollection::updateChildTaskObject($postData->TicketId,$postData->projectId,$parentTasks);
                TicketComments::createCommentsRecord($ticketNumber,$postData->projectId);
-               if(!empty($ticketDetails['Followers'])){
-                    $this->updateFollowersForSubTask($ticketNumber,$postData->projectId,$ticketDetails['Followers']);
+               error_log("--newFollowersArray--".count($newFollowersArray));
+               if(!empty($newFollowersArray)){
+                  $this->updateFollowersForSubTask($ticketNumber,$postData->projectId,$newFollowersArray);
                }
                $selectFields = [];
                $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto','Fields.assignedto','Fields.workflow'];
@@ -1366,7 +1381,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
        public function updateFollowersForSubTask($ticketId,$projectId,$followerArray){
         try{
             $db =  TicketCollection::getCollection();
-            $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Followers' =>array('$each'=>$followerArray))),array('new' => 1,"upsert"=>1)); 
+            $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$push'=> array('Followers' =>array('$each'=>$followerArray))),array('new' => 1,"upsert"=>1)); 
            
         } catch (Exception $ex) {
             Yii::log("StoryService:updateFollowersForSubTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -1410,6 +1425,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     return true;
                 } else if ($newWorkflowId == 10 || $newWorkflowId == 7 || $newWorkflowId == 1 || $newWorkflowId == 8) {  // 10 --Re-open  7 -- Invalid 1--New 8--Fixed
                     if (sizeof($oldTicketObj['Tasks']) != 0 || $oldTicketObj['Tasks'] != NULL) {
+                        error_log("updateWorkflowAndSendNotification-----------------2");
                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
                         foreach ($oldTicketObj['Tasks'] as $task) {
                             //  error_log("Task type------------".$task['TaskType']);
@@ -1421,12 +1437,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             case 1 :
                             case 7 :   // 1-New,7 -- Invalid
                                 // send notification to assigned to person
+                            $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                             //$this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             break;
 
                             case 8 : // 8-Fixed
-
+                            $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             $fixedworkflowDetail = WorkFlowFields::getWorkFlowDetails(8);
                             $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Get closed status details
                             if ($taskDetails['WorkflowType'] == 1) {
@@ -1441,6 +1458,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             break;
 
                             case 10 : // 10 -Reopen
+                                $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             if ($taskDetails['Fields']['workflow']['value'] == 7) {
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                             // send notification to all child ticket
@@ -1450,7 +1468,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                                     //send notification to Peer  
                             }
-                           // $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                            
                             break;
                         }
 
@@ -1487,6 +1505,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 }
                
             } else if ($oldTicketObj['WorkflowType'] == 4) { // 4--QA
+                 error_log("updateWorkflowAndSendNotification-----------------3");
                 $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
                 $ticket_array=array('TicketId'=>$parentTicketDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
                 $ticket_data=json_decode(json_encode($ticket_array,1));
@@ -1499,24 +1518,34 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 
                     case 14 :
                         // 14- Closed
-                    $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
+                   // $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
                     $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
                     foreach ($parentTicketDetails['Tasks'] as $task) {
+                       
                        $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
-                       $task_array=array('TicketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser)); 
-                        // Peer UI QA status updated to Close
-                        $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                        if($taskDetails['WorkflowType']==1){
-                         $fixedworkflowDetail = WorkFlowFields::getWorkFlowDetails(8); 
-                         $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $fixedworkflowDetail['Id'], 'Fields.workflow.value_name' => $fixedworkflowDetail['Name'], 'Fields.state.value' => (int) $fixedworkflowDetail['StateId'], 'Fields.state.value_name' => $fixedworkflowDetail['State'])));
-   
+                       error_log("old ticket id----".$oldTicketObj['TicketId']."----".$task['TaskId']."**************************".$taskDetails['Fields']["workflow"]["value"]);
+                        if($oldTicketObj['TicketId'] == $task['TaskId'] || $taskDetails['Fields']["workflow"]["value"]==14){ //QA task
+                            error_log("contineu------------****");
+                            continue;
                         }
-                       // $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);  
+                       $task_array=array('TicketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser)); 
+                       $child_ticket_data=json_decode(json_encode($task_array,1));
+                     
+                       // Peer UI QA status updated to Close
+                       // $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
+                        if($taskDetails['WorkflowType']==1){
+                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails(8); 
+                         $newWorkflowId = 8;
+                        }
+                     $this->saveNotifications($child_ticket_data,'workflow',$newWorkflowId);
+                   $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                         
                     }
+                     
                     $ticketId = $oldTicketObj['ParentStoryId'];
                     $workFlowDetail = WorkFlowFields::getWorkFlowDetails(8); // Fixed parent ticket
                     // Parent ticket status updated to re-open
+                     $this->saveNotifications($ticket_data,'workflow',8);
                     $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                     // Send Notification toAll followers.
                     error_log("Send Notification to All followers");
