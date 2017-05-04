@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit {
             jQuery("#notificationCount").show();
             jQuery("#notificationCount").html(data.count);
             }
-
+  
         });
 
 

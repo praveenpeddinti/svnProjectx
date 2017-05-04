@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { AjaxService } from '../ajax/ajax.service';
-
+declare var io:any;
+declare var socket:any;
 import 'rxjs/add/operator/toPromise';
 export class Collaborator {
   constructor(
@@ -24,6 +25,7 @@ export class LoginService {
   * logout the current Collabarator
  */
   logout(logoutCallback) {
+   socket.emit("clearInterval");
       this._ajaxService.AjaxSubscribe("site/update-collabarator-status",{},function(result){
        localStorage.removeItem("user");
        logoutCallback(result);
