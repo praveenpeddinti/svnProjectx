@@ -11,7 +11,7 @@ var dir = "/usr/share/nginx/www/ProjectXService";
 var exec = require('child_process').exec;
 var child;
 console.log("entry");
- 
+ var globalArray = [];
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -111,19 +111,17 @@ app.post("/propertyChange",function(req,res,cb)
  var io = require('socket.io')(server);
  console.log("in");
     io.sockets.on('connection', function(client)
-    {  
+    {   console.log('Connection started---------------------'+client.id);
 
         client.on('getAllNotificationsCount', function(request) {
             console.log('******************getAllNotificationsCount1***************'+JSON.stringify(request));
      getUnreadNotificationsCount(request,client);
-     var interval = "";
-     if(interval != ""){
-         clearInterval(interval); 
-     }
-     interval = setInterval(function(){
+    
+   
+     var interval = setInterval(function(){
            getUnreadNotificationsCount(request,client);
         },15000)
-  
+     globalArray[client.id] = interval;
 
        });
        
@@ -139,10 +137,23 @@ app.post("/propertyChange",function(req,res,cb)
            });
               child.stderr.on('data', function(data) {
     //            logger.trace('stderr: ' + data);
-                console.log("assignedTo-------error- "+data );
+                console.log(client.id+"----getUnreadNotificationsCount-------error- "+data );
            });
     }
-
+     client.on('clearInterval', function()
+    {
+//        logger.trace('Client disconnected');
+       console.log('Client clearInterval-- '+client.id);
+       clearInterval(globalArray[client.id]);
+        
+    });
+ client.on('disconnect', function()
+    {
+//        logger.trace('Client disconnected');
+       console.log('Client disconnected-- '+client.id);
+       clearInterval(globalArray[client.id]);
+        
+    });
     });
     
    
