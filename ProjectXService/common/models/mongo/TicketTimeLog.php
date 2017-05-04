@@ -129,8 +129,9 @@ class TicketTimeLog extends ActiveRecord
             $matchArray = array("TicketId" => array('$in' => $ticketsList), "ProjectId" => (int) $projectId);
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
-                array('$match' => $matchArray),
+               
                 array('$unwind'=> '$TimeLog'),
+                array('$match' => $matchArray),
                 array(
                     '$group' => array(
                         '_id' => '$TimeLog.CollaboratorId',
