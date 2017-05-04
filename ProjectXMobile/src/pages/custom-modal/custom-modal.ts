@@ -41,10 +41,15 @@ export class CustomModalPage {
       this.activatedFieldValue = jQuery("#field_title_" + params.get('activatedFieldIndex')).text();
   }
   public dismiss(selectedItem) {
+    console.log("the data " + JSON.stringify(selectedItem));
+    jQuery("#modelitem_"+selectedItem.Id).addClass("itemClick");
       if(Object.keys(selectedItem).length > 0){
           selectedItem['previousValue'] = this.activatedFieldValue;
       }
+      setTimeout( ()=>{
           this.viewCtrl.dismiss(selectedItem);
+      }, 500);
+          
   }
   ionViewDidLoad() {}
   public ionViewDidEnter(){}

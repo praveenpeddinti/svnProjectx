@@ -13,16 +13,18 @@
 </ion-header>
 <ion-content #scrollContent padding>   
     <ion-list no-lines>
-        <ion-item style="border-bottom: 1px solid #ccc;" 
-                  *ngFor="let item of displayFieldvalue; let i=index;" 
-                  [ngClass]="{'selectedMember': activatedFieldValue == item.Name}"
-                  (click)="dismiss(item)" center> 
-                  <div id="item_{{i}}"> 
-                      <ion-icon *ngIf="activatedFieldValue == item.Name" name="checkmark"></ion-icon> 
-                        {{item.Name}} 
-                        <i *ngIf="isPriority" class="fa fa-circle {{item.Name}}" aria-hidden="true"></i> 
-                  </div> 
-        </ion-item>
+        <ng-container *ngFor="let item of displayFieldvalue; let i=index;" >
+            <ion-item style="border-bottom: 1px solid #ccc;" 
+                    id="modelitem_{{item.Id}}"
+                    [ngClass]="{'selectedMember': activatedFieldValue == item.Name}"
+                    (click)="dismiss(item)" center> 
+                    <div> 
+                        <ion-icon *ngIf="activatedFieldValue == item.Name" name="checkmark"></ion-icon> 
+                            {{item.Name}} 
+                            <i *ngIf="isPriority" class="fa fa-circle {{item.Name}}" aria-hidden="true"></i> 
+                    </div> 
+            </ion-item>
+        </ng-container>
     </ion-list>
     
     
