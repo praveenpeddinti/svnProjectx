@@ -34,7 +34,7 @@ export class StoryDetailsPage {
     private editCommentOpenClose = [];
     private newCommentOpenClose = true;
     private newSubmitOpenClose = true;
-    private editSubmitUploadClose = true;
+    private editSubmitOpenClose = true;
     public commentDesc = "";
     private lastImage: string = null;
     private progressNew: number;
@@ -211,7 +211,7 @@ export class StoryDetailsPage {
             jQuery(document).bind("click",function(event){ 
                 if(jQuery(event.target).closest('.submitcommentupload').length == 0 && jQuery(event.target).closest('.commentTextArea').length == 0){ 
                     thisObj.newSubmitOpenClose = true;
-                    thisObj.editSubmitUploadClose = true;
+                    thisObj.editSubmitOpenClose = true;
                 }
             });
         });
@@ -275,6 +275,11 @@ export class StoryDetailsPage {
             ev: myEvent
         });
     }
+
+    public titleEdit(event) {
+        //this.enableEdatable = true;
+    }
+
     public updateTitleSubmit() {
         this.enableEdatable = false;
         this.taskDetails.title = this.titleAfterEdit;
@@ -468,7 +473,7 @@ export class StoryDetailsPage {
             this.newSubmitOpenClose = false;
         }
         else{
-            this.editSubmitUploadClose = false; 
+            this.editSubmitOpenClose = false; 
         }
     }
     public submitComment() {
@@ -680,9 +685,11 @@ export class StoryDetailsPage {
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                 if (where == "comments") {
                     this.commentDesc = this.commentDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                    this.newSubmitOpenClose = false;
                 } else if (where == "edit_comments") {
                     appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
                     jQuery("#Actions_" + comment + " .textEditor").val(appended_content);
+                    this.editSubmitOpenClose = false;
                 } 
             }
             return 'uploaded';

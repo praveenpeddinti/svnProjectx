@@ -84,7 +84,6 @@
                 </div>
             </div>
         </div>
-
         <div class="padding10">
             <ul class="custnavtabs" role="tablist">
                 <li class="t_comments active"><a aria-controls="t_comments" ><i class="fa fa-weixin" aria-hidden="true"></i></a></li>
@@ -150,7 +149,7 @@
                                                         <progress [value]="progressEdit" max="100"></progress>
                                                     </div>
                                                     <div id="progressFileUploadEdit"></div>
-                                                    <div class="customrow submitcommentupload" [hidden]='editSubmitUploadClose'>
+                                                    <div class="customrow submitcommentupload" [hidden]='editSubmitOpenClose'>
                                                         <div class="col50">
                                                             <div class="">
                                                                 <button class="buttonicon linkbutton" (click)="presentActionSheet('fileChange','edit_comments',i)"><i class="fa fa-paperclip" aria-hidden="true"></i></button>
