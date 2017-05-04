@@ -199,10 +199,7 @@ export class StoryDetailsPage {
         if (day.length < 2) day = '0' + day;
         return [month, day, year].join('-');
     }
-    ionViewDidLoad() {
-        document.addEventListener('touchmove', function(e){e.preventDefault()}, false);
-        document.getElementById('inner-scroll').addEventListener('touchmove', function(e){e.stopPropagation()}, false);
-    }
+    ionViewDidLoad() {}
     ionViewDidEnter() {
         if (jQuery('#description').height() > 200) {
             jQuery('#description').css("height", "200px");
