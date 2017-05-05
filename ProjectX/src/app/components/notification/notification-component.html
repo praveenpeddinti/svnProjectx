@@ -5,10 +5,10 @@
 </div>
 <div >
 <ul id="notifications_list" class="notification_all">
-  <li class="notificationlist" *ngIf="allNotification.length==0" id="notificationMessage">
+  <li class="notificationlist_all" *ngIf="allNotification.length==0" id="notificationMessage">
      <div class="notificationdiv nonotification">No Notifications</div>
  </li>  
-<li *ngFor="let notify of allNotification "   class="notificationlist">
+<li *ngFor="let notify of allNotification "   class="notificationlist_all">
 <div class="notificationdiv {{(notify.IsSeen==0)?'unreadnotification':''}} " id="notify_no_{{notify.id.$oid}}">
 <span class="notificationusericon">
 <img src="{{notify.Profile}}"/>
@@ -51,7 +51,7 @@
 </a>
 </div>
 </li>
-<li class="notificationlist" *ngIf="nomorenotifications" id="notificationMessage">
+<li class="notificationlist_all" *ngIf="nomorenotifications" id="notificationMessage">
      <div class="notificationdiv nonotification">No more notifications</div>
 </li> 
 </ul>

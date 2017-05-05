@@ -1131,7 +1131,6 @@ var thisObj = this;
       CommentedOn:formatedDate,
       ParentIndex:"",
       Slug:slug,
-      OriginalCommentorId:this.commentorId
     },
   };
   // alert(JSON.stringify(reqData)+"<---->edited content");
@@ -1179,7 +1178,6 @@ var thisObj = this;
                   Comment:{
                     Slug:slug,
                     ParentIndex:parent,
-                    OriginalCommentorId:this.commentorId,
                     CrudeCDescription:CrudeCDescription
                   },
                 };
@@ -1188,7 +1186,6 @@ var thisObj = this;
                 TicketId:this.ticketId,
                 Comment:{
                   Slug:slug,
-                  OriginalCommentorId:this.commentorId,
                   CrudeCDescription:CrudeCDescription
                 },
               };

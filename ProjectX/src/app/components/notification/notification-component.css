@@ -13,15 +13,15 @@
 /* notification div */
 
 .notification_all{border-radius:3px;list-style:none;padding:5px 0;margin:0;width:100%;}
-.notification_all .notificationlist{padding:0px 0px 0px;}
-.notification_all .notificationlist .notificationdiv{position:relative;padding:10px 5px;background:#fff;border-radius:3px; border-bottom:1px dotted #ccc;}
-.notification_all .notificationlist .notificationdiv .notificationusericon{position:absolute;width:30px;height:30px;max-width:30px;max-height:30px}
-.notification_all .notificationlist .notificationdiv .notificationusericon img{width:30px;height:30px;border-radius:100px;}
-.notification_all .notificationlist .notificationdiv .not_description{padding:0px 40px 0px 40px}
-.notification_all .notificationlist .notificationdiv .not_description .not_header{color:#a2a2a2;font-size:12px}
-.notification_all .notificationlist .notificationdiv .not_description .not_content{color:#7b7b7b;font-size:14px;line-height:16px;cursor: pointer}
-.notification_all .notificationlist .notificationdiv .not_description .not_content .not_mention{color:#0199e0}
-.notification_all .notificationlist .notificationdiv .not_description .not_header .not_profilename{color:#0199e0;font-size:16px}
+.notification_all .notificationlist_all{padding:0px 0px 0px;}
+.notification_all .notificationlist_all .notificationdiv{position:relative;padding:10px 5px;background:#fff;border-radius:3px; border-bottom:1px dotted #ccc;}
+.notification_all .notificationlist_all .notificationdiv .notificationusericon{position:absolute;width:30px;height:30px;max-width:30px;max-height:30px}
+.notification_all .notificationlist_all .notificationdiv .notificationusericon img{width:30px;height:30px;border-radius:100px;}
+.notification_all .notificationlist_all .notificationdiv .not_description{padding:0px 40px 0px 40px}
+.notification_all .notificationlist_all .notificationdiv .not_description .not_header{color:#a2a2a2;font-size:12px}
+.notification_all .notificationlist_all .notificationdiv .not_description .not_content{color:#7b7b7b;font-size:14px;line-height:16px;cursor: pointer}
+.notification_all .notificationlist_all .notificationdiv .not_description .not_content .not_mention{color:#0199e0}
+.notification_all .notificationlist_all .notificationdiv .not_description .not_header .not_profilename{color:#0199e0;font-size:16px}
 .notificationdelete{position:absolute;width:30px;height:30px;border-radius:100px;background:#eeeeee;background:-moz-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:-webkit-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:linear-gradient(to bottom,#eeeeee 0%,#eeeeee 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee',endColorstr='#eeeeee',GradientType=0);text-align:center;padding-top:4px;right:5px;top:10px}
 .notificationdelete{border:1px solid #e8e8e8;cursor: pointer}
 .notificationdelete:hover{border:1px solid #ccc}
