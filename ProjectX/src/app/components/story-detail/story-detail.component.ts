@@ -312,7 +312,7 @@ editTitle(titleId){
   
 }
 
-closeTitleEdit(editedText){
+closeTitleEdit(editedText){ 
         if(editedText !=""){
           // this.titleError="";
           document.getElementById(this.ticketId+"_title").innerHTML= editedText;
@@ -1449,6 +1449,15 @@ public callTicketDetailPage(ticId){
      * @description: This is used to display Attachments
      */
        this.getArtifacts(ticketIdObj);
+}
+     /**
+     * @author:Anand
+     * @description: Submit title on enter click
+     */
+submitOnEnter(event) { 
+  if(event.keyCode == 13) {
+   this.closeTitleEdit(event.target.value);
+  }
 }
 
     }
