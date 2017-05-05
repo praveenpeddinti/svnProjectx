@@ -462,7 +462,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                             }));
                                             break;
                                     }
-                                  if(!isEmpty($unfollowId))
+                                  if(!empty($unfollowId))
                                   $this->unfollowTicket($unfollowId,$follow_ticket_id[0]['TaskId'],$projectId,'follower',0);   
                                   $this->followTicket($ticket_data->$key,$follow_ticket_id[0]['TaskId'],$projectId,$userId,$fieldDetails["Field_Name"]='follower',FALSE);  
                                  }
@@ -690,7 +690,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                             }));
                                             break;
                                     }
-                                  if(!isEmpty($unfollowId))
+                                  if(!empty($unfollowId))
                                   $this->unfollowTicket($unfollowId,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,'follower',0);   
                                   $this->followTicket($ticket_data->value,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',FALSE);  
                                  }
