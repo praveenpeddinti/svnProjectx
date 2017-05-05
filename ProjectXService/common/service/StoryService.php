@@ -1458,13 +1458,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             break;
 
                             case 10 : // 10 -Reopen
-                                $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                                
                             if ($taskDetails['Fields']['workflow']['value'] == 7) {
+                                $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                             // send notification to all child ticket
                                 
                             } else if ($taskDetails['Fields']['state']['value'] == 6 && ($taskDetails['WorkflowType'] == 3 || $taskDetails['WorkflowType'] == 4)) {
                                   // send notification to Peer and QA
+                                $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                                     //send notification to Peer  
                             }
