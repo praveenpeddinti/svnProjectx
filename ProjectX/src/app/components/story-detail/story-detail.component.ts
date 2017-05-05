@@ -784,7 +784,7 @@ var thisObj = this;
             if(result.data.activityData.referenceKey == -1){
              this.commentsList.push(result.data.activityData.data);
             }
-       else{
+       else if(result.data.activityData != "noupdate"){
         this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
      }        
  }
