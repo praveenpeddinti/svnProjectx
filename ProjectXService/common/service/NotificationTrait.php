@@ -236,6 +236,9 @@ use \ArrayObject;
             if($notifyType == "Title" || $notifyType == "Description")
             {
                 $oldValue = $ticketDetails[$notifyType]; 
+                  if($oldValue == $activityOn){
+                   return;
+                 }
                  if($oldValue!=''){
                             $notification_Type='changed';
                         }
@@ -252,11 +255,14 @@ use \ArrayObject;
             
 //                    if(!($notify_type=='added' || $notify_type=='removed'))
 //                    { 
-                    if($fieldType==1 ||$fieldType==4 || $fieldType==5 || $fieldType==8)
+                     if($fieldType==1 ||$fieldType==4 || $fieldType==5 || $fieldType==8)
                     {
                         //for due date,dod and estimated points
                         $oldValue=$oldValue;
                         $newValue=$activityOn;
+                        if($oldValue == $newValue){
+                            return;
+                        }
                         if($oldValue!='') //if changed
                             {
                                 $activityOn='changed';
@@ -450,7 +456,7 @@ use \ArrayObject;
                         
                         $tic->Notification_Type=$activityOn;
                         $tic->Status=0;
-                        $tic->OldValue=$oldValue;
+                        $tic->OldValue=(string)$oldValue;
                         $tic->NewValue=$newValue;
                         $tic->save(); //here not sending emails for left hand side propert change excpet Assinged to , stake holder
                     }
