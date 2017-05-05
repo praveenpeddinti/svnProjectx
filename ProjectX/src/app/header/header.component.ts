@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   public notify_count:any=0;
   public pageNo=1;
   public searchresults;
+  public getnotificationTimeout:any=0;
    constructor(
     private _ajaxService: AjaxService,
     public _router: Router,
@@ -201,11 +202,16 @@ export class HeaderComponent implements OnInit {
      
    if(this.notify_count>0){
     console.log("show notify");
- var post_data={viewAll:0,page:1};
- this.notification_msg=[];
+  var post_data={viewAll:0,page:1};
+  if(this.getnotificationTimeout != 0){
+   clearTimeout(this.getnotificationTimeout);
+ }
+ 
+ this.getnotificationTimeout = setTimeout(()=>{
       this._ajaxService.NodeSubscribe('/getAllNotifications',post_data,(data)=>
       {
       console.log("--leing-------"+data.notify_result.length);
+       this.notification_msg=[];
       if(data.notify_result.length >0){
       
   jQuery("#notifications_list").show();
@@ -222,7 +228,7 @@ export class HeaderComponent implements OnInit {
         }
      
       });
-
+},500);
   
     }else{
       jQuery("#notifications_list").show();
