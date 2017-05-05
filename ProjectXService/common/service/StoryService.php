@@ -442,7 +442,31 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                     $this->followTicket($ticket_data->$key,$childticketId['TaskId'],$projectId,$userId,$fieldDetails["Field_Name"]='follower',FALSE,"FullUpdate");
                                 }
                                 }else{
-                                    $this->followTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$userId,$ticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE,"FullUpdate");
+                                $unfollowId='';
+                                $parentTicketDetails=TicketCollection::getTicketDetails($ticketDetails['ParentStoryId'],$projectId);
+                                
+                                 if($fieldDetails["Field_Name"]=='assignedto'){
+                                   if($ticketDetails['Fields'][$key]['value']!='' && $ticketDetails['Fields'][$key]['value']!= $ticket_data->$key ){
+                                     $unfollowId=$ticketDetails['Fields'][$key]['value'];
+                                    }
+                                    $follow_ticket_id='';
+                                    switch($ticketDetails['WorkflowType']){
+                                        case 3:
+                                            $follow_ticket_id=  array_values(array_filter($parentTicketDetails['Tasks'],function($val){
+                                             return $val['TaskType']==4; 
+                                            }));
+                                            break;
+                                        case 4:
+                                            $follow_ticket_id=array_values(array_filter($parentTicketDetails['Tasks'],function($val){
+                                                   return $val['TaskType']==3;
+                                            }));
+                                            break;
+                                    }
+                                  if(!isEmpty($unfollowId))
+                                  $this->unfollowTicket($unfollowId,$follow_ticket_id[0]['TaskId'],$projectId,'follower',0);   
+                                  $this->followTicket($ticket_data->$key,$follow_ticket_id[0]['TaskId'],$projectId,$userId,$fieldDetails["Field_Name"]='follower',FALSE);  
+                                 }
+                                 $this->followTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$userId,$ticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE,"FullUpdate");
                                 } 
                                 }
                                 else if($fieldDetails["Field_Name"] == "workflow"){
@@ -571,7 +595,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $valueName = "";
             $updatedState=array();
             $selectFields = [];
-            $selectFields = ['ProjectId','WorkflowType','TicketId','ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Fields.workflow.value','Tasks'];
+            $selectFields = ['ProjectId','WorkflowType','TicketId','ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Fields.workflow.value','Tasks','Fields'];
             $childticketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId,$selectFields); 
             $ticketDetails=TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId);//added by Ryan for Email Purpose
             $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
@@ -646,7 +670,31 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                     $this->followTicket($ticket_data->value,$childticketId['TaskId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',FALSE);
                                 }
                             }else{error_log("----follow elseStory");
-                                $this->followTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$loggedInUser,$childticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE);
+                                $unfollowId='';
+                                $parentTicketDetails=TicketCollection::getTicketDetails($childticketDetails['ParentStoryId'],$ticket_data->projectId);
+                                
+                                 if($fieldDetails["Field_Name"]=='assignedto'){
+                                   if($childticketDetails['Fields'][$fieldDetails["Field_Name"]]['value']!='' && $childticketDetails['Fields'][$fieldDetails["Field_Name"]]['value']!= $ticket_data->value ){
+                                     $unfollowId=$childticketDetails['Fields'][$fieldDetails["Field_Name"]]['value'];
+                                    }
+                                    $follow_ticket_id='';
+                                    switch($childticketDetails['WorkflowType']){
+                                        case 3:
+                                            $follow_ticket_id=  array_values(array_filter($parentTicketDetails['Tasks'],function($val){
+                                             return $val['TaskType']==4; 
+                                            }));
+                                            break;
+                                        case 4:
+                                            $follow_ticket_id=array_values(array_filter($parentTicketDetails['Tasks'],function($val){
+                                                   return $val['TaskType']==3;
+                                            }));
+                                            break;
+                                    }
+                                  if(!isEmpty($unfollowId))
+                                  $this->unfollowTicket($unfollowId,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,'follower',0);   
+                                  $this->followTicket($ticket_data->value,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',FALSE);  
+                                 }
+                                 $this->followTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$loggedInUser,$childticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE);
 
                             }
                         }
@@ -910,11 +958,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     * @param type $ticketId
     * @param type $projectId
     */
-    public function unfollowTicket($collaboratorId,$ticketId,$projectId,$fieldType = ""){
+    public function unfollowTicket($collaboratorId,$ticketId,$projectId,$fieldType = "",$is_default=1){
         try {
            $db =  TicketCollection::getCollection();
            if($fieldType!=""){
+               if($is_default==0){
+                 $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$pull'=> array('Followers' =>array("Flag" => $fieldType,"DefaultFollower"=>(int)$is_default),"multi"=>FALSE)));    
+               }else{
              $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$pull'=> array('Followers' =>array("Flag" => $fieldType))));  
+               }     
            }else{
             $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$pull'=> array('Followers' =>array("FollowerId" => (int)$collaboratorId))));   
            }
