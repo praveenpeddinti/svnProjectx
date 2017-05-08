@@ -1,0 +1,61 @@
+<!-- Menu -->
+<div class="custom_menu">
+  <div class="row">
+    <div class="col-xs-12 col-sm-4 col-md-4 ">
+      <button (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="normal bluebutton"><i class="fa fa-plus" aria-hidden="true"></i></button>
+
+    </div>
+    <div class="col-xs-12 col-sm-8 col-md-8 ">
+      <div class="pull-right">
+        <div class="customdropdown customdropdownheader" id="filterDropdown">
+          LAST 7 DAYS TOTAL WORKED HOURS {{last7daystimehours}}
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div>Time Tracking</div>
+<ngx-datatable
+        #myTable 
+        class="material expandable customdatatable"
+        [rows]="rows"
+        [columnMode]="'flex'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [externalSorting]="true"
+        [count]="count"
+        [offset]="offset"
+        [limit]="limit"
+        [sortable]= "true"
+        (page)="onPage($event)"
+        (sort)="onSort($event)"
+        >
+<!-- Column Template -->
+<!--The table column(s) width take dynamically.
+Row classes are also dynamically. These classes are pass to service layer-->
+ <ngx-datatable-column *ngFor="let column of columns;let i=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
+  [flexGrow]="column.flexGrow">
+  <template let-row="row" ngx-datatable-cell-template>
+   <div class="{{column.class}} " *ngIf="row[i].field_name!='action'" >
+        <img *ngIf="row[i].other_data==1" src="assets/images/story-icon.png"  />
+      <img *ngIf="row[i].other_data==2" src="assets/images/task-icon.png" />
+       {{row[i].field_value}}
+   </div>
+      <div *ngIf="row[i].field_name =='action'" class="{{column.class}}" style=" margin-right: 20px;">
+          <input type="button" name="EDIT" value="EDIT" />
+          <input type="button" name="DELETE" value="DELETE" />
+      </div>   
+     
+       
+</template>
+</ngx-datatable-column>
+
+<!-- Column Template -->
+
+</ngx-datatable>
+
+
