@@ -13,6 +13,7 @@ class ResponseBean {
     public $message = "";
     public $data = "";
     public $totalCount=0;
+    public $timehours=0;
    
     
 }

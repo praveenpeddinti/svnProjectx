@@ -146,6 +146,116 @@ class TicketTimeLog extends ActiveRecord
             Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    /**
+     * @author Praveen P
+     * @param type $projectId
+     * @param type $collaboratorId
+     * @param type $gettimelogdetailsforcollaboratorId
+     * @return type
+     */
+    
+    public static function getAllTimeReportDetails($StoryData, $projectId) {
+        try {
+            error_log("--page--".$StoryData->pagesize."----------".$StoryData->offset);
+            $offset=$StoryData->offset * $StoryData->pagesize;
+            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId);
+            $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
+            $pipeline = array(
+                array('$unwind' => '$TimeLog'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                        '_id' => '$TicketId',
+                         "data" => array('$push' => '$TimeLog'),
+                    ),),
+                array('$limit' => $StoryData->pagesize),array('$skip' => $offset),
+                );
+                //array('$limit' => $StoryData->pagesize),array('$skip' => $StoryData->offset * $StoryData->pagesize)
+            
+            $timeReportDetails = $query->aggregate($pipeline);
+            $TimeLogDetailsFinalArray = array();
+            $TimeLogDataArray= array();
+            
+            foreach($timeReportDetails as $extractTimeLog){
+                $ticketCollectionModel = new TicketCollection();
+                $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractTimeLog['_id'],$projectId,$selectFields=[]);
+                $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
+                $ticketTask = $getTicketDetails["Fields"]['planlevel']['value'];
+                $TimeLogDatafinalArray =array();
+                foreach($extractTimeLog['data'] as $eachOne){
+                    $datetime = $eachOne['LoggedOn']->toDateTime();
+                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                    $LogDate = $datetime->format('M-d-Y');
+                    $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask);
+                    $time = array("field_name" => "Date", "value_id" => "", "field_value" => $eachOne['Time'], "other_data" => "");
+                    $date = array("field_name" => "Time", "value_id" => "", "field_value" => $LogDate, "other_data" => "");
+                    $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "");
+                    $forTicketComments[0] = $date;
+                    $forTicketComments[1] =  $ticketId;
+                    $forTicketComments[2] = $time;
+                    $forTicketComments[3] = $action;
+                    
+                   array_push($TimeLogDataArray,$forTicketComments);
+                }
+            }
+            return $TimeLogDataArray;
+        } catch (Exception $ex) {
+            Yii::log("TicketTimeLog:getAllTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    /**
+     * @author Praveen P
+     * @param type $projectId
+     * @param type $collaboratorId
+     * @param type $totalTimeLogReportforCollaborator
+     * @return type
+     */
+    
+    public static function getTimeReportCount($StoryData, $projectId) {
+        try {
+            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId);
+            $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
+            $pipeline = array(
+                array('$unwind' => '$TimeLog'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                        '_id' => '$TimeLog.CollaboratorId',
+                        "count" => array('$sum' => 1),
+                    ),
+                ),
+            );
+            $Arraytimelog = $query->aggregate($pipeline);
+            return $Arraytimelog[0]['count'];
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getTimeReportCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    
+    public static function getTimeLogRecordsForLast7Days($StoryData,$projectId) {
+        try {
+          error_log("---hours==coll===".$StoryData->userInfo->Id);
+            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int)$projectId);
+            $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
+            $pipeline = array(
+                array('$unwind'=> '$TimeLog'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                        '_id' => '$TimeLog.CollaboratorId',
+                        "totalHours" => array('$sum' => '$TimeLog.Time'),
+                    ),
+                ),
+            );
+            $last7DaysTimelog = $query->aggregate($pipeline);
+            return $last7DaysTimelog[0]['totalHours'];
+        } catch (Exception $ex) {
+            Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
 ?>
