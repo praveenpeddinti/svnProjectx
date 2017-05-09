@@ -22,6 +22,7 @@ declare var jQuery: any;
     providers: [DatePipe]
 })
 export class StoryDetailsPage {
+    public ticketId: any;
     public items: Array<any>;
     public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
     public displayFieldvalue = [];
@@ -55,6 +56,11 @@ export class StoryDetailsPage {
     public textFieldValue = "";
     public textAreaValue = "";
     public displayedClassColorValue = "";
+    //Work log
+    public workLog = { thours: "", iworkHours: "" };
+    public workedLogtime: any = {};
+    public individualitems: Array<any>;
+    public inputHourslog = "";
 
     @ViewChild(Content) content: Content;
 
@@ -73,6 +79,7 @@ export class StoryDetailsPage {
         private datePipe: DatePipe,
         private ngZone: NgZone,
         private alertController: AlertController ) {
+        this.ticketId = this.navParams.get("id");
         StoryDetailsPage.menuControler = menu;
         this.minDate = new Date().toISOString();
         let loader = this.loadingController.create({ content: "Loading..." });
@@ -162,6 +169,18 @@ export class StoryDetailsPage {
         );
         this.progressNew = 0;
         this.progressEdit = 0;
+        
+        // Total worked hours service method
+        globalService.getWorklog(this.constants.getWorkLog, this.navParams.get("id")).subscribe(
+            (result) => {
+                this.workedLogtime = result.data;
+            }, (error) => {
+
+            }
+        );
+
+        globalService.searchTicket(this.constants.allDetailsforSearch, this.navParams.get("id")).subscribe();
+
     }
     public menuOpened() {
         StoryDetailsPage.isMenuOpen = true;
@@ -696,5 +715,24 @@ export class StoryDetailsPage {
         }else{
             return 'notuploaded';
         }
+    }
+    //workLog
+    public inputWorkLog(event, index) {
+        console.log("the details " + JSON.stringify(this.ticketId));
+        this.globalService.insertTimelog(this.constants.insertTimeLog, this.ticketId, this.inputHourslog).subscribe(
+            (result) => {
+                setTimeout(() => {
+                    // document.getElementById("logHourDetails_input_" + index).style.display = 'block';
+                    // document.getElementById("logHourDetails_input_" + index).innerHTML = this.workedLogtime.workHours;
+                    this.inputHourslog = null;
+                    this.workedLogtime = result.data;
+                    // this.workedLogtime.TotalTimeLog = result.data.TotalTimeLog;
+                    // this.individualitems = result.data.individualLog;
+
+                }, 200);
+            },
+            (error) => {
+                this.presentToast('Unsuccessful');
+            });
     }
 }

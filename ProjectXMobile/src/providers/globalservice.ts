@@ -130,4 +130,50 @@ export class Globalservice {
         );
         return response;
     }
+//sprint 5 start :- prabhu
+public getWorklog(url, worklogParams){
+        var getWorklogParams = this.getUserInfo();
+        getWorklogParams["TicketId"] = worklogParams.TicketId;
+        getWorklogParams["getimelog"] = worklogParams.getimelog;
+        getWorklogParams["timeZone"] = "Asia/Kolkata";
+        var response = this.http.post(url, JSON.stringify(getWorklogParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
+    public insertTimelog(url, timelogTicketId, enteredTimeLog){
+        var insertTimelogParams = this.getUserInfo();
+        insertTimelogParams["TicketId"] = timelogTicketId;
+        insertTimelogParams["workHours"] = enteredTimeLog;
+        insertTimelogParams["timeZone"] = "Asia/Kolkata";
+        var response = this.http.post(url, JSON.stringify(insertTimelogParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
+
+    public searchTicket(url, ticketParams){
+        var searchTicketParams = this.getUserInfo();
+        searchTicketParams["TicketId"] = ticketParams.TicketId;
+        searchTicketParams["sortvalue"] = ticketParams.sortvalue;
+        searchTicketParams["searchString"] = ticketParams.searchString;
+         searchTicketParams["timeZone"] = "Asia/Kolkata";
+         var response = this.http.post(url,JSON.stringify(searchTicketParams),this.headers).map(
+             res => res.json()
+         );
+         return response;
+    }
+
+    public relateTask(url, relatedTask){
+        var relateTaskParams = this.getUserInfo();
+        relateTaskParams["TicketId"] = relatedTask.TicketId;
+        relateTaskParams["relatedSearchTicketId"] = relatedTask.relatedSearchTicketId;
+         relateTaskParams["timeZone"] = "Asia/Kolkata";
+         var response = this.http.post(url,JSON.stringify(relateTaskParams),this.headers).map(
+             res => res.json()
+         );
+         return response;
+    }
+    //sprint 5 end :- prabhu
+
 }
