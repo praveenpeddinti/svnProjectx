@@ -5,9 +5,17 @@ import { ModalController, NavParams, MenuController, LoadingController, PopoverC
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { LogoutPage } from '../logout/logout';
-import { Storage } from "@ionic/storage";
+import { Storage } from '@ionic/storage';
 import { CustomModalPage } from '../custom-modal/custom-modal';
-import {Camera, File, Transfer, FilePath} from 'ionic-native';
+import { Camera } from '@ionic-native/camera';
+import { File} from '@ionic-native/file';
+import {Transfer,TransferObject} from '@ionic-native/transfer';
+import { FilePath} from '@ionic-native/file-path';
+//Story details tabs 
+import { StoryFollowersPage } from "../story-followers/story-followers";
+import { StoryTaskPage } from "../story-task/story-task";
+import { StoryWorklogPage } from "../story-worklog/story-worklog";
+
 declare var cordova: any;
 declare var jQuery: any;
 /*
@@ -22,6 +30,15 @@ declare var jQuery: any;
     providers: [DatePipe]
 })
 export class StoryDetailsPage {
+       //for tabs : - prabhu
+    storyFollowers: any = StoryFollowersPage;
+    storyTask: any = StoryTaskPage;
+    storyWorklog: any = StoryWorklogPage;
+
+    showIcons: boolean;
+    showTitles: boolean;
+    pageTitle: string;
+    //end tabs : - prabhu
     public ticketId: any;
     public items: Array<any>;
     public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
@@ -70,6 +87,10 @@ export class StoryDetailsPage {
         private toastCtrl: ToastController,
         public globalService: Globalservice,
         private constants: Constants,
+        private camera: Camera,
+        private file: File,
+        private transfer: Transfer,
+        private filePath:FilePath,
         public navParams: NavParams,
         public loadingController: LoadingController,
         public popoverCtrl: PopoverController,
@@ -79,6 +100,11 @@ export class StoryDetailsPage {
         private datePipe: DatePipe,
         private ngZone: NgZone,
         private alertController: AlertController ) {
+         //for tabs :- prabhu
+        this.showIcons = navParams.get('icons');
+        this.showTitles = navParams.get('titles');
+        this.pageTitle = navParams.get('pageTitle');
+        
         this.ticketId = this.navParams.get("id");
         StoryDetailsPage.menuControler = menu;
         this.minDate = new Date().toISOString();
@@ -566,13 +592,13 @@ export class StoryDetailsPage {
                 {
                     text: 'Load from Library',
                     handler: () => {
-                        this.takePicture(Camera.PictureSourceType.PHOTOLIBRARY,comeFrom, where, comment);
+                        this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY,comeFrom, where, comment);
                     }
                 },
                 {
                     text: 'Use Camera',
                     handler: () => {
-                        this.takePicture(Camera.PictureSourceType.CAMERA,comeFrom, where, comment);
+                        this.takePicture(this.camera.PictureSourceType.CAMERA,comeFrom, where, comment);
                     }
                 },
                 {
@@ -587,14 +613,14 @@ export class StoryDetailsPage {
         var options = {
             quality: 100,
             sourceType: sourceType,
-            destinationType: Camera.DestinationType.FILE_URI,
-            encodingType: Camera.EncodingType.JPEG,
+            destinationType: this.camera.DestinationType.FILE_URI,
+            encodingType: this.camera.EncodingType.JPEG,
             saveToPhotoAlbum: false,
             correctOrientation: true,
         };
-        Camera.getPicture(options).then((imagePath) => {
-            if (this.platform.is('android') && sourceType === Camera.PictureSourceType.PHOTOLIBRARY) {
-                FilePath.resolveNativePath(imagePath).then((filePath) => {
+        this.camera.getPicture(options).then((imagePath) => {
+            if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+                this.filePath.resolveNativePath(imagePath).then((filePath) => {
                     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
                     let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
                     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
@@ -613,7 +639,7 @@ export class StoryDetailsPage {
         return newFileName;
     }
     private copyFileToLocalDir(namePath, currentName, newFileName, comeFrom: string, where:string, comment:string) {
-        File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+        this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
             this.lastImage = newFileName;
             this.uploadImage(currentName, newFileName, comeFrom, where, comment);
         }, error => {});
@@ -666,7 +692,8 @@ export class StoryDetailsPage {
             mimeType: "image/jpeg",
             params : {'filename': filename,'directory':this.constants.fileUploadsFolder,'originalname': originalname}
         };
-        const fileTransfer = new Transfer();
+       // const fileTransfer = new Transfer();
+        const fileTransfer: TransferObject = this.transfer.create();
         if(where == "comments"){
             fileTransfer.onProgress(this.onProgressNew);
         }
@@ -735,4 +762,7 @@ export class StoryDetailsPage {
                 this.presentToast('Unsuccessful');
             });
     }
+     onTabSelect(tab: { index: number; id: string; }) {
+      console.log(`Selected tab: `, tab);
+     }
 }

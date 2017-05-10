@@ -3,7 +3,7 @@ import {NavController, ViewController,  AlertController, LoadingController,  } f
 import {DashboardPage} from '../dashboard/dashboard';
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
-import { Storage } from "@ionic/storage";
+import { Storage } from '@ionic/storage';
 /*
   Generated class for the Login page.
 */

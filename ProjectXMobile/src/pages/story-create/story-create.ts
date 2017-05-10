@@ -3,9 +3,12 @@ import { ToastController, NavController, ActionSheetController, Platform, NavPar
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 import { LogoutPage } from '../logout/logout';
-import { Storage } from "@ionic/storage";
+import { Storage } from '@ionic/storage';
 import { CustomModalPage } from '../custom-modal/custom-modal';
-import { Camera, File, FilePath, Transfer } from 'ionic-native';
+import {Camera} from '@ionic-native/camera';
+import { File} from '@ionic-native/file';
+import {Transfer, TransferObject} from '@ionic-native/transfer';
+import { FilePath} from '@ionic-native/file-path';
 import { DashboardPage } from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var cordova: any;
@@ -16,6 +19,7 @@ declare var RE: any;
     templateUrl: 'story-create.html'
 })
 export class StoryCreatePage {
+    
     public itemfield: Array<any>;
     public tasktypes: Array<any>;
     public create: { title?: string, description?: string, default_task?: any, planlevel?: any, priority?: any } = { title: "", description: "", default_task: [], planlevel: "", priority: "" };
@@ -34,6 +38,10 @@ export class StoryCreatePage {
         public navParams: NavParams,
         private globalService: Globalservice,
         private toastCtrl: ToastController,
+        private camera: Camera,
+        private file: File,
+        private transfer: Transfer,
+        private filePath:FilePath,
         public platform: Platform,
         public actionSheetCtrl: ActionSheetController,
         public popoverCtrl: PopoverController,
@@ -147,13 +155,13 @@ export class StoryCreatePage {
                 {
                     text: 'Upload from Library',
                     handler: () => {
-                        this.takePicture(Camera.PictureSourceType.PHOTOLIBRARY);
+                        this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
                     }
                 },
                 {
                     text: 'Use Camera',
                     handler: () => {
-                        this.takePicture(Camera.PictureSourceType.CAMERA);
+                        this.takePicture(this.camera.PictureSourceType.CAMERA);
                     }
                 },
                 {
@@ -168,14 +176,14 @@ export class StoryCreatePage {
         var options = {
             quality: 100,
             sourceType: sourceType,
-            destinationType: Camera.DestinationType.FILE_URI,
-            encodingType: Camera.EncodingType.JPEG,
+            destinationType: this.camera.DestinationType.FILE_URI,
+            encodingType: this.camera.EncodingType.JPEG,
             saveToPhotoAlbum: false,
             correctOrientation: true,
         };
-        Camera.getPicture(options).then((imagePath) => {
-            if (this.platform.is('android') && sourceType === Camera.PictureSourceType.PHOTOLIBRARY) {
-                FilePath.resolveNativePath(imagePath).then((filePath) => {
+        this.camera.getPicture(options).then((imagePath) => {
+            if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+                this.filePath.resolveNativePath(imagePath).then((filePath) => {
                     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
                     let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
                     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName));
@@ -194,7 +202,7 @@ export class StoryCreatePage {
         return newFileName;
     }
     private copyFileToLocalDir(namePath, currentName, newFileName) {
-        File.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+        this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
             this.lastImage = newFileName;
             this.uploadImage(currentName, newFileName);
         }, error => {});
@@ -210,7 +218,8 @@ export class StoryCreatePage {
             mimeType: "image/jpeg",
             params: { 'filename': filename, 'directory': this.constants.fileUploadsFolder, 'originalname': originalname }
         };
-        const fileTransfer = new Transfer();
+        //const fileTransfer = new Transfer();
+        const fileTransfer: TransferObject = this.transfer.create();
         fileTransfer.onProgress(this.onProgressFile);
         fileTransfer.upload(targetPath, url, options).then((data) => {
             this.uploadedInserver(data);    

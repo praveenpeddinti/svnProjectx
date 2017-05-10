@@ -169,7 +169,7 @@ export class SelectAlertless implements AfterContentInit, ControlValueAccessor, 
         var selectCssClass = 'select-alert';
 
         // create the alert instance from our built up selectOptions
-        this.overlay = new Alert((<any>this)._app, selectOptions);
+        //this.overlay = new Alert((<any>this)._app, selectOptions);
 
         if (this._multi) {
             // use checkboxes

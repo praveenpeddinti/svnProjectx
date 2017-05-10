@@ -12,12 +12,25 @@ import { SelectAlertless } from '../pages/story-details/SelectAlert';
 
 import {CustomModalPage} from '../pages/custom-modal/custom-modal';
 
-import { Storage } from "@ionic/storage";
+//import { Storage } from "@ionic/storage";
+import { IonicStorageModule } from '@ionic/storage';
 import { LogoutPage } from '../pages/logout/logout';
 
 import { CKEditorModule } from 'ng2-ckeditor';
-import { AUTOCOMPLETE_DIRECTIVES, AUTOCOMPLETE_PIPES } from 'ionic2-auto-complete';
 import {AutoCompleteProvider} from '../providers/auto.complete-provider';
+import { AutoCompleteModule } from 'ionic2-auto-complete';
+//Ionic2-tabs
+import { SuperTabsModule, SuperTabsController } from 'ionic2-super-tabs';
+import { StoryWorklogPage } from '../pages/story-worklog/story-worklog';
+import { StoryFollowersPage } from '../pages/story-followers/story-followers';
+import { StoryTaskPage } from '../pages/story-task/story-task';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule} from '@angular/http';
+import { Camera } from '@ionic-native/camera';
+import { File } from '@ionic-native/file';
+import { Transfer } from '@ionic-native/transfer';
+import { FilePath } from '@ionic-native/file-path';
+
 
 @NgModule({
   declarations: [
@@ -29,12 +42,19 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
     StoryCreatePage,
     SelectAlertless,
     LogoutPage,
-    AUTOCOMPLETE_DIRECTIVES,
-    AUTOCOMPLETE_PIPES
+    StoryWorklogPage,
+    StoryFollowersPage,
+    StoryTaskPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    CKEditorModule
+    CKEditorModule,
+    AutoCompleteModule,
+    BrowserModule,
+    HttpModule,
+    SuperTabsModule.forRoot(),
+    IonicStorageModule.forRoot(),
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -45,9 +65,12 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
     StoryDetailsPage,
     StoryCreatePage,
     SelectAlertless,
-    LogoutPage
+    LogoutPage,
+    StoryWorklogPage,
+    StoryFollowersPage,
+    StoryTaskPage
   ],
-  providers: [AutoCompleteProvider, Globalservice, Constants, Storage, {provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [AutoCompleteProvider, Globalservice, Camera, File, Transfer, FilePath, Constants, {provide: ErrorHandler, useClass: IonicErrorHandler}]
 
 })
 export class AppModule {}
