@@ -531,7 +531,7 @@ use \ArrayObject;
                           $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assigned'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params[$activityOn],"Preposition"=>$preposition);
                                 array_push($result_msg,$message); 
                     }
-              else if($notification['ActivityOn']=='Description'){
+              else if($notification['ActivityOn']=='Description' || $notification['ActivityOn']=='Title'){
                     $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
                      $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
                    $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
