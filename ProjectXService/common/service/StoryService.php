@@ -598,7 +598,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $selectFields = ['ProjectId','WorkflowType','TicketId','ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Fields.workflow.value','Tasks','Fields'];
             $childticketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId,$selectFields); 
             $ticketDetails=TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId);//added by Ryan for Email Purpose
-            $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
             error_log("updateStoryFieldInline---1");
             if($checkData==0){
                  error_log("updateStoryFieldInline---2");
@@ -727,8 +726,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->value);
                                 $valueName = $tickettypeDetail["Name"];
                                 } 
-                        
+                              else if($fieldDetails["Field_Name"] == "estimatedpoints"){
+                                if($childticketDetails['IsChild']==0){
+                                    $ticketId= $ticket_data->TicketId;
+                                  }else{
+                                      $ticketId= $childticketDetails['ParentStoryId'];
+                                  }
+                                  $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
+                                TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
+
+                                }
                         error_log("updateStoryFieldInline---7");
+
                          $leftsideFieldVal = (int)$ticket_data->value;  
                     }else{
                          error_log("updateStoryFieldInline---8");
@@ -793,13 +802,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 if(!empty($artifacts)){
                 TicketArtifacts::saveArtifacts($ticket_data->TicketId, $ticket_data->projectId, $artifacts,$loggedInUser);
                 }
-                if($childticketDetails['IsChild']==0){
-                  $ticketId= $ticket_data->TicketId;
-                }else{
-                    $ticketId= $childticketDetails['ParentStoryId'];
-                }
+                
                  error_log("updateStoryFieldInline---15");
-                TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
            // if($updateStaus==1){
                 $returnValue=$selectedValue;
            // }
