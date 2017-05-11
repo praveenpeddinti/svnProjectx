@@ -48,7 +48,7 @@ import {StoryDetailsWorklog} from '../pages/story-details-worklog/story-details-
     StoryCreatePage,
     SelectAlertless,
     LogoutPage,
-    CustomAutocompleteItem
+    CustomAutocompleteItem,
     StoryDetailsWorklog,
     StoryDetailsFollowers,
     StoryDetailsTask,
