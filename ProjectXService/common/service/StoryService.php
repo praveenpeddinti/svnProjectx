@@ -561,7 +561,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 
              }
              if($newworkflowId != ""){
-                $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId,$userdata);
+                $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId,$userId);
 
              }
              $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$projectId);
