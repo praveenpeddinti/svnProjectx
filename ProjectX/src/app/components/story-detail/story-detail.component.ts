@@ -27,6 +27,7 @@ public blurTimeout=[];
 @ViewChild('detailEditor')  detail_ckeditor; // reference for editor in view.
   public clickedOutside = false;
   public dragTimeout;
+  public inlineTimeout;
   public minDate:Date;
   private ticketData;
   private ticketId;
@@ -761,6 +762,8 @@ var thisObj = this;
 // Added by Padmaja for Inline Edit
 //Common Ajax method to save the changes.
     public postDataToAjax(postEditedText){
+     clearTimeout(this.inlineTimeout);
+    this.inlineTimeout =  setTimeout(() => { 
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
         {
           
@@ -822,6 +825,7 @@ var thisObj = this;
 
 
         /* Notification End */
+        },500)
     }
 
 //Navigate back to dashboard page.
