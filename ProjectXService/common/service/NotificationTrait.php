@@ -642,7 +642,7 @@ use \ArrayObject;
                                     //     moin.hussain mentioned you in a reply
                                     //     moin.hussain mentined you on Ticket #33
                                     $notification['NotifiedUser']='you';
-                                    $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"mention",'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
+                                    $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"mention",'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>"on");
                                     array_push($result_msg,$message);
                                     
                                 }
