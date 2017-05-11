@@ -4,7 +4,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 // import { StatusBar } from '@ionic-native';
 // import { SplashScreen } from '@ionic-native';
-//import { Storage } from '@ionic/storage';
 import { Storage } from '@ionic/storage';
 import { LoginPage } from '../pages/login/login';
 import { DashboardPage } from '../pages/dashboard/dashboard';

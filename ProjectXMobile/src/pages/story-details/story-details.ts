@@ -1,17 +1,20 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ToastController, Content, Platform, App } from 'ionic-angular';
+import { ToastController, Content, Platform, App, NavController } from 'ionic-angular';
 import { ModalController, NavParams, MenuController, LoadingController, PopoverController, ActionSheetController, AlertController } from 'ionic-angular';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
-import {AutoCompleteProvider} from '../../providers/auto.complete-provider';
+// Ticket #113
+import { AutoCompleteProvider } from '../../providers/auto-complete-provider';
+import { AutoCompleteComponent } from 'ionic2-auto-complete';
+// Ticket #113 ended
 import { LogoutPage } from '../logout/logout';
 import { Storage } from '@ionic/storage';
 import { CustomModalPage } from '../custom-modal/custom-modal';
 import { Camera } from '@ionic-native/camera';
-import { File} from '@ionic-native/file';
-import {Transfer,TransferObject} from '@ionic-native/transfer';
-import { FilePath} from '@ionic-native/file-path';
+import { File } from '@ionic-native/file';
+import { Transfer,TransferObject } from '@ionic-native/transfer';
+import { FilePath } from '@ionic-native/file-path';
 //Story details tabs 
 import { StoryDetailsComments } from '../story-details-comments/story-details-comments';
 import {StoryDetailsFollowers} from '../story-details-followers/story-details-followers';
@@ -80,6 +83,12 @@ export class StoryDetailsPage {
     public textFieldValue = "";
     public textAreaValue = "";
     public displayedClassColorValue = "";
+    // Ticket #113
+    public followers: Array<any>; 
+    public userId: number;
+    private follower_search_results: string[];
+    private fList: any = [];
+    // Ticket #113 ended
     //Work log
     // public workLog = { thours: "", iworkHours: "" };
     // public workedLogtime: any = {};
@@ -90,7 +99,10 @@ export class StoryDetailsPage {
     public fooId: any = {};
 
     @ViewChild(Content) content: Content;
-
+    // Ticket #113
+    @ViewChild('searchbar') searchbar: AutoCompleteComponent;
+    // Ticket #113 ended
+    // Ticket #113 added autoCompleteProvider in constructor
     constructor(menu: MenuController,
         private app: App,
         private modalController: ModalController,
@@ -109,7 +121,9 @@ export class StoryDetailsPage {
         private storage: Storage, 
         private datePipe: DatePipe,
         private ngZone: NgZone,
-        private alertController: AlertController ) {
+        private alertController: AlertController,
+        public navCtrl: NavController,
+        public autoCompleteProvider: AutoCompleteProvider ) {
 
            this.navParams = navParams;
            this.StoryDetailsComments = StoryDetailsComments;
@@ -131,6 +145,9 @@ export class StoryDetailsPage {
         loader.present();
         this.storage.get('userCredentials').then((value) => {
             this.userName = value.username;
+            // Ticket #113
+            this.userId = value.Id;
+            // Ticket #113 ended
         });
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.navParams.get("id")).subscribe(
             result => {
@@ -141,6 +158,9 @@ export class StoryDetailsPage {
                 this.taskDetails.workflowType = result.data.WorkflowType;
                 this.titleAfterEdit = result.data.Title;
                 this.items = result.data.Fields;
+                // Ticket #113
+                this.followers = result.data.Followers;
+                // Ticket #113 ended
                 this.arrayList = [];
                 for (let i = 0; i < this.items.length; i++) {
                     var _id = this.items[i].Id;
@@ -214,7 +234,15 @@ export class StoryDetailsPage {
         );
         this.progressNew = 0;
         this.progressEdit = 0;
-        
+        // Ticket #113
+        this.follower_search_results=[];
+        // Followers dummy
+        // this.fList = [{ Name: "prabhu", id: 16, ProfilePic: "http://10.10.73.33/files/user/prabhu.png" },
+        // { Name: "Satish Peta", id: 7, ProfilePic: "http://10.10.73.33/files/user/SatishPeta.png" }];
+        // this.follower_search_results = this.fList;
+        // Followers dummy ended
+        this.getUsersForFollow();
+        // Ticket #113 ended
         // Total worked hours service method
         // globalService.getWorklog(this.constants.getWorkLog, this.navParams.get("id")).subscribe(
         //     (result) => {
@@ -223,9 +251,6 @@ export class StoryDetailsPage {
 
         //     }
         // );
-
-     //   globalService.searchTicket(this.constants.allDetailsforSearch, this.navParams.get("id")).subscribe();
-
     }
     public menuOpened() {
         StoryDetailsPage.isMenuOpen = true;
@@ -762,6 +787,167 @@ export class StoryDetailsPage {
             return 'notuploaded';
         }
     }
+    // Followers dummy
+    public getUsersForFollow() {
+        this.follower_search_results = [];
+        var addFollowerData = {
+            TicketId: this.taskDetails.ticketId,
+            ProjectId: 1,
+            SearchValue: "madan"
+        };
+        this.globalService.getUsersForFollow(this.constants.getUsersForFollow, addFollowerData).subscribe(
+            (result) => {
+                if (result.statusCode == 200) {
+                    var fList: any = [];
+                    for (var l = 0; l < result.data.length; l++) {
+                        fList.push({ Name: result.data[l].Name, id: result.data[l].Id, ProfilePic: result.data[l].ProfilePic });
+                    }
+                    this.follower_search_results = fList;
+                } else {
+                    console.log("service failed");
+                }
+            },
+            (error) => {
+                console.log("error in getUsersForFollow");
+            }
+        );
+    }
+    public addFollower(followerId) {
+        var followerData = {
+            TicketId: this.taskDetails.ticketId,
+            collaboratorId: followerId,
+        };
+        this.globalService.makeUsersFollowTicket(this.constants.makeUsersFollowTicket, followerData).subscribe(
+            (result) => {
+                if (result.statusCode == 200) {
+                    this.followers.push(result.data);
+                }
+            },
+            (error) => {
+                console.log("error in makeUsersFollowTicket");
+            }
+        );
+    }
+    public presentConfirmRemoveFollower(followerId) {
+        let alert = this.alertController.create({
+            title: 'Confirm Remove Follower',
+            message: 'Do you want to delete this follower?',
+            buttons: [
+            {
+                text: 'CANCEL',
+                role: 'cancel',
+                handler: () => {}
+            },
+            {
+                text: 'OK',
+                handler: () => {
+                    this.removeFollower(followerId);
+                }
+            }
+            ]
+        });
+        alert.present();
+    }
+    public removeFollower(followerId) {
+        var followerData = {
+            TicketId: this.taskDetails.ticketId,
+            collaboratorId: followerId
+        };
+        this.globalService.makeUsersUnfollowTicket(this.constants.makeUsersUnfollowTicket, followerData).subscribe(
+            (result) => {
+                if (result.statusCode == 200) {
+                    jQuery("#followerdiv_" + followerId).remove();
+                    this.followers = this.followers.filter(function (el) {
+                        return el.FollowerId !== followerId;
+                    });
+                }
+            },
+            (error) => {
+                console.log("error in makeUsersUnfollowTicket");
+            }
+        );
+    }
+    itemCustomSelected($event){
+        this.addFollower($event.Id);
+        this.searchbar.clearValue();
+    }
+    // Followers dummy ended
+
+    // Ticket #113
+    // public checkFollower(followerId){
+    //     if(jQuery("#check_"+followerId).hasClass("glyphicon glyphicon-ok")){
+    //         jQuery("#check_"+followerId).removeClass("glyphicon glyphicon-ok");
+    //         var followerData = {
+    //             TicketId:this.taskDetails.ticketId,
+    //             collaboratorId:followerId
+    //         };
+    //         this.globalService.makeUsersUnfollowTicket(this.constants.makeUsersUnfollowTicket, followerData).subscribe(
+    //             (result) => {
+    //                 if(result.statusCode==200){
+    //                     jQuery("#followerdiv_"+followerId).remove();
+    //                     this.followers = this.followers.filter(function(el) {
+    //                         return el.FollowerId !== followerId;
+    //                     });
+    //                 }
+    //             },
+    //             (error)=> {
+    //                 console.log("error in getUsersForFollow");
+    //             }
+    //         );
+    //     }else{
+    //         jQuery("#check_"+followerId).addClass("glyphicon glyphicon-ok");
+    //         var followerData = {
+    //             TicketId:this.taskDetails.ticketId,
+    //             collaboratorId:followerId,
+    //         };
+    //         this.globalService.makeUsersFollowTicket(this.constants.makeUsersFollowTicket, followerData).subscribe(
+    //             (result) => {
+    //                 if(result.statusCode==200){
+    //                     this.followers.push(result.data);  
+    //                 }
+    //             },
+    //             (error)=> {
+    //                 console.log("error in getUsersForFollow");
+    //             }
+    //         );
+    //     }
+    // }
+
+    // public getUsersForFollow(event: any){
+    //     this.follower_search_results=[];
+    //     // set val to the value of the searchbar
+    //     let val = event.target.value;
+    //     if(val.length>=2){
+    //         var defaultUserList:any=[];
+    //         for(var x=0;x< this.followers.length;x++){
+    //             defaultUserList.push(this.followers[x].FollowerId);
+    //             defaultUserList.push(this.followers[x].CreatedBy);
+    //         }
+    //         var addFollowerData = {
+    //             TicketId:this.taskDetails.ticketId,
+    //             ProjectId:1,
+    //             DafaultUserList:defaultUserList,
+    //             SearchValue:val
+    //         };
+    //         this.globalService.getUsersForFollow(this.constants.getUsersForFollow,addFollowerData).map(
+    //             (result) => {
+    //                 if (result.statusCode == 200) {
+    //                     var fList:any=[];
+    //                     for(var l=0;l< result.data.length;l++){
+    //                         fList.push({Name:result.data[l].Name,id:result.data[l].Id,ProfilePic:result.data[l].ProfilePic});
+    //                     }
+    //                     this.follower_search_results=fList;
+    //                 } else {
+    //                     console.log("service failed");
+    //                 }
+    //             },
+    //             (error) => {
+    //                 console.log("error in getUsersForFollow");
+    //             }
+    //         );
+    //     }
+    // }
+    // Ticket #113 ended
     //workLog
     // public inputWorkLog(event, index) {
     //     console.log("the details " + JSON.stringify(this.ticketId));

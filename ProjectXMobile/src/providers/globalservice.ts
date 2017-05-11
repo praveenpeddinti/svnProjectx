@@ -130,6 +130,36 @@ export class Globalservice {
         );
         return response;
     }
+    // Ticket #113
+    public getUsersForFollow(url, usersData){
+        var getUsersParams = this.getUserInfo();
+        getUsersParams["TicketId"] = usersData.TicketId;
+        getUsersParams["ProjectId"] = usersData.ProjectId;
+        getUsersParams["SearchValue"] = usersData.SearchValue;
+        var response = this.http.post(url, JSON.stringify(getUsersParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
+    public makeUsersFollowTicket(url, addFollowerData){
+        var addFollowerParams = this.getUserInfo();
+        addFollowerParams["TicketId"] = addFollowerData.TicketId;
+        addFollowerParams["collaboratorId"] = addFollowerData.collaboratorId;
+        var response = this.http.post(url, JSON.stringify(addFollowerParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
+    public makeUsersUnfollowTicket(url, removeFollowerData){
+        var removeFollowerParams = this.getUserInfo();
+        removeFollowerParams["TicketId"] = removeFollowerData.TicketId;
+        removeFollowerParams["collaboratorId"] = removeFollowerData.collaboratorId;
+        var response = this.http.post(url, JSON.stringify(removeFollowerParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
+    //  Ticket #113 ended
 //sprint 5 start :- prabhu
 public getWorklog(url, worklogParams){
         var getWorklogParams = this.getUserInfo();
