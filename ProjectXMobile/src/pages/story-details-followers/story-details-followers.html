@@ -1,5 +1,25 @@
 <ion-content padding>
-<ion-row text-uppercase text-center style="height: 20%; background: linear-gradient(#c1c1c1, rgb(210, 210, 210));font-size: 20px;">
-      <h2>Some content from Story details followers</h2>
-    </ion-row>
+                <!--Ticket #113-->
+                <div role="tabpanel" class="custtab-pane active" id="t_followers">
+                    <div>
+                        <div class="widgethed">Followers</div>
+                        <!--Auto complete add follower-->
+                        <ion-auto-complete [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Lorem Ipsum' }" (itemSelected)='itemCustomSelected($event)' #searchbar></ion-auto-complete>
+                        <!--Followers list-->
+                        <div class="followersList">
+                            <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
+                                <div class="user">
+                                    <img class="usericon" src="{{follower.ProfilePicture}}" alt="" />
+                                    <span class="">{{follower.UserName}}</span>
+                                    <!--Replace Remove by icon-->
+                                    <span class="followers_delete" (click)="presentConfirmRemoveFollower(follower.FollowerId)" id="follower_{{follower.FollowerId}}"
+                                        *ngIf="follower.CreatedBy == userId" title="{{follower.UserName}}">
+                                        Remove
+                                     </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Ticket #113 ended-->
 </ion-content>
