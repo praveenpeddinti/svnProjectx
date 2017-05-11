@@ -4,7 +4,7 @@
                     <div>
                         <div class="widgethed">Followers</div>
                         <!--Auto complete add follower-->
-                        <ion-auto-complete [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Lorem Ipsum' }" (itemSelected)='itemCustomSelected($event)' #searchbar></ion-auto-complete>
+                        <ion-auto-complete [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Search to add followers' }" (itemSelected)='itemCustomSelected($event)' #searchbar></ion-auto-complete>
                         <!--Followers list-->
                         <div class="followersList">
                             <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
