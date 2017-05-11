@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { AutoCompleteService } from 'ionic2-auto-complete';
+import { Constants } from '../providers/constants';
 
 /*
   Generated class for the DataProvider provider.
@@ -13,20 +14,21 @@ import { AutoCompleteService } from 'ionic2-auto-complete';
 export class AutoCompleteProvider implements AutoCompleteService{
   labelAttribute = "Name";
   private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
-  constructor(private http:Http) {}
+  public ticketId: any = "";
+  constructor(private http:Http,private constants: Constants) {}
   getResults(keyword: string) {
     var getFollowersParams: any = {
-                TicketId: "34",
+                TicketId: this.ticketId,
                 ProjectId: 1,
                 SearchValue: keyword };
-                // console.log("the params " + JSON.stringify(getFollowersParams));
-    return this.http.post("http://10.10.73.12:802/story/get-collaborators-for-follow", JSON.stringify(getFollowersParams), this.headers).map(
+    return this.http.post(this.constants.getUsersForFollow, JSON.stringify(getFollowersParams), this.headers).map(
             (res) => {
-                    // console.log("the search response " + JSON.stringify(res.json().data));
               return res.json().data.filter(item => item.Name.toLowerCase().startsWith(keyword.toLowerCase()) );
             }
         );
   }
+
+  public getDataForSearch(ticketIdParam){
+    this.ticketId = ticketIdParam;
+  }
 }
-
-

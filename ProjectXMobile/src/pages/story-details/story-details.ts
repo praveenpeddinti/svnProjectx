@@ -236,13 +236,14 @@ export class StoryDetailsPage {
         this.progressEdit = 0;
         // Ticket #113
         this.follower_search_results=[];
+        // Ticket #113 ended
         // Followers dummy
         // this.fList = [{ Name: "prabhu", id: 16, ProfilePic: "http://10.10.73.33/files/user/prabhu.png" },
         // { Name: "Satish Peta", id: 7, ProfilePic: "http://10.10.73.33/files/user/SatishPeta.png" }];
         // this.follower_search_results = this.fList;
+        // this.getUsersForFollow();
         // Followers dummy ended
-        this.getUsersForFollow();
-        // Ticket #113 ended
+        
         // Total worked hours service method
         // globalService.getWorklog(this.constants.getWorkLog, this.navParams.get("id")).subscribe(
         //     (result) => {
@@ -288,7 +289,9 @@ export class StoryDetailsPage {
         if (day.length < 2) day = '0' + day;
         return [month, day, year].join('-');
     }
-    ionViewDidLoad() {}
+    ionViewDidLoad() {
+        this.autoCompleteProvider.getDataForSearch(this.ticketId);
+    }
     ionViewDidEnter() {
         if (jQuery('#description').height() > 200) {
             jQuery('#description').css("height", "200px");
@@ -871,6 +874,12 @@ export class StoryDetailsPage {
         this.addFollower($event.Id);
         this.searchbar.clearValue();
     }
+    // onInput($event){
+    //     this.getUsersForFollowEvent($event);
+    // }
+    // public getUsersForFollowEvent($event){
+    //     console.log('getUsersForFollowEvent : '+JSON.stringify($event));
+    // }
     // Followers dummy ended
 
     // Ticket #113
