@@ -1,21 +1,15 @@
 //---------------------------------------------------
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { IonicPage, ToastController, Content, Platform, App, NavController } from 'ionic-angular';
 import { ModalController, NavParams, MenuController, LoadingController, PopoverController, ActionSheetController, AlertController } from 'ionic-angular';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
-// Ticket #113
-import { AutoCompleteProvider } from '../../providers/auto-complete-provider';
-import { AutoCompleteComponent } from 'ionic2-auto-complete';
-// Ticket #113 ended
-import { LogoutPage } from '../logout/logout';
 import { Storage } from '@ionic/storage';
-import { CustomModalPage } from '../custom-modal/custom-modal';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { Transfer,TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
+import { DatePipe } from '@angular/common';
 
 declare var cordova: any;
 declare var jQuery: any;
@@ -29,16 +23,11 @@ declare var jQuery: any;
 @Component({
   selector: 'page-story-details-comments',
   templateUrl: 'story-details-comments.html',
-  providers: [DatePipe]
+   providers: [DatePipe]
 })
 export class StoryDetailsComments {
-   public ticketId: any;
+    public ticketId: any;
     public rootParams: any = {ticketId: ""};
-    public items: Array<any>;
-    public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
-    public displayFieldvalue = [];
-    public showEditableFieldOnly = [];
-    public readOnlyDropDownField: boolean = false;
     public itemsInActivities: Array<any>;
     private replyToComment = -1;
     private replying = false;
@@ -51,23 +40,33 @@ export class StoryDetailsComments {
     private lastImage: string = null;
     private progressNew: number;
     private progressEdit: number;
-    public enableDataPicker = [];
-    public enableTextField = [];
-    public enableTextArea = [];
-    public titleAfterEdit: string = "";
-    public enableEdatable: boolean = false;
-    public taskDetails = { ticketId: "", title: "", description: "", type: "", workflowType: "" };
-    public options = "options";
+    public storyTicketId: any;
+    
+    
+   
+   // public items: Array<any>;
+   // public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
+   // public displayFieldvalue = [];
+   // public showEditableFieldOnly = [];
+    //public readOnlyDropDownField: boolean = false;
+    
+    //public enableDataPicker = [];
+   // public enableTextField = [];
+  //  public enableTextArea = [];
+  //  public titleAfterEdit: string = "";
+   // public enableEdatable: boolean = false;
+   // public taskDetails = { ticketId: "", title: "", description: "", type: "", workflowType: "" };
+   // public options = "options";
     public localDate: any = new Date();
     public minDate: any = new Date();
-    public userName: any = '';
-    public static optionsModal;
-    public static isMenuOpen: boolean = false;
-    public static menuControler;
-    public textFieldValue = "";
-    public textAreaValue = "";
-    public displayedClassColorValue = "";
-    public storyTicketId: any;
+  //  public userName: any = '';
+ //   public static optionsModal;
+  //  public static isMenuOpen: boolean = false;
+//    public static menuControler;
+//    public textFieldValue = "";
+//    public textAreaValue = "";
+//    public displayedClassColorValue = "";
+   
     
     @ViewChild(Content) content: Content;
     
@@ -87,92 +86,15 @@ export class StoryDetailsComments {
         public actionSheetCtrl: ActionSheetController,
         public platform: Platform,
         private storage: Storage, 
-        private datePipe: DatePipe,
         private ngZone: NgZone,
-        private alertController: AlertController,
-        public autoCompleteProvider: AutoCompleteProvider) {
-        let loader = this.loadingController.create({ content: "Loading..." });
-        loader.present();
-         this.storage.get('userCredentials').then((value) => {
-            this.userName = value.username;
-        });
+        private alertController: AlertController,) {
+//        let loader = this.loadingController.create({ content: "Loading..." });
+//        loader.present();
+//         this.storage.get('userCredentials').then((value) => {
+//            this.userName = value.username;
+//        });
          this.storyTicketId = this.navParams.data.ticketId;
          console.log("the story details comments ticket id " + JSON.stringify(this.storyTicketId));
-         
-         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.storyTicketId).subscribe(
-             result => {
-                 this.storyTicketId = result.data.TicketId;
-                 this.taskDetails.title = result.data.Title;
-                 this.taskDetails.description = result.data.Description;
-                 this.taskDetails.type = result.data.StoryType.Name;
-                 this.taskDetails.workflowType = result.data.WorkflowType;
-                 this.titleAfterEdit = result.data.Title;
-                 this.items = result.data.Fields;
-                 this.arrayList = [];
-                 for (let i = 0; i < this.items.length; i++) {
-                     var _id = this.items[i].Id;
-                     var _title = this.items[i].title;
-                     var _assignTo;
-                     if (this.items[i].field_type == "Text") {
-                         if (this.items[i].value == "") {
-                             _assignTo = "--";
-                         } else {
-                             _assignTo = this.items[i].value;
-                             if (this.items[i].field_name == "estimatedpoints") {
-                                 this.textFieldValue = this.items[i].value;
-                             }
-                         }
-                     } else if (this.items[i].field_type == "TextArea") {
-                         if (this.items[i].value == "") {
-                             _assignTo = "--";
-                         } else {
-                             _assignTo = this.items[i].value;
-                             this.textAreaValue = this.items[i].value;
-                         }
-                     } else if (this.items[i].field_type == "Date") {
-                         //                        readable_value
-                         if (this.items[i].readable_value == "") {
-                             _assignTo = "--";
-                             this.localDate = new Date().toISOString();
-                         } else {
-                             _assignTo = this.items[i].readable_value;
-                             var date = new Date(this.items[i].readable_value);
-                             date.setTime(date.getTime() + date.getTimezoneOffset() * -60 * 1000);
-                             this.localDate = new Date(date.setDate(date.getDate())).toISOString();
-                         }
-                     }
-                     else if (this.items[i].field_type == "DateTime") {
-                         //                        readable_value
-                         if (this.items[i].readable_value == "") {
-                             _assignTo = "--";
-                         } else {
-                             _assignTo = this.items[i].readable_value;
-                         }
-                     }
-                     else {
-                         if (this.items[i].value_name == "") {
-                             _assignTo = "--";
-                         } else {
-                             _assignTo = this.items[i].value_name;
-                         }
-                     }
-                     var _readOnly = this.items[i].readonly;
-                     var _fieldType = this.items[i].field_type;
-                     var _fieldName = this.items[i].field_name;
-                     if (_fieldName == 'priority') {
-                         this.displayedClassColorValue = _assignTo;
-                     }
-                     var _readableValue = this.items[i].readable_value;
-                     this.arrayList.push({
-                         id: _id, title: _title, assignTo: _assignTo, readOnly: _readOnly, fieldType: _fieldType, fieldName: _fieldName, ticketId: this.storyTicketId, readableValue: _readableValue
-                     });
-                 }
-                 loader.dismiss();
-             }, error => {
-                 loader.dismiss();
-             }
-         );
-         
          this.itemsInActivities = [];
          globalService.getTicketActivity(this.constants.getTicketActivity, this.storyTicketId).subscribe(
              (result) => {
@@ -197,9 +119,6 @@ export class StoryDetailsComments {
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
-                    document.getElementById("field_title_" + index).innerHTML = this.datePipe.transform(this.localDate, 'MMM-dd-yyyy');
-                    this.enableDataPicker[index] = false;
-                    document.getElementById("field_title_" + index).style.display = 'block';
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
                     } else {
@@ -210,20 +129,8 @@ export class StoryDetailsComments {
             (error) => {
                 this.presentToast('Unsuccessful');
             });
-        setTimeout(() => {
-            document.getElementById("field_title_" + index).style.display = 'none';
-        }, 300);
     }
 
-       public formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-        if (month.length < 2) month = '0' + month;
-        if (day.length < 2) day = '0' + day;
-        return [month, day, year].join('-');
-    }
      public navigateToParentComment(parentCommentId) {
         jQuery("#"+parentCommentId)[0].scrollIntoView({
             behavior: "smooth", // or "auto" or "instant"
@@ -234,11 +141,11 @@ export class StoryDetailsComments {
     console.log('ionViewDidLoad StoryDetailsComments');
   }
       ionViewDidEnter() {
-        if (jQuery('#description').height() > 200) {
-            jQuery('#description').css("height", "200px");
-            jQuery('.show-morediv').show();
-            jQuery('#show').show();
-        }
+//        if (jQuery('#description').height() > 200) {
+//            jQuery('#description').css("height", "200px");
+//            jQuery('.show-morediv').show();
+//            jQuery('#show').show();
+//        }
         var thisObj = this;
         jQuery(document).ready(function(){
             jQuery(document).bind("click",function(event){ 
@@ -250,27 +157,22 @@ export class StoryDetailsComments {
         });
     }
     ionViewWillEnter() {
-        if (jQuery('#description').height() > 200) {
-            jQuery('#description').css("height", "200px");
-            jQuery('.show-morediv').show();
-            jQuery('#show').show();
-        }
+//        if (jQuery('#description').height() > 200) {
+//            jQuery('#description').css("height", "200px");
+//            jQuery('.show-morediv').show();
+//            jQuery('#show').show();
+//        }
     }
-    public selectCancel(index) {
-        this.showEditableFieldOnly[index] = false;
-    }
+//    public selectCancel(index) {
+//        this.showEditableFieldOnly[index] = false;
+//    }
        public changeOption(event, index, fieldDetails) {
-        this.readOnlyDropDownField = false;
-        this.showEditableFieldOnly[index] = false;
+//        this.readOnlyDropDownField = false;
+//        this.showEditableFieldOnly[index] = false;
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
-                    jQuery("#field_title_" + index + " div").text(event.Name);
-                    if (fieldDetails.fieldName == 'priority') {
-                        this.displayedClassColorValue = event.Name;
-                    } else if(fieldDetails.fieldName == "workflow"){
-                        jQuery("#field_title_" + (index-1) + " div").text(result.data.updatedState.state);
-                    }
+            
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
                     } else {
@@ -286,10 +188,10 @@ export class StoryDetailsComments {
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
-                    this.enableTextField[index] = false;
-                    this.enableTextArea[index] = false;
-                    document.getElementById("field_title_" + index).style.display = 'block';
-                    document.getElementById("field_title_" + index).innerHTML = (event.target.value);
+//                    this.enableTextField[index] = false;
+//                    this.enableTextArea[index] = false;
+//                    document.getElementById("field_title_" + index).style.display = 'block';
+//                    document.getElementById("field_title_" + index).innerHTML = (event.target.value);
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
                     } else {
@@ -305,81 +207,67 @@ export class StoryDetailsComments {
         //this.enableEdatable = true;
     }
 
-    public updateTitleSubmit() {
-        this.enableEdatable = false;
-        this.taskDetails.title = this.titleAfterEdit;
-    }
-    public updateTitleCancel() {
-        this.enableEdatable = false;
-        this.titleAfterEdit = this.taskDetails.title;
-    }
-    public expandDescription() {
-        jQuery('#description').css('height', 'auto');
-        jQuery('#show').hide();
-        jQuery('#hide').show();
-    }
-    public collapseDescription() {
-        jQuery('#hide').hide();
-        jQuery('#show').show();
-        jQuery('#description').css("height", "200px");
-        jQuery('#description').css("overflow", "hidden");
-    }
-     public isColorChange(fieldDetails) {
-        if (fieldDetails.title == "Created on") {
-            return true;
-        }
-        else if (fieldDetails.title == "Reported by") {
-            return true;
-        }
-        else if (fieldDetails.title == "Plan Level") {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-     public openOptionsModal(fieldDetails, index) {
-        fieldDetails['workflowType'] = this.taskDetails.workflowType;
-        if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
-            this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
-                (result) => {
-                    if (fieldDetails.fieldType == "Team List") {
-                        this.displayFieldvalue.push({ "Id": "", "Name": "--none--", "Email": "null" })
-                        for (let data of result.getFieldDetails) {
-                            this.displayFieldvalue.push(data);
-                        }
-                    } else {
-                        for (let data of result.getFieldDetails) {
-                            this.displayFieldvalue.push(data);
-                        }
-                    }
-                    StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
-                    StoryDetailsComments.optionsModal.onDidDismiss((data) => {
-                        if (data != null && (data.Name != data.previousValue)) {
-                            this.changeOption(data, index, fieldDetails);
-                        }
-                        this.displayFieldvalue = [];
-                    });
-                    StoryDetailsComments.optionsModal.present();
-                },
-                (error) => {
-                });
-        } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
-            this.enableDataPicker[index] = true;
-            document.getElementById("field_title_" + index).style.display = 'none';
-        } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
-            if (fieldDetails.fieldType == "TextArea") {
-                this.enableTextArea[index] = true;
-                document.getElementById("field_title_" + index).focus();
-                document.getElementById("field_title_" + index).style.display = 'none';
-            }
-            else if (fieldDetails.fieldType == "Text") {
-                this.enableTextField[index] = true;
-                document.getElementById("field_title_" + index).focus();
-                document.getElementById("field_title_" + index).style.display = 'none';
-            }
-        }
-    }
+//    public updateTitleSubmit() {
+//        this.enableEdatable = false;
+//        this.taskDetails.title = this.titleAfterEdit;
+//    }
+//    public updateTitleCancel() {
+//        this.enableEdatable = false;
+//        this.titleAfterEdit = this.taskDetails.title;
+//    }
+//    public expandDescription() {
+//        jQuery('#description').css('height', 'auto');
+//        jQuery('#show').hide();
+//        jQuery('#hide').show();
+//    }
+//    public collapseDescription() {
+//        jQuery('#hide').hide();
+//        jQuery('#show').show();
+//        jQuery('#description').css("height", "200px");
+//        jQuery('#description').css("overflow", "hidden");
+//    }
+//     public openOptionsModal(fieldDetails, index) {
+//        fieldDetails['workflowType'] = this.taskDetails.workflowType;
+//        if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
+//            this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
+//                (result) => {
+//                    if (fieldDetails.fieldType == "Team List") {
+//                        this.displayFieldvalue.push({ "Id": "", "Name": "--none--", "Email": "null" })
+//                        for (let data of result.getFieldDetails) {
+//                            this.displayFieldvalue.push(data);
+//                        }
+//                    } else {
+//                        for (let data of result.getFieldDetails) {
+//                            this.displayFieldvalue.push(data);
+//                        }
+//                    }
+//                    StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
+//                    StoryDetailsComments.optionsModal.onDidDismiss((data) => {
+//                        if (data != null && (data.Name != data.previousValue)) {
+//                            this.changeOption(data, index, fieldDetails);
+//                        }
+//                        this.displayFieldvalue = [];
+//                    });
+//                    StoryDetailsComments.optionsModal.present();
+//                },
+//                (error) => {
+//                });
+//        } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
+//            this.enableDataPicker[index] = true;
+//            document.getElementById("field_title_" + index).style.display = 'none';
+//        } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
+//            if (fieldDetails.fieldType == "TextArea") {
+//                this.enableTextArea[index] = true;
+//                document.getElementById("field_title_" + index).focus();
+//                document.getElementById("field_title_" + index).style.display = 'none';
+//            }
+//            else if (fieldDetails.fieldType == "Text") {
+//                this.enableTextField[index] = true;
+//                document.getElementById("field_title_" + index).focus();
+//                document.getElementById("field_title_" + index).style.display = 'none';
+//            }
+//        }
+//    }
     public replyComment(commentId) {
         jQuery(".commentAction").removeClass("fab-close-active");
         jQuery(".fab-list-active").removeClass("fab-list-active");
@@ -486,7 +374,8 @@ export class StoryDetailsComments {
         }
     }
     public submitComment() {
-        var commentText = jQuery(".uploadAndSubmit .textEditor").val();
+//        console.log("clicked submit " + this.commentDesc);
+        var commentText = this.commentDesc;
         if (commentText != "" && commentText.trim() != "") {
             this.commentDesc = "";
             jQuery("#commentEditorArea").removeClass("replybox");
