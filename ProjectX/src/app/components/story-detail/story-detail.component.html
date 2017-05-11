@@ -217,7 +217,7 @@
       <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
         <img  data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{follower.ProfilePicture}}" title="{{follower.UserName}}"  /> 
-        <div (click)="removeFollower($event.target.id)" id="follower_{{follower.FollowerId}}" *ngIf="(follower.CreatedBy == getAllData.Id )" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+        <div (click)="removeFollower($event.target.id)" id="follower_{{follower.FollowerId}}" *ngIf="(follower.CreatedBy == getAllData.Id )" title="{{follower.UserName}}" class="followers_delete dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-times" aria-hidden="true"></i></div>
       
         <div id="conformRF_{{follower.FollowerId}}" class="dropdown-menu customdropdown-menu">
             <div class="delete_followersbg">  
