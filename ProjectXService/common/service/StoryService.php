@@ -733,8 +733,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                       $ticketId= $childticketDetails['ParentStoryId'];
                                   }
                                   $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
-                                TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
+                                if(!empty($ticketDetails["Tasks"])) { 
+                                    TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
 
+                                }   
                                 }
                         error_log("updateStoryFieldInline---7");
 
