@@ -383,7 +383,7 @@ use \ArrayObject;
                     
             foreach($followers as $follower)
             {
-                error_log("foloowerid-----------------------".$follower['FollowerId']);
+                error_log($loggedInUser."--foloowerid-----------------------".$follower['FollowerId']);
                error_log("===Notify Type".$notify_type);
               if($follower['FollowerId'] == $loggedInUser){
                   error_log("continure----------------");
@@ -503,6 +503,7 @@ use \ArrayObject;
                    /*************** Left Panel Field Values newly assigned *********************/
                  $activityOn = $notification['ActivityOn'];
                  $activityOnFieldType = "";
+                 $storyField = "";
                  if($activityOn !="Title" && $activityOn != "Description"){
                      $storyField = StoryFields::getFieldDetails($activityOn,"Field_Name");;
                     $activityOnFieldType = $storyField["Type"];  
@@ -656,7 +657,7 @@ use \ArrayObject;
                    // {
                   // $storyField = StoryFields::getFieldDetails($notification['ActivityOn'],"Field_Name");
                         else if(isset($storyField['Title'])){
-                             error_log("*******************************************")  ;
+                             error_log("*******************************************".$storyField['Title'])  ;
                       
                          $storyFieldName=$storyField['Title'];
                              //Eg : moin.hussain set duedate to 'apr-14-2017'
