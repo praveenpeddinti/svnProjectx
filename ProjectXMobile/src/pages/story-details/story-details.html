@@ -231,7 +231,7 @@
                 <!--Ticket #113 ended-->
                 <div role="tabpanel" class="custtab-pane " id="t_tasks">..pp.</div>
                 <div role="tabpanel" class="custtab-pane " id="t_worklog">
-                    <ion-row>
+<!--                    <ion-row>
                         <span class="pull-left">Total worked hours</span>
                         <div class="thours pull-right"><i aria-hidden="true" class="fa fa-clock-o timeclr"></i>&nbsp; {{workedLogtime.TotalTimeLog}}</div>
                     </ion-row>
@@ -245,15 +245,16 @@
                         <div class="pull-left">Worked hours:</div>
                         <input (blur)="inputWorkLog($event, i)" class="no_mar spinnerlabel" id="logHourDetails_input_{{i}}" [(ngModel)]="inputHourslog"
                             type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="0.00">
-                    </ion-row>
+                    </ion-row>-->
                 </div>
-                <super-tabs style="height: 80%;" id="suptab">
+                
+            </div>
+        </div>
+    </div>
+    <super-tabs style="height: 80%;" id="suptab">
                     <super-tab [root]="StoryDetailsComments" style="color: #fff;" [rootParams]="rootParams">1 </super-tab>
                     <super-tab [root]="StoryDetailsFollowers" [rootParams]="rootParams">2 </super-tab>
                     <super-tab [root]="StoryDetailsTask" [rootParams]="rootParams">3 </super-tab>
                     <super-tab [root]="StoryDetailsWorklog" [rootParams]="rootParams">4</super-tab>
-                </super-tabs>
-            </div>
-        </div>
-    </div>
+    </super-tabs>
 </ion-content>
