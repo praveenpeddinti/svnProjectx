@@ -21,9 +21,11 @@ import {AutoCompleteProvider} from '../providers/auto.complete-provider';
 import { AutoCompleteModule } from 'ionic2-auto-complete';
 //Ionic2-tabs
 import { SuperTabsModule, SuperTabsController } from 'ionic2-super-tabs';
-import { StoryWorklogPage } from '../pages/story-worklog/story-worklog';
-import { StoryFollowersPage } from '../pages/story-followers/story-followers';
-import { StoryTaskPage } from '../pages/story-task/story-task';
+import { StoryDetailsComments } from '../pages/story-details-comments/story-details-comments';
+import {StoryDetailsFollowers} from '../pages/story-details-followers/story-details-followers';
+import {StoryDetailsTask} from '../pages/story-details-task/story-details-task';
+import {StoryDetailsWorklog} from '../pages/story-details-worklog/story-details-worklog';
+//import { StoryWorklogPage } from '../pages/story-worklog/story-worklog';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule} from '@angular/http';
 import { Camera } from '@ionic-native/camera';
@@ -42,9 +44,10 @@ import { FilePath } from '@ionic-native/file-path';
     StoryCreatePage,
     SelectAlertless,
     LogoutPage,
-    StoryWorklogPage,
-    StoryFollowersPage,
-    StoryTaskPage
+    StoryDetailsWorklog,
+    StoryDetailsFollowers,
+    StoryDetailsTask,
+    StoryDetailsComments
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -66,9 +69,10 @@ import { FilePath } from '@ionic-native/file-path';
     StoryCreatePage,
     SelectAlertless,
     LogoutPage,
-    StoryWorklogPage,
-    StoryFollowersPage,
-    StoryTaskPage
+    StoryDetailsWorklog,
+    StoryDetailsFollowers,
+    StoryDetailsTask,
+    StoryDetailsComments
   ],
   providers: [AutoCompleteProvider, Globalservice, Camera, File, Transfer, FilePath, Constants, {provide: ErrorHandler, useClass: IonicErrorHandler}]
 

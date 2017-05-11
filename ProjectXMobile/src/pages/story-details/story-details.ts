@@ -4,6 +4,7 @@ import { ToastController, Content, Platform, App } from 'ionic-angular';
 import { ModalController, NavParams, MenuController, LoadingController, PopoverController, ActionSheetController, AlertController } from 'ionic-angular';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
+import {AutoCompleteProvider} from '../../providers/auto.complete-provider';
 import { LogoutPage } from '../logout/logout';
 import { Storage } from '@ionic/storage';
 import { CustomModalPage } from '../custom-modal/custom-modal';
@@ -12,9 +13,13 @@ import { File} from '@ionic-native/file';
 import {Transfer,TransferObject} from '@ionic-native/transfer';
 import { FilePath} from '@ionic-native/file-path';
 //Story details tabs 
-import { StoryFollowersPage } from "../story-followers/story-followers";
-import { StoryTaskPage } from "../story-task/story-task";
-import { StoryWorklogPage } from "../story-worklog/story-worklog";
+import { StoryDetailsComments } from '../story-details-comments/story-details-comments';
+import {StoryDetailsFollowers} from '../story-details-followers/story-details-followers';
+import {StoryDetailsTask} from '../story-details-task/story-details-task';
+import {StoryDetailsWorklog} from '../story-details-worklog/story-details-worklog';
+//import { StoryFollowersPage } from "../story-followers/story-followers";
+//import { StoryTaskPage } from "../story-task/story-task";
+//import { StoryWorklogPage } from "../story-worklog/story-worklog";
 
 declare var cordova: any;
 declare var jQuery: any;
@@ -31,15 +36,17 @@ declare var jQuery: any;
 })
 export class StoryDetailsPage {
        //for tabs : - prabhu
-    storyFollowers: any = StoryFollowersPage;
-    storyTask: any = StoryTaskPage;
-    storyWorklog: any = StoryWorklogPage;
+    StoryDetailsComments:any;
+    StoryDetailsFollowers: any;
+    StoryDetailsTask: any;
+    StoryDetailsWorklog: any;
 
-    showIcons: boolean;
-    showTitles: boolean;
-    pageTitle: string;
+    // showIcons: boolean;
+    // showTitles: boolean;
+    // pageTitle: string;
     //end tabs : - prabhu
     public ticketId: any;
+    public rootParams: any = {ticketId: ""};
     public items: Array<any>;
     public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
     public displayFieldvalue = [];
@@ -74,10 +81,13 @@ export class StoryDetailsPage {
     public textAreaValue = "";
     public displayedClassColorValue = "";
     //Work log
-    public workLog = { thours: "", iworkHours: "" };
-    public workedLogtime: any = {};
-    public individualitems: Array<any>;
-    public inputHourslog = "";
+    // public workLog = { thours: "", iworkHours: "" };
+    // public workedLogtime: any = {};
+    // public individualitems: Array<any>;
+    // public inputHourslog = "";
+   // public mySample: any= "";
+    //public mySample: any;
+    public fooId: any = {};
 
     @ViewChild(Content) content: Content;
 
@@ -100,12 +110,21 @@ export class StoryDetailsPage {
         private datePipe: DatePipe,
         private ngZone: NgZone,
         private alertController: AlertController ) {
+
+           this.navParams = navParams;
+           this.StoryDetailsComments = StoryDetailsComments;
+           this.StoryDetailsFollowers = StoryDetailsFollowers;
+           this. StoryDetailsTask = StoryDetailsTask;
+           this. StoryDetailsWorklog = StoryDetailsWorklog;
+            // this.mySample = this.navParams.data;
+            // console.log("the RootParam value is" + JSON.stringify(this.mySample));
          //for tabs :- prabhu
-        this.showIcons = navParams.get('icons');
-        this.showTitles = navParams.get('titles');
-        this.pageTitle = navParams.get('pageTitle');
+        // this.showIcons = navParams.get('icons');
+        // this.showTitles = navParams.get('titles');
+        // this.pageTitle = navParams.get('pageTitle');
         
         this.ticketId = this.navParams.get("id");
+        this.rootParams.ticketId =  this.navParams.get("id");
         StoryDetailsPage.menuControler = menu;
         this.minDate = new Date().toISOString();
         let loader = this.loadingController.create({ content: "Loading..." });
@@ -197,15 +216,15 @@ export class StoryDetailsPage {
         this.progressEdit = 0;
         
         // Total worked hours service method
-        globalService.getWorklog(this.constants.getWorkLog, this.navParams.get("id")).subscribe(
-            (result) => {
-                this.workedLogtime = result.data;
-            }, (error) => {
+        // globalService.getWorklog(this.constants.getWorkLog, this.navParams.get("id")).subscribe(
+        //     (result) => {
+        //         this.workedLogtime = result.data;
+        //     }, (error) => {
 
-            }
-        );
+        //     }
+        // );
 
-        globalService.searchTicket(this.constants.allDetailsforSearch, this.navParams.get("id")).subscribe();
+     //   globalService.searchTicket(this.constants.allDetailsforSearch, this.navParams.get("id")).subscribe();
 
     }
     public menuOpened() {
@@ -744,24 +763,24 @@ export class StoryDetailsPage {
         }
     }
     //workLog
-    public inputWorkLog(event, index) {
-        console.log("the details " + JSON.stringify(this.ticketId));
-        this.globalService.insertTimelog(this.constants.insertTimeLog, this.ticketId, this.inputHourslog).subscribe(
-            (result) => {
-                setTimeout(() => {
-                    // document.getElementById("logHourDetails_input_" + index).style.display = 'block';
-                    // document.getElementById("logHourDetails_input_" + index).innerHTML = this.workedLogtime.workHours;
-                    this.inputHourslog = null;
-                    this.workedLogtime = result.data;
-                    // this.workedLogtime.TotalTimeLog = result.data.TotalTimeLog;
-                    // this.individualitems = result.data.individualLog;
+    // public inputWorkLog(event, index) {
+    //     console.log("the details " + JSON.stringify(this.ticketId));
+    //     this.globalService.insertTimelog(this.constants.insertTimeLog, this.ticketId, this.inputHourslog).subscribe(
+    //         (result) => {
+    //             setTimeout(() => {
+    //                 // document.getElementById("logHourDetails_input_" + index).style.display = 'block';
+    //                 // document.getElementById("logHourDetails_input_" + index).innerHTML = this.workedLogtime.workHours;
+    //                 this.inputHourslog = null;
+    //                 this.workedLogtime = result.data;
+    //                 // this.workedLogtime.TotalTimeLog = result.data.TotalTimeLog;
+    //                 // this.individualitems = result.data.individualLog;
 
-                }, 200);
-            },
-            (error) => {
-                this.presentToast('Unsuccessful');
-            });
-    }
+    //             }, 200);
+    //         },
+    //         (error) => {
+    //             this.presentToast('Unsuccessful');
+    //         });
+    // }
      onTabSelect(tab: { index: number; id: string; }) {
       console.log(`Selected tab: `, tab);
      }
