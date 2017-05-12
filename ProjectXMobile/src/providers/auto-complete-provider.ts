@@ -15,12 +15,13 @@ export class AutoCompleteProvider implements AutoCompleteService{
   labelAttribute = "Name";
   private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
   public ticketId: any = "";
+  
   constructor(private http:Http,private constants: Constants) {}
   getResults(keyword: string) {
     var getFollowersParams: any = {
-                TicketId: this.ticketId,
-                ProjectId: 1,
-                SearchValue: keyword };
+                ticketId: this.ticketId,
+                projectId: 1,
+                searchValue: keyword };
     return this.http.post(this.constants.getUsersForFollow, JSON.stringify(getFollowersParams), this.headers).map(
             (res) => {
               return res.json().data.filter(item => item.Name.toLowerCase().startsWith(keyword.toLowerCase()) );

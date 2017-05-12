@@ -39,12 +39,14 @@ export class StoryDetailsFollowers {
         private constants: Constants,
         private alertController: AlertController,
        private storage: Storage) {
+       
+       this.storyTicketId = this.navParams.data.ticketId;
           this.storage.get('userCredentials').then((value) => {
-               this.storyTicketId = this.navParams.data.ticketId;
               this.userName = value.username;
               // Ticket #113
               this.userId = value.Id;
               // Ticket #113 ended
+               });
               globalService.getTicketDetailsById(this.constants.taskDetailsById, this.storyTicketId).subscribe(
                   result => {
                       // Ticket #113
@@ -57,11 +59,11 @@ export class StoryDetailsFollowers {
                // Ticket #113
            this.follower_search_results=[];
         // Ticket #113 ended
-        });
+       
   }
     public addFollower(followerId) {
         var followerData = {
-            TicketId: this.storyTicketId,
+            ticketId: this.storyTicketId,
             collaboratorId: followerId,
         };
         this.globalService.makeUsersFollowTicket(this.constants.makeUsersFollowTicket, followerData).subscribe(
@@ -97,7 +99,7 @@ export class StoryDetailsFollowers {
     }
     public removeFollower(followerId) {
         var followerData = {
-            TicketId: this.storyTicketId,
+            ticketId: this.storyTicketId,
             collaboratorId: followerId
         };
         this.globalService.makeUsersUnfollowTicket(this.constants.makeUsersUnfollowTicket, followerData).subscribe(

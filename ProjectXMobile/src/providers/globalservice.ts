@@ -52,14 +52,13 @@ export class Globalservice {
     }
     public getFieldItemById(url, fieldDetails) {
         var fieldItemParams = this.getUserInfo();
-        fieldItemParams["FieldId"] = fieldDetails.id;
-        fieldItemParams["TicketId"] = fieldDetails.ticketId;
-        fieldItemParams["ProjectId"] = 1;
+        fieldItemParams["fieldId"] = fieldDetails.id;
+        fieldItemParams["ticketId"] = fieldDetails.ticketId;
+        fieldItemParams["projectId"] = 1;
         fieldItemParams["timeZone"] = "Asia/Kolkata";
-        fieldItemParams["WorkflowType"] = fieldDetails.workflowType;
-        fieldItemParams["StatusId"] = fieldDetails.readableValue.StateId;
-        delete fieldItemParams["ticketId"];
-        delete fieldItemParams["projectId"];
+        fieldItemParams["workflowType"] = fieldDetails.workflowType;
+        fieldItemParams["statusId"] = fieldDetails.readableValue.StateId;
+       
         var response = this.http.post(url, JSON.stringify(fieldItemParams), this.headers).map(
             res => res.json()
         );
@@ -70,17 +69,17 @@ export class Globalservice {
         fieldUpdateParams["isLeftColumn"] = 1;
         fieldUpdateParams["id"] = fieldDetails.id;
         fieldUpdateParams["value"] = selectedItem;
-        fieldUpdateParams["TicketId"] = fieldDetails.ticketId;
-        fieldUpdateParams["EditedId"] = fieldDetails.fieldName;
+        fieldUpdateParams["ticketId"] = fieldDetails.ticketId;
+        fieldUpdateParams["editedId"] = fieldDetails.fieldName;
         if(fieldDetails.fieldName == 'workflow'){
-            fieldUpdateParams["WorkflowType"] = fieldDetails.workflowType;
-            fieldUpdateParams["StatusId"] = fieldDetails.readableValue.StateId;
+            fieldUpdateParams["workflowType"] = fieldDetails.workflowType;
+            fieldUpdateParams["statusId"] = fieldDetails.readableValue.StateId;
         }
         fieldUpdateParams["projectId"] = 1;
         fieldUpdateParams["timeZone"] = "Asia/Kolkata";
-        delete fieldUpdateParams["FieldId"];
-        delete fieldUpdateParams["ticketId"];
-        delete fieldUpdateParams["ProjectId"];
+        delete fieldUpdateParams["fieldId"];
+      
+       // delete fieldUpdateParams["projectId"];
         var response = this.http.post(url, JSON.stringify(fieldUpdateParams), this.headers).map(
             res => res.json()
         );
@@ -115,7 +114,7 @@ export class Globalservice {
     public deleteCommentById(url, commentParams){
         var deleteCommentParams = this.getUserInfo();
         deleteCommentParams["Comment"] = commentParams.Comment;
-        deleteCommentParams["TicketId"] = commentParams.TicketId;
+        deleteCommentParams["ticketId"] = commentParams.TicketId;
         var response = this.http.post(url, JSON.stringify(deleteCommentParams), this.headers).map(
             res => res.json()
         );
@@ -124,18 +123,19 @@ export class Globalservice {
     public submitComment(url, commentParams){
         var submitCommentParams = this.getUserInfo();
         submitCommentParams["Comment"] = commentParams.Comment;
-        submitCommentParams["TicketId"] = commentParams.TicketId;
+        submitCommentParams["ticketId"] = commentParams.TicketId;
         var response = this.http.post(url, JSON.stringify(submitCommentParams), this.headers).map(
             res => res.json()
         );
         return response;
     }
     // Ticket #113
+    //delete it later
     public getUsersForFollow(url, usersData){
         var getUsersParams = this.getUserInfo();
-        getUsersParams["TicketId"] = usersData.TicketId;
-        getUsersParams["ProjectId"] = usersData.ProjectId;
-        getUsersParams["SearchValue"] = usersData.SearchValue;
+        getUsersParams["ticketId"] = usersData.ticketId;
+        getUsersParams["projectId"] = usersData.ProjectId;
+        getUsersParams["searchValue"] = usersData.SearchValue;
         var response = this.http.post(url, JSON.stringify(getUsersParams), this.headers).map(
             res => res.json()
         );
@@ -143,7 +143,8 @@ export class Globalservice {
     }
     public makeUsersFollowTicket(url, addFollowerData){
         var addFollowerParams = this.getUserInfo();
-        addFollowerParams["TicketId"] = addFollowerData.TicketId;
+        addFollowerParams["ticketId"] = addFollowerData.ticketId;
+        addFollowerParams["projectId"] = 1;
         addFollowerParams["collaboratorId"] = addFollowerData.collaboratorId;
         var response = this.http.post(url, JSON.stringify(addFollowerParams), this.headers).map(
             res => res.json()
@@ -152,7 +153,7 @@ export class Globalservice {
     }
     public makeUsersUnfollowTicket(url, removeFollowerData){
         var removeFollowerParams = this.getUserInfo();
-        removeFollowerParams["TicketId"] = removeFollowerData.TicketId;
+        removeFollowerParams["ticketId"] = removeFollowerData.ticketId;
         removeFollowerParams["collaboratorId"] = removeFollowerData.collaboratorId;
         var response = this.http.post(url, JSON.stringify(removeFollowerParams), this.headers).map(
             res => res.json()
@@ -161,10 +162,11 @@ export class Globalservice {
     }
     //  Ticket #113 ended
 //sprint 5 start :- prabhu
-public getWorklog(url, worklogParams){
+    public getWorklog(url, worklogParams){
         var getWorklogParams = this.getUserInfo();
-        getWorklogParams["TicketId"] = worklogParams.TicketId;
+        getWorklogParams["ticketId"] = worklogParams;
         getWorklogParams["getimelog"] = worklogParams.getimelog;
+        getWorklogParams["projectId"] = 1;
         getWorklogParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(getWorklogParams), this.headers).map(
             res => res.json()
@@ -173,8 +175,9 @@ public getWorklog(url, worklogParams){
     }
     public insertTimelog(url, timelogTicketId, enteredTimeLog){
         var insertTimelogParams = this.getUserInfo();
-        insertTimelogParams["TicketId"] = timelogTicketId;
+        insertTimelogParams["ticketId"] = timelogTicketId;
         insertTimelogParams["workHours"] = enteredTimeLog;
+        insertTimelogParams["projectId"] = 1;
         insertTimelogParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(insertTimelogParams), this.headers).map(
             res => res.json()
@@ -184,7 +187,8 @@ public getWorklog(url, worklogParams){
 
     public searchTicket(url, ticketParams){
         var searchTicketParams = this.getUserInfo();
-        searchTicketParams["TicketId"] = ticketParams.TicketId;
+        searchTicketParams["ticketId"] = ticketParams.TicketId;
+        searchTicketParams["projectId"] = 1;
         searchTicketParams["sortvalue"] = ticketParams.sortvalue;
         searchTicketParams["searchString"] = ticketParams.searchString;
          searchTicketParams["timeZone"] = "Asia/Kolkata";
@@ -196,7 +200,8 @@ public getWorklog(url, worklogParams){
 
     public relateTask(url, relatedTask){
         var relateTaskParams = this.getUserInfo();
-        relateTaskParams["TicketId"] = relatedTask.TicketId;
+        relateTaskParams["ticketId"] = relatedTask.TicketId;
+        relateTaskParams["projectId"] = 1;
         relateTaskParams["relatedSearchTicketId"] = relatedTask.relatedSearchTicketId;
          relateTaskParams["timeZone"] = "Asia/Kolkata";
          var response = this.http.post(url,JSON.stringify(relateTaskParams),this.headers).map(

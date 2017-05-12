@@ -794,9 +794,9 @@ export class StoryDetailsPage {
     public getUsersForFollow() {
         this.follower_search_results = [];
         var addFollowerData = {
-            TicketId: this.taskDetails.ticketId,
-            ProjectId: 1,
-            SearchValue: "madan"
+            ticketId: this.taskDetails.ticketId,
+            projectId: 1,
+            searchValue: "madan"
         };
         this.globalService.getUsersForFollow(this.constants.getUsersForFollow, addFollowerData).subscribe(
             (result) => {
@@ -817,7 +817,7 @@ export class StoryDetailsPage {
     }
     public addFollower(followerId) {
         var followerData = {
-            TicketId: this.taskDetails.ticketId,
+            ticketId: this.taskDetails.ticketId,
             collaboratorId: followerId,
         };
         this.globalService.makeUsersFollowTicket(this.constants.makeUsersFollowTicket, followerData).subscribe(
@@ -853,7 +853,7 @@ export class StoryDetailsPage {
     }
     public removeFollower(followerId) {
         var followerData = {
-            TicketId: this.taskDetails.ticketId,
+            icketId: this.taskDetails.ticketId,
             collaboratorId: followerId
         };
         this.globalService.makeUsersUnfollowTicket(this.constants.makeUsersUnfollowTicket, followerData).subscribe(
