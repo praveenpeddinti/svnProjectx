@@ -85,7 +85,7 @@
                 </div>
             </div>
         </div>
-        <div class="padding10">
+<!--        <div class="padding10">
             <ul class="custnavtabs" role="tablist">
                 <li class="t_comments active"><a aria-controls="t_comments"><i class="fa fa-weixin" aria-hidden="true"></i></a></li>
                 <li class="t_followers "><a aria-controls="t_followers"><span>F</span></a></li>
@@ -147,7 +147,7 @@
                                                 <div class="commentingTextArea editorDiv editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i] && !editCommentOpenClose[i]"
                                                      style="position: relative;">
                                                     <div class="deletediv"> <a href="javascript:void(0)" class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>    </div>
-                                                    <!--Have to change Text area to editor-->
+                                                    Have to change Text area to editor
                                                     <textarea (focus)="showSubmit(i)" class="textEditor commentTextArea" placeholder="Enter text here..."></textarea>
                                                     <div class="uploadProgress" [hidden]='progressEdit==0'>
                                                         <progress [value]="progressEdit" max="100"></progress>
@@ -185,7 +185,7 @@
                                 </div>
                             </div>
                             <div class="uploadAndSubmit editorDiv" id="uploadAndSubmit">
-                                <!--Have to change Text area to editor-->
+                                Have to change Text area to editor
                                 <textarea (focus)="showSubmit(-1)" class="textEditor commentTextArea" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}"
                                     placeholder="Enter text here..."></textarea>
                                 <div class="uploadProgress" [hidden]='progressNew==0'>
@@ -206,19 +206,19 @@
                         </div>
                     </div>
                 </div>
-                <!--Ticket #113-->
+                Ticket #113
                 <div role="tabpanel" class="custtab-pane active" id="t_followers">
                     <div>
                         <div class="widgethed">Followers</div>
-                        <!--Auto complete add follower-->
+                        Auto complete add follower
                         <ion-auto-complete [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Lorem Ipsum' }" (itemSelected)='itemCustomSelected($event)' #searchbar></ion-auto-complete>
-                        <!--Followers list-->
+                        Followers list
                         <div class="followersList">
                             <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
                                 <div class="user">
                                     <img class="usericon" src="{{follower.ProfilePicture}}" alt="" />
                                     <span class="">{{follower.UserName}}</span>
-                                    <!--Replace Remove by icon-->
+                                    Replace Remove by icon
                                     <span class="followers_delete" (click)="presentConfirmRemoveFollower(follower.FollowerId)" id="follower_{{follower.FollowerId}}"
                                         *ngIf="follower.CreatedBy == userId" title="{{follower.UserName}}">
                                         Remove
@@ -228,11 +228,11 @@
                         </div>
                     </div>
                 </div>
-                <!--Ticket #113 ended-->
+                Ticket #113 ended
                 <div role="tabpanel" class="custtab-pane " id="t_tasks">..pp.</div>
                 <div role="tabpanel" class="custtab-pane " id="t_worklog"></div>
             </div>
-        </div>
+        </div>-->
     </div>
     <super-tabs style="height: 80%;" id="suptab">
                     <super-tab [root]="StoryDetailsComments" tabTitle="Activity" [rootParams]="rootParams"></super-tab>

@@ -10,6 +10,7 @@ import { File } from '@ionic-native/file';
 import { Transfer,TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { DatePipe } from '@angular/common';
+import { CustomModalPage } from '../custom-modal/custom-modal';
 
 declare var cordova: any;
 declare var jQuery: any;
@@ -46,7 +47,7 @@ export class StoryDetailsComments {
    
    // public items: Array<any>;
    // public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
-   // public displayFieldvalue = [];
+    public displayFieldvalue = [];
    // public showEditableFieldOnly = [];
     //public readOnlyDropDownField: boolean = false;
     
@@ -60,7 +61,7 @@ export class StoryDetailsComments {
     public localDate: any = new Date();
     public minDate: any = new Date();
     public userName: any = '';
- //   public static optionsModal;
+    public static optionsModal;
   //  public static isMenuOpen: boolean = false;
 //    public static menuControler;
 //    public textFieldValue = "";
@@ -172,7 +173,6 @@ export class StoryDetailsComments {
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
-            
                     if (result.data.activityData.referenceKey == -1) {
                         this.itemsInActivities.push(result.data.activityData.data);
                     } else {
@@ -226,48 +226,23 @@ export class StoryDetailsComments {
 //        jQuery('#description').css("height", "200px");
 //        jQuery('#description').css("overflow", "hidden");
 //    }
-//     public openOptionsModal(fieldDetails, index) {
-//        fieldDetails['workflowType'] = this.taskDetails.workflowType;
-//        if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
-//            this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
-//                (result) => {
-//                    if (fieldDetails.fieldType == "Team List") {
-//                        this.displayFieldvalue.push({ "Id": "", "Name": "--none--", "Email": "null" })
-//                        for (let data of result.getFieldDetails) {
-//                            this.displayFieldvalue.push(data);
-//                        }
-//                    } else {
-//                        for (let data of result.getFieldDetails) {
-//                            this.displayFieldvalue.push(data);
-//                        }
-//                    }
-//                    StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
-//                    StoryDetailsComments.optionsModal.onDidDismiss((data) => {
-//                        if (data != null && (data.Name != data.previousValue)) {
-//                            this.changeOption(data, index, fieldDetails);
-//                        }
-//                        this.displayFieldvalue = [];
-//                    });
-//                    StoryDetailsComments.optionsModal.present();
-//                },
-//                (error) => {
-//                });
-//        } else if ((fieldDetails.readOnly == 0) && (fieldDetails.fieldType == "Date")) {
-//            this.enableDataPicker[index] = true;
-//            document.getElementById("field_title_" + index).style.display = 'none';
-//        } else if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "TextArea") || (fieldDetails.fieldType == "Text"))) {
-//            if (fieldDetails.fieldType == "TextArea") {
-//                this.enableTextArea[index] = true;
-//                document.getElementById("field_title_" + index).focus();
-//                document.getElementById("field_title_" + index).style.display = 'none';
-//            }
-//            else if (fieldDetails.fieldType == "Text") {
-//                this.enableTextField[index] = true;
-//                document.getElementById("field_title_" + index).focus();
-//                document.getElementById("field_title_" + index).style.display = 'none';
-//            }
-//        }
-//    }
+    public openOptionsModal(fieldDetails, index) {
+        console.log("open option method from story details comment.");
+       if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
+           this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
+               (result) => {
+                StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
+                   StoryDetailsComments.optionsModal.onDidDismiss((data) => {
+                       if (data != null && (data.Name != data.previousValue)) {
+                           this.changeOption(data, index, fieldDetails);
+                       }
+                    
+                   });
+               },
+               (error) => {
+               });
+       }
+   }
     public replyComment(commentId) {
         jQuery(".commentAction").removeClass("fab-close-active");
         jQuery(".fab-list-active").removeClass("fab-list-active");
@@ -374,8 +349,8 @@ export class StoryDetailsComments {
         }
     }
     public submitComment() {
-//        console.log("clicked submit " + this.commentDesc);
-        var commentText = this.commentDesc;
+        var commentText = jQuery(".uploadAndSubmit .textEditor").val();
+        // var commentText = this.commentDesc;
         if (commentText != "" && commentText.trim() != "") {
             this.commentDesc = "";
             jQuery("#commentEditorArea").removeClass("replybox");
