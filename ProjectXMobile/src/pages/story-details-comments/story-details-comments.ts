@@ -59,7 +59,7 @@ export class StoryDetailsComments {
    // public options = "options";
     public localDate: any = new Date();
     public minDate: any = new Date();
-  //  public userName: any = '';
+    public userName: any = '';
  //   public static optionsModal;
   //  public static isMenuOpen: boolean = false;
 //    public static menuControler;
@@ -90,9 +90,9 @@ export class StoryDetailsComments {
         private alertController: AlertController,) {
 //        let loader = this.loadingController.create({ content: "Loading..." });
 //        loader.present();
-//         this.storage.get('userCredentials').then((value) => {
-//            this.userName = value.username;
-//        });
+         this.storage.get('userCredentials').then((value) => {
+            this.userName = value.username;
+        });
          this.storyTicketId = this.navParams.data.ticketId;
          console.log("the story details comments ticket id " + JSON.stringify(this.storyTicketId));
          this.itemsInActivities = [];
