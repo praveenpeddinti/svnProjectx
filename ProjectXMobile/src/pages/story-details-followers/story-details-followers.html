@@ -13,7 +13,7 @@
                                     <span class="">{{follower.UserName}}</span>
                                     <!--Replace Remove by icon-->
                                     <span class="followers_delete" (click)="presentConfirmRemoveFollower(follower.FollowerId)" id="follower_{{follower.FollowerId}}"
-                                        *ngIf="follower.CreatedBy == userId" title="{{follower.UserName}}">
+                                        *ngIf="follower.CreatedBy == userId || follower.FollowerId == userId" title="{{follower.UserName}}">
                                         Remove
                                      </span>
                                 </div>
