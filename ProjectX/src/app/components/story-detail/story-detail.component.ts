@@ -780,7 +780,10 @@ var thisObj = this;
                   this.getArtifacts(ticketIdObj);
                  }
          }
-
+    
+if(postEditedText.EditedId == "estimatedpoints"){ 
+jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
+}
 
 
          //  this.commentsList = result.data.Activities;
