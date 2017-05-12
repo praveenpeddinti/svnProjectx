@@ -235,9 +235,9 @@
         </div>
     </div>
     <super-tabs style="height: 80%;" id="suptab">
-                    <super-tab [root]="StoryDetailsComments" style="color: #fff;" [rootParams]="rootParams">1 </super-tab>
-                    <super-tab [root]="StoryDetailsFollowers" [rootParams]="rootParams">2 </super-tab>
-                    <super-tab [root]="StoryDetailsTask" [rootParams]="rootParams">3 </super-tab>
-                    <super-tab [root]="StoryDetailsWorklog" [rootParams]="rootParams">4</super-tab>
+                    <super-tab [root]="StoryDetailsComments" tabTitle="Activity" [rootParams]="rootParams"></super-tab>
+                    <super-tab [root]="StoryDetailsFollowers" tabTitle="Followers" [rootParams]="rootParams"></super-tab>
+                    <super-tab [root]="StoryDetailsTask" tabTitle="Task" [rootParams]="rootParams"></super-tab>
+                    <super-tab [root]="StoryDetailsWorklog" tabTitle="Worklog" [rootParams]="rootParams"></super-tab>
     </super-tabs>
 </ion-content>
