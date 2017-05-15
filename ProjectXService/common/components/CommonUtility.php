@@ -1026,34 +1026,29 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
     
     
     public static function sendEmail($recipient_list,$text_message,$subject="ProjectX",$attachment_list=array()){
-//         try{
-//           
-//             error_log("send eamil-------after-------------".print_r($recipient_list,1));
-//             ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
-//             $attachments=$attachment_list;//list of artifacts
-//             $EEemail = new Email();
-//             
-//                    $from=Yii::$app->params['ProjectEmail'];
-//                    $fromName="ProjectX";
-//                    $html="<h1> $text_message </h1>";
-//                    $text=$text_message;
-//                  //  $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
-//                }
-//                catch (Exception $e)
-//                {
-//                    echo 'Something went wrong: ', $e->getMessage(), '\n';
-//                    return;
-//                }
-        try
-        {
-                error_log("in send mail");
-               Yii::$app->mailer->compose()
-           ->setFrom(Yii::$app->params['ProjectEmail'])
-           ->setTo($recipient_list)
-           ->setSubject($subject)
-           ->setTextBody('This is ProjectX')
-           ->setHtmlBody($text_message)
-           ->send();
+        try{
+           
+           echo("send eamil-------after-------------");
+         ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
+        $attachments=array();//list of artifacts
+        $EEemail = new Email();
+
+        $from=Yii::$app->params['ProjectEmail'];
+        $fromName="ProjectX";
+        $html="<h1> $text_message </h1>";
+        $text=$text_message;
+        $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
+                
+        
+//              Yii::$app->mailer->compose()
+//           ->setFrom(Yii::$app->params['ProjectEmail'])
+//           ->setTo($recipient_list)
+//           ->setSubject($subject)
+//           ->setTextBody('This is ProjectX')
+//           ->setHtmlBody($text_message)
+//           ->send();
+//             error_log("in send mail");
+       
         }catch(Exception $e)
         {
             return;

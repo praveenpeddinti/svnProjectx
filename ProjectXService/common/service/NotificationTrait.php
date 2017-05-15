@@ -1,10 +1,9 @@
 <?php
 namespace common\service;
-use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
+use common\models\mongo\{TicketCollection,TinyUserCollection,NotificationCollection};
 use common\components\{CommonUtility};
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects};
 use yii;
-use \ArrayObject;
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -719,16 +718,27 @@ use \ArrayObject;
         }
     }
     public static function sendEmailNotification($notificationIds,$projectId){
+         // error_log("send e,ao;====nr==================".print_r($notificationIds,1));
+          $notificationIds = json_encode($notificationIds);
+        //  error_log("send e,ao;======================".$notificationIds);
+         echo shell_exec("php /usr/share/nginx/www/ProjectXService/yii notifications/send '$notificationIds' '$projectId' > /data/error.log &");
         
-         $msg='';
+               
+        
+    }
+    
+     public function sendEmailNotificationFromBackground($notificationIds,$projectId){
+         echo "1. SendEmailNotificationFromBackground----started--------";
+            $msg='';
         $message=array();
         $result_msg=array(); 
         
         
         // error_log("sendEmailNotification--".print_r($notificationIds,1));
         $notifications = NotificationCollection::getNotificationDetails($notificationIds);
-       // error_log("count-------------".count($notifications));
+       echo("2. Count-------------".count($notifications));
      foreach($notifications as $notification){
+         //echo $notification['_id'];
           $recipient_list=array();
          
                  error_log($notification['_id']."==Notification Type==".$notification['Notification_Type']);
@@ -750,18 +760,18 @@ use \ArrayObject;
                  $ticketId = $notification['TicketId'];
                  $title = $ticket_data['Title'];
                  $fromUser = $from_user['UserName'];
-                 if($activityOn == "Description" || $activityOn == "Title"){
-                   
-                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
-                                $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> </br>
-{$activityOn} has been changed by {$fromUser}
-EOD;
- 
-         array_push($recipient_list,$notification['NotifiedUser']);                       
-                 }
+//                 if($activityOn == "Description" || $activityOn == "Title"){
+//                   
+//                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+//                                $text_message = <<<EOD
+//<a href={$link}>#{$ticketId} {$title} </a> </br>
+//{$activityOn} has been changed by {$fromUser}
+//EOD;
+// 
+//         array_push($recipient_list,$notification['NotifiedUser']);                       
+//                 }
                  
-                else if($activityOnFieldType== 6) //newly assigned 
+                 if($activityOnFieldType== 6) //newly assigned 
                     {
                         //$action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
                        
@@ -796,6 +806,7 @@ EOD;
          array_push($recipient_list,$notification['NotifiedUser']);  
                     }
               else if($notification['ActivityOn']=='Description'){
+                  echo "descriopnt chanted-------------";
                     $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
                      $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
                    $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
@@ -977,141 +988,16 @@ EOD;
                               }
                               
                        /*Left Panel Changed Field Values Start*/
-                    
-          
-                    
-                    /*********Left Panel  Changed Field Values End *******************/        
-              
-                   
-                    /**** Changes in Editor End *************/
-                  //   error_log("sendEmailNotification--snedin eaml--");
-                  
-           
-           //  error_log("send eamil--------------------".print_r($recipient_list,1));
              foreach ($recipient_list as &$value) {
                   $collaboratorData = TinyUserCollection::getMiniUserDetails($value);
                   $value = $collaboratorData['Email'];
                //   error_log("EMAIL________________+++++++++++_____________".$value);
              }
-                  
-                  
-                      CommonUtility::sendEmail($recipient_list,$text_message);
-            }
-               
-        
-    }
-    
-    /**
-      * @author Ryan Marshal
-      * @param type $loggedInUser
-      * @param type $recipients
-      * @param type $ticketdetails
-      * @param type $artifacts
-      * @return type
-      */
-    public static function sendMail($ticketData,$loggedInUser,$recipients,$notificationType,$toFollower = false)
-    {
-        error_log("sendMail--".$loggedInUser."---".$recipients."--".$notificationType);
-      //  error_log("==Followers==".print_r($ticketdetails['Followers'],1));
-       // $followers=$ticketdetails['Followers'];
-       // $recipient_list=array();
-        $attachment_list=array();
-        try
-        {
-            $collaboratorData = TinyUserCollection::getMiniUserDetails($loggedInUser);
-            $actionByUser = $collaboratorData["UserName"];
-            $ticketId = $ticketData["TicketId"];
-            $title = $ticketData["Title"];
-            error_log("sending email-------");
-            if($notificationType == "mention"){
-               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
-            $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$actionByUser}
-EOD;
-            
-    } 
-          if($notificationType == "comment"){
-               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
-            $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> <br/> commented by {$actionByUser}
-EOD;
-            
-    } 
-              if($notificationType == "reply"){
-               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
-            $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> <br/> replied by {$actionByUser}
-EOD;
-            
-    } 
-    if($notificationType == "assignedto" || $notificationType == "stakeholder"){
-        $fieldName = "";
-        if($notificationType != "assignedto" ){
-           $storyField = StoryFields::getFieldDetails($notificationType,"Field_Name");
-                 $fieldName = $storyField["Title"];   
-        }
-       $fieldName =  $fieldName == "" ? "":"as a ".$fieldName;
-                    
-                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
-                                $text_message = <<<EOD
-{$actionByUser} has assigned you {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
-EOD;
- 
-   } 
-  
-    
-    
-         //   $qry="select UserName,Email from Collaborators where UserName = '$loggedInUser'";
-           // $from = Yii::$app->db->createCommand($qry)->queryOne();
-//            if(is_array($recipients)) // for @mentioned users
-//            {
-//                if(!empty($recipients))
-//                {
-//                    for($i=0;$i<count($recipients);$i++)
-//                    {
-//                        $qry="select UserName,Email from Collaborators where UserName = '$recipients[$i]'";
-//                        $data = Yii::$app->db->createCommand($qry)->queryOne();
-//                        array_push($recipient_list,$data['Email']);
-//                    }
-//                }
-//                
-//                // for followers
-//                foreach($followers as $follower)
-//                {
-//                    $followerid=$follower['FollowerId'];
-//                    error_log("==Follower Id==".$followerid);
-//                    $qry="select UserName,Email from Collaborators where Id = '$followerid'";
-//                    $data = Yii::$app->db->createCommand($qry)->queryOne();
-//                    if($data['UserName']!=$loggedInUser) //To avoidloggedin user @mentioning himself
-//                    {
-//                        array_push($recipient_list,$data['Email']);
-//                    }
-//                }
-//            }
-//            else // for assigned to and stakeholder
-//            {
-//                $qry="select UserName,Email from Collaborators where UserName = '$recipients'";
-//                $data = Yii::$app->db->createCommand($qry)->queryOne();
-//                array_push($recipient_list,$data['Email']);
-//            }
-    
-         $recipient_list=array();
-             if(!is_array($recipients)){
-                 array_push($recipient_list,$recipients);
-             }else{
-                 $recipient_list = $recipients;
-             }
-             error_log("send eamil--------------------".print_r($recipient_list,1));
-             foreach ($recipient_list as &$value) {
-                  $collaboratorData = TinyUserCollection::getMiniUserDetails($value);
-                  $value = $collaboratorData['Email'];
-             }
-            CommonUtility::sendEmail($recipient_list,$text_message);
- 
-            
-        } catch (Exception $ex) {
-            Yii::log("NotificationTrait:sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
-    }
+              $subject="ProjectX";  
+             \common\components\CommonUtility::sendEmail($recipient_list,$text_message,$subject);
+
+                      
+     }
+     }
     
 } 

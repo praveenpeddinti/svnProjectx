@@ -9,7 +9,9 @@ namespace console\controllers;
 use Yii;
 use yii\console\Controller;
 use common\models\mongo\NotificationCollection;
-use common\components\ServiceFactory;
+use common\components\ServiceFactory; //only for testing purpose
+ //only for testing purpose
+//include_once 'ElasticEmailClient.php';
 
 class NotificationsController extends Controller
 {
@@ -82,6 +84,19 @@ class NotificationsController extends Controller
         }
         
     }
+      public function actionSend($notificationIds,$projectId){
+         // echo "actionSendEmailNotification--".$notificationIds;
+           $notificationIds = json_decode($notificationIds,true);
+            // echo "actionSendEmailNotification-)))****-".$notificationIds;
+           $notificationArray = array();
+           foreach($notificationIds as $v){
+               echo $v['$oid'];
+               array_push($notificationArray, new \MongoDB\BSON\ObjectID($v['$oid']));
+           }
+            //echo "actionSendEmailNotification-- after".print_r($notificationArray,1);
+           $result_data = ServiceFactory::getStoryServiceInstance()->sendEmailNotificationFromBackground($notificationArray,$projectId);
+         
+      }
     
 
 }
