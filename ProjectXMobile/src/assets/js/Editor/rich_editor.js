@@ -75,18 +75,18 @@ RE.click = function (id) {
 
         case "insertlink":
             var person = prompt("Enter the url");
-
-            RE.insertLink(person, person);
-            myHTML = document.getElementById('editor').innerHTML;
+            if(person != null) {
+                RE.insertLink(person, person);
+                myHTML = document.getElementById('editor').innerHTML;
+            }
             RE.focus();
 
 
             break;
 
         case "close":
-            var hideOrShow = document.getElementById('hideOrShow');
-            hideOrShow.style.display = "none";
-            RE.focus();
+            document.getElementById("hideOrShow").style.display = "none"; 
+            // RE.focus();
 
             break;
 
@@ -351,21 +351,12 @@ var mouseTimer;
 RE.focus = function (evt) {
     RE.editor.focus();
 
-    // var hideOrShow = document.getElementById('hideOrShow');
-    //     hideOrShow.style.display = "none";
+    var hideOrShow = document.getElementById('hideOrShow');
+        hideOrShow.style.display = "block";
 }
 
 RE.blurFocus = function () {
     RE.editor.blur();
-
-    var sel = document.getSelection();
-    if (sel.toString().length < 0) {
-        // alert("blur if " + sel.toString().length);
-         var hideOrShow = document.getElementById('hideOrShow');
-             hideOrShow.style.display = "none";
-    } else{
-        RE.focus();
-    }
 }
 
 RE.removeFormat = function () {
