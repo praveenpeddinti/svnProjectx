@@ -465,8 +465,8 @@ class CommonUtility {
             $workFlowModel = new WorkFlowFields();
             $ticketTypeModel = new TicketType();
             $workFlowDetails = array();
-
-            foreach ($ticketDetails["Fields"] as &$value) {
+            if(!empty($ticketDetails)){
+               foreach ($ticketDetails["Fields"] as &$value) {
                 if (isset($value["custom_field_id"])) {
                     $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
                     if ($storyFieldDetails["Name"] == "List") {
@@ -566,7 +566,11 @@ class CommonUtility {
             unset($ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
             unset($ticketDetails["ArtifactsRef"]);
-            unset($ticketDetails["CommentsRef"]);
+            unset($ticketDetails["CommentsRef"]);  
+            }else{
+              $ticketDetails='';  
+            }
+           
 
             return $ticketDetails;
         } catch (Exception $ex) {
@@ -872,6 +876,9 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                array_push($arr2ordered, $arrow);
             unset($ticketDetails["Fields"]);
             $ticketDetails = $arr2ordered;
+            $projectObj = new Projects();
+            $projectDetails = $projectObj->getProjectMiniDetails($projectId);
+            $ticketDetails['project_name']=$projectDetails['ProjectName'];
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -1068,6 +1075,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     $offset = ($page - 1) * $pageLength;
                     $limit = $pageLength;
                 }
+            $projectObj = new Projects();    
             $searchString=strtolower($searchString);    
             if (preg_match('/[^@!%^&*()<>.,#\\-$]/', $searchString) && !empty($searchString)) {
                 $TicketCollFinalArray = array();
@@ -1110,6 +1118,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
+                        $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        $forTicketCollection['Project'] = $projectDetails;
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
                     $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
@@ -1131,7 +1141,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
 
                         foreach($ticketCommentsData as $extractComments){
                            $ticketCollectionModel = new TicketCollection();
-                           $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                           $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
                            $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],1,$selectFields);
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
@@ -1155,6 +1165,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                                 $readableDate = $datetime->format('Y-m-d H:i');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
+                           $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                           $forTicketComments['Project'] = $projectDetails;
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
                     $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
@@ -1163,7 +1175,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $ticketCollectionModel = new TicketCollection();
-                        $selectFields = ['Title', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
+                        $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
                         $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],1,$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
@@ -1182,6 +1194,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
+                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $forTicketArtifacts['Project'] = $projectDetails;
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
                     }
@@ -1223,7 +1237,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                         foreach($ticketCommentsData as $extractComments){
                             //error_log("commentsssssssssssss".print_r($extractComments,1));
                            $ticketCollectionModel = new TicketCollection();
-                           $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                           $selectFields = ['Title','ProjectId','TicketId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
                            $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],1,$selectFields);
                            error_log("getdetailssssssssssss".print_r($getTicketDetails,1));
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
@@ -1249,6 +1263,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                                 $readableDate = $datetime->format('Y-m-d H:i');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
+                           $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                           $forTicketComments['Project'] = $projectDetails;
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
                 }else if($searchFlag==3){
@@ -1278,7 +1294,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $ticketCollectionModel = new TicketCollection();
-                        $selectFields = ['Title', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
+                        $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
                         $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],1,$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
@@ -1297,6 +1313,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
+                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $forTicketArtifacts['Project'] = $projectDetails; 
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
                     }
@@ -1335,6 +1353,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
+                         $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        $forTicketCollection['Project'] = $projectDetails; 
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
                     $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
@@ -1356,7 +1376,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
 
                         foreach($ticketCommentsData as $extractComments){
                            $ticketCollectionModel = new TicketCollection();
-                           $selectFields = ['Title', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                           $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
                            $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],1,$selectFields);
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
@@ -1380,6 +1400,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                                 $readableDate = $datetime->format('Y-m-d H:i');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
+                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
                     $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
@@ -1388,7 +1410,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $ticketCollectionModel = new TicketCollection();
-                        $selectFields = ['Title', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
+                        $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
                         $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],1,$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
@@ -1407,6 +1429,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
+                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $forTicketArtifacts['Project'] = $projectDetails; 
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
                     }
