@@ -90,7 +90,6 @@ class NotificationsController extends Controller
             // echo "actionSendEmailNotification-)))****-".$notificationIds;
            $notificationArray = array();
            foreach($notificationIds as $v){
-               echo $v['$oid'];
                array_push($notificationArray, new \MongoDB\BSON\ObjectID($v['$oid']));
            }
             //echo "actionSendEmailNotification-- after".print_r($notificationArray,1);
