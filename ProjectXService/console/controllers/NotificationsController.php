@@ -83,8 +83,15 @@ class NotificationsController extends Controller
 
         }
         
-    }
-      public function actionSend($notificationIds,$projectId){
+    }/**
+     * @author Moin Hussain
+     * @param type $notificationIds
+     * @param type $projectId
+     */
+      public function actionForkEmailNotificationProcess($notificationIds,$projectId){
+          try{
+           echo("\n".date("Y-m-d H:i:s T")."****************************************************************\n");
+           echo("0. Sending email background job has started\n");
          // echo "actionSendEmailNotification--".$notificationIds;
            $notificationIds = json_decode($notificationIds,true);
             // echo "actionSendEmailNotification-)))****-".$notificationIds;
@@ -94,6 +101,10 @@ class NotificationsController extends Controller
            }
             //echo "actionSendEmailNotification-- after".print_r($notificationArray,1);
            $result_data = ServiceFactory::getStoryServiceInstance()->sendEmailNotificationFromBackground($notificationArray,$projectId);
+          } catch (Exception $ex) {
+ Yii::log("NotificationsController:actionForkEmailNotificationProcess::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+          }
+          
          
       }
     
