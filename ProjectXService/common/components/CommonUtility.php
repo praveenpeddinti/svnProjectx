@@ -1023,12 +1023,19 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
     }
 
   
-    
+    /**
+     * @author Moin Hussain
+     * @param type $recipient_list
+     * @param type $text_message
+     * @param type $subject
+     * @param type $attachment_list
+     * @return type
+     */
     
     public static function sendEmail($recipient_list,$text_message,$subject="ProjectX",$attachment_list=array()){
         try{
            
-           echo("send eamil-------after-------------");
+         echo("4. In CommonUtiltiy sendEmail started\n");
          ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
         $attachments=array();//list of artifacts
         $EEemail = new Email();
@@ -1048,10 +1055,12 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
 //           ->setHtmlBody($text_message)
 //           ->send();
 //             error_log("in send mail");
-       
-        }catch(Exception $e)
-        {
-            return;
+        echo("5. In CommonUtiltiy sendEmail completed..\n");
+        echo("6. Sending email background job has completed\n");
+        }catch(Exception $ex){
+           echo("Exception:In CommonUtiltiy sendEmail failed..".$ex->getMessage()."\n");
+           Yii::log("CommonUtility:sendEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
         }
     }
      /**
