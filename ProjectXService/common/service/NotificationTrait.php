@@ -717,18 +717,38 @@ use yii;
 
         }
     }
+    /**
+     * @author Moin Hussain
+     * @param type $notificationIds
+     * @param type $projectId
+     */
     public static function sendEmailNotification($notificationIds,$projectId){
+        try{
          // error_log("send e,ao;====nr==================".print_r($notificationIds,1));
           $notificationIds = json_encode($notificationIds);
         //  error_log("send e,ao;======================".$notificationIds);
-         echo shell_exec("php /usr/share/nginx/www/ProjectXService/yii notifications/send '$notificationIds' '$projectId' > /data/error.log &");
+           $path = "/data/logs/ProjectX";
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
         
-               
+         shell_exec("touch $path/email_notifications.log");
+         echo shell_exec("php /usr/share/nginx/www/ProjectXService/yii notifications/fork-email-notification-process '$notificationIds' '$projectId' >> $path/email_notifications.log &");
+        
+          } catch (Exception $ex) {
+            Yii::log("NotificationTrait:sendEmailNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }     
         
     }
-    
+    /**
+     * @author Moin Hussain
+     * @param type $notificationIds
+     * @param type $projectId
+     */
      public function sendEmailNotificationFromBackground($notificationIds,$projectId){
-         echo "1. SendEmailNotificationFromBackground----started--------";
+         try{
+         echo "1. SendEmailNotificationFromBackground----started--------\n";
             $msg='';
         $message=array();
         $result_msg=array(); 
@@ -736,9 +756,10 @@ use yii;
         
         // error_log("sendEmailNotification--".print_r($notificationIds,1));
         $notifications = NotificationCollection::getNotificationDetails($notificationIds);
-       echo("2. Count-------------".count($notifications));
+       echo("2. Notifications Count-------------".count($notifications)."\n");
      foreach($notifications as $notification){
          //echo $notification['_id'];
+          echo("3. Processing Notification-------------".$notification['_id']."\n");
           $recipient_list=array();
          
                  error_log($notification['_id']."==Notification Type==".$notification['Notification_Type']);
@@ -806,9 +827,9 @@ EOD;
          array_push($recipient_list,$notification['NotifiedUser']);  
                     }
               else if($notification['ActivityOn']=='Description'){
-                  echo "descriopnt chanted-------------";
-                    $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
-                     $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
+                
+                    $notification['OldValue']  =  CommonUtility::refineActivityData($notification['OldValue'],10);
+                     $notification['NewValue']  =  CommonUtility::refineActivityData($notification['NewValue'],10);
                    $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
                                  $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
                                 $text_message = <<<EOD
@@ -977,8 +998,8 @@ EOD;
                              }
                              else if($storyField['Type']!=6 )
                              {
-                                $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
-                                $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
+                                $notification['OldValue']  =  CommonUtility::refineActivityData($notification['OldValue'],10);
+                                $notification['NewValue']  =  CommonUtility::refineActivityData($notification['NewValue'],10);
                                $preposition =  $notification['Notification_Type'] == "set" ? "to" : "**";
                                  $message=array('from'=>$from_user['UserName'],'type'=>Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                                  array_push($result_msg,$message);
@@ -994,10 +1015,11 @@ EOD;
                //   error_log("EMAIL________________+++++++++++_____________".$value);
              }
               $subject="ProjectX";  
-             \common\components\CommonUtility::sendEmail($recipient_list,$text_message,$subject);
+             CommonUtility::sendEmail($recipient_list,$text_message,$subject);
+     }
+     }catch (Exception $ex) {
+        Yii::log("NotificationTrait:sendEmailNotificationFromBackground::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
-                      
-     }
-     }
-    
+        } 
+    }  
 } 
