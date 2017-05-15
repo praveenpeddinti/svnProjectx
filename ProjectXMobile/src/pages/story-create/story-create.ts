@@ -94,12 +94,14 @@ export class StoryCreatePage {
     }
 
     ionViewDidLoad() {
-//        RE.editor = document.getElementById('editor');
-//        RE.editor.addEventListener("touchstart", RE.touchstart);
-//        RE.editor.addEventListener("touchend", RE.touchend);
+        RE.editor = document.getElementById('editor');
+        RE.editor.addEventListener("touchstart", RE.touchstart);
+        RE.editor.addEventListener("touchend", RE.touchend);
+        RE.editor.setAttribute("placeholder", "insert my text ...");
+
     }
     public onStoryCreate(form): void {
-       // this.myHTML = document.getElementById('editor').innerHTML;
+        this.myHTML = document.getElementById('editor').innerHTML;
         if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();

@@ -10,12 +10,15 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Constants {
   // Local URL
-  //  public baseUrl = 'http://10.10.73.33/';
+//    public baseUrl = 'http://10.10.73.33/';
   // Sandbox URL
  // public baseUrl = 'http://10.10.73.77/';
   // Public URL
   //  public baseUrl = 'http://113.193.181.131/';
+  
   // Mobile team URL
+  // public baseUrl = 'http://10.10.73.62/';
+
   //    public baseUrl = 'http://10.10.73.12:802/';
     //anand
     public baseUrl = 'http://10.10.73.9:8099/';
