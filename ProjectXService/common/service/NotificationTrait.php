@@ -759,7 +759,7 @@ use yii;
        echo("2. Notifications Count-------------".count($notifications)."\n");
      foreach($notifications as $notification){
          //echo $notification['_id'];
-          echo("3. Processing Notification-------------".$notification['_id']."\n");
+          echo("3. Processing Notification-------------".$notification['_id']."---".$notification['ActivityOn']."\n");
           $recipient_list=array();
          
                  error_log($notification['_id']."==Notification Type==".$notification['Notification_Type']);
@@ -781,16 +781,7 @@ use yii;
                  $ticketId = $notification['TicketId'];
                  $title = $ticket_data['Title'];
                  $fromUser = $from_user['UserName'];
-//                 if($activityOn == "Description" || $activityOn == "Title"){
-//                   
-//                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
-//                                $text_message = <<<EOD
-//<a href={$link}>#{$ticketId} {$title} </a> </br>
-//{$activityOn} has been changed by {$fromUser}
-//EOD;
-// 
-//         array_push($recipient_list,$notification['NotifiedUser']);                       
-//                 }
+          
                  
                  if($activityOnFieldType== 6) //newly assigned 
                     {
@@ -826,16 +817,16 @@ EOD;
  
          array_push($recipient_list,$notification['NotifiedUser']);  
                     }
-              else if($notification['ActivityOn']=='Description'){
-                
+                else  if($activityOn == "Description" || $activityOn == "Title"){
                     $notification['OldValue']  =  CommonUtility::refineActivityData($notification['OldValue'],10);
-                     $notification['NewValue']  =  CommonUtility::refineActivityData($notification['NewValue'],10);
-                   $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
-                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+                    $notification['NewValue']  =  CommonUtility::refineActivityData($notification['NewValue'],10);
+                    $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
+                    $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+                                $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
                                 $text_message = <<<EOD
-{$fromUser} has assigned {$to} {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
+<a href={$link}>#{$ticketId} {$title} </a> </br>
+{$activityOn} has been changed by {$fromUser}
 EOD;
- 
          array_push($recipient_list,$notification['NotifiedUser']); 
              }
                     
