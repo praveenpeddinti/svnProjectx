@@ -44,6 +44,23 @@ Yii::log("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->ge
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
+    /**
+     * @author Anand
+     * @param type $projectName
+     * @return type
+     */
+     public static function getProjectDetails($projectName)
+    {
+        try{
+        $query = "select PId,ProjectName from Projects where ProjectName='$projectName';";
+        $data = Yii::$app->db->createCommand($query)->queryOne();
+        return $data;   
+        } catch (Exception $ex) {
+Yii::log("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
 }
 
 
