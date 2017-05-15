@@ -444,7 +444,7 @@ class TicketCollection extends ActiveRecord
         try {
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $newdata = array('$addToSet' => array('RelatedStories' => (int) $searchTicketId));
-            $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => $projectId), $newdata);
+            $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int)$projectId), $newdata);
         } catch (Exception $ex) {
             Yii::log("TicketCollection:updateChiledTaskObject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
