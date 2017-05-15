@@ -692,3 +692,16 @@ padding-left:0px!important;
 
 .readmark-ui{float: right;
     margin-top: -10px;}
+
+/*standup-datepicker*/
+
+.standup_totaldate{ background:#37b9e6; width:100%; height:auto; padding:20px 0px; clear:both; text-align:center; color:#fff;}
+.standup_totaldate .stweek{ font:normal 18px/30px 'open_sansregular'; clear:both; text-transform:uppercase;}
+.standup_totaldate .stdate{ font:normal 60px/50px 'open_sansregular'; font-weight:bold; color:#f2f2f2;clear:both;}
+.standup_totaldate .stmonthnyear{ font:normal 20px/30px 'open_sansregular';clear:both; text-transform:uppercase;}
+.dateactive{ color:#37b9e6; font-weight:bold;font-family:'open_sansregular';}
+.datepast{ color:#b7b7b7; font-weight:bold; font-family:'open_sansregular';}
+.datenormal{ color:#7b7b7b; font-family:'open_sansregular';}
+
+.pagenotfound{ width:100%; height: auto; text-align: center;}
+
