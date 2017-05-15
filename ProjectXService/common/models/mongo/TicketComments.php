@@ -142,10 +142,10 @@ Yii::log("TicketComments:getTicketActivity::" . $ex->getMessage() . "--" . $ex->
           $newdata = array('$pull' =>array("Activities"=> array("Slug"=>new \MongoDB\BSON\ObjectID($commentData->Comment->Slug))));
 //        }
           
-        $res = $collection->update(array("TicketId" => (int)$commentData->TicketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
+        $res = $collection->update(array("TicketId" => (int)$commentData->ticketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
         if(isset($commentData->Comment->ParentIndex)){
           $newdata = array('$inc'=>array('Activities.'.$commentData->Comment->ParentIndex.'.repliesCount'=>-1));
-          $res = $collection->update(array("TicketId" => (int)$commentData->TicketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
+          $res = $collection->update(array("TicketId" => (int)$commentData->ticketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
               
         }
           error_log("**************".$res);

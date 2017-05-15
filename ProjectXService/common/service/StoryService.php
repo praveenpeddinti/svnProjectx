@@ -2,7 +2,7 @@
 namespace common\service;
 use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
 use common\components\{CommonUtility};
-use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters};
+use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects};
 use common\models\bean\FieldBean;
 use Yii;
 use common\service\NotificationTrait;
@@ -23,9 +23,14 @@ class StoryService {
      */
     public function getTicketDetails($ticketId, $projectId) {
         try {
-             $ticketCollectionModel = new TicketCollection();
-         $ticketDetails = $ticketCollectionModel::getTicketDetails($ticketId,$projectId);  
-         $details =  CommonUtility::prepareTicketDetails($ticketDetails, $projectId);
+          $details = "NOTFOUND";  
+         $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId); 
+         if(!empty($ticketDetails)){
+          $details =  CommonUtility::prepareTicketDetails($ticketDetails, $projectId);   
+         }
+           
+       
+         
          return $details;
         } catch (Exception $ex) {
             Yii::log("StoryService:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -462,10 +467,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                             }));
                                             break;
                                     }
+                                    if(!empty($follow_ticket_id)){
                                   if(!empty($unfollowId))
                                   $this->unfollowTicket($unfollowId,$follow_ticket_id[0]['TaskId'],$projectId,'follower',0);   
                                   $this->followTicket($ticket_data->$key,$follow_ticket_id[0]['TaskId'],$projectId,$userId,$fieldDetails["Field_Name"]='follower',FALSE);  
-                                 }
+                                 }}
                                  $this->followTicket($ticket_data->$key,$ticketDetails['ParentStoryId'],$projectId,$userId,$ticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE,"FullUpdate");
                                 } 
                                 }
@@ -586,7 +592,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $returnValue = 'failure';
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $checkData = $ticket_data->isLeftColumn;
-            $field_name = $ticket_data->EditedId;
+            $field_name = $ticket_data->editedId;
             $field_id = $ticket_data->id;
             $loggedInUser = $ticket_data->userInfo->Id;
             $projectId=$ticket_data->projectId;
@@ -596,8 +602,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $updatedState=array();
             $selectFields = [];
             $selectFields = ['ProjectId','WorkflowType','TicketId','ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Fields.workflow.value','Tasks','Fields'];
-            $childticketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId,$selectFields); 
-            $ticketDetails=TicketCollection::getTicketDetails($ticket_data->TicketId,$ticket_data->projectId);//added by Ryan for Email Purpose
+            $childticketDetails = TicketCollection::getTicketDetails($ticket_data->ticketId,$ticket_data->projectId,$selectFields); 
+            $ticketDetails=TicketCollection::getTicketDetails($ticket_data->ticketId,$ticket_data->projectId);//added by Ryan for Email Purpose
             error_log("updateStoryFieldInline---1");
             if($checkData==0){
                  error_log("updateStoryFieldInline---2");
@@ -605,7 +611,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                      $fieldType = "Title";
                       $field_name = "Title";
                     $newData = array('$set' => array("Title" => trim($ticket_data->value)));
-                    $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
+                    $condition=array("TicketId" => (int)$ticket_data->ticketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$ticket_data->value;
                     $activityNewValue = $ticket_data->value;
                 }else if($ticket_data->id=='Description'){
@@ -615,7 +621,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $actualdescription = $refinedData["description"];
                     $artifacts=$refinedData["ArtifactsList"];
                     $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$ticket_data->value ));
-                    $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId);
+                    $condition=array("TicketId" => (int)$ticket_data->ticketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$actualdescription;
                     $activityNewValue = $ticket_data->value;
                     
@@ -647,7 +653,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
                           
-                            $this->followTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
+                            $this->followTicket($ticket_data->value,$ticket_data->ticketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
                            //  $this->saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
 
                             /*Send Mail to Assigned to User by Ryan*/
@@ -689,10 +695,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                             }));
                                             break;
                                     }
+                                if(!empty($follow_ticket_id))
+                                 {
                                   if(!empty($unfollowId))
                                   $this->unfollowTicket($unfollowId,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,'follower',0);   
                                   $this->followTicket($ticket_data->value,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',FALSE);  
                                  }
+                                 
+                                    }
                                  $this->followTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$loggedInUser,$childticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE);
 
                             }
@@ -728,7 +738,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 } 
                               else if($fieldDetails["Field_Name"] == "estimatedpoints"){
                                 if($childticketDetails['IsChild']==0){
-                                    $ticketId= $ticket_data->TicketId;
+                                    $ticketId= $ticket_data->ticketId;
                                   }else{
                                       $ticketId= $childticketDetails['ParentStoryId'];
                                   }
@@ -755,7 +765,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             $leftsideFieldVal = $ticket_data->value;
                             //error_log("===Ticket Data Value==".$leftsideFieldVal);
                                 if($fieldDetails["Type"] == 6 ){
-                                    $this->unfollowTicket($ticket_data->value,$ticket_data->TicketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
+                                    $this->unfollowTicket($ticket_data->value,$ticket_data->ticketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
                                     if($childticketDetails['IsChild'] == 0){
                                     if (!empty($childticketDetails['Tasks'])){
                                         foreach($childticketDetails['Tasks'] as $childticketId){
@@ -766,7 +776,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 } else{
                                    $fieldName =  $fieldDetails["Field_Name"];
                                     if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
-                                        $fieldNameModified = $ticket_data->TicketId."-".$fieldName;  
+                                        $fieldNameModified = $ticket_data->ticketId."-".$fieldName;  
                                     }else{
                                         $fieldNameModified ='follower';
                                     }
@@ -780,7 +790,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $fieldtochange2 = "Fields.".$field_name.".value_name";
                     $fieldtochangeId = "Fields.".$field_name.".Id";
                     $newData = array('$set' => array($fieldtochange1 => $leftsideFieldVal,$fieldtochange2 =>$valueName));
-                    $condition=array("TicketId" => (int)$ticket_data->TicketId,"ProjectId"=>(int)$ticket_data->projectId,$fieldtochangeId=>(int)$ticket_data->id);
+                    $condition=array("TicketId" => (int)$ticket_data->ticketId,"ProjectId"=>(int)$ticket_data->projectId,$fieldtochangeId=>(int)$ticket_data->id);
                     $selectedValue=$leftsideFieldVal;
                     $activityNewValue = $leftsideFieldVal;
              error_log("==call check==".$ticket_data->value);       
@@ -798,20 +808,24 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             }
             $this->saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldType);
     error_log("updateStoryFieldInline---13");
-                $activityData = $this->saveActivity($ticket_data->TicketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
+                $activityData = $this->saveActivity($ticket_data->ticketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
                 $updateStaus = $collection->update($condition, $newData);
                 if($field_name=='workflow'){
                 $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value,$loggedInUser);
  error_log("updateStoryFieldInline---14");
-                $collection->findAndModify( array("ProjectId"=> (int)$ticket_data->projectId ,"TicketId"=>(int)$ticket_data->TicketId),array('$set' => array('Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
+                $collection->findAndModify( array("ProjectId"=> (int)$ticket_data->projectId ,"TicketId"=>(int)$ticket_data->ticketId),array('$set' => array('Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
                 $updatedState['field_name'] ='state';
                 $updatedState['state']=$workFlowDetail['State'];
                 }
                 if(!empty($artifacts)){
-                TicketArtifacts::saveArtifacts($ticket_data->TicketId, $ticket_data->projectId, $artifacts,$loggedInUser);
+                TicketArtifacts::saveArtifacts($ticket_data->ticketId, $ticket_data->projectId, $artifacts,$loggedInUser);
                 }
-                
-                 error_log("updateStoryFieldInline---15");
+                if($childticketDetails['IsChild']==0){
+                  $ticketId= $ticket_data->ticketId;
+                }else{
+                    $ticketId= $childticketDetails['ParentStoryId'];
+                }
+            error_log("updateStoryFieldInline---15");
            // if($updateStaus==1){
                 $returnValue=$selectedValue;
            // }
@@ -840,7 +854,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             error_log("saveComment-------------1");
             $slug="";
             $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
-            $ticketDetails=TicketCollection::getTicketDetails($commentData->TicketId,$commentData->projectId);//added By Ryan
+            $ticketDetails=TicketCollection::getTicketDetails($commentData->ticketId,$commentData->projectId);//added By Ryan
             
             $mentionArray = $refinedData['UsersList'];               
             $processedDesc = $refinedData["description"];
@@ -852,11 +866,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $collection = Yii::$app->mongodb->getCollection('TicketComments');
 //}
                 $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc));
-                $collection->update(array("TicketId" => (int) $commentData->TicketId, "ProjectId" => (int) $commentData->projectId, "Activities.Slug" => new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
+                $collection->update(array("TicketId" => (int) $commentData->ticketId, "ProjectId" => (int) $commentData->projectId, "Activities.Slug" => new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
                 $retData = array("CrudeCDescription" => $commentDesc,
                     "CDescription" => $processedDesc);
                 if (!empty($artifacts)) {
-                    TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
+                    TicketArtifacts::saveArtifacts($commentData->ticketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
                 }
                  $notify_type = "edit";
                  $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
@@ -880,10 +894,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     "repliesCount" => (int) 0
                 );
                 $db = TicketComments::getCollection();
-                $v = $db->update(array("ProjectId" => (int) $commentData->projectId, "TicketId" => (int) $commentData->TicketId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $commentData->userInfo->Id, "Activity" => "Comment"));
-                TicketComments::saveComment($commentData->TicketId, $commentData->projectId, $commentDataArray);
+                $v = $db->update(array("ProjectId" => (int) $commentData->projectId, "TicketId" => (int) $commentData->ticketId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $commentData->userInfo->Id, "Activity" => "Comment"));
+                TicketComments::saveComment($commentData->ticketId, $commentData->projectId, $commentDataArray);
                 if (!empty($artifacts)) {
-                    TicketArtifacts::saveArtifacts($commentData->TicketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
+                    TicketArtifacts::saveArtifacts($commentData->ticketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
                 }
                 $tinyUserModel = new TinyUserCollection();
                 $userProfile = $tinyUserModel->getMiniUserDetails($commentDataArray["ActivityBy"]);
@@ -1006,6 +1020,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             foreach ($ticketDetails as $ticket) {
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
+                unset($details['project_name']);
                 array_push($finalData, $details);
             }
             return $finalData;
@@ -1182,7 +1197,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $returnStatus="failure";
             $ticketCollectionModel = new TicketCollection();
            $loggedInUserId =  $postData->userInfo->Id;
-           $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->TicketId, $postData->projectId);
+           $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->ticketId, $postData->projectId);
              // $ticketDetails = $ticketCollectionModel->getTicketDetails1($postData->TicketId, $postData->projectId);
             $storyField = new StoryFields();
             $standardFields = $storyField->getStoryFieldList();
@@ -1266,7 +1281,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ticketModel->TicketId = (int)$ticketNumber;
            $ticketModel->TotalEstimate = 0;
            $ticketModel->TotalTimeLog = 0;
-           $ticketModel->ParentStoryId = (int)$postData->TicketId;
+           $ticketModel->ParentStoryId = (int)$postData->ticketId;
            $ticketModel->IsChild = 1;
           
            $returnValue = TicketCollection::saveTicketDetails($ticketModel);
@@ -1275,7 +1290,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                $lastChiledTicket['TaskType']=  (int)1;
                $parentTasks = $ticketDetails['Tasks'];
                array_push($parentTasks,$lastChiledTicket);
-               TicketCollection::updateChildTaskObject($postData->TicketId,$postData->projectId,$parentTasks);
+               TicketCollection::updateChildTaskObject($postData->ticketId,$postData->projectId,$parentTasks);
                TicketComments::createCommentsRecord($ticketNumber,$postData->projectId);
                error_log("--newFollowersArray--".count($newFollowersArray));
                if(!empty($newFollowersArray)){
@@ -1344,7 +1359,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         try {
 
             $projectId = $timelog_data->projectId;
-            $ticketId = $timelog_data->TicketId;
+            $ticketId = $timelog_data->ticketId;
             $userId = $timelog_data->userInfo->Id;
             $totalWorkHours = (float) $timelog_data->workHours;
             $ticketDetails = TicketTimeLog::saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours);
@@ -1494,7 +1509,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         foreach ($oldTicketObj['Tasks'] as $task) {
                             //  error_log("Task type------------".$task['TaskType']);
                             $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
-                            $task_array=array('TicketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));
+                            $task_array=array('ticketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));
                             $ticket_data=json_decode(json_encode($task_array,1));
                             switch($newWorkflowId)
                             {
@@ -1594,7 +1609,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             error_log("contineu------------****");
                             continue;
                         }
-                       $task_array=array('TicketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser)); 
+                       $task_array=array('ticketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser)); 
                        $child_ticket_data=json_decode(json_encode($task_array,1));
                      
                        // Peer UI QA status updated to Close
@@ -1665,6 +1680,22 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         {
             Yii::log("StoryService:getQA::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
+    }
+    
+    /**
+     * @author Anand
+     * @param type $projectName
+     */
+    
+    public function getProjectDetailsByName($projectName){
+        try
+        {
+            $projectDetails = Projects::getProjectDetails($projectName);
+            return $projectDetails;
+        }catch(Exception $ex)
+        {
+            Yii::log("StoryService:getProjectDetailsByName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }  
     }
 
 }

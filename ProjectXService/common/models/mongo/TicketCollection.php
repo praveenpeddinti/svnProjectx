@@ -179,12 +179,12 @@ class TicketCollection extends ActiveRecord
                    $conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
                case 4:
                    $conditions["IsChild"] = array('$in' => array(0,1));
-                     $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
-                      $conditions['Fields.state.value']=(int)3;break; // in progress
+                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
+                   $conditions['Fields.state.value']=(int)3;break; // in progress
                case 5:
                    $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
-                       $conditions['Fields.state.value']=(int)6;break; // my closed
+                   $conditions['Fields.state.value']=(int)6;break; // my closed
                case 6:
                    $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;

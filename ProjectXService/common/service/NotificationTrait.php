@@ -2,7 +2,7 @@
 namespace common\service;
 use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
 use common\components\{CommonUtility};
-use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters};
+use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects};
 use yii;
 use \ArrayObject;
 
@@ -127,7 +127,7 @@ use \ArrayObject;
             error_log("saveNotificationsForComment---".$notify_type);
             $commentOwner=$commentData->Comment->OriginalCommentorId;
             $loggedinUser=$commentData->userInfo->Id;
-            $ticketId=$commentData->TicketId;
+            $ticketId=$commentData->ticketId;
             $projectId=$commentData->projectId;
             $data = TicketCollection::getTicketDetails($ticketId,$projectId);
             $followers=$data['Followers'];
@@ -222,7 +222,7 @@ use \ArrayObject;
             $oldCollaborator='';
             $newCollaborator='';
                 //For Story Detail Page Use Case.....
-           $ticketId =  isset($notification_data->TicketId) ? $notification_data->TicketId : $notification_data->data->TicketId;
+           $ticketId =  isset($notification_data->ticketId) ? $notification_data->ticketId : $notification_data->data->ticketId;
            // $ticketId=$notification_data->TicketId;
             $projectId=$notification_data->projectId;
            // $from=$notification_data->userInfo->username;
@@ -483,6 +483,7 @@ use \ArrayObject;
         $result_msg=array();
        // $action_user=Collaborators::getCollaboratorById($user);
         try{
+            $projectObj = new Projects();
             $notifications = NotificationCollection::getNotifications($user, $projectId,$offset,$limit,$viewAll);
             //constucting the notifications for the user
             error_log("not cont--------------------".count($notifications));
@@ -499,6 +500,7 @@ use \ArrayObject;
                 error_log("activtiy form---------------".$notification['ActivityFrom']);
                 $from_user= TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
                 
+               $projectDetails = $projectObj->getProjectMiniDetails($notification["ProjectId"]);
                   
                    /*************** Left Panel Field Values newly assigned *********************/
                  $activityOn = $notification['ActivityOn'];
@@ -529,13 +531,13 @@ use \ArrayObject;
                            
                         }
                           $preposition =  "to";
-                          $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assigned'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params[$activityOn],"Preposition"=>$preposition);
+                          $message=array('Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assigned'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params[$activityOn],"Preposition"=>$preposition);
                                 array_push($result_msg,$message); 
                     }
               else if($notification['ActivityOn']=='Description' || $notification['ActivityOn']=='Title'){
                     $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
                      $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
-                   $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
+                   $message=array('Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
                      array_push($result_msg,$message);
              }
                  
@@ -574,7 +576,7 @@ use \ArrayObject;
                                 $otherMessage = Yii::$app->params['follower'];
                                  $preposition =  $notification['Notification_Type'] == "added" ? "to" : "from";
                             }
-                         $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>$otherMessage,"Preposition"=>$preposition);
+                         $message=array('Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>$otherMessage,"Preposition"=>$preposition);
                                 array_push($result_msg,$message);
                     }
                               
@@ -619,7 +621,7 @@ use \ArrayObject;
                                   $object = "delete";
                              $type =  Yii::$app->params['delete'];
                         }
-                     $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>$object,'type'=>$type,'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
+                     $message=array('Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>$object,'type'=>$type,'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                      array_push($result_msg,$message);
                  }
                    
@@ -643,7 +645,7 @@ use \ArrayObject;
                                     //     moin.hussain mentioned you in a reply
                                     //     moin.hussain mentined you on Ticket #33
                                     $notification['NotifiedUser']='you';
-                                    $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"mention",'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>"on");
+                                    $message=array('Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"mention",'type'=> Yii::$app->params['mention'],'id'=>$notification['_id'],'Slug'=>$notification['CommentSlug'],'ActivityOn'=>$notification['NotifiedUser'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture']);
                                     array_push($result_msg,$message);
                                     
                                 }
@@ -678,7 +680,7 @@ use \ArrayObject;
                                  }
                                 
                                  $preposition =  $notification['Notification_Type'] == "set" ? "to" : "**";
-                                 $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'type'=> Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$oldValue,"NewValue"=>$newValue,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
+                                 $message=array('Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'type'=> Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$oldValue,"NewValue"=>$newValue,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                                  array_push($result_msg,$message);
                              }
                              else if($storyField['Type']!=6 )
@@ -686,7 +688,7 @@ use \ArrayObject;
                                 $notification['OldValue']  =  \common\components\CommonUtility::refineActivityData($notification['OldValue'],10);
                                 $notification['NewValue']  =  \common\components\CommonUtility::refineActivityData($notification['NewValue'],10);
                                 $preposition =  $notification['Notification_Type'] == "set" ? "to" : "**";
-                                $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'type'=>Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
+                                $message=array('Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'type'=>Yii::$app->params["{$notification['Notification_Type']}"],'ActivityOn'=>$storyFieldName,'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'status'=>$notification['Notification_Type'],'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                                  array_push($result_msg,$message);
                                  
                              }

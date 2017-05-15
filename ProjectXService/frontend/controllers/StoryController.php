@@ -69,10 +69,17 @@ class StoryController extends Controller
     public function actionGetTicketDetails(){
         try{
         $ticket_data = json_decode(file_get_contents("php://input"));
-        $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data->ticketId,1);
+        $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data->ticketId,$ticket_data->projectId);
         $responseBean = new ResponseBean();
-        $responseBean->statusCode = ResponseBean::SUCCESS;
-        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        if(is_array($data)){
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+           $responseBean->message = ResponseBean::SUCCESS_MESSAGE; 
+        }else{
+             $message = $data."_MESSAGE";
+             $responseBean->statusCode = ResponseBean::getConstant($data);
+             $responseBean->message = ResponseBean::getConstant($message);
+        }
+       
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
@@ -143,12 +150,20 @@ class StoryController extends Controller
 
             $ticket_data = json_decode(file_get_contents("php://input"));
             error_log("++++++++++++++++++++++++dfsdfsdfsdf+++++++++++++".$ticket_data->ticketId);
-        $data['ticket_details'] = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,1);
+        $data['ticket_details'] = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,$ticket_data->projectId);
+        if(!empty($data['ticket_details']))
         $data['task_types'] = ServiceFactory::getStoryServiceInstance()->getTaskTypes();
-
+        else
+         $data='NOTFOUND';   
         $responseBean = new ResponseBean();
-        $responseBean->statusCode = ResponseBean::SUCCESS;
-        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        if(is_array($data)){
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+           $responseBean->message = ResponseBean::SUCCESS_MESSAGE; 
+        }else{
+             $message = $data."_MESSAGE";
+             $responseBean->statusCode = ResponseBean::getConstant($data);
+             $responseBean->message = ResponseBean::getConstant($message);
+        }
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
@@ -286,22 +301,22 @@ class StoryController extends Controller
             $postFieldData = json_decode(file_get_contents("php://input"));
             $responseBean = new ResponseBean();
           //  $responseData['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldDataById(5);
-            if($postFieldData->FieldId == 5 || $postFieldData->FieldId == 11){
+            if($postFieldData->fieldId == 5 || $postFieldData->fieldId == 11){
             // get all assigned to details,stakeholeders
-                $responseData['getFieldDetails'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postFieldData->ProjectId);//$projectId
-            }else if($postFieldData->FieldId == 3){
+                $responseData['getFieldDetails'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postFieldData->projectId);//$projectId
+            }else if($postFieldData->fieldId == 3){
                 // get all Bucket details
-                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($postFieldData->ProjectId);//$projectId
-            }else if($postFieldData->FieldId == 4){
+                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($postFieldData->projectId);//$projectId
+            }else if($postFieldData->fieldId == 4){
             //get all planlevel details
                 $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
-            }else if($postFieldData->FieldId == 7){
+            }else if($postFieldData->fieldId == 7){
             //get all status details
-                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList($postFieldData->WorkflowType,$postFieldData->StatusId);
-            }else if($postFieldData->FieldId == 6){
+                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList($postFieldData->workflowType,$postFieldData->statusId);
+            }else if($postFieldData->fieldId == 6){
             //get all priority details
                 $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getPriorityList();
-            }else if($postFieldData->FieldId == 12){
+            }else if($postFieldData->fieldId == 12){
             //get all ticket type details
              $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();       
             }
@@ -463,9 +478,9 @@ class StoryController extends Controller
         try {
             $StoryData = json_decode(file_get_contents("php://input"));
             //$projectId=1;
-            $projectId = $StoryData->ProjectId;
-            $searchValue = $StoryData->SearchValue;
-            $ticketId = $StoryData->TicketId;
+            $projectId = $StoryData->projectId;
+            $searchValue = $StoryData->searchValue;
+            $ticketId = $StoryData->ticketId;
             $followerlist=ServiceFactory::getCollaboratorServiceInstance()->getCollaboratorsForFollow($ticketId,$searchValue,$projectId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -537,7 +552,7 @@ class StoryController extends Controller
             $followers_pics = array();
             //save followers to Ticket
           
-               ServiceFactory::getStoryServiceInstance()->followTicket($post_data->collaboratorId, $post_data->TicketId, $post_data->projectId, $post_data->userInfo->Id, "follower");
+               ServiceFactory::getStoryServiceInstance()->followTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId, $post_data->userInfo->Id, "follower");
                $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);
                $followerData = array();
                $followerData["ProfilePicture"] = $collaboratorData["ProfilePicture"];
@@ -579,7 +594,7 @@ class StoryController extends Controller
         try {
             $post_data = json_decode(file_get_contents("php://input"));
             //remove followers to Ticket
-            ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->TicketId, $post_data->projectId);
+            ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId);
             
             $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);//added by Ryan
 //            if($collaboratorData['UserName']!='') //added by Ryan for email purpose
@@ -706,7 +721,7 @@ class StoryController extends Controller
             $timelog_data = json_decode(file_get_contents("php://input"));
             $insertTimelog = ServiceFactory::getStoryServiceInstance()->insertTimeLog($timelog_data);
             $projectId = $timelog_data->projectId;
-            $parentTicketId = $timelog_data->TicketId;
+            $parentTicketId = $timelog_data->ticketId;
             $updateTimeLog = ServiceFactory::getStoryServiceInstance()->getTimeLog($projectId, $parentTicketId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -1006,7 +1021,27 @@ class StoryController extends Controller
         }
     }
 //    Ticket #91 ended
-   
+  
+    
+      public function actionGetProjectDetails(){
+        try{
+        $project_data = json_decode(file_get_contents("php://input"));
+        $data = ServiceFactory::getStoryServiceInstance()->getProjectDetailsByName($project_data->projectName);
+        $responseBean = new ResponseBean();
+        if(is_array($data)){
+           $responseBean->statusCode = ResponseBean::SUCCESS;
+           $responseBean->message = ResponseBean::SUCCESS_MESSAGE; 
+        }else{
+             $responseBean->statusCode = ResponseBean::NOTFOUND;
+             $responseBean->message = ResponseBean::NOTFOUND_MESSAGE;
+        }
+        $responseBean->data = $data;
+        $response = CommonUtility::prepareResponse($responseBean,"json");
+        return $response;
+        } catch (Exception $ex) {
+     Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 }
 
 
