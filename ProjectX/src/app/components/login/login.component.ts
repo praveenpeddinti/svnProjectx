@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit{
     ngOnInit(){
      var getAllObj=JSON.parse(localStorage.getItem("user"));
     if(getAllObj != null){
-        this._router.navigate(['story-dashboard']); 
+        this._router.navigate(['home']); 
     }else{
         this._router.navigate(['login']); 
     }
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit{
     login() {
         this._service.login(this.user,(data)=>{ 
             if(data.status==200){
-                this._router.navigate(['story-dashboard']);  
+                this._router.navigate(['home']);  
             }else{
                 this.checkData=true;
                 this.errorMsg = 'Invalid Email/Password';

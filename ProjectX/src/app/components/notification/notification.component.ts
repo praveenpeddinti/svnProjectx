@@ -57,12 +57,12 @@ export class NotificationComponent implements OnInit{
       });
     }
 
-    deleteNotification(notify_id,event) 
+    deleteNotification(project,notify_id,event) 
   {
     jQuery("#notifications_list").hide();
     event.stopPropagation();
     //ajax call for delete notificatin
-    var post_data={'notifyid':notify_id,viewAll:1,page:this.pageNo};
+    var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
       if(data)
@@ -79,9 +79,9 @@ export class NotificationComponent implements OnInit{
 
   }
 
-  goToTicket(ticketid,notify_id)
+  goToTicket(project,ticketid,notify_id)
   {
-    var post_data={'notifyid':notify_id,viewAll:1,page:this.pageNo};
+    var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
       if(data)
@@ -90,13 +90,13 @@ export class NotificationComponent implements OnInit{
       jQuery('#mark_'+notify_id).remove(); 
       jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
       }
-      this._router.navigate(['story-detail',ticketid]);
+     this._router.navigate(['project',project.ProjectName,ticketid,'details']);
     })
     
   }
-  goToComment(ticketid,comment,notify_id)
+  goToComment(project,ticketid,comment,notify_id)
   {
-    var post_data={'notifyid':notify_id,viewAll:1,page:this.pageNo};
+    var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
       if(data)
@@ -105,7 +105,7 @@ export class NotificationComponent implements OnInit{
         jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
       }
     })
-    this._router.navigate(['story-detail',ticketid],{queryParams: {Slug:comment}});
+     this._router.navigate(['project',project.ProjectName,ticketid,'details',{queryParams: {Slug:comment}}]);
   }
   markAllRead()
   {

@@ -83,7 +83,13 @@ export class HeaderComponent implements OnInit {
         // if(searchString=='' || searchString=='undefined'){ 
         //   this.showErrorFunction("searchError","Please Search.")
         // }else{
-           this._router.navigate(['search'],{queryParams: {v:searchString}});
+          var projectname=localStorage.getItem('ProjectName');
+          if(projectname=='' || projectname==undefined){
+              this._router.navigate(['search',],{queryParams: {q:searchString}});
+          }else{
+             this._router.navigate(['project',projectname,'search'],{queryParams: {q:searchString}});
+          }
+          
         // }
       
     }
@@ -93,11 +99,11 @@ export class HeaderComponent implements OnInit {
           jQuery("#"+id).fadeOut(4000);
   }
 
-  deleteNotification(notify_id,event)
+  deleteNotification(project,notify_id,event)
   {
     event.stopPropagation();
     //ajax call for delete notificatin
-    var post_data={'notifyid':notify_id,viewAll:0,page:this.pageNo};
+    var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:0,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
     this.notification_msg=[];
@@ -124,9 +130,9 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  goToTicket(ticketid,notify_id)
+  goToTicket(project,ticketid,notify_id)
   {
-    var post_data={'notifyid':notify_id,viewAll:0,page:this.pageNo};
+    var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:0,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
       if(data)
@@ -146,13 +152,13 @@ export class HeaderComponent implements OnInit {
         }
         
       }
-      this._router.navigate(['story-detail',ticketid]);
+      this._router.navigate(['project',project.ProjectName,ticketid,'details']);
     })
     
   }
-  goToComment(ticketid,comment,notify_id)
+  goToComment(project,ticketid,comment,notify_id)
   {
-    var post_data={'notifyid':notify_id,viewAll:0,page:this.pageNo};
+    var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:0,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
       if(data)
@@ -173,7 +179,7 @@ export class HeaderComponent implements OnInit {
         
       }
     })
-    this._router.navigate(['story-detail',ticketid],{queryParams: {Slug:comment}});
+    this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment}});
   }
   allRead()
   {
@@ -240,7 +246,7 @@ export class HeaderComponent implements OnInit {
 
 
   viewAllNotifications(){
-    this._router.navigate(['notification']);
+    this._router.navigate(['collaborator','notifications']);
   }
   
 }

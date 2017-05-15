@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit{
      this.route.queryParams.subscribe(
       params => 
       {
-             this.searchString=params['v'];
+             this.searchString=params['q'];
               this.page=1;
            this.searchArray=[];
              this.load_contents(this.page,this.searchString,this.searchFlag);
@@ -74,8 +74,8 @@ export class SearchComponent implements OnInit{
        }
        return prepareData;
     }
-    navigateToStoryDetail(ticketId,slug){
-         this._router.navigate(['/story-detail',ticketId],{queryParams: {Slug:slug}});
+    navigateToStoryDetail(project,ticketId,slug){
+         this._router.navigate(['project',project.ProjectName,ticketId,'details'],{queryParams: {Slug:slug}});
      }
      callsearchByClick(searchFlag){
         this.searchArray=[];

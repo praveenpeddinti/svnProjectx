@@ -1,14 +1,15 @@
 import { StoryComponent } from '../story/story-form.component';
 import { Component, Directive,ViewChild,ViewEncapsulation } from '@angular/core';
 import { StoryService } from '../../services/story.service';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
+import { ProjectService } from '../../services/project.service';
 declare var jQuery:any;
 
 @Component({
     selector: 'story-dashboard-view',
-    providers: [StoryService],
+    providers: [StoryService,ProjectService],
     templateUrl: 'story-dashboard-component.html',
     styleUrls: ['./story-dashboard.component.css']
 
@@ -17,7 +18,9 @@ declare var jQuery:any;
 export class StoryDashboardComponent {
     public FilterOption=[];
     public FilterOptionToDisplay=[];
-     public selectedFilter=null;                  
+     public selectedFilter=null;  
+     public projectName; 
+     public projectId;               
     @ViewChild('myTable') table: any;
     rows = [];
     row1 = [];
@@ -84,37 +87,53 @@ expanded: any = {};
 
     constructor(
         private _router: Router,
-        private _service: StoryService, private http: Http) { console.log("in constructor"); }
-
+        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute) { console.log("in constructor"); }
+       
     ngOnInit() {
  var thisObj = this;
+  thisObj.route.queryParams.subscribe(
+      params => 
+      { 
+      thisObj.route.params.subscribe(params => {
+           thisObj.projectName=params['projectName'];
+            thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
+                if(data.statusCode!=404) {
+                thisObj.projectId=data.data.PId;  
+                /*
+                @params    :  projectId
+                @Description: get bucket details
+                */  
+                thisObj._service.getFilterOptions(thisObj.projectId,(response) => { 
+                thisObj.FilterOption=response.data[0].filterValue;
+                thisObj.FilterOptionToDisplay=response.data;
+                });
 
- /*
-  @params    :  projectId
-  @Description: get bucket details
-  */  
- this._service.getFilterOptions(1,(response) => { 
-  thisObj.FilterOption=response.data[0].filterValue;
-  thisObj.FilterOptionToDisplay=response.data;
- });
-        /*
+   /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: Default routing
         */
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
+        thisObj.page(thisObj.projectId,thisObj.offset, thisObj.limit, thisObj.sortvalue, thisObj.sortorder,thisObj.selectedFilter);
         var ScrollHeightDataTable=jQuery(".ngx-datatable").width() - 12;
         jQuery("#filterDropdown").css("paddingRight",10);
        jQuery(".ngx-datatable").css("width",ScrollHeightDataTable);
-       var thisObj = this;
+      // var thisObj = this;
        
-          jQuery( window ).resize(function() { 
-if( thisObj.checkScrollBar() == true){
- jQuery("#filterDropdown").css("paddingRight",0);
-}else{
- jQuery("#filterDropdown").css("paddingRight",12);
-}
-});
- 
+            jQuery( window ).resize(function() { 
+            if( thisObj.checkScrollBar() == true){
+            jQuery("#filterDropdown").css("paddingRight",0);
+            }else{
+            jQuery("#filterDropdown").css("paddingRight",12);
+            }
+            });
+       }else{
+
+       this._router.navigate(['project',this.projectName,'error']); 
+       }
+                
+        });
+        });
+       
+           })
 }
     // ngAfterViewInit()
     // {
@@ -125,9 +144,10 @@ if( thisObj.checkScrollBar() == true){
         @params    :  offset,limit,sortvalue,sortorder
         @Description: StoryComponent/Task list Rendering
         */
-    page(offset, limit, sortvalue, sortorder,selectedOption ) {
+        
+    page(projectId,offset, limit, sortvalue, sortorder,selectedOption ) {
          this.rows =[];
-        this._service.getAllStoryDetails(1, offset, limit, sortvalue, sortorder,selectedOption,(response) => {
+        this._service.getAllStoryDetails(projectId, offset, limit, sortvalue, sortorder,selectedOption,(response) => {
            
             let jsonForm = {};
             if (response.statusCode == 200) {
@@ -138,6 +158,7 @@ if( thisObj.checkScrollBar() == true){
                     rows[i + start] = response.data[i];
                 }
                 this.rows = rows;
+                //console.log("ROWS___"+JSON.stringify(rows));
                 this.count = response.totalCount;
             } else {
                 console.log("fail---");
@@ -150,7 +171,7 @@ if( thisObj.checkScrollBar() == true){
     onPage(event) {
         this.offset = event.offset;
         this.limit = event.limit;
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
+        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
     }
 
  
@@ -160,7 +181,7 @@ if( thisObj.checkScrollBar() == true){
     onSort(event) {
         this.sortvalue = event.sorts[0].prop;
         this.sortorder = event.sorts[0].dir;
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
+        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
     }
 collapseAll(){ 
     this.table.rowDetail.collapseAllRows()
@@ -193,20 +214,21 @@ toggleExpandRow(row) {
         */
     onActivate(event) {
         if (event.hasOwnProperty("row")) {
-            this._router.navigate(['story-detail', event.row[0].field_value]);
+            this._router.navigate(['project',event.row.project_name, event.row[0].field_value,'details']);
         }
     }
      /* @Praveen P
         * This method is used story/task details when story/task id click component
         */
     showStoryDetail(event) {
-            this._router.navigate(['story-detail', event[0].field_value]);
+
+            this._router.navigate(['project',event.project_name, event[0].field_value,'details']);
     }
 
     
 
     renderStoryForm() {
-        this._router.navigate(['story-form']);
+        this._router.navigate(['project',this.projectName,'new']);
     }
 
     filterDashboard(){
@@ -215,7 +237,7 @@ toggleExpandRow(row) {
            this.sortvalue='bucket' ;
            this.sortorder='asc'; 
         }
-      this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);  
+      this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);  
     }
      checkScrollBar() {
     var hContent = jQuery("body").height(); // get the height of your content

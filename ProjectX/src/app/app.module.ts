@@ -39,7 +39,8 @@ import { SearchComponent }  from './components/search/search.component';
 import { TimeReportComponent }  from './components/time-report/time-report.component';
 import {TimeReportService} from './services/time-report.service';
 import { NotificationComponent }  from './components/notification/notification.component';
-
+import { StandupComponent }  from './components/standup/standup.component';
+import {PageNotFoundComponent} from './components/pagenotfound/pagenotfound.component'
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: 'home',children:[
@@ -48,23 +49,28 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
               {path: 'login', component: LoginComponent},
-                {path: 'story-dashboard',children:[
+                {path: 'project/:projectName/list',children:[
                 { path: '' , component: StoryDashboardComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-                {path: 'story-form',children:[
+                {path: 'project/:projectName/new',children:[
                 { path: '' , component: StoryComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-             {path: 'story-detail/:id',children:[
+             {path: 'project/:projectName/:id/details',children:[
                 { path: '' , component: StoryDetailComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-               {path: 'story-edit/:id',children:[
+               {path: 'project/:projectName/:id/edit',children:[
                 { path: '' , component: StoryEditComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/search',children:[
+                { path: '' , component: SearchComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
@@ -78,8 +84,28 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-               {path: 'notification',children:[
+              {path: 'collaborator/notifications',children:[
                 { path: '' , component: NotificationComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'standup',children:[
+                { path: '' , component: StandupComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/:id/error',children:[
+                { path: '' , component: PageNotFoundComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'pagenotfound',children:[
+                { path: '' , component: PageNotFoundComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+                {path: 'project/:projectName/error',children:[
+                { path: '' , component: PageNotFoundComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
@@ -104,8 +130,7 @@ const ROUTES=[
    AutoCompleteModule,
    RouterModule.forRoot(ROUTES)
   ],
-
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,TimeReportComponent,NotificationComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent ],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,SummerNoteEditorService,TimeReportService
   ],

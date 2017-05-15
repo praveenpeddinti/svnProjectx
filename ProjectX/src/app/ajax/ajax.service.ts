@@ -16,13 +16,13 @@ export class AjaxService {
     private http: Http) { }
 
 AjaxSubscribe(url:string,params:Object,callback)
-{   
+{   console.log("params____"+JSON.stringify(params));
    jQuery("#commonSpinner").removeClass("unloading"); 
    jQuery("#commonSpinner").addClass("loading"); 
    var getAllData=  JSON.parse(localStorage.getItem('user'));
    if(getAllData != null){
       params["userInfo"] = getAllData;
-      params["projectId"] = 1;
+     // params["projectId"] = 1;
       params["timeZone"] = jstz.determine_timezone().name();
     }
       //var  options = new RequestOptions({headers: headers});

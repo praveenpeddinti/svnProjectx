@@ -25,7 +25,10 @@ getStoryFields(projectId,getStoryCallback) {
   }
  
  saveStory(storyData,saveStoryCallback){ 
+   var projectId=parseInt(localStorage.getItem('ProjectId'));
+   var projectName=localStorage.getItem('ProjectName');
 var post_data={
+      'projectId':projectId,
       'data':storyData,
      
     }
@@ -33,7 +36,7 @@ var post_data={
     if(post_data.data.title!='' && post_data.data.description !='' ){
        this._ajaxService.AjaxSubscribe("story/save-ticket-details",post_data,(data)=>
     { 
-        this._router.navigate(['story-dashboard']);
+         this._router.navigate(['project',projectName,'list']);
          saveStoryCallback(data);
 
     });

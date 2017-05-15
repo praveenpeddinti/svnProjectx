@@ -10,6 +10,7 @@ import { MentionService } from '../../services/mention.service';
 import { GlobalVariable } from '../../config';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 import * as io from 'socket.io-client';
+import { ProjectService} from '../../services/project.service';
 
 declare var jQuery:any; //reference to jquery
 declare var summernote:any; //reference to summernote
@@ -18,7 +19,7 @@ declare var summernote:any; //reference to summernote
   selector: 'app-story-edit',
   templateUrl: './story-edit.component.html',
   styleUrls: ['./story-edit.component.css'],
-  providers:[StoryService],
+  providers:[StoryService,ProjectService],
 })
 
 export class StoryEditComponent implements OnInit 
@@ -31,6 +32,8 @@ export class StoryEditComponent implements OnInit
   private ticketData:any=[];
   private ticketid;
   private url_TicketId;
+  public projectName;
+  public projectId;
   private description;
   public form={};
   private fieldsData = [];
@@ -49,7 +52,7 @@ export class StoryEditComponent implements OnInit
   public defaultTasksShow:boolean=true;
 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
-    public _router: Router,private mention:MentionService,
+    public _router: Router,private mention:MentionService,private projectService:ProjectService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) { 
            this.filesToUpload = [];
     }
@@ -60,12 +63,15 @@ export class StoryEditComponent implements OnInit
     //getting the route param(Ticketid) for specific ticket to edit
     this.route.params.subscribe(params => {
             this.url_TicketId = params['id'];
-        });
-
-      this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId},(data)=>
-        {   
-  
-          data.data.ticket_details.Fields.filter (function(obj){
+            this.projectName=params['projectName'];
+            this.projectService.getProjectDetails(this.projectName,(data)=>{ 
+             thisObj.projectId=data.data.PId;
+             if(data.statusCode!=404){
+                      // this.callTicketDetailPage(thisObj.ticketId, projectId);
+         this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId,projectId:thisObj.projectId},(data)=>
+          {   
+          if(data.statusCode!=404){
+           data.data.ticket_details.Fields.filter (function(obj){
               if(obj.field_name=='planlevel' && obj.value==2){
                thisObj.defaultTasksShow= false;
               }
@@ -87,9 +93,20 @@ export class StoryEditComponent implements OnInit
              this.ticketData = data.data.ticket_details;
              this.description= this.ticketData.CrudeDescription;
              this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);      
-             jQuery("#description").summernote('code',this.description);      
-
+             jQuery("#description").summernote('code',this.description);   
+          }else{
+            this._router.navigate(['project',this.projectName,this.url_TicketId,'error']);
+          }
+           
         });
+       }else{
+          this._router.navigate(['project',this.projectName,'error']);
+       }  
+        
+        });
+        });
+
+      
     
     this.minDate=new Date(); //set current date to datepicker as min date
   }
@@ -248,13 +265,14 @@ export class StoryEditComponent implements OnInit
             }
       }
        var post_data={
+          'projectId':this.projectId,
           'data':edit_data,
          
         }
         this._ajaxService.AjaxSubscribe("story/update-ticket-details",post_data,(data)=>
     
         {
-         this._router.navigate(['story-detail',this.url_TicketId]);
+         this._router.navigate(['project',this.projectName,this.url_TicketId,'details']);
         });
     }
           
@@ -353,7 +371,7 @@ export class StoryEditComponent implements OnInit
      */
     cancelDesc()
     {
-      this._router.navigate(['story-detail',this.url_TicketId]);
+      this._router.navigate(['project',this.projectName,this.url_TicketId,'details']);
     }
 
     

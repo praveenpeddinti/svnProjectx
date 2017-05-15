@@ -7,13 +7,15 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
 import { MentionService } from '../../services/mention.service';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
+import { ProjectService } from '../../services/project.service';
+
 declare var jQuery:any;
 declare const CKEDITOR;
 @Component({
   selector: 'app-story-detail',
   templateUrl: './story-detail.component.html',
   styleUrls: ['./story-detail.component.css'],
-  
+   providers: [ProjectService]
 })
 export class StoryDetailComponent implements OnInit {
 
@@ -31,6 +33,8 @@ public blurTimeout=[];
   public minDate:Date;
   private ticketData;
   private ticketId;
+  private projectId;
+  public projectName;
   private fieldsData = [];
   private showMyEditableField =[];
   private showMyEditableTaskField =[];
@@ -73,7 +77,7 @@ public blurTimeout=[];
   public searchSlug='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
-    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) {
+    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private projectService:ProjectService) {
     this.filesToUpload = [];
     route.queryParams.subscribe(
       params => 
@@ -89,7 +93,7 @@ public blurTimeout=[];
 
  //public form={description:''};//added by ryan
   ngOnInit() {
-
+var thisObj = this;
     //let jsonform={};//added by ryan
     //jsonform['description']='';//added by ryan
    
@@ -104,12 +108,22 @@ public blurTimeout=[];
       { 
       this.route.params.subscribe(params => {
             this.ticketId = params['id'];
+           this.projectName=params['projectName'];
+            this.projectService.getProjectDetails(this.projectName,(data)=>{ 
+              if(data.data!=false){
+                thisObj.projectId=data.data.PId;  
+                this.callTicketDetailPage(thisObj.ticketId, thisObj.projectId);
+              }else{
+               this._router.navigate(['pagenotfound']);  
+              }
+                
+        });
+
             jQuery("#notifications_list").hide();
-            console.log("started-------------");
-            this.callTicketDetailPage(this.ticketId);
+            
              
         });
-             
+       
            })
 }
 
@@ -169,8 +183,9 @@ getArtifacts(obj){
           isLeftColumn:0,
           id:'Description',
           value:editorData,
-          TicketId:this.ticketId,
-          EditedId:'desc'
+          ticketId:this.ticketId,
+          projectId:this.projectId,
+          editedId:'desc'
         };
         this.postDataToAjax(postEditedText);
         this.showDescEditor = true;
@@ -224,7 +239,8 @@ jQuery("#commentEditorArea").removeClass("replybox");
 var commentedOn = new Date()
 var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear();
   var reqData = {
-    TicketId:this.ticketId,
+    ticketId:this.ticketId,
+    projectId:this.projectId,
     Comment:{
       CrudeCDescription:commentText.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
       CommentedOn:formatedDate,
@@ -252,7 +268,7 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
           }
           
           this.replying = false;
-          var ticketIdObj={'ticketId': this.ticketId};
+          var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
           this.getArtifacts(ticketIdObj);
           
         });
@@ -323,8 +339,9 @@ closeTitleEdit(editedText){
             isLeftColumn:0,
             id:'Title',
             value:editedText,
-            TicketId:this.ticketId,
-            EditedId:'title'
+            ticketId:this.ticketId,
+            projectId:this.projectId,
+            editedId:'title'
           };
           this.postDataToAjax(postEditedText);
       }else{
@@ -337,8 +354,8 @@ closeTitleEdit(editedText){
 
 //Navigate to Edit Page
   goToEditPage(){
-    this._router.navigate(['story-edit',this.ticketId]);
-
+  //  this._router.navigate(['story-edit',this.ticketId]);
+this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
   }
 
 //Changes inline editable filed to thier respective edit modes - Left Column fields.
@@ -374,11 +391,11 @@ closeTitleEdit(editedText){
     }
     if(renderType == "select"){
         var reqData = {
-          FieldId:fieldDataId,
-          ProjectId:this.ticketData.data.Project.PId,
-           TicketId:(where == "Tasks")?fieldId:this.ticketData.data.TicketId,
-          WorkflowType:this.ticketData.data.WorkflowType,
-          StatusId:thisObj.statusId 
+          fieldId:fieldDataId,
+          projectId:this.ticketData.data.Project.PId,
+          ticketId:(where == "Tasks")?fieldId:this.ticketData.data.TicketId,
+          workflowType:this.ticketData.data.WorkflowType,
+          statusId:thisObj.statusId 
         };
         //Fetches the field list data for current dropdown in edit mode.
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
@@ -429,11 +446,12 @@ private dateVal = new Date();
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
 
       var postEditedText={
+                        projectId:this.projectId,
                         isLeftColumn:1,
                         id:fieldId,
                         value:"",
-                        TicketId:(where == "Tasks")?restoreFieldId.split("_")[0]:this.ticketId,
-                        EditedId:restoreFieldId.split("_")[1]
+                        ticketId:(where == "Tasks")?restoreFieldId.split("_")[0]:this.ticketId,
+                        editedId:restoreFieldId.split("_")[1]
                       };
           switch(renderType){
             case "input":
@@ -776,7 +794,7 @@ var thisObj = this;
          if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
                 document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
                 if(postEditedText.EditedId == "desc"){
-                  var ticketIdObj={'ticketId': this.ticketId};
+                  var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
                   this.getArtifacts(ticketIdObj);
                  }
          }
@@ -848,7 +866,8 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
           this.commonErrorFunction("subtaskerr","Please enter title.")
        }else{
         var postTaskData={
-            TicketId:this.ticketId,
+            ticketId:this.ticketId,
+            projectId:this.projectId,
             title:jQuery('#childtitle').val()
           };
         this._ajaxService.AjaxSubscribe("story/create-child-task",postTaskData,(result)=>
@@ -875,7 +894,7 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
     {
        var modifiedString=event.query.replace("#","");
         var post_data={
-        'projectId':1,
+        'projectId':this.projectId,
         'sortvalue':'Title',
         'ticketId':this.ticketId,
         'searchString':modifiedString
@@ -919,10 +938,10 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
            dafaultUserList.push(this.followers[x].CreatedBy);
       }
          var followerData = {
-          TicketId:this.ticketId,
-          ProjectId:1,
-          DafaultUserList:dafaultUserList,
-          SearchValue:event
+          ticketId:this.ticketId,
+          projectId:this.projectId,
+          dafaultUserList:dafaultUserList,
+          searchValue:event
         };
          this._ajaxService.AjaxSubscribe("story/get-collaborators-for-follow",followerData,(response)=>
          { 
@@ -950,8 +969,8 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
       {
         jQuery("#check_"+event).removeClass("glyphicon glyphicon-ok");
         var followerData = {
-          TicketId:this.ticketId,
-        
+          ticketId:this.ticketId,
+          projectId:this.projectId,
           collaboratorId:event
         
         };
@@ -987,8 +1006,8 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
         jQuery("#check_"+event).addClass("glyphicon glyphicon-ok");
         //make ajax to add follower to the Ticket.....
         var followerData = {
-          TicketId:this.ticketId,
-        
+         ticketId:this.ticketId,
+          projectId:this.projectId,
           collaboratorId:event,
         
        
@@ -1034,7 +1053,8 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
     jQuery("#check_"+event).removeClass("glyphicon glyphicon-ok");
     document.getElementById("followerdiv").style.display='none';
     var followerData = {
-          TicketId:this.ticketId,
+          ticketId:this.ticketId,
+          projectId:this.projectId,
           collaboratorId:event,
         };
         this._ajaxService.AjaxSubscribe("story/unfollow-ticket",followerData,(response)=>
@@ -1132,7 +1152,8 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
      var commentedOn = new Date()
      var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear();
      var reqData = {
-    TicketId:this.ticketId,
+    ticketId:this.ticketId,
+    projectId:this.projectId,
     Comment:{
       CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
       CommentedOn:formatedDate,
@@ -1162,7 +1183,7 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
 
 
           jQuery("#Actions_"+commentIndex).hide();
-          var ticketIdObj={'ticketId': this.ticketId};
+          var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
           this.getArtifacts(ticketIdObj);
           // this.commentsList.push(result.data);
           
@@ -1181,7 +1202,8 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
         if(this.commentsList[commentIndex].Status == 2){
             parent = parseInt(this.commentsList[commentIndex].ParentIndex);
              reqData = {
-                  TicketId:this.ticketId,
+                  ticketId:this.ticketId,
+                  projectId:this.projectId,
                   Comment:{
                     Slug:slug,
                     ParentIndex:parent,
@@ -1190,7 +1212,8 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
                 };
           }else{
               reqData = {
-                TicketId:this.ticketId,
+                ticketId:this.ticketId,
+                projectId:this.projectId,
                 Comment:{
                   Slug:slug,
                   CrudeCDescription:CrudeCDescription
@@ -1260,7 +1283,7 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
         this.commonErrorFunction("relatedTaskerr_msg","Please enter title or id.")
        }else{
         var relatedTasks={
-        'projectId':1,
+        projectId:this.projectId,
         'ticketId':this.ticketId,
         'relatedSearchTicketId':suggestValue.split("#")[1]
          } 
@@ -1290,7 +1313,7 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
        }else{
        if(event!=0){
             var TimeLog={
-                TicketId:this.ticketId,
+                ticketId:this.ticketId,
                 workHours:event,
                 projectId:1
               };
@@ -1343,13 +1366,13 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
           jQuery("#"+id).fadeOut(4000);
             }
 
-    public navigateStoryDetail(ticketId){ 
+    public navigateStoryDetail(ticketId,projectId){ 
     this.fieldsData = []; 
     this.showMyEditableField =[];
-         this.callTicketDetailPage(ticketId);        
+         this.callTicketDetailPage(ticketId,projectId);        
         }
 
-public callTicketDetailPage(ticId){
+public callTicketDetailPage(ticId,projectId){
     var thisObj = this;
     jQuery(document).ready(function(){
         window.scrollTo(0,0);
@@ -1385,13 +1408,11 @@ public callTicketDetailPage(ticId){
       }else{  
           this.ticketId = ticId;
       }
-      console.log("+++++++++++++iniit+++++++++");
-
-      var ticketIdObj={'ticketId': this.ticketId};
+      var ticketIdObj={'ticketId': this.ticketId,'projectId':projectId};
         this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
         { 
-
-            this.ticketData = data;
+            if(data.statusCode!=404){
+              this.ticketData = data;
               this.ticketData.data.Fields.filter (function(obj){
               if(obj.field_name=='workflow'){
                thisObj.statusId =obj.value;
@@ -1432,8 +1453,7 @@ public callTicketDetailPage(ticId){
               
             });
 
-        });
-        this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
+       this._ajaxService.AjaxSubscribe("story/get-work-log",ticketIdObj,(data)=>
             { 
                this.individualLog =data.data.individualLog;
                  if(data.data.TotalTimeLog > 0){
@@ -1448,14 +1468,22 @@ public callTicketDetailPage(ticId){
         
          this.relatedTaskArray=result.data;
         })
-      this.minDate=new Date();
 
-          //---------------------------- Attachments code---------------//
+    //---------------------------- Attachments code---------------//
      /**
      * @author:Jagadish
      * @description: This is used to display Attachments
      */
        this.getArtifacts(ticketIdObj);
+      }else{
+        this._router.navigate(['project',this.projectName,this.ticketId ,'error']); 
+      }
+        
+        });
+       
+      this.minDate=new Date();
+
+   
 }
      /**
      * @author:Anand

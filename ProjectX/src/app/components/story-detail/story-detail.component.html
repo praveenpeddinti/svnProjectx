@@ -283,7 +283,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="addtask_bor">
-                            <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/story-detail',childTasks.TicketId]" (click)="navigateStoryDetail(childTasks.TicketId)">{{childTasks.Title  | truncate:140}}</a></div>
+                            <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/project',projectName,childTasks.TicketId,'details']" (click)="navigateStoryDetail(childTasks.TicketId, childTasks.ProjectId)">{{childTasks.Title  | truncate:140}}</a></div>
                             <div class="addtask_status" *ngIf="childTasks.TicketId">{{childTasks.Fields[2].data.value_name}}</div>
                         </div>
                     </div>
@@ -336,7 +336,7 @@
     </div>
     <div class="col-md-10">
         <div class="addtask_bor">
-            <div class="addtask_title"><a [routerLink]="['/story-detail',relatedTask.TicketId]" (click)="navigateStoryDetail(relatedTask.TicketId)">{{relatedTask.Title}}</a></div>
+            <div class="addtask_title"><a [routerLink]="['/project',projectName,relatedTask.TicketId,'details']" (click)="navigateStoryDetail(relatedTask.TicketId)">{{relatedTask.Title}}</a></div>
             <div class="addtask_status">{{relatedTask.Fields.workflow.value_name}}</div>
         </div>
     </div>
@@ -366,7 +366,7 @@
             </div>
           <div *ngFor="let property of comment.PropertyChanges;">   
     <div class="ticketactivity">
-        <a  *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/story-detail',property.PoppedChildId]" (click)="navigateStoryDetail(property.PoppedChildId)" >#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a> <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
+        <a  *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/project',projectName,property.PoppedChildId,'details']" (click)="navigateStoryDetail(property.PoppedChildId)" >#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a> <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
        <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-none-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
                 </span>
     <span *ngIf="property.type!='user'"> 

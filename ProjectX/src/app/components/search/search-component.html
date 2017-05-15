@@ -21,7 +21,7 @@
 <div class="searchresulttitle" *ngIf="!finalData.ProfilePicture">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
- <a [routerLink]="['/story-detail',finalData.TicketId]" (click)="navigateToStoryDetail(finalData.TicketId)">#{{finalData.TicketId}} {{finalData.Title}}</a>
+ <a  (click)="navigateToStoryDetail(finalData.Project,finalData.TicketId)">#{{finalData.TicketId}} {{finalData.Title}}</a>
 </div>
 <div class="searchresulttitle" *ngIf="finalData.ProfilePicture">
     <span class="searchresulttitleusericon">
