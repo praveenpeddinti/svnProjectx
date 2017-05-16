@@ -1384,18 +1384,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $collaborator=TinyUserCollection::getMiniUserDetails($follower['FollowerId']);
                     array_push($recipient_list,$collaborator['Email']);
                 }
-                $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId; //added by Ryan
-//                $text_message = <<<EOD
-//TimeLog has been {$action} by {$timelog_data->userInfo->username} for <a href={$link}>#{$ticketId} {$ticketInfo['Title']} </a> </br>
+//                $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId; //added by Ryan
+////                $text_message = <<<EOD
+////TimeLog has been {$action} by {$timelog_data->userInfo->username} for <a href={$link}>#{$ticketId} {$ticketInfo['Title']} </a> </br>
+////EOD;
+// $text_message = <<<EOD
+//          you have a new ticket alert.
+//<a href={$link}>#{$ticketId} {$ticketInfo['Title']} </a> 
+//         Changes by {$timelog_data->userInfo->username}: 
+//Total invested hours: {$oldTimeLog} => {$newTimeLog}
+//
 //EOD;
- $text_message = <<<EOD
-          you have a new ticket alert.
-<a href={$link}>#{$ticketId} {$ticketInfo['Title']} </a> 
-         Changes by {$timelog_data->userInfo->username}: 
-Total invested hours: {$oldTimeLog} => {$newTimeLog}
-
-EOD;
-                CommonUtility::sendEmail($recipient_list, $text_message);
+//                CommonUtility::sendEmail($recipient_list, $text_message);
             }
         } catch (Exception $ex) {
             Yii::log("StoryService:insertTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
