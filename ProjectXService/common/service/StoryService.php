@@ -877,10 +877,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
                 return $retData;
             } else {
- error_log("saveComment-------------3");
+ error_log("saveComment-------------3***");
+ 
                 $commentedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
 
                 $slug = new \MongoDB\BSON\ObjectID();
+                error_log("saveComment-------------444**");
                 $commentDataArray = array(
                     "Slug" => $slug,
                     "CDescription" => $processedDesc,
@@ -1060,12 +1062,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         $oldValue = "";
          $returnValue="noupdate";
         $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
-        if($actionfieldName == "Title" || $actionfieldName == "Description"){
-         $oldValue = $ticketDetails[$actionfieldName]; 
+        if($actionfieldName == "Title" || $actionfieldName == "Description" || $actionfieldName=="TotalTimeLog"){ //added actionFieldName for TotalTimeLog By Ryan
+            $oldValue = $ticketDetails[$actionfieldName]; 
         }else{
           $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];
         }
-        
        if(trim($oldValue) != trim($newValue)){
         if($oldValue == ""){
             $action = "set to";
@@ -1357,19 +1358,44 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      */
     public function insertTimeLog($timelog_data) {
         try {
-
+            
             $projectId = $timelog_data->projectId;
             $ticketId = $timelog_data->ticketId;
             $userId = $timelog_data->userInfo->Id;
             $totalWorkHours = (float) $timelog_data->workHours;
             $ticketDetails = TicketTimeLog::saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours);
+            $recipient_list=array();//added By Ryan
+            $action='';//added By Ryan
             if ($ticketDetails != "failure") {
-            $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId") );
+            $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") ); //added by Ryan
+            $oldTimeLog=$parenTicketInfo['TotalTimeLog']; //added by Ryan
+            $total=($oldTimeLog + $totalWorkHours); //added by Ryan
+            $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $userId); //added by Ryan
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
             }
            
                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $totalWorkHours);
+                $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog")); //added by Ryan
+                $newTimeLog=$ticketInfo['TotalTimeLog']; //added by Ryan
+                $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog; //added by Ryan
+                foreach($ticketInfo['Followers'] as $follower) //added by Ryan
+                {
+                    $collaborator=TinyUserCollection::getMiniUserDetails($follower['FollowerId']);
+                    array_push($recipient_list,$collaborator['Email']);
+                }
+                $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId; //added by Ryan
+//                $text_message = <<<EOD
+//TimeLog has been {$action} by {$timelog_data->userInfo->username} for <a href={$link}>#{$ticketId} {$ticketInfo['Title']} </a> </br>
+//EOD;
+ $text_message = <<<EOD
+          you have a new ticket alert.
+<a href={$link}>#{$ticketId} {$ticketInfo['Title']} </a> 
+         Changes by {$timelog_data->userInfo->username}: 
+Total invested hours: {$oldTimeLog} => {$newTimeLog}
+
+EOD;
+                CommonUtility::sendEmail($recipient_list, $text_message);
             }
         } catch (Exception $ex) {
             Yii::log("StoryService:insertTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -1499,7 +1525,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 if ($newWorkflowId == 5) {
                     // 5 --Code complete
                     // Send notification to Peer person
-                  
+
                     //Send notification end.....
                     return true;
                 } else if ($newWorkflowId == 10 || $newWorkflowId == 7 || $newWorkflowId == 1 || $newWorkflowId == 8) {  // 10 --Re-open  7 -- Invalid 1--New 8--Fixed
