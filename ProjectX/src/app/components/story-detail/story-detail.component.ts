@@ -791,15 +791,16 @@ var thisObj = this;
                 this.statusId = result.data.updatedFieldData;
            }
 
-         if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
-                document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
-                if(postEditedText.EditedId == "desc"){
+         if(postEditedText.editedId == "title" || postEditedText.editedId == "desc"){
+         console.log("in------------"+result.data.updatedFieldData);
+                document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerHTML=result.data.updatedFieldData;
+                if(postEditedText.editedId == "desc"){
                   var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
                   this.getArtifacts(ticketIdObj);
                  }
          }
     
-if(postEditedText.EditedId == "estimatedpoints"){ 
+if(postEditedText.editedId == "estimatedpoints"){ 
 jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
 }
 
@@ -814,38 +815,6 @@ jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.upda
  }
         });
 
-        /*For notification Purpose By Ryan for assigned To*/
-        // console.log("Post edited text field"+postEditedText.EditedId+"Post edited value"+postEditedText.value);
-        // if(postEditedText.EditedId=='assignedto' || postEditedText.EditedId=='stakeholder')
-        // {
-        //   var notify_data={'ticketId':this.ticketId,'comment_type':postEditedText.EditedId,'collaborator':postEditedText.value,'followers':this.followers};
-
-        //   this._ajaxService.NodeSubscribe('/assignedTo',notify_data,(data)=>
-        //   {
-
-        //   });
-        // }
-
-        // if(postEditedText.EditedId=='priority' || postEditedText.EditedId=='bucket' ||  postEditedText.EditedId=='workflow')
-        // {
-        //   var priority_data=
-        //   {
-        //     'ticketId':this.ticketId,
-        //     'comment_type':'changed',
-        //     'Activity_On':postEditedText.EditedId,
-        //     'field_value':postEditedText.value,
-        //     'Activity':this.activity_data,
-        //     'followers':this.followers
-        //   };
-
-        //   this._ajaxService.NodeSubscribe('/propertyChange',priority_data,(data)=>
-        //   {
-
-        //   });
-        // }
-
-
-        /* Notification End */
         },500)
     }
 
