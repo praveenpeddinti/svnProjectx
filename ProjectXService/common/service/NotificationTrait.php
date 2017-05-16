@@ -72,7 +72,7 @@ use yii;
             error_log("----saveNotificationsToMentionOnly---");
             $from=$ticket_data->userInfo->username;
              $loggedinUser=$ticket_data->userInfo->Id;
-            $ticketId=$ticket_data->TicketId;
+            $ticketId=$ticket_data->ticketId;
             $projectId=$ticket_data->projectId;
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
            $ticket_data = TicketCollection::getTicketDetails($ticketId,$projectId);
@@ -797,15 +797,13 @@ use yii;
                  if($activityOnFieldType== 6) {//newly assigned  
                         //$action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
                        
-                        if($notification['NotifiedUser']==$notification['NewValue'])
-                        {
+                        if($notification['NotifiedUser']==$notification['NewValue']){
                            
                             //for logged in user
                             //Eg : moin.hussain assigned you to ticket #33
                              $to =  "you";
                         }
-                        else
-                        {
+                        else{
                            $action_user=Collaborators::getCollaboratorById($notification['NewValue']);
                                 //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
                                 //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
@@ -845,8 +843,7 @@ EOD;
                     
                     /********* Followers Messages *****************/
                     
-                    else if($notification['ActivityOn']=='FollowObj')
-                    {
+                    else if($notification['ActivityOn']=='FollowObj'){
                       //  error_log("added");
                         
                             if($notification['NotifiedUser']==$notification['NewValue']) //if logged in user has been added
@@ -893,6 +890,7 @@ EOD;
                     // $message=array('from'=>$from_user['UserName'],'object'=>$object,'type'=>$type,'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
                     // array_push($result_msg,$message);
           error_log("Notification___Type___________########################".$notification['Notification_Type'] );       
+         $link .=  "?Slug=".$notification['CommentSlug'] ;  
           if($notification['Notification_Type'] == "comment"){
             //  error_log("comment-----------------------22222");
                $preposition = "on";
@@ -930,7 +928,7 @@ EOD;
             $text_message = <<<EOD
 <a href={$link}>#{$ticketId} {$title} </a> <br/> comment deleted by {$fromUser}
 EOD;
-            
+        
     } 
                      
                 array_push($recipient_list,$notification['NotifiedUser']);     
