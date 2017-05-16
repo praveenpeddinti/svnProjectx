@@ -1035,26 +1035,26 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
     public static function sendEmail($recipient_list,$text_message,$subject="ProjectX",$attachment_list=array()){
         try{
            
-         echo("4. In CommonUtiltiy sendEmail started\n");
-         ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
-        $attachments=array();//list of artifacts
-        $EEemail = new Email();
-
-        $from=Yii::$app->params['ProjectEmail'];
-        $fromName="ProjectX";
-        $html="<h1> $text_message </h1>";
-        $text=$text_message;
-        $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
-                
+//         echo("4. In CommonUtiltiy sendEmail started\n");
+//         ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
+//        $attachments=array();//list of artifacts
+//        $EEemail = new Email();
+//
+//        $from=Yii::$app->params['ProjectEmail'];
+//        $fromName="ProjectX";
+//        $html="<h1> $text_message </h1>";
+//        $text=$text_message;
+//        $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
+//                
         
-//              Yii::$app->mailer->compose()
-//           ->setFrom(Yii::$app->params['ProjectEmail'])
-//           ->setTo($recipient_list)
-//           ->setSubject($subject)
-//           ->setTextBody('This is ProjectX')
-//           ->setHtmlBody($text_message)
-//           ->send();
-//             error_log("in send mail");
+              Yii::$app->mailer->compose()
+           ->setFrom(Yii::$app->params['ProjectEmail'])
+           ->setTo($recipient_list)
+           ->setSubject($subject)
+           ->setTextBody('This is ProjectX')
+           ->setHtmlBody($text_message)
+           ->send();
+             error_log("in send mail");
         echo("5. In CommonUtiltiy sendEmail completed..\n");
         echo("6. Sending email background job has completed\n");
         }catch(Exception $ex){
