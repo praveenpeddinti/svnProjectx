@@ -95,8 +95,8 @@ export class StoryCreatePage {
 
     ionViewDidLoad() {
         RE.editor = document.getElementById('editor');
-        RE.editor.addEventListener("touchstart", RE.touchstart);
-        RE.editor.addEventListener("touchend", RE.touchend);
+//        RE.editor.addEventListener("touchstart", RE.touchstart);
+//        RE.editor.addEventListener("touchend", RE.touchend);
         RE.editor.setAttribute("placeholder", "insert my text ...");
 
     }
@@ -115,8 +115,8 @@ export class StoryCreatePage {
             if (typeof (this.create.title) == 'string' && this.create.title.length > 0) {
                 this.create.title.trim();
             }
-            if (this.create.description != null) {
-                this.create.description = "<p>" + this.create.description + "</p>";
+            if (this.myHTML != null) {
+                this.create.description = this.myHTML;
             }
             this.globalService.createStoryORTask(this.constants.createStory, (this.create)).subscribe(
                 (result) => {

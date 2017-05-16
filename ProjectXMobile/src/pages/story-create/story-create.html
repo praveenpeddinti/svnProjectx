@@ -10,8 +10,8 @@
 </ion-header>
 <ion-content padding>
 
-    <div id="editor" class="editable" contenteditable="true" onclick="RE.focus (event)" ondblclick="RE.enableOptions(event)" onblur="RE.blurFocus()" style="height: 100px; border: 2px solid black; border-radius: 5px"></div>
-    {{myHTML}}
+<!--    <div id="editor" class="editable" contenteditable="true" onclick="RE.focus (event)" ondblclick="RE.enableOptions(event)" onblur="RE.blurFocus()" style="height: 100px; border: 2px solid black; border-radius: 5px"></div>
+    {{myHTML}}-->
     
     <form #createForm="ngForm" (ngSubmit)="onStoryCreate(createForm)" style="max-height:100%;height:100%" novalidate="true">
         <div>
@@ -51,9 +51,10 @@
                     <label class="customlabel">Description</label>
                     <ion-item>
                         <ion-row>
-                            <textarea class="text-area  item customdropdowntext spinnerlabel" placeholder="Type your message here" [(ngModel)]="create.description"
+                            <div id="editor" class="" required #create_description contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px;"></div>
+<!--                            <textarea class="text-area  item customdropdowntext spinnerlabel" placeholder="Type your message here" [(ngModel)]="create.description"
                                 required name="create_description" #create_description="ngModel" rows="5" id="create_description"
-                                [ngModelOptions]="{standalone:true}"></textarea>
+                                [ngModelOptions]="{standalone:true}"></textarea>-->
                         </ion-row>
                     </ion-item>
                     <div [hidden]="!create_description.errors.required" *ngIf="submitted && create_description.errors " class="text-md-danger text-ios-danger text-wp-danger">

@@ -30,12 +30,12 @@ body {
 }
 
 #editor {
-  /*display: table-cell;
+  display: table-cell;
   outline: 0px solid transparent;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  user-select: text;*/
+  user-select: text;
 
  
 }

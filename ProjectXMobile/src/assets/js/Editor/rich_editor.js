@@ -387,11 +387,13 @@ RE.removeFormat = function () {
 }
 
 // Event Listeners
-RE.editor.addEventListener("input", RE.callback);
-RE.editor.addEventListener("keyup", function (e) {
-    var KEY_LEFT = 37, KEY_RIGHT = 39;
-    if (e.which == KEY_LEFT || e.which == KEY_RIGHT) {
-        RE.enabledEditingItems(e);
-    }
-});
-RE.editor.addEventListener("click", RE.enabledEditingItems);
+if(RE.editor){
+    RE.editor.addEventListener("input", RE.callback);
+    RE.editor.addEventListener("keyup", function (e) {
+        var KEY_LEFT = 37, KEY_RIGHT = 39;
+        if (e.which == KEY_LEFT || e.which == KEY_RIGHT) {
+            RE.enabledEditingItems(e);
+        }
+    });
+    RE.editor.addEventListener("click", RE.enabledEditingItems);
+}
