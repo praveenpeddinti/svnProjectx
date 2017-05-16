@@ -782,9 +782,10 @@ use yii;
                  $title = $ticket_data['Title'];
                  $fromUser = $from_user['UserName'];
           
-                 
-                 if($activityOnFieldType== 6) //newly assigned 
-                    {
+                $projectDetails = Projects::getProjectMiniDetails($projectId);
+                $projectName = $projectDetails["ProjectName"];
+                $link = Yii::$app->params['AppURL']."/#/project/$projectName/".$ticketId."/details"; 
+                 if($activityOnFieldType== 6) {//newly assigned  
                         //$action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
                        
                         if($notification['NotifiedUser']==$notification['NewValue'])
@@ -810,7 +811,6 @@ use yii;
         }
        $fieldName =  $fieldName == "" ? "":"as a ".$fieldName;
                    
-                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
                                 $text_message = <<<EOD
 {$fromUser} has assigned {$to} {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
 EOD;
@@ -821,8 +821,8 @@ EOD;
                     $notification['OldValue']  =  CommonUtility::refineActivityData($notification['OldValue'],10);
                     $notification['NewValue']  =  CommonUtility::refineActivityData($notification['NewValue'],10);
                     $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
-                    $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
-                                $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
+                   
+                             
                                 $text_message = <<<EOD
 <a href={$link}>#{$ticketId} {$title} </a> </br>
 {$activityOn} has been changed by {$fromUser}
@@ -856,7 +856,6 @@ EOD;
                            $preposition =  $notification['Notification_Type'] == "added" ? "to" : "from";
                         // $message=array('from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower'],"Preposition"=>$preposition);
                         
-                                 $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
                                $message =  Yii::$app->params[$notification['Notification_Type']];
                                 $text_message = <<<EOD
 {$fromUser}  {$message} {$activityOn} as follower {$preposition} <a href={$link}>#{$ticketId} {$title} </a>
@@ -890,7 +889,6 @@ EOD;
                $preposition = "on";
                            $object = "comment";
                            $type =  Yii::$app->params['comment'];
-               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
             $text_message = <<<EOD
 <a href={$link}>#{$ticketId} {$title} </a> <br/> commented by {$fromUser}
 EOD;
@@ -901,7 +899,6 @@ EOD;
                       $preposition = "";
                        $object = "reply";
                              $type =  Yii::$app->params['reply']; 
-               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
             $text_message = <<<EOD
 <a href={$link}>#{$ticketId} {$title} </a> <br/> replied by {$fromUser}
 EOD;
@@ -912,7 +909,6 @@ EOD;
                       $preposition = "";
                        $object = "edit";
                              $type =  Yii::$app->params['reply']; 
-               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
             $text_message = <<<EOD
 <a href={$link}>#{$ticketId} {$title} </a> <br/> comment edited by {$fromUser}
 EOD;
@@ -922,7 +918,6 @@ EOD;
                       $preposition = "";
                        $object = "delete";
                              $type =  Yii::$app->params['delete'];
-               $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
             $text_message = <<<EOD
 <a href={$link}>#{$ticketId} {$title} </a> <br/> comment deleted by {$fromUser}
 EOD;
@@ -947,7 +942,6 @@ EOD;
                         {
                         //    error_log("==in mention==");
                       
- $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketId;
             $text_message = <<<EOD
 <a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$fromUser}
 EOD;
