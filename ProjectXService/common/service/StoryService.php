@@ -796,9 +796,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              error_log("==call check==".$ticket_data->value);       
           if($fieldDetails["Field_Name"] == "estimatedpoints"){
                if($childticketDetails['IsChild'] == 0){
-                 $ticketId= $ticket_data->TicketId;
+                 $ticketId= $ticket_data->ticketId;
                  $getTicketDetailsForEstimate = TicketCollection::getTicketDetails($ticketId,$ticket_data->projectId,['Fields.totalestimatepoints.value']);
-                 error_log($ticket_data->TicketId."@@@@-------------------".print_r($getTicketDetailsForEstimate,1));
+                 error_log($ticket_data->ticketId."@@@@-------------------".print_r($getTicketDetailsForEstimate,1));
                  $totalEstimatePoints = $getTicketDetailsForEstimate["Fields"]["totalestimatepoints"]; 
                  $selectedValue=$totalEstimatePoints;
                  
