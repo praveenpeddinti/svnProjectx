@@ -255,7 +255,8 @@ textarea {
   color: inherit; /* 1 */
   font: inherit; /* 2 */
   margin: 0; /* 3 */
-}
+},
+
 
 /**
  * Address `overflow` set to `hidden` in IE 8/9/10/11.
@@ -411,6 +412,14 @@ td,
 th {
   padding: 0;
 }
+
+/**
+*{
+    -webkit-user-modify:read-write;
+}
+ 
+ **/
+
 
 #editor {
     -webkit-user-select: text;

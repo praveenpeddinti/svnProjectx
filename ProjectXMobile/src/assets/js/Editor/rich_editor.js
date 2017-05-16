@@ -22,9 +22,13 @@ RE.currentSelection = {
     "endContainer": 0,
     "endOffset": 0
 };
-var myHTML;
+
+
+
 
 RE.editor = document.getElementById('editor');
+RE.htmlView = document.getElementById('htmlview');
+
 
 document.addEventListener("selectionchange", function () { RE.backuprange(); });
 
@@ -35,30 +39,35 @@ RE.callback = function () {
 
 RE.click = function (id) {
 
+
     switch (id) {
         case "bold":
             RE.setBold();
-            myHTML = document.getElementById('editor').innerHTML;
+            var myHTML = document.getElementById('editor').innerHTML;
+            // window.alert(myHTML);
             RE.focus();
 
             break;
 
         case "italic":
             RE.setItalic();
-            myHTML = document.getElementById('editor').innerHTML;
+            var myHTML = document.getElementById('editor').innerHTML;
+            // window.alert(myHTML);
             RE.focus();
 
             break;
         case "underline":
             RE.setUnderline();
-            myHTML = document.getElementById('editor').innerHTML;
+            var myHTML = document.getElementById('editor').innerHTML;
+            // window.alert(myHTML);
             RE.focus();
 
             break;
 
         case "bullets":
             RE.setBullets();
-            myHTML = document.getElementById('editor').innerHTML;
+            var myHTML = document.getElementById('editor').innerHTML;
+            // window.alert(myHTML);
             RE.focus();
 
 
@@ -66,7 +75,8 @@ RE.click = function (id) {
 
         case "numbers":
             RE.setNumbers();
-            myHTML = document.getElementById('editor').innerHTML;
+            var myHTML = document.getElementById('editor').innerHTML;
+            // window.alert(myHTML);
             RE.focus();
 
 
@@ -75,24 +85,31 @@ RE.click = function (id) {
 
         case "insertlink":
             var person = prompt("Enter the url");
-            if(person != null) {
-                RE.insertLink(person, person);
-                myHTML = document.getElementById('editor').innerHTML;
-            }
-            RE.focus();
+
+            RE.insertLink(person,person);
+
+            // var myHTML = document.getElementById('editor').innerHTML;
+           // window.alert(myHTML);
+           RE.focus();
 
 
             break;
 
         case "close":
             document.getElementById("hideOrShow").style.display = "none"; 
-            // RE.focus();
+            RE.editor.focus();
 
             break;
+
 
         default:
             break;
     }
+
+
+
+
+
 }
 
 RE.setHtml = function (contents) {
@@ -251,7 +268,7 @@ RE.insertHTML = function (html) {
 }
 
 RE.insertLink = function (url, title) {
-    //  RE.restorerange();
+  //  RE.restorerange();
     var sel = document.getSelection();
     if (sel.toString().length == 0) {
         document.execCommand("insertHTML", false, "<a href='" + url + "'>" + title + "</a>");
@@ -265,7 +282,7 @@ RE.insertLink = function (url, title) {
         sel.removeAllRanges();
         sel.addRange(range);
     }
-    // RE.callback();
+   // RE.callback();
 }
 
 RE.setTodo = function (text) {
@@ -347,8 +364,14 @@ RE.enabledEditingItems = function (e) {
 
     window.location.href = "re-state://" + encodeURI(items.join(','));
 }
-var mouseTimer;
-RE.focus = function (evt) {
+
+RE.focus = function () {
+    var range = document.createRange();
+    range.selectNodeContents(RE.editor);
+    range.collapse(false);
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
     RE.editor.focus();
 
     var hideOrShow = document.getElementById('hideOrShow');
@@ -363,32 +386,7 @@ RE.removeFormat = function () {
     document.execCommand('removeFormat', false, null);
 }
 
-RE.enableOptions = function(evt){
-
-    var hideOrShow = document.getElementById('hideOrShow');
-    hideOrShow.style.display = "block";
-
-}
-
-var touchduration = 1000;
-var timer;
-RE.touchstart = function touchstart(){
-        timer = setTimeout(onlongtouch, touchduration); 
-}
-RE.touchend = function touchstart(){
-        if (timer){
-            clearTimeout(timer); 
-        }
-        RE.focus();
-}
-function onlongtouch(){
-    var hideOrShow = document.getElementById('hideOrShow');
-        hideOrShow.style.display = "block";
-}
-
 // Event Listeners
-
-if(RE.editor){
 RE.editor.addEventListener("input", RE.callback);
 RE.editor.addEventListener("keyup", function (e) {
     var KEY_LEFT = 37, KEY_RIGHT = 39;
@@ -397,4 +395,3 @@ RE.editor.addEventListener("keyup", function (e) {
     }
 });
 RE.editor.addEventListener("click", RE.enabledEditingItems);
-}
