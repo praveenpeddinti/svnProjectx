@@ -1,4 +1,25 @@
 <ion-content padding>
+    <div>
+        <div class="padding10trl"> </div>
+        <div class="dashboardbox_header">
+            <i class="{{taskDetails.type}}"></i>
+            <span class="ticketid">#{{taskDetails.ticketId}}</span>
+            <span id="title" *ngIf="!enableEdatable" (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span>
+        </div>
+        <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
+        <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
+        <div class="padding10">
+            <div style="position: relative;" class="customtoggle padding10">
+<div id="description" style="overflow:hidden;">
+<div id="innerdesc" class="displayblock imgVideo_bg" [innerHTML]=" taskDetails.description "></div>
+</div>
+<div class="show-morediv" style="display:none">
+<button id="show" (click)="expandDescription()" class="customshowbutton">Show more</button>
+<button id="hide" (click)="collapseDescription()" class="customshowbutton" style="display:none">Show less</button>
+</div>
+</div>
+</div>
+</div>
 <ion-row>
     <span class="pull-left">Total worked hours</span>
     <div class="thours pull-right"><i aria-hidden="true" class="fa fa-clock-o timeclr"></i>&nbsp; {{workedLogtime.TotalTimeLog}}</div>
@@ -12,7 +33,6 @@
 <ion-row>
     <div class="pull-left">Worked hours:</div>
     <input (blur)="inputWorkLog($event, i)" class="no_mar spinnerlabel" id="logHourDetails_input_{{i}}" [(ngModel)]="inputHourslog"
-        type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number"
-        placeholder="0.00">
+        type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="0.00">
 </ion-row>
 </ion-content>
