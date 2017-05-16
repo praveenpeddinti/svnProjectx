@@ -291,7 +291,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 if(!empty($refinedData['UsersList']))
                 {
                     error_log("===in if mail sending.....==");
-                    $newticket_data->TicketId = $ticketNumber;
+                    $newticket_data->ticketId = $ticketNumber;
                     self::saveNotificationsToMentionOnly($newticket_data,$refinedData['UsersList'],'mention');
 
                 }
