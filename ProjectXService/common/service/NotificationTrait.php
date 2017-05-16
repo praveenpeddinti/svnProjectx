@@ -272,10 +272,16 @@ use yii;
                                 $oldValue='';
                             }
                           if($fieldType == 4){
+                              error_log("in field tyupe 4444444444444");
                                        $validDate = CommonUtility::validateDate($newValue);
                                       if($validDate){
                                      $newValue = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
                                        }
+                                        $validDate = CommonUtility::validateDate($oldValue);
+                                      if($validDate){
+                                      $oldValue = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+                                       }
+                                         error_log($newValue."----in field tyupe 4444444444444----".$oldValue);
                              }    
                     }
                     else if($fieldType==6)
@@ -455,7 +461,10 @@ use yii;
                         
                         $tic->Notification_Type=$activityOn;
                         $tic->Status=0;
-                        $tic->OldValue=(string)$oldValue;
+                        $oldValue = ($fieldType == 4) ? $oldValue : (string)$oldValue;
+                        $tic->OldValue = $oldValue; 
+                       
+                      
                         $tic->NewValue=$newValue;
                         $tic->save(); //here not sending emails for left hand side propert change excpet Assinged to , stake holder
                     }
