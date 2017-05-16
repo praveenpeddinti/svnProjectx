@@ -86,11 +86,13 @@ RE.click = function (id) {
         case "insertlink":
             var person = prompt("Enter the url");
 
+           if(person != null){
             RE.insertLink(person,person);
 
-            // var myHTML = document.getElementById('editor').innerHTML;
+             var myHTML = document.getElementById('editor').innerHTML;
            // window.alert(myHTML);
            RE.focus();
+        }
 
 
             break;
