@@ -801,7 +801,7 @@ var thisObj = this;
          }
     
 if(postEditedText.editedId == "estimatedpoints"){ 
-jQuery("#"+postEditedText.TicketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
+jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
 }
 
 
