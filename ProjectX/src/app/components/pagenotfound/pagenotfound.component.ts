@@ -3,6 +3,7 @@ import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
 import { AjaxService } from '../../ajax/ajax.service';
+import {SharedService} from '../../services/shared.service';
 declare var jQuery:any;
 @Component({
    selector: 'page-not-found',
@@ -22,13 +23,14 @@ export class PageNotFoundComponent implements OnInit{
         private _router: Router,
          private _authGuard:AuthGuard,
         private route: ActivatedRoute,
-        private _ajaxService: AjaxService
+        private _ajaxService: AjaxService,
+        private shared:SharedService
         ) {
 
          }
 
     ngOnInit(){
     
-  
+  this.shared.change(this._router.url,null,'Error',''); //added for breadcrumb purpose
 }
 }
