@@ -14,7 +14,7 @@ import { StoryDashboardComponent }  from './components/story-dashboard/story-das
 import {StoryService} from './services/story.service';
 import { CKEditorModule } from 'ng2-ckeditor';
 //import {Ng2DragDropModule} from "ng2-drag-drop";
-import {DropdownModule,CalendarModule,AutoCompleteModule,CheckboxModule} from 'primeng/primeng'; 
+import {DropdownModule,CalendarModule,AutoCompleteModule,CheckboxModule,BreadcrumbModule,MenuItem} from 'primeng/primeng'; 
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService, Collaborator} from './services/login.service';
@@ -39,8 +39,16 @@ import { SearchComponent }  from './components/search/search.component';
 import { TimeReportComponent }  from './components/time-report/time-report.component';
 import {TimeReportService} from './services/time-report.service';
 import { NotificationComponent }  from './components/notification/notification.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+//import {Ng2BreadcrumbModule} from 'ng2-breadcrumb/ng2-breadcrumb'; /*** Important Module */
+import {SharedService} from './services/shared.service';
+
 import { StandupComponent }  from './components/standup/standup.component';
-import {PageNotFoundComponent} from './components/pagenotfound/pagenotfound.component'
+import {PageNotFoundComponent} from './components/pagenotfound/pagenotfound.component';
+import {UrlSerializer} from '@angular/router';
+import {CustomUrlSerializer} from './CustomUrlSerializer';
+
+
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: 'home',children:[
@@ -50,7 +58,7 @@ const ROUTES=[
                ],canActivate:[AuthGuard]},
               {path: 'login', component: LoginComponent},
                 {path: 'project/:projectName/list',children:[
-                { path: '' , component: StoryDashboardComponent},
+                { path: '' , component: StoryDashboardComponent,data:{breadcrumb:'Dashboard'}},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
@@ -60,7 +68,7 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
              {path: 'project/:projectName/:id/details',children:[
-                { path: '' , component: StoryDetailComponent},
+                { path: '' , component: StoryDetailComponent,data:{breadcrumb:'Detail'}},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
@@ -128,11 +136,13 @@ const ROUTES=[
    CheckboxModule,
    CalendarModule,
    AutoCompleteModule,
-   RouterModule.forRoot(ROUTES)
+   RouterModule.forRoot(ROUTES),
+   //Ng2BreadcrumbModule.forRoot()
   ],
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent ],
+
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent ],
   bootstrap:    [ AppComponent ],
-  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,SummerNoteEditorService,TimeReportService
+  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
