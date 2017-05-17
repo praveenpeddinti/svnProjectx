@@ -30,7 +30,7 @@ RE.editor = document.getElementById('editor');
 RE.htmlView = document.getElementById('htmlview');
 
 
-document.addEventListener("selectionchange", function () { RE.backuprange(); });
+// document.addEventListener("selectionchange", function () { RE.backuprange(); });
 
 // Initializations
 RE.callback = function () {
@@ -45,6 +45,7 @@ RE.click = function (id) {
             RE.setBold();
             var myHTML = document.getElementById('editor').innerHTML;
             // window.alert(myHTML);
+            returnNodeType();
             RE.focus();
 
             break;
@@ -53,6 +54,7 @@ RE.click = function (id) {
             RE.setItalic();
             var myHTML = document.getElementById('editor').innerHTML;
             // window.alert(myHTML);
+            returnNodeType();
             RE.focus();
 
             break;
@@ -60,6 +62,7 @@ RE.click = function (id) {
             RE.setUnderline();
             var myHTML = document.getElementById('editor').innerHTML;
             // window.alert(myHTML);
+            returnNodeType();
             RE.focus();
 
             break;
@@ -68,6 +71,7 @@ RE.click = function (id) {
             RE.setBullets();
             var myHTML = document.getElementById('editor').innerHTML;
             // window.alert(myHTML);
+            returnNodeType();
             RE.focus();
 
 
@@ -77,6 +81,7 @@ RE.click = function (id) {
             RE.setNumbers();
             var myHTML = document.getElementById('editor').innerHTML;
             // window.alert(myHTML);
+            returnNodeType();
             RE.focus();
 
 
@@ -91,6 +96,7 @@ RE.click = function (id) {
 
              var myHTML = document.getElementById('editor').innerHTML;
            // window.alert(myHTML);
+           returnNodeType();
            RE.focus();
         }
 
@@ -112,10 +118,59 @@ RE.click = function (id) {
             break;
     }
 
+}
 
+function returnNodeType() {
+   var node=null;      
+   node=window.getSelection().getRangeAt(0).commonAncestorContainer;
+   node = ((node.nodeType===1)?node:node);      
+   var nodeArray = [];
+   returnarray = returnParentTag(node, nodeArray);
+    
+    if(nodeArray.indexOf("B") > -1){
+   		// Bold
+        //    alert(document.getElementById("bold").style.backgroundColor);
+           document.getElementById("bold").style.backgroundColor = "red";
+    } else if(nodeArray.indexOf("I") > -1){
+        // Italic
+        document.getElementById("italic").style.backgroundColor = "red";
+    } else if(nodeArray.indexOf("U") > -1){
+            // unorder list (bullits)
+            document.getElementById("underline").style.backgroundColor = "red";
+    }else if(nodeArray.indexOf("UL") > -1){
+            // unorder list (bullits)
+            document.getElementById("bullets").style.backgroundColor = "red";
+    } else if(nodeArray.indexOf("OL") > -1){
+            // order list (numbers)
+            document.getElementById("numbers").style.backgroundColor = "red";
+    } else if(nodeArray.indexOf("A") > -1){
+            // ancher tag
+            document.getElementById("insertlink").style.backgroundColor = "red";
+    } else {
+        document.getElementById("bold").style.backgroundColor = "";
+        document.getElementById("italic").style.backgroundColor = "";
+        document.getElementById("underline").style.backgroundColor = "";
+        document.getElementById("bullets").style.backgroundColor = "";
+        document.getElementById("numbers").style.backgroundColor = "";
+        document.getElementById("insertlink").style.backgroundColor = "";
+    }
+   return returnarray;
+}
 
+function returnParentTag(elem, nodeArray) {
+    if(elem.tagName != undefined){
+    	nodeArray.push(elem.tagName);
+    }
+    if(elem.id != "editor") {
+        var next = returnParentTag(elem.parentNode, nodeArray);
+	if(next) return next;
+    }
+    else
+        return nodeArray;
+}
 
-
+RE.keyup = function (){
+    returnNodeType()
 }
 
 RE.setHtml = function (contents) {
@@ -372,13 +427,15 @@ RE.enabledEditingItems = function (e) {
 }
 
 RE.focus = function () {
-    var range = document.createRange();
-    range.selectNodeContents(RE.editor);
-    range.collapse(false);
-    var selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
+    // var range = document.createRange();
+    // range.selectNodeContents(RE.editor);
+    // range.collapse(false);
+    // var selection = window.getSelection();
+    // selection.removeAllRanges();
+    // selection.addRange(range);
     RE.editor.focus();
+
+    returnNodeType();
 
     var hideOrShow = document.getElementById('hideOrShow');
         hideOrShow.style.display = "block";
