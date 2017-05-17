@@ -3,13 +3,15 @@ import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
 import { AjaxService } from '../../ajax/ajax.service';
+import {SharedService} from '../../services/shared.service';
 declare var jQuery:any;
 @Component({
-   selector: 'all-notification',
+   selector: 'search-view',
     templateUrl: 'notification-component.html',
-     styleUrls: ['./notification-component.css'],
+    styleUrls: ['./notification-component.css'],
     providers: [AuthGuard]
 })
+
 export class NotificationComponent implements OnInit{
     public searchString="";
     public allNotification=[];
@@ -23,17 +25,18 @@ export class NotificationComponent implements OnInit{
         private _router: Router,
          private _authGuard:AuthGuard,
         private route: ActivatedRoute,
-        private _ajaxService: AjaxService
+        private _ajaxService: AjaxService,
+        private shared:SharedService
         ) {
 
          }
 
     ngOnInit(){
       this.getAllNotification(this.pageNo);
-  
     }
 
     getAllNotification(page){
+    this.shared.change(this._router.url,null,'Notifications',''); //added for breadcrumb purpose
     var post_data={viewAll:1,page:page};
     this._ajaxService.NodeSubscribe('/getAllNotifications',post_data,(data)=>
       {
@@ -131,9 +134,7 @@ export class NotificationComponent implements OnInit{
       if (this.allNotification.length > 0 && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
 
           this.pageNo +=1; 
-          this.getAllNotification(this.pageNo)     
+          this.getAllNotification(this.pageNo);     
       }
     }
-
-  
 }
