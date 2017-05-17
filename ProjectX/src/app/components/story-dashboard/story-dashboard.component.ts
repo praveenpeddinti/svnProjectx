@@ -4,7 +4,9 @@ import { StoryService } from '../../services/story.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
+import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
+
 declare var jQuery:any;
 
 @Component({
@@ -86,8 +88,9 @@ expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
     constructor(
+
         private _router: Router,
-        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute) { console.log("in constructor"); }
+        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService) { console.log("in constructor"); }
        
     ngOnInit() {
  var thisObj = this;
@@ -134,6 +137,7 @@ expanded: any = {};
         });
        
            })
+ this.shared.change(this._router.url,this.projectName,'Dashboard',''); //added by Ryan for breadcrumb purpose
 }
     // ngAfterViewInit()
     // {
