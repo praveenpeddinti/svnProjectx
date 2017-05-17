@@ -98,6 +98,7 @@ export class StoryCreatePage {
 //        RE.editor.addEventListener("touchstart", RE.touchstart);
 //        RE.editor.addEventListener("touchend", RE.touchend);
         RE.editor.setAttribute("placeholder", "insert my text ...");
+        RE.editor.addEventListener("keyup", RE.keyup);
 
         // jQuery("#editor").dblclick(function() {
         //     alert("double clikc");
@@ -257,6 +258,7 @@ export class StoryCreatePage {
         });
     }
     public uploadedInserver(dataUploaded) {
+        this.myHTML = document.getElementById('editor').innerHTML;
         var serverResponse = JSON.parse(dataUploaded.response);
         if (serverResponse['status'] == '1') {
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
