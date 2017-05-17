@@ -98,8 +98,12 @@ RE.click = function (id) {
             break;
 
         case "close":
-            document.getElementById("hideOrShow").style.display = "none"; 
-            RE.editor.focus();
+            var selection = window.getSelection();
+            if (selection == "") {
+                document.getElementById("hideOrShow").style.display = "none"; 
+            } else{
+                RE.editor.focus();
+            }
 
             break;
 
