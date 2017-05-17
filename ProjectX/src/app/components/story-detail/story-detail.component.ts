@@ -7,8 +7,9 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
 import { MentionService } from '../../services/mention.service';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
+import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
-
+declare var refresh;
 declare var jQuery:any;
 declare const CKEDITOR;
 @Component({
@@ -77,14 +78,16 @@ public blurTimeout=[];
   public searchSlug='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
-    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private projectService:ProjectService) {
+    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private projectService:ProjectService,private shared:SharedService) {
+
     this.filesToUpload = [];
     route.queryParams.subscribe(
       params => 
       {
             this.searchSlug=params['Slug'];
+            console.log(this.searchSlug);
        })
-        // alert(this.searchSlug);   
+  
 
     }
 
@@ -103,9 +106,17 @@ var thisObj = this;
       jQuery("#followerdiv").css( "display",'none' );
     }
    });
+
+   
+
+  
+
    this.route.queryParams.subscribe(
       params => 
       { 
+         console.log("==Slug params=="+params['Slug']);
+         this.searchSlug = params['Slug'];
+        // for navigation to ticket
       this.route.params.subscribe(params => {
             this.ticketId = params['id'];
            this.projectName=params['projectName'];
@@ -121,10 +132,21 @@ var thisObj = this;
 
             jQuery("#notifications_list").hide();
             
-             
+            console.log("==Id=="+params['id']);
+            console.log("==Slug params=="+params['Slug']);
+            //this.searchSlug = params['Slug'];//added by Ryan
+              //added By Ryan for BreadCrumb Purpose
+            
         });
-       
-           })
+           });
+
+      //      this.route.queryParams.subscribe(
+      // params => 
+      // { 
+      //   // for navigation to ticket
+      // this.route.params.subscribe(params => {
+      //       this.searchSlug = params['Slug'];
+        
 }
 
     /**
@@ -134,7 +156,7 @@ var thisObj = this;
     ngAfterViewInit()
     {
         this.editor.initialize_editor('commentEditor',null,null); //for comment
-
+         console.log("=Plan Level="+this.checkPlanLevel);
       //jQuery('span[id^="check_"]').hide();
    
 
@@ -791,16 +813,15 @@ var thisObj = this;
                 this.statusId = result.data.updatedFieldData;
            }
 
-         if(postEditedText.editedId == "title" || postEditedText.editedId == "desc"){
-         console.log("in------------"+result.data.updatedFieldData);
-                document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerHTML=result.data.updatedFieldData;
-                if(postEditedText.editedId == "desc"){
+         if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
+                document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
+                if(postEditedText.EditedId == "desc"){
                   var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
                   this.getArtifacts(ticketIdObj);
                  }
          }
     
-if(postEditedText.editedId == "estimatedpoints"){ 
+if(postEditedText.EditedId == "estimatedpoints"){ 
 jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
 }
 
@@ -815,6 +836,38 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
  }
         });
 
+        /*For notification Purpose By Ryan for assigned To*/
+        // console.log("Post edited text field"+postEditedText.EditedId+"Post edited value"+postEditedText.value);
+        // if(postEditedText.EditedId=='assignedto' || postEditedText.EditedId=='stakeholder')
+        // {
+        //   var notify_data={'ticketId':this.ticketId,'comment_type':postEditedText.EditedId,'collaborator':postEditedText.value,'followers':this.followers};
+
+        //   this._ajaxService.NodeSubscribe('/assignedTo',notify_data,(data)=>
+        //   {
+
+        //   });
+        // }
+
+        // if(postEditedText.EditedId=='priority' || postEditedText.EditedId=='bucket' ||  postEditedText.EditedId=='workflow')
+        // {
+        //   var priority_data=
+        //   {
+        //     'ticketId':this.ticketId,
+        //     'comment_type':'changed',
+        //     'Activity_On':postEditedText.EditedId,
+        //     'field_value':postEditedText.value,
+        //     'Activity':this.activity_data,
+        //     'followers':this.followers
+        //   };
+
+        //   this._ajaxService.NodeSubscribe('/propertyChange',priority_data,(data)=>
+        //   {
+
+        //   });
+        // }
+
+
+        /* Notification End */
         },500)
     }
 
@@ -1397,6 +1450,8 @@ public callTicketDetailPage(ticId,projectId){
             //alert("fieldsDatass"+JSON.stringify(this.fieldsData));
             //alert("fieldsDatass@@@@@@@@@@@"+JSON.stringify(this.ticketData));
             this.checkPlanLevel=data.data.StoryType.Name;
+            console.log("==Plan Level=="+this.checkPlanLevel);
+            this.shared.change(this._router.url,this.ticketId,'Detail',this.checkPlanLevel);
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
