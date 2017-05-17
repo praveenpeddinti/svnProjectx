@@ -99,6 +99,9 @@ export class StoryCreatePage {
 //        RE.editor.addEventListener("touchend", RE.touchend);
         RE.editor.setAttribute("placeholder", "insert my text ...");
 
+        // jQuery("#editor").dblclick(function() {
+        //     alert("double clikc");
+        // });
     }
     public onStoryCreate(form): void {
         this.myHTML = document.getElementById('editor').innerHTML;
@@ -258,7 +261,8 @@ export class StoryCreatePage {
         if (serverResponse['status'] == '1') {
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                this.create.description = this.create.description + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                // this.create.description = this.create.description + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                this.myHTML = this.myHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
             }
         } else {
             this.presentToast('Unable to upload the image.');
