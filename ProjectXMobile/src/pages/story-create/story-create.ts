@@ -264,7 +264,7 @@ export class StoryCreatePage {
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                 // this.create.description = this.create.description + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                this.myHTML = this.myHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                document.getElementById('editor').innerHTML = document.getElementById('editor').innerHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
             }
         } else {
             this.presentToast('Unable to upload the image.');
