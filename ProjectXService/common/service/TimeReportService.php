@@ -70,6 +70,11 @@ class TimeReportService {
         }
         
     }
+              /**
+     * @author Padmaja
+     * @uses adding  details
+     * @return type
+     */
     public function addTimelog($timelogData){
         try{
             $ticketDesc= explode(" ",$timelogData->addTimelogTask);
@@ -99,7 +104,11 @@ class TimeReportService {
             Yii::log("TimeReportService:addTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
+            /**
+     * @author Padmaja
+     * @uses removing  details
+     * @return type
+     */
     public function RemoveTimelogs($projectId,$ticketId,$slug,$timelogHours){
         try{
           return $returnSlug=  TicketTimeLog::removeTimelogData($projectId,$ticketId,$slug,$timelogHours);
@@ -108,6 +117,11 @@ class TimeReportService {
         }
         
     }
+              /**
+     * @author Padmaja
+     * @uses updateDataForTimeLog  details
+     * @return type
+     */
     public function updateDataForTimeLog($ticketData){
         try{
             $projectId = $ticketData->projectId;
@@ -132,7 +146,7 @@ class TimeReportService {
            
             
         } catch (Exception $ex) {
-            Yii::log("TimeReportService:addTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TimeReportService:updateDataForTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 }
