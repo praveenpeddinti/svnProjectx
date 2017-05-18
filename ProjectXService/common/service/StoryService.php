@@ -1066,16 +1066,19 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         $oldValue = "";
          $action = "";
          $returnValue="noupdate";
+         if(empty($slug))
+         $slug =  new \MongoDB\BSON\ObjectID();
         $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
         if($actionfieldName == "Title" || $actionfieldName == "Description" || $actionfieldName=="TotalTimeLog"){ //added actionFieldName for TotalTimeLog By Ryan
             $oldValue = $ticketDetails[$actionfieldName]; 
-        }else if($actionfieldName=='Followed' || $actionfieldName=='Unfollowed' || $actionfieldName=='Related' || $actionfieldName=='ChildTask'){
+        }else if($actionfieldName=='Followed' || $actionfieldName=='Unfollowed' || $actionfieldName=='Related' || $actionfieldName=='ChildTask' || $actionfieldName=='Unrelated'){
           $oldValue = "";
           switch($actionfieldName){
               case 'Followed':$action="added to";break;
               case 'Unfollowed':$action="removed from";break;
               case 'Related':$action="has related";break;
               case 'ChildTask':$action="created";break; 
+              case 'Unrelated':$action="has unrelated";break; 
           }
           
         }else{
@@ -1150,7 +1153,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
          $record = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId));
          //  $record = iterator_to_array($record);
          //  error_log(print_r($record,1));
-         $slug =  new \MongoDB\BSON\ObjectID();
+        
      
              $commentDataArray=array(
             "Slug"=>$slug,
@@ -1518,9 +1521,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @author suryaprakash reddy 
      * @return type array
      */
-    public function unRelateTask($projectId, $parentTicketId, $unRelateTicketId) {
+    public function unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId='') {
         try {
+            $slug =  new \MongoDB\BSON\ObjectID();
+            $activityData = $this->saveActivity($parentTicketId, $projectId, 'Unrelated', $unRelateTicketId, $loginUserId,$slug);
             $unRelateChild = TicketCollection::unRelateTask($projectId, $parentTicketId, $unRelateTicketId);
+        return $activityData;
         } catch (Exception $ex) {
             Yii::log("StoryService:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }

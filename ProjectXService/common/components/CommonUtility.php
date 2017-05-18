@@ -949,11 +949,11 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                 $property["PreviousValue"] = self::refineActivityData($property["PreviousValue"]);
                 $property["NewValue"] = self::refineActivityData($property["NewValue"]);
             }
-           if($actionFieldName=='Followed' || $actionFieldName=='Unfollowed' || $actionFieldName=='Related' || $actionFieldName=='ChildTask') {
+           if($actionFieldName=='Followed' || $actionFieldName=='Unfollowed' || $actionFieldName=='Related' || $actionFieldName=='ChildTask' || $actionFieldName=='Unrelated') {
                 //$property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
                 // $property["NewValue"]   = substr($property["NewValue"], 0, 25);
             $property["SpecialActivity"]=1;
-             $action=array("Id"=>'',"Name"=>'');
+            $action=array("Id"=>'',"Name"=>'');
             $property["PreviousValue"] = self::refineActivityData($property["PreviousValue"]);
                switch($actionFieldName){
               case 'Followed':
@@ -971,6 +971,13 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                              $property["type"]='related';
                              $property["ActionFieldTitle"]=$newVal;
                              $property["NewValue"] = $action;break; 
+               case 'Unrelated':$newVal="unrealted";
+                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title"]);
+                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title']);
+                             $newVal="Story/Task";
+                             $property["type"]='unrelated';
+                             $property["ActionFieldTitle"]=$newVal;
+                             $property["NewValue"] = $action;break;            
               case 'ChildTask':
                              $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title"]);
                              $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title']);

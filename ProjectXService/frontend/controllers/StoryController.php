@@ -818,16 +818,18 @@ class StoryController extends Controller
 
 
         try {
+            $response=array();
             $ticketData = json_decode(file_get_contents("php://input"));
             $projectId = $ticketData->projectId;
             $parentTicketId = $ticketData->ticketId;
             $unRelateTicketId = $ticketData->unRelateTicketId;
-            $removeUnrelateTask = ServiceFactory::getStoryServiceInstance()->unRelateTask($projectId, $parentTicketId, $unRelateTicketId);
-            $relatedTicketsInfo = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId, $parentTicketId);
+            $loginUserId=$ticketData->userInfo->Id;
+            $response['activityData'] = ServiceFactory::getStoryServiceInstance()->unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId);
+            $response['ticketInfo'] = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId, $parentTicketId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $relatedTicketsInfo;
+            $responseBean->data = $response;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
