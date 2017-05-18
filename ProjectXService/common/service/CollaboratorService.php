@@ -136,6 +136,25 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
             Yii::log("CollaboratorService:getCollaboratorsForFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    /**
+    * @author Praveen P
+    * @description This method is to used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list.
+    * @param type $ticketId
+    * @param type $projectId
+    * @return type
+    */      
+    public function getAllFollowInlineEdit($ticketId, $projectId) {
+        try {
+            $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId); 
+            if(!empty($ticketDetails)){
+                $details =  CommonUtility::prepareFollowerDetails($ticketDetails, $projectId);   
+            }
+            return $details;
+        } catch (Exception $ex) {
+            Yii::log("CollaboratorService:getAllFollowInlineEdit::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
 
