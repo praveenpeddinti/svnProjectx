@@ -1395,7 +1395,13 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
             this._ajaxService.AjaxSubscribe("story/un-relate-task",unRelateTicketData,(data)=>
               { 
               if(data.statusCode== 200){
-                   this.relatedTaskArray=data.data;
+                   this.relatedTaskArray=data.data.ticketInfo;
+                   if(data.data.activityData.referenceKey == -1){
+             this.commentsList.push(data.data.activityData.data);
+            }
+             else if(data.data.activityData != "noupdate"){
+        this.commentsList[data.data.activityData.referenceKey]["PropertyChanges"].push(data.data.activityData.data);
+     }  
               }
         });
         }
