@@ -1054,6 +1054,29 @@ class StoryController extends Controller
      Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    /*
+    * @author Praveen P
+    * @description This method is to used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list.
+    * @return type Json
+    */
+    public function actionGetAllFollowInlineedit() {
+        try {
+            $StoryData = json_decode(file_get_contents("php://input"));
+            $projectId = $StoryData->projectId;
+            $ticketId = $StoryData->ticketId;
+            $followerlist=ServiceFactory::getCollaboratorServiceInstance()->getAllFollowInlineEdit($ticketId,$projectId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $followerlist;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetCollaboratorsforFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
 }
 
 
