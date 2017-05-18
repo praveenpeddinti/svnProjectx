@@ -10,9 +10,9 @@
 .timereportdiv ul li .timecountouter{position: relative;margin-left:60px;}
 .timereportdiv ul li .timecountouter .timecount{background: #e8e8e8;padding:10px;
 	border: 1px dashed #333;font-size:18px;font-weight:bold}
-.timereportdiv ul li .timecountouter i{position: absolute;left:-48px;top:2px;color:#fff;font-size:35px}
+.timereportdiv ul li .timecountouter i{position: absolute;left:-48px;top:1px;color:#237ea7;font-size:38px}
 
-.timewrap {position: relative;display:table}
+/*.timewrap {position: relative;display:table}
 .timewraparrow {
   width: 12px;
   height: 12px;
@@ -54,4 +54,61 @@
   border-radius: 0px;
   padding:7px 10px 5px;
   font-size:18px;font-weight:bold
+}*/
+.timewrapbox {
+	position: relative;
+	background: #ffffff;
+        padding:7px 10px 5px;
+        font-size:18px;font-weight:bold
+}
+.timewrapbox:after {
+	right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(255, 255, 255, 0);
+	border-right-color: #ffffff;
+	border-width: 8px;
+	margin-top: -8px;
+}
+.timereportlabel{font-weight:normal;margin-bottom:0;display: block;}
+.paddingtop20{padding-top:20px}
+.add{
+    background: #207fa9 none repeat scroll 0 0;
+    border-radius: 0;
+    cursor: pointer;
+    display: table-cell;
+    float: right;
+    height: 30px;
+    padding: 5px 10px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+}
+.add i{
+    color: #fff;
+}
+.widgethedsub {
+    color: #000;
+    font-family: "robotoregular";
+    font-size: 20px;
+   
+}
+.paddingtop10{padding-top:10px}
+.custom_menu .ui-widget-header .ui-button, .custom_menu .ui-widget-content .ui-button, .ui-button {
+    background: #e8e8e8 none repeat scroll 0 0!important;
+    border: 1px solid #f8f8f8!important;
+    color: #333!important;
+    transition: background-color 0.2s ease 0s;border-radius:0!important
+}
+.custom_menu  .ui-calendar.ui-calendar-w-btn input {
+    border-bottom-right-radius: 0!important;
+     border-bottom-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+    border-top-left-radius: 0!important;
 }
