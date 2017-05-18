@@ -82,7 +82,7 @@ export class NotificationComponent implements OnInit{
 
   }
 
-  goToTicket(project,ticketid,notify_id)
+  goToTicket(project,ticketid,notify_id,comment)
   {
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
@@ -93,12 +93,13 @@ export class NotificationComponent implements OnInit{
       jQuery('#mark_'+notify_id).remove(); 
       jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
       }
-     this._router.navigate(['project',project.ProjectName,ticketid,'details']);
+     this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment}});
     })
     
   }
   goToComment(project,ticketid,comment,notify_id)
   {
+    alert("==Sllug=="+comment);
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
@@ -107,8 +108,9 @@ export class NotificationComponent implements OnInit{
         jQuery('#mark_'+notify_id).remove(); 
         jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
       }
+      this._router.navigate(['project',project.ProjectName,ticketid,'details',{queryParams: {Slug:comment}}]);
     })
-     this._router.navigate(['project',project.ProjectName,ticketid,'details',{queryParams: {Slug:comment}}]);
+     
   }
   markAllRead()
   {

@@ -130,7 +130,7 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  goToTicket(project,ticketid,notify_id)
+  goToTicket(project,ticketid,notify_id,slug)
   {
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:0,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
@@ -152,7 +152,7 @@ export class HeaderComponent implements OnInit {
         }
         
       }
-      this._router.navigate(['project',project.ProjectName,ticketid,'details']);
+      this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:slug}});
     })
     
   }

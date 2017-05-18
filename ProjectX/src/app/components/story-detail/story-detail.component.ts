@@ -99,7 +99,7 @@ public blurTimeout=[];
 var thisObj = this;
     //let jsonform={};//added by ryan
     //jsonform['description']='';//added by ryan
-   
+   this.replyToComment=-1;
    //@Praveen P toggle for plus button in follower list
    jQuery(document).click(function(e) {
      if( jQuery(e.target).closest('div#followerdiv').length==0 && e.target.id != 'follwersAdd' && e.target.id != 'follwersAddI'  ) {
@@ -898,6 +898,12 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
           task.push(result.data.Tasks);
           var newChildData = this.taskDataBuilder(task);
           this.childTasksArray.push(newChildData[0]);
+           if(result.data.activityData.referenceKey == -1){
+             this.commentsList.push(result.data.activityData.data);
+            }
+             else if(result.data.activityData != "noupdate"){
+        this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+     }  
           });
        jQuery('#childtitle').val("");
        }  
@@ -1000,9 +1006,11 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
         {
             if(response.statusCode==200)
             {
+               
                jQuery("#followerdiv_"+event).remove();
                this.followers = this.followers.filter(function(el) {
                return el.FollowerId !== event;
+               
              });
             }
         });
@@ -1039,6 +1047,9 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
                 if(response.statusCode==200)
                 {
                   this.followers.push(response.data);  
+                   if(response.data.activityData.referenceKey == -1){
+             this.commentsList.push(response.data.activityData.data);
+            }
                 }
                 /*socket connection for notifications*/
                 // console.log("==connecting==");
@@ -1083,7 +1094,9 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
          {
                 if(response.statusCode==200)
                 {
-             
+             if(response.data.activityData.referenceKey == -1){
+                this.commentsList.push(response.data.activityData.data);
+                }
                jQuery("#followerdiv_"+event).remove();
                this.followers = this.followers.filter(function(el) {
                     return el.FollowerId !== event;
@@ -1220,6 +1233,7 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
      var CrudeCDescription=editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,"");
      var reqData;
      var parent;
+    jQuery("#Activity_content_"+commentIndex).summernote('destroy');
      this.commentorId=this.commentsList[commentIndex].ActivityBy.CollaboratorId ; 
         if(this.commentsList[commentIndex].Status == 2){
             parent = parseInt(this.commentsList[commentIndex].ParentIndex);
@@ -1250,10 +1264,8 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
             // parent = parseInt(this.commentsList[commentIndex].ParentIndex);
             this.commentsList[parent].repliesCount--;
           }
-          
-          this.commentsList.splice(commentIndex,1);
-          // this.commentsList.push(result.data);
-          
+          this.commentsList[commentIndex].Status = 0;
+         
         });
 
    }
@@ -1314,8 +1326,11 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
        }else{
        this._ajaxService.AjaxSubscribe("story/update-related-tasks",relatedTasks,(result)=>
          { 
-      this.relatedTaskArray=result.data;
+      this.relatedTaskArray=result.data.ticketData;
             this.text="";
+            if(result.data.activityData.referenceKey == -1){
+             this.commentsList.push(result.data.activityData.data);
+            }
         })
        }
        
@@ -1342,9 +1357,15 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
             this._ajaxService.AjaxSubscribe("story/insert-time-log",TimeLog,(data)=>
               { 
               if(data.statusCode== 200){
-                    this.individualLog =data.data.individualLog;
-                    this.totalWorkLog =data.data.TotalTimeLog;
+                    this.individualLog =data.data.timeLogData.individualLog;
+                    this.totalWorkLog =data.data.timeLogData.TotalTimeLog;
                      jQuery("#workedhours").val("");
+                     if(data.data.activityData.referenceKey == -1){
+             this.commentsList.push(data.data.activityData.data);
+            }
+             else if(data.data.activityData != "noupdate"){
+        this.commentsList[data.data.activityData.referenceKey]["PropertyChanges"].push(data.data.activityData.data);
+     }  
               }
         });
 
@@ -1368,6 +1389,7 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
         public unRelateTask(ticketId){
             var unRelateTicketData={
                 ticketId:this.ticketId,
+                projectId:this.projectId,
                 unRelateTicketId:ticketId,
               };
             this._ajaxService.AjaxSubscribe("story/un-relate-task",unRelateTicketData,(data)=>
