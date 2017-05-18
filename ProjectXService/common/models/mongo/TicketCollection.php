@@ -476,7 +476,7 @@ class TicketCollection extends ActiveRecord
         try {
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $newdata = array('$pull' => array('RelatedStories' => (int) $unRelateTicketId));
-            $collection->update(array("TicketId" => (int) $parentTicketId, "ProjectId" => $projectId), $newdata);
+            $collection->update(array("TicketId" => (int) $parentTicketId, "ProjectId" => (int)$projectId), $newdata);
         } catch (Exception $ex) {
             Yii::log("TicketCollection:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
