@@ -422,14 +422,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticket_data = $ticket_data->data;
             $workFlowDetail = array();
             $ticketCollectionModel = new TicketCollection();
-            $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->TicketId, $projectId);
+            $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->ticketId, $projectId);
             $ticketDetails["Title"] = trim($ticket_data->title);
-            $this->saveActivity($ticket_data->TicketId,$projectId,"Title", $ticketDetails["Title"],$userId);
+            $this->saveActivity($ticket_data->ticketId,$projectId,"Title", $ticketDetails["Title"],$userId);
             $description = $ticket_data->description;
             $ticketDetails["CrudeDescription"] = $description;
             $refiendData = CommonUtility::refineDescription($description);
             $ticketDetails["Description"] = $refiendData["description"];
-            $this->saveActivity($ticket_data->TicketId,$projectId,"Description", $description,$userId);
+            $this->saveActivity($ticket_data->ticketId,$projectId,"Description", $description,$userId);
             $newworkflowId = "";
             foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
@@ -441,7 +441,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                if($fieldDetails["Type"] == 6){
                                 $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$key);
                                 $value["value_name"] = $collaboratorData["UserName"];
-                                $this->followTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE,"FullUpdate");
+                                $this->followTicket($ticket_data->$key,$ticket_data->ticketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE,"FullUpdate");
                                 if (!empty($ticketDetails['Tasks'])){
                                 foreach($ticketDetails['Tasks'] as $childticketId){
                                     $this->followTicket($ticket_data->$key,$childticketId['TaskId'],$projectId,$userId,$fieldDetails["Field_Name"]='follower',FALSE,"FullUpdate");
@@ -522,7 +522,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 if($fieldDetails["Type"] == 6 ){
                                      $value["value"] = "";
                                      $value["value_name"] = "";
-                                    $this->unfollowTicket($ticket_data->$key,$ticket_data->TicketId,$projectId,$fieldDetails["Field_Name"]);
+                                    $this->unfollowTicket($ticket_data->$key,$ticket_data->ticketId,$projectId,$fieldDetails["Field_Name"]);
                                    
                                      if($ticketDetails['IsChild'] == 0){
                                     if (!empty($ticketDetails['Tasks'])){
@@ -534,7 +534,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 }  else{
                                     $fieldName =  $fieldDetails["Field_Name"];
                                     if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
-                                       $fieldDetails["Field_Name"]= $ticket_data->TicketId."-".$fieldName;  
+                                       $fieldDetails["Field_Name"]= $ticket_data->ticketId."-".$fieldName;  
                                     }else{
                                         $fieldDetails["Field_Name"]='follower';
                                     }
@@ -552,7 +552,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         
                         error_log($fieldName."----------activtiyr reuls---------------");
                         $slug =  new \MongoDB\BSON\ObjectID();
-                        $activity=$this->saveActivity($ticket_data->TicketId,$projectId,$fieldName, $value["value"],$userId,$slug);
+                        $activity=$this->saveActivity($ticket_data->ticketId,$projectId,$fieldName, $value["value"],$userId,$slug);
                         if($activity != "noupdate")
                         {
                             
@@ -573,11 +573,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId,$userId);
 
              }
-             $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->TicketId,$projectId);
+             $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->ticketId,$projectId);
              $ticketDetails["Followers"] = $newTicketDetails["Followers"];
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $collection->save($ticketDetails);
-            TicketArtifacts::saveArtifacts($ticket_data->TicketId, $projectId, $refiendData["ArtifactsList"],$userId);
+            TicketArtifacts::saveArtifacts($ticket_data->ticketId, $projectId, $refiendData["ArtifactsList"],$userId);
             
         } catch (Exception $ex) {
              error_log($ex->getMessage());

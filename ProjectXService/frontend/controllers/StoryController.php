@@ -338,7 +338,7 @@ class StoryController extends Controller
             $ticket_data = json_decode(file_get_contents("php://input"));
             $title=$ticket_data->data->title;
             $projectId=$ticket_data->projectId;
-            $parentTicNumber=$ticket_data->data->TicketId;
+            $parentTicNumber=$ticket_data->data->ticketId;
             $data = ServiceFactory::getStoryServiceInstance()->updateTicketDetails($ticket_data);
             if($ticket_data->data->default_task != null){
             $defaultTicketsArray = $ticket_data->data->default_task;
