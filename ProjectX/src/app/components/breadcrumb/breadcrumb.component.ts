@@ -7,7 +7,8 @@ import {SharedService} from '../../services/shared.service'; //this service upda
 declare var jQuery:any;
 @Component({
   selector: 'breadcrumb',
-  templateUrl:'./breadcrumb.component.html'
+  templateUrl:'./breadcrumb.component.html',
+  styleUrls: ['./breadcrumb.component.css'],
 })
 
 export class BreadcrumbComponent implements OnInit {
@@ -20,6 +21,7 @@ export class BreadcrumbComponent implements OnInit {
   private route_changes;
   private count=0;
   private status=false;
+  private isLoggedOut=false;
   constructor(private router:Router,private route:ActivatedRoute,private shared:SharedService){
     this.shared=shared;
     console.log("==in const==");
@@ -34,29 +36,40 @@ export class BreadcrumbComponent implements OnInit {
         this.route_changes=value; //params from URL
         console.log("==Count=="+this.count);
         console.log("==Value in BreadCrumb=="+this.route_changes.url +' '+this.route_changes.params);
-
-        if(this.count==0 && this.status!=true)
-          {
-            console.log("==Length=="+this.items.length);
-            console.log("==projectName=="+localStorage.getItem('ProjectName'));
-           // this.removeItems(0,false);
-            this.items.push({label:localStorage.getItem('ProjectName'),url:"/#/project/"+localStorage.getItem('ProjectName')+"/list"});
-            this.status=true;
+        if(this.route_changes.page!='Logout')
+        {
+          if(this.count==0 && this.status!=true && localStorage.getItem('ProjectName')!='')
+            {
+              console.log("==Length=="+this.items.length);
+              console.log("==projectName=="+localStorage.getItem('ProjectName'));
+            // this.removeItems(0,false);
+              this.items.push({label:localStorage.getItem('ProjectName'),url:"/#/project/"+localStorage.getItem('ProjectName')+"/list"});
+              this.status=true;
+            }
+            if((this.route_changes.page=='Detail') && !(this.id.indexOf('#'+this.route_changes.params)>-1))
+            {
+              this.items.push({label:'#'+this.route_changes.params,url:"/#"+this.route_changes.url,type:this.route_changes.type});
+              this.id.push('#'+this.route_changes.params);
+              this.count++;
+            }
+            
+        // }
+        //  else{ //for search  and notifications
+          if(this.route_changes.page == "Search" || this.route_changes.page=="Notifications" || this.route_changes.page=='Error'){ 
+              this.status=true;        
+              this.removeItems(1,true);
+              this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
           }
-          if((this.route_changes.page=='Detail') && !(this.id.indexOf('#'+this.route_changes.params)>-1))
-          {
-            this.items.push({label:'#'+this.route_changes.params,url:"/#"+this.route_changes.url,type:this.route_changes.type});
-            this.id.push('#'+this.route_changes.params);
-            this.count++;
-          }
-          
-       // }
-      //  else{ //for search  and notifications
-        if(this.route_changes.page == "Search" || this.route_changes.page=="Notifications" || this.route_changes.page=='Error'){ 
-            this.status=true;        
-            this.removeItems(1,true);
-            this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
+          this.isLoggedOut=false;
         }
+        else{
+              console.log("==Page after Logout=="+this.route_changes.page);
+              this.id=[];
+              this.count=0;
+              this.status=false;
+              this.isLoggedOut=true;
+              this.items=[];
+            }
          
      // }
 
