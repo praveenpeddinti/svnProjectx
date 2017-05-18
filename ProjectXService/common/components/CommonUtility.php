@@ -929,13 +929,14 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             $property["ActionFieldTitle"] = $fieldTitle;
             if ($storyFieldDetails["Title"] != "" && $storyFieldDetails["Title"] != null) {
                 $property["ActionFieldTitle"] = $storyFieldDetails["Title"];
+                $property["ActionFieldType"] = $type;
             }
            if($poppedFromChild !=""){
                 $ticketDetails = TicketCollection::getTicketDetails($poppedFromChild, $projectId,["TicketId","Title"]);
                 error_log(print_r($ticketDetails,1));
                 $ticketInfo = $ticketDetails["TicketId"]." ".$ticketDetails["Title"];
                 $property["ActionFieldTitle"] = $property["ActionFieldTitle"];
-              
+                $property["ActionFieldType"] = $type;
                 $ticketDetails["Title"] = self::refineActivityData($ticketDetails["Title"],30);
                 $property["PoppedChildTitle"] = $ticketDetails["Title"];
                 $property["PoppedChildId"] = $ticketDetails["TicketId"];
@@ -1559,6 +1560,37 @@ public static function filterFollowers($followers){
 
     }
 }
+
+
+    /**
+     * @description This method is to prepare follower list when edit the inline for Stack Holder, Assigned to and Reported by
+     * @author Praveen P
+     * @param type $ticketId
+     * @param type $projectId
+     * @return type
+     */
+    public static function prepareFollowerDetails($ticketDetails, $projectId) {
+        try {
+            $tinyUserModel = new TinyUserCollection();
+            
+            if (!empty($ticketDetails["Followers"])) {
+            $ticketDetails["Followers"] = CommonUtility::filterFollowers($ticketDetails["Followers"]);
+                foreach ($ticketDetails["Followers"] as &$followersList) {
+                    $projectFDetails = $tinyUserModel->getMiniUserDetails($followersList['FollowerId']);
+                    $followersList["ProfilePicture"] = $projectFDetails["ProfilePicture"];
+                    $followersList["UserName"] = $projectFDetails["UserName"];
+                }
+            }
+            usort($ticketDetails["Followers"], function($a, $b) {
+                   return $a["DefaultFollower"] <= $b["DefaultFollower"];
+            });
+            unset($ticketDetails["CreatedOn"]);
+            unset($ticketDetails["UpdatedOn"]);
+            return $ticketDetails["Followers"];
+        } catch (Exception $ex) {
+            Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
 
