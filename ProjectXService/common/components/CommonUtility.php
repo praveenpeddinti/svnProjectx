@@ -921,11 +921,12 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
         try {
             $tinyUserModel = new TinyUserCollection();
             $fieldName = $property["ActionFieldName"];
-
+            $property["SpecialActivity"]=0;
             $storyFieldDetails = StoryFields::getFieldDetails($fieldName, "Field_Name");
             $type = $storyFieldDetails["Type"];
             $actionFieldName = $property["ActionFieldName"];
-            $property["ActionFieldTitle"] = $fieldName;
+            $fieldTitle = preg_replace('/(?<!\ )[A-Z]/', ' $0', $fieldName);
+            $property["ActionFieldTitle"] = $fieldTitle;
             if ($storyFieldDetails["Title"] != "" && $storyFieldDetails["Title"] != null) {
                 $property["ActionFieldTitle"] = $storyFieldDetails["Title"];
             }
@@ -948,7 +949,41 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                 $property["PreviousValue"] = self::refineActivityData($property["PreviousValue"]);
                 $property["NewValue"] = self::refineActivityData($property["NewValue"]);
             }
-
+           if($actionFieldName=='Followed' || $actionFieldName=='Unfollowed' || $actionFieldName=='Related' || $actionFieldName=='ChildTask') {
+                //$property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
+                // $property["NewValue"]   = substr($property["NewValue"], 0, 25);
+            $property["SpecialActivity"]=1;
+             $action=array("Id"=>'',"Name"=>'');
+            $property["PreviousValue"] = self::refineActivityData($property["PreviousValue"]);
+               switch($actionFieldName){
+              case 'Followed':
+              case 'Unfollowed':
+                             $user=$tinyUserModel->getMiniUserDetails($property["NewValue"]);
+                             $action=array("Id"=>$user['_id'],"Name"=>$user['UserName']);
+                             $newVal="followers"; 
+                             $property["type"]='follower';
+                             $property["ActionFieldTitle"]=$action;
+                             $property["NewValue"] = self::refineActivityData($newVal);break;
+              case 'Related':$newVal="realted";
+                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title"]);
+                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title']);
+                             $newVal="Story/Task";
+                             $property["type"]='related';
+                             $property["ActionFieldTitle"]=$newVal;
+                             $property["NewValue"] = $action;break; 
+              case 'ChildTask':
+                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title"]);
+                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title']);
+                             $newVal="Child task";
+                             $property["type"]='childtask';
+                             $property["ActionFieldTitle"]=$newVal;
+                             $property["NewValue"] = $action;break; 
+          }
+             
+             
+             
+              
+            }
 
             if ($type == 6) {
                 if ($property["PreviousValue"] != "") {

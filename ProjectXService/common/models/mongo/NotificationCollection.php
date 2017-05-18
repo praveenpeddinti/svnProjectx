@@ -69,7 +69,7 @@ class NotificationCollection extends ActiveRecord
         }
     }
      public static function getNotificationsCount($user,$projectId)
-    {
+    { error_log("getNotificationsCount----ANAND".$user."*************".$projectId);
           $query=new Query();
             $query->from('NotificationCollection')
             ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0])

@@ -553,6 +553,7 @@ class StoryController extends Controller
             //save followers to Ticket
           
                ServiceFactory::getStoryServiceInstance()->followTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId, $post_data->userInfo->Id, "follower");
+               $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Followed', $post_data->collaboratorId, $post_data->userInfo->Id);
                $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);
                $followerData = array();
                $followerData["ProfilePicture"] = $collaboratorData["ProfilePicture"];
@@ -561,6 +562,7 @@ class StoryController extends Controller
                $followerData["CreatedBy"] =$post_data->userInfo->Id;
                $followerData["Flag"] ="follower";
                $followerData["DefaultFollower"] =0;
+               $followerData['activityData']=$activityData;
               //  array_push($followers_pics, $followerData);
 //               if($followerData["UserName"]!='') // added by Ryan for email purpose
 //               {
@@ -595,7 +597,7 @@ class StoryController extends Controller
             $post_data = json_decode(file_get_contents("php://input"));
             //remove followers to Ticket
             ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId);
-            
+            $activitydata =  ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Unfollowed', $post_data->collaboratorId, $post_data->userInfo->Id);
             $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);//added by Ryan
 //            if($collaboratorData['UserName']!='') //added by Ryan for email purpose
 //            {
@@ -613,11 +615,12 @@ class StoryController extends Controller
                
               ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'remove', $post_data->collaboratorId,"FollowObj");
                /* notifications end */
-               
+            $UnfollowData['collaboratorId']  = $post_data->collaboratorId;
+            $UnfollowData['activityData']  = $activitydata;
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $post_data->collaboratorId;
+            $responseBean->data = $UnfollowData;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
@@ -634,9 +637,10 @@ class StoryController extends Controller
         try{
             $postData= json_decode(file_get_contents("php://input")); 
             $task = ServiceFactory::getStoryServiceInstance()->createChildTask($postData);
-            $responseData = array();
-            $responseData = array("Tasks"=>$task);
+            $responseData = array("Tasks"=>$task,'activityData'=>'');
             if($task !='failure'){
+                $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($postData->ticketId,$postData->projectId,"ChildTask", $task['TicketId'],$postData->userInfo->Id);
+                $responseData['activityData'] = $activityData;
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -697,12 +701,15 @@ class StoryController extends Controller
           $projectId = $storyData->projectId;
           $ticketId = $storyData->ticketId;
           $searchTicketId = $storyData->relatedSearchTicketId;
-          $pdateRelateTask = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($projectId,$ticketId,$searchTicketId);
+          $loginUserId=$storyData->userInfo->Id;
+          $pdateRelateTask = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($projectId,$ticketId,$searchTicketId,$loginUserId);
+          $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($ticketId, $projectId,'Related', (int)$searchTicketId, $loginUserId);
           $ticketData = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId,$ticketId);
-            $responseBean = new ResponseBean();
+          $responseData=array('ticketData'=>$ticketData,'activityData'=>$activityData);
+          $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $ticketData;
+            $responseBean->data = $responseData;
             $response = CommonUtility::prepareResponse($responseBean, "json");
              return $response;
         } catch (Exception $ex) {
@@ -718,15 +725,18 @@ class StoryController extends Controller
      */
     public function actionInsertTimeLog() {
         try {
+            $response=array();
             $timelog_data = json_decode(file_get_contents("php://input"));
             $insertTimelog = ServiceFactory::getStoryServiceInstance()->insertTimeLog($timelog_data);
             $projectId = $timelog_data->projectId;
             $parentTicketId = $timelog_data->ticketId;
             $updateTimeLog = ServiceFactory::getStoryServiceInstance()->getTimeLog($projectId, $parentTicketId);
+            $response['timeLogData']=$updateTimeLog;
+            $response['activityData']=$insertTimelog;
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $updateTimeLog;
+            $responseBean->data = $response;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {

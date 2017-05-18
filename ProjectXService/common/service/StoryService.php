@@ -549,12 +549,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             
                              
                          }
-                        $activity=$this->saveActivity($ticket_data->TicketId,$projectId,$fieldName, $value["value"],$userId);
+                        
                         error_log($fieldName."----------activtiyr reuls---------------");
+                        $slug =  new \MongoDB\BSON\ObjectID();
+                        $activity=$this->saveActivity($ticket_data->TicketId,$projectId,$fieldName, $value["value"],$userId,$slug);
                         if($activity != "noupdate")
                         {
-                            error_log("sending notificiaont------".$fieldName);
-                        $this->saveNotifications($editticket,$fieldName,$ticket_data->$key,$fieldDetails["Type"]);
+                            
+                        $this->saveNotifications($editticket,$fieldName,$ticket_data->$key,$fieldDetails["Type"],$slug);
+                        
                         }     
                         
                        }else{
@@ -806,9 +809,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
          }
    
             }
-            $this->saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldType);
+            $slug =  new \MongoDB\BSON\ObjectID();
+            $this->saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldType,$slug);
     error_log("updateStoryFieldInline---13");
-                $activityData = $this->saveActivity($ticket_data->ticketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser);
+                $activityData = $this->saveActivity($ticket_data->ticketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser,$slug);
                 $updateStaus = $collection->update($condition, $newData);
                 if($field_name=='workflow'){
                 $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value,$loggedInUser);
@@ -845,7 +849,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     // $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
     // $mentionArray = $refinedData['UsersList']; 
      $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
-     $this->saveNotificationsForComment($commentData,array(),$notify_type,$commentData->Comment->Slug);
+     $this->saveNotificationsForComment($commentData,array(),$notify_type,new \MongoDB\BSON\ObjectID($commentData->Comment->Slug));
      
     }
   
@@ -970,7 +974,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              
              }else{
                  if($fieldName == "assignedto" || $fieldName == "stakeholder" || strpos($fieldName, "assignedto")>0 ||  strpos($fieldName, "stakeholder")>0 ){
-                   $newdata = array('$set' => array("Followers.$.FollowerId" => (int)$collaboratorId,"Followers.$.FollowedOn" => $currentDate,"Followers.$.CreatedBy" => (int)$loggedInUser));
+                  $newdata = array('$set' => array("Followers.$.FollowerId" => (int)$collaboratorId,"Followers.$.FollowedOn" => $currentDate,"Followers.$.CreatedBy" => (int)$loggedInUser));
                   $db->update(array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Followers.Flag"=>$fieldName), $newdata); 
                  }
                  
@@ -1058,16 +1062,26 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @param type $newValue
      * @param type $activityUserId
      */
-    public function saveActivity($ticketId,$projectId,$actionfieldName,$newValue,$activityUserId){
+    public function saveActivity($ticketId,$projectId,$actionfieldName,$newValue,$activityUserId,$slug=""){
         $oldValue = "";
+         $action = "";
          $returnValue="noupdate";
         $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
         if($actionfieldName == "Title" || $actionfieldName == "Description" || $actionfieldName=="TotalTimeLog"){ //added actionFieldName for TotalTimeLog By Ryan
             $oldValue = $ticketDetails[$actionfieldName]; 
+        }else if($actionfieldName=='Followed' || $actionfieldName=='Unfollowed' || $actionfieldName=='Related' || $actionfieldName=='ChildTask'){
+          $oldValue = "";
+          switch($actionfieldName){
+              case 'Followed':$action="added to";break;
+              case 'Unfollowed':$action="removed from";break;
+              case 'Related':$action="has related";break;
+              case 'ChildTask':$action="created";break; 
+          }
+          
         }else{
-          $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];
+           $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];  
         }
-       if(trim($oldValue) != trim($newValue)){
+       if($action=="" && trim($oldValue) != trim($newValue)){
         if($oldValue == ""){
             $action = "set to";
         }else{
@@ -1078,7 +1092,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
           $record = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId));
          //  $record = iterator_to_array($record);
          //  error_log(print_r($record,1));
-         $slug =  new \MongoDB\BSON\ObjectID();
+         //$slug =  new \MongoDB\BSON\ObjectID();
          if($record["RecentActivityUser"] != $activityUserId || $record["Activity"] == "Comment" ){
             // $dataArray = array();
              $commentDataArray=array(
@@ -1088,7 +1102,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ActivityOn"=>$currentDate,
             "ActivityBy"=>(int)$activityUserId,
             "Status"=>(int)1,
-            "PropertyChanges"=>array(array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
+            "PropertyChanges"=>array(array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
             "ParentIndex"=>"",
             "PoppedFromChild"=>""
             
@@ -1100,7 +1114,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             
          }else{
              $recentSlug = $record["RecentActivitySlug"];
-             $property = array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate );
+             $property = array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate );
 
              $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>$property)),array('new' => 1,"upsert"=>1));
             
@@ -1112,7 +1126,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              $returnValue = array("referenceKey"=>$activitiesCount,"data"=>$property);
          }
            if($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow"){
-                $slug =  new \MongoDB\BSON\ObjectID();
+            //    $slug =  new \MongoDB\BSON\ObjectID();
             $commentDataArray=array(
             "Slug"=>$slug,
             "CDescription"=>  "",
@@ -1129,6 +1143,36 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));   
         }
        
+    }else{
+        
+         $db =  TicketComments::getCollection();
+         $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+         $record = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId));
+         //  $record = iterator_to_array($record);
+         //  error_log(print_r($record,1));
+         $slug =  new \MongoDB\BSON\ObjectID();
+     
+             $commentDataArray=array(
+            "Slug"=>$slug,
+            "CDescription"=>  "",
+            "CrudeCDescription"=>"",
+            "ActivityOn"=>$currentDate,
+            "ActivityBy"=>(int)$activityUserId,
+            "Status"=>(int)1,
+            "PropertyChanges"=>array(array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
+            "ParentIndex"=>"",
+            "PoppedFromChild"=>""
+            
+        );
+            $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));  
+            $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId,"Activity"=>"Comment"));  
+//            $activitiesCount = count($v["Activities"]);
+//             if($activitiesCount>0){
+//                 $activitiesCount = $activitiesCount-1;
+//             }
+            CommonUtility::prepareActivity($commentDataArray,$projectId);
+            $returnValue = array("referenceKey"=>-1,"data"=>$commentDataArray);
+             
     }
      return $returnValue;
           //error_log("response-------".$v);
@@ -1342,7 +1386,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @author suryaprakash reddy 
      * @return array
      */
-    public function updateRelatedTaskId($projectId,$ticketId,$searchTicketId){
+    public function updateRelatedTaskId($projectId,$ticketId,$searchTicketId,$loginUserId=''){
         try{
             $returnStatus="failure";
             TicketCollection::updateRelateTicket($projectId,$ticketId,$searchTicketId); 
@@ -1370,7 +1414,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") ); //added by Ryan
             $oldTimeLog=$parenTicketInfo['TotalTimeLog']; //added by Ryan
             $total=($oldTimeLog + $totalWorkHours); //added by Ryan
-            $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $userId); //added by Ryan
+            $slug =  new \MongoDB\BSON\ObjectID();
+            $activityData=$this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $userId,$slug); //added by Ryan
+            $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug);
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
             }
@@ -1396,6 +1442,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 //
 //EOD;
 //                CommonUtility::sendEmail($recipient_list, $text_message);
+                return $activityData;
             }
         } catch (Exception $ex) {
             Yii::log("StoryService:insertTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

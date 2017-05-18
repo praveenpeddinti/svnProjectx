@@ -139,10 +139,10 @@ Yii::log("TicketComments:getTicketActivity::" . $ex->getMessage() . "--" . $ex->
 //        if(isset($commentData->Comment->ParentIndex)){
 //          $newdata = array('$pull' =>array("Activities"=> array("Slug"=>new \MongoDB\BSON\ObjectID($commentData->Comment->Slug))),'$inc'=>array('Activities.'.$commentData->Comment->ParentIndex.'repliesCount'=>-1));
 //        }else{
-          $newdata = array('$pull' =>array("Activities"=> array("Slug"=>new \MongoDB\BSON\ObjectID($commentData->Comment->Slug))));
+          $newdata =array('$set'=> array('Activities.$.Status' =>(int)0));
 //        }
           
-        $res = $collection->update(array("TicketId" => (int)$commentData->ticketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
+        $res = $collection->update(array("TicketId" => (int)$commentData->ticketId,"ProjectId"=>(int)$commentData->projectId,"Activities.Slug"=> new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
         if(isset($commentData->Comment->ParentIndex)){
           $newdata = array('$inc'=>array('Activities.'.$commentData->Comment->ParentIndex.'.repliesCount'=>-1));
           $res = $collection->update(array("TicketId" => (int)$commentData->ticketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
