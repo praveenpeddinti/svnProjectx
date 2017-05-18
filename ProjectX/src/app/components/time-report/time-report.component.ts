@@ -119,7 +119,6 @@ this.fromDateVal=lastWeekDate;
         */
 this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
     var thisObj = this;
- 
          }
 
 FromDate(event){
@@ -327,13 +326,23 @@ DateRangeForm(){
                 // }
                 // this.rows = rows;
                 //  console.log("@@@@@@@@@responseoooo final" +JSON.stringify(this.rows));
-            } else {
+                 jQuery('.timelogSuccessMsg').css('display','block');
+                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );
+                  setTimeout(() => {
+                        jQuery('#'+'myModal_'+slug).modal('hide');
+                       
+              }, 500);
+             } else {
                 console.log("fail---");
             }
             });
     }
-    showdeleteDiv(){
-        jQuery("#delete_timelog").css("display", "block");
+    showdeleteDiv(flag){
+        if(flag == 1){
+            jQuery("#delete_timelog").css("display", "block");
+        }else{
+           jQuery("#delete_timelog").css("display", "none"); 
+        }
     }
     removeTimelog(ticketDesc,slug,timelogHours){
         var input="_Input";
