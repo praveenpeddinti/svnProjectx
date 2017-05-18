@@ -812,7 +812,18 @@ var thisObj = this;
                 document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
                 this.statusId = result.data.updatedFieldData;
            }
-
+        /**
+        * @author:Praveen P
+        * @description : This is used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list 
+        */
+        if(result.data.activityData.data.ActionFieldType == 6){
+            this._ajaxService.AjaxSubscribe("story/get-all-follow-inlineedit",postEditedText,(response)=>
+            { 
+                if (response.statusCode == 200) {
+                    this.followers = response.data;
+                }
+            });
+        }
          if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
                 document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
                 if(postEditedText.EditedId == "desc"){
@@ -973,7 +984,7 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
         };
          this._ajaxService.AjaxSubscribe("story/get-collaborators-for-follow",followerData,(response)=>
          { 
-
+        
           if (response.statusCode == 200) {
                  var fList:any=[];
          for(var l=0;l<response.data.length;l++){
@@ -982,7 +993,7 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
            }
            
              this.follower_search_results=fList;
-              
+               console.log(this.followers.length+"--followerdate-------"+JSON.stringify(this.follower_search_results));
             } else {
                 console.log("fail---");
             } 
