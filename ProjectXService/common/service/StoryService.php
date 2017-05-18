@@ -1084,12 +1084,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         }else{
            $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];  
         }
-       if($action=="" && trim($oldValue) != trim($newValue)){
-        if($oldValue == ""){
-            $action = "set to";
-        }else{
-            $action = "changed from"; 
-        }
+       if($action!="" || trim($oldValue) != trim($newValue)){
+           if($action == ""){
+                if($oldValue == ""){
+                      $action = "set to";
+                }else{
+                      $action = "changed from"; 
+                 }
+           }
+       
            $db =  TicketComments::getCollection();
            $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
           $record = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId));
@@ -1146,36 +1149,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));   
         }
        
-    }else{
-        
-         $db =  TicketComments::getCollection();
-         $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
-         $record = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId));
-         //  $record = iterator_to_array($record);
-         //  error_log(print_r($record,1));
-        
-     
-             $commentDataArray=array(
-            "Slug"=>$slug,
-            "CDescription"=>  "",
-            "CrudeCDescription"=>"",
-            "ActivityOn"=>$currentDate,
-            "ActivityBy"=>(int)$activityUserId,
-            "Status"=>(int)1,
-            "PropertyChanges"=>array(array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
-            "ParentIndex"=>"",
-            "PoppedFromChild"=>""
-            
-        );
-            $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));  
-            $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId,"Activity"=>"Comment"));  
-//            $activitiesCount = count($v["Activities"]);
-//             if($activitiesCount>0){
-//                 $activitiesCount = $activitiesCount-1;
-//             }
-            CommonUtility::prepareActivity($commentDataArray,$projectId);
-            $returnValue = array("referenceKey"=>-1,"data"=>$commentDataArray);
-             
     }
      return $returnValue;
           //error_log("response-------".$v);
