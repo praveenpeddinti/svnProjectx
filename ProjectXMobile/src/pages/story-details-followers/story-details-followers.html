@@ -6,41 +6,29 @@
                 <span class="ticketid">#{{taskDetails.ticketId}}</span>
                 <span id="title" *ngIf="!enableEdatable" (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span>
             </div>
-            <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
-            <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
-    <div class="padding10">
-    <div style="position: relative;" class="customtoggle padding10">
-    <div id="description" style="overflow:hidden;">
-<div id="innerdesc" class="displayblock imgVideo_bg" [innerHTML]=" taskDetails.description "></div>
-</div>
-    <div class="show-morediv" style="display:none">
-<button id="show" (click)="expandDescription()" class="customshowbutton">Show more</button>
-<button id="hide" (click)="collapseDescription()" class="customshowbutton" style="display:none">Show less</button>
-</div>
-    </div>
-    </div>
+           
+   
 </div>
                 <!--Ticket #113-->
                 <div role="tabpanel" class="custtab-pane active" id="t_followers">
-                    <div>
-                        <div class="widgethed">Followers</div>
+                  <div >
+                      <div class="searchpadding">
                         <!--Auto complete add follower-->
                         <ion-auto-complete [dataProvider]="autoCompleteProvider" [options]="{ placeholder : 'Search to add followers' }" (itemSelected)='itemCustomSelected($event)' #searchbar></ion-auto-complete>
+                      </div>
                         <!--Followers list-->
                         <div class="followersList">
                             <div id="followerdiv_{{follower.FollowerId}}" *ngFor="let follower of followers" class="followers_usr btn-group ">
-                                <div class="user">
+                                <div class="user customuser">
                                     <img class="usericon" src="{{follower.ProfilePicture}}" alt="" />
                                     <span class="">{{follower.UserName}}</span>
-                                    <!--Replace Remove by icon-->
-                                    <span class="followers_delete" (click)="presentConfirmRemoveFollower(follower.FollowerId)" id="follower_{{follower.FollowerId}}"
-                                        *ngIf="follower.CreatedBy == userId || follower.FollowerId == userId" title="{{follower.UserName}}">
-                                        Remove
-                                     </span>
+                                    <button class="customremovebutton" (click)="presentConfirmRemoveFollower(follower.FollowerId)" id="follower_{{follower.FollowerId}}"
+                                        *ngIf="follower.CreatedBy == userId || follower.FollowerId == userId" title="{{follower.UserName}}"><i class="fa fa-times" aria-hidden="true"></i>
+</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--Ticket #113 ended-->
+
 </ion-content>

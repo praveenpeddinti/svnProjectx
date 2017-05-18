@@ -6,33 +6,40 @@
             <span class="ticketid">#{{taskDetails.ticketId}}</span>
             <span id="title" *ngIf="!enableEdatable" (click)="titleEdit($event)" (blur)="text=el.innerText" class="tickettitle">{{taskDetails.title}}</span>
         </div>
-        <button *ngIf="enableEdatable" (click)="updateTitleCancel()">Cancel</button>
-        <button *ngIf="enableEdatable" (click)="updateTitleSubmit()">Submit</button>
-        <div class="padding10">
-            <div style="position: relative;" class="customtoggle padding10">
-<div id="description" style="overflow:hidden;">
-<div id="innerdesc" class="displayblock imgVideo_bg" [innerHTML]=" taskDetails.description "></div>
+       
+        
 </div>
-<div class="show-morediv" style="display:none">
-<button id="show" (click)="expandDescription()" class="customshowbutton">Show more</button>
-<button id="hide" (click)="collapseDescription()" class="customshowbutton" style="display:none">Show less</button>
-</div>
-</div>
-</div>
-</div>
-<ion-row>
-    <span class="pull-left">Total worked hours</span>
-    <div class="thours pull-right"><i aria-hidden="true" class="fa fa-clock-o timeclr"></i>&nbsp; {{workedLogtime.TotalTimeLog}}</div>
-</ion-row>
+    <div class="padding10">
+            
+        <div class="worklogdiv">
+            <ul>
+                <li><div class="twhdiv">Total worked hours</div></li>
+                <li class="pull-right"><div class="totalworklog "><i aria-hidden="true" class="fa fa-clock-o timeclr"></i><span class="totalworklog_box">{{workedLogtime.TotalTimeLog}}</span></div></li>
+            </ul>
+           
+           
+        </div>
+
 <div *ngFor="let logHourDetails of workedLogtime.individualLog">
-    <ion-row>
-        <div class="pull-left"><a>{{logHourDetails.readable_value.UserName}}</a></div>
-        <div class="pull-right">{{logHourDetails.sum}}</div>
-    </ion-row>
+     <div class="worklogindividuals">
+                <ul>
+                    <li>{{logHourDetails.readable_value.UserName}}</li><li class="pull-right">{{logHourDetails.sum}}</li>
+                </ul>
+            </div>
+    
 </div>
-<ion-row>
-    <div class="pull-left">Worked hours:</div>
-    <input (blur)="inputWorkLog($event, i)" class="no_mar spinnerlabel" id="logHourDetails_input_{{i}}" [(ngModel)]="inputHourslog"
-        type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="0.00">
-</ion-row>
+        <div class="worklogdiv">
+            <div class="worklogtextarea">
+                <textarea>Description</textarea>
+            </div>
+            <div class="worklogdivbuttonarea">
+                 <ul>
+                    <li class="inputstyle"><input (blur)="inputWorkLog($event, i)" class="no_mar spinnerlabel" id="logHourDetails_input_{{i}}" [(ngModel)]="inputHourslog"
+        type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="0.00"></li><li class="pull-right"><button class="buttonicon submitbutton "> <i aria-hidden="true" class="fa fa-paper-plane"></i></button></li>
+                </ul>
+                
+            </div>
+        </div>
+
+        </div>
 </ion-content>

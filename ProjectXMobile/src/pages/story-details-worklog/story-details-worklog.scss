@@ -1,3 +1,37 @@
 page-story-details-worklog {
 .padding10trl{padding:10px 10px 0 10px}
 }
+.worklogdiv{background: #ebedee;padding:10px;min-height:60px;border-bottom: 1px solid #d5d6d7}
+.worklogindividuals ul, .worklogdiv ul{padding:0;margin:0;}
+.worklogindividuals ul:after, .worklogdiv ul:after{content:"";clear:both;display:block;list-style: none}
+.worklogindividuals ul li,.worklogdiv ul li{float:left;list-style: none}
+.worklogindividuals ul li.pull-right,.worklogdiv ul li.pull-right{float:right}
+.twhdiv{font-size:18px;color:#4c4c4c;padding-top:10px}
+.totalworklog {padding-top:6px;}
+.totalworklog i{font-size:35px;color:#2087b6;vertical-align: middle;margin-right:15px}
+.totalworklog_box {
+	position: relative;
+	background: #ffffff;
+        font-size:18px;
+        color:#4c4c4c;
+        padding:10px;font-weight:bold
+}
+.totalworklog_box:after {
+	right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(255, 255, 255, 0);
+	border-right-color: #ffffff;
+	border-width: 10px;
+	margin-top: -10px;
+}
+.worklogindividuals{background: #ebedee;padding:10px;border-bottom: 1px solid #d5d6d7 }
+.worklogindividuals ul li{color:#767677}
+.worklogtextarea textarea{width:100%}
+.worklogdivbuttonarea{padding-top:10px}
+.inputstyle input{float:left;font-size:18px;padding: 6px;width: 80px;border:0;margin-top:2px}

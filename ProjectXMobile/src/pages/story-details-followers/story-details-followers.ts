@@ -179,8 +179,8 @@ export class StoryDetailsFollowers {
     }
     public presentConfirmRemoveFollower(followerId) {
         let alert = this.alertController.create({
-            title: 'Confirm Remove Follower',
-            message: 'Do you want to delete this follower?',
+            title: 'Confirmation',
+            message: 'Do you want to remove this user?',
             buttons: [
             {
                 text: 'CANCEL',
