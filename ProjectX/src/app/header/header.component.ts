@@ -4,6 +4,7 @@ import { Headers, Http } from '@angular/http';
 import { LoginService, Collaborator } from '../services/login.service';
 import { AjaxService } from '../ajax/ajax.service';
 import { GlobalVariable } from '../config';
+import {SharedService} from '../services/shared.service';
 declare var io:any;
 declare var socket:any;
 declare var jQuery:any;
@@ -26,7 +27,8 @@ export class HeaderComponent implements OnInit {
     private _ajaxService: AjaxService,
     public _router: Router,
     private http: Http,
-    private _service: LoginService
+    private _service: LoginService,
+    private shared:SharedService
        ) { }
 
   ngOnInit() {
@@ -71,7 +73,8 @@ export class HeaderComponent implements OnInit {
   }
   logout() { 
         this._service.logout((data)=>{ 
-              this._router.navigate(['login']);  
+              this._router.navigate(['login']);
+              this.shared.change(null,null,'Logout',null);  
         });
 
     }
