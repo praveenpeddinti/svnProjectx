@@ -3,7 +3,7 @@ import { LoginService, Collaborator } from '../../services/login.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
-
+import {SharedService} from '../../services/shared.service';
 
 @Component({
     selector: 'login-view',
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit{
     if(getAllObj != null){
         this._router.navigate(['home']); 
     }else{
-        this._router.navigate(['login']); 
+        this._router.navigate(['login']);
     }
     }
 
@@ -35,7 +35,8 @@ export class LoginComponent implements OnInit{
         private _router: Router,
         private _service: LoginService,
         private _authGuard:AuthGuard,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private shared:SharedService
         ) { }
 /*
 * Added by Padmaja
@@ -44,7 +45,8 @@ export class LoginComponent implements OnInit{
     login() {
         this._service.login(this.user,(data)=>{ 
             if(data.status==200){
-                this._router.navigate(['home']);  
+                this._router.navigate(['home']); 
+                this.shared.change(null,null,'LogIn',null);  
             }else{
                 this.checkData=true;
                 this.errorMsg = 'Invalid Email/Password';
