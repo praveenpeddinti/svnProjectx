@@ -125,7 +125,7 @@ export class StoryDetailsWorklog {
       }
     );
   }
-  public inputWorkLog(event, index) {
+   inputWorkLog(event, index) {
     // console.log("the details " + JSON.stringify(this.ticketId));
     this.globalService.insertTimelog(this.constants.insertTimeLog, this.storyTicketId, this.inputHourslog).subscribe(
       (result) => {

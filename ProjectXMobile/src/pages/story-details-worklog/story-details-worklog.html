@@ -29,13 +29,13 @@
     
 </div>
         <div class="worklogdiv">
-            <div class="worklogtextarea">
+<!--            <div class="worklogtextarea">
                 <textarea>Description</textarea>
-            </div>
+            </div>-->
             <div class="worklogdivbuttonarea">
                  <ul>
-                    <li class="inputstyle"><input (blur)="inputWorkLog($event, i)" class="no_mar spinnerlabel" id="logHourDetails_input_{{i}}" [(ngModel)]="inputHourslog"
-        type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="0.00"></li><li class="pull-right"><button class="buttonicon submitbutton "> <i aria-hidden="true" class="fa fa-paper-plane"></i></button></li>
+                    <li class="inputstyle"><input class="no_mar spinnerlabel" id="logHourDetails_input_{{i}}" [(ngModel)]="inputHourslog"
+        type="number" min="0" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="0.00"></li><li class="pull-right"><button class="buttonicon submitbutton" (click)="inputWorkLog($event, i)"> <i aria-hidden="true" class="fa fa-paper-plane"></i></button></li>
                 </ul>
                 
             </div>
