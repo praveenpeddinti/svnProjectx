@@ -24,6 +24,7 @@ use common\models\mysql\Collaborators;
 use common\components\ApiClient; //only for testing purpose
 use common\components\Email; //only for testing purpose
 use common\models\mongo\NotificationCollection;
+use common\models\mongo\TicketTimeLog;
 include_once '../../common/components/ElasticEmailClient.php';
 /**
  * TimeReport Controller
@@ -991,7 +992,75 @@ class TimeReportController extends Controller
         }
     }
 //    Ticket #91 ended
-   
+    
+    public function actionGetTicketdetailsForEdit(){
+            $ticketData = json_decode(file_get_contents("php://input"));
+            $projectId = $ticketData->projectId;
+            $ticketId = $ticketData->ticketId;
+            $ticketArry=array($ticketId);
+         error_log("ticketTimeLog33333333333".$ticketId.$projectId);
+        $ticketTimeLog = TicketTimeLog::getTimeLogRecords($projectId, $ticketArry);
+        error_log("ticketTimeLog".print_r($ticketTimeLog));
+    }
+    public function actionUpdateTimelogForEdit(){
+        error_log("asssssssssssssssssssd@@@@@@@@@@@@@@@@@@");
+        $ticketData = json_decode(file_get_contents("php://input"));
+       // error_log("calendarrrrrrrrrrrr".strtotime($ticketData->calendardate));
+        $updatedData=ServiceFactory::getTimeReportServiceInstance()->updateDataForTimeLog($ticketData);
+       
+        // $ticketTimeLog= ServiceFactory::getTimeReportServiceInstance()->addTimelog($ticketData);
+       
+       // TicketTimeLog::saveTimeLogData($projectId,$ticketId,$ticketData->userInfo->Id,$timelogHours,$ticketDesc);
+        $responseBean = new ResponseBean();
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data = $updatedData;
+        $response = CommonUtility::prepareResponse($responseBean, "json");
+        return $response;
+    }
+    
+    public function actionGetStoryDetailsForTimelog(){
+        $searchData = json_decode(file_get_contents("php://input"));
+        $projectId = $searchData->projectId;
+       // $ticketId = $searchData->ticketId;
+        $sortvalue = $searchData->sortvalue;
+        $searchString = $searchData->searchString;
+        $getSearchDetails = TicketCollection::getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
+        $responseBean = new ResponseBean();
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data = $getSearchDetails;
+        $response = CommonUtility::prepareResponse($responseBean, "json");
+        return $response;
+    }
+    
+    public function actionAddTimelog(){
+        $timelogData = json_decode(file_get_contents("php://input"));
+        $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
+        
+        // $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
+        $responseBean = new ResponseBean();
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data = $getTimelogData;
+        $response = CommonUtility::prepareResponse($responseBean, "json");
+        return $response;
+    }
+   public function actionRemoveTimelog(){
+        $timelogData = json_decode(file_get_contents("php://input"));
+        $projectId = $timelogData->projectId;
+        $slug = $timelogData->slug;
+        $timelogHours = $timelogData->timelogHours;
+        $ticketDesc= explode(".",$timelogData->ticketDesc);
+        $ticketId=str_replace('#','',$ticketDesc[0]);
+        $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->RemoveTimelogs($projectId,$ticketId,$slug,$timelogHours);
+        $responseBean = new ResponseBean();
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+        $responseBean->data = $getTimelogData;
+        $response = CommonUtility::prepareResponse($responseBean, "json");
+        return $response;
+   }
 }
 
 
