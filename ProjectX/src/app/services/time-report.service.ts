@@ -25,18 +25,20 @@ getStoryFields(projectId,getStoryCallback) {
   }
  
 
-getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,getAllStoryDetailsCallback) { 
+getTimeReportDetails(projectId,offset,pagesize,sortvalue,sortorder,fromDateVal,toDateVal,getTimeReportDetailsCallback) { 
    var post_data={
       'projectId':projectId,
       'offset':offset,
       'pagesize':pagesize,
       'sortvalue':sortvalue,
       'sortorder':sortorder,
+      'fromDate':fromDateVal,
+      'toDate':toDateVal,
      
     }
     this._ajaxService.AjaxSubscribe("time-report/get-time-report-details",post_data,(data)=>
     { 
-         getAllStoryDetailsCallback(data);
+         getTimeReportDetailsCallback(data);
     });
   }
 

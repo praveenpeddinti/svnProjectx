@@ -1,22 +1,68 @@
 <!-- Menu -->
 <div class="custom_menu">
-  <div class="row">
-    <div class="col-xs-12 col-sm-4 col-md-4 ">
-      <button (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="normal bluebutton"><i class="fa fa-plus" aria-hidden="true"></i></button>
-
-    </div>
-    <div class="col-xs-12 col-sm-8 col-md-8 ">
-      <div class="pull-right">
-        <div class="customdropdown customdropdownheader" id="filterDropdown">
-          LAST 7 DAYS TOTAL WORKED HOURS {{last7daystimehours}}
-
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 ">
+            <div>Time Report</div>
+           <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4 ">
+            <p-calendar [(ngModel)]="fromDateVal" class="primeDateComponent" name="fromDate"  (onSelect)="FromDate($event)" id='fromDate' [readonlyInput]="true" [fromDate]="fromDate" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
+      </p-calendar>
+        <div id="fromDate_error" [hidden]="true" class="alert alert-danger">FromDate is Required</div>
+            
         </div>
-      </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 ">
+             <p-calendar [(ngModel)]="toDateVal" class="primeDateComponent" name="toDate"  (onSelect)="ToDate($event)" id='toDate' [readonlyInput]="true" [toDate]="toDate" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
+      </p-calendar>
+        <div id="toDate_error" [hidden]="true" class="alert alert-danger">ToDate is must be greatthan FromDate</div>
+            
+        </div>
+       <div class="col-xs-12 col-sm-4 col-md-4 ">
+            <button (click)="DateRangeForm()" class="normal bluebutton bluebuttonmedium">GO</button>
+            
+        </div>
     </div>
-  </div>
+            
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 ">
+            <div class=" pull-right">
+                <div class="timereportdiv">
+                    <ul>
+                        <li>
+                            <div class="timeboxtitle">Last {{showdays}}</div>
+                            <div  class="timeboxlabel">Total worked hours</div>
+                            
+                        </li>
+                        <li>
+                            <div class="timecountouter"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                           <div class="timewraptimewrap">
+  <div class="timewraparrow"></div>
+  <div class="timewraparrow-cover"></div>
+  <div class="timewrapbox">{{last7daystimehours}}</div>
+</div> </div>
+                        </li>
+                        
+                    </ul>
+                        
+                    </div>
+                        
+                    </div>
+            
+            
+        </div>
+    </div>
+  <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 ">
+          <div >Time Tracking</div>
+      </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 ">
+        <div class="pull-right">
+      <button (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="normal bluebutton"><i class="fa fa-plus" aria-hidden="true"></i></button>
+</div>
+    </div>
+   </div>
 
 </div>
-<div>Time Tracking</div>
+
 <ngx-datatable
         #myTable 
         class="material expandable customdatatable"
