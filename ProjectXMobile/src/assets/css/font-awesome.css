@@ -11,7 +11,7 @@
   font-weight: normal;
   font-style: normal;
 }
-.fa {
+.fa,.tab-button-icon  {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -2335,3 +2335,15 @@
   overflow: visible;
   clip: auto;
 }
+
+
+/*index page styles*/
+
+.indexpage{position: fixed;left:0;right:0;top:0;bottom:0;z-index:1000;background: url(../../assets/images/login-bg.png) no-repeat left top ;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;border-radius:0}
+.indexpage img{top:50%;position: absolute;margin-top:-20px;left:50%;margin-left:-20px}
+
+/* end*/
