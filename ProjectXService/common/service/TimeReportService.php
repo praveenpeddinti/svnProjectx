@@ -51,7 +51,7 @@ class TimeReportService {
      */
     
     public function getTimeLogRecordsForLast7Days($StoryData, $projectId) {
-        try {error_log("----service----hours");
+        try {
             $workLogHours = TicketTimeLog::getTimeLogRecordsForLast7Days($StoryData, $projectId);
 
             return $workLogHours;

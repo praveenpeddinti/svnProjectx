@@ -90,12 +90,9 @@ class TimeReportController extends Controller
    public function actionGetTimeReportDetails() {
         try { 
             $StoryData = json_decode(file_get_contents("php://input"));
-            //$projectId=1;
             $projectId = $StoryData->projectId;
             $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($StoryData,$projectId);
-            error_log("----total reports-1--".$totalCount);
             $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($StoryData,$projectId);
-            //error_log("----total reports-1--".$totalCount);
             
             $data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
             $responseBean = new ResponseBean();
@@ -119,7 +116,6 @@ class TimeReportController extends Controller
    public function actionGetSubTaskDetails() {
         try {
             $StoryData = json_decode(file_get_contents("php://input"));
-            //$projectId=1;
             $subtaskIds=array();
             $projectId = $StoryData->projectId;
             $getSubTaskIds = ServiceFactory::getStoryServiceInstance()->getSubTaskIds($StoryData->storyId,$projectId);

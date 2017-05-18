@@ -33,8 +33,7 @@ class TicketTimeLog extends ActiveRecord
           "_id",
           "TicketId",
           "ProjectId",
-          "CollaboratorId",
-          "Time",
+          "TimeLog",  
           "CreatedOn",
           "UpdatedOn"
 
@@ -125,7 +124,7 @@ class TicketTimeLog extends ActiveRecord
      */
     public static function getTimeLogRecords($projectId, $ticketsList) {
         try {
-          
+           
             $matchArray = array("TicketId" => array('$in' => $ticketsList), "ProjectId" => (int) $projectId);
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
@@ -157,9 +156,11 @@ class TicketTimeLog extends ActiveRecord
     
     public static function getAllTimeReportDetails($StoryData, $projectId) {
         try {
-            error_log("--page--".$StoryData->pagesize."----------".$StoryData->offset);
-            $offset=$StoryData->offset * $StoryData->pagesize;
-            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId);
+            $StoryData->toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
+            $skip = $StoryData->offset * $StoryData->pagesize;
+            $limit = $skip + $StoryData->pagesize;
+            
+            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->toDate)*1000)));
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
                 array('$unwind' => '$TimeLog'),
@@ -168,15 +169,13 @@ class TicketTimeLog extends ActiveRecord
                     '$group' => array(
                         '_id' => '$TicketId',
                          "data" => array('$push' => '$TimeLog'),
-                    ),),
-                array('$limit' => $StoryData->pagesize),array('$skip' => $offset),
+                    ),)
                 );
-                //array('$limit' => $StoryData->pagesize),array('$skip' => $StoryData->offset * $StoryData->pagesize)
             
             $timeReportDetails = $query->aggregate($pipeline);
             $TimeLogDetailsFinalArray = array();
             $TimeLogDataArray= array();
-            
+            error_log("--size---".count($timeReportDetails));
             foreach($timeReportDetails as $extractTimeLog){
                 $ticketCollectionModel = new TicketCollection();
                 $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractTimeLog['_id'],$projectId,$selectFields=[]);
@@ -215,11 +214,14 @@ class TicketTimeLog extends ActiveRecord
     
     public static function getTimeReportCount($StoryData, $projectId) {
         try {
-            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId);
+            $StoryData->toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
+            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->toDate)*1000)));
+            
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
                 array('$unwind' => '$TimeLog'),
                 array('$match' => $matchArray),
+                //array('Time.LoggedOn'=>array('$lt' => new MongoDate($date))),
                 array(
                     '$group' => array(
                         '_id' => '$TimeLog.CollaboratorId',
@@ -237,8 +239,8 @@ class TicketTimeLog extends ActiveRecord
     
     public static function getTimeLogRecordsForLast7Days($StoryData,$projectId) {
         try {
-          error_log("---hours==coll===".$StoryData->userInfo->Id);
-            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int)$projectId);
+            $StoryData->toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
+            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->toDate)*1000)));
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
                 array('$unwind'=> '$TimeLog'),
