@@ -87,7 +87,7 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-               {path: 'time-report',children:[
+               {path: 'project/:projectName/time-report',children:[
                 { path: '' , component: TimeReportComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}

@@ -2,16 +2,17 @@ import { Component,Directive,ViewChild,ViewEncapsulation } from '@angular/core';
 import { TimeReportService } from '../../services/time-report.service';
 import {CalendarModule,AutoComplete} from 'primeng/primeng'; 
 import { AjaxService } from '../../ajax/ajax.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
+import { ProjectService } from '../../services/project.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 //import {AutoCompleteModule} from 'primeng/primeng';
 declare var jQuery:any;
 
 @Component({
     selector: 'time-report-view',
-    providers: [TimeReportService],
+    providers: [TimeReportService,ProjectService],
     templateUrl: 'time-report-component.html',
     styleUrls: ['./time-report.component.css']
 
@@ -19,7 +20,9 @@ declare var jQuery:any;
 
 export class TimeReportComponent{
     public FilterList=[];
-    public selectedFilter=null; 
+    public selectedFilter=null;  
+    public projectName; 
+    public projectId;                  
     private search_results:string[];
     private ticketdesc=[];
     private text:string;
@@ -76,10 +79,29 @@ expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     constructor(
         private _router: Router,
-        private _service: TimeReportService, private http: Http,private _ajaxService: AjaxService) { console.log("in constructor"); }
-
+        private _service: TimeReportService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute) { console.log("in constructor"); }
     ngOnInit() {
 var thisObj = this;
+thisObj.route.queryParams.subscribe(
+      params => 
+      { 
+      thisObj.route.params.subscribe(params => {
+           thisObj.projectName=params['projectName'];
+            thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
+                if(data.statusCode!=404) {
+                thisObj.projectId=data.data.PId;  
+               
+               
+                }
+                });
+                });
+                });
+                
+
+
+
+
+
 var date1 = new Date();//set current date to datepicker as min date
 date1.setHours(0,0,0,0);
 this.toDateVal = date1;

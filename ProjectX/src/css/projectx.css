@@ -126,7 +126,7 @@ background-color: #237ea7;
 /* end */
 /* componentstyles for to title area*/
  .titlearea  .ticketidareanorightpadding{padding-right:0}
- .titlearea .ticketidarea{background:#f8f8f8;font-size: 20px;font-weight: bold;min-height: 50px;padding-top: 12px;text-align: center;}
+ .titlearea .ticketidarea{background:#f8f8f8;font-size: 20px;font-weight: normal;min-height: 50px;padding-top: 12px;text-align: center;}
  .titlearea .ticketdescriptionarea{background:#f8f8f8;padding:6px}
  .titlearea .ticketdescriptionarea .editinput{width:100%;min-height:40px;font-size:20px;background:#fff;padding:5px 10px;border:0}
  .rightdescriptionarea{padding:15px;background:#f8f8f8; margin-bottom: 20px; }
@@ -705,3 +705,25 @@ padding-left:0px!important;
 
 .pagenotfound{ width:100%; height: auto; text-align: center;}
 
+.customcalenderdiv .ui-calendar button, .customcalenderdiv .ui-calendar button:hover, .customcalenderdiv .ui-calendar button:focus{
+    background: #e8e8e8;
+    border: 1px solid #d6d6d6;
+    border-left:0;
+    color:#333;
+    border-radius:0
+   
+}
+
+.breadcrumb{margin-bottom:20px;padding:6px 10px 4px}
+.breadcrumb .fa-home{font-size:20px;color:#237ea7;vertical-align: text-bottom}
+.breadcrumb label{font-weight:normal;color:#8c8c8c}
+.breadcrumb img{vertical-align: text-bottom}
+.customcalenderdiv  .ui-calendar input {
+    border-bottom-right-radius: 0!important;
+     border-bottom-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+    border-top-left-radius: 0!important;
+}
+.ticketidarea img{padding:0 0 6px}
+.ticketidarea  .paddingL10{position: relative;margin-top:-2px}
+.note-editor.note-frame{border:1px solid #e8e8e8}

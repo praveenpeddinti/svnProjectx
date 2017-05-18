@@ -23,49 +23,6 @@
 	border: 1px dashed #333;font-size:18px;font-weight:bold}
 .timereportdiv ul li .timecountouter i{position: absolute;left:-48px;top:1px;color:#237ea7;font-size:38px}
 
-/*.timewrap {position: relative;display:table}
-.timewraparrow {
-  width: 12px;
-  height: 12px;
-  border: 1px dashed #bababa;
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-  position: absolute;
-  top: 50%;
-  margin-top: -7px;
-  left: -7px;
-  z-index: 10;
-  border-radius: 0px;  
-}
-.timewraparrow-cover {
-  top: 50%;
-  margin-top: -7px;
-  left: -6px;
-  width: 12px;
-  height: 12px;
-  border: 1px dashed transparent;
-  position: absolute;
-  background: #e2e2e2;
-  z-index: 30;
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-  border-radius: 0px;
-}
-.timewrapbox {
-  background: #e2e2e2;
-  z-index: 10;
-  position: relative;
-  border: 1px dashed #bababa;
-  border-radius: 0px;
-  padding:7px 10px 5px;
-  font-size:18px;font-weight:bold
-}*/
 .timewrapbox {
 	position: relative;
 	background: #ffffff;
@@ -107,10 +64,14 @@
 .widgethedsub {
     color: #000;
     font-family: "robotoregular";
-    font-size: 20px;
+    font-size: 18px;
+   
    
 }
 .paddingtop10{padding-top:10px}
+.topdivider{border-top:1px solid #f4f4f4;margin: 5px 0 0;
+    padding: 0;}
+.paddingtop5{padding-top:5px}
 .custom_menu .ui-widget-header .ui-button, .custom_menu .ui-widget-content .ui-button, .ui-button {
     background: #e8e8e8 none repeat scroll 0 0!important;
     border: 1px solid #f8f8f8!important;
