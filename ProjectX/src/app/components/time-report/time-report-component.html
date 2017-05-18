@@ -24,6 +24,7 @@
             <button (click)="DateRangeForm()" class="normal bluebutton bluebuttonmedium">GO</button>
             
         </div>
+
     </div>
             
         </div>
@@ -57,7 +58,8 @@
       </div>
     <div class="col-xs-12 col-sm-6 col-md-6 ">
         <div class="pull-right">
-        <div class="add" (click)="renderStoryForm()" ><i  class="fa fa-plus"></i>
+           
+        <div class="add" data-toggle="modal" data-target="#addTimelogModel" ><i  class="fa fa-plus"></i>
         </div>
      
 </div>
@@ -88,23 +90,85 @@
 Row classes are also dynamically. These classes are pass to service layer-->
  <ngx-datatable-column *ngFor="let column of columns;let i=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
   [flexGrow]="column.flexGrow">
-  <template let-row="row" ngx-datatable-cell-template>
+  
+  <template let-row="row" ngx-datatable-cell-template >
+    <div attr.class="{{i}}">
    <div class="{{column.class}} " *ngIf="row[i].field_name!='action'" >
         <img *ngIf="row[i].other_data==1" src="assets/images/story-icon.png"  />
       <img *ngIf="row[i].other_data==2" src="assets/images/task-icon.png" />
        {{row[i].field_value}}
+       
    </div>
       <div *ngIf="row[i].field_name =='action'" class="{{column.class}}" style=" margin-right: 20px;">
-          <input type="button" name="EDIT" value="EDIT" />
-          <input type="button" name="DELETE" value="DELETE" />
-      </div>   
-     
-       
+        
+          <input type="button" name="EDIT" value="EDIT"   data-toggle="modal"   [attr.data-target]="'#myModal_'+ row[i].Slug.$oid" />
+          <input type="button" name="DELETE" value="DELETE" (click)="showdeleteDiv()"/>
+      </div> 
+
+
+  <div id="delete_timelog">  
+                Do you want to remove this Timelog?
+                <div class="text-center">
+                    <div (click)="removeTimelog(row[i].ticketDesc,row[i].Slug.$oid,row[i].Time)" id="remove_yes" class="yes">Yes</div>
+                    <div class="no">No</div>
+        </div>
+            </div>
+     </div> 
+              <div class="modal fade "  id="myModal_{{row[i].Slug.$oid}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog"  id="{{row[i].Slug.$oid}}" >
+    <div class="modal-content" style="z-index:9999;">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Entry</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+           story/Task  
+            <p-autoComplete  [ngModel]="row[i].ticketDesc" (onSelect)="getSelectedValueForTask($event)" [minLength]="1" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="taskdisplay"></p-autoComplete>
+          <p *ngIf="row[i].ticketDesc.includes('#')"> description<input type="text"  value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"/></p>
+          <p>Hours <input type="text"  value="{{row[i].Time}}"  id="editTimelogTime_{{row[i].Slug.$oid}}"/></p>
+            <p-calendar  [(ngModel)]="row[i].LogDate" class="primeDateComponent" (onSelect)="getSelectedValueForDate($event)"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" class="addTimelogDate">
+              </p-calendar>
+            </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="updateTimelog(row[i].Slug.$oid,row[i].ticketDesc,row[i].readableDate)" >Update</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div> 
 </template>
+
 </ngx-datatable-column>
 
 <!-- Column Template -->
 
 </ngx-datatable>
-
+        <div class="modal fade"  id="addTimelogModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Entry</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="timelogSuccessMsg"> Timelog added successfully</div>
+      <div class="modal-body">
+           story/Task 
+            <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="addTimelogTask"></p-autoComplete>
+            <p> description<input type="text"  value=""  id="addTimelogDesc"/></p>
+            <p>Hours <input type="text"  value=""  id="addTimelogTime"/></p>
+              <p-calendar  [(ngModel)]="dateVal" class="primeDateComponent"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate">
+                        </p-calendar>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="addTimeLog()">Submit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 

@@ -1,5 +1,16 @@
 .stateStyle{
   color:#333;font-size:13px!important;
+
+}
+#editTimeReport{
+  display:none;
+}
+#delete_timelog{
+    display:none;
+}
+.timelogSuccessMsg{
+   display:none;
+
 }
 .timeboxtitle{text-align: center;text-transform: uppercase;color:#717171;}
 .timeboxlabel{text-align: center;color:#237ea7;text-transform: uppercase;}
@@ -111,4 +122,5 @@
      border-bottom-left-radius: 0!important;
     border-top-right-radius: 0!important;
     border-top-left-radius: 0!important;
+
 }
