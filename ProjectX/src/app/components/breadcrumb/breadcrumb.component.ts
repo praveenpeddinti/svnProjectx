@@ -60,6 +60,11 @@ export class BreadcrumbComponent implements OnInit {
               this.removeItems(1,true);
               this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
           }
+          if(this.route_changes.page=='Home')
+          {
+             this.status=true;        
+             this.removeItems(1,true);
+          }
           this.isLoggedOut=false;
         }
         else{
