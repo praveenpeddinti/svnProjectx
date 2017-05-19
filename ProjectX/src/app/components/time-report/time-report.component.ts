@@ -272,7 +272,10 @@ DateRangeForm(){
               'addTimelogDesc':jQuery('#addTimelogDesc').val(),
               'addTimelogTime':jQuery('#addTimelogTime').val(),
               'addTimelogDate':finalDate,
+              'fromDate':this.fromDateVal,
+              'toDate':this.toDateVal
         }
+      //  alert("timelogData"+JSON.stringify(timelogData));
             this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
                 { 
                 //  console.log("ssssssssssssss first"+JSON.stringify(this.rows));
@@ -336,7 +339,9 @@ DateRangeForm(){
                     'description':jQuery('#editableDesc'+'_'+slug).val(),
                     'autocompleteTask':this.selectedValForTask,
                     'editableDate':editableDate,
-                    'calendardate':this.selectedValForDate
+                    'calendardate':this.selectedValForDate,
+                    'fromDate':this.fromDateVal,
+                    'toDate':this.toDateVal
                    }
            this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
             { 
