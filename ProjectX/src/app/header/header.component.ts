@@ -251,5 +251,10 @@ export class HeaderComponent implements OnInit {
   viewAllNotifications(){
     this._router.navigate(['collaborator','notifications']);
   }
+
+  modifyRoute()
+  {
+    this.shared.change(null,null,'Home',null);
+  }
   
 }
