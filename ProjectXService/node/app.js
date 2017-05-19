@@ -117,8 +117,9 @@ app.post("/propertyChange",function(req,res,cb)
             console.log('******************getAllNotificationsCount1***************'+JSON.stringify(request));
      getUnreadNotificationsCount(request,client);
     
-   
+    clearInterval(globalArray[client.id]);
      var interval = setInterval(function(){
+          console.log("--pining interval----");
            getUnreadNotificationsCount(request,client);
         },15000)
      globalArray[client.id] = interval;
