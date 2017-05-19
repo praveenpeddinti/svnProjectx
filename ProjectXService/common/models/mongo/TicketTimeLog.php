@@ -169,7 +169,8 @@ class TicketTimeLog extends ActiveRecord
                     '$group' => array(
                         '_id' => '$TicketId',
                          "data" => array('$push' => '$TimeLog'),
-                    ),)
+                    )),
+                array('$limit' => $StoryData->pagesize),array('$skip' => $offset),
                 );
             
             $timeReportDetails = $query->aggregate($pipeline);
@@ -180,6 +181,7 @@ class TicketTimeLog extends ActiveRecord
                 $ticketCollectionModel = new TicketCollection();
                 $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractTimeLog['_id'],$projectId,$selectFields=[]);
                 $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
+                error_log("ticket dexc---".$ticketDesc);
                 $ticketTask = $getTicketDetails["Fields"]['planlevel']['value'];
                 $TimeLogDatafinalArray =array();
                 foreach($extractTimeLog['data'] as $eachOne){
@@ -255,6 +257,7 @@ class TicketTimeLog extends ActiveRecord
                 ),
             );
             $last7DaysTimelog = $query->aggregate($pipeline);
+            error_log("count----------".print_r($last7DaysTimelog,1));
             return $last7DaysTimelog[0]['totalHours'];
         } catch (Exception $ex) {
             Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
