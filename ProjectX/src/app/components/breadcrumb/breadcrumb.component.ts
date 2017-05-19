@@ -79,7 +79,7 @@ export class BreadcrumbComponent implements OnInit {
             
         // }
         //  else{ //for search  and notifications
-          if(this.route_changes.page == "Search" || this.route_changes.page=="Notifications" || this.route_changes.page=='Error'){ 
+          if(this.route_changes.type=='Other'){ 
               this.status=true;        
               this.removeItems(1,true);
               this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
