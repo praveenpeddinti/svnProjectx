@@ -14,6 +14,7 @@ import { CustomModalPage } from '../custom-modal/custom-modal';
 
 declare var cordova: any;
 declare var jQuery: any;
+declare var RE: any;
 /**
  * Generated class for the StoryDetailsComments page.
  *
@@ -69,8 +70,8 @@ export class StoryDetailsComments {
     public textFieldValue = "";
     public textAreaValue = "";
     public displayedClassColorValue = "";
-   
-    
+    public myHTML: any;
+
     @ViewChild(Content) content: Content;
     
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -218,6 +219,9 @@ export class StoryDetailsComments {
         });
     }
   ionViewDidLoad() {
+        RE.editor = document.getElementById('editor');
+        RE.editor.setAttribute("placeholder", "insert my text ...");
+        RE.editor.addEventListener("keyup", RE.keyup);
     console.log('ionViewDidLoad StoryDetailsComments');
   }
    public expandDescription() {
@@ -399,10 +403,12 @@ export class StoryDetailsComments {
         }
         this.globalService.deleteCommentById(this.constants.deleteCommentById, commentParams).subscribe(
             (result) => {
+                console.log("deleted the comment");
                 if (this.itemsInActivities[commentId].Status == 2) {
                     this.itemsInActivities[parentCommentId].repliesCount--;
                 }
-                this.itemsInActivities.splice(commentId, 1);
+                this.itemsInActivities[commentId].Status = 0;
+                //this.itemsInActivities.splice(commentId, 1);
             }, (error) => {
                 this.presentToast('Unsuccessful');
             }
@@ -439,17 +445,21 @@ export class StoryDetailsComments {
         }
     }
     public submitComment() {
-        var commentText = jQuery(".uploadAndSubmit .textEditor").val();
+        console.log("submit button clicked1");
+        this.myHTML = document.getElementById('editor').innerHTML;
+        console.log("submit button clicked2" + JSON.stringify(this.myHTML));
+        //var commentText = jQuery(".uploadAndSubmit .textEditor").val();
         // var commentText = this.commentDesc;
-        if (commentText != "" && commentText.trim() != "") {
-            this.commentDesc = "";
+        if (this.myHTML != "" && this.myHTML.trim() != "" ) {
+          //  this.commentDesc = "";
+            console.log("submit button clicked3");
             jQuery("#commentEditorArea").removeClass("replybox");
             var commentedOn = new Date();
             var formatedDate = (commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' + commentedOn.getFullYear();
             var commentData = {
                 TicketId: this.storyTicketId,
                 Comment: {
-                    CrudeCDescription: commentText.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
+                    CrudeCDescription: this.myHTML.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
                     CommentedOn: formatedDate,
                     ParentIndex: "",
                     Reply:this.replying,
@@ -469,7 +479,8 @@ export class StoryDetailsComments {
                         this.itemsInActivities[this.replyToComment].repliesCount++;
                     }
                     this.replying = false;
-                    jQuery(".uploadAndSubmit .textEditor").val('');
+                    document.getElementById('editor').innerHTML= "";
+                   // jQuery(".uploadAndSubmit .textEditor").val('');
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
@@ -477,6 +488,10 @@ export class StoryDetailsComments {
         }
     }
     public submitEditedComment(commentId, slug) {
+        RE.editor = document.getElementById('editor');
+        RE.editor.setAttribute("placeholder", "insert my text ...");
+        RE.editor.addEventListener("keyup", RE.keyup);
+        
         var editedContent = jQuery("#Actions_" + commentId + " .textEditor").val();
         if (editedContent != "" && editedContent.trim() != "") {
             var commentedOn = new Date();
@@ -497,6 +512,7 @@ export class StoryDetailsComments {
                     this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
                     this.editCommentOpenClose[commentId] = false;
                     this.newCommentOpenClose = true;
+                    document.getElementById('editor').innerHTML= "";
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
@@ -638,6 +654,7 @@ export class StoryDetailsComments {
         });
     }
     public uploadedInserver(dataUploaded, comeFrom: string, where:string, comment:string){
+        this.myHTML = document.getElementById('editor').innerHTML;
         var serverResponse = JSON.parse(dataUploaded.response);
         if (serverResponse['status'] == '1') {
             var editor_contents;
@@ -648,7 +665,7 @@ export class StoryDetailsComments {
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                 if (where == "comments") {
-                    this.commentDesc = this.commentDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                   this.myHTML = this.myHTML + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
                     this.newSubmitOpenClose = false;
                 } else if (where == "edit_comments") {
                     appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";

@@ -35,7 +35,7 @@
             </div>
             <div *ngIf="eachActivity.PropertyChanges.length == 0" class="comments_menuouter{{(eachActivity.Status ==2)?'_reply':''}}">
                 <ion-fab top right>
-                    <button ion-fab class="commentAction"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
+                    <button ion-fab class="commentAction" *ngIf="eachActivity.Status!=0"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
                     <ion-fab-list side="left">
                         <button ion-fab (click)="replyComment(i,eachActivity.ActivityBy.CollaboratorId)"><i class="fa fa-reply" aria-hidden="true"></i></button>
                         <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0" (click)="presentConfirmDelete(i,eachActivity.Slug.$oid)"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -65,20 +65,22 @@
             <div *ngIf="eachActivity.PropertyChanges.length == 0" id="commentContent" class="comment{{(eachActivity.Status ==2)?'_reply':''}}">
                 <div style="position:relative">
 <div class="commentedtext" (click)="navigateToParentComment(eachActivity.ParentIndex)" *ngIf="eachActivity.Status ==2">
-    <div class="user">
+    <div class="user" *ngIf="eachActivity.Status ==0">
         <a href="javascript:void(0)"><img class="usericon" src="{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.ProfilePicture}}"></a> by <span><a href="javascript:void(0)">{{itemsInActivities[eachActivity.ParentIndex].ActivityBy.UserName}}</a></span>
     </div>
     <div [innerHTML]="itemsInActivities[eachActivity.ParentIndex].CDescription"></div>
 </div>
 <div>
     <div id="Activity_content_{{i}}" [hidden]="editTheComment[i] && editCommentOpenClose[i]">
-        <div class="commentp" [innerHTML]="eachActivity.CDescription"></div>
+        <div *ngIf="eachActivity.Status!=0" class="commentp" [innerHTML]="eachActivity.CDescription"></div>
+        <div *ngIf="eachActivity.Status ==0" class="commentp" >(Comment removed)</div>
     </div>
     <div class="commentingTextArea editorDiv editorDivclose" id="Actions_{{i}}" [hidden]="!editTheComment[i] && !editCommentOpenClose[i]"
         style="position: relative;">
 <div class="deletediv"> <a href="javascript:void(0)" class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>    </div>
 <!--Have to change Text area to editor-->
-<textarea (focus)="showSubmit(i)" class="textEditor commentTextArea" placeholder="Enter text here..."></textarea>
+<!--<textarea (focus)="showSubmit(i)" class="textEditor commentTextArea" placeholder="Enter text here..."></textarea>-->
+<div id="editor1" (focus)="showSubmit(i)" class="" contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
 <div class="uploadProgress" [hidden]='progressEdit==0'>
     <progress [value]="progressEdit" max="100"></progress>
 </div>
@@ -116,9 +118,10 @@
         </div>
         <div class="uploadAndSubmit editorDiv" id="uploadAndSubmit">
             <!--Have to change Text area to editor-->
-            <textarea (focus)="showSubmit(-1)" class="textEditor commentTextArea" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}"
-                placeholder="Enter text here..."></textarea>
-            <div class="uploadProgress" [hidden]='progressNew==0'>
+            <!--<textarea (focus)="showSubmit(-1)" class="textEditor commentTextArea" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}"
+                placeholder="Enter text here..."></textarea>-->
+                <div id="editor" (focus)="showSubmit(-1)" class="textEditor commentTextArea" contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
+                <div class="uploadProgress" [hidden]='progressNew==0'>
                 <progress [value]="progressNew" max="100"></progress>
                 <div id="progressFileUploadNew"></div>
             </div>
@@ -141,5 +144,14 @@
 </div>
 </div>
 </div>
-
+ 
+<div id="hideOrShow" align="center" style="display: none;">
+        <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold" aria-hidden="true"></i></button>
+        <button id="italic" onclick="RE.click(id)"><i class="fa fa-italic" aria-hidden="true"></i></button>
+        <button id="underline" onclick="RE.click(id)"><i class="fa fa-underline" aria-hidden="true"></i></button>
+        <button id="bullets" onclick="RE.click(id)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>
+        <button id="numbers" onclick="RE.click(id)"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+        <button id="insertlink" onclick="RE.click(id)"><i class="fa fa-link" aria-hidden="true"></i></button>
+        <button id="close" onclick="RE.click(id)"><i class="fa fa-times" aria-hidden="true"></i></button>
+    </div>
 </ion-content>
