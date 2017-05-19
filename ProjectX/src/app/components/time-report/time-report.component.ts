@@ -2,7 +2,7 @@ import { Component,Directive,ViewChild,ViewEncapsulation } from '@angular/core';
 import { TimeReportService } from '../../services/time-report.service';
 import {CalendarModule,AutoComplete} from 'primeng/primeng'; 
 import { AjaxService } from '../../ajax/ajax.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute,NavigationExtras } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
 import { ProjectService } from '../../services/project.service';
@@ -52,25 +52,25 @@ export class TimeReportComponent{
                     name: 'Date',
                     flexGrow: 1,
                     sortby: 'Date',
-                    class: 'taskRstory'
+                    class: 'paddingleft10'
                 },
                 {
-                    name: 'Story / task Description',
+                    name: 'Story / Task Description',
                     flexGrow: 3,
                     sortby: 'Id',
-                    class: 'titlecolumn'
+                    class: 'titlecolumn paddingleft10'
                 },
                 {
                     name: 'Hours',
                     flexGrow: 1.5,
-                    sortby: 'time',
-                    class: ''
+                    sortby: 'time ',
+                    class: 'paddingleft10'
                 },
                 {
                     name: '',
                     flexGrow: 1.0,
                     sortby: '',
-                    class: 'arrowClass'
+                    class: 'paddingleft10'
                 }
 
               ];
@@ -79,7 +79,14 @@ expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     constructor(
         private _router: Router,
-        private _service: TimeReportService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute) { console.log("in constructor"); }
+            private _service: TimeReportService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute) { 
+        console.log("in constructor"); 
+        let PageParameters = {
+                    offset: 0,
+                    Sortvalue: "Id",
+                    Sortorder:"desc"
+                };
+        }
     ngOnInit() {
 var thisObj = this;
 thisObj.route.queryParams.subscribe(

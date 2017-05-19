@@ -43,7 +43,10 @@
 	border-width: 8px;
 	margin-top: -8px;
 }
-.timereportlabel{font-weight:normal;margin-bottom:0;display: block;}
+.timereportlabel{margin-bottom:0;display: block; color: #6d6d6d;
+    font-family: "robotoregular";
+    font-size: 13px;
+    font-weight: normal;}
 .paddingtop20{padding-top:20px}
 .add{
     background: #207fa9 none repeat scroll 0 0;
@@ -85,6 +88,8 @@
     border-top-left-radius: 0!important;
 
 }
+
 #taskerr_msg{
      display:none;
 }
+

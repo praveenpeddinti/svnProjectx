@@ -229,4 +229,7 @@ export class HeaderComponent implements OnInit {
     this.shared.change(null,null,'Home',null);
   }
   
+  TimeReport(){
+  this._router.navigate(['project',localStorage.getItem('ProjectName'),'time-report']);
+}
 }
