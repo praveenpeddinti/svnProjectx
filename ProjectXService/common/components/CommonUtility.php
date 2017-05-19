@@ -80,13 +80,22 @@ class CommonUtility {
             Yii::log("CommonUtility:convert_time_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
+static function validateDateFormat($date, $format = 'M-d-Y')
+{
+    $d = \DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
     /**
      * @author Moin Hussain
      * @param type $date
      * @return type
      */
     public static function validateDate($date) {
+        
+        if(self::validateDateFormat($date)){
+            return FALSE; 
+        }
+        
         error_log("-----------------" . $date);
         $date = preg_replace("/\([^)]+\)/", "", $date);
         error_log("------------afet-----" . $date);
