@@ -1321,7 +1321,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto','Fields.assignedto','Fields.workflow'];
                $subTicketDetails = $ticketCollectionModel->getTicketDetails($ticketNumber,$postData->projectId,$selectFields);
                $returnStatus=$subTicketDetails;
-              
+               /* Notifications */
+               $notifyType="Create Task";
+               $slug =  new \MongoDB\BSON\ObjectID();
+               $this->saveNotifications($postData, $notifyType,'','',$slug,$ticketModel->TicketId);
+               /* end Notifications */
             }
              return $returnStatus;
          } catch (Exception $ex) {
@@ -1392,7 +1396,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $total=($oldTimeLog + $totalWorkHours); //added by Ryan
             $slug =  new \MongoDB\BSON\ObjectID();
             $activityData=$this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $userId,$slug); //added by Ryan
-            $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug);
+            $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug); //added by Ryan
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
             }
