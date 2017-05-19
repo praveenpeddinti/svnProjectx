@@ -1060,7 +1060,9 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
                   this.followers.push(response.data);  
                    if(response.data.activityData.referenceKey == -1){
              this.commentsList.push(response.data.activityData.data);
-            }
+            } else if(response.data.activityData != "noupdate"){
+        this.commentsList[response.data.activityData.referenceKey]["PropertyChanges"].push(response.data.activityData.data);
+     }  
                 }
                 /*socket connection for notifications*/
                 // console.log("==connecting==");
@@ -1107,7 +1109,9 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
                 {
              if(response.data.activityData.referenceKey == -1){
                 this.commentsList.push(response.data.activityData.data);
-                }
+                } else if(response.data.activityData != "noupdate"){
+        this.commentsList[response.data.activityData.referenceKey]["PropertyChanges"].push(response.data.activityData.data);
+     }  
                jQuery("#followerdiv_"+event).remove();
                this.followers = this.followers.filter(function(el) {
                     return el.FollowerId !== event;
@@ -1341,7 +1345,9 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
             this.text="";
             if(result.data.activityData.referenceKey == -1){
              this.commentsList.push(result.data.activityData.data);
-            }
+            } else if(result.data.activityData != "noupdate"){
+        this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+     }  
         })
        }
        
