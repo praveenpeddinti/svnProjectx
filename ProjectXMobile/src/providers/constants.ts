@@ -12,7 +12,7 @@ export class Constants {
   // Local URL
 //    public baseUrl = 'http://10.10.73.33/';
   // Sandbox URL
- // public baseUrl = 'http://10.10.73.77/';
+  public baseUrl = 'http://10.10.73.77/';
   // Public URL
   //  public baseUrl = 'http://113.193.181.131/';
   
@@ -21,7 +21,7 @@ export class Constants {
 
   //    public baseUrl = 'http://10.10.73.12:802/';
     //anand
-    public baseUrl = 'http://10.10.73.9:8099/';
+  //  public baseUrl = 'http://10.10.73.9:8099/';
     
    public loginUrl = this.baseUrl+"site/user-authentication";
    public getAllTicketDetails = this.baseUrl + "story/get-my-tickets-details";
