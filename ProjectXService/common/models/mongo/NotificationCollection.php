@@ -37,6 +37,7 @@ class NotificationCollection extends ActiveRecord
      "OldValue",
      "NewValue",
      "CommentSlug",
+     "TargetTicketId"
     
    
         ];
@@ -142,4 +143,4 @@ class NotificationCollection extends ActiveRecord
             Yii::log("NotificationCollection:deleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-}
+        }
