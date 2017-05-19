@@ -91,10 +91,11 @@ class TimeReportController extends Controller
    public function actionGetTimeReportDetails() {
         try { 
             $StoryData = json_decode(file_get_contents("php://input"));
-            $projectId = $StoryData->projectId;
+            $projectId = $StoryData->projectId; 
+           
             $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($StoryData,$projectId);
             $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($StoryData,$projectId);
-            
+         
             $data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -1012,12 +1013,17 @@ class TimeReportController extends Controller
         try{
             error_log("asssssssssssssssssssd@@@@@@@@@@@@@@@@@@");
             $ticketData = json_decode(file_get_contents("php://input"));
-           // error_log("calendarrrrrrrrrrrr".strtotime($ticketData->calendardate));
+           error_log("calendarrrrrrrrrrrr".$ticketData->toDate);
+            $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($ticketData,$ticketData->projectId);
+            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($ticketData,$ticketData->projectId);
             $updatedData=ServiceFactory::getTimeReportServiceInstance()->updateDataForTimeLog($ticketData);
+             error_log("###############".$totalCount);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $updatedData;
+            $responseBean->totalCount = $totalCount;
+            $responseBean->timehours = $last7DaysWorkLog;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
             
@@ -1049,13 +1055,17 @@ class TimeReportController extends Controller
     public function actionAddTimelog(){
         try{
             $timelogData = json_decode(file_get_contents("php://input"));
+            $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($timelogData,$timelogData->projectId);
+            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($timelogData,$timelogData->projectId);
             $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
-
+           
             // $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $getTimelogData;
+            $responseBean->totalCount = $totalCount;
+            $responseBean->timehours = $last7DaysWorkLog;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response; 
         } catch (Exception $ex) {
