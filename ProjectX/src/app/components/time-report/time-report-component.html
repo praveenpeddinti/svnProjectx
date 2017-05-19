@@ -129,7 +129,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
            story/Task  
             <p-autoComplete  [ngModel]="row[i].ticketDesc" (onSelect)="getSelectedValueForTask($event)" [minLength]="1" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="taskdisplay"></p-autoComplete>
           <p *ngIf="row[i].ticketDesc.includes('#')"> description<input type="text"  value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"/></p>
-          <p>Hours <input type="text"  value="{{row[i].Time}}"  id="editTimelogTime_{{row[i].Slug.$oid}}"/></p>
+          <p>Hours <input type="text"  value="{{row[i].Time}}"  id="editTimelogTime_{{row[i].Slug.$oid}}" (keyup)="inputKeyDown(2,row[i].Slug.$oid)"/></p>
             <p-calendar  [(ngModel)]="row[i].LogDate" class="primeDateComponent" (onSelect)="getSelectedValueForDate($event)"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" class="addTimelogDate">
               </p-calendar>
             </div>
@@ -160,8 +160,11 @@ Row classes are also dynamically. These classes are pass to service layer-->
       <div class="modal-body">
            story/Task 
             <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="addTimelogTask"></p-autoComplete>
+            <div id="taskerr_msg" class="alert alert-danger" style="display:none;"></div>
             <p> description<input type="text"  value=""  id="addTimelogDesc"/></p>
-            <p>Hours <input type="text"  value=""  id="addTimelogTime"/></p>
+        <div id="descriptionerr_msg" class="alert alert-danger" style="display:none;"></div>
+            <p>Hours <input type="text"  value=""  id="addTimelogTime" (keyup)="inputKeyDown(1,'')" /></p>
+             <div id="hourserr_msg" class="alert alert-danger" style="display:none;"></div>
               <p-calendar  [(ngModel)]="dateVal" class="primeDateComponent"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate">
                         </p-calendar>
         

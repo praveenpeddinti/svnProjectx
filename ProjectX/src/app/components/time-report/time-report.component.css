@@ -85,3 +85,6 @@
     border-top-left-radius: 0!important;
 
 }
+#taskerr_msg{
+     display:none;
+}

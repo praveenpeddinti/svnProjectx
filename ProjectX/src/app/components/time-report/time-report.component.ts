@@ -258,7 +258,12 @@ DateRangeForm(){
 
     addTimeLog(){
         var getTaskVal=this.text;
-        var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
+  
+       // alert("timelogData"+JSON.stringify(timelogData));
+       if(getTaskVal==""||getTaskVal==undefined){
+           this.commonErrorFunction("taskerr_msg","Please enter task .")
+       }else{
+                 var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
         date = date.replace(/(\b\d{1}\b)/g, "0$1");
         var finalDate=this.dateVal.toString();
         var timelogData={
@@ -268,34 +273,56 @@ DateRangeForm(){
               'addTimelogTime':jQuery('#addTimelogTime').val(),
               'addTimelogDate':finalDate,
         }
-       // alert("timelogData"+JSON.stringify(timelogData));
-        this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
-            { 
-              //  console.log("ssssssssssssss first"+JSON.stringify(this.rows));
-                if (response.statusCode == 200) {
-                    this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
-               // console.log("onlyyyy" +JSON.stringify(response));
-              // console.log("onlyyyy###" +JSON.stringify(response.data[0]));
-                //  this.rows.push(response.data[0]);
-                //   let rows = [...this.rows];
-                // for (let i = 0; i < response.data.length; i++) {
-                //     rows[i + 0] = response.data[i];
-                // }
-                // this.rows = rows;
-              // console.log("@@@@@@@@@responseoooo final" +JSON.stringify(this.rows));
-            jQuery('.timelogSuccessMsg').css('display','block');
-            jQuery('.timelogSuccessMsg').fadeOut( "slow" );
-                  setTimeout(() => {
-                        jQuery('#addTimelogModel').modal('hide');
-                        jQuery('#addTimelogModel').find("input,p").val('').end();
-              }, 500);
-              
-            } else {
-                console.log("fail---");
-            }
-            });
+            this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
+                { 
+                //  console.log("ssssssssssssss first"+JSON.stringify(this.rows));
+                    if (response.statusCode == 200) {
+                        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+                // console.log("onlyyyy" +JSON.stringify(response));
+                // console.log("onlyyyy###" +JSON.stringify(response.data[0]));
+                    //  this.rows.push(response.data[0]);
+                    //   let rows = [...this.rows];
+                    // for (let i = 0; i < response.data.length; i++) {
+                    //     rows[i + 0] = response.data[i];
+                    // }
+                    // this.rows = rows;
+                // console.log("@@@@@@@@@responseoooo final" +JSON.stringify(this.rows));
+                jQuery('.timelogSuccessMsg').css('display','block');
+                jQuery('.timelogSuccessMsg').fadeOut( "slow" );
+                    setTimeout(() => {
+                            jQuery('#addTimelogModel').modal('hide');
+                            jQuery('#addTimelogModel').find("input,p").val('').end();
+                }, 500);
+                
+                } else {
+                    console.log("fail---");
+                }
+                });
+       }
     
     }
+     inputKeyDown(id,slug){
+     if(id==1){
+            var initVal = jQuery("#addTimelogTime").val();
+        var  outputVal = initVal.replace(/([^0-9])+/g,'');       
+        if (initVal != outputVal) {
+            jQuery("#addTimelogTime").val(outputVal);
+         }
+        }
+        else{
+                 var initVal = jQuery("#editTimelogTime_"+slug).val();
+                var  outputVal = initVal.replace(/([^0-9])+/g,'');       
+                if (initVal != outputVal) {
+                    jQuery("#editTimelogTime_"+slug).val(outputVal);
+                } 
+        }
+
+  }
+        commonErrorFunction(id,message){
+          jQuery("#"+id).html(message);
+          jQuery("#"+id).show();
+          jQuery("#"+id).fadeOut(4000);
+            }
     updateTimelog(slug,ticketDesc,timeLogDate){
    //  alert(JSON.stringify(ticketDesc));
      // alert(jQuery('#editTimelogTime'+'_'+slug).val());
