@@ -704,6 +704,9 @@ class StoryController extends Controller
           $loginUserId=$storyData->userInfo->Id;
           $pdateRelateTask = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($projectId,$ticketId,$searchTicketId,$loginUserId);
           $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($ticketId, $projectId,'Related', (int)$searchTicketId, $loginUserId);
+          $notifyType="Relate";
+          $slug =  new \MongoDB\BSON\ObjectID();
+          ServiceFactory::getStoryServiceInstance()->saveNotifications($storyData, $notifyType,'','',$slug,$searchTicketId);
           $ticketData = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId,$ticketId);
           $responseData=array('ticketData'=>$ticketData,'activityData'=>$activityData);
           $responseBean = new ResponseBean();
@@ -825,6 +828,9 @@ class StoryController extends Controller
             $unRelateTicketId = $ticketData->unRelateTicketId;
             $loginUserId=$ticketData->userInfo->Id;
             $response['activityData'] = ServiceFactory::getStoryServiceInstance()->unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId);
+            $notifyType="UnRelate";
+            $slug =  new \MongoDB\BSON\ObjectID();
+            ServiceFactory::getStoryServiceInstance()->saveNotifications($ticketData, $notifyType,'','',$slug,$unRelateTicketId);
             $response['ticketInfo'] = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId, $parentTicketId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
