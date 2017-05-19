@@ -211,7 +211,7 @@ use yii;
      * @return type
      * @description  Used for saving the notifications for assignedTo,Add/Remove Followers,stakeholder and left panel property changes  
      */
-    public static function saveNotifications($notification_data,$notifyType,$activityOn,$fieldType="",$slug='')
+    public static function saveNotifications($notification_data,$notifyType,$activityOn,$fieldType="",$slug='',$taskId=0)
     {
         error_log("in save notifications--".$notifyType."----------".$activityOn."--------".$fieldType."---");
         try{
@@ -228,8 +228,8 @@ use yii;
             $loggedInUser=$notification_data->userInfo->Id;         
             $notify_type=$notifyType;//this will be changed to ActivityOn in the below code....
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
-            $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
-            $followers=$ticketDetails['Followers'];
+            $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);
+            $followers=$ticketDetails['Followers']; 
             
             $followers = CommonUtility::filterFollowers($followers);
             if($notifyType == "Title" || $notifyType == "Description" || $notifyType == "TotalTimeLog")
@@ -404,6 +404,7 @@ use yii;
                     $tic = new NotificationCollection();
                     $tic->CommentSlug=$slug;
                     $tic->NotifiedUser=(int)$follower['FollowerId'];
+                    $tic->TargetTicketId =$taskId; //added for child task and relate task
                     $tic->TicketId =$ticketId;
                     $tic->ProjectId =$projectId;
                     $tic->ActivityOn=$notify_type; // new use case "ActivityOn" will be Field Name
@@ -521,7 +522,7 @@ use yii;
                  $activityOn = $notification['ActivityOn'];
                  $activityOnFieldType = "";
                  $storyField = "";
-                 if($activityOn !="Title" && $activityOn != "Description"){
+                 if($activityOn !="Title" && $activityOn != "Description" && $activityOn != "TotalTimeLog"){
                      $storyField = StoryFields::getFieldDetails($activityOn,"Field_Name");;
                     $activityOnFieldType = $storyField["Type"];  
                  }
@@ -555,8 +556,36 @@ use yii;
                    $message=array('Slug'=>$notification['CommentSlug'],'Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
                      array_push($result_msg,$message);
              }
-                 
-                    
+             //for child task create...by Ryan
+             else if($notification['ActivityOn']=='Create Task' || $notification['ActivityOn']=='Relate' || $notification['ActivityOn']=='UnRelate')
+             {
+                    error_log("==In Create Task== ");
+                    $targetTicketData= TicketCollection::getTicketDetails($notification['TargetTicketId'],$projectId);
+                    $targetPlanLevel=$targetTicketData["Fields"]["planlevel"]["value"];
+                    if($notification['ActivityOn']=='Create Task')
+                    {
+                     $message=array('Slug'=>$notification['CommentSlug'],'Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"task",'type'=> 'created','id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$ticket_data['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'TargetPlanLevel'=>$targetPlanLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'TargetTicketId'=>$targetTicketData['TicketId'],'TargetTicketTitle'=>$targetTicketData['Title']);   
+                    }
+                    else
+                    {
+                        if($notification['ActivityOn']=='Relate')
+                        {
+                            $message=array('Slug'=>$notification['CommentSlug'],'Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"task",'type'=> 'related','id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$ticket_data['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'TargetPlanLevel'=>$targetPlanLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'TargetTicketId'=>$targetTicketData['TicketId'],'TargetTicketTitle'=>$targetTicketData['Title']);
+                        }
+                        else
+                        {
+                            $message=array('Slug'=>$notification['CommentSlug'],'Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"task",'type'=> 'unrelated','id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$ticket_data['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'TargetPlanLevel'=>$targetPlanLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'TargetTicketId'=>$targetTicketData['TicketId'],'TargetTicketTitle'=>$targetTicketData['Title']);
+                        }
+                    }
+                        array_push($result_msg,$message);
+             }
+             
+             else if($notification['ActivityOn']=='TotalTimeLog')
+             {
+                $message=array('Slug'=>$notification['CommentSlug'],'Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"work log",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
+                array_push($result_msg,$message);
+             }
+             
                     /* Left Panel newly assigned Field Values End */
                     
                    
