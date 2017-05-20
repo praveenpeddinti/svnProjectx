@@ -1,5 +1,6 @@
 <div class="search">
-<div class="searchresulttext searchresulttextmarginzero">Search results for <span class="heighlight">{{searchString}}</span> in ProjectX</div>
+<div class="searchresulttext searchresulttextmarginzero">Search results for <span class="heighlight">{{searchString}}</span> in 
+<span *ngIf="projectName">{{projectName}}</span><span *ngIf="!projectName">All</span></div>
  <div class="tabbable tabs-left row">
  
  <div class="col-xs-12 col-sm-3 col-md-3 tabpaddingrightzero">
