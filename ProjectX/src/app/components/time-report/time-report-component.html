@@ -105,7 +105,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
    <div class="{{column.class}} " *ngIf="row[i].field_name!='action'" >
         <img *ngIf="row[i].other_data==1" src="assets/images/story-icon.png"  />
       <img *ngIf="row[i].other_data==2" src="assets/images/task-icon.png" />
-       {{row[i].field_value}}
+       <a (click)="navigateStoryDetail(row[i].ticketId)"> {{row[i].field_value}} </a>
        
    </div>
       <div *ngIf="row[i].field_name =='action'" class="{{column.class}}" style="position: relative">
@@ -113,9 +113,9 @@ Row classes are also dynamically. These classes are pass to service layer-->
           <input type="button" class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" data-backdrop="false"  data-toggle="modal"   [attr.data-target]="'#myModal_'+ row[i].Slug.$oid" />
           <input type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey tablebuttons" name="DELETE" value="DELETE" (click)="showdeleteDiv(1)"/>
       <div  class="dropdown-menu customdropdown-menutable" id="delete_timelog">
-            <div class="delete_followersbgtable">  
+            <div class="delete_followersbgtable" >  
                 Do you want to remove this Timelog?
-                <div class="text-center" style="padding-top:12px">
+                <div class="text-center" style=" margin-top: -23px;">
                     <div class="yes" id="remove_yes" (click)="removeTimelog(row[i].ticketDesc,row[i].Slug.$oid,row[i].Time)">Yes</div>
                     <div class="no" (click)="showdeleteDiv(2)">No</div>
         </div>
@@ -137,21 +137,32 @@ Row classes are also dynamically. These classes are pass to service layer-->
         </button>
       </div>
       <div class="timelogSuccessMsg"> Timelog updated successfully</div>
+        <form   #editTimeLogForm="ngForm" (ngSubmit)="submitted && editTimeLogForm.form.valid && updateTimelog(row[i].Slug.$oid,row[i].ticketDesc,row[i].readableDate)" novalidate="true">
+
       <div class="modal-body">
 
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom">
-                 <p-autoComplete  [ngModel]="row[i].ticketDesc" (onSelect)="getSelectedValueForTask($event)" [minLength]="1" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="taskdisplay"></p-autoComplete>
+                 <p-autoComplete  [ngModel]="row[i].ticketDesc" name="ticketDesc_{{row[i].Slug.$oid}}"  (onSelect)="getSelectedValueForTask($event)" [minLength]="1" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="taskdisplay" required></p-autoComplete>
                   </div>
               </div>
+           <div class="col-xs-12 col-sm-12 col-md-12 ">
+              <!--<div *ngIf="submitted && ticketDesc_+'row[i].Slug.$oid'+'.'+errors" class="alert alert-danger">
+                <div [hidden]="!ticketDesc_+'row[i].Slug.$oid'+'.'+errors+'.'+required">
+                    Task is required 
+                </div>
+               
+            </div>-->
+          </div>
           </div> 
              <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Description </label>
-                  <p *ngIf="row[i].ticketDesc.includes('#')"> <input type="text" class="customformfields "  value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"/></p>
-<!--                  <textarea class="customformfieldstextarea customformfieldsmarginbottom"></textarea>-->
+                  <p *ngIf="row[i].ticketDesc.includes('#')"> 
+                    <!--  <input type="text" class="customformfields "   value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"/>-->
+                  <textarea class="customformfieldstextarea customformfieldsmarginbottom" value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"></textarea></p>
 
               </div>
           </div>
@@ -164,7 +175,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
               <div class="col-xs-12 col-sm-8 col-md-8 ">
                   <label class="timereportlabel"> Date </label>
                   <div class="paddingright25 ">
-                      <p-calendar  [(ngModel)]="row[i].LogDate" class="primeDateComponent customcalenderdiv addTimelogDate" (onSelect)="getSelectedValueForDate($event)"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy">
+                      <p-calendar  [(ngModel)]="row[i].LogDate" name="LogDate" #LogDate="ngModel" class="primeDateComponent customcalenderdiv addTimelogDate" (onSelect)="getSelectedValueForDate($event)"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy">
 
               </p-calendar>
                   </div>
@@ -174,9 +185,10 @@ Row classes are also dynamically. These classes are pass to service layer-->
             
             </div>
       <div class="modal-footer">
-        <button type="button" class="normal bluebutton bluebuttonmedium" (click)="updateTimelog(row[i].Slug.$oid,row[i].ticketDesc,row[i].readableDate)" >UPDATE</button>
+        <button type="submit" class="normal bluebutton bluebuttonmedium" (click)="submitted=true;" >UPDATE</button>
         <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey" data-dismiss="modal">CANCEL</button>
       </div>
+       </form>
     </div>
   </div>
 </div> 
@@ -197,13 +209,15 @@ Row classes are also dynamically. These classes are pass to service layer-->
       </div>
       <div class="timelogSuccessMsg"> Timelog added successfully</div>
      <form   #timeLogForm="ngForm" (ngSubmit)="submitted && timeLogForm.form.valid && addTimeLog()" novalidate="true">
-      <div class="modal-body">
 
+      <div class="modal-body">
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom">
-                  <p-autoComplete required [(ngModel)]="entryForm.task" name="task"  #task="ngModel" [minLength]="2"  placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="addTimelogTask"></p-autoComplete>
+
+                  <p-autoComplete required [(ngModel)]="text" name="task"  #task="ngModel" [minLength]="2"  placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="addTimelogTask"></p-autoComplete>
+
                   </div>
               </div>
               <div class="col-xs-12 col-sm-12 col-md-12 ">
@@ -220,8 +234,11 @@ Row classes are also dynamically. These classes are pass to service layer-->
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Description </label>
-                  <textarea  [(ngModel)]="entryForm.description" name="description"  #description="ngModel"   class="customformfieldstextarea customformfieldsmarginbottom"  required></textarea>
+
+                  <textarea  [(ngModel)]="entryForm.description" name="description"  #description="ngModel"   class="customformfieldstextarea customformfieldsmarginbottom" id="addTimelogDesc"  required></textarea>
+
 <!--                  <input type="text" class="customformfields " value=""  id="addTimelogDesc"/>-->
+              <div id="descerr_msg" class="alert alert-danger" style="display:none;"></div>
               </div>
               <div class="col-xs-12 col-sm-12 col-md-12 ">
               <div *ngIf="submitted && description.errors " class="alert alert-danger">
@@ -253,7 +270,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
               <div class="col-xs-12 col-sm-8 col-md-8 ">
                   <label class="timereportlabel"> Date </label>
                   <div class="paddingright25 ">
-                 <p-calendar required  [(ngModel)]="entryForm.dateVal" name="dateVal"  #dateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate">
+                 <p-calendar required  [(ngModel)]="entryForm.dateVal" name="dateVal"  #dateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate" >
                         </p-calendar>
                   </div>
               </div>
@@ -272,7 +289,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
          </div>
     
       <div class="modal-footer">
-        <button type="button" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
+        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
         <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal">CANCEL</button>
       </div>
        </form>

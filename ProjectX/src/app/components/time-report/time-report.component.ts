@@ -5,9 +5,13 @@ import { AjaxService } from '../../ajax/ajax.service';
 import { Router, ActivatedRoute,NavigationExtras } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
+import {SharedService} from '../../services/shared.service';
+import {AuthGuard} from '../../services/auth-guard.service';
 import { ProjectService } from '../../services/project.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import { NgForm } from '@angular/forms';
+
+
 
 //import {AutoCompleteModule} from 'primeng/primeng';
 declare var jQuery:any;
@@ -49,8 +53,9 @@ export class TimeReportComponent{
     public fromDateVal:Date;
     public toDate:Date;
     public toDateVal:Date;
+
     public entryForm={};
-    columns = [
+     columns = [
                 {
                     name: 'Date',
                     flexGrow: 1,
@@ -235,7 +240,7 @@ DateRangeForm(){
     {
      var modifiedString=event.query.replace("#","");
         var post_data={
-        'projectId':1,
+        'projectId':this.projectId,
         'sortvalue':'Title',
        'searchString':modifiedString
     }
@@ -268,16 +273,13 @@ DateRangeForm(){
 
     addTimeLog(){
         var getTaskVal=this.text;
-  
-       // alert("timelogData"+JSON.stringify(timelogData));
-       if(getTaskVal==""||getTaskVal==undefined){
-           this.commonErrorFunction("taskerr_msg","Please enter task .")
-       }else{
-                 var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
+///alert("ssssssssssssssss"+this.projectId);
+      // if(this.checkData != false){
+             var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
         date = date.replace(/(\b\d{1}\b)/g, "0$1");
         var finalDate=this.dateVal.toString();
         var timelogData={
-              'projectId':1,
+              'projectId':this.projectId,
               'addTimelogTask':getTaskVal.split("#")[1],
               'addTimelogDesc':jQuery('#addTimelogDesc').val(),
               'addTimelogTime':jQuery('#addTimelogTime').val(),
@@ -285,7 +287,7 @@ DateRangeForm(){
               'fromDate':this.fromDateVal,
               'toDate':this.toDateVal
         }
-      //  alert("timelogData"+JSON.stringify(timelogData));
+      // alert("timelogData"+JSON.stringify(timelogData));
             this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
                 { 
                 //  console.log("ssssssssssssss first"+JSON.stringify(this.rows));
@@ -308,11 +310,12 @@ DateRangeForm(){
                 }, 500);
                 
                 } else {
-                    console.log("fail---");
+               // this.errorMsg = 'dsasdasd';
+           
                 }
                 });
-       }
-    
+     
+      // }
     }
      inputKeyDown(id,slug){
      if(id==1){
@@ -331,6 +334,7 @@ DateRangeForm(){
         }
 
   }
+
         commonErrorFunction(id,message){
           jQuery("#"+id).html(message);
           jQuery("#"+id).show();
@@ -342,7 +346,7 @@ DateRangeForm(){
       console.log("eeeeeeee"+this.selectedValForDate);
       var editableDate = new Date(timeLogDate);
                 var post_data={
-                    'projectId':1,
+                    'projectId':this.projectId,
                     'slug':slug,
                     'timelogHours':jQuery('#editTimelogTime'+'_'+slug).val(),
                     'ticketDesc':ticketDesc,
@@ -380,6 +384,7 @@ DateRangeForm(){
             });
     }
     showdeleteDiv(flag){
+      //  alert(flag);
         if(flag == 1){
             jQuery("#delete_timelog").css("display", "block");
         }else{
@@ -390,7 +395,7 @@ DateRangeForm(){
         var input="_Input";
       //  alert(slug+input);
          var postObj={
-                    'projectId':1,
+                    'projectId':this.projectId,
                     'slug':slug,
                     'ticketDesc':ticketDesc,
                     'timelogHours':timelogHours
@@ -403,4 +408,7 @@ DateRangeForm(){
              // this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
             });            
     }
+        navigateToStoryDetail(project,ticketId){
+         this._router.navigate(['project',project.ProjectName,ticketId,'details']);
+     }
 }
