@@ -411,8 +411,9 @@ class SiteController extends Controller
     public function actionGlobalSearch(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-            $searchFlag=!empty($postData->searchFlag)?$postData->searchFlag:"";
-            $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag); 
+            $searchFlag=!empty($postData->searchFlag)?$postData->searchFlag:""; 
+            $projectId=!empty($postData->projectId)?$postData->projectId:"";
+            $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag,$projectId); 
             if(empty($searchData['ticketCollection']) && empty($searchData['ticketComments']) && empty($searchData['ticketArtifacts'])&& empty($searchData['tinyUserData'])){
                 $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::FAILURE;
