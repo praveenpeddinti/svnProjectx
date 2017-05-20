@@ -909,10 +909,10 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             $readableDate = $datetime->format('M-d-Y H:i:s');
             $value["ActivityOn"] = $readableDate;
             $propertyChanges = $value["PropertyChanges"];
-            $poppedFromChild = $value["PoppedFromChild"];
+           // $poppedFromChild = $value["PoppedFromChild"];
             if (count($propertyChanges) > 0) {
                 foreach ($value["PropertyChanges"] as &$property) {
-                    CommonUtility::prepareActivityProperty($property,$projectId,$poppedFromChild);
+                    CommonUtility::prepareActivityProperty($property,$projectId);
                 }
             }
         } catch (Exception $ex) {
@@ -940,8 +940,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                 $property["ActionFieldTitle"] = $storyFieldDetails["Title"];
                 $property["ActionFieldType"] = $type;
             }
-           if($poppedFromChild !=""){
-                $ticketDetails = TicketCollection::getTicketDetails($poppedFromChild, $projectId,["TicketId","Title"]);
+           if($property['PoppedFromChild'] !=""){
+                $ticketDetails = TicketCollection::getTicketDetails($property['PoppedFromChild'] , $projectId,["TicketId","Title"]);
                 error_log(print_r($ticketDetails,1));
                 $ticketInfo = $ticketDetails["TicketId"]." ".$ticketDetails["Title"];
                 $property["ActionFieldTitle"] = $property["ActionFieldTitle"];

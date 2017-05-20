@@ -1099,7 +1099,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
          //  $record = iterator_to_array($record);
          //  error_log(print_r($record,1));
          //$slug =  new \MongoDB\BSON\ObjectID();
-         if($record["RecentActivityUser"] != $activityUserId || $record["Activity"] == "Comment" ){
+         if(!empty($record) && ($record["RecentActivityUser"] != $activityUserId || $record["Activity"] == "Comment" )){
             // $dataArray = array();
              $commentDataArray=array(
             "Slug"=>$slug,
@@ -1108,9 +1108,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ActivityOn"=>$currentDate,
             "ActivityBy"=>(int)$activityUserId,
             "Status"=>(int)1,
-            "PropertyChanges"=>array(array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
+            "PropertyChanges"=>array(array("PoppedFromChild" => "","Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
             "ParentIndex"=>"",
-            "PoppedFromChild"=>""
             
         );
             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));  
@@ -1120,7 +1119,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             
          }else{
              $recentSlug = $record["RecentActivitySlug"];
-             $property = array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate );
+             $property = array("PoppedFromChild" => "","Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate );
 
              $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>$property)),array('new' => 1,"upsert"=>1));
             
@@ -1132,7 +1131,16 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              $returnValue = array("referenceKey"=>$activitiesCount,"data"=>$property);
          }
            if($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow"){
-            //    $slug =  new \MongoDB\BSON\ObjectID();
+               
+            $parentStoryId =  $ticketDetails["ParentStoryId"];
+            $precord = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId));
+            if($precord['RecentActivityUser']==(int)$activityUserId){
+                $slug=$precord['RecentActivitySlug'];
+                $property = array("PoppedFromChild" => (int)$ticketId,"Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate);
+                $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId,"Activities.Slug"=>$slug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>$property)),array('new' => 1,"upsert"=>1));   
+          
+            }else{
+                            //    $slug =  new \MongoDB\BSON\ObjectID();
             $commentDataArray=array(
             "Slug"=>$slug,
             "CDescription"=>  "",
@@ -1140,14 +1148,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             "ActivityOn"=>$currentDate,
             "ActivityBy"=>(int)$activityUserId,
             "Status"=>(int)1,
-            "PropertyChanges"=>array(array("ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
+            "PropertyChanges"=>array(array("PoppedFromChild" => (int)$ticketId,"Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
             "ParentIndex"=>"",
-            "PoppedFromChild" => (int)$ticketId
-            
-        );   
-           $parentStoryId =  $ticketDetails["ParentStoryId"];
+            );
             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));   
-        }
+            }
+            $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId,"Activity"=>"PropertyChange"));  
+            
+           }
        
     }
      return $returnValue;
