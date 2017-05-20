@@ -7,6 +7,8 @@ import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
 import { ProjectService } from '../../services/project.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
+import { NgForm } from '@angular/forms';
+
 //import {AutoCompleteModule} from 'primeng/primeng';
 declare var jQuery:any;
 
@@ -47,6 +49,7 @@ export class TimeReportComponent{
     public fromDateVal:Date;
     public toDate:Date;
     public toDateVal:Date;
+    public entryForm={};
     columns = [
                 {
                     name: 'Date',

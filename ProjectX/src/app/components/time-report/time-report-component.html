@@ -196,44 +196,86 @@ Row classes are also dynamically. These classes are pass to service layer-->
         </button>
       </div>
       <div class="timelogSuccessMsg"> Timelog added successfully</div>
+     <form   #timeLogForm="ngForm" (ngSubmit)="submitted && timeLogForm.form.valid && addTimeLog()" novalidate="true">
       <div class="modal-body">
 
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom">
-                  <p-autoComplete [(ngModel)]="text" [minLength]="2" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="addTimelogTask"></p-autoComplete>
+                  <p-autoComplete required [(ngModel)]="entryForm.task" name="task"  #task="ngModel" [minLength]="2"  placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="addTimelogTask"></p-autoComplete>
                   </div>
               </div>
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+              <div *ngIf="submitted && task.errors " class="alert alert-danger">
+                <div [hidden]="!task.errors.required">
+                    Task is required
+                </div>
+                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
+                    Title must be 3 characters long
+                </div>-->
+            </div>
+          </div>
           </div>
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Description </label>
-                  <textarea class="customformfieldstextarea customformfieldsmarginbottom"></textarea>
+                  <textarea  [(ngModel)]="entryForm.description" name="description"  #description="ngModel"   class="customformfieldstextarea customformfieldsmarginbottom"  required></textarea>
 <!--                  <input type="text" class="customformfields " value=""  id="addTimelogDesc"/>-->
               </div>
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+              <div *ngIf="submitted && description.errors " class="alert alert-danger">
+                <div [hidden]="!description.errors.required">
+                    Description is required
+                </div>
+                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
+                    Title must be 3 characters long
+                </div>-->
+            </div>
+          </div>
           </div>
           <div class="row">
               <div class="col-xs-12 col-sm-4 col-md-4 ">
                   <label class="timereportlabel"> Hours </label>
-                  <input type="text" class="customformfields "  value=""  id="addTimelogTime"/>
+                  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime"/>
               </div>
-
+ <div class="col-xs-12 col-sm-4 col-md-4  ">
+              <div *ngIf="submitted && hours.errors " class="alert alert-danger">
+                <div [hidden]="!hours.errors.required">
+                    Hours is required
+                </div>
+                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
+                    Title must be 3 characters long
+                </div>-->
+            </div>
+          </div>
         
               <div class="col-xs-12 col-sm-8 col-md-8 ">
                   <label class="timereportlabel"> Date </label>
                   <div class="paddingright25 ">
-                 <p-calendar  [(ngModel)]="dateVal" class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate">
+                 <p-calendar required  [(ngModel)]="entryForm.dateVal" name="dateVal"  #dateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate">
                         </p-calendar>
                   </div>
               </div>
+               <div class="col-xs-12 col-sm-8 col-md-8">
+              <div *ngIf="submitted && dateVal.errors " class="alert alert-danger">
+                <div [hidden]="!dateVal.errors.required">
+                    Date is required
+                </div>
+                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
+                    Title must be 3 characters long
+                </div>-->
+            </div>
+          </div>
           </div>
           
          </div>
+    
       <div class="modal-footer">
-        <button type="button" class="normal bluebutton bluebuttonmedium " (click)="addTimeLog()">SUBMIT</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
         <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal">CANCEL</button>
       </div>
+       </form>
     </div>
   </div>
 </div>
