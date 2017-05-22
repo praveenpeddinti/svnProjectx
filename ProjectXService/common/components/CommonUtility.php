@@ -909,10 +909,10 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
             $readableDate = $datetime->format('M-d-Y H:i:s');
             $value["ActivityOn"] = $readableDate;
             $propertyChanges = $value["PropertyChanges"];
-           // $poppedFromChild = $value["PoppedFromChild"];
+            $poppedFromChild = $value["PoppedFromChild"];
             if (count($propertyChanges) > 0) {
                 foreach ($value["PropertyChanges"] as &$property) {
-                    CommonUtility::prepareActivityProperty($property,$projectId);
+                    CommonUtility::prepareActivityProperty($property,$projectId,$poppedFromChild);
                 }
             }
         } catch (Exception $ex) {
@@ -940,8 +940,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                 $property["ActionFieldTitle"] = $storyFieldDetails["Title"];
                 $property["ActionFieldType"] = $type;
             }
-           if($property['PoppedFromChild'] !=""){
-                $ticketDetails = TicketCollection::getTicketDetails($property['PoppedFromChild'] , $projectId,["TicketId","Title"]);
+           if($poppedFromChild !=""){
+                $ticketDetails = TicketCollection::getTicketDetails($poppedFromChild, $projectId,["TicketId","Title"]);
                 error_log(print_r($ticketDetails,1));
                 $ticketInfo = $ticketDetails["TicketId"]." ".$ticketDetails["Title"];
                 $property["ActionFieldTitle"] = $property["ActionFieldTitle"];
@@ -1122,7 +1122,6 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
      */
     public static function getAllDetailsForSearch($searchString,$page,$searchFlag="",$projectId=""){
         try{
-           error_log("@@@@@".$projectId);
                 $page = $page ;
                 $pageLength = 10;
                 if ($page == 1) {
@@ -1145,23 +1144,23 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                 );
                 if($searchFlag==1){
                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-                     if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
+                    if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
                         if(strpos($searchString, '#') !== false){
                             $searchString=str_replace("#","",$searchString); 
                             if(!empty($projectId)){
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                            }else{
-                               $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
-                             }    
-                            
                         }else{
+                               $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                        }
+
+                    }else{
                             if(!empty($projectId)){
                               $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                          
                             }else{
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
                              
-                            }
+                    }
                         }
 
                     }else{
@@ -1192,12 +1191,12 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                         if(!empty($projectId)){
-                            $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
-                            $forTicketCollection['Project'] = $projectDetails;
+                        $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        $forTicketCollection['Project'] = $projectDetails;
                         }
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
-                     $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
+                    $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
                     $query = Yii::$app->mongodb->getCollection('TicketComments');
                     $pipeline = array(
                         array('$unwind' => '$Activities'),
@@ -1213,7 +1212,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                     $ticketCommentsData = $query->aggregate($pipeline);
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
-           
+
                         foreach($ticketCommentsData as $extractComments){
                            $ticketCollectionModel = new TicketCollection();
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
@@ -1241,8 +1240,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             if(!empty($projectId)){
-                                $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                                $forTicketComments['Project'] = $projectDetails;
+                           $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                           $forTicketComments['Project'] = $projectDetails;
                             }
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
@@ -1277,8 +1276,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
                           if(!empty($projectId)){
-                            $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                            $forTicketArtifacts['Project'] = $projectDetails;
+                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $forTicketArtifacts['Project'] = $projectDetails;
                           }
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
@@ -1348,8 +1347,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                            if(!empty($projectId)){
-                                $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                                $forTicketComments['Project'] = $projectDetails;
+                           $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                           $forTicketComments['Project'] = $projectDetails;
                            }
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
@@ -1400,8 +1399,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
                          if(!empty($projectId)){
-                            $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                            $forTicketArtifacts['Project'] = $projectDetails;
+                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $forTicketArtifacts['Project'] = $projectDetails; 
                          }
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
@@ -1417,18 +1416,18 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $searchString=str_replace("#","",$searchString); 
                             if(!empty($projectId)){
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                            }else{
+                        }else{
                                $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options); 
-                            }
-                            
-                            }else{
+                        }
+
+                    }else{
                                 if(!empty($projectId)){  
                                     $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                         
                                 }else{
                                      $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
                          
-                                }
+                    }
                             }
 
                     }else{
@@ -1458,8 +1457,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                         if(!empty($projectId)){ 
-                            $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
-                            $forTicketCollection['Project'] = $projectDetails; 
+                         $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        $forTicketCollection['Project'] = $projectDetails; 
                         }
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
@@ -1507,10 +1506,10 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                            if(!empty($projectId)){
-                                $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                                $forTicketComments['Project'] = $projectDetails; 
+                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $forTicketComments['Project'] = $projectDetails; 
                            }
-                                array_push($TicketCommentsFinalArray, $forTicketComments);
+                            array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
                     $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
                     $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
