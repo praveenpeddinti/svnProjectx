@@ -31,7 +31,35 @@ export class HeaderComponent implements OnInit {
     private shared:SharedService
        ) { }
 
-  ngOnInit() { 
+  ngOnInit() {
+  /* For Notifications */
+    if(this.users)
+    {
+     var thisObj = this;
+    var post_data={}; 
+      thisObj._ajaxService.SocketSubscribe('getAllNotificationsCount',post_data);
+    
+      
+        socket.on('getAllNotificationsCountResponse', function(data) {
+       
+            data = JSON.parse(data); 
+             console.log("getAllNotificationsCountResponse-----------"+data.count);
+            thisObj.notify_count=data.count;
+            if(data.count == 0){
+            jQuery("#notificationCount").hide();
+             jQuery(".notificationlist").remove();
+            }else{
+            jQuery("#notificationCount").show();
+            jQuery("#notificationCount").html(data.count);
+            }
+  
+        });
+
+
+      
+     
+    }
+    
      jQuery(document).ready(function(){
       jQuery(document).bind("click",function(event){   
 //alert(jQuery(event.target).closest('ul#notifications_list').length); 
