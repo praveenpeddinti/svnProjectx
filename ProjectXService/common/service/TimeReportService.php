@@ -109,9 +109,9 @@ class TimeReportService {
      * @uses removing  details
      * @return type
      */
-    public function RemoveTimelogs($projectId,$ticketId,$slug,$timelogHours){
+    public function RemoveTimelogs($projectId,$ticketId,$slug,$timelogHours,$userId){
         try{
-          return $returnSlug=  TicketTimeLog::removeTimelogData($projectId,$ticketId,$slug,$timelogHours);
+          return $returnSlug=  TicketTimeLog::removeTimelogData($projectId,$ticketId,$slug,$timelogHours,$userId);
         } catch (Exception $ex) {
              Yii::log("TimeReportService:RemoveTimelogs::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }

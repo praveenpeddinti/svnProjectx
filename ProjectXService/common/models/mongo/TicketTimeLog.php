@@ -259,6 +259,7 @@ class TicketTimeLog extends ActiveRecord
             );
             $last7DaysTimelog = $query->aggregate($pipeline);
             error_log("count----------".print_r($last7DaysTimelog,1));
+            $last7DaysTimelog[0]['totalHours']=!empty($last7DaysTimelog[0]['totalHours'])?$last7DaysTimelog[0]['totalHours']:0;
             return $last7DaysTimelog[0]['totalHours'];
         } catch (Exception $ex) {
             Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -337,16 +338,18 @@ class TicketTimeLog extends ActiveRecord
      * @author Padmaja
      * @return type
      */
-    public static function removeTimelogData($projectId,$ticketId,$slug,$timelogHours){
+    public static function removeTimelogData($projectId,$ticketId,$slug,$timelogHours,$userId){
         try{
             $returnValue= 'failure';
             $collection = Yii::$app->mongodb->getCollection('TicketTimeLog');
-            $newdata = array('$pull'=> array('TimeLog' =>array("Time" => $timelogHours,"Slug"=>new \MongoDB\BSON\ObjectID($slug))));
-            if($collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => $projectId), $newdata)){
+            $newdata = array('$pull'=> array('TimeLog' =>array("Time" => $timelogHours,"Slug"=>new \MongoDB\BSON\ObjectID($slug)),"multi"=>FALSE));
+
+            if($collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int)$projectId), $newdata)){
                 return $returnValue=$slug;
             }
+
             return $returnValue;
-           
+       
         } catch (Exception $ex) {
              Yii::log("TicketTimeLog:removeTimelogData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
