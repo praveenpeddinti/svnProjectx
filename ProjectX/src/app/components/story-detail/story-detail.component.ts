@@ -816,7 +816,7 @@ var thisObj = this;
         * @author:Praveen P
         * @description : This is used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list 
         */
-        if(result.data.activityData.data.ActionFieldType == 6){
+        if(result.data.activityData !='noupdate' && result.data.activityData.data.ActionFieldType == 6){
             this._ajaxService.AjaxSubscribe("story/get-all-follow-inlineedit",postEditedText,(response)=>
             { 
                 if (response.statusCode == 200) {
