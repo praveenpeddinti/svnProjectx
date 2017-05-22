@@ -2,10 +2,8 @@ import {Component,OnInit,Input} from '@angular/core';
 import {ActivatedRoute,Router,NavigationEnd,Params,PRIMARY_OUTLET,UrlTree,UrlSegment,UrlSegmentGroup} from '@angular/router';
 import {MenuItem} from 'primeng/primeng';
 import { GlobalVariable } from '../../config';
-import { AjaxService } from '../../ajax/ajax.service';
 import {SharedService} from '../../services/shared.service'; //this service updates the component variable from another component
-declare var io:any;
-declare var socket:any;
+
 declare var jQuery:any;
 @Component({
   selector: 'breadcrumb',
@@ -14,7 +12,7 @@ declare var jQuery:any;
 })
 
 export class BreadcrumbComponent implements OnInit {
-   public notify_count:any=0;
+  
   private items:any=[];
   private route_url:string;
   private route_params:string;
@@ -24,31 +22,9 @@ export class BreadcrumbComponent implements OnInit {
   private count=0;
   private status=false;
   private isLoggedOut=false;
-  constructor(private router:Router,private route:ActivatedRoute,private shared:SharedService,private _ajaxService: AjaxService,){
+  constructor(private router:Router,private route:ActivatedRoute,private shared:SharedService){
     this.shared=shared;
-    console.log("==in const==BreadcrumbComponent");
-    
-      var thisObj = this;
-    var post_data={}; 
-      thisObj._ajaxService.SocketSubscribe('getAllNotificationsCount',post_data);
-    
-      
-        socket.on('getAllNotificationsCountResponse', function(data) {
-       
-            data = JSON.parse(data); 
-             console.log("getAllNotificationsCountResponse-----------"+data.count);
-            thisObj.notify_count=data.count;
-            if(data.count == 0){
-            jQuery("#notificationCount").hide();
-             jQuery(".notificationlist").remove();
-            }else{
-            jQuery("#notificationCount").show();
-            jQuery("#notificationCount").html(data.count);
-            }
-  
-        });
-    
-    
+    console.log("==in const==");
   }
   ngOnInit()
   {
