@@ -162,14 +162,14 @@ Row classes are also dynamically. These classes are pass to service layer-->
                   <label class="timereportlabel"> Description </label>
                   <p *ngIf="row[i].ticketDesc.includes('#')"> 
                     <!--  <input type="text" class="customformfields "   value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"/>-->
-                  <textarea class="customformfieldstextarea customformfieldsmarginbottom" value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"></textarea></p>
+                  <textarea class="customformfieldstextarea customformfieldsmarginbottom" value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}" ></textarea></p>
 
               </div>
           </div>
           <div class="row">
               <div class="col-xs-12 col-sm-4 col-md-4 ">
                   <label class="timereportlabel"> Hours </label>
-                  <input type="text"  class="customformfields " value="{{row[i].Time}}"  id="editTimelogTime_{{row[i].Slug.$oid}}"/>
+                  <input type="text"  class="customformfields " value="{{row[i].Time}}"  id="editTimelogTime_{{row[i].Slug.$oid}}" (keyup)="inputKeyDown(2,row[i].Slug.$oid)"/>
               </div>
         
               <div class="col-xs-12 col-sm-8 col-md-8 ">
@@ -254,7 +254,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
           <div class="row">
               <div class="col-xs-12 col-sm-4 col-md-4 ">
                   <label class="timereportlabel"> Hours </label>
-                  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime"/>
+                  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime" (keyup)="inputKeyDown(1,'')"/>
               </div>
  <div class="col-xs-12 col-sm-4 col-md-4  ">
               <div *ngIf="submitted && hours.errors " class="alert alert-danger">
