@@ -1055,10 +1055,9 @@ class TimeReportController extends Controller
     public function actionAddTimelog(){
         try{
             $timelogData = json_decode(file_get_contents("php://input"));
+            $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
             $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($timelogData,$timelogData->projectId);
             $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($timelogData,$timelogData->projectId);
-            $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
-           
             // $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
