@@ -170,7 +170,7 @@ class TicketTimeLog extends ActiveRecord
                         '_id' => '$TicketId',
                          "data" => array('$push' => '$TimeLog'),
                     )),
-                array('$limit' => $StoryData->pagesize),array('$skip' => $offset),
+                array('$limit' => $StoryData->pagesize),array('$skip' => $StoryData->offset),
                 );
             
             $timeReportDetails = $query->aggregate($pipeline);
@@ -190,10 +190,10 @@ class TicketTimeLog extends ActiveRecord
                     $LogDate = $datetime->format('M-d-Y');
                     $readableDate =$datetime->format('Y-m-d');
                     error_log("ssssssss##########".$readableDate);
-                    $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => $ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"readableDate"=>$readableDate);
-                    $time = array("field_name" => "Date", "value_id" => "", "field_value" => $eachOne['Time'], "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"readableDate"=>$readableDate);
-                    $date = array("field_name" => "Time", "value_id" => "", "field_value" => $LogDate, "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"readableDate"=>$readableDate);
-                    $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"readableDate"=>$readableDate);
+                    $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => $ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
+                    $time = array("field_name" => "Date", "value_id" => "", "field_value" => $eachOne['Time'], "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
+                    $date = array("field_name" => "Time", "value_id" => "", "field_value" => $LogDate, "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
+                    $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
                     $forTicketComments[0] = $date;
                     $forTicketComments[1] =  $ticketId;
                     $forTicketComments[2] = $time;
@@ -234,6 +234,7 @@ class TicketTimeLog extends ActiveRecord
                 ),
             );
             $Arraytimelog = $query->aggregate($pipeline);
+            $Arraytimelog[0]['count']=!empty($Arraytimelog[0]['count'])?$Arraytimelog[0]['count']:0;
             return $Arraytimelog[0]['count'];
         } catch (Exception $ex) {
             Yii::log("TicketCollection:getTimeReportCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
