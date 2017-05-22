@@ -12,6 +12,9 @@
    display:none;
 
 }
+#descriptionerr_msg{
+    display:none;
+}
 .timeboxtitle{text-align: center;text-transform: uppercase;color:#717171;}
 .timeboxlabel{text-align: center;color:#237ea7;text-transform: uppercase;}
 .timereportdiv{background:#e2e2e2;padding:10px}

@@ -28,6 +28,7 @@ export class SearchComponent implements OnInit{
       params => 
       {
            thisObj.searchString=params['q'];
+           if(thisObj.searchString){
           console.log("searchhhhhhhhhhhhhhh"+JSON.stringify(thisObj.searchString));
         this.route.params.subscribe(params => {
            this.projectName=params['projectName'];
@@ -60,7 +61,9 @@ export class SearchComponent implements OnInit{
                 });
             }
          });
-            
+           }else{
+               this._router.navigate(['pagenotfound']);  
+           }  
            })
         // this.load_contents(this.page);
              var thisObj=this; 

@@ -357,6 +357,9 @@ DateRangeForm(){
                     'fromDate':this.fromDateVal,
                     'toDate':this.toDateVal
                    }
+        if(jQuery('#editTimelogTime'+'_'+slug).val()!='' && jQuery('#editableDesc'+'_'+slug).val() == ''){
+            this.commonErrorFunction("descriptionerr_msg","Please enter description.")
+        }else{           
            this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
             { 
                //alert("onlyyyy" +JSON.stringify(response)); 
@@ -382,6 +385,8 @@ DateRangeForm(){
                 console.log("fail---");
             }
             });
+        }
+
     }
     showdeleteDiv(flag){
       //  alert(flag);

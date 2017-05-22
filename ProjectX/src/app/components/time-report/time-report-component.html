@@ -13,23 +13,23 @@
         <div class="col-xs-12 col-sm-6 col-md-6 ">
             
            <div class="row">
-        <div class="col-xs-12 col-sm-4 col-md-4 ">
+        <div class="col-xs-12 col-sm-4 col-md-4 errorshow ">
             <label class="timereportlabel">From</label>
             <p-calendar [(ngModel)]="fromDateVal" class="primeDateComponent customcalenderdiv" name="fromDate"  (onSelect)="FromDate($event)" id='fromDate' [readonlyInput]="true" [fromDate]="fromDate" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
       </p-calendar>
-        <div id="fromDate_error" [hidden]="true" class="alert alert-danger">FromDate is Required</div>
+        <div id="fromDate_error" [hidden]="true" class="alert alert-danger">From Date is Required</div>
             
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4 ">
             <label class="timereportlabel">To</label>
              <p-calendar [(ngModel)]="toDateVal" class="primeDateComponent customcalenderdiv" name="toDate"  (onSelect)="ToDate($event)" id='toDate' [readonlyInput]="true" [toDate]="toDate" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
       </p-calendar>
-        <div id="toDate_error" [hidden]="true" class="alert alert-danger">ToDate is must be greatthan FromDate</div>
+        <div id="toDate_error" [hidden]="true" class="alert alert-danger">To Date is must be greater than From Date</div>
             
         </div>
        <div class="col-xs-12 col-sm-4 col-md-4 paddingtop20">
            
-            <button (click)="DateRangeForm()" class="normal bluebutton bluebuttonmedium">GO</button>
+            <button (click)="DateRangeForm()" class="normal bluebutton bluebuttonmedium buttonmediumheight">GO</button>
             
         </div>
 
@@ -112,12 +112,12 @@ Row classes are also dynamically. These classes are pass to service layer-->
         
           <input type="button" class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" data-backdrop="false"  data-toggle="modal"   [attr.data-target]="'#myModal_'+ row[i].Slug.$oid" />
           <input type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey tablebuttons" name="DELETE" value="DELETE" (click)="showdeleteDiv(1)"/>
-      <div  class="dropdown-menu customdropdown-menutable" id="delete_timelog">
+      <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment" id="delete_timelog">
             <div class="delete_followersbgtable" >  
                 Do you want to remove this Timelog?
-                <div class="text-center" style=" margin-top: -23px;">
-                    <div class="yes" id="remove_yes" (click)="removeTimelog(row[i].ticketDesc,row[i].Slug.$oid,row[i].Time)">Yes</div>
-                    <div class="no" (click)="showdeleteDiv(2)">No</div>
+                <div class="text-center" style=" padding-top:10px">
+                    <div class="yes" id="remove_yes" (click)="removeTimelog(row[i].ticketDesc,row[i].Slug.$oid,row[i].Time)">YES</div>
+                    <div class="no" (click)="showdeleteDiv(2)">NO</div>
         </div>
             </div>
         </div>
@@ -145,7 +145,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom">
-                 <p-autoComplete  [ngModel]="row[i].ticketDesc" name="ticketDesc_{{row[i].Slug.$oid}}"  (onSelect)="getSelectedValueForTask($event)" [minLength]="1" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="taskdisplay" required></p-autoComplete>
+                 <p-autoComplete  [ngModel]="row[i].ticketDesc" name="ticketDesc_{{row[i].Slug.$oid}}"  (onSelect)="getSelectedValueForTask($event)" [minLength]="1" placeholder="list of tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" id="taskdisplay"></p-autoComplete>
                   </div>
               </div>
            <div class="col-xs-12 col-sm-12 col-md-12 ">
@@ -160,11 +160,15 @@ Row classes are also dynamically. These classes are pass to service layer-->
              <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Description </label>
-                  <p *ngIf="row[i].ticketDesc.includes('#')"> 
-                    <!--  <input type="text" class="customformfields "   value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"/>-->
-                  <textarea class="customformfieldstextarea customformfieldsmarginbottom" value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}" ></textarea></p>
+                 <!-- <p *ngIf="row[i].ticketDesc.includes('#')"> 
+                      <input type="text" class="customformfields "   value="{{row[i].ticketDesc.split(row[i].ticketId)[1]}}"  id="editableDesc_{{row[i].Slug.$oid}}"/>-->
+                  <p>
+                  <textarea class="customformfieldstextarea customformfieldsmarginbottom" value="{{row[i].description}}"  id="editableDesc_{{row[i].Slug.$oid}}" ></textarea></p>
 
               </div>
+                <div class="col-xs-12 col-sm-12 col-md-12  alert alert-danger" id="descriptionerr_msg">
+                    Description is required
+                </div>
           </div>
           <div class="row">
               <div class="col-xs-12 col-sm-4 col-md-4 ">
@@ -220,9 +224,9 @@ Row classes are also dynamically. These classes are pass to service layer-->
 
                   </div>
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-12 ">
-              <div *ngIf="submitted && task.errors " class="alert alert-danger">
-                <div [hidden]="!task.errors.required">
+              <div class="col-xs-12 col-sm-12 col-md-12 relativediv">
+              <div *ngIf="submitted && task.errors " class="fielderror">
+                <div  [hidden]="!task.errors.required">
                     Task is required
                 </div>
                 <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
@@ -240,8 +244,8 @@ Row classes are also dynamically. These classes are pass to service layer-->
 <!--                  <input type="text" class="customformfields " value=""  id="addTimelogDesc"/>-->
               <div id="descerr_msg" class="alert alert-danger" style="display:none;"></div>
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-12 ">
-              <div *ngIf="submitted && description.errors " class="alert alert-danger">
+              <div class="col-xs-12 col-sm-12 col-md-12 relativediv">
+              <div *ngIf="submitted && description.errors " class="fielderror">
                 <div [hidden]="!description.errors.required">
                     Description is required
                 </div>
@@ -254,10 +258,9 @@ Row classes are also dynamically. These classes are pass to service layer-->
           <div class="row">
               <div class="col-xs-12 col-sm-4 col-md-4 ">
                   <label class="timereportlabel"> Hours </label>
+                  <div class="relativediv">
                   <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime" (keyup)="inputKeyDown(1,'')"/>
-              </div>
- <div class="col-xs-12 col-sm-4 col-md-4  ">
-              <div *ngIf="submitted && hours.errors " class="alert alert-danger">
+                          <div *ngIf="submitted && hours.errors " class="fielderror">
                 <div [hidden]="!hours.errors.required">
                     Hours is required
                 </div>
@@ -265,7 +268,9 @@ Row classes are also dynamically. These classes are pass to service layer-->
                     Title must be 3 characters long
                 </div>-->
             </div>
-          </div>
+              </div>
+              </div>
+ 
         
               <div class="col-xs-12 col-sm-8 col-md-8 ">
                   <label class="timereportlabel"> Date </label>
@@ -274,8 +279,8 @@ Row classes are also dynamically. These classes are pass to service layer-->
                         </p-calendar>
                   </div>
               </div>
-               <div class="col-xs-12 col-sm-8 col-md-8">
-              <div *ngIf="submitted && dateVal.errors " class="alert alert-danger">
+               <div class="col-xs-12 col-sm-8 col-md-8 relativediv">
+              <div *ngIf="submitted && dateVal.errors " class="fielderror">
                 <div [hidden]="!dateVal.errors.required">
                     Date is required
                 </div>
