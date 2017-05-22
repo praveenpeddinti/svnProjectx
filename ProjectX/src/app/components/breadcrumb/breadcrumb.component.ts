@@ -63,7 +63,7 @@ export class BreadcrumbComponent implements OnInit {
           if(this.route_changes.page=='Home')
           {
              this.status=true;        
-             this.removeItems(1,true);
+             this.removeItems(0,false);
           }
           this.isLoggedOut=false;
         }
