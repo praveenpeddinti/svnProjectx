@@ -46,8 +46,8 @@ class TicketComments extends ActiveRecord
     public static function createCommentsRecord($ticketNumber,$projectId){
         try{
             $tktCommentsColl = new TicketComments();
-            $tktCommentsColl->TicketId = $ticketNumber;
-            $tktCommentsColl->ProjectId = $projectId;
+            $tktCommentsColl->TicketId = (int)$ticketNumber;
+            $tktCommentsColl->ProjectId = (int)$projectId;
             $tktCommentsColl->Activities = [];
             $tktCommentsColl->RecentActivityUser = "";
             $tktCommentsColl->RecentActivitySlug = "";
