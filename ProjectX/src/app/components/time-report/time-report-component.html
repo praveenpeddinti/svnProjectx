@@ -105,8 +105,8 @@ Row classes are also dynamically. These classes are pass to service layer-->
    <div class="{{column.class}} " *ngIf="row[i].field_name!='action'" >
         <img *ngIf="row[i].other_data==1" src="assets/images/story-icon.png"  />
       <img *ngIf="row[i].other_data==2" src="assets/images/task-icon.png" />
-       <a (click)="navigateStoryDetail(row[i].ticketId)"> {{row[i].field_value}} </a>
-       
+       <a (click)="navigateToStoryDetail(row[i].ticketId)"> {{row[i].field_value}} </a>
+   
    </div>
       <div *ngIf="row[i].field_name =='action'" class="{{column.class}}" style="position: relative">
         

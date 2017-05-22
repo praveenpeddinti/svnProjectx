@@ -413,7 +413,7 @@ DateRangeForm(){
              // this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
             });            
     }
-        navigateToStoryDetail(project,ticketId){
-         this._router.navigate(['project',project.ProjectName,ticketId,'details']);
+        navigateToStoryDetail(ticketId){
+        this._router.navigate(['project',this.projectName,ticketId,'details']);
      }
 }
