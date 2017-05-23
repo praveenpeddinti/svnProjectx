@@ -1100,9 +1100,9 @@ $text_message=$html . $text_message .
         <tr><td bgcolor='#0199e0'>
         <table width='96%' height='50' border='0' align='center' cellpadding='0' cellspacing='0'>
         <tr><td style='font-family:'Arial', Helvetica, sans-serif; font-size:14px;line-height:50px; color:#fff;'>This message was sent by <a href='' style=' color:#fff;'>ProjectX</a></td>
-        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['ProjectRoot']."'/files/project/facebook.png' style=' border:none; outline:none;'/></a></td>
-        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['ProjectRoot']."'/files/project/twit.png' style=' border:none; outline:none;'/></a></td>
-        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['ProjectRoot']."'/files/project/linkedin.png' style=' border:none; outline:none;'/></a></td>
+        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/facebook.png'." style=' border:none; outline:none;'/></a></td>
+        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/twit.png'." style=' border:none; outline:none;'/></a></td>
+        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/linkedin.png'." style=' border:none; outline:none;'/></a></td>
         </tr>
        </table>
        </td>
