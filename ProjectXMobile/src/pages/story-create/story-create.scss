@@ -8,7 +8,7 @@ page-story-create {
 }
 .customtextareadiv{padding-top:10px}
 .customtextareadiv .item-md.item-block .item-inner, .customtextareadiv .item-ios.item-block .item-inner, .customtextareadiv .item-wp.item-block .item-inner{padding-right:0;padding-left:0!important}
-.list .item:last-child .item-inner{padding-right:0;padding-left:8px}
+.list .item:last-child .item-inner{padding-right:0;padding-left:0px}
 .list .item{padding-left:0!important}
     /*header styles*/
     .toolbar-background-md, .toolbar-background-ios, .toolbar-background-wp{
@@ -73,7 +73,7 @@ input[type=submit] {
     box-shadow:none!important;}
 
 .item-md.item-block .item-inner, .item-ios.item-block .item-inner, .item-wp.item-block .item-inner {
-    padding-right: 8px;
+    padding-right: 0px;
     border-bottom: transparent;
 }
 
@@ -108,10 +108,10 @@ input[type=submit] {
 .customcheckboxrow{margin-right:20px}
 .customcheckboxrow span{color:#4c4c4c}
 .customcheckboxrow .checkbox-md, .customcheckboxrow .checkbox-wp, .customcheckboxrow .checkbox-ios{vertical-align: middle;}
-.customcheckboxrow .checkbox-md .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-wp .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-ios .checkbox-checked .checkbox-inner{left:11px;top:9px}
+.customcheckboxrow .checkbox-md .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-wp .checkbox-checked .checkbox-inner, .customcheckboxrow .checkbox-ios .checkbox-checked .checkbox-inner{left:9px;top:4px;width:8px;height:15px}
 
-.customcheckboxrow .checkbox-md .checkbox-checked, .customcheckboxrow .checkbox-wp .checkbox-checked, .customcheckboxrow .checkbox-ios .checkbox-checked{width:22px;height:22px;}
-.customcheckboxrow .checkbox-md .checkbox-icon, .customcheckboxrow .checkbox-wp .checkbox-icon, .customcheckboxrow .checkbox-wp .checkbox-icon{width:22px;height:22px;}
+.customcheckboxrow .checkbox-md .checkbox-checked, .customcheckboxrow .checkbox-wp .checkbox-checked, .customcheckboxrow .checkbox-ios .checkbox-checked{width:30px;height:30px;}
+.customcheckboxrow .checkbox-md .checkbox-icon, .customcheckboxrow .checkbox-wp .checkbox-icon, .customcheckboxrow .checkbox-wp .checkbox-icon{width:30px;height:30px;}
 .customcheckboxrow .checkbox-md .checkbox-checked, .customcheckboxrow .checkbox-wp .checkbox-checked,.customcheckboxrow .checkbox-ios .checkbox-checked {
     background-color: #3b9ec2;
     border-color: #3b9ec2;
@@ -164,4 +164,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endCol
 .pull-left{float: left;}
 .pull-right{float: right;}
 
+ .paddingmobile{padding:10px;}
 }
+.editordiv{border:1px solid #e8e8e8;font-size:14px}
+.editoroption{padding:5px;border-bottom:1px solid #e8e8e8;background: #f0f0f0;text-align: left}
+.editoroption button{border-radius:3px;}
+#close{float:right}
+#close i{font-size:18px}
+.editoroptionouter{padding:0 10px}
+.editoroptionouterpaddingbottom10{padding-bottom:10px}

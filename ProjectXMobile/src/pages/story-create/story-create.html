@@ -14,7 +14,7 @@
     {{myHTML}}-->
     
     <form #createForm="ngForm" (ngSubmit)="onStoryCreate(createForm)" style="max-height:100%;height:100%" novalidate="true">
-        <div>
+        <div class="paddingmobile">
             <label class="customlabel">Title</label>
             <ion-input type="text" class="item customdropdowntext spinnerlabel" placeholder="Title" [(ngModel)]="create.title" required
                 name="create_title" #create_title="ngModel" [ngModelOptions]="{standalone:true}"></ion-input>
@@ -51,12 +51,11 @@
                     <label class="customlabel">Description</label>
                     <ion-item>
                         <ion-row>
-                            <div id="editor" class=""  contenteditable="true" (keyup)="bindDescription()" placeholder="Description" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
-                         <!--<textarea class="text-area  item customdropdowntext spinnerlabel" placeholder="Type your message here" [(ngModel)]="create.description"
-                                required name="create_description" #create_description="ngModel" rows="5" id="create_description"
-                                [ngModelOptions]="{standalone:true}"></textarea>-->
+                            <div id="editor" class="editordiv"  contenteditable="true" (keyup)="bindDescription()" placeholder="Description" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block;  padding:3px; white-space:normal;"></div>
+                         
                         </ion-row>
                     </ion-item>
+                    
                     <div [hidden]="create.description!=''" *ngIf="submitted && create.description == '' " class="text-md-danger text-ios-danger text-wp-danger">
                         <i class="fa fa-exclamation-circle" aria-hidden="true" id="createDescriptionError"></i> Description
                         is required
@@ -74,9 +73,7 @@
     </form>
 </ion-content>
 <ion-footer>
-    <ion-toolbar>
-
-    <div id="hideOrShow" align="center" style="display: none;">
+    <div id="hideOrShow" class="editoroption" align="center" style="display: none;">
         <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold" aria-hidden="true"></i></button>
         <button id="italic" onclick="RE.click(id)"><i class="fa fa-italic" aria-hidden="true"></i></button>
         <button id="underline" onclick="RE.click(id)"><i class="fa fa-underline" aria-hidden="true"></i></button>
@@ -85,6 +82,9 @@
         <button id="insertlink" onclick="RE.click(id)"><i class="fa fa-link" aria-hidden="true"></i></button>
         <button id="close" onclick="RE.click(id)"><i class="fa fa-times" aria-hidden="true"></i></button>
     </div>
+    <ion-toolbar>
+
+    
 
         <ion-buttons left>
             <span class="">
