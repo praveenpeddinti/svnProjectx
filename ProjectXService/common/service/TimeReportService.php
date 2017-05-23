@@ -50,13 +50,13 @@ class TimeReportService {
      * @return type 7days work hours for collaborator
      */
     
-    public function getTimeLogRecordsForLast7Days($StoryData, $projectId) {
+    public function getTotalWorkLogHours($StoryData, $projectId) {
         try {
-            $workLogHours = TicketTimeLog::getTimeLogRecordsForLast7Days($StoryData, $projectId);
+            $workLogHours = TicketTimeLog::getTotalWorkLogHours($StoryData, $projectId);
 
             return $workLogHours;
         } catch (Exception $ex) {
-            Yii::log("TimeReportService:getTimeReportCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TimeReportService:getTotalWorkLogHours::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     

@@ -94,7 +94,7 @@ class TimeReportController extends Controller
             $projectId = $StoryData->projectId; 
             $data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
             $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($StoryData,$projectId);
-            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($StoryData,$projectId);
+            $totalWorkLogHours = ServiceFactory::getTimeReportServiceInstance()->getTotalWorkLogHours($StoryData,$projectId);
          
             //$data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
             $responseBean = new ResponseBean();
@@ -102,7 +102,7 @@ class TimeReportController extends Controller
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $data;
             $responseBean->totalCount = $totalCount;
-            $responseBean->timehours = $last7DaysWorkLog;
+            $responseBean->timehours = $totalWorkLogHours;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {

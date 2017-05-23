@@ -191,7 +191,6 @@ class TicketTimeLog extends ActiveRecord
                     $ticketCollectionModel = new TicketCollection();
                     $getTicketDetails = $ticketCollectionModel->getTicketDetails($eachOne['TicketId'],$projectId,$selectFields=[]);
                     $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
-                    error_log("ticket dexc---".$ticketDesc);
                     $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
                     $datetime = $eachOne['LoggedOn']->toDateTime();  
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -249,7 +248,7 @@ class TicketTimeLog extends ActiveRecord
     }
     
     
-    public static function getTimeLogRecordsForLast7Days($StoryData,$projectId) {
+    public static function getTotalWorkLogHours($StoryData,$projectId) {
         try {
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
@@ -264,12 +263,12 @@ class TicketTimeLog extends ActiveRecord
                     ),
                 ),
             );
-            $last7DaysTimelog = $query->aggregate($pipeline);
-            $last7DaysTimelog[0]['totalHours']=!empty($last7DaysTimelog[0]['totalHours'])?$last7DaysTimelog[0]['totalHours']:0;
+            $totalWorkLogHours = $query->aggregate($pipeline);
+            $totalWorkLogHours[0]['totalHours']=!empty($totalWorkLogHours[0]['totalHours'])?$totalWorkLogHours[0]['totalHours']:0;
                
-            return number_format(round($last7DaysTimelog[0]['totalHours'],2),2);
+            return number_format(round($totalWorkLogHours[0]['totalHours'],2),2);
         } catch (Exception $ex) {
-            Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TicketTimeLog:getTotalWorkLogHours::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     /**
