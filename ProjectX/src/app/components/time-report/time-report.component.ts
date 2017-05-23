@@ -147,6 +147,7 @@ ToDate(event){
     this.toDateVal=event;
 }
 DateRangeForm(){
+    this.offset = 0;
     jQuery("#toDate_error").hide();
     this.fromDate=this.fromDateVal;
     this.toDate=this.toDateVal;
@@ -168,7 +169,7 @@ DateRangeForm(){
        
 
         this._service.getTimeReportDetails(1, offset, limit, sortvalue, sortorder,fromDateVal,toDateVal,(response) => {
-           console.log("responseoooo firsttime" +JSON.stringify(response.data))
+         //  console.log("responseoooo firsttime" +JSON.stringify(response.data))
 
             let jsonForm = {};
             if (response.statusCode == 200) {
