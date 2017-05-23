@@ -132,8 +132,14 @@ export class StoryDetailsWorklog {
         setTimeout(() => {
           // document.getElementById("logHourDetails_input_" + index).style.display = 'block';
           // document.getElementById("logHourDetails_input_" + index).innerHTML = this.workedLogtime.workHours;
-          this.inputHourslog = null;
-          this.workedLogtime = result.data;
+        //  this.inputHourslog = null;
+            if(result.data.TotalTimeLog > 0){
+                 this.workedLogtime = result.data;
+                 jQuery("#logHourDetails_input").val("");
+            }else {
+                 this.workedLogtime= "0.00";
+                 jQuery("#logHourDetails_input").val("");
+            }
           // this.workedLogtime.TotalTimeLog = result.data.TotalTimeLog;
           // this.individualitems = result.data.individualLog;
 
