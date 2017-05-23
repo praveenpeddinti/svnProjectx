@@ -3,6 +3,7 @@ import { LoginService } from '../../services/login.service';
 import {AuthGuard} from '../../services/auth-guard.service';
 import { GlobalVariable } from '../../config';
 import { Router,ActivatedRoute } from '@angular/router';
+import {SharedService} from '../../services/shared.service';
 
 @Component({
     selector: 'home-view',
@@ -18,11 +19,13 @@ export class HomeComponent{
     ngOnInit() {
         localStorage.setItem('ProjectName','');
         localStorage.setItem('ProjectId','');
+        this.shared.change('','','','');
    }
      constructor(
           private _router: Router,
          private _service: LoginService,
-          private _authGuard:AuthGuard
+          private _authGuard:AuthGuard,
+          private shared:SharedService
           ) { }
     
 changeProject(){
