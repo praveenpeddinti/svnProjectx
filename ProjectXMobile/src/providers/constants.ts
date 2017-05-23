@@ -45,6 +45,7 @@ export class Constants {
    public insertTimeLog = this.baseUrl+"story/insert-time-log";
    public allDetailsforSearch = this.baseUrl+"story/get-all-ticket-details-for-search";
    public relateTask = this.baseUrl+"story/update-related-tasks";
+   public getCollaboratorsUrl=this.baseUrl+"story/get-collaborators";
    constructor() {
       console.log('Constants');
    }
