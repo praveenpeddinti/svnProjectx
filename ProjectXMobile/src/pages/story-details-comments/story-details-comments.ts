@@ -676,4 +676,35 @@ export class StoryDetailsComments {
         }
     }
 
+    public atmensions(){
+            var thisObj=this;
+    var reqParam={'ProjectId':1,'search_term':''};
+    var userList;
+    jQuery("#editor").atwho({
+    at: "@",
+     callbacks:{ remoteFilter: function(query, callback){
+        console.log("==queyr=="+query);
+      if(query.length > 0){
+          reqParam.search_term=query;
+        thisObj.globalService.getCollaborators(thisObj.constants.getCollaboratorsUrl,reqParam).subscribe(
+                (result) => {
+                   userList = jQuery.map(result.data, function(value, i) {
+  return {'id':value.Id, 'name':value.Name,'profilepic':value.ProfilePic};
+});
+callback(userList);
+      
+                }, (error) => {
+                   console.log("user loading error")
+                }
+            );
+     // callback(userList);
+        }
+    },
+}, 
+    data:userList,
+    displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='20' width='20'/> ${name} </li>",
+    insertTpl: "@${name}",
+});
+    }
+
 }
