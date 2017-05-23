@@ -30,18 +30,20 @@ export class CustomModalPage {
     public activatedFieldTitle: string;
     public activatedFieldValue: string = "";
     public isPriority: boolean = false;
-
+    public isChecked: boolean = false;
   constructor(public viewCtrl: ViewController, params: NavParams) {
+    var thisObj=this;
     this.activatedFieldDetails = params.get('activeField');
     this.activatedFieldTitle = this.activatedFieldDetails.title;
     if(this.activatedFieldDetails.fieldName == "priority"){
           this.isPriority = true;
     }
       this.displayFieldvalue = params.get('displayList');
-      this.activatedFieldValue = jQuery("#field_title_" + params.get('activatedFieldIndex')).text();
-  }
+      this.activatedFieldValue = jQuery("#field_title_" + params.get('activatedFieldIndex')).text().trim();
+
+}
   public dismiss(selectedItem) {
-    console.log("the data " + JSON.stringify(selectedItem));
+    console.log("the data from prabhu " + JSON.stringify(selectedItem));
     jQuery("#modelitem_"+selectedItem.Id).addClass("itemClick");
       if(Object.keys(selectedItem).length > 0){
           selectedItem['previousValue'] = this.activatedFieldValue;

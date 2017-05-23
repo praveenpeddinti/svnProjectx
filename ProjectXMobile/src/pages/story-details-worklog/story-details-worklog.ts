@@ -28,7 +28,7 @@ export class StoryDetailsWorklog {
   //Work log parameters
   public ticketId: any;
   public workLog = { thours: "", iworkHours: "" };
-  public workedLogtime: any = {};
+  public workedLogtime: any={};
   public individualitems: Array<any>;
   public inputHourslog = "";
   public storyTicketId: any;
@@ -125,21 +125,18 @@ export class StoryDetailsWorklog {
       }
     );
   }
+  
    inputWorkLog(event, index) {
+     var thisObj=this;
     // console.log("the details " + JSON.stringify(this.ticketId));
     this.globalService.insertTimelog(this.constants.insertTimeLog, this.storyTicketId, this.inputHourslog).subscribe(
       (result) => {
         setTimeout(() => {
           // document.getElementById("logHourDetails_input_" + index).style.display = 'block';
           // document.getElementById("logHourDetails_input_" + index).innerHTML = this.workedLogtime.workHours;
-        //  this.inputHourslog = null;
-            if(result.data.TotalTimeLog > 0){
-                 this.workedLogtime = result.data;
-                 jQuery("#logHourDetails_input").val("");
-            }else {
-                 this.workedLogtime= "0.00";
-                 jQuery("#logHourDetails_input").val("");
-            }
+          thisObj.inputHourslog = null;
+          thisObj.workedLogtime= result.data.timeLogData;
+
           // this.workedLogtime.TotalTimeLog = result.data.TotalTimeLog;
           // this.individualitems = result.data.individualLog;
 
