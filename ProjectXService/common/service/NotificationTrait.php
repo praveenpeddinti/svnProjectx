@@ -798,7 +798,6 @@ use yii;
         $message=array();
         $result_msg=array(); 
         
-        
         // error_log("sendEmailNotification--".print_r($notificationIds,1));
         $notifications = NotificationCollection::getNotificationDetails($notificationIds);
        echo("2. Notifications Count-------------".count($notifications)."\n");
@@ -838,13 +837,21 @@ use yii;
                             //for logged in user
                             //Eg : moin.hussain assigned you to ticket #33
                              $to =  "you";
+                             $action_user=Collaborators::getCollaboratorById($notification['NewValue']);
+                             
                         }
                         else{
                            $action_user=Collaborators::getCollaboratorById($notification['NewValue']);
                                 //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
                                 //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
-                            $to =  $action_user['UserName']; 
+                            $to =  $action_user['UserName'];
                            
+                        }
+                        $assigned_message=$action_user;
+                        $old_user=Collaborators::getCollaboratorById($notification['OldValue']);
+                        if($old_user!='')
+                        {
+                            $assigned_message=$old_user['UserName'] . '=>' .$action_user['UserName'];
                         }
                           $preposition =  "to";
                         //  $message=array('from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assignedTo'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder'],"Preposition"=>$preposition);
@@ -854,8 +861,14 @@ use yii;
         }
        $fieldName =  $fieldName == "" ? "":"as a ".$fieldName;
                    
-                                $text_message = <<<EOD
-{$fromUser} has assigned {$to} {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
+//                                $text_message = <<<EOD
+//{$fromUser} has assigned {$to} {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
+//EOD;
+       
+
+$text_message = <<<EOD
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Changes by {$fromUser} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$activityOn} : {$assigned_message} </td></tr>
 EOD;
  
          array_push($recipient_list,$notification['NotifiedUser']);  
@@ -864,11 +877,15 @@ EOD;
                     $notification['OldValue']  =  CommonUtility::refineActivityData($notification['OldValue'],10);
                     $notification['NewValue']  =  CommonUtility::refineActivityData($notification['NewValue'],10);
                     $message=array('IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"description",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue']);
-                   
+                    $description_message=$notification['OldValue']. "=>" . $notification['NewValue'];
                              
-                                $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> </br>
-{$activityOn} has been changed by {$fromUser}
+//                                $text_message = <<<EOD
+//<a href={$link}>#{$ticketId} {$title} </a> </br>
+//{$activityOn} has been changed by {$fromUser}
+//EOD;
+                    $text_message = <<<EOD
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Changes by {$fromUser} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$activityOn} : {$description_message} </td></tr>
 EOD;
          array_push($recipient_list,$notification['NotifiedUser']); 
              }
@@ -881,11 +898,13 @@ EOD;
                     
                     else if($notification['ActivityOn']=='FollowObj'){
                       //  error_log("added");
-                        
+                            echo ("5. Add follower");
                             if($notification['NotifiedUser']==$notification['NewValue']) //if logged in user has been added
                             {
                                 //Eg : moin.hussain added you as a follower to ticket #33
                                 $activityOn ='you';
+                                $action_user=Collaborators::getCollaboratorById($notification['NewValue']);
+                                $activityOn =$action_user['UserName'];
                              
                             }
                             else
@@ -897,10 +916,15 @@ EOD;
                             }
                            $preposition =  $notification['Notification_Type'] == "added" ? "to" : "from";
                         // $message=array('from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower'],"Preposition"=>$preposition);
-                        
-                               $message =  Yii::$app->params[$notification['Notification_Type']];
-                                $text_message = <<<EOD
-{$fromUser}  {$message} {$activityOn} as follower {$preposition} <a href={$link}>#{$ticketId} {$title} </a>
+                           $follower_message="Follower :". " ". $notification['Notification_Type']. " ". $activityOn;
+                               
+//                                 $text_message = <<<EOD
+//{$fromUser}  {$message} {$activityOn} as follower {$preposition} <a href={$link}>#{$ticketId} {$title} </a>
+//EOD;
+                               
+                                   $text_message = <<<EOD
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">(Comment by) {$fromUser} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$follower_message} </td></tr>
 EOD;
  
          array_push($recipient_list,$notification['NotifiedUser']);     
@@ -933,17 +957,22 @@ EOD;
                            $object = "comment";
                            $type =  Yii::$app->params['comment'];
             $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> <br/> commented by {$fromUser}
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">(Comment by) {$fromUser} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} commented on Ticket </td></tr>
 EOD;
-            
+              
     } 
               else if($notification['Notification_Type'] == "reply"){
                  //  error_log("replyyyyyyyyyyyyy-----------------------111111111111s");
                       $preposition = "";
                        $object = "reply";
                              $type =  Yii::$app->params['reply']; 
-            $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> <br/> replied by {$fromUser}
+//            $text_message = <<<EOD
+//<a href={$link}>#{$ticketId} {$title} </a> <br/> replied by {$fromUser}
+//EOD;
+                             $text_message = <<<EOD
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">(Comment by) {$fromUser} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} replied on Ticket </td></tr>
 EOD;
             
     } 
@@ -952,8 +981,12 @@ EOD;
                       $preposition = "";
                        $object = "edit";
                              $type =  Yii::$app->params['reply']; 
-            $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> <br/> comment edited by {$fromUser}
+//            $text_message = <<<EOD
+//<a href={$link}>#{$ticketId} {$title} </a> <br/> comment edited by {$fromUser}
+//EOD;
+                              $text_message = <<<EOD
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">(Comment by) {$fromUser} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} edited comment on Ticket </td></tr>
 EOD;
             
     }    else if($notification['Notification_Type'] == "delete"){
@@ -961,8 +994,12 @@ EOD;
                       $preposition = "";
                        $object = "delete";
                              $type =  Yii::$app->params['delete'];
-            $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> <br/> comment deleted by {$fromUser}
+//            $text_message = <<<EOD
+//<a href={$link}>#{$ticketId} {$title} </a> <br/> comment deleted by {$fromUser}
+//EOD;
+                              $text_message = <<<EOD
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">(Comment by) {$fromUser} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} deleted comment on Ticket </td></tr>
 EOD;
         
     } 
@@ -985,8 +1022,12 @@ EOD;
                         {
                         //    error_log("==in mention==");
                       
-            $text_message = <<<EOD
-<a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$fromUser}
+//            $text_message = <<<EOD
+//<a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$fromUser}
+//EOD;
+                             $text_message = <<<EOD
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">(Comment by) {$fromUser} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} mentioned on Ticket </td></tr>
 EOD;
            
                     array_push($recipient_list,$notification['NotifiedUser']);          
@@ -1035,14 +1076,27 @@ EOD;
                              }
                              
                               }
-                              
+                            echo ("3. sending email ...");  
                        /*Left Panel Changed Field Values Start*/
              foreach ($recipient_list as &$value) {
                   $collaboratorData = TinyUserCollection::getMiniUserDetails($value);
                   $value = $collaboratorData['Email'];
+                  $notified_user=$collaboratorData['UserName'];
                //   error_log("EMAIL________________+++++++++++_____________".$value);
              }
-              $subject="ProjectX";  
+              $subject=$projectName;
+              $project_logo="<tr><td style='border:solid 1px #f0f0f0; padding:5px;'><a href='' ><img src='http://10.10.73.77:4200/assets/images/logo.png' style='border:0px; outline:0px;'/></a></td></tr>
+                             <tr><td bgcolor='#f8f8f8' style='border-bottom:solid 1px #fff;'>
+                             <table width='96%' border='0' align='center' cellpadding='0' cellspacing='0'>
+                              <tr>
+                              <td height='15'>&nbsp;</td>
+                              </tr>";
+              $user_message="<tr><td style='font-family':'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333; border-bottom:solid 1px #f0f0f0; padding-bottom:10px;>Hi ". $notified_user."<br/>"."you have a new ticket alert.</td></tr>";
+              $link_message = "<a  style='font-family:Arial, Helvetica, sans-serif;  font-size:16px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>#{$ticketId} {$title} </a>";
+              $ticket_message="<tr><td style='font-family:'Arial', Helvetica, sans-serif;  font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>".$link_message."</td></tr>";
+              $view_ticket_message="<tr><td><a style='font-family:Arial, Helvetica, sans-serif;  font-size:16px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View ticket</a></td></tr></table> </td></tr>";
+              $text_message=$project_logo . $user_message . $ticket_message . $text_message.$view_ticket_message;
+              echo("==going to send mail==");
              CommonUtility::sendEmail($recipient_list,$text_message,$subject);
      }
      }catch (Exception $ex) {
