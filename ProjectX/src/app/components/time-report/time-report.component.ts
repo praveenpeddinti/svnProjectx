@@ -90,7 +90,7 @@ expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     constructor(
         private _router: Router,
-            private _service: TimeReportService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute) { 
+            private _service: TimeReportService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute,private shared:SharedService) { 
         console.log("in constructor"); 
         let PageParameters = {
                     offset: 0,
@@ -137,6 +137,7 @@ this.fromDateVal=lastWeekDate;
         */
 this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
     var thisObj = this;
+    this.shared.change(this._router.url,null,'TimeReport','Other');
          }
 
 FromDate(event){
