@@ -322,7 +322,7 @@ callback(userList);
     },
 }, 
     data:userList,
-    displayTpl: "<li style='list-style: none; margin: 0; padding: 0; display: inline-block; width: 100%;background: #ff0;'><img src='${profilepic}' height='20' width='20'/> ${name} </li>",
+    displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='20' width='20'/> ${name} </li>",
     insertTpl: "@${name}",
 });
 
