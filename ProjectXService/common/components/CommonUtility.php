@@ -1086,7 +1086,30 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
     
     public static function sendEmail($recipient_list,$text_message,$subject="ProjectX",$attachment_list=array()){
         try{
-           
+            
+$html="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<title>E-mailer</title>
+</head>
+<body>
+<table width='600' border='0' align='center' cellpadding='0' cellspacing='0'>";          
+$text_message=$html . $text_message . 
+        "<tr><td style='border:solid 1px #f0f0f0;font-family:'Arial', Helvetica, sans-serif; font-size:14px;line-height:50px;  color:#0199e0;' align='center' >Update Your Email Alert Preferences</td></tr>
+        <tr><td bgcolor='#0199e0'>
+        <table width='96%' height='50' border='0' align='center' cellpadding='0' cellspacing='0'>
+        <tr><td style='font-family:'Arial', Helvetica, sans-serif; font-size:14px;line-height:50px; color:#fff;'>This message was sent by <a href='' style=' color:#fff;'>ProjectX</a></td>
+        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['ProjectRoot']."'/files/project/facebook.png' style=' border:none; outline:none;'/></a></td>
+        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['ProjectRoot']."'/files/project/twit.png' style=' border:none; outline:none;'/></a></td>
+        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['ProjectRoot']."'/files/project/linkedin.png' style=' border:none; outline:none;'/></a></td>
+        </tr>
+       </table>
+       </td>
+       </tr>
+</table>
+</body>
+</html>";
 //         echo("4. In CommonUtiltiy sendEmail started\n");
 //         ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
 //        $attachments=array();//list of artifacts
@@ -1098,7 +1121,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
 //        $text=$text_message;
 //        $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
 //                
-        
+
               Yii::$app->mailer->compose()
            ->setFrom(Yii::$app->params['ProjectEmail'])
            ->setTo($recipient_list)
@@ -1107,8 +1130,8 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
            ->setHtmlBody($text_message)
            ->send();
              error_log("in send mail");
-        echo("5. In CommonUtiltiy sendEmail completed..\n");
-        echo("6. Sending email background job has completed\n");
+//        echo("5. In CommonUtiltiy sendEmail completed..\n");
+//        echo("6. Sending email background job has completed\n");
         }catch(Exception $ex){
            echo("Exception:In CommonUtiltiy sendEmail failed..".$ex->getMessage()."\n");
            Yii::log("CommonUtility:sendEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
