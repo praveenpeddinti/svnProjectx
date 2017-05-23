@@ -56,6 +56,8 @@ export class TimeReportComponent{
     public toDateVal:Date;
     date4: string;
     public entryForm={};
+   errors: string='';
+   adderrors: string='';
      columns = [
                 {
                     name: 'Date',
@@ -273,8 +275,46 @@ DateRangeForm(){
 
     addTimeLog(){
         var getTaskVal=this.text;
-///alert("ssssssssssssssss"+this.projectId);
-      // if(this.checkData != false){
+ if(getTaskVal==""||getTaskVal==undefined)
+    {
+       jQuery(".addTaskErrors").addClass("fielderror").fadeIn();
+       jQuery(".addTaskErrors").text("Story/task is required").fadeIn();
+     // jQuery('#editableDesc'+'_'+slug).focus() ;
+        this.adderrors = '1';
+   }else{
+       jQuery(".addTaskErrors").removeClass("fielderror").fadeIn();
+       jQuery(".addTaskErrors").text(" ").fadeIn();
+   }
+   if(jQuery('#addTimelogDesc').val() == "" )
+   {
+       jQuery(".addDescError").addClass("fielderror").fadeIn();
+       jQuery(".addDescError").text("Description is required").fadeIn();
+     // jQuery('#editableDesc'+'_'+slug).focus() ;
+     this.adderrors = '1';
+   }else{
+       jQuery(".addDescError").removeClass("fielderror").fadeIn();
+       jQuery(".addDescError").text(" ").fadeIn();
+   }
+  
+    if(jQuery('#addTimelogTime').val() == "" )
+   {
+       jQuery(".addHoursError").addClass("fielderror").fadeIn();
+       jQuery(".addHoursError").text("Worked hours is required").fadeIn();
+     this.adderrors = '1';
+   }else if(jQuery('#addTimelogTime').val() == 0){
+        jQuery(".addHoursError").addClass("fielderror").fadeIn();
+       jQuery(".addHoursError").text("Please enter valid time").fadeIn(); 
+        this.adderrors= '1';
+   }else{
+       jQuery(".addHoursError").removeClass("fielderror").fadeIn();
+       jQuery(".addHoursError").text(" ").fadeIn(); 
+   }
+    if(this.adderrors){
+       console.log("ssssssssssssdddddddd");
+   }else{
+       console.log("11111111111111");
+  
+   
              var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
         date = date.replace(/(\b\d{1}\b)/g, "0$1");
         var finalDate=this.dateVal.toString();
@@ -315,7 +355,7 @@ DateRangeForm(){
                 }
                 });
      
-      // }
+       }
     }
      inputKeyDown(id,slug){
      if(id==1){
@@ -334,17 +374,65 @@ DateRangeForm(){
         }
 
   }
+  inputKeyDownFovalid(slug){
+     var input="tcc_"+slug;
+    //    alert("."+input); 
+    // jQuery("."+input).show();
+   //  jQuery("."+input).fadeOut(4000);
+  }
 
         commonErrorFunction(id,message){
           jQuery("#"+id).html(message);
           jQuery("#"+id).show();
           jQuery("#"+id).fadeOut(4000);
             }
-    updateTimelog(slug,ticketDesc,timeLogDate){
-   //  alert(JSON.stringify(ticketDesc));
-     // alert(jQuery('#editTimelogTime'+'_'+slug).val());
+  updateTimelog(slug,ticketDesc,timeLogDate){
+  // alert(jQuery('#taskdisplay_'+'_'+slug).val());
+     // alert("eeeeeeeeeeeeee"+this.selectedValForTask);
       console.log("eeeeeeee"+this.selectedValForDate);
-      var editableDate = new Date(timeLogDate);
+     // var errors="";
+       var editableDate = new Date(timeLogDate);
+   if(this.selectedValForTask == ""||this.selectedValForTask==undefined )
+   {
+       jQuery(".taskErrormes").addClass("fielderror").fadeIn();
+       jQuery(".taskErrormes").text("Story/task is required").fadeIn();
+     // jQuery('#editableDesc'+'_'+slug).focus() ;
+     this.errors = '1';
+   }else{
+       jQuery(".taskErrormes").removeClass("fielderror").fadeIn();
+       jQuery(".taskErrormes").text(" ").fadeIn();
+   }
+    if(jQuery('#editableDesc'+'_'+slug).val() == "" )
+   {
+       jQuery(".descErrormes").addClass("fielderror").fadeIn();
+       jQuery(".descErrormes").text("Description is required").fadeIn();
+     // jQuery('#editableDesc'+'_'+slug).focus() ;
+     this.errors = '1';
+   }else{
+       jQuery(".descErrormes").removeClass("fielderror").fadeIn();
+       jQuery(".descErrormes").text(" ").fadeIn();
+   }
+   if(jQuery('#editTimelogTime'+'_'+slug).val() =="")
+   {
+       jQuery(".hoursErrormes").addClass("fielderror").fadeIn();
+       jQuery(".hoursErrormes").text("Worked hours is required").fadeIn(); 
+      // jQuery('#editTimelogTime'+'_'+slug).focus() ;
+       this.errors= '1';
+   }else if(jQuery('#editTimelogTime'+'_'+slug).val() == 0){
+        jQuery(".hoursErrormes").addClass("fielderror").fadeIn();
+       jQuery(".hoursErrormes").text("Please enter valid time").fadeIn(); 
+        this.errors= '1';
+   }else{
+       jQuery(".hoursErrormes").removeClass("fielderror").fadeIn();
+       jQuery(".hoursErrormes").text(" ").fadeIn(); 
+   }
+
+
+   if(this.errors){
+       console.log("ssssssssssssdddddddd");
+   }else{
+	 console.log("666666666666666666");
+    
                 var post_data={
                     'projectId':this.projectId,
                     'slug':slug,
@@ -357,9 +445,9 @@ DateRangeForm(){
                     'fromDate':this.fromDateVal,
                     'toDate':this.toDateVal
                    }
-        if(jQuery('#editTimelogTime'+'_'+slug).val()!='' && jQuery('#editableDesc'+'_'+slug).val() == ''){
-            this.commonErrorFunction("descriptionerr_msg","Please enter description.")
-        }else{           
+       // if(jQuery('#editTimelogTime'+'_'+slug).val()!='' && jQuery('#editableDesc'+'_'+slug).val() == ''){
+       //     this.commonErrorFunction("descriptionerr_msg","Please enter description.")
+       // }else{           
            this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
             { 
                //alert("onlyyyy" +JSON.stringify(response)); 
@@ -385,7 +473,7 @@ DateRangeForm(){
                 console.log("fail---");
             }
             });
-        }
+       }
 
     }
     showdeleteDiv(flag){
