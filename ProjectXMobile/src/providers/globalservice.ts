@@ -209,6 +209,15 @@ export class Globalservice {
          );
          return response;
     }
+
+   public getCollaborators(url, requestParams) {
+        requestParams['userInfo'] = this.getUserInfo();
+        requestParams["timeZone"] = "Asia/Kolkata";
+        var response = this.http.post(url, JSON.stringify(requestParams), this.headers).map(
+            res => res.json()
+        );
+        return response;
+    }
     //sprint 5 end :- prabhu
 
 }
