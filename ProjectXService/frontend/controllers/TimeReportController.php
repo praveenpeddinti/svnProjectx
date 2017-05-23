@@ -93,11 +93,10 @@ class TimeReportController extends Controller
             $StoryData = json_decode(file_get_contents("php://input"));
             $projectId = $StoryData->projectId; 
             $data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
-            error_log("dattttttttttttttttt".print_r($data,1));
             $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($StoryData,$projectId);
             $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($StoryData,$projectId);
          
-            $data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
+            //$data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -107,7 +106,7 @@ class TimeReportController extends Controller
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetAllStoryDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("StoryController:actionGetTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
