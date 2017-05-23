@@ -116,6 +116,8 @@ thisObj.route.queryParams.subscribe(
 this.date4 = (this.calendarVal.getMonth() + 1) + '-' + this.calendarVal.getDate() + '-' + this.calendarVal.getFullYear(); 
   
 
+var maxDate = new Date();//set current date to datepicker as min date
+
 var date1 = new Date();//set current date to datepicker as min date
 date1.setHours(0,0,0,0);
 this.toDateVal = date1;
@@ -142,7 +144,6 @@ ToDate(event){
     this.toDateVal=event;
 }
 DateRangeForm(){
-    jQuery("#fromDate_error").hide();
     jQuery("#toDate_error").hide();
     this.fromDate=this.fromDateVal;
     this.toDate=this.toDateVal;

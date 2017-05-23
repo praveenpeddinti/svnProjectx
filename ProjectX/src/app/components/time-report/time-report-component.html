@@ -15,18 +15,20 @@
            <div class="row">
         <div class="col-xs-12 col-sm-4 col-md-4 errorshow ">
             <label class="timereportlabel">From</label>
-            <p-calendar [(ngModel)]="fromDateVal" class="primeDateComponent customcalenderdiv" name="fromDate"  (onSelect)="FromDate($event)" id='fromDate' [readonlyInput]="true" [fromDate]="fromDate" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
+            <p-calendar [(ngModel)]="fromDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="FromDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
       </p-calendar>
-        <div id="fromDate_error" [hidden]="true" class="alert alert-danger">From Date is Required</div>
+        <!--<div id="fromDate_error" [hidden]="true" class="alert alert-danger">From Date is Required</div>-->
             
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4 ">
             <label class="timereportlabel">To</label>
-             <p-calendar [(ngModel)]="toDateVal" class="primeDateComponent customcalenderdiv" name="toDate"  (onSelect)="ToDate($event)" id='toDate' [readonlyInput]="true" [toDate]="toDate" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
+             <p-calendar [(ngModel)]="toDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="ToDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
       </p-calendar>
-        <div id="toDate_error" [hidden]="true" class="alert alert-danger">To Date is must be greater than From Date</div>
+            
+        <div id="toDate_error" [hidden]="true" class="fielderror">To Date is must be greater than From Date</div>
             
         </div>
+               
        <div class="col-xs-12 col-sm-4 col-md-4 paddingtop20">
            
             <button (click)="DateRangeForm()" class="normal bluebutton bluebuttonmedium buttonmediumheight">GO</button>
@@ -102,13 +104,19 @@ Row classes are also dynamically. These classes are pass to service layer-->
   
   <template let-row="row" ngx-datatable-cell-template >
     <div attr.class="{{i}}">
-   <div class="{{column.class}} " *ngIf="row[i].field_name!='action'" >
-        <img *ngIf="row[i].other_data==1" src="assets/images/story-icon.png"  />
-      <img *ngIf="row[i].other_data==2" src="assets/images/task-icon.png" />
-       <a (click)="navigateToStoryDetail(row[i].ticketId)"> {{row[i].field_value}} </a>
+   <div style="cursor:default" class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name!='Id'" >
+      {{row[i].field_value}}
+       
    
    </div>
-      <div *ngIf="row[i].field_name =='action'" class="{{column.class}}" style="position: relative">
+        <div class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name=='Id'" >
+        <img *ngIf="row[i].other_data==1" src="assets/images/story-icon.png"  />
+      <img *ngIf="row[i].other_data==2" src="assets/images/task-icon.png" />
+      <a *ngIf="row[i].field_name=='Id'" (click)="navigateToStoryDetail(row[i].ticketId)">{{row[i].field_value}} </a>
+       
+   
+   </div>
+      <div style="cursor:default" *ngIf="row[i].field_name =='action'" class="{{column.class}}" style="position: relative">
         
           <input type="button" class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" data-backdrop="false"  data-toggle="modal"   [attr.data-target]="'#myModal_'+ row[i].Slug.$oid" />
           <input type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey tablebuttons" name="DELETE" value="DELETE" (click)="showdeleteDiv(1)"/>
