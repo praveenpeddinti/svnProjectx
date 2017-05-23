@@ -676,11 +676,17 @@ export class StoryDetailsComments {
         }
     }
 
-    public atmensions(){
+    public atmensions(index){
+        var selector;
+        if(index==-1){
+            selector='comment_editor';
+        }else{
+            selector='comment_edit_editor_'+index;
+        }
             var thisObj=this;
     var reqParam={'ProjectId':1,'search_term':''};
     var userList;
-    jQuery("#editor").atwho({
+    jQuery("."+selector).atwho({
     at: "@",
      callbacks:{ remoteFilter: function(query, callback){
         console.log("==queyr=="+query);
