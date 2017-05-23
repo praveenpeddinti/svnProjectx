@@ -154,7 +154,7 @@ class TicketTimeLog extends ActiveRecord
      * @return type
      */
     
-    public static function getAllTimeReportDetails($StoryData, $projectId) {$StoryData->pagesize=2;
+    public static function getAllTimeReportDetails($StoryData, $projectId) {
         try {
             error_log("getAllTimeReportDetails--");
             $StoryData->toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
@@ -171,13 +171,15 @@ class TicketTimeLog extends ActiveRecord
             $pipeline = array(
                 array('$unwind' => '$TimeLog'),
                 array('$match' => $matchArray),
+                array('$sort' => array("TimeLog.LoggedOn" => -1)),
+                array('$limit' => $limit),array('$skip' => $skip),
                 array(
                     '$group' => array(
-                        '_id' => '$_id',
+                        '_id' => '$TimeLog.CollaboratorId',
                          "data" => array('$push' => '$TimeLog'),
                     )),
 
-                array('$limit' => $limit),array('$skip' => $skip),
+              
 
              //   array('$limit' => $StoryData->pagesize),array('$skip' => $StoryData->offset),
                 );
@@ -185,8 +187,8 @@ class TicketTimeLog extends ActiveRecord
             $timeReportDetails = $query->aggregate($pipeline);
             $TimeLogDetailsFinalArray = array();
             $TimeLogDataArray= array();
-           // error_log("--size---".count($timeReportDetails));
-              error_log("--size---".print_r($timeReportDetails,1));
+            error_log("--size---".count($timeReportDetails));
+             // error_log("--size---".print_r($timeReportDetails,1));
               $timelogs = $timeReportDetails[0]["data"];
             //foreach($timeReportDetails as $extractTimeLog){
                 
