@@ -13,7 +13,7 @@ import { DashboardPage } from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var cordova: any;
 declare var RE: any;
-
+declare var atwho:any;
 @Component({
     selector: 'page-story-create',
     templateUrl: 'story-create.html'
@@ -31,7 +31,7 @@ export class StoryCreatePage {
     private lastImage: string = null;
     private progressFile: number;
     public myHTML: any;
-
+    
     constructor(
         public navCtrl: NavController,
         public modalController: ModalController,
@@ -106,6 +106,7 @@ export class StoryCreatePage {
     }
     public onStoryCreate(form): void {
         this.myHTML = document.getElementById('editor').innerHTML;
+        console.log("submit button clicked2" + JSON.stringify(this.myHTML));
         if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false) {
             let loader = this.loadingController.create({ content: "Loading..." });
             loader.present();
@@ -279,7 +280,8 @@ export class StoryCreatePage {
     }
     public openOptionsModal(fieldDetails, index) {
         let optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: fieldDetails.assignData });
-        optionsModal.onDidDismiss((data) => {
+        console.log("the open option model index is" + index);
+            optionsModal.onDidDismiss((data) => {
             if (data != null && Object.keys(data).length > 0) {
                 if (fieldDetails.fieldName == "planlevel") {
                     this.create.planlevel = data.Id;
@@ -292,4 +294,39 @@ export class StoryCreatePage {
         });
         optionsModal.present();
     }
+    
+    public bindDescription(){
+        var thisObj=this;
+    var reqParam={'ProjectId':1,'search_term':''};
+    var userList;
+    jQuery("#editor").atwho({
+    at: "@",
+     callbacks:{ remoteFilter: function(query, callback){
+        console.log("==queyr=="+query);
+      if(query.length > 0){
+          reqParam.search_term=query;
+        thisObj.globalService.getCollaborators(thisObj.constants.getCollaboratorsUrl,reqParam).subscribe(
+                (result) => {
+                   userList = jQuery.map(result.data, function(value, i) {
+  return {'id':value.Id, 'name':value.Name};
+});
+//callback(userList);
+      
+                }, (error) => {
+                   console.log("user loading error")
+                }
+            );
+      callback(userList);
+        }
+    },
+    }, 
+    displayTpl: "<li style='list-style: none; margin: 0; padding: 0; display: inline-block; width: 100%;background: #ff0;'><img src='http://a248.e.akamai.net/assets.github.com/images/icons/emoji/${name}.png' height='20' width='20'/> ${name} </li>",
+    insertTpl: "@${name}",
+});
+this.create.description= jQuery("#editor").html();
+        //console.log( this.create.description);
+  
+  };
+
+
 }

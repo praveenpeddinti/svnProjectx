@@ -46,7 +46,7 @@
         </div>
         <div class="cust_com_content">
             <div class="userActivity" *ngFor="let eachProperty of eachActivity.PropertyChanges;">
-                <div class="ticketActivity">
+                <div class="ticketActivity" *ngIf="eachProperty.SpecialActivity==0" >
                     <span class="bold">{{eachProperty.ActionFieldTitle}}</span> {{eachProperty.Action}}
                     <span *ngIf="eachProperty.type=='user'"> 
                                             <span class="property"><a href="javascript:void(0);" data-id="{{eachProperty.PreviousValue.CollaboratorId}}" data-name="{{eachProperty.PreviousValue.UserName}}">{{eachProperty.PreviousValue.UserName}}</a></span>
@@ -59,6 +59,11 @@
                     <span class="bold" [innerHTML]="eachProperty.NewValue"></span>
                     </span>
                     <div class="activityDate">({{eachProperty.ActivityOn}})</div>
+               
+
+                </div>
+                  <div class="ticketActivity" *ngIf="eachProperty.SpecialActivity== 1" >
+                  <span *ngIf="eachProperty.type=='follower'"><span class="bold">{{(eachActivity.ActivityBy.UserName == eachProperty.ActionFieldTitle.Name)?'You':eachProperty.ActionFieldTitle.Name}}</span> {{eachProperty.Action}}&nbsp; <span class="bold" >{{ eachProperty.NewValue}}</span> </span> 
                 </div>
                 <div class="divider"></div>
             </div>
@@ -80,7 +85,7 @@
 <div class="deletediv"> <a href="javascript:void(0)" class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>    </div>
 <!--Have to change Text area to editor-->
 <!--<textarea (focus)="showSubmit(i)" class="textEditor commentTextArea" placeholder="Enter text here..."></textarea>-->
-<div id="editor1" (focus)="showSubmit(i)" class="" contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
+<div id="editor" (focus)="showSubmit(i)" placeholder="Enter text here" class="comment_edit_editor_{{i}}" contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
 <div class="uploadProgress" [hidden]='progressEdit==0'>
     <progress [value]="progressEdit" max="100"></progress>
 </div>
@@ -119,8 +124,8 @@
         <div class="uploadAndSubmit editorDiv" id="uploadAndSubmit">
             <!--Have to change Text area to editor-->
             <!--<textarea (focus)="showSubmit(-1)" class="textEditor commentTextArea" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}"
-                placeholder="Enter text here..."></textarea>-->
-                <div id="editor" (focus)="showSubmit(-1)" class="textEditor commentTextArea" contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
+                placeholder="Enter text here..."></textarea>--> 
+                <div id="editor" (focus)="showSubmit(-1)" class="textEditor comment_editor commentTextArea" placeholder="Comment" contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
                 <div class="uploadProgress" [hidden]='progressNew==0'>
                 <progress [value]="progressNew" max="100"></progress>
                 <div id="progressFileUploadNew"></div>

@@ -39,7 +39,7 @@ export class StoryDetailsComments {
     private editCommentOpenClose = [];
     private newCommentOpenClose = true;
     private newSubmitOpenClose = true;
-    private editSubmitOpenClose = true;
+    public editSubmitOpenClose = true;
     public commentDesc = "";
     private lastImage: string = null;
     private progressNew: number;
@@ -326,7 +326,8 @@ export class StoryDetailsComments {
            this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
                (result) => {
                 StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
-                   StoryDetailsComments.optionsModal.onDidDismiss((data) => {
+                console.log("the index of open model is" + index);
+                       StoryDetailsComments.optionsModal.onDidDismiss((data) => {
                        if (data != null && (data.Name != data.previousValue)) {
                            this.changeOption(data, index, fieldDetails);
                        }
@@ -426,7 +427,7 @@ export class StoryDetailsComments {
                 thisObj.editCommentOpenClose[commentid] = false;
             }
         });
-        jQuery("#Actions_" + commentId + " .textEditor").val(this.itemsInActivities[commentId].CrudeCDescription);
+        jQuery(".comment_edit_editor_" + commentId ).html(this.itemsInActivities[commentId].CrudeCDescription);
         this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
         this.newCommentOpenClose = false;
         this.editCommentOpenClose[commentId] = true;
@@ -436,8 +437,8 @@ export class StoryDetailsComments {
         this.editCommentOpenClose[commentId] = false;
         this.newCommentOpenClose = true;
     }
-    public showSubmit(commentId){
-        if(commentId==-1){
+    public showSubmit(commentId){console.log(commentId)
+        if(commentId==-1){ 
             this.newSubmitOpenClose = false;
         }
         else{
@@ -446,7 +447,7 @@ export class StoryDetailsComments {
     }
     public submitComment() {
         console.log("submit button clicked1");
-        this.myHTML = document.getElementById('editor').innerHTML;
+        this.myHTML = jQuery('.comment_editor').html();
         console.log("submit button clicked2" + JSON.stringify(this.myHTML));
         //var commentText = jQuery(".uploadAndSubmit .textEditor").val();
         // var commentText = this.commentDesc;
@@ -479,7 +480,7 @@ export class StoryDetailsComments {
                         this.itemsInActivities[this.replyToComment].repliesCount++;
                     }
                     this.replying = false;
-                    document.getElementById('editor').innerHTML= "";
+                   jQuery('.comment_editor').html("");
                    // jQuery(".uploadAndSubmit .textEditor").val('');
                 }, (error) => {
                     this.presentToast('Unsuccessful');
@@ -488,11 +489,7 @@ export class StoryDetailsComments {
         }
     }
     public submitEditedComment(commentId, slug) {
-        RE.editor = document.getElementById('editor');
-        RE.editor.setAttribute("placeholder", "insert my text ...");
-        RE.editor.addEventListener("keyup", RE.keyup);
-        
-        var editedContent = jQuery("#Actions_" + commentId + " .textEditor").val();
+        var editedContent = jQuery(".comment_edit_editor_" + commentId ).html();
         if (editedContent != "" && editedContent.trim() != "") {
             var commentedOn = new Date();
             var formatedDate = (commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' + commentedOn.getFullYear();
@@ -512,7 +509,7 @@ export class StoryDetailsComments {
                     this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
                     this.editCommentOpenClose[commentId] = false;
                     this.newCommentOpenClose = true;
-                    document.getElementById('editor').innerHTML= "";
+                    jQuery(".comment_edit_editor_" + commentId ).html("");
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
