@@ -36,6 +36,7 @@ export class TimeReportComponent{
     private selectedValForTask="";
     private selectedValForDate:Date;
     private calendarVal = new Date();
+  
     @ViewChild('myTable') table: any;
     rows = [];
     row1 = [];
@@ -53,7 +54,7 @@ export class TimeReportComponent{
     public fromDateVal:Date;
     public toDate:Date;
     public toDateVal:Date;
-
+    date4: string;
     public entryForm={};
      columns = [
                 {
@@ -112,10 +113,8 @@ thisObj.route.queryParams.subscribe(
                 });
                 });
                 
-
-
-
-
+this.date4 = (this.calendarVal.getMonth() + 1) + '-' + this.calendarVal.getDate() + '-' + this.calendarVal.getFullYear(); 
+  
 
 var date1 = new Date();//set current date to datepicker as min date
 date1.setHours(0,0,0,0);

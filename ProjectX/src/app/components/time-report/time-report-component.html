@@ -275,7 +275,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
               <div class="col-xs-12 col-sm-8 col-md-8 ">
                   <label class="timereportlabel"> Date </label>
                   <div class="paddingright25 ">
-                 <p-calendar required  [(ngModel)]="entryForm.dateVal" name="dateVal"  #dateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate" >
+                 <p-calendar required  [(ngModel)]="entryForm.dateVal" name="dateVal"  #dateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"  placeholder="{{date4}}">
                         </p-calendar>
                   </div>
               </div>
