@@ -1017,7 +1017,11 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
         {
             if(response.statusCode==200)
             {
-               
+               if(response.data.activityData.referenceKey == -1){
+                this.commentsList.push(response.data.activityData.data);
+                } else if(response.data.activityData != "noupdate"){
+        this.commentsList[response.data.activityData.referenceKey]["PropertyChanges"].push(response.data.activityData.data);
+     }  
                jQuery("#followerdiv_"+event).remove();
                this.followers = this.followers.filter(function(el) {
                return el.FollowerId !== event;
