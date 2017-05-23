@@ -25,6 +25,7 @@ export class BreadcrumbComponent implements OnInit {
   constructor(private router:Router,private route:ActivatedRoute,private shared:SharedService){
     this.shared=shared;
     console.log("==in const==");
+    this.isLoggedOut=true;
   }
   ngOnInit()
   {
@@ -33,6 +34,7 @@ export class BreadcrumbComponent implements OnInit {
     console.log("==In breadcrumb==");
       this.shared.getEmittedValue().subscribe(value=>
       {
+        
         this.route_changes=value; //params from URL
         console.log("==Count=="+this.count);
         console.log("==Value in BreadCrumb=="+this.route_changes.url +' '+this.route_changes.params);
@@ -42,9 +44,12 @@ export class BreadcrumbComponent implements OnInit {
             {
               console.log("==Length=="+this.items.length);
               console.log("==projectName=="+localStorage.getItem('ProjectName'));
-            // this.removeItems(0,false);
-              this.items.push({label:localStorage.getItem('ProjectName'),url:"/#/project/"+localStorage.getItem('ProjectName')+"/list"});
-              this.status=true;
+              // this.removeItems(0,false);
+              if(this.route_changes.params!=null)
+              {
+                this.items.push({label:localStorage.getItem('ProjectName'),url:"/#/project/"+localStorage.getItem('ProjectName')+"/list"});
+                this.status=true;
+              }
             }
             if((this.route_changes.page=='Detail') && !(this.id.indexOf('#'+this.route_changes.params)>-1))
             {
@@ -72,6 +77,7 @@ export class BreadcrumbComponent implements OnInit {
               this.id=[];
               this.count=0;
               this.status=false;
+              //this.status=true;
               this.isLoggedOut=true;
               this.items=[];
             }
