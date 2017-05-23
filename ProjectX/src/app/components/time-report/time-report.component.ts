@@ -192,15 +192,16 @@ dateFilterSearch(){
                 var millisBetween = toDateVal.getTime() - fromDateVal.getTime();
                 var days = millisBetween / millisecondsPerDay;
                 // Round down.
-                if(days<30){this.showdays = days+ " DAY(S)";}
-                else if((days>=30) && (days<=365)){
-                var totalmonth=( fromDateVal.getFullYear() * 12 + fromDateVal.getMonth() )-( toDateVal.getFullYear() * 12 + toDateVal.getMonth() );
-                this.showdays = totalmonth+ " MONTH(S)";}else{
-                var totalYears= fromDateVal.getFullYear() - toDateVal.getFullYear();
-                this.showdays = totalYears+ " YEAR(S)";}
-            } else {
+                if(days<30){
+                    this.showdays = days+ " DAY(S)";
+                }else if((days>=30) && (days<=365)){
+                    var totalmonth=( toDateVal.getFullYear() * 12 + toDateVal.getMonth() )-( fromDateVal.getFullYear() * 12 + fromDateVal.getMonth() );
+                    this.showdays = totalmonth+ " MONTH(S)";}else{
+                    var totalYears= fromDateVal.getFullYear() - toDateVal.getFullYear();
+                    this.showdays = totalYears+ " YEAR(S)";}
+                } else {
                 console.log("fail---");
-            }
+                }
         });
     }
     /*
