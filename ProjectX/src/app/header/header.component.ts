@@ -58,7 +58,7 @@ export class HeaderComponent implements OnInit {
 
 
       
-     
+     console.log("==In header=="+this._router.url);
     }
     
      jQuery(document).ready(function(){
@@ -259,7 +259,6 @@ export class HeaderComponent implements OnInit {
   }
   
   TimeReport(){
-    this.shared.change(null,null,'TimeReport','Other');
   this._router.navigate(['project',localStorage.getItem('ProjectName'),'time-report']);
 }
 }
