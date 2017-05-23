@@ -48,7 +48,7 @@ export class TimeReportComponent{
     sortvalue: string = "Id";
     sortorder: string = "desc";
     loading: boolean = false;
-    last7daystimehours: number = 0;
+    totaltimehours: number = 0;
     showdays:string='';
     public fromDate:Date;
     public fromDateVal:Date;
@@ -140,21 +140,22 @@ this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateV
     this.shared.change(this._router.url,null,'TimeReport','Other');
          }
 
-FromDate(event){
+selectFromDate(event){
     this.fromDateVal=event;
 }
-ToDate(event){
+selectToDate(event){
     this.toDateVal=event;
 }
-DateRangeForm(){
+dateFilterSearch(){
     this.offset = 0;
     jQuery("#toDate_error").hide();
     this.fromDate=this.fromDateVal;
     this.toDate=this.toDateVal;
     if( (new Date(this.fromDateVal) > new Date(this.toDateVal))){
     jQuery("#toDate_error").show();
-    }
+    }else{
     this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
+    }
 }
     // ngAfterViewInit()
     // {
@@ -167,7 +168,7 @@ DateRangeForm(){
         */
     page(offset, limit, sortvalue, sortorder,fromDateVal,toDateVal ) {
        
-
+       
         this._service.getTimeReportDetails(1, offset, limit, sortvalue, sortorder,fromDateVal,toDateVal,(response) => {
          //  console.log("responseoooo firsttime" +JSON.stringify(response.data))
 
@@ -185,7 +186,7 @@ DateRangeForm(){
                 //alert("rowsssssssss"+JSON.stringify(this.rows));
                 this.count = response.totalCount;
                 //this.ticketdesc=response.tick;
-                this.last7daystimehours=response.timehours;
+                this.totaltimehours=response.timehours;
 
                 var millisecondsPerDay = 1000 * 60 * 60 * 24;
                 var millisBetween = toDateVal.getTime() - fromDateVal.getTime();

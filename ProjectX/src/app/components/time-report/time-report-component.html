@@ -1,12 +1,4 @@
 <!-- Menu -->
-<div class="sticky-container">
-		<ul class="sticky">
-			<li>
-                            <span><i class="fa fa-clock-o"></i></span>
-				<p>Time Report</p>
-			</li>
-                </ul>
-</div>
 <div class="custom_menu ">
     <div class="widgethedsub">Time Report</div>
     <div class="row">
@@ -15,14 +7,14 @@
            <div class="row">
         <div class="col-xs-12 col-sm-4 col-md-4 errorshow ">
             <label class="timereportlabel">From</label>
-            <p-calendar [(ngModel)]="fromDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="FromDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
+            <p-calendar [(ngModel)]="fromDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="selectFromDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
       </p-calendar>
         <!--<div id="fromDate_error" [hidden]="true" class="alert alert-danger">From Date is Required</div>-->
             
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4 ">
             <label class="timereportlabel">To</label>
-             <p-calendar [(ngModel)]="toDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="ToDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
+             <p-calendar [(ngModel)]="toDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="selectToDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
       </p-calendar>
             
         <div id="toDate_error" [hidden]="true" class="fielderror">To Date is must be greater than From Date</div>
@@ -31,7 +23,7 @@
                
        <div class="col-xs-12 col-sm-4 col-md-4 paddingtop20">
            
-            <button (click)="DateRangeForm()" class="normal bluebutton bluebuttonmedium buttonmediumheight">GO</button>
+            <button (click)="dateFilterSearch()" class="normal bluebutton bluebuttonmedium buttonmediumheight">GO</button>
             
         </div>
 
@@ -49,7 +41,7 @@
                         </li>
                         <li>
                             <div class="timecountouter"><i class="fa fa-clock-o" aria-hidden="true"></i>
-                            <div class="timewrapbox">{{last7daystimehours}}</div>
+                            <div class="timewrapbox">{{totaltimehours}}</div>
                             </div>
                         </li>
                         
