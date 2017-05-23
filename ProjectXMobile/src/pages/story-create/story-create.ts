@@ -296,6 +296,7 @@ export class StoryCreatePage {
     }
     
     public bindDescription(){
+        this.create.description= jQuery("#editor").html();
         var thisObj=this;
     var reqParam={'ProjectId':1,'search_term':''};
     var userList;
@@ -308,23 +309,23 @@ export class StoryCreatePage {
         thisObj.globalService.getCollaborators(thisObj.constants.getCollaboratorsUrl,reqParam).subscribe(
                 (result) => {
                    userList = jQuery.map(result.data, function(value, i) {
-  return {'id':value.Id, 'name':value.Name};
+  return {'id':value.Id, 'name':value.Name,'profilepic':value.ProfilePic};
 });
-//callback(userList);
+callback(userList);
       
                 }, (error) => {
                    console.log("user loading error")
                 }
             );
-      callback(userList);
+     // callback(userList);
         }
     },
-    }, 
-    displayTpl: "<li style='list-style: none; margin: 0; padding: 0; display: inline-block; width: 100%;background: #ff0;'><img src='http://a248.e.akamai.net/assets.github.com/images/icons/emoji/${name}.png' height='20' width='20'/> ${name} </li>",
+}, 
+    data:userList,
+    displayTpl: "<li style='list-style: none; margin: 0; padding: 0; display: inline-block; width: 100%;background: #ff0;'><img src='${profilepic}' height='20' width='20'/> ${name} </li>",
     insertTpl: "@${name}",
 });
-this.create.description= jQuery("#editor").html();
-        //console.log( this.create.description);
+
   
   };
 
