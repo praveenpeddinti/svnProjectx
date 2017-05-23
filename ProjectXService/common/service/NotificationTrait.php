@@ -1085,7 +1085,7 @@ EOD;
                //   error_log("EMAIL________________+++++++++++_____________".$value);
              }
               $subject=$projectName;
-              $project_logo="<tr><td style='border:solid 1px #f0f0f0; padding:5px;'><a href='' ><img src='http://10.10.73.77:4200/assets/images/logo.png' style='border:0px; outline:0px;'/></a></td></tr>
+              $project_logo="<tr><td style='border:solid 1px #f0f0f0; padding:5px;'><a href='' ><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/logo.png'." style='border:0px; outline:0px;'/></a></td></tr>
                              <tr><td bgcolor='#f8f8f8' style='border-bottom:solid 1px #fff;'>
                              <table width='96%' border='0' align='center' cellpadding='0' cellspacing='0'>
                               <tr>
