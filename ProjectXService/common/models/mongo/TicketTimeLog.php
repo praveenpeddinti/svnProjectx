@@ -104,7 +104,7 @@ class TicketTimeLog extends ActiveRecord
 //            
           $db =  TicketTimeLog::getCollection();
           $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);error_log("current dataeee".$currentDate);
-          $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"Time"=>$totalWorkHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
+          $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$ticketId,"Time"=>$totalWorkHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
             
             return $returnValue;
             
@@ -154,12 +154,18 @@ class TicketTimeLog extends ActiveRecord
      * @return type
      */
     
-    public static function getAllTimeReportDetails($StoryData, $projectId) {
+    public static function getAllTimeReportDetails($StoryData, $projectId) {$StoryData->pagesize=2;
         try {
+            error_log("getAllTimeReportDetails--");
             $StoryData->toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $skip = $StoryData->offset * $StoryData->pagesize;
+           
+           
             $limit = $skip + $StoryData->pagesize;
-            
+             if($skip>0){
+                //$skip =$skip-1; 
+            }
+              error_log("getAllTimeReportDetails--**----".$limit."---".$skip);
             $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->toDate)*1000)));
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
@@ -167,24 +173,33 @@ class TicketTimeLog extends ActiveRecord
                 array('$match' => $matchArray),
                 array(
                     '$group' => array(
-                        '_id' => '$TicketId',
+                        '_id' => '$_id',
                          "data" => array('$push' => '$TimeLog'),
                     )),
-                array('$limit' => $StoryData->pagesize),array('$skip' => $StoryData->offset),
+
+                array('$limit' => $limit),array('$skip' => $skip),
+
+             //   array('$limit' => $StoryData->pagesize),array('$skip' => $StoryData->offset),
                 );
-            
+             error_log("--cccc---");
             $timeReportDetails = $query->aggregate($pipeline);
             $TimeLogDetailsFinalArray = array();
             $TimeLogDataArray= array();
-            error_log("--size---".count($timeReportDetails));
-            foreach($timeReportDetails as $extractTimeLog){
-                $ticketCollectionModel = new TicketCollection();
-                $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractTimeLog['_id'],$projectId,$selectFields=[]);
+           // error_log("--size---".count($timeReportDetails));
+              error_log("--size---".print_r($timeReportDetails,1));
+              $timelogs = $timeReportDetails[0]["data"];
+            //foreach($timeReportDetails as $extractTimeLog){
+                
+                $TimeLogDatafinalArray =array();
+                foreach($timelogs as $eachOne){
+                    
+                   $ticketCollectionModel = new TicketCollection();
+                $getTicketDetails = $ticketCollectionModel->getTicketDetails($eachOne['TicketId'],$projectId,$selectFields=[]);
                 $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
                 error_log("ticket dexc---".$ticketDesc);
-                $ticketTask = $getTicketDetails["Fields"]['planlevel']['value'];
-                $TimeLogDatafinalArray =array();
-                foreach($extractTimeLog['data'] as $eachOne){
+                $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
+                    
+                    
                     $datetime = $eachOne['LoggedOn']->toDateTime();  error_log("%%%%%%%%%%%%%%".$eachOne['LoggedOn']);
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                     $LogDate = $datetime->format('M-d-Y');
@@ -201,7 +216,7 @@ class TicketTimeLog extends ActiveRecord
                     
                    array_push($TimeLogDataArray,$forTicketComments);
                 }
-            }
+          //  }
             return $TimeLogDataArray;
         } catch (Exception $ex) {
             Yii::log("TicketTimeLog:getAllTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
