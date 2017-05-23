@@ -847,7 +847,7 @@ use yii;
                             $to =  $action_user['UserName'];
                            
                         }
-                        $assigned_message=$action_user;
+                        $assigned_message=$action_user['UserName'];
                         $old_user=Collaborators::getCollaboratorById($notification['OldValue']);
                         if($old_user!='')
                         {
