@@ -240,7 +240,14 @@ dateFilterSearch(){
  
         // }) 
 
-
+    }
+    resetForm(){
+          jQuery('.addTaskErrors').html(" ");
+          jQuery(".addTaskErrors").removeClass("fielderror");
+          jQuery('.addDescError').html(" ");
+          jQuery(".addDescError").removeClass("fielderror");
+          jQuery('.addHoursError').html(" ");
+          jQuery(".addHoursError").removeClass("fielderror");
     }
     searchTask(event)
     {
@@ -350,7 +357,7 @@ dateFilterSearch(){
                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );
                     setTimeout(() => {
                             jQuery('#addTimelogModel').modal('hide');
-                            jQuery('#addTimelogModel').find("input,p").val('').end();
+                            jQuery('#addTimelogModel').find("input,p,textarea").val('').end();
                 }, 500);
                 
                 } else {
