@@ -636,11 +636,8 @@ class StoryController extends Controller
     public function actionCreateChildTask(){
         try{
             $postData= json_decode(file_get_contents("php://input")); 
-            $task = ServiceFactory::getStoryServiceInstance()->createChildTask($postData);
-            $responseData = array("Tasks"=>$task,'activityData'=>'');
-            if($task !='failure'){
-                $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($postData->ticketId,$postData->projectId,"ChildTask", $task['TicketId'],$postData->userInfo->Id);
-                $responseData['activityData'] = $activityData;
+            $responseData = ServiceFactory::getStoryServiceInstance()->createChildTask($postData);
+            if($responseData !='failure'){
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -651,7 +648,7 @@ class StoryController extends Controller
                 $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::FAILURE;
                 $responseBean->message = "FAILURE";
-                $responseBean->data =    $task;
+                $responseBean->data =    $responseData;
                 $response = CommonUtility::prepareResponse($responseBean,"json");
             } 
              return $response;
