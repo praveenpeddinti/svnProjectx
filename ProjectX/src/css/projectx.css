@@ -830,4 +830,5 @@ padding-left:0px!important;
 .customdropdown-menutablealignment{right:0;left:auto}
 .yes{ background:#237ea7; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center; display:inline-block;}
 .no{background:#757777; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center;display:inline-block;}
+.modal.custommodel{overflow-x: visible!important;overflow-y: visible!important;}
 /*end*/
