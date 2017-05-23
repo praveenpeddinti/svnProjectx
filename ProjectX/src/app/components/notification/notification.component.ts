@@ -36,7 +36,7 @@ export class NotificationComponent implements OnInit{
     }
 
     getAllNotification(page){
-    this.shared.change(this._router.url,null,'Notifications',''); //added for breadcrumb purpose
+    this.shared.change(this._router.url,null,'Notifications','Other'); //added for breadcrumb purpose
     var post_data={viewAll:1,page:page};
     this._ajaxService.NodeSubscribe('/getAllNotifications',post_data,(data)=>
       {
