@@ -1,4 +1,21 @@
 ion-app.md [padding], ion-app.md [padding] .scroll-content{padding:0}
 .page-story-details .submitbutton-md, .page-story-details .submitbutton-ios, .page-story-details .submitbutton-wp {
     text-align: center;
+vertical-align: middle;
+border-radius: 100%;
+display: table-cell;
+padding: 5px 10px;
+cursor: pointer;
+position: relative;
 }
+
+page-story-details .submitbutton {text-align: center!important;
+vertical-align: middle!important;
+border-radius: 100%!important;
+display: table-cell!important;
+padding: 5px 10px!important;
+cursor: pointer!important;
+position: relative!important;}
+
+.twhdiv{font-size:16px!important;}
+
