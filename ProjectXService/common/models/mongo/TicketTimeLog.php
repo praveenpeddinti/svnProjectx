@@ -104,7 +104,7 @@ class TicketTimeLog extends ActiveRecord
 //            
           $db =  TicketTimeLog::getCollection();
           $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);error_log("current dataeee".$currentDate);
-          $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$ticketId,"Time"=>$totalWorkHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
+          $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$ticketId,"Time"=>(float)$totalWorkHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
             
             return $returnValue;
             
