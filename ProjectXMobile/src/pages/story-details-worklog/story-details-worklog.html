@@ -35,7 +35,7 @@
             <div class="worklogdivbuttonarea">
                  <ul>
                     <li class="inputstyle"><input class="no_mar spinnerlabel" id="logHourDetails_input" [(ngModel)]="inputHourslog"
-        type="number" min="0" max="2" inputmode="numeric" pattern="[0-9]*" title="Non-negative integral number" placeholder="0.00"></li><li class="pull-right"><button class="buttonicon submitbutton" (click)="inputWorkLog($event, i)"> <i aria-hidden="true" class="fa fa-paper-plane"></i></button></li>
+        type="number" min="0" inputmode="numeric" pattern="[0-9]+[\.]" step="0.01" title="Non-negative integral number" placeholder="0.00"></li><li class="pull-right"><button class="buttonicon submitbutton" (click)="inputWorkLog($event, i)"> <i aria-hidden="true" class="fa fa-paper-plane"></i></button></li>
                 </ul>
                 
             </div>
