@@ -38,8 +38,17 @@ export class BreadcrumbComponent implements OnInit {
         this.route_changes=value; //params from URL
         console.log("==Count=="+this.count);
         console.log("==Value in BreadCrumb=="+this.route_changes.url +' '+this.route_changes.params);
+        console.log("==local storage=="+localStorage.getItem('ProjectName'));
         if(this.route_changes.page!='Logout')
         {
+          if(this.items.length>0 && this.count==0 && this.route_changes.page!='Detail' && this.route_changes.type!='Other')
+                {
+                   for (var key in this.items[0]) 
+                   {
+                    this.items[0].url="/#/project/"+this.route_changes.params+"/list";
+                    this.items[0].label=this.route_changes.params;
+                   }
+                }
           if(this.count==0 && this.status!=true && localStorage.getItem('ProjectName')!='')
             {
               console.log("==Length=="+this.items.length);
@@ -47,23 +56,78 @@ export class BreadcrumbComponent implements OnInit {
               // this.removeItems(0,false);
               if(this.route_changes.params!=null)
               {
-                this.items.push({label:localStorage.getItem('ProjectName'),url:"/#/project/"+localStorage.getItem('ProjectName')+"/list"});
+                
+                 this.items.push({label:localStorage.getItem('ProjectName'),url:"/#/project/"+localStorage.getItem('ProjectName')+"/list"});
+                
                 this.status=true;
               }
             }
+            // console.log("==Index=="+this.id.indexOf('#'+this.route_changes.params));
+            // if(this.id.indexOf('#'+this.route_changes.params)>-1)
+            // {
+            //   this.removeItems(this.id.indexOf('#'+this.route_changes.params)+2,true);
+            // }
+
+            
+
+            
             if((this.route_changes.page=='Detail') && !(this.id.indexOf('#'+this.route_changes.params)>-1))
             {
               this.items.push({label:'#'+this.route_changes.params,url:"/#"+this.route_changes.url,type:this.route_changes.type});
               this.id.push('#'+this.route_changes.params);
               this.count++;
+              console.log("==Details Count=="+this.count);
+             // this.removeItems(this.count-1,true); //added newly by Ryan
             }
+
+            /*For Back Logic */
+            for (var key in this.items) 
+                   {
+                     if((this.items[key].label==this.route_changes.params) || (this.items[key].label=='#'+this.route_changes.params) )
+                     {
+                       console.log("==Key=="+key);
+                       //this.removeItems(key+1,true);
+                       for(var i:any=parseInt(key);i<this.items.length;i++)
+                        {
+                          //this.items[i].remove();
+                          this.items.splice(i+1,this.items.length);
+                          this.id.splice(i,this.items.length);
+                        }
+                     }
+                   }
+            /*Back Logic End */
             
         // }
         //  else{ //for search  and notifications
           if(this.route_changes.type=='Other'){ 
-              this.status=true;        
-              this.removeItems(1,true);
-              this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
+              this.status=true;
+              console.log("==Id length=="+this.id.length);
+              if(this.id.length!=0)
+              {        
+                this.removeItems(1,true);
+                this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
+                
+              }
+              else
+              {
+                this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
+                if(this.items.length>1)
+                {
+                  for (var key in this.items) 
+                    {
+                    
+                      if(this.items[0].label==this.items[1].label)
+                      {
+                        this.removeItems(1,true);
+                      }
+                    }
+                }
+               
+                // if(this.count>1 && this.route_changes.page!='TimeReport')
+                // {
+                //   this.removeItems(1,true);
+                // }
+              }
           }
           if(this.route_changes.page=='Home')
           {
@@ -93,9 +157,11 @@ export class BreadcrumbComponent implements OnInit {
   
   modifyBreadcrumb(index)
   {
+    console.log(index);
     if(index==0)
     {
       this.removeItems(index+1,true);
+     
     }
     else if(index==null)
     {
@@ -114,9 +180,12 @@ export class BreadcrumbComponent implements OnInit {
         //this.items[i].remove();
         this.items.splice(i,this.items.length);
       }
-      this.id=[];
-      this.count=0;
-      this.status=status;
+      // if(this.items.length==0)
+      // {
+        this.id=[];
+        this.count=0;
+        this.status=status;
+      //}
   }
 
 }
