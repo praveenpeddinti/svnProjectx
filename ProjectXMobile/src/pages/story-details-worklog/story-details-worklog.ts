@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, AlertController, NavParams } from 'ionic-angular';
 import { Globalservice } from '../../providers/globalservice';
 import { Constants } from '../../providers/constants';
 declare var jQuery: any;
@@ -32,9 +32,11 @@ export class StoryDetailsWorklog {
   public individualitems: Array<any>;
   public inputHourslog = "";
   public storyTicketId: any;
+  public isTimeValidErrorMessage;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public globalService: Globalservice,
     public loadingController: LoadingController,
+    private alertController: AlertController,
     private constants: Constants) {
     this.storyTicketId = this.navParams.data.ticketId;
     console.log("the worklog value is" + JSON.stringify(this.storyTicketId));
@@ -127,24 +129,38 @@ export class StoryDetailsWorklog {
   }
   
    inputWorkLog(event, index) {
+       
      var thisObj=this;
-    // console.log("the details " + JSON.stringify(this.ticketId));
+      if(thisObj.workedLogtime > "0" && thisObj.inputHourslog > "0"){
     this.globalService.insertTimelog(this.constants.insertTimeLog, this.storyTicketId, this.inputHourslog).subscribe(
       (result) => {
         setTimeout(() => {
           // document.getElementById("logHourDetails_input_" + index).style.display = 'block';
-          // document.getElementById("logHourDetails_input_" + index).innerHTML = this.workedLogtime.workHours;
+          // document.getElementById("logHourDetails_input_" + index).innerHTML = this.workedLogtime.workHours;      
           thisObj.inputHourslog = null;
           thisObj.workedLogtime= result.data.timeLogData;
-
-          // this.workedLogtime.TotalTimeLog = result.data.TotalTimeLog;
-          // this.individualitems = result.data.individualLog;
-
         }, 200);
       },
       (error) => {
         //  this.presentToast('Unsuccessful');
       });
+     //  }
+      }else{
+            let alert = this.alertController.create({
+            title: 'Error',
+            message: 'Please enter valid hours!',
+            buttons: [
+            {
+                text: 'OK',
+                role: 'cancel',
+                handler: () => {
+                    jQuery("#logHourDetails_input").val("");
+                }
+            },
+            ]
+        });
+        alert.present();
+      }
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad StoryDetailsWorklog');
