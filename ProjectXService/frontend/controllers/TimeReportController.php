@@ -987,7 +987,7 @@ class TimeReportController extends Controller
             $ticketData = json_decode(file_get_contents("php://input"));
            error_log("calendarrrrrrrrrrrr".$ticketData->toDate);
             $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($ticketData,$ticketData->projectId);
-            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($ticketData,$ticketData->projectId);
+            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTotalWorkLogHours($ticketData,$ticketData->projectId);
             $updatedData=ServiceFactory::getTimeReportServiceInstance()->updateDataForTimeLog($ticketData);
              error_log("###############".$totalCount);
             $responseBean = new ResponseBean();
@@ -1029,7 +1029,7 @@ class TimeReportController extends Controller
             $timelogData = json_decode(file_get_contents("php://input"));
             $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
             $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($timelogData,$timelogData->projectId);
-            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTimeLogRecordsForLast7Days($timelogData,$timelogData->projectId);
+            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTotalWorkLogHours($timelogData,$timelogData->projectId);
             // $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
