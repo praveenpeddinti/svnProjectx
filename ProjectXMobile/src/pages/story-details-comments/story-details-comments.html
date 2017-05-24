@@ -37,9 +37,9 @@
                 <ion-fab top right>
                     <button ion-fab class="commentAction" *ngIf="eachActivity.Status!=0"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></button>
                     <ion-fab-list side="left">
-                        <button ion-fab (click)="replyComment(i,eachActivity.ActivityBy.CollaboratorId)"><i class="fa fa-reply" aria-hidden="true"></i></button>
-                        <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0" (click)="presentConfirmDelete(i,eachActivity.Slug.$oid)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                        <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName" (click)="editComment(i)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                        <button ion-fab (tap)="replyComment(i,eachActivity.ActivityBy.CollaboratorId)"><i class="fa fa-reply" aria-hidden="true"></i></button>
+                        <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName && eachActivity.repliesCount==0" (tap)="presentConfirmDelete(i,eachActivity.Slug.$oid)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                        <button ion-fab *ngIf="eachActivity.ActivityBy.UserName == userName" (tap)="editComment(i)"><i class="fa fa-pencil" aria-hidden="true"></i></button>
                     </ion-fab-list>
                 </ion-fab>
             </div>
@@ -97,7 +97,7 @@
         </div>
     </div>
     <div class="col50 col50textright">
-        <button class="buttonicon submitbutton" (click)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+        <button class="buttonicon submitbutton" (tap)="submitEditedComment(i,eachActivity.Slug.$oid)"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
     </div>
 </div>
 </div>
@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <div class="col50 col50textright">
-                    <button class="buttonicon submitbutton " (click)="submitComment()"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    <button class="buttonicon submitbutton " (tap)="submitComment()"> <i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
