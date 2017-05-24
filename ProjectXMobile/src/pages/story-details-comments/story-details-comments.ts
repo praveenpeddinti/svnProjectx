@@ -220,7 +220,7 @@ export class StoryDetailsComments {
     }
   ionViewDidLoad() {
         RE.editor = document.getElementById('editor');
-        RE.editor.setAttribute("placeholder", "insert my text ...");
+        RE.editor.setAttribute("placeholder", "Description");
         RE.editor.addEventListener("keyup", RE.keyup);
     console.log('ionViewDidLoad StoryDetailsComments');
   }

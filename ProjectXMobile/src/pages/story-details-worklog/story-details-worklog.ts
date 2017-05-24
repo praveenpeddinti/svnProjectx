@@ -147,8 +147,7 @@ export class StoryDetailsWorklog {
      //  }
       }else{
             let alert = this.alertController.create({
-            title: 'Error',
-            message: 'Please enter valid hours!',
+            message: 'Invalid Time',
             buttons: [
             {
                 text: 'OK',
