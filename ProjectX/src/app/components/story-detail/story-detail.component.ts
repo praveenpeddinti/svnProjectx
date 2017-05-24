@@ -463,7 +463,7 @@ private dateVal = new Date();
 //Restores the editable field to static mode.
 //Also prepares the data to be sent to service to save the changes.
 //This is common to left Column fields.
-   restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,where){
+   restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,where,isChildActivity=0){
      var intRegex = /^\d+$/;
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
 
@@ -505,8 +505,8 @@ private dateVal = new Date();
         }else{  
             this.showMyEditableField[fieldIndex] = true;
         }
-
-       this.postDataToAjax(postEditedText);
+       
+       this.postDataToAjax(postEditedText,isChildActivity);
   }
   inputKeyDown(value,eleId){
     
@@ -801,7 +801,7 @@ var thisObj = this;
 
 // Added by Padmaja for Inline Edit
 //Common Ajax method to save the changes.
-    public postDataToAjax(postEditedText){
+    public postDataToAjax(postEditedText,isChildActivity=0){
      clearTimeout(this.inlineTimeout);
     this.inlineTimeout =  setTimeout(() => { 
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
@@ -816,7 +816,15 @@ var thisObj = this;
         * @author:Praveen P
         * @description : This is used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list 
         */
-        if(result.data.activityData !='noupdate' && result.data.activityData.data.ActionFieldType == 6){
+        var fieldType:any='';
+        if(isChildActivity==1)postEditedText.ticketId=this.ticketId;
+        if(result.data.activityData !='noupdate')
+        {   
+          if(result.data.activityData.referenceKey == -1)
+           fieldType = result.data.activityData.data.PropertyChanges[0].ActionFieldType ;
+           else 
+           fieldType = result.data.activityData.data.ActionFieldType ;
+          if(fieldType!='' && fieldType == 6){
             this._ajaxService.AjaxSubscribe("story/get-all-follow-inlineedit",postEditedText,(response)=>
             { 
                 if (response.statusCode == 200) {
@@ -824,6 +832,7 @@ var thisObj = this;
                 }
             });
         }
+      }
          if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
                 document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
                 if(postEditedText.EditedId == "desc"){
@@ -838,12 +847,15 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
 
 
          //  this.commentsList = result.data.Activities;
+         if(isChildActivity==0){
             if(result.data.activityData.referenceKey == -1){
              this.commentsList.push(result.data.activityData.data);
             }
        else if(result.data.activityData != "noupdate"){
         this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
-     }        
+     } 
+         }
+               
  }
         });
 

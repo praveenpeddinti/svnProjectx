@@ -302,7 +302,7 @@
      </div>
 
          <div class="customdropdown">
-     <p-dropdown [hidden]="!taskFieldsEditable[j][k]"  [style]="{'width':'100%'}" [ngModel]="childTaskFields.data.value"   name="dropdownContainer_{{j}}_{{k}}" (onFocus)="dropdownFocus($event,j+'_'+k,'Tasks')" (onBlur)="selectBlurField($event,j+'_'+k,'Tasks')"  (onChange)="restoreField($event,childTasks.TicketId+'_'+childTaskFields.fieldName,j+'_'+k,'select',childTaskFields.data.Id,'Tasks')" id="{{childTasks.TicketId}}_{{j}}_{{k}}" [displayOptions]="dropDisplayList"  [options]="dropList" >
+     <p-dropdown [hidden]="!taskFieldsEditable[j][k]"  [style]="{'width':'100%'}" [ngModel]="childTaskFields.data.value"   name="dropdownContainer_{{j}}_{{k}}" (onFocus)="dropdownFocus($event,j+'_'+k,'Tasks')" (onBlur)="selectBlurField($event,j+'_'+k,'Tasks')"  (onChange)="restoreField($event,childTasks.TicketId+'_'+childTaskFields.fieldName,j+'_'+k,'select',childTaskFields.data.Id,'Tasks',1)" id="{{childTasks.TicketId}}_{{j}}_{{k}}" [displayOptions]="dropDisplayList"  [options]="dropList" >
      </p-dropdown>
      </div>
                         </div>
