@@ -54,8 +54,8 @@
                     <span class="property"><a href="javascript:void(0);" *ngIf="eachProperty.NewValue!='-none-'" data-id="{{eachProperty.NewValue.CollaboratorId}}" data-name="{{eachProperty.NewValue.UserName}}">{{eachProperty.NewValue.UserName}}</a></span>
                     </span>
                     <span *ngIf="eachProperty.type!='user'"> 
-                                            <span class="bold" [innerHTML]= "eachProperty.PreviousValue"></span>
-                    <span *ngIf="eachProperty.PreviousValue!=''"> to</span>
+                                            <span class="bold" *ngIf=" eachProperty.PreviousValue != '' || eachProperty.PreviousValue !=0 " [innerHTML]= "eachProperty.PreviousValue"></span>
+                    <span *ngIf="eachProperty.PreviousValue!='' || eachProperty.PreviousValue!=0 "> to</span>
                     <span class="bold" [innerHTML]="eachProperty.NewValue"></span>
                     </span>
                     <div class="activityDate">({{eachProperty.ActivityOn}})</div>
