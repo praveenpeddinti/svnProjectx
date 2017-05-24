@@ -870,6 +870,10 @@ use yii;
  {
     $activityOn='Assigned To'; 
  }
+ else
+ {
+   $activityOn='Stakeholder';  
+ }
 $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Changes by {$fromUser} </td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$activityOn} : {$assigned_message} </td></tr>
