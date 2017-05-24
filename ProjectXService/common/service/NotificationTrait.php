@@ -866,17 +866,9 @@ use yii;
 //{$fromUser} has assigned {$to} {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
 //EOD;
        
- if($activityOn == "assignedto" ) //for change of assigned to message
- {
-    $activityOn='Assigned To'; 
- }
- else
- {
-   $activityOn='Stakeholder';  
- }
 $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Changes by {$fromUser} </td></tr>
-        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$activityOn} : {$assigned_message} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$storyField['Title']} : {$assigned_message} </td></tr>
 EOD;
  
          array_push($recipient_list,$notification['NotifiedUser']);  
