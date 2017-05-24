@@ -100,6 +100,14 @@ expanded: any = {};
         }
     ngOnInit() {
 var thisObj = this;
+this.date4 = (this.calendarVal.getMonth() + 1) + '-' + this.calendarVal.getDate() + '-' + this.calendarVal.getFullYear(); 
+var maxDate = new Date();//set current date to datepicker as min date
+var date1 = new Date();//set current date to datepicker as min date
+date1.setHours(0,0,0,0);
+this.toDateVal = date1;
+var lastWeekDate = new Date(this.toDateVal);
+lastWeekDate.setDate(lastWeekDate.getDate()-7);
+this.fromDateVal=lastWeekDate;
 thisObj.route.queryParams.subscribe(
       params => 
       { 
@@ -109,35 +117,16 @@ thisObj.route.queryParams.subscribe(
                 if(data.statusCode!=404) {
                 thisObj.projectId=data.data.PId;  
                
-               
+               this.page(thisObj.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+    //var thisObj = this;
+    this.shared.change(this._router.url,null,'TimeReport','Other');
                 }
                 });
                 });
                 });
                 
-this.date4 = (this.calendarVal.getMonth() + 1) + '-' + this.calendarVal.getDate() + '-' + this.calendarVal.getFullYear(); 
-  
 
-var maxDate = new Date();//set current date to datepicker as min date
 
-var date1 = new Date();//set current date to datepicker as min date
-date1.setHours(0,0,0,0);
-this.toDateVal = date1;
-var lastWeekDate = new Date(this.toDateVal);
-lastWeekDate.setDate(lastWeekDate.getDate()-7);
-this.fromDateVal=lastWeekDate;
- /*
-  @params    :  projectId
-  @Description: get bucket details
-  */  
- 
-        /*
-        @params    :  offset,limit,sortvalue,sortorder
-        @Description: Default routing
-        */
-this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
-    var thisObj = this;
-    this.shared.change(this._router.url,null,'TimeReport','Other');
          }
 
 selectFromDate(event){
@@ -154,7 +143,7 @@ dateFilterSearch(){
     if( (new Date(this.fromDateVal) > new Date(this.toDateVal))){
     jQuery("#toDate_error").show();
     }else{
-    this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
+    this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
     }
 }
     // ngAfterViewInit()
@@ -166,10 +155,9 @@ dateFilterSearch(){
         @params    :  offset,limit,sortvalue,sortorder
         @Description: StoryComponent/Task list Rendering
         */
-    page(offset, limit, sortvalue, sortorder,fromDateVal,toDateVal ) {
+    page(projectId,offset, limit, sortvalue, sortorder,fromDateVal,toDateVal ) {
        
-       
-        this._service.getTimeReportDetails(1, offset, limit, sortvalue, sortorder,fromDateVal,toDateVal,(response) => {
+        this._service.getTimeReportDetails(projectId, offset, limit, sortvalue, sortorder,fromDateVal,toDateVal,(response) => {
          //  console.log("responseoooo firsttime" +JSON.stringify(response.data))
 
             let jsonForm = {};
@@ -210,7 +198,7 @@ dateFilterSearch(){
     onPage(event) {
         this.offset = event.offset;
         this.limit = event.limit;
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
     }
 
  
@@ -220,7 +208,7 @@ dateFilterSearch(){
     onSort(event) {
         this.sortvalue = event.sorts[0].prop;
         this.sortorder = event.sorts[0].dir;
-        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
 }
 
 
@@ -343,7 +331,7 @@ dateFilterSearch(){
                 { 
                 //  console.log("ssssssssssssss first"+JSON.stringify(this.rows));
                     if (response.statusCode == 200) {
-                        this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+                        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
                 // console.log("onlyyyy" +JSON.stringify(response));
                 // console.log("onlyyyy###" +JSON.stringify(response.data[0]));
                     //  this.rows.push(response.data[0]);
@@ -508,7 +496,7 @@ dateFilterSearch(){
             { 
               console.log("onlyyyy@@@@@@@@@@@@@@" +JSON.stringify(response)); 
               //jQuery('.'+slug+input).hide();
-               this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+               this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
              // this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
             });            
     }
