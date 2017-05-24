@@ -386,21 +386,22 @@ dateFilterSearch(){
           jQuery("#"+id).fadeOut(4000);
             }
   updateTimelog(slug,ticketDesc,timeLogDate){
-  // alert(jQuery('#taskdisplay_'+'_'+slug).val());
+ // alert(jQuery('#'+'taskdisplay_5925293c80a131045b569ae2').val());
      // alert("eeeeeeeeeeeeee"+this.selectedValForTask);
       console.log("eeeeeeee"+this.selectedValForDate);
      // var errors="";
        var editableDate = new Date(timeLogDate);
-   if(this.selectedValForTask == ""||this.selectedValForTask==undefined )
-   {
-       jQuery(".taskErrormes").addClass("fielderror").fadeIn();
-       jQuery(".taskErrormes").text("Story/task is required").fadeIn();
-     // jQuery('#editableDesc'+'_'+slug).focus() ;
-     this.errors = '1';
-   }else{
-       jQuery(".taskErrormes").removeClass("fielderror").fadeIn();
-       jQuery(".taskErrormes").text(" ").fadeIn();
-   }
+   //    alert("eeeeeeeeeeeeee"+ticketDesc);
+   //    if(this.selectedValForTask == ""||this.selectedValForTask==undefined )
+//    {
+//        jQuery(".taskErrormes").addClass("fielderror").fadeIn();
+//        jQuery(".taskErrormes").text("Story/task is required").fadeIn();
+//      // jQuery('#editableDesc'+'_'+slug).focus() ;
+//      this.errors = '1';
+//    }else{
+//        jQuery(".taskErrormes").removeClass("fielderror").fadeIn();
+//        jQuery(".taskErrormes").text(" ").fadeIn();
+//    }
     if(jQuery('#editableDesc'+'_'+slug).val() == "" )
    {
        jQuery(".descErrormes").addClass("fielderror").fadeIn();
