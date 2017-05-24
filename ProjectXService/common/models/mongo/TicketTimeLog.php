@@ -283,11 +283,12 @@ class TicketTimeLog extends ActiveRecord
                 $db =  TicketTimeLog::getCollection();
                 $currentDate =$loggonDate;
               //  $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
-                $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$autocompleteticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"Time"=>$timelogHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
+              error_log($ticketId."------".$timelogHours."-----*************---------------".$currentDate);
+                $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$autocompleteticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$autocompleteticketId,"Time"=>(float)$timelogHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
                 
                 $collection = Yii::$app->mongodb->getCollection('TicketTimeLog');
-                $newdata = array('$pull'=> array('TimeLog' =>array("Time" => $timelogHours,"Slug"=>new \MongoDB\BSON\ObjectID($slug))));
-                $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => $projectId), $newdata);
+                $newdata = array('$pull'=> array('TimeLog' =>array("Time" =>(float)$timelogHours,"Slug"=>new \MongoDB\BSON\ObjectID($slug))));
+                $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int)$projectId), $newdata);
                 $ticketCollectionModel = new TicketCollection();
                 $getTicketDetails = $ticketCollectionModel->getTicketDetails($autocompleteticketId,$projectId,$selectFields=[]);
                 $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
@@ -307,7 +308,7 @@ class TicketTimeLog extends ActiveRecord
             }else{
                  error_log("autocompleteeeeeeeeeeee@@@@@@@@@@@@@@@@@@@@@".$timelogHours.$loggonDate);
                  $collection =  TicketTimeLog::getCollection();
-                 $newdata = array('$set' => array('TimeLog.$.Time' => $timelogHours,'TimeLog.$.Description' => $description));
+                 $newdata = array('$set' => array('TimeLog.$.Time' =>(float) $timelogHours,'TimeLog.$.Description' => $description));
                  $collection->update(array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"TimeLog.Slug"=>new \MongoDB\BSON\ObjectID($slug)), $newdata); 
                  $ticketCollectionModel = new TicketCollection();
                  $getTicketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId,$selectFields=[]);
