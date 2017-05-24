@@ -234,8 +234,16 @@ dateFilterSearch(){
           jQuery(".addTaskErrors").removeClass("fielderror");
           jQuery('.addDescError').html(" ");
           jQuery(".addDescError").removeClass("fielderror");
+          jQuery('#addTimelogDesc').val('');
+           jQuery('#addTimelogTime').val('');
           jQuery('.addHoursError').html(" ");
           jQuery(".addHoursError").removeClass("fielderror");
+          jQuery('.taskErrormes').html(" ");
+          jQuery(".taskErrormes").removeClass("fielderror");
+          jQuery('.descErrormes').html(" ");
+          jQuery(".descErrormes").removeClass("fielderror");
+          jQuery(".hoursErrormes").html(" ");
+          jQuery(".hoursErrormes").removeClass("fielderror");
     }
     searchTask(event)
     {
@@ -359,14 +367,14 @@ dateFilterSearch(){
      inputKeyDown(id,slug){
      if(id==1){
             var initVal = jQuery("#addTimelogTime").val();
-        var  outputVal = initVal.replace(/([^0-9])+/g,'');       
+        var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
         if (initVal != outputVal) {
             jQuery("#addTimelogTime").val(outputVal);
          }
         }
         else{
                  var initVal = jQuery("#editTimelogTime_"+slug).val();
-                var  outputVal = initVal.replace(/([^0-9])+/g,'');       
+                var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
                 if (initVal != outputVal) {
                     jQuery("#editTimelogTime_"+slug).val(outputVal);
                 } 
