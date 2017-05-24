@@ -139,7 +139,6 @@ class TicketTimeLog extends ActiveRecord
                 ),
             );
             $Arraytimelog = $query->aggregate($pipeline);
-          error_log("@@@@@@@@@@@@@".print_r($Arraytimelog,1));
             return $Arraytimelog;
         } catch (Exception $ex) {
             Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -156,16 +155,12 @@ class TicketTimeLog extends ActiveRecord
     
     public static function getAllTimeReportDetails($StoryData, $projectId) {
         try {
-            error_log("getAllTimeReportDetails--");
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $skip = $StoryData->offset * $StoryData->pagesize;
-           
-           
             $limit = $skip + $StoryData->pagesize;
              if($skip>0){
                 //$skip =$skip-1; 
             }
-              error_log("getAllTimeReportDetails--**----".$limit."---".$skip."--------".$StoryData->fromDate."--".$toDate);
             $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(

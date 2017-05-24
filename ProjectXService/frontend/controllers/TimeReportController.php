@@ -85,7 +85,7 @@ class TimeReportController extends Controller
 
     /**
     * @author Praveen P
-    * @description This method is used to get all data for stories/tasks.
+    * @description This method is used to get all data for Work log details.
     * @return type
     */
    public function actionGetTimeReportDetails() {
@@ -96,7 +96,6 @@ class TimeReportController extends Controller
             $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($StoryData,$projectId);
             $totalWorkLogHours = ServiceFactory::getTimeReportServiceInstance()->getTotalWorkLogHours($StoryData,$projectId);
          
-            //$data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -111,31 +110,6 @@ class TimeReportController extends Controller
     }
 
     /**
-    * @author Praveen P
-    * @description This method is used to getting subtask details for the particular story.
-    * @return type subtasks
-    */
-   public function actionGetSubTaskDetails() {
-        try {
-            $StoryData = json_decode(file_get_contents("php://input"));
-            $subtaskIds=array();
-            $projectId = $StoryData->projectId;
-            $getSubTaskIds = ServiceFactory::getStoryServiceInstance()->getSubTaskIds($StoryData->storyId,$projectId);
-            foreach($getSubTaskIds['Tasks'] as $task){
-               array_push($subtaskIds,$task['TaskId']);
-            }
-            $data = ServiceFactory::getStoryServiceInstance()->getSubTaskDetails($subtaskIds, $projectId);
-            $responseBean = new ResponseBean();
-            $responseBean->statusCode = ResponseBean::SUCCESS;
-            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $data;
-            $response = CommonUtility::prepareResponse($responseBean, "json");
-            return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
-    }
-    /**
     * @author Moin Hussain
     * @description This method is used to get data for edit mode.
     * @return type
@@ -143,8 +117,7 @@ class TimeReportController extends Controller
     public function actionEditTicket(){
         try{
 
-            $ticket_data = json_decode(file_get_contents("php://input"));
-            error_log("++++++++++++++++++++++++dfsdfsdfsdf+++++++++++++".$ticket_data->ticketId);
+        $ticket_data = json_decode(file_get_contents("php://input"));
         $data['ticket_details'] = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,1);
         $data['task_types'] = ServiceFactory::getStoryServiceInstance()->getTaskTypes();
 
@@ -482,7 +455,6 @@ class TimeReportController extends Controller
 
 
    public function actionSubmitComment(){
-       error_log("submit comment==============");
        $comment_post_data=json_decode(file_get_contents("php://input"));
        error_log(print_r($comment_post_data,1));
        $returnData = ServiceFactory::getStoryServiceInstance()->saveComment($comment_post_data);

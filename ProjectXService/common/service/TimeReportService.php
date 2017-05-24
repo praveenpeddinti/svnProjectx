@@ -20,7 +20,7 @@ class TimeReportService {
      * @author Praveen P
      * @param type $CollaboratorId
      * @param type $projectId
-     * @return type
+     * @return type 
      */
   
     public function getTimeReportCount($StoryData, $projectId) {
@@ -32,7 +32,13 @@ class TimeReportService {
             Yii::log("TimeReportService:getTimeReportCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-
+    
+    /**
+     * @author Praveen P
+     * @param type $CollaboratorId
+     * @param type $projectId
+     * @return type work log details for collaborator
+     */
     public function getAllTimeReportDetails($StoryData,$projectId) {
         try {
             $finalData = array();
@@ -47,7 +53,7 @@ class TimeReportService {
      * @author Praveen P
      * @param type $CollaboratorId
      * @param type $projectId
-     * @return type 7days work hours for collaborator
+     * @return type work hours for collaborator
      */
     
     public function getTotalWorkLogHours($StoryData, $projectId) {
