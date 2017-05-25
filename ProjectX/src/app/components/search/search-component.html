@@ -22,7 +22,7 @@
 <div class="searchresulttitle" *ngIf="!finalData.ProfilePicture">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
- <a  (click)="navigateToStoryDetail(finalData.Project,finalData.TicketId)">#{{finalData.TicketId}} {{finalData.Title}}</a>
+ <a [routerLink]="['/project',finalData.Project.ProjectName,finalData.TicketId]" (click)="navigateToStoryDetail(finalData.Project,finalData.TicketId,'')">#{{finalData.TicketId}} {{finalData.Title}}</a>
 </div>
 <div class="searchresulttitle" *ngIf="finalData.ProfilePicture">
     <span class="searchresulttitleusericon">
@@ -44,7 +44,7 @@
 <div class="searchresulttitle">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
- <a [routerLink]="['/project',finalData.ProjectName,finalData.TicketId,commentData.Slug.$oid]" >#{{finalData.TicketId}} {{finalData.Title}}<span class="heighlight"></span></a>
+ <a [routerLink]="['/project',finalData.Project.ProjectName,finalData.TicketId,commentData.Slug.$oid]" (click)="navigateToStoryDetail(finalData.Project,finalData.TicketId,commentData.Slug.$oid)">#{{finalData.TicketId}} {{finalData.Title}}<span class="heighlight"></span></a>
 </div>
 <div class="searchresultcontent" [innerHTML]="commentData.CrudeCDescription">
 <span class="not_mention">
