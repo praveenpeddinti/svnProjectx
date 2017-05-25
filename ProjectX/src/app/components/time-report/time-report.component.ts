@@ -346,9 +346,21 @@ dateFilterSearch(){
      
      
     }
-     showdeleteDiv(delObj){
+     showdeleteDiv(delObj,slug){
              jQuery("#delete_timelog").css("display", "block");
+             //alert("ddddddddddddddddddd");
+             //alert(jQuery('#del_'+slug));
+             var delbutton_Height=25;
+             var delbutton_Width=jQuery('#del_'+slug).width()/2;
+             var delete_popup=jQuery('.delete_followersbgtable').width()/2;
+             var offset=jQuery('#del_'+slug).offset();
+             var offsetTop=offset.top+delbutton_Height;
+             var offsetRight=offset.right-(delbutton_Width+delete_popup);
+         
             // alert("idddddddddddddd"+JSON.stringify(delObj));
+            jQuery('#delete_timelog').css({'top':offsetTop,'left':offsetRight,'min-width':"auto"});
+            
+            //jQuery('#delete_timelog').css('min-width',"auto");
              this.extractDelFields=delObj;
     }
     removeTimelog(){
