@@ -54,13 +54,12 @@ export class BreadcrumbComponent implements OnInit {
               console.log("==Length=="+this.items.length);
               console.log("==projectName=="+localStorage.getItem('ProjectName'));
               // this.removeItems(0,false);
-              if(this.route_changes.params!=null)
-              {
+             
                 
                  this.items.push({label:localStorage.getItem('ProjectName'),url:"/#/project/"+localStorage.getItem('ProjectName')+"/list"});
                 
                 this.status=true;
-              }
+              
             }
             // console.log("==Index=="+this.id.indexOf('#'+this.route_changes.params));
             // if(this.id.indexOf('#'+this.route_changes.params)>-1)
@@ -113,12 +112,19 @@ export class BreadcrumbComponent implements OnInit {
                 this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
                 if(this.items.length>1)
                 {
-                  for (var key in this.items) 
+                  console.log("==Items Length=="+this.items.length);
+                  for(var key in this.items) 
                     {
-                    
-                      if(this.items[0].label==this.items[1].label)
+                      console.log("== Count key ===="+key);
+                      var i:any=parseInt(key);
+                      if(i<this.items.length)
                       {
-                        this.removeItems(1,true);
+                        console.log("condition satisfied");
+                        if(this.items[i].label==this.route_changes.page)
+                        {
+                          console.log("condition satisfied");
+                          this.removeItems(i+1,true);
+                        }
                       }
                     }
                 }
@@ -169,7 +175,8 @@ export class BreadcrumbComponent implements OnInit {
     }
     else 
     {
-      this.removeItems(index,true);
+     // this.removeItems(index,true);
+     this.removeItems(index+1,true); //newly added
     }
   }
 
