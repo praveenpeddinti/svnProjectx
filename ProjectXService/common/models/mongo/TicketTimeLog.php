@@ -307,8 +307,9 @@ class TicketTimeLog extends ActiveRecord
                   
             }else{
                  error_log("autocompleteeeeeeeeeeee@@@@@@@@@@@@@@@@@@@@@".$timelogHours.$loggonDate);
+                 $currentDate =$loggonDate;
                  $collection =  TicketTimeLog::getCollection();
-                 $newdata = array('$set' => array('TimeLog.$.Time' =>(float) $timelogHours,'TimeLog.$.Description' => $description));
+                 $newdata = array('$set' => array('TimeLog.$.Time' =>(float) $timelogHours,'TimeLog.$.Description' => $description,'TimeLog.$.LoggedOn' => $currentDate));
                  $collection->update(array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"TimeLog.Slug"=>new \MongoDB\BSON\ObjectID($slug)), $newdata); 
                  $ticketCollectionModel = new TicketCollection();
                  $getTicketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId,$selectFields=[]);
@@ -317,7 +318,7 @@ class TicketTimeLog extends ActiveRecord
                 $getTicketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId,$selectFields=[]);
                 $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
                 $ticketTask = $getTicketDetails["Fields"]['planlevel']['value'];
-                $currentDate =$loggonDate;
+                
                 $datetime = strtotime($currentDate);
                 $LogDate = date('M-d-Y',$datetime);
                 $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => "","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");

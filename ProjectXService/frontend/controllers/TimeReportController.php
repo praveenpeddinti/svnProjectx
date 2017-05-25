@@ -1010,26 +1010,30 @@ class TimeReportController extends Controller
      * @return type
      */
     public function actionGetStoryDetailsForTimelog(){
-        $searchData = json_decode(file_get_contents("php://input"));
-        $projectId = $searchData->projectId;
-       // $ticketId = $searchData->ticketId;
-        $sortvalue = $searchData->sortvalue;
-        $searchString = $searchData->searchString;
-        $getSearchDetails = TicketCollection::getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
-        if(!empty($getSearchDetails)){
-            $responseBean = new ResponseBean();
-            $responseBean->statusCode = ResponseBean::SUCCESS;
-            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $getSearchDetails;
-            $response = CommonUtility::prepareResponse($responseBean, "json");
-        }else{
-            $responseBean = new ResponseBean;
-            $responseBean->status = ResponseBean::FAILURE;
-            $responseBean->message = "failure";
-            $responseBean->data = $getSearchDetails;
-            $response = CommonUtility::prepareResponse($responseBean,"json"); 
-            }
+        try{
+            $searchData = json_decode(file_get_contents("php://input"));
+            $projectId = $searchData->projectId;
+           // $ticketId = $searchData->ticketId;
+            $sortvalue = $searchData->sortvalue;
+            $searchString = $searchData->searchString;
+            $getSearchDetails = TicketCollection::getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
+            if(!empty($getSearchDetails)){
+                $responseBean = new ResponseBean();
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+                $responseBean->data = $getSearchDetails;
+                $response = CommonUtility::prepareResponse($responseBean, "json");
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $getSearchDetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+                }
         return $response;
+         } catch (Exception $ex) {
+             Yii::log("TimeReportController:actionGetStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
     }
          /**
      * @author Padmaja
