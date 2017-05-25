@@ -482,8 +482,9 @@ dateFilterSearch(){
                 // }
                 // this.rows = rows;
                 //  console.log("@@@@@@@@@responseoooo final" +JSON.stringify(this.rows));
+                   this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
                  jQuery('.timelogSuccessMsg').css('display','block');
-                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );
+                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );;
                   setTimeout(() => {
                         jQuery('#'+'myModal_'+slug).modal('hide');
                        
