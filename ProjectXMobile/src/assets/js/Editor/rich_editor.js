@@ -130,22 +130,22 @@ function returnNodeType() {
     if(nodeArray.indexOf("B") > -1){
    		// Bold
         //    alert(document.getElementById("bold").style.backgroundColor);
-           document.getElementById("bold").style.backgroundColor = "red";
+           document.getElementById("bold").style.backgroundColor = "#cccccc";
     } else if(nodeArray.indexOf("I") > -1){
         // Italic
-        document.getElementById("italic").style.backgroundColor = "red";
+        document.getElementById("italic").style.backgroundColor = "#cccccc";
     } else if(nodeArray.indexOf("U") > -1){
             // unorder list (bullits)
-            document.getElementById("underline").style.backgroundColor = "red";
+            document.getElementById("underline").style.backgroundColor = "#cccccc";
     }else if(nodeArray.indexOf("UL") > -1){
             // unorder list (bullits)
-            document.getElementById("bullets").style.backgroundColor = "red";
+            document.getElementById("bullets").style.backgroundColor = "#cccccc";
     } else if(nodeArray.indexOf("OL") > -1){
             // order list (numbers)
-            document.getElementById("numbers").style.backgroundColor = "red";
+            document.getElementById("numbers").style.backgroundColor = "#cccccc";
     } else if(nodeArray.indexOf("A") > -1){
             // ancher tag
-            document.getElementById("insertlink").style.backgroundColor = "red";
+            document.getElementById("insertlink").style.backgroundColor = "#cccccc";
     } else {
         document.getElementById("bold").style.backgroundColor = "";
         document.getElementById("italic").style.backgroundColor = "";
