@@ -31,6 +31,6 @@ export class PageNotFoundComponent implements OnInit{
 
     ngOnInit(){
     
-  this.shared.change(this._router.url,null,'Error',''); //added for breadcrumb purpose
+  this.shared.change(this._router.url,null,'Error','Other'); //added for breadcrumb purpose
 }
 }
