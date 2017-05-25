@@ -423,7 +423,7 @@ footer{font-size:12px}
 .commentlink a{ color:#237ea7; text-decoration:none;}
 .commentp{ color:#4c4c4c; font:normal 14px/18px 'robotoregular', Arial, Helvetica, sans-serif; word-wrap: break-word;}
 .commentreplyp{ color:#000; font:normal 15px/18px 'robotoregular', Arial, Helvetica, sans-serif;}
-.commentp span{ color:#237ea7;}
+.commentp span{ /*color:#237ea7;*/}
 .commentp span a{ color:#237ea7; text-decoration:none;}
 .commedit{  float:left; margin-left:10px; width:28px; height:28px; margin-bottom: 10px;}
 .commentp img{ max-width:100%; margin-bottom: 20px;}
@@ -825,7 +825,7 @@ padding-left:0px!important;
    
 }
 .relativediv{position: relative}
-.ngx-datatable{overflow: visible!important}
+/*.ngx-datatable{overflow: visible!important;}*/
 .normal.buttonmediumheight{padding: 13px 12px 14px!important;}
 .customdropdown-menutablealignment{right:0;left:auto}
 .yes{ background:#237ea7; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center; display:inline-block;}
@@ -833,3 +833,10 @@ padding-left:0px!important;
 .modal.custommodel{overflow-x: visible!important;overflow-y: visible!important;}
 .marb5{ margin-bottom: 5px!important;}
 /*end*/
+.ngx-datatable .datatable-body .datatable-body-row > div{display: table!important}
+.assignedto{margin: 0 0 0 16px}
+.story_tasks .prioritycolumn{margin:0 0 0 10px!important}
+.story_tasks .statusbold{margin:0 0 0 13px!important}
+.story_tasks .bucket {margin: 0 0 0 16px!important;}
+.story_tasks .duedate{margin: 0 0 0 8px!important;}
+.story_tasks .assignedto{margin: 0 0 0 8px!important;}
