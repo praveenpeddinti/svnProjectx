@@ -338,16 +338,17 @@ dateFilterSearch(){
              var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
         date = date.replace(/(\b\d{1}\b)/g, "0$1");
         var finalDate=this.dateVal.toString();
+        var ticketSpilt = getTaskVal.split("#")[1];
+        var ticket_Id = ticketSpilt.split(" ")[0];
         var timelogData={
-              'projectId':this.projectId,
-              'addTimelogTask':getTaskVal.split("#")[1],
-              'addTimelogDesc':jQuery('#addTimelogDesc').val(),
-              'addTimelogTime':jQuery('#addTimelogTime').val(),
-              'addTimelogDate':finalDate,
-              'fromDate':this.fromDateVal,
-              'toDate':this.toDateVal
+                ticketId:ticket_Id,
+                workHours:jQuery('#addTimelogTime').val(),
+                addTimelogDesc:jQuery('#addTimelogDesc').val(),
+                addTimelogTime:finalDate,
+                projectId:this.projectId
+              
         }
-      // alert("timelogData"+JSON.stringify(timelogData));
+       //alert("timelogData"+JSON.stringify(timelogData));
             this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
                 { 
                 //  console.log("ssssssssssssss first"+JSON.stringify(this.rows));
