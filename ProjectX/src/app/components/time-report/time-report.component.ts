@@ -184,7 +184,7 @@ dateFilterSearch(){
                 }else if((days>=30) && (days<=365)){
                     var totalmonth=( toDateVal.getFullYear() * 12 + toDateVal.getMonth() )-( fromDateVal.getFullYear() * 12 + fromDateVal.getMonth() );
                     this.showdays = totalmonth+ " MONTH(S)";}else{
-                    var totalYears= fromDateVal.getFullYear() - toDateVal.getFullYear();
+                    var totalYears= toDateVal.getFullYear() - fromDateVal.getFullYear() ;
                     this.showdays = totalYears+ " YEAR(S)";}
                 } else {
                 console.log("fail---");
