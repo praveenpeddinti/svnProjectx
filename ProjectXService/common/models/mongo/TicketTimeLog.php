@@ -89,7 +89,7 @@ class TicketTimeLog extends ActiveRecord
      * @param type $totalWorkHours
      * @return type
      */
-      public static function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours,$description='') {
+      public static function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours,$description,$LoggedOn) {
 
         try {
             $returnValue = 'failure';
@@ -103,7 +103,7 @@ class TicketTimeLog extends ActiveRecord
 //            }
 //            
           $db =  TicketTimeLog::getCollection();
-          $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);error_log("current dataeee".$currentDate);
+          $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($LoggedOn)*1000);error_log("current dataeee".$currentDate);
           $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$ticketId,"Time"=>(float)$totalWorkHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
             
             return $returnValue;
@@ -154,7 +154,7 @@ class TicketTimeLog extends ActiveRecord
      */
     
     public static function getAllTimeReportDetails($StoryData, $projectId) {
-        try {
+        try {error_log("---d-d-f---".$StoryData->toDate);
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $skip = $StoryData->offset * $StoryData->pagesize;
             $limit = $skip + $StoryData->pagesize;

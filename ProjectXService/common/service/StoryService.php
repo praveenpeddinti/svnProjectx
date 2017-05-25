@@ -1387,11 +1387,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     public function insertTimeLog($timelog_data) {
         try {
             
+            $addTimelogTime = date("Y-m-d H:i:s", strtotime($timelog_data->addTimelogTime));
             $projectId = $timelog_data->projectId;
             $ticketId = $timelog_data->ticketId;
             $userId = $timelog_data->userInfo->Id;
             $totalWorkHours = (float) $timelog_data->workHours;
-            $ticketDetails = TicketTimeLog::saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours);
+            $description = $timelog_data->addTimelogDesc;
+            $LoggedOn = $addTimelogTime;
+            $ticketDetails = TicketTimeLog::saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours,$description,$LoggedOn);
             $recipient_list=array();//added By Ryan
             $action='';//added By Ryan
             if ($ticketDetails != "failure") {
