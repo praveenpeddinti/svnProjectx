@@ -437,12 +437,18 @@ export class StoryDetailsComments {
         this.editCommentOpenClose[commentId] = false;
         this.newCommentOpenClose = true;
     }
-    public showSubmit(commentId){console.log(commentId)
-        if(commentId==-1){ 
-            this.newSubmitOpenClose = false;
+    public showSubmit(commentId){
+       var thisObj = this;
+             if(commentId==-1){ 
+                 setTimeout(function(){
+              thisObj.newSubmitOpenClose = false;   
+            },100)
+           
         }
         else{
-            this.editSubmitOpenClose = false; 
+            setTimeout(function(){
+               thisObj.editSubmitOpenClose = false;   
+            },100)
         }
     }
     public submitComment() {
