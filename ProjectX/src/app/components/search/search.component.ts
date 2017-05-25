@@ -79,7 +79,7 @@ export class SearchComponent implements OnInit{
               
                 });
         });
-        this.shared.change(this._router.url,this.route.params,'Search',''); //added By Ryan for breadcrumb purpose
+        this.shared.change(this._router.url,this.route.params,'Search','Other'); //added By Ryan for breadcrumb purpose
     }
    public  load_contents(page,searchString,searchFlag,projectId,type){
         var post_data={
