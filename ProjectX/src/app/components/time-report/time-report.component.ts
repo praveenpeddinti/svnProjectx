@@ -145,6 +145,9 @@ dateFilterSearch(){
     this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
     }
 }
+ clearDateTimeEntry(){ alert('ss');
+     this.dateVal =  new Date();
+     }
     // ngAfterViewInit()
     // {
     //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.general:eq(0)').before('<label>Filter</label>');
@@ -363,7 +366,7 @@ dateFilterSearch(){
                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );
                     setTimeout(() => {
                             jQuery('#addTimelogModel').modal('hide');
-                            jQuery('#addTimelogModel').find("input,textarea").val('').end();
+                            //jQuery('#addTimelogModel').find("input,textarea").val('').end();
                            
                 }, 500);
                
