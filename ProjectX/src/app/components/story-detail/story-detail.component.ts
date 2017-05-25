@@ -50,7 +50,6 @@ public blurTimeout=[];
   private texts:string;
   private check_status:boolean=false;
 
-
   private childTasksArray=[];
   private childTaskData="";
   public commentsList=[];
@@ -1381,11 +1380,14 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
        {
           this.errorTimeLog();
        }else{
-       if(event!=0){
+        if(event!=0){
+            var currentDate = new Date();
             var TimeLog={
                 ticketId:this.ticketId,
                 workHours:event,
-                projectId:1
+                addTimelogDesc:'',
+                addTimelogTime:currentDate.toString(),
+                projectId:this.projectId
               };
             this._ajaxService.AjaxSubscribe("story/insert-time-log",TimeLog,(data)=>
               { 
