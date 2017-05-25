@@ -167,11 +167,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endCol
  .paddingmobile{padding:10px;}
 }
 .editordiv{border:1px solid #e8e8e8;font-size:14px}
-.editoroption{padding:5px;border-bottom:1px solid #e8e8e8;background: #f0f0f0;text-align: left}
-.editoroption button{border-radius:3px;}
+.editoroption{padding:5px 0;border-bottom:1px solid #e8e8e8;background: #f0f0f0;text-align: left}
+.editoroption button{border-radius:3px;padding:5px 12px}
 #close{float:right}
 #close i{font-size:18px}
 .editoroptionouter{padding:0 10px}
 .editoroptionouterpaddingbottom10{padding-bottom:10px}
 .atmentionuserstyles{list-style: none; margin: 0; padding: 0; display: inline-block; width: 100%;background: #f4f4f4;padding:5px;border-bottom:1px solid #fff}
 .atmentionuserstyles img{border-radius:100px;vertical-align: middle}
+.tabs-md .tab-button-text{font-size:15px}
