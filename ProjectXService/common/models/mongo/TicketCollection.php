@@ -427,7 +427,7 @@ class TicketCollection extends ActiveRecord
 
             if ($totalWorkHours > 0) {
                 $ticketCollection = Yii::$app->mongodb->getCollection('TicketCollection');
-                $updateTotalTimeLog = array('$inc' => array("TotalTimeLog" => $totalWorkHours));
+                $updateTotalTimeLog = array('$inc' => array("TotalTimeLog" =>(float)$totalWorkHours));
                 $ticketCollection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int) $projectId), $updateTotalTimeLog);
             }
         } catch (Exception $ex) {

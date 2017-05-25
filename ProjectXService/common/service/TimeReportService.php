@@ -1,11 +1,11 @@
 <?php
 namespace common\service;
-use common\models\mongo\{TicketTimeLog,TicketCollection,TinyUserCollection};
-use common\components\CommonUtility;
+use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters};
 use common\models\bean\FieldBean;
 use Yii;
-
+use common\components\{CommonUtility};
+use common\service\NotificationTrait;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,7 +15,7 @@ use Yii;
 
 class TimeReportService {
 
-        
+          use NotificationTrait;
     /**
      * @author Praveen P
      * @param type $CollaboratorId
@@ -132,7 +132,7 @@ class TimeReportService {
         try{
             $projectId = $ticketData->projectId;
             $slug = $ticketData->slug;
-            $timelogHours = $ticketData->timelogHours;
+            $totalWorkHours = $ticketData->timelogHours;
             $ticketDesc= explode(".",$ticketData->ticketDesc);
             $ticketId=str_replace('#','',$ticketDesc[0]);
             $collabaratorId=$ticketData->userInfo->Id;
@@ -148,8 +148,38 @@ class TimeReportService {
             if(isset($ticketData->calendardate)){
                 $calendardate = $ticketData->calendardate;
             }
-           return  $ticketTimeLog = TicketTimeLog::updateTimeLogRecords($projectId,$slug,$timelogHours,$ticketId,$autocompleteticketId,$editableDate,$calendardate,$collabaratorId,$description);
-           
+            $ticketTimeLog = TicketTimeLog::updateTimeLogRecords($projectId,$slug,$totalWorkHours,$ticketId,$autocompleteticketId,$editableDate,$calendardate,$collabaratorId,$description);
+            
+            $recipient_list=array();
+            $action='';
+            if ($ticketTimeLog != "failure") {
+                 if(!empty($autocompleteticketId)){
+                    $ticketId=$autocompleteticketId;
+                }
+                
+            $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
+            $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
+            $total=($oldTimeLog + $totalWorkHours);
+            $slug =  new \MongoDB\BSON\ObjectID();
+            error_log("$$$$$$$$$$$$$".$ticketId."###".$projectId."asss".$total.$collabaratorId.$slug);
+            $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $collabaratorId,$slug);
+             // ServiceFactory::getStoryServiceInstance()->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug); 
+            if ($parenTicketInfo["ParentStoryId"] != "") {
+                $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
+            }
+                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $totalWorkHours);
+                $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog"));
+                $newTimeLog=$ticketInfo['TotalTimeLog'];
+                $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog;
+                foreach($ticketInfo['Followers'] as $follower) 
+                {
+                    $collaborator=TinyUserCollection::getMiniUserDetails($follower['FollowerId']);
+                    array_push($recipient_list,$collaborator['Email']);
+                }
+
+                return $activityData;
+            }
+             
             
         } catch (Exception $ex) {
             Yii::log("TimeReportService:updateDataForTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

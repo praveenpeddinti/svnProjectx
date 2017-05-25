@@ -97,19 +97,12 @@ class TimeReportController extends Controller
     */
     public function actionUpdateTimelogForEdit(){
         try{
-            error_log("asssssssssssssssssssd@@@@@@@@@@@@@@@@@@");
             $ticketData = json_decode(file_get_contents("php://input"));
-           error_log("calendarrrrrrrrrrrr".$ticketData->toDate);
-            $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($ticketData,$ticketData->projectId);
-            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTotalWorkLogHours($ticketData,$ticketData->projectId);
             $updatedData=ServiceFactory::getTimeReportServiceInstance()->updateDataForTimeLog($ticketData);
-             error_log("###############".$totalCount);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $updatedData;
-            $responseBean->totalCount = $totalCount;
-            $responseBean->timehours = $last7DaysWorkLog;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
             
@@ -159,15 +152,10 @@ class TimeReportController extends Controller
             $timelogData = json_decode(file_get_contents("php://input"));
             //$getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
             $getTimelogData=ServiceFactory::getStoryServiceInstance()->insertTimeLog($timelogData);
-            $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($timelogData,$timelogData->projectId);
-            $last7DaysWorkLog = ServiceFactory::getTimeReportServiceInstance()->getTotalWorkLogHours($timelogData,$timelogData->projectId);
-            // $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $getTimelogData;
-            $responseBean->totalCount = $totalCount;
-            $responseBean->timehours = $last7DaysWorkLog;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response; 
         } catch (Exception $ex) {
@@ -201,6 +189,16 @@ class TimeReportController extends Controller
             Yii::log("TimeReportController:actionRemoveTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
        }
 
+   }
+   public function actionGetTimelogDetailsBySlug(){
+     try{ 
+        $timelogData = json_decode(file_get_contents("php://input"));
+       $timelogDetails=  TicketTimeLog::getTimeLogRecordsBySlug($timelogData->projectId,$timelogData->ticketId,$timelogData->slug);
+       error_log("slugggggggggggggg".print_r($timelogDetails,1));
+         
+     } catch (Exception $ex) {
+
+     } 
    }
 }
 

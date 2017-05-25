@@ -272,8 +272,8 @@ class TicketTimeLog extends ActiveRecord
      */
     public static function updateTimeLogRecords($projectId,$slug,$timelogHours,$ticketId,$autocompleteticketId="",$editableDate,$calendardate="",$userId,$description=""){
         try{
-            $TimeLogDataArray=array();
-                if(!empty($calendardate)){
+            $returnValue='failure';
+               if(!empty($calendardate)){
                     $loggonDate=$calendardate;
                 }else{
                     $loggonDate=$editableDate;
@@ -281,57 +281,24 @@ class TicketTimeLog extends ActiveRecord
             if(!empty($autocompleteticketId)){
                 error_log("autocompleteeeeeeeeeeee");
                 $db =  TicketTimeLog::getCollection();
-                $currentDate =$loggonDate;
-              //  $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
+               // $currentDate =$loggonDate;
+               $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
               error_log($ticketId."------".$timelogHours."-----*************---------------".$currentDate);
                 $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$autocompleteticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$autocompleteticketId,"Time"=>(float)$timelogHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
                 
                 $collection = Yii::$app->mongodb->getCollection('TicketTimeLog');
                 $newdata = array('$pull'=> array('TimeLog' =>array("Time" =>(float)$timelogHours,"Slug"=>new \MongoDB\BSON\ObjectID($slug))));
                 $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int)$projectId), $newdata);
-                $ticketCollectionModel = new TicketCollection();
-                $getTicketDetails = $ticketCollectionModel->getTicketDetails($autocompleteticketId,$projectId,$selectFields=[]);
-                $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
-                $ticketTask = $getTicketDetails["Fields"]['planlevel']['value'];
-                $datetime = strtotime($currentDate);
-                $LogDate = date('M-d-Y',$datetime);
-                $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => "","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");
-                $time = array("field_name" => "Date", "value_id" => "", "field_value" => $timelogHours, "other_data" => "", "ticketDesc" =>"","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");
-                $date = array("field_name" => "Time", "value_id" => "", "field_value" =>$LogDate, "other_data" => "", "ticketDesc" =>"","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");
-                $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "", "ticketDesc" =>"","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");
-                $forTicketComments[0] = $date;
-                $forTicketComments[1] =  $ticketId;
-                $forTicketComments[2] = $time;
-                $forTicketComments[3] = $action;
-                array_push($TimeLogDataArray,$forTicketComments);
-                  
-            }else{
+                $returnValue=$slug;
+             }else{
                  error_log("autocompleteeeeeeeeeeee@@@@@@@@@@@@@@@@@@@@@".$timelogHours.$loggonDate);
-                 $currentDate =$loggonDate;
+                 $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
                  $collection =  TicketTimeLog::getCollection();
                  $newdata = array('$set' => array('TimeLog.$.Time' =>(float) $timelogHours,'TimeLog.$.Description' => $description,'TimeLog.$.LoggedOn' => $currentDate));
                  $collection->update(array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"TimeLog.Slug"=>new \MongoDB\BSON\ObjectID($slug)), $newdata); 
-                 $ticketCollectionModel = new TicketCollection();
-                 $getTicketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId,$selectFields=[]);
-                 $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
-                 $ticketTask = $getTicketDetails["Fields"]['planlevel']['value'];
-                $getTicketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId,$selectFields=[]);
-                $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
-                $ticketTask = $getTicketDetails["Fields"]['planlevel']['value'];
-                
-                $datetime = strtotime($currentDate);
-                $LogDate = date('M-d-Y',$datetime);
-                $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => "","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");
-                $time = array("field_name" => "Date", "value_id" => "", "field_value" => $timelogHours, "other_data" => "", "ticketDesc" =>"","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");
-                $date = array("field_name" => "Time", "value_id" => "", "field_value" =>$LogDate, "other_data" => "", "ticketDesc" =>"","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");
-                $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "", "ticketDesc" =>"","Time"=>"","LogDate"=>"","Slug"=>"","ticketId"=>"");
-                $forTicketComments[0] = $date;
-                $forTicketComments[1] =  $ticketId;
-                $forTicketComments[2] = $time;
-                $forTicketComments[3] = $action;
-                array_push($TimeLogDataArray,$forTicketComments); 
+                 $returnValue=$slug;
             }
-            return $TimeLogDataArray;
+            return $returnValue;
         } catch (Exception $ex) {
             Yii::log("TicketTimeLog:updateTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -358,6 +325,6 @@ class TicketTimeLog extends ActiveRecord
         }
         
     }
-}
+        }
 ?>
 

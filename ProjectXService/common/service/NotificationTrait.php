@@ -1,6 +1,6 @@
 <?php
 namespace common\service;
-use common\models\mongo\{TicketCollection,TinyUserCollection,NotificationCollection};
+use common\models\mongo\{TicketCollection,TinyUserCollection,NotificationCollection,TicketComments};
 use common\components\{CommonUtility};
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects};
 use yii;
@@ -57,6 +57,110 @@ use yii;
             Yii::log("NotificationTrait:getFieldChangeValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
         
+    }
+    
+    
+     /**
+     * @author Moin Hussain
+     * @param type $ticketId
+     * @param type $projectId
+     * @param type $actionfieldName
+     * @param type $newValue
+     * @param type $activityUserId
+     */
+    public function saveActivity($ticketId,$projectId,$actionfieldName,$newValue,$activityUserId,$slug=""){
+        $oldValue = "";
+         $action = "";
+         $returnValue="noupdate";
+         if(empty($slug))
+         $slug =  new \MongoDB\BSON\ObjectID();
+        $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);  
+        if($actionfieldName == "Title" || $actionfieldName == "Description" || $actionfieldName=="TotalTimeLog"){ //added actionFieldName for TotalTimeLog By Ryan
+            $oldValue = $ticketDetails[$actionfieldName]; 
+        }else if($actionfieldName=='Followed' || $actionfieldName=='Unfollowed' || $actionfieldName=='Related' || $actionfieldName=='ChildTask' || $actionfieldName=='Unrelated'){
+          $oldValue = "";
+          switch($actionfieldName){
+              case 'Followed':$action="added to";break;
+              case 'Unfollowed':$action="removed from";break;
+              case 'Related':$action="has related";break;
+              case 'ChildTask':$action="created";break; 
+              case 'Unrelated':$action="has unrelated";break; 
+          }
+          
+        }else{
+           $oldValue = $ticketDetails["Fields"][$actionfieldName]["value"];  
+        }
+       if($action!="" || trim($oldValue) != trim($newValue)){
+           if($action == ""){
+                if($oldValue == ""){
+                      $action = "set to";
+                }else{
+                      $action = "changed from"; 
+                 }
+           }
+       
+           $db =  TicketComments::getCollection();
+           $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+          $record = $db->findOne( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId));
+         //  $record = iterator_to_array($record);
+         //  error_log(print_r($record,1));
+         //$slug =  new \MongoDB\BSON\ObjectID();
+         if($record["RecentActivityUser"] != $activityUserId || $record["Activity"] == "Comment" || $record["Activity"] == "PoppedFromChild" ){
+            // $dataArray = array();
+             $commentDataArray=array(
+            "Slug"=>$slug,
+            "CDescription"=>  "",
+            "CrudeCDescription"=>"",
+            "ActivityOn"=>$currentDate,
+            "ActivityBy"=>(int)$activityUserId,
+            "Status"=>(int)1,
+            "PropertyChanges"=>array(array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
+            "ParentIndex"=>"",
+            "PoppedFromChild"=>""
+            
+        );
+            $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));  
+            $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId,"Activity"=>"PropertyChange"));  
+            CommonUtility::prepareActivity($commentDataArray,$projectId);
+            $returnValue = array("referenceKey"=>-1,"data"=>$commentDataArray);
+            
+         }else{
+             $recentSlug = $record["RecentActivitySlug"];
+             $property = array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate );
+
+             $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"Activities.Slug"=>$recentSlug), array('$addToSet'=> array('Activities.$.PropertyChanges' =>$property)),array('new' => 1,"upsert"=>1));
+            
+             $activitiesCount = count($v["Activities"]);
+             if($activitiesCount>0){
+                 $activitiesCount = $activitiesCount-1;
+             }
+             CommonUtility::prepareActivityProperty($property,$projectId);
+             $returnValue = array("referenceKey"=>$activitiesCount,"data"=>$property);
+         }
+           if($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow"){
+            //    $slug =  new \MongoDB\BSON\ObjectID();
+            $commentDataArray=array(
+            "Slug"=>$slug,
+            "CDescription"=>  "",
+            "CrudeCDescription"=>"",
+            "ActivityOn"=>$currentDate,
+            "ActivityBy"=>(int)$activityUserId,
+            "Status"=>(int)1,
+            "PropertyChanges"=>array(array("Slug"=>$slug,"ActionFieldName" => $actionfieldName,"Action" => $action ,"PreviousValue" =>$oldValue,"NewValue"=>$newValue,"CreatedOn" => $currentDate)),
+            "ParentIndex"=>"",
+            "PoppedFromChild" => (int)$ticketId
+            
+        );   
+           $parentStoryId =  $ticketDetails["ParentStoryId"];
+
+            $v = $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId), array('$addToSet'=> array('Activities' =>$commentDataArray)),array('new' => 1,"upsert"=>1));   
+         $v = $db->update( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$parentStoryId), array("RecentActivitySlug"=>$slug,"RecentActivityUser"=>(int)$activityUserId,"Activity"=>"PoppedFromChild"));  
+            
+           }
+       
+    }
+     return $returnValue;
+          //error_log("response-------".$v);
     }
     
     /**
