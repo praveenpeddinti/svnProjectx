@@ -36,7 +36,9 @@ export class TimeReportComponent{
     private selectedValForTask="";
     private selectedValForDate:Date;
     private calendarVal = new Date();
-  
+    public extractFields={};
+    public extractDelFields={};
+    public submitted=false;
     @ViewChild('myTable') table: any;
     rows = [];
     row1 = [];
@@ -145,8 +147,9 @@ dateFilterSearch(){
     this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
     }
 }
- clearDateTimeEntry(){ alert('ss');
-     this.dateVal =  new Date();
+ clearDateTimeEntry(){ 
+    this.entryForm={};
+     this.entryForm={'dateVal':new Date()};
      }
     // ngAfterViewInit()
     // {
@@ -219,32 +222,11 @@ dateFilterSearch(){
     }
     editTimeReport(){
           document.getElementById("editTimeReport").style.display='block';
-        //  jQuery('#myModal').on('shown.bs.modal', function () {
-        //     alert("herer");
-        // jQuery('#myInput').focus();
- 
-        // }) 
-        //  jQuery('#addTimelogModel').on('shown.bs.modal', function () {
-          
-        // jQuery('#myInput').focus();
- 
-        // }) 
+
       }
     resetForm(){
-          jQuery('.addTaskErrors').html(" ");
-          jQuery(".addTaskErrors").removeClass("fielderror");
-          jQuery('.addDescError').html(" ");
-          jQuery(".addDescError").removeClass("fielderror");
-          jQuery('#addTimelogDesc').val('');
-           jQuery('#addTimelogTime').val('');
-          jQuery('.addHoursError').html(" ");
-          jQuery(".addHoursError").removeClass("fielderror");
-          jQuery('.taskErrormes').html(" ");
-          jQuery(".taskErrormes").removeClass("fielderror");
-          jQuery('.descErrormes').html(" ");
-          jQuery(".descErrormes").removeClass("fielderror");
-          jQuery(".hoursErrormes").html(" ");
-          jQuery(".hoursErrormes").removeClass("fielderror");
+        this.submitted= false;
+
     }
     searchTask(event)
     {
@@ -256,7 +238,7 @@ dateFilterSearch(){
     }
    // alert("searchhhhhhhhhhh");
      let prepareSearchData = [];
-     let appendstring=['Please select story/task'];
+     let appendstring=['Please select valid story/task'];
         this._ajaxService.AjaxSubscribe("time-report/get-story-details-for-timelog",post_data,(result)=>
          {
            //  alert("searchhhhhhhhhhh"+JSON.stringify(result.data)); 
@@ -288,70 +270,54 @@ dateFilterSearch(){
         console.log("gettttttttttt@@@@@@@@@@"+event);
         this.selectedValForDate=event; 
     }
-
-    addTimeLog(){
+    editTimeLog(){
+      var editableDate=  new Date(this.extractFields['readableDate']);
+                 var post_data={
+                    'projectId':this.projectId,
+                    'slug':this.extractFields['Slug']['$oid'],
+                    'timelogHours':this.extractFields['Time'],
+                    'ticketDesc':this.extractFields['ticketDesc'],
+                    'description':this.extractFields['description'],
+                    'autocompleteTask':this.selectedValForTask,
+                    'editableDate':editableDate,
+                    'calendardate':this.selectedValForDate,
+                    }
+                //   alert("@@@@@@@@"+JSON.stringify(post_data));
+            this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
+            { 
+              // alert("onlyyyy" +JSON.stringify(response)); 
+                   if (response.statusCode == 200) {
+                      this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+                    jQuery('.timelogSuccessMsg').css('display','block');
+                    jQuery('.timelogSuccessMsg').fadeOut( "slow" );;
+                    setTimeout(() => {
+                        jQuery('#editTimelogModel').modal('hide');
+                     }, 500);
+                } else {
+                    console.log("fail---");
+                }
+            });
+    }
+    addTimeLog(){ 
         var getTaskVal=this.text;
-    if(getTaskVal==""||getTaskVal==undefined)
-    {
-       jQuery(".addTaskErrors").addClass("fielderror");
-       jQuery(".addTaskErrors").text("Story/task is required");
-     // jQuery('#editableDesc'+'_'+slug).focus() ;
-         this.adderrors = '1';
-   }else{
-       jQuery(".addTaskErrors").removeClass("fielderror");
-       jQuery(".addTaskErrors").text(" ");
-   }
-   if(jQuery('#addTimelogDesc').val() == "" )
-   {
-       jQuery(".addDescError").addClass("fielderror");
-       jQuery(".addDescError").text("Description is required");
-      
-     // jQuery('#editableDesc'+'_'+slug).focus() ;
-     this.adderrors = '1';
-   }else{
-       jQuery(".addDescError").removeClass("fielderror");
-       jQuery(".addDescError").text(" ");
-   }
-  
-    if(jQuery('#addTimelogTime').val() == "" )
-   {
-       jQuery(".addHoursError").addClass("fielderror");
-       jQuery(".addHoursError").text("Worked hours is required");
-     
-     this.adderrors = '1';
-   }else if(jQuery('#addTimelogTime').val() == 0){
-        jQuery(".addHoursError").addClass("fielderror");
-       jQuery(".addHoursError").text("Please enter valid time"); 
-    
-        this.adderrors= '1';
-   }else{
-       jQuery(".addHoursError").removeClass("fielderror");
-       jQuery(".addHoursError").text(" ");
-      
-   }
-    if(this.adderrors){
-       console.log("ssssssssssssdddddddd");
-   }else{
-       console.log("11111111111111");
-  
-   
-             var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
+        var thisObj = this;
+        var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
         date = date.replace(/(\b\d{1}\b)/g, "0$1");
         var finalDate=this.dateVal.toString();
         var ticketSpilt = getTaskVal.split("#")[1];
         var ticket_Id = ticketSpilt.split(" ")[0];
         var timelogData={
                 ticketId:ticket_Id,
-                workHours:jQuery('#addTimelogTime').val(),
-                addTimelogDesc:jQuery('#addTimelogDesc').val(),
+                workHours:this.entryForm['hours'],
+                addTimelogDesc:this.entryForm['description'],
                 addTimelogTime:finalDate,
                 projectId:this.projectId
               
         }
-       //alert("timelogData"+JSON.stringify(timelogData));
+//alert("ssssddddddddd"+JSON.stringify(timelogData));
             this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
                 { 
-                //  console.log("ssssssssssssss first"+JSON.stringify(this.rows));
+               console.log("ssssssssssssss first"+JSON.stringify(timelogData));
                     if (response.statusCode == 200) {
                         this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
                 // console.log("onlyyyy" +JSON.stringify(response));
@@ -365,6 +331,7 @@ dateFilterSearch(){
                 // console.log("@@@@@@@@@responseoooo final" +JSON.stringify(this.rows));
                 jQuery('.timelogSuccessMsg').css('display','block');
                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );
+                
                     setTimeout(() => {
                             jQuery('#addTimelogModel').modal('hide');
                             //jQuery('#addTimelogModel').find("input,textarea").val('').end();
@@ -377,156 +344,23 @@ dateFilterSearch(){
                 }
                 });
      
-       }
+     
     }
-     inputKeyDown(id,slug){
-     if(id==1){
-            var initVal = jQuery("#addTimelogTime").val();
-        var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
-        if (initVal != outputVal) {
-            jQuery("#addTimelogTime").val(outputVal);
-         }
-        }
-        else{
-                 var initVal = jQuery("#editTimelogTime_"+slug).val();
-                var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
-                if (initVal != outputVal) {
-                    jQuery("#editTimelogTime_"+slug).val(outputVal);
-                } 
-        }
-
-  }
-  inputKeyDownFovalid(slug){
-     var input="tcc_"+slug;
-    //    alert("."+input); 
-    // jQuery("."+input).show();
-   //  jQuery("."+input).fadeOut(4000);
-  }
-
-        commonErrorFunction(id,message){
-          jQuery("#"+id).html(message);
-          jQuery("#"+id).show();
-          jQuery("#"+id).fadeOut(4000);
-            }
-  updateTimelog(slug,ticketDesc,timeLogDate){
- // alert(jQuery('#'+'taskdisplay_5925293c80a131045b569ae2').val());
-     // alert("eeeeeeeeeeeeee"+this.selectedValForTask);
-      console.log("eeeeeeee"+this.selectedValForDate);
-     // var errors="";
-       var editableDate = new Date(timeLogDate);
-   //    alert("eeeeeeeeeeeeee"+ticketDesc);
-   //    if(this.selectedValForTask == ""||this.selectedValForTask==undefined )
-//    {
-//        jQuery(".taskErrormes").addClass("fielderror").fadeIn();
-//        jQuery(".taskErrormes").text("Story/task is required").fadeIn();
-//      // jQuery('#editableDesc'+'_'+slug).focus() ;
-//      this.errors = '1';
-//    }else{
-//        jQuery(".taskErrormes").removeClass("fielderror").fadeIn();
-//        jQuery(".taskErrormes").text(" ").fadeIn();
-//    }
-    if(jQuery('#editableDesc'+'_'+slug).val() == "" )
-   {
-       jQuery(".descErrormes").addClass("fielderror");
-       jQuery(".descErrormes").text("Description is required");
-      // jQuery('#editableDesc'+'_'+slug).focus() ;
-     this.errors = '1';
-   }else{
-       jQuery(".descErrormes").removeClass("fielderror");
-       jQuery(".descErrormes").text(" ");
-   }
-   if(jQuery('#editTimelogTime'+'_'+slug).val() =="")
-   {
-       jQuery(".hoursErrormes").addClass("fielderror");
-       jQuery(".hoursErrormes").text("Worked hours is required"); 
-      // jQuery('#editTimelogTime'+'_'+slug).focus() ;
-       this.errors= '1';
-   }else if(jQuery('#editTimelogTime'+'_'+slug).val() == 0){
-        jQuery(".hoursErrormes").addClass("fielderror");
-       jQuery(".hoursErrormes").text("Please enter valid time"); 
-        this.errors= '1';
-   }else{
-       jQuery(".hoursErrormes").removeClass("fielderror");
-       jQuery(".hoursErrormes").text(" "); 
-   }
-
-
-   if(this.errors){
-       console.log("ssssssssssssdddddddd");
-   }else{
-	 console.log("666666666666666666");
-    
-                var post_data={
-                    'projectId':this.projectId,
-                    'slug':slug,
-                    'timelogHours':jQuery('#editTimelogTime'+'_'+slug).val(),
-                    'ticketDesc':ticketDesc,
-                    'description':jQuery('#editableDesc'+'_'+slug).val(),
-                    'autocompleteTask':this.selectedValForTask,
-                    'editableDate':editableDate,
-                    'calendardate':this.selectedValForDate,
-                    'fromDate':this.fromDateVal,
-                    'toDate':this.toDateVal
-                   }
-       // if(jQuery('#editTimelogTime'+'_'+slug).val()!='' && jQuery('#editableDesc'+'_'+slug).val() == ''){
-       //     this.commonErrorFunction("descriptionerr_msg","Please enter description.")
-       // }else{           
-           this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
-            { 
-               //alert("onlyyyy" +JSON.stringify(response)); 
-                   if (response.statusCode == 200) {
-                        var input="_Input";
-                      //  alert(slug+input);
-                      //  jQuery('.'+slug+input).replaceWith(response.data[0]);
-                //   this.rows.push(response.data[0]);
-                //   console.log("onlyyyy###" +JSON.stringify(response.data[0]));
-                //   let rows = [...this.rows];
-                // for (let i = 0; i < response.data.length; i++) {
-                //     rows[i + 0] = response.data[i];
-                // }
-                // this.rows = rows;
-                //  console.log("@@@@@@@@@responseoooo final" +JSON.stringify(this.rows));
-                   this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
-                 jQuery('.timelogSuccessMsg').css('display','block');
-                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );;
-                  setTimeout(() => {
-                        jQuery('#'+'myModal_'+slug).modal('hide');
-                       
-              }, 500);
-             } else {
-                console.log("fail---");
-            }
-            });
-       }
-
+     showdeleteDiv(delObj){
+             jQuery("#delete_timelog").css("display", "block");
+            // alert("idddddddddddddd"+JSON.stringify(delObj));
+             this.extractDelFields=delObj;
     }
-    showHideErrorsForEdit(id){
-        if(id==2){
-             jQuery(".descErrormes").removeClass("fielderror");
-            jQuery(".descErrormes").text(" ");
-         }else{
-            jQuery(".hoursErrormes").removeClass("fielderror");
-            jQuery(".hoursErrormes").text(" "); 
-         }
-
-    }
-    showdeleteDiv(flag,slug){
-        if(flag == 1){
-            jQuery("#delete_timelog_"+slug).css("display", "block");
-        }else{
-           jQuery("#delete_timelog_"+slug).css("display", "none"); 
-        }
-    }
-    removeTimelog(ticketDesc,slug,timelogHours){
+    removeTimelog(){
         var input="_Input";
-      //  alert(slug+input);
+
          var postObj={
                     'projectId':this.projectId,
-                    'slug':slug,
-                    'ticketDesc':ticketDesc,
-                    'timelogHours':timelogHours
+                    'slug':this.extractDelFields['Slug']['$oid'],
+                    'ticketDesc':this.extractDelFields['ticketDesc'],
+                    'timelogHours':this.extractDelFields['Time']
                      }
-          this._ajaxService.AjaxSubscribe("time-report/remove-timelog",postObj,(response)=>
+           this._ajaxService.AjaxSubscribe("time-report/remove-timelog",postObj,(response)=>
             { 
               console.log("onlyyyy@@@@@@@@@@@@@@" +JSON.stringify(response)); 
               //jQuery('.'+slug+input).hide();
@@ -534,19 +368,32 @@ dateFilterSearch(){
              // this.page(this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
             });            
     }
-        navigateToStoryDetail(ticketId){
+    blockDeleteDiv(){
+             jQuery("#delete_timelog").css("display", "none");
+
+    }
+     inputKeyDown(id){
+     if(id==1){
+          var initVal = jQuery("#addTimelogTime").val();
+         var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
+        if (initVal != outputVal) {
+            jQuery("#addTimelogTime").val(outputVal);
+         }
+        }
+        else{
+                 var initVal = jQuery("#editTimelogTime").val();
+                var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
+                if (initVal != outputVal) {
+                    jQuery("#editTimelogTime").val(outputVal);
+                } 
+        }
+
+  }
+    navigateToStoryDetail(ticketId){
         this._router.navigate(['project',this.projectName,ticketId,'details']);
      }
-     showHideErrors(id){
-         if(id==1){
-            jQuery(".addTaskErrors").removeClass("fielderror");
-            jQuery(".addTaskErrors").text(" ");
-        }else if(id==2){
-            jQuery(".addDescError").removeClass("fielderror");
-            jQuery(".addDescError").text(" ");
-         }else{
-            jQuery(".addHoursError").removeClass("fielderror");
-            jQuery(".addHoursError").text(" ");
-         }
+
+     editTimeEntry(Object){
+          this.extractFields=Object;
      }
 }
