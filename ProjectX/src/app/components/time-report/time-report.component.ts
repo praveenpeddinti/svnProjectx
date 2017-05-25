@@ -126,7 +126,6 @@ thisObj.route.queryParams.subscribe(
                 });
                 
 
-
          }
 
 selectFromDate(event){
@@ -227,8 +226,7 @@ dateFilterSearch(){
         // jQuery('#myInput').focus();
  
         // }) 
-
-    }
+      }
     resetForm(){
           jQuery('.addTaskErrors').html(" ");
           jQuery(".addTaskErrors").removeClass("fielderror");
@@ -253,16 +251,24 @@ dateFilterSearch(){
         'sortvalue':'Title',
        'searchString':modifiedString
     }
+   // alert("searchhhhhhhhhhh");
      let prepareSearchData = [];
+     let appendstring=['Please select story/task'];
         this._ajaxService.AjaxSubscribe("time-report/get-story-details-for-timelog",post_data,(result)=>
-         { 
-           var subTaskData = result.data;
-            for(let subTaskfield of subTaskData){
-               var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
-                 prepareSearchData.push(currentData);
-            }
-           // alert("prepareSearchData"+prepareSearchData);
-           this.search_results=prepareSearchData;
+         {
+           //  alert("searchhhhhhhhhhh"+JSON.stringify(result.data)); 
+              if(result.status !='401'){ 
+                var subTaskData = result.data;
+                    for(let subTaskfield of subTaskData){
+                    var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
+                        prepareSearchData.push(currentData);
+                    }
+                // alert("prepareSearchData"+prepareSearchData);
+                this.search_results=prepareSearchData;
+              }else{
+                  this.search_results=appendstring;
+              }
+             // alert("eeeeeeeeeeeeeeee"+this.search_results);
          });
     }
 
@@ -282,39 +288,43 @@ dateFilterSearch(){
 
     addTimeLog(){
         var getTaskVal=this.text;
- if(getTaskVal==""||getTaskVal==undefined)
+    if(getTaskVal==""||getTaskVal==undefined)
     {
-       jQuery(".addTaskErrors").addClass("fielderror").fadeIn();
-       jQuery(".addTaskErrors").text("Story/task is required").fadeIn();
+       jQuery(".addTaskErrors").addClass("fielderror");
+       jQuery(".addTaskErrors").text("Story/task is required");
      // jQuery('#editableDesc'+'_'+slug).focus() ;
-        this.adderrors = '1';
+         this.adderrors = '1';
    }else{
-       jQuery(".addTaskErrors").removeClass("fielderror").fadeIn();
-       jQuery(".addTaskErrors").text(" ").fadeIn();
+       jQuery(".addTaskErrors").removeClass("fielderror");
+       jQuery(".addTaskErrors").text(" ");
    }
    if(jQuery('#addTimelogDesc').val() == "" )
    {
-       jQuery(".addDescError").addClass("fielderror").fadeIn();
-       jQuery(".addDescError").text("Description is required").fadeIn();
+       jQuery(".addDescError").addClass("fielderror");
+       jQuery(".addDescError").text("Description is required");
+      
      // jQuery('#editableDesc'+'_'+slug).focus() ;
      this.adderrors = '1';
    }else{
-       jQuery(".addDescError").removeClass("fielderror").fadeIn();
-       jQuery(".addDescError").text(" ").fadeIn();
+       jQuery(".addDescError").removeClass("fielderror");
+       jQuery(".addDescError").text(" ");
    }
   
     if(jQuery('#addTimelogTime').val() == "" )
    {
-       jQuery(".addHoursError").addClass("fielderror").fadeIn();
-       jQuery(".addHoursError").text("Worked hours is required").fadeIn();
+       jQuery(".addHoursError").addClass("fielderror");
+       jQuery(".addHoursError").text("Worked hours is required");
+     
      this.adderrors = '1';
    }else if(jQuery('#addTimelogTime').val() == 0){
-        jQuery(".addHoursError").addClass("fielderror").fadeIn();
-       jQuery(".addHoursError").text("Please enter valid time").fadeIn(); 
+        jQuery(".addHoursError").addClass("fielderror");
+       jQuery(".addHoursError").text("Please enter valid time"); 
+    
         this.adderrors= '1';
    }else{
-       jQuery(".addHoursError").removeClass("fielderror").fadeIn();
-       jQuery(".addHoursError").text(" ").fadeIn(); 
+       jQuery(".addHoursError").removeClass("fielderror");
+       jQuery(".addHoursError").text(" ");
+      
    }
     if(this.adderrors){
        console.log("ssssssssssssdddddddd");
@@ -353,9 +363,10 @@ dateFilterSearch(){
                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );
                     setTimeout(() => {
                             jQuery('#addTimelogModel').modal('hide');
-                            jQuery('#addTimelogModel').find("input,p,textarea").val('').end();
+                            jQuery('#addTimelogModel').find("input,textarea").val('').end();
+                           
                 }, 500);
-                
+               
                 } else {
                // this.errorMsg = 'dsasdasd';
            
@@ -412,27 +423,27 @@ dateFilterSearch(){
 //    }
     if(jQuery('#editableDesc'+'_'+slug).val() == "" )
    {
-       jQuery(".descErrormes").addClass("fielderror").fadeIn();
-       jQuery(".descErrormes").text("Description is required").fadeIn();
-     // jQuery('#editableDesc'+'_'+slug).focus() ;
+       jQuery(".descErrormes").addClass("fielderror");
+       jQuery(".descErrormes").text("Description is required");
+      // jQuery('#editableDesc'+'_'+slug).focus() ;
      this.errors = '1';
    }else{
-       jQuery(".descErrormes").removeClass("fielderror").fadeIn();
-       jQuery(".descErrormes").text(" ").fadeIn();
+       jQuery(".descErrormes").removeClass("fielderror");
+       jQuery(".descErrormes").text(" ");
    }
    if(jQuery('#editTimelogTime'+'_'+slug).val() =="")
    {
-       jQuery(".hoursErrormes").addClass("fielderror").fadeIn();
-       jQuery(".hoursErrormes").text("Worked hours is required").fadeIn(); 
+       jQuery(".hoursErrormes").addClass("fielderror");
+       jQuery(".hoursErrormes").text("Worked hours is required"); 
       // jQuery('#editTimelogTime'+'_'+slug).focus() ;
        this.errors= '1';
    }else if(jQuery('#editTimelogTime'+'_'+slug).val() == 0){
-        jQuery(".hoursErrormes").addClass("fielderror").fadeIn();
-       jQuery(".hoursErrormes").text("Please enter valid time").fadeIn(); 
+        jQuery(".hoursErrormes").addClass("fielderror");
+       jQuery(".hoursErrormes").text("Please enter valid time"); 
         this.errors= '1';
    }else{
-       jQuery(".hoursErrormes").removeClass("fielderror").fadeIn();
-       jQuery(".hoursErrormes").text(" ").fadeIn(); 
+       jQuery(".hoursErrormes").removeClass("fielderror");
+       jQuery(".hoursErrormes").text(" "); 
    }
 
 
@@ -484,12 +495,21 @@ dateFilterSearch(){
        }
 
     }
-    showdeleteDiv(flag){
-      //  alert(flag);
+    showHideErrorsForEdit(id){
+        if(id==2){
+             jQuery(".descErrormes").removeClass("fielderror");
+            jQuery(".descErrormes").text(" ");
+         }else{
+            jQuery(".hoursErrormes").removeClass("fielderror");
+            jQuery(".hoursErrormes").text(" "); 
+         }
+
+    }
+    showdeleteDiv(flag,slug){
         if(flag == 1){
-            jQuery("#delete_timelog").css("display", "block");
+            jQuery("#delete_timelog_"+slug).css("display", "block");
         }else{
-           jQuery("#delete_timelog").css("display", "none"); 
+           jQuery("#delete_timelog_"+slug).css("display", "none"); 
         }
     }
     removeTimelog(ticketDesc,slug,timelogHours){
@@ -511,5 +531,17 @@ dateFilterSearch(){
     }
         navigateToStoryDetail(ticketId){
         this._router.navigate(['project',this.projectName,ticketId,'details']);
+     }
+     showHideErrors(id){
+         if(id==1){
+            jQuery(".addTaskErrors").removeClass("fielderror");
+            jQuery(".addTaskErrors").text(" ");
+        }else if(id==2){
+            jQuery(".addDescError").removeClass("fielderror");
+            jQuery(".addDescError").text(" ");
+         }else{
+            jQuery(".addHoursError").removeClass("fielderror");
+            jQuery(".addHoursError").text(" ");
+         }
      }
 }
