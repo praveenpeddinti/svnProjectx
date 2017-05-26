@@ -51,7 +51,7 @@
                     <label class="customlabel">Description</label>
                     <ion-item>
                         <ion-row>
-                            <div id="editor" class="editordiv"  contenteditable="true" (keyup)="bindDescription()" placeholder="Description" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block;  padding:3px; white-space:normal;"></div>
+                            <div id="editor" class="editordiv" (mouseup)="handleFormatOption()" contenteditable="true" (keyup)="bindDescription()" placeholder="Description" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block;  padding:3px; white-space:normal;"></div>
                          
                         </ion-row>
                     </ion-item>

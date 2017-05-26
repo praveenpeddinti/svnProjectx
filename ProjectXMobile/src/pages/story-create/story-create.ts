@@ -97,7 +97,7 @@ export class StoryCreatePage {
         RE.editor = document.getElementById('editor');
 //        RE.editor.addEventListener("touchstart", RE.touchstart);
 //        RE.editor.addEventListener("touchend", RE.touchend);
-        RE.editor.setAttribute("placeholder", "insert my text ...");
+        RE.editor.setAttribute("placeholder", "Description");
         RE.editor.addEventListener("keyup", RE.keyup);
 
         // jQuery("#editor").dblclick(function() {
@@ -127,7 +127,7 @@ export class StoryCreatePage {
                 (result) => {
                     loader.dismiss().then(() => {
                         let alert = this.alertCtrl.create({
-                            title: 'Alert',
+                           
                             subTitle: 'Successfully created.',
                             buttons: ['OK']
                         });
@@ -264,8 +264,8 @@ export class StoryCreatePage {
         if (serverResponse['status'] == '1') {
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                // this.create.description = this.create.description + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                document.getElementById('editor').innerHTML = document.getElementById('editor').innerHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                 this.create.description = this.create.description + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                //document.getElementById('editor').innerHTML = document.getElementById('editor').innerHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
             }
         } else {
             this.presentToast('Unable to upload the image.');
@@ -328,6 +328,8 @@ callback(userList);
 
   
   };
-
+ handleFormatOption(){
+  console.log("selected__text___"+window.getSelection());
+ }
 
 }
