@@ -824,7 +824,7 @@ var thisObj = this;
            else 
            fieldType = result.data.activityData.data.ActionFieldType ;
           if(fieldType!='' && fieldType == 6){
-            this._ajaxService.AjaxSubscribe("story/get-all-follow-inlineedit",postEditedText,(response)=>
+            this._ajaxService.AjaxSubscribe("story/get-ticket-followers-list",postEditedText,(response)=>
             { 
                 if (response.statusCode == 200) {
                     this.followers = response.data;
@@ -858,38 +858,7 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
  }
         });
 
-        /*For notification Purpose By Ryan for assigned To*/
-        // console.log("Post edited text field"+postEditedText.EditedId+"Post edited value"+postEditedText.value);
-        // if(postEditedText.EditedId=='assignedto' || postEditedText.EditedId=='stakeholder')
-        // {
-        //   var notify_data={'ticketId':this.ticketId,'comment_type':postEditedText.EditedId,'collaborator':postEditedText.value,'followers':this.followers};
-
-        //   this._ajaxService.NodeSubscribe('/assignedTo',notify_data,(data)=>
-        //   {
-
-        //   });
-        // }
-
-        // if(postEditedText.EditedId=='priority' || postEditedText.EditedId=='bucket' ||  postEditedText.EditedId=='workflow')
-        // {
-        //   var priority_data=
-        //   {
-        //     'ticketId':this.ticketId,
-        //     'comment_type':'changed',
-        //     'Activity_On':postEditedText.EditedId,
-        //     'field_value':postEditedText.value,
-        //     'Activity':this.activity_data,
-        //     'followers':this.followers
-        //   };
-
-        //   this._ajaxService.NodeSubscribe('/propertyChange',priority_data,(data)=>
-        //   {
-
-        //   });
-        // }
-
-
-        /* Notification End */
+      
         },500)
     }
 
@@ -1041,21 +1010,6 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
             }
         });
 
-         /*For notification Purpose By Ryan for removing followers */
-        
-          // var notify_unfollow=
-          // {
-          //   'ticketId':this.ticketId,
-          //   'comment_type':'removed',
-          //   'collaborator':event,
-          //   'followers':this.followers
-          // };
-          // this._ajaxService.NodeSubscribe('/follow',notify_unfollow,(data)=>
-          // {
-
-          // });
-
-          /* Notification End */
 
       }
       else{
@@ -1079,32 +1033,10 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
         this.commentsList[response.data.activityData.referenceKey]["PropertyChanges"].push(response.data.activityData.data);
      }  
                 }
-                /*socket connection for notifications*/
-                // console.log("==connecting==");
-                // var socket=io("http://localhost:5000");
-                // socket.on('connection',(data)=>
-                // {
-                //   console.log("successfully connected");
-                //   socket.emit('followers',this.followers);
-                // });
+             
 
         });
 
-        // /*For notification Purpose By Ryan for adding followers */
-        
-        //   var notify_follow=
-        //   {
-        //     'ticketId':this.ticketId,
-        //     'comment_type':'added',
-        //     'collaborator':event,
-        //     'followers':this.followers
-        //   };
-        //   this._ajaxService.NodeSubscribe('/follow',notify_follow,(data)=>
-        //   {
-
-        //   });
-        
-        // /* Notification End */
 
       }
       
@@ -1132,29 +1064,9 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
                     return el.FollowerId !== event;
                 });
               }
-              /*socket connection for notifications*/
-                // var socket=io("http://localhost:5000");
-                // socket.on('connection',(data)=>
-                // {
-                //   console.log("successfully connected");
-                //   socket.emit('followers',this.followers);
-                // })
+             
         });
 
-         /*For notification Purpose By Ryan for removing followers */
-        // var notify_unfollow=
-        //   {
-        //     'ticketId':this.ticketId,
-        //     'comment_type':'removed',
-        //     'collaborator':event,
-        //     'followers':this.followers
-        //   };
-        //   this._ajaxService.NodeSubscribe('/follow',notify_unfollow,(data)=>
-        //   {
-
-        //   });
-           
-        /* Notification End */
     }
     /*when click the 'X' button in the follower div to open the popup*/
   public removeFollower(event)
