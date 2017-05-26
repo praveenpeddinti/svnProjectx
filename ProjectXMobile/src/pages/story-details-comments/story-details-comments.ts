@@ -657,13 +657,13 @@ export class StoryDetailsComments {
         });
     }
     public uploadedInserver(dataUploaded, comeFrom: string, where:string, comment:string){
-        this.myHTML = document.getElementById('editor').innerHTML;
+       
         var serverResponse = JSON.parse(dataUploaded.response);
         if (serverResponse['status'] == '1') {
             var editor_contents;
             var appended_content;
             if(where=="edit_comments"){
-                editor_contents = jQuery("#Actions_"+comment+" .textEditor").val();
+                editor_contents = this.innerHTML;
             }
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
@@ -672,7 +672,7 @@ export class StoryDetailsComments {
                     this.newSubmitOpenClose = false;
                 } else if (where == "edit_comments") {
                     appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                    jQuery("#Actions_" + comment + " .textEditor").val(appended_content);
+                    jQuery(".comment_edit_editor_" + comment +).val(appended_content);
                     this.editSubmitOpenClose = false;
                 } 
             }
@@ -689,7 +689,8 @@ export class StoryDetailsComments {
         }else{
             selector='comment_edit_editor_'+index;
         }
-            var thisObj=this;
+    this.myHTML = jQuery("."+selector).html();
+    var thisObj=this;
     var reqParam={'ProjectId':1,'search_term':''};
     var userList;
     jQuery("."+selector).atwho({
