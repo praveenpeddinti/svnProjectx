@@ -8,10 +8,10 @@ export class SharedService {
      console.log('shared service started');
    }
 
-   change(url,params,page,ticket_type) { 
+   change(url,params,page,ticket_type,project) { 
      console.log("==Url in shared service=="+url);
      console.log("==params in shared service=="+params);
-     var route_data={url:url,params:params,page:page,type:ticket_type};
+     var route_data={url:url,params:params,page:page,type:ticket_type,projectName:project};
      this.route_change.emit(route_data);
    }
 
