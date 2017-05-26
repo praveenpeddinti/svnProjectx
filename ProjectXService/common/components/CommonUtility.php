@@ -1213,20 +1213,23 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
-                        if(!empty($projectId)){
+                     
                         $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
                         $forTicketCollection['Project'] = $projectDetails;
-                        }
+                  
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
                     $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
+                    if(!empty($projectId)){
+                        $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>(int)$projectId);
+                    }
                     $query = Yii::$app->mongodb->getCollection('TicketComments');
                     $pipeline = array(
                         array('$unwind' => '$Activities'),
                         array('$match' => $matchArray),
                          array(
                             '$group' => array(
-                                '_id' => '$TicketId',
+                                      '_id' =>  array('TicketId'=> '$TicketId', 'ProjectId'=> '$ProjectId'),
                                 "commentData" => array('$push' => '$Activities'),
 
                              ),
@@ -1236,19 +1239,19 @@ $text_message=$html . $text_message .
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
 
-                        foreach($ticketCommentsData as $extractComments){
-                           $ticketCollectionModel = new TicketCollection();
+                       foreach($ticketCommentsData as $extractComments){
+                          $ticketCollectionModel = new TicketCollection();
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
-                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],$projectId,$selectFields);
+                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
                          //  $forTicketComments['comments'] =  $extractComments['commentData'];
-                            $commentsfinalArray =array();
+                           $commentsfinalArray =array();
                            foreach($extractComments['commentData'] as $eachOne){
                               $commentsArray['CrudeCDescription']=strip_tags($eachOne['CrudeCDescription']);
                               $commentsArray['Slug']=$eachOne['Slug'];
                               $commentsArray['ActivityOn']=$eachOne['ActivityOn'];
-                              if(strpos(strtolower($commentsArray['CrudeCDescription']),$searchString) !==false){
+                              if(strpos($commentsArray['CrudeCDescription'],$searchString) !==false){
                                 array_push($commentsfinalArray,$commentsArray);
                               }
                            }
@@ -1262,29 +1265,25 @@ $text_message=$html . $text_message .
                                 $readableDate = $datetime->format('Y-m-d H:i');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
-                            if(!empty($projectId)){
-                           $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                           $forTicketComments['Project'] = $projectDetails;
-                            }
+                            $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                             $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
-                    $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
-                     if(!empty($projectId)){
-                        $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                     }else{
-                       $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
-                      
-                     }
+                          $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
+                    $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                    if(!empty($projectId)){
+                       $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array(),$options); 
+                    }
                     $ticketArtifactsData = iterator_to_array($cursor);
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $ticketCollectionModel = new TicketCollection();
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
-                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$projectId,$selectFields);
+                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
                         $ticketArtifactsModel = new TicketArtifacts();
-                        $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],$projectId);
+                        $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],$extractArtifacts['ProjectId']);
                         $getArtifactsEach=array();
                         foreach($artifacts['Artifacts'] as $getArtifact){
                              array_push($getArtifactsEach,$getArtifact['OriginalFileName']);
@@ -1298,16 +1297,17 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
-                          if(!empty($projectId)){
                         $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                        $forTicketArtifacts['Project'] = $projectDetails;
-                          }
+                        $forTicketArtifacts['Project'] = $projectDetails; 
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
                     }
 
                     $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
                     $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                    if(!empty($projectId)){
+                         $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                    }
                     $tinyUserData = iterator_to_array($cursor);
                     $TinyUserFinalArray = array();
                     foreach($tinyUserData as $extractUserData){
@@ -1324,13 +1324,16 @@ $text_message=$html . $text_message .
                     }
                 }else if($searchFlag==2){
                     $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
+                     if(!empty($projectId)){
+                        $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>(int)$projectId);
+                    }
                     $query = Yii::$app->mongodb->getCollection('TicketComments');
                     $pipeline = array(
                         array('$unwind' => '$Activities'),
                         array('$match' => $matchArray),
                          array(
                             '$group' => array(
-                                '_id' => '$TicketId',
+                                '_id' =>  array('TicketId'=> '$TicketId', 'ProjectId'=> '$ProjectId'),
                                 "commentData" => array('$push' => '$Activities'),
 
                              ),
@@ -1340,23 +1343,21 @@ $text_message=$html . $text_message .
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
                    // error_log("commentsssssssssssss".print_r($ticketCommentsData,1));
-                        foreach($ticketCommentsData as $extractComments){
-                            //error_log("commentsssssssssssss".print_r($extractComments,1));
-                           $ticketCollectionModel = new TicketCollection();
-                           $selectFields = ['Title','ProjectId','TicketId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
-                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],$projectId,$selectFields);
-                           error_log("getdetailssssssssssss".print_r($getTicketDetails,1));
+                    
+                       foreach($ticketCommentsData as $extractComments){
+                          $ticketCollectionModel = new TicketCollection();
+                           $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
+                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
                          //  $forTicketComments['comments'] =  $extractComments['commentData'];
-                            $commentsfinalArray =array();
+                           $commentsfinalArray =array();
                            foreach($extractComments['commentData'] as $eachOne){
                               $commentsArray['CrudeCDescription']=strip_tags($eachOne['CrudeCDescription']);
                               $commentsArray['Slug']=$eachOne['Slug'];
                               $commentsArray['ActivityOn']=$eachOne['ActivityOn'];
                               if(strpos($commentsArray['CrudeCDescription'],$searchString) !==false){
                                 array_push($commentsfinalArray,$commentsArray);
-                                  error_log("hellllllllllllll@@@@@@@@@@@@");
                               }
                            }
                             $forTicketComments['comments']=$commentsfinalArray;
@@ -1369,10 +1370,8 @@ $text_message=$html . $text_message .
                                 $readableDate = $datetime->format('Y-m-d H:i');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
-                           if(!empty($projectId)){
-                           $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                           $forTicketComments['Project'] = $projectDetails;
-                           }
+                            $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                             $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
                 }else if($searchFlag==3){
@@ -1396,18 +1395,21 @@ $text_message=$html . $text_message .
            
                     
                 }else if($searchFlag==4){
-                    $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
-                    $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                       $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
+                    $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                    if(!empty($projectId)){
+                       $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array(),$options); 
+                    }
                     $ticketArtifactsData = iterator_to_array($cursor);
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $ticketCollectionModel = new TicketCollection();
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
-                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$projectId,$selectFields);
+                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
                         $ticketArtifactsModel = new TicketArtifacts();
-                        $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],$projectId);
+                        $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],$extractArtifacts['ProjectId']);
                         $getArtifactsEach=array();
                         foreach($artifacts['Artifacts'] as $getArtifact){
                              array_push($getArtifactsEach,$getArtifact['OriginalFileName']);
@@ -1421,10 +1423,8 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
-                         if(!empty($projectId)){
                         $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
                         $forTicketArtifacts['Project'] = $projectDetails; 
-                         }
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
                     }
@@ -1479,20 +1479,24 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
-                        if(!empty($projectId)){ 
-                         $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        error_log("projectIdddddddddddddddd".$extractCollection["ProjectId"]);
+                        $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
                         $forTicketCollection['Project'] = $projectDetails; 
-                        }
+                       
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
+                 //   error_log("eeeeeeeeeeeeeeeeeeee".print_r($TicketCollFinalArray,1));
                     $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
+                    if(!empty($projectId)){
+                        $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>(int)$projectId);
+                    }
                     $query = Yii::$app->mongodb->getCollection('TicketComments');
                     $pipeline = array(
                         array('$unwind' => '$Activities'),
                         array('$match' => $matchArray),
                          array(
                             '$group' => array(
-                                '_id' => '$TicketId',
+                                '_id' =>  array('TicketId'=> '$TicketId', 'ProjectId'=> '$ProjectId'),
                                 "commentData" => array('$push' => '$Activities'),
 
                              ),
@@ -1501,15 +1505,16 @@ $text_message=$html . $text_message .
                     $ticketCommentsData = $query->aggregate($pipeline);
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
-
+                    error_log("fffffffddddddddddddddd".$projectId);
+              
                         foreach($ticketCommentsData as $extractComments){
-                           $ticketCollectionModel = new TicketCollection();
+                          $ticketCollectionModel = new TicketCollection();
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
-                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id'],$projectId,$selectFields);
+                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
                          //  $forTicketComments['comments'] =  $extractComments['commentData'];
-                            $commentsfinalArray =array();
+                           $commentsfinalArray =array();
                            foreach($extractComments['commentData'] as $eachOne){
                               $commentsArray['CrudeCDescription']=strip_tags($eachOne['CrudeCDescription']);
                               $commentsArray['Slug']=$eachOne['Slug'];
@@ -1528,24 +1533,25 @@ $text_message=$html . $text_message .
                                 $readableDate = $datetime->format('Y-m-d H:i');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
-                           if(!empty($projectId)){
-                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                        $forTicketComments['Project'] = $projectDetails; 
-                           }
+                            $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                             $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
                     $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
                     $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                    if(!empty($projectId)){
+                       $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array(),$options); 
+                    }
                     $ticketArtifactsData = iterator_to_array($cursor);
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $ticketCollectionModel = new TicketCollection();
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
-                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$projectId,$selectFields);
+                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
                         $ticketArtifactsModel = new TicketArtifacts();
-                        $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],$projectId);
+                        $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],$extractArtifacts['ProjectId']);
                         $getArtifactsEach=array();
                         foreach($artifacts['Artifacts'] as $getArtifact){
                              array_push($getArtifactsEach,$getArtifact['OriginalFileName']);
@@ -1559,8 +1565,8 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
-                       // $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                      //  $forTicketArtifacts['Project'] = $projectDetails; 
+                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $forTicketArtifacts['Project'] = $projectDetails; 
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
                     }
@@ -1569,6 +1575,7 @@ $text_message=$html . $text_message .
                     $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
                     $tinyUserData = iterator_to_array($cursor);
                     $TinyUserFinalArray = array();
+                 
                     foreach($tinyUserData as $extractUserData){
                         $forUsercollection['Title']=  $extractUserData['UserName'];
                         $forUsercollection['ProfilePicture']=  $extractUserData['ProfilePicture'];
@@ -1581,9 +1588,9 @@ $text_message=$html . $text_message .
                           }
                          array_push($TinyUserFinalArray, $forUsercollection);
                     }
-                }    
-               $getCollectionData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
-        }else{
+                }  
+                $getCollectionData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
+                        }else{
             $getCollectionData=array();
         }
          
