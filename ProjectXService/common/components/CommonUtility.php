@@ -1652,14 +1652,12 @@ public static function filterFollowers($followers){
      * @param type $projectId
      * @return type
      */
-    public static function prepareFollowerDetails($ticketDetails, $projectId) {
+    public static function prepareFollowerDetails($ticketDetails) {
         try {
-            $tinyUserModel = new TinyUserCollection();
-            
             if (!empty($ticketDetails["Followers"])) {
             $ticketDetails["Followers"] = CommonUtility::filterFollowers($ticketDetails["Followers"]);
                 foreach ($ticketDetails["Followers"] as &$followersList) {
-                    $projectFDetails = $tinyUserModel->getMiniUserDetails($followersList['FollowerId']);
+                    $projectFDetails = TinyUserCollection::getMiniUserDetails($followersList['FollowerId']);
                     $followersList["ProfilePicture"] = $projectFDetails["ProfilePicture"];
                     $followersList["UserName"] = $projectFDetails["UserName"];
                 }
@@ -1671,7 +1669,7 @@ public static function filterFollowers($followers){
             unset($ticketDetails["UpdatedOn"]);
             return $ticketDetails["Followers"];
         } catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("CommonUtility:prepareFollowerDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
