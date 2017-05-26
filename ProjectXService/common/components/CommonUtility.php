@@ -959,7 +959,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                 $property["PreviousValue"] = self::refineActivityData($property["PreviousValue"]);
                 $property["NewValue"] = self::refineActivityData($property["NewValue"]);
             }
-           if($actionFieldName=='Followed' || $actionFieldName=='Unfollowed' || $actionFieldName=='Related' || $actionFieldName=='ChildTask' || $actionFieldName=='Unrelated') {
+           else if($actionFieldName=='Followed' || $actionFieldName=='Unfollowed' || $actionFieldName=='Related' || $actionFieldName=='ChildTask' || $actionFieldName=='Unrelated') {
                 //$property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
                 // $property["NewValue"]   = substr($property["NewValue"], 0, 25);
             $property["SpecialActivity"]=1;
@@ -1002,7 +1002,7 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
               
             }
 
-            if ($type == 6) {
+            else if ($type == 6) {
                 if ($property["PreviousValue"] != "") {
                     $property["PreviousValue"] = $tinyUserModel->getMiniUserDetails($property["PreviousValue"]);
                 }
@@ -1013,19 +1013,19 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                 }
                 $property["type"] = "user";
             }
-            if ($fieldName == "workflow") {
+            else if ($fieldName == "workflow") {
                 $workflowDetails = WorkFlowFields::getWorkFlowDetails($property["PreviousValue"]);
                 $property["PreviousValue"] = $workflowDetails["Name"];
                 $workflowDetails = WorkFlowFields::getWorkFlowDetails($property["NewValue"]);
                 $property["NewValue"] = $workflowDetails["Name"];
             }
-            if ($fieldName == "priority") {
+            else if ($fieldName == "priority") {
                 $priorityDetails = Priority::getPriorityDetails($property["PreviousValue"]);
                 $property["PreviousValue"] = $priorityDetails["Name"];
                 $priorityDetails = Priority::getPriorityDetails($property["NewValue"]);
                 $property["NewValue"] = $priorityDetails["Name"];
             }
-            if ($type == 4) {
+            else if ($type == 4) {
                 if ($property["PreviousValue"] != "") {
                     $datetime = $property["PreviousValue"]->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -1037,24 +1037,24 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                 $property["NewValue"] = $datetime->format('M-d-Y');
             }
-            if ($type == 8) {
-                //due date
+            else if ($type == 8) {
+                //DOD
             }
-            if ($type == 10) {
+            else if ($type == 10) {
                 //bucket
                 $bucketDetails = Bucket::getBucketName($property["PreviousValue"], $projectId);
                 $property["PreviousValue"] = $bucketDetails["Name"];
                 $bucketDetails = Bucket::getBucketName($property["NewValue"], $projectId);
                 $property["NewValue"] = $bucketDetails["Name"];
             }
-            if ($fieldName == "planlevel") {
+            else if ($fieldName == "planlevel") {
                 //Plan Level
                 $planlevelDetails = PlanLevel::getPlanLevelDetails($property["PreviousValue"]);
                 $property["PreviousValue"] = $planlevelDetails["Name"];
                 $planlevelDetails = PlanLevel::getPlanLevelDetails($property["NewValue"]);
                 $property["NewValue"] = $planlevelDetails["Name"];
             }
-            if ($fieldName == "tickettype") {
+            else if ($fieldName == "tickettype") {
                 //Ticket Type
                 $ticketTypeDetails = TicketType::getTicketType($property["PreviousValue"]);
                 $property["PreviousValue"] = $ticketTypeDetails["Name"];
