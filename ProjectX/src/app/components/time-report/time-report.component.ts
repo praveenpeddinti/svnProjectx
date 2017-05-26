@@ -46,7 +46,8 @@ export class TimeReportComponent{
     sortorder: string = "desc";
     loading: boolean = false;
     totaltimehours: number = 0;
-    showdays:string='';
+    fromDateString:string='';
+    toDateString:string='';
     public fromDate:Date;
     public fromDateVal:Date;
     public toDate:Date;
@@ -155,25 +156,18 @@ export class TimeReportComponent{
                 const start = offset * limit;
                 const end = start + limit;
                 let rows = [...this.rows];
-                for (let i = 0; i < response.data.length; i++) {
-                    rows[i + start] = response.data[i];
+                var data = response.data.data;
+                 this.fromDateString = response.data.fromDate;
+                 this.toDateString = response.data.toDate;
+                for (let i = 0; i < data.length; i++) {
+                    rows[i + start] = data[i];
                     jQuery('.datatable-row-wrapper').addClass('gggg');
                 }
                 this.rows = rows;
                 this.count = response.totalCount;
-                this.totaltimehours=response.timehours;
-                /* Praveen P Calcualting days*/
-                var millisecondsPerDay = 1000 * 60 * 60 * 24;
-                var millisBetween = toDateVal.getTime() - fromDateVal.getTime();
-                var days = millisBetween / millisecondsPerDay;
-                if(days<30){
-                    this.showdays = days+ " DAY(S)";
-                }else if((days>=30) && (days<=365)){
-                    var totalmonth=( toDateVal.getFullYear() * 12 + toDateVal.getMonth() )-( fromDateVal.getFullYear() * 12 + fromDateVal.getMonth() );
-                    this.showdays = totalmonth+ " MONTH(S)";}
-                else{
-                    var totalYears= toDateVal.getFullYear() - fromDateVal.getFullYear() ;
-                    this.showdays = totalYears+ " YEAR(S)";}
+                this.totaltimehours=response.data.totalHours;
+            
+
             } else {
                 console.log("fail---");
             }
