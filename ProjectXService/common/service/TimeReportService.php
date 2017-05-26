@@ -139,6 +139,7 @@ class TimeReportService {
             $collabaratorId=$ticketData->userInfo->Id;
             $description=str_replace('.','',$ticketData->description);
             $autocompleteticketId="";
+            $oldWorkHours = $ticketData->oldWorkHours;
             $calendardate="";
             if(isset($ticketData->autocompleteTask)){
                // error_log($ticketData->autocompleteTask."@@@@@@@@");
@@ -160,7 +161,15 @@ class TimeReportService {
                 
             $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
             $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
-            $total=($oldTimeLog + $totalWorkHours);
+            if($oldWorkHours>$totalWorkHours){
+                $temphours=$oldWorkHours-$totalWorkHours;//error_log("---if==".$temphours);
+                $total=($oldTimeLog + $temphours);
+            }else{
+                $temphours=$totalWorkHours-$oldWorkHours;//error_log("---else--".$temphours);
+                $total=($oldTimeLog - $temphours);
+            }
+            //$total=($oldTimeLog + $temphours);
+            //error_log($oldTimeLog."---fdsfd-s----".$total);
             $slug =  new \MongoDB\BSON\ObjectID();
             error_log("$$$$$$$$$$$$$".$ticketId."###".$projectId."asss".$total.$collabaratorId.$slug);
             $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $collabaratorId,$slug);
