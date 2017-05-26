@@ -409,9 +409,9 @@ class TicketCollection extends ActiveRecord
      */
     public static function getAllTicketDetailsForSearch($projectId,$ticketId,$sortvalue, $searchString,$ticketArray) {
         try {
-            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $cursor =  $collection->find(array('$or'=>array( array( "TicketIdString"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$ticketArray)),array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$ticketArray)))));
-            $ticketDetails = iterator_to_array($cursor);            
+            $ticketDetails = iterator_to_array($cursor);     
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("TicketCollection:getAllTicketDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -539,7 +539,7 @@ class TicketCollection extends ActiveRecord
         try{
          // error_log($projectId."sssss"."wwww".$sortvalue."22222222".$searchString);
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $cursor =  $collection->find(array('$or'=>array( array( "TicketIdString"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId),array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId))));
+            $cursor =  $collection->find(array('$or'=>array( array( "TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))));
             $ticketDetails = iterator_to_array($cursor);
             error_log("ssssssssss".print_r($ticketDetails,1));
             return $ticketDetails;
