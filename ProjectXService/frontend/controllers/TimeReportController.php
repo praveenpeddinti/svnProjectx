@@ -78,7 +78,7 @@ class TimeReportController extends Controller
             $totalWorkLogHours = 0;
             if(count($arrayTimelog)>0){
              $totalCount =  $arrayTimelog[0]["count"];
-              $totalWorkLogHours =  $arrayTimelog[0]["totalHours"];
+              $totalWorkLogHours =  number_format(round($arrayTimelog[0]["totalHours"],2),2);
           }
             $fromDate = CommonUtility::convert_date_zone(strtotime($StoryData->fromDate),$StoryData->timeZone);
             $toDate = CommonUtility::convert_date_zone(strtotime($StoryData->toDate),$StoryData->timeZone);
