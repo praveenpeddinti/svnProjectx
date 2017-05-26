@@ -121,7 +121,7 @@ thisObj.route.queryParams.subscribe(
                
                this.page(thisObj.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
     //var thisObj = this;
-    this.shared.change(this._router.url,null,'TimeReport','Other');
+    this.shared.change(this._router.url,null,'TimeReport','Other',thisObj.projectName);
                 }
                 });
                 });
