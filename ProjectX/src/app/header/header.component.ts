@@ -75,7 +75,7 @@ export class HeaderComponent implements OnInit {
   logout() { 
         this._service.logout((data)=>{ 
               this._router.navigate(['login']);
-              this.shared.change(null,null,'Logout',null);  
+              this.shared.change(null,null,'Logout',null,'');  
         });
 
     }
@@ -255,7 +255,7 @@ export class HeaderComponent implements OnInit {
 
   modifyRoute()
   {
-    this.shared.change(null,null,'Home',null);
+    this.shared.change(null,null,'Home',null,'');
   }
   
   TimeReport(){
