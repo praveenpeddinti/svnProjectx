@@ -227,15 +227,24 @@ use yii;
     {
         try
         {
-            error_log("saveNotificationsForComment---".$notify_type);
+           // error_log("saveNotificationsForComment---".$notify_type."---".$slug);
             $commentOwner=$commentData->Comment->OriginalCommentorId;
             $loggedinUser=$commentData->userInfo->Id;
             $ticketId=(int)$commentData->ticketId;
             $projectId=(int)$commentData->projectId;
+            $commentDescripition = $commentData->Comment->CrudeCDescription;
             $data = TicketCollection::getTicketDetails($ticketId,$projectId);
             $followers=$data['Followers'];
             $followers = CommonUtility::filterFollowers($followers);
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+            $oldValue = "";
+            if($notify_type == "edit"){
+               $OldNotfication =  NotificationCollection::getNotificationDetail($slug,$ticketId,$projectId);
+               $oldValue = $OldNotfication["NewValue"];
+              // error_log("oldv alue-----------".$oldValue);
+            }
+            
+            
             //For Reply....added by Ryan
              $mentionUserIdlist= array();
                  if(!empty($userslist))
@@ -250,8 +259,8 @@ use yii;
                     $tic->NotifiedUser=(int)$user['Id'];
                     $tic->ActivityFrom=(int)$loggedinUser;
                     $tic->NotificationDate=$currentDate;
-                    $tic->OldValue="";//added for consistency
-                    $tic->NewValue="";//added for consistency
+                    $tic->OldValue=$oldValue;//added for consistency
+                    $tic->NewValue=$commentDescripition;//added for consistency
                     $tic->Notification_Type='mention';
                     //$tic->ActivityOn=$user['Id']; //previous use case
                     //eg: moin.hussain mentioned you
@@ -278,8 +287,8 @@ use yii;
                             $tic->ProjectId =$projectId;
                             $tic->ActivityFrom=(int)$loggedinUser;
                             $tic->NotificationDate=$currentDate;
-                            $tic->OldValue=""; //added for consistency
-                            $tic->NewValue=""; //added for consistency
+                            $tic->OldValue=$oldValue; //added for consistency
+                            $tic->NewValue= $commentDescripition; //added for consistency
                             $tic->CommentSlug=$slug;
                             //eg : moin.hussain commented on or replied on the ticket.
                             if($commentOwner == $follower['FollowerId'])  //added by Ryan for Reply
@@ -287,7 +296,7 @@ use yii;
                                 error_log("==reply==");
                                 $tic->Notification_Type="reply";
                                 $tic->ActivityOn="comment"; //added for consistency
-                            }else{
+                            }else {
                                 error_log("==comment==");
                                  $tic->Notification_Type=$notify_type;
                                  $tic->ActivityOn="comment"; //added for consistency
