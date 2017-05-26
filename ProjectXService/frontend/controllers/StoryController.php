@@ -1037,7 +1037,11 @@ class StoryController extends Controller
     }
 //    Ticket #91 ended
   
-    
+    /**
+     * @author Anand
+     * @uses Get project details by project name.
+     * @return type
+     */
       public function actionGetProjectDetails(){
         try{
         $project_data = json_decode(file_get_contents("php://input"));
@@ -1054,7 +1058,7 @@ class StoryController extends Controller
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
         } catch (Exception $ex) {
-     Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+     Yii::log("StoryController:actionGetProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     

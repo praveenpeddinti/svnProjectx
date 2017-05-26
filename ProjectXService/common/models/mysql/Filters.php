@@ -28,7 +28,11 @@ class Filters extends ActiveRecord
             TimestampBehavior::className(),
         ];
     }
-    
+    /**
+     * @author Anand
+     * @uses Get all active filters
+     * @return type
+     */
     public static function getAllActiveFilters()
     {
         try{
