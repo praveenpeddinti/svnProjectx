@@ -73,15 +73,21 @@ class TimeReportController extends Controller
             $StoryData = json_decode(file_get_contents("php://input"));
             $projectId = $StoryData->projectId; 
             $data = ServiceFactory::getTimeReportServiceInstance()->getAllTimeReportDetails($StoryData, $projectId);
-            $totalCount = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCount($StoryData,$projectId);
-            $totalWorkLogHours = ServiceFactory::getTimeReportServiceInstance()->getTotalWorkLogHours($StoryData,$projectId);
-         
+            $arrayTimelog = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCountAndWorkLog($StoryData,$projectId);
+            $totalCount = 0;
+            $totalWorkLogHours = 0;
+            if(count($arrayTimelog)>0){
+             $totalCount =  $arrayTimelog[0]["count"];
+              $totalWorkLogHours =  $arrayTimelog[0]["totalHours"];
+          }
+            $fromDate = CommonUtility::convert_date_zone(strtotime($StoryData->fromDate),$StoryData->timeZone);
+            $toDate = CommonUtility::convert_date_zone(strtotime($StoryData->toDate),$StoryData->timeZone);
+            $finalData = array("fromDate"=>$fromDate,"toDate"=>$toDate,"data"=>$data,"totalHours"=>$totalWorkLogHours);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $data;
+            $responseBean->data = $finalData;
             $responseBean->totalCount = $totalCount;
-            $responseBean->timehours = $totalWorkLogHours;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {

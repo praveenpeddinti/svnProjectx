@@ -126,9 +126,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $time_object = new \DateTime($date_time, new \DateTimeZone($from_tz));
             $time_object->setTimezone(new \DateTimeZone($to_tz));
             if ($type == "sec") {
-                return strtotime($time_object->format('Y-m-d H:i:s'));
+                return strtotime($time_object->format('M-d-Y H:i:s'));
             } else {
-                return $time_object->format('d-m-Y');
+                return $time_object->format('M-d-Y');
             }
         } catch (Exception $ex) {
             Yii::log("CommonUtility:convert_date_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

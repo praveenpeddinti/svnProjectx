@@ -23,13 +23,12 @@ class TimeReportService {
      * @return type 
      */
   
-    public function getTimeReportCount($StoryData, $projectId) {
+    public function getTimeReportCountAndWorkLog($StoryData, $projectId) {
         try {
-            $totalCount = TicketTimeLog::getTimeReportCount($StoryData, $projectId);
-            
-            return $totalCount;
+            $arrayTimelog = TicketTimeLog::getTimeReportCountAndWorkLog($StoryData, $projectId);
+            return $arrayTimelog;
         } catch (Exception $ex) {
-            Yii::log("TimeReportService:getTimeReportCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TimeReportService:getTimeReportCountAndWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     

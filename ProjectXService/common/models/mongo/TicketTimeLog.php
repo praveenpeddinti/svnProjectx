@@ -217,7 +217,7 @@ class TicketTimeLog extends ActiveRecord
      * @return type
      */
     
-    public static function getTimeReportCount($StoryData, $projectId) {
+    public static function getTimeReportCountAndWorkLog($StoryData, $projectId) {
         try {
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
@@ -231,41 +231,19 @@ class TicketTimeLog extends ActiveRecord
                     '$group' => array(
                         '_id' => '$TimeLog.CollaboratorId',
                         "count" => array('$sum' => 1),
-                    ),
-                ),
-            );
-            $Arraytimelog = $query->aggregate($pipeline);
-            $Arraytimelog[0]['count']=!empty($Arraytimelog[0]['count'])?$Arraytimelog[0]['count']:0;
-            return $Arraytimelog[0]['count'];
-        } catch (Exception $ex) {
-            Yii::log("TicketCollection:getTimeReportCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
-    }
-    
-    
-    public static function getTotalWorkLogHours($StoryData,$projectId) {
-        try {
-            $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
-            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
-            $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
-            $pipeline = array(
-                array('$unwind'=> '$TimeLog'),
-                array('$match' => $matchArray),
-                array(
-                    '$group' => array(
-                        '_id' => '$TimeLog.CollaboratorId',
                         "totalHours" => array('$sum' => '$TimeLog.Time'),
                     ),
                 ),
             );
-            $totalWorkLogHours = $query->aggregate($pipeline);
-            $totalWorkLogHours[0]['totalHours']=!empty($totalWorkLogHours[0]['totalHours'])?$totalWorkLogHours[0]['totalHours']:0;
-               
-            return number_format(round($totalWorkLogHours[0]['totalHours'],2),2);
+            $Arraytimelog = $query->aggregate($pipeline);
+           // $Arraytimelog[0]['count']=!empty($Arraytimelog[0]['count'])?$Arraytimelog[0]['count']:0;
+            return $Arraytimelog;
         } catch (Exception $ex) {
-            Yii::log("TicketTimeLog:getTotalWorkLogHours::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TicketCollection:getTimeReportCountAndWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+  
     /**
      * @author Padmaja
      * @return type
