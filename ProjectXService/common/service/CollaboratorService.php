@@ -144,15 +144,15 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
     * @param type $projectId
     * @return type
     */      
-    public function getAllFollowInlineEdit($ticketId, $projectId) {
+    public function getTicketFollowersList($ticketId, $projectId) {
         try {
             $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId); 
             if(!empty($ticketDetails)){
-                $details =  CommonUtility::prepareFollowerDetails($ticketDetails, $projectId);   
+                $details =  CommonUtility::prepareFollowerDetails($ticketDetails);   
             }
             return $details;
         } catch (Exception $ex) {
-            Yii::log("CollaboratorService:getAllFollowInlineEdit::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("CollaboratorService:getTicketFollowersList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
