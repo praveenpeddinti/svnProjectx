@@ -1514,7 +1514,7 @@ public callTicketDetailPage(ticId,projectId){
             //alert("fieldsDatass@@@@@@@@@@@"+JSON.stringify(this.ticketData));
             this.checkPlanLevel=data.data.StoryType.Name;
             console.log("==Plan Level=="+this.checkPlanLevel);
-            this.shared.change(this._router.url,this.ticketId,'Detail',this.checkPlanLevel);
+            this.shared.change(this._router.url,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
             this.childTaskData=data.data.Tasks;
             // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);

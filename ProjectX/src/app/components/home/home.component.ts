@@ -19,7 +19,7 @@ export class HomeComponent{
     ngOnInit() {
         localStorage.setItem('ProjectName','');
         localStorage.setItem('ProjectId','');
-        this.shared.change('','','','');
+        this.shared.change('','','','','');
    }
      constructor(
           private _router: Router,
