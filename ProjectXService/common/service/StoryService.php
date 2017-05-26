@@ -702,11 +702,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                  {
                                   if(!empty($unfollowId))
                                   $this->unfollowTicket($unfollowId,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,'follower',0);   
-                                  $this->followTicket($ticket_data->value,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',FALSE);  
+                                  $this->followTicket($ticket_data->value,$follow_ticket_id[0]['TaskId'],$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"]='follower',TRUE);  
                                  }
                                  
                                     }
-                                 $this->followTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$loggedInUser,$childticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],FALSE);
+                                 $this->followTicket($ticket_data->value,$childticketDetails['ParentStoryId'],$ticket_data->projectId,$loggedInUser,$childticketDetails['TicketId'].'-'.$fieldDetails["Field_Name"],TRUE);
 
                             }
                         }
