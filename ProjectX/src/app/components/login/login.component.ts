@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit{
         this._service.login(this.user,(data)=>{ 
             if(data.status==200){
                 this._router.navigate(['home']); 
-                this.shared.change(null,null,'LogIn',null);  
+                this.shared.change(null,null,'LogIn',null,'');  //newly changed
             }else{
                 this.checkData=true;
                 this.errorMsg = 'Invalid Email/Password';
