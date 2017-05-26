@@ -22,6 +22,7 @@ export class BreadcrumbComponent implements OnInit {
   private count=0;
   private status=false;
   private isLoggedOut=false;
+  private project;
   constructor(private router:Router,private route:ActivatedRoute,private shared:SharedService){
     this.shared=shared;
     console.log("==in const==");
@@ -49,18 +50,21 @@ export class BreadcrumbComponent implements OnInit {
                     this.items[0].label=this.route_changes.params;
                    }
                 }
-          if(this.count==0 && this.status!=true && localStorage.getItem('ProjectName')!='')
+          if(this.route_changes.projectName!=''  && this.status!=true && this.project!='') //newly changed
             {
               console.log("==Length=="+this.items.length);
-              console.log("==projectName=="+localStorage.getItem('ProjectName'));
+              console.log("==projectName=="+this.route_changes.projectName);
               // this.removeItems(0,false);
              
-                
-                 this.items.push({label:localStorage.getItem('ProjectName'),url:"/#/project/"+localStorage.getItem('ProjectName')+"/list"});
+                 if(this.route_changes.projectName!=undefined)
+                 {
+                  this.items.push({label:this.route_changes.projectName,url:"/#/project/"+this.route_changes.projectName+"/list"});
                 
                 this.status=true;
-              
-            }
+                this.project=this.route_changes.projectName;
+                 }
+              }
+            
             // console.log("==Index=="+this.id.indexOf('#'+this.route_changes.params));
             // if(this.id.indexOf('#'+this.route_changes.params)>-1)
             // {
@@ -72,6 +76,19 @@ export class BreadcrumbComponent implements OnInit {
             
             if((this.route_changes.page=='Detail') && !(this.id.indexOf('#'+this.route_changes.params)>-1))
             {
+              for (var key in this.items[0]) 
+                   {
+                    this.items[0].url="/#/project/"+this.route_changes.projectName+"/list";
+                    this.items[0].label=this.route_changes.projectName;
+                    if(this.project!=this.route_changes.projectName && this.project!='')
+                    {
+                      console.log("==not equal==");
+                      //this.id=[];
+                      this.items.splice(1,this.items.length);
+                      this.project='';
+                      this.status=false;
+                    }
+                   }
               this.items.push({label:'#'+this.route_changes.params,url:"/#"+this.route_changes.url,type:this.route_changes.type});
               this.id.push('#'+this.route_changes.params);
               this.count++;
