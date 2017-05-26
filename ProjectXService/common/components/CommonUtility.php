@@ -1096,13 +1096,16 @@ $html="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://ww
 <body>
 <table width='600' border='0' align='center' cellpadding='0' cellspacing='0'>";          
 $text_message=$html . $text_message . 
-        "<tr><td style='border:solid 1px #f0f0f0;font-family:'Arial', Helvetica, sans-serif; font-size:14px;line-height:50px;  color:#0199e0;' align='center' >Update Your Email Alert Preferences</td></tr>
-        <tr><td bgcolor='#0199e0'>
-        <table width='96%' height='50' border='0' align='center' cellpadding='0' cellspacing='0'>
-        <tr><td style='font-family:'Arial', Helvetica, sans-serif; font-size:14px;line-height:50px; color:#fff;'>This message was sent by <a href='' style=' color:#fff;'>ProjectX</a></td>
-        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/facebook.png'." style=' border:none; outline:none;'/></a></td>
-        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/twit.png'." style=' border:none; outline:none;'/></a></td>
-        <td width='30' align='center'><a href=''><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/linkedin.png'." style=' border:none; outline:none;'/></a></td>
+        "<tr><td align='center' style='border:1px solid #f0f0f0; padding:5px;font-family:Arial; font-size:12px;line-height:40px;color:#333333; text-align:center;' >Update Your <a href='#' style='color:#0199e0; text-decoration:none;'>Email Alert Preferences</a></td></tr>
+        <tr><td bgcolor='#787878' align='left' valign='top' height='35'>
+        <table width='100%'  border='0' align='center' cellpadding='0' cellspacing='0' height:'35'>
+  <tr>
+  <td width='15' height:'35'>&nbsp;</td>
+        <td width='512' align='left' height:'35' style='font-family:Arial; font-size:12px;line-height:35px; color:#fff;'>This message was sent by <a href='#' style='color:#d0ebff;font-size:13dpx;text-decoration:none;'>ProjectX</a></td>
+        <td width='20' align='left'height:'35' ><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/facebook.png'." style=' border:none; outline:none;'/></a></td>
+        <td width='20' align='left' height:'35'><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/twit.png'." style=' border:none; outline:none;'/></a></td>
+        <td width='20' align='center' height:'35'><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/linkedin.png'." style=' border:none; outline:none;'/></a></td>
+        <td width='15'>&nbsp;</td>
         </tr>
        </table>
        </td>
