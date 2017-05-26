@@ -11,6 +11,7 @@ import {Storage} from '@ionic/storage';
 */
 @Injectable()
 export class Globalservice {
+    localDate = new Date().toISOString();
     private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
     params: {userInfo?: any, projectId?: any} = {};
     constructor(public http: Http, public storage: Storage) {
@@ -177,6 +178,8 @@ export class Globalservice {
         var insertTimelogParams = this.getUserInfo();
         insertTimelogParams["ticketId"] = timelogTicketId;
         insertTimelogParams["workHours"] = enteredTimeLog;
+        insertTimelogParams["addTimelogDesc"] = "";
+        insertTimelogParams["addTimelogTime"] = this.localDate;
         insertTimelogParams["projectId"] = 1;
         insertTimelogParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(insertTimelogParams), this.headers).map(
