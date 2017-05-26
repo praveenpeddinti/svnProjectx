@@ -125,35 +125,41 @@ function returnNodeType() {
    node=window.getSelection().getRangeAt(0).commonAncestorContainer;
    node = ((node.nodeType===1)?node:node);      
    var nodeArray = [];
+   console.log(JSON.stringify(node));
    returnarray = returnParentTag(node, nodeArray);
     
     if(nodeArray.indexOf("B") > -1){
    		// Bold
         //    alert(document.getElementById("bold").style.backgroundColor);
            document.getElementById("bold").style.backgroundColor = "#cccccc";
-    } else if(nodeArray.indexOf("I") > -1){
+    }else{
+       document.getElementById("bold").style.backgroundColor = "";  
+    } if(nodeArray.indexOf("I") > -1){
         // Italic
         document.getElementById("italic").style.backgroundColor = "#cccccc";
-    } else if(nodeArray.indexOf("U") > -1){
+    }else{
+         document.getElementById("italic").style.backgroundColor = ""; 
+    }  if(nodeArray.indexOf("U") > -1){
             // unorder list (bullits)
             document.getElementById("underline").style.backgroundColor = "#cccccc";
-    }else if(nodeArray.indexOf("UL") > -1){
+    }else{
+         document.getElementById("underline").style.backgroundColor = ""; 
+    }if(nodeArray.indexOf("UL") > -1){
             // unorder list (bullits)
             document.getElementById("bullets").style.backgroundColor = "#cccccc";
-    } else if(nodeArray.indexOf("OL") > -1){
+    } else{
+         document.getElementById("bullets").style.backgroundColor = "";
+    }if(nodeArray.indexOf("OL") > -1){
             // order list (numbers)
             document.getElementById("numbers").style.backgroundColor = "#cccccc";
-    } else if(nodeArray.indexOf("A") > -1){
+    } else{
+        document.getElementById("numbers").style.backgroundColor = "";
+    } if(nodeArray.indexOf("A") > -1){
             // ancher tag
             document.getElementById("insertlink").style.backgroundColor = "#cccccc";
-    } else {
-        document.getElementById("bold").style.backgroundColor = "";
-        document.getElementById("italic").style.backgroundColor = "";
-        document.getElementById("underline").style.backgroundColor = "";
-        document.getElementById("bullets").style.backgroundColor = "";
-        document.getElementById("numbers").style.backgroundColor = "";
-        document.getElementById("insertlink").style.backgroundColor = "";
-    }
+    }else{
+         document.getElementById("insertlink").style.backgroundColor = "";
+    } 
    return returnarray;
 }
 
