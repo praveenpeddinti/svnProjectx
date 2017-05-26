@@ -687,7 +687,7 @@ use yii;
              
              else if($notification['ActivityOn']=='TotalTimeLog')
              {
-                $message=array('Slug'=>$notification['CommentSlug'],'Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"work log",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>$notification['ActivityOn'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue'],'Preposition'=>'to');
+                $message=array('Slug'=>$notification['CommentSlug'],'Project'=>$projectDetails,'IsSeen'=>$notification['Status'],'from'=>$from_user['UserName'],'object'=>"work log",'type'=> Yii::$app->params[$notification['Notification_Type']],'id'=>$notification['_id'],'ActivityOn'=>"Total Time Log",'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],'status'=>$notification['Notification_Type'],'OldValue'=>$notification['OldValue'],"NewValue"=>$notification['NewValue'],'Preposition'=>'to');
                 array_push($result_msg,$message);
              }
              
