@@ -51,6 +51,7 @@ import {CustomUrlSerializer} from './CustomUrlSerializer';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
+              {path: '404',redirectTo: 'error',pathMatch: 'full' },
               {path: 'home',children:[
                 { path: '' , component: HomeComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
@@ -117,6 +118,11 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
+               {path: 'error',children:[
+                { path: '' , component: PageNotFoundComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
              ];
 @NgModule({
   imports:      [
@@ -142,7 +148,7 @@ const ROUTES=[
 
   declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent ],
   bootstrap:    [ AppComponent ],
-  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,{provide: LocationStrategy, useClass: HashLocationStrategy},StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
+  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
