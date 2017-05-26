@@ -1122,10 +1122,7 @@ EOD;
                         $selectfields=['Title','TicketId','Fields.planlevel'];
                        // $ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
                        // $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
-                        if($notification['Notification_Type']=='mention')
-                        {
-                        //    error_log("==in mention==");
-                      
+                        
 //            $text_message = <<<EOD
 //<a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$fromUser}
 //EOD;
@@ -1137,7 +1134,6 @@ EOD;
                     array_push($recipient_list,$notification['NotifiedUser']);          
                              
                             
-                        }
                    }
                    
                        
@@ -1189,16 +1185,17 @@ EOD;
                //   error_log("EMAIL________________+++++++++++_____________".$value);
              }
               $subject=$projectName;
-              $project_logo="<tr><td style='border:solid 1px #f0f0f0; padding:5px;'><a href='' ><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/logo.png'." style='border:0px; outline:0px;'/></a></td></tr>
+              $project_logo="<tr><td style='border:solid 1px #f0f0f0; padding:5px;'><a href='' ><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/logo-emailer.png'." style='border:0px; outline:0px;'/></a></td></tr>
                              <tr><td bgcolor='#f8f8f8' style='border-bottom:solid 1px #fff;'>
-                             <table width='96%' border='0' align='center' cellpadding='0' cellspacing='0'>
-                              <tr>
-                              <td height='15'>&nbsp;</td>
-                              </tr>";
-              $user_message="<tr><td style='font-family':'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333; border-bottom:solid 1px #f0f0f0; padding-bottom:10px;>Hi ". $notified_user."<br/>"."you have a new ticket alert.</td></tr>";
-              $link_message = "<a  style='font-family:Arial, Helvetica, sans-serif;  font-size:16px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>#{$ticketId} {$title} </a>";
-              $ticket_message="<tr><td style='font-family:'Arial', Helvetica, sans-serif;  font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>".$link_message."</td></tr>";
-              $view_ticket_message="<tr><td><a style='font-family:Arial, Helvetica, sans-serif;  font-size:16px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View ticket</a></td></tr></table> </td></tr>";
+                             <table width='100%' border='0' cellspacing='0' cellpadding='0'>
+                             <tr><td width='15'>&nbsp;</td><td width='570' align='left' valign:'top'>
+                              <table width='570' border='0' align='left' cellpadding='0' cellspacing='0'>
+                                <tr><td height='15'>&nbsp;</td></tr>";
+              $user_message="<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;'>Hi ". $notified_user."<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new ticket alert</span></td></tr>";
+              $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>#{$ticketId} {$title} </a>";
+              $ticket_message="<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>".$link_message."</td></tr>";
+              $view_ticket_message="<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
+                                    </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
               $text_message=$project_logo . $user_message . $ticket_message . $text_message.$view_ticket_message;
               echo("==going to send mail==");
              CommonUtility::sendEmail($recipient_list,$text_message,$subject);
