@@ -663,7 +663,7 @@ export class StoryDetailsComments {
             var editor_contents;
             var appended_content;
             if(where=="edit_comments"){
-                editor_contents = this.innerHTML;
+                editor_contents = this.myHTML;
             }
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
