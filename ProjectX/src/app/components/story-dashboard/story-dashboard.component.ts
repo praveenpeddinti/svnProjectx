@@ -99,6 +99,7 @@ expanded: any = {};
       { 
       thisObj.route.params.subscribe(params => {
            thisObj.projectName=params['projectName'];
+           this.shared.change(this._router.url,thisObj.projectName,'Dashboard','',thisObj.projectName); //added by Ryan for breadcrumb purpose
             thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode!=404) {
                 thisObj.projectId=data.data.PId;  
@@ -137,7 +138,7 @@ expanded: any = {};
         });
        
            })
- this.shared.change(this._router.url,this.projectName,'Dashboard',''); //added by Ryan for breadcrumb purpose
+ 
 }
     // ngAfterViewInit()
     // {
