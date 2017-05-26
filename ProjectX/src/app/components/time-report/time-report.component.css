@@ -74,6 +74,7 @@
    
    
 }
+
 .paddingtop10{padding-top:10px}
 .topdivider{border-top:1px solid #f4f4f4;margin: 5px 0 0;
     padding: 0;}
@@ -96,3 +97,8 @@
      display:none;
 }
 
+.customformfieldstextarea{
+    resize: none;
+    height:120px;
+
+}

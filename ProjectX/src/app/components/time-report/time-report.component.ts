@@ -201,14 +201,15 @@ export class TimeReportComponent{
         this.submitted= false;
     }
     searchTask(event) {
+      //  alert(event.query);
+        var searchStrg=event.query;
         var modifiedString=event.query.replace("#","");
         var post_data={
         'projectId':this.projectId,
         'sortvalue':'Title',
-        'searchString':modifiedString
+        'searchString':modifiedString.trim()
         }
         let prepareSearchData = [];
-        let appendstring=['Please select valid story/task'];
             this._ajaxService.AjaxSubscribe("time-report/get-story-details-for-timelog",post_data,(result)=>
             {
                 if(result.status !='401'){ 
@@ -219,7 +220,12 @@ export class TimeReportComponent{
                     }
                     this.search_results=prepareSearchData;
                 }else{
-                    this.search_results=appendstring;
+                    if(!searchStrg.includes("#") && result.status =='401'){
+                        let appendstring=['Please select valid story/task'];
+                      //  alert("333333333333333");
+                        this.search_results=appendstring;
+                    }
+                   
                 }
             });
     }
@@ -291,6 +297,7 @@ export class TimeReportComponent{
                 jQuery('.timelogSuccessMsg').css('display','block');
                 jQuery('.timelogSuccessMsg').fadeOut( "slow" );
                  setTimeout(() => {
+                     this.submitted=false;
                     jQuery('#addTimelogModel').modal('hide');
                     //jQuery('#addTimelogModel').find("input,textarea").val('').end();
                 }, 500);
