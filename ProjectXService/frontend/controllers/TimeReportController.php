@@ -111,11 +111,11 @@ class TimeReportController extends Controller
         }
 
     }
-           /**
-     * @author Padmaja
-     * @uses get dearchdetails for timelog 
-     * @return type
-     */
+    /**
+    * @author Padmaja
+    * @uses get dearchdetails for timelog 
+    * @return type
+    */
     public function actionGetStoryDetailsForTimelog(){
         try{
             $searchData = json_decode(file_get_contents("php://input"));
@@ -142,15 +142,14 @@ class TimeReportController extends Controller
              Yii::log("TimeReportController:actionGetStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-         /**
-     * @author Padmaja
-     * @uses adding timelog details
-     * @return type
-     */
+    /**
+    * @author Padmaja
+    * @uses adding timelog details
+    * @return type
+    */
     public function actionAddTimelog(){
         try{
             $timelogData = json_decode(file_get_contents("php://input"));
-            //$getTimelogData= ServiceFactory::getTimeReportServiceInstance()->addTimelog($timelogData);
             $getTimelogData=ServiceFactory::getStoryServiceInstance()->insertTimeLog($timelogData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -163,43 +162,35 @@ class TimeReportController extends Controller
         }
 
     }
-          /**
-     * @author Padmaja
-     * @uses adding removing details
-     * @return type
-     */
-   public function actionRemoveTimelog(){
-       try{
-            $timelogData = json_decode(file_get_contents("php://input"));
-            $projectId = $timelogData->projectId;
-            $slug = $timelogData->slug;
-            $timelogHours = $timelogData->timelogHours;
-            $ticketDesc= explode(".",$timelogData->ticketDesc);
-            $ticketId=str_replace('#','',$ticketDesc[0]);
-            $userId=$timelogData->userInfo->Id;
-            $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->RemoveTimelogs($projectId,$ticketId,$slug,$timelogHours,$userId);
-            $responseBean = new ResponseBean();
-            $responseBean->statusCode = ResponseBean::SUCCESS;
-            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $getTimelogData;
-            $response = CommonUtility::prepareResponse($responseBean, "json");
-            return $response;
-           
-       } catch (Exception $ex) {
-            Yii::log("TimeReportController:actionRemoveTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-       }
+    /**
+    * @author Padmaja
+    * @uses adding removing details
+    * @return type
+    */
+    public function actionRemoveTimelog(){
+        try{
+             $timelogData = json_decode(file_get_contents("php://input"));
+             $getTimelogData= ServiceFactory::getTimeReportServiceInstance()->RemoveTimelogs($timelogData);
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SUCCESS;
+             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+             $responseBean->data = $getTimelogData;
+             $response = CommonUtility::prepareResponse($responseBean, "json");
+             return $response;
 
-   }
-   public function actionGetTimelogDetailsBySlug(){
-     try{ 
-        $timelogData = json_decode(file_get_contents("php://input"));
-       $timelogDetails=  TicketTimeLog::getTimeLogRecordsBySlug($timelogData->projectId,$timelogData->ticketId,$timelogData->slug);
-       error_log("slugggggggggggggg".print_r($timelogDetails,1));
-         
-     } catch (Exception $ex) {
+        } catch (Exception $ex) {
+             Yii::log("TimeReportController:actionRemoveTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
 
+    }
+    public function actionGetTimelogDetailsBySlug(){
+      try{ 
+         $timelogData = json_decode(file_get_contents("php://input"));
+        $timelogDetails=  TicketTimeLog::getTimeLogRecordsBySlug($timelogData->projectId,$timelogData->ticketId,$timelogData->slug);
+     }catch (Exception $ex) {
+         Yii::log("TimeReportController:actionGetTimelogDetailsBySlug::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
      } 
-   }
+    }
 }
 
 
