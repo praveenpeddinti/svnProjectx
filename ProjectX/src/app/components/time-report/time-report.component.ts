@@ -56,6 +56,7 @@ export class TimeReportComponent{
     public entryForm={};
     errors: string='';
     adderrors: string='';
+    oldWorkLogHour: number = 0;
     columns = [
                 {
                     name: 'Date',
@@ -249,9 +250,11 @@ export class TimeReportComponent{
             'ticketId':updateTicketId[1],
             'description':this.extractFields['description'],
             'autocompleteTask':this.selectedValForTask,
-            'editableDate':editableDate,
+            'editableDate':this.extractFields['LogDate'],
             'calendardate':this.selectedValForDate,
+            'oldWorkHours':this.oldWorkLogHour
         }
+        
         this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
         { 
             if (response.statusCode == 200) {
@@ -361,7 +364,8 @@ export class TimeReportComponent{
         this._router.navigate(['project',this.projectName,ticketId,'details']);
      }
 
-    editTimeEntry(Object){
+    editTimeEntry(Object){alert("-----"+JSON.stringify(Object));
           this.extractFields=Object;
+          this.oldWorkLogHour=this.extractFields['Time'];
     }
 }
