@@ -38,22 +38,14 @@ export class SearchComponent implements OnInit{
                  this.page=1;
                 this.searchArray=[];
                     console.log("@@@@@@@@@@@@@"+JSON.stringify(thisObj.searchString));
-            //    console.log("projectIDDDDDDDDDDDddd"+JSON.stringify(this.projectId)+thisObj.searchString);
-               //     console.log("projectIDDDDDDDDDDDddd"+JSON.stringify(this.projectId)+this.searchString);
-                    this.load_contents(this.page,this.searchString,this.searchFlag,'','2');
+                   this.load_contents(this.page,this.searchString,this.searchFlag,'','');
             }else{
-               // alert("3333333333333333");;
-                         this.projectService.getProjectDetails(this.projectName,(data)=>{ 
+                    this.projectService.getProjectDetails(this.projectName,(data)=>{ 
                     if(data.data!=false){
                         this.projectId=data.data.PId; 
-                    //   var thisObj = this; 
-                    // thisObj.searchString=params['q'];
                     this.page=1;
-                this.searchArray=[];
-                    console.log("@@@@@@@@@@@@@"+JSON.stringify(thisObj.searchString));
-                console.log("projectIDDDDDDDDDDDddd"+JSON.stringify(this.projectId)+thisObj.searchString);
-                    console.log("projectIDDDDDDDDDDDddd"+JSON.stringify(this.projectId)+this.searchString);
-                    this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'2');
+                    this.searchArray=[];
+                    this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'');
                     }else{
                     this._router.navigate(['pagenotfound']);  
                     }
@@ -73,7 +65,7 @@ export class SearchComponent implements OnInit{
                     thisObj.ready=false;
                     thisObj.page++;
                   //  alert("loading"+thisObj.projectId);
-                    thisObj.load_contents(thisObj.page,thisObj.searchString,thisObj.searchFlag,thisObj.projectId,'1'); 
+                    thisObj.load_contents(thisObj.page,thisObj.searchString,thisObj.searchFlag,thisObj.projectId,'scroll'); 
                     
                 }
               
@@ -81,7 +73,7 @@ export class SearchComponent implements OnInit{
         });
         this.shared.change(this._router.url,this.projectName,'Search','Other',this.projectName); //added By Ryan for breadcrumb purpose
     }
-   public  load_contents(page,searchString,searchFlag,projectId,type){
+   public  load_contents(page,searchString,searchFlag,projectId,scroll){
         var post_data={
         'projectId':projectId,
         'searchString':searchString,
@@ -91,12 +83,13 @@ export class SearchComponent implements OnInit{
       console.log("psearchparam"+JSON.stringify(post_data));
           this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
          { 
+                jQuery('#searchsection').html(' ');
                   if(result.status !='401'){ 
                      this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
                     this.ready=true;
                     }else{
-                        if(type==1){
-                             jQuery('#searchsection').html("That's All..No records found.");
+                        if(scroll=='scroll' && result.status =='401'){
+                           jQuery('#searchsection').html("That's All.No Results found");
                         }else{
                             jQuery('#searchsection').html('No Results Found');
                         }
@@ -125,14 +118,18 @@ export class SearchComponent implements OnInit{
        return prepareData;
     }
     navigateToStoryDetail(project,ticketId,slug){
+        if(slug=='' || slug==undefined){
+            this._router.navigate(['project',project.ProjectName,ticketId,'details']);
+        }else{
          this._router.navigate(['project',project.ProjectName,ticketId,'details'],{queryParams: {Slug:slug}});
-     }
+        }
+    }
      callsearchByClick(searchFlag){
         this.searchArray=[];
         this.searchFlag=searchFlag;
         this.page=1;
         // alert("loading12333"+this.projectId);
-        this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'2');
+        this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'');
         
      }
 }
