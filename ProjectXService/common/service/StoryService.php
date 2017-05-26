@@ -865,8 +865,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $artifacts = $refinedData["ArtifactsList"];
             $commentDesc = $commentData->Comment->CrudeCDescription;
             if (isset($commentData->Comment->Slug)) {
+                 $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
+                 $notify_type = "edit";
+                    $slug= new \MongoDB\BSON\ObjectID($commentData->Comment->Slug);
+                 $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
                  error_log("saveComment-------------2");
-                $slug=$commentData->Comment->Slug;
+             
                 $collection = Yii::$app->mongodb->getCollection('TicketComments');
 //}
                 $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc));
@@ -876,9 +880,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 if (!empty($artifacts)) {
                     TicketArtifacts::saveArtifacts($commentData->ticketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
                 }
-                 $notify_type = "edit";
-                 $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
-                $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
+                
+               
+               
                 return $retData;
             } else {
  error_log("saveComment-------------3***");
