@@ -46,7 +46,7 @@ export class BreadcrumbComponent implements OnInit {
                 {
                    for (var key in this.items[0]) 
                    {
-                    this.items[0].url="/#/project/"+this.route_changes.params+"/list";
+                    this.items[0].url="/project/"+this.route_changes.params+"/list";
                     this.items[0].label=this.route_changes.params;
                    }
                 }
@@ -58,7 +58,7 @@ export class BreadcrumbComponent implements OnInit {
              
                  if(this.route_changes.projectName!=undefined)
                  {
-                  this.items.push({label:this.route_changes.projectName,url:"/#/project/"+this.route_changes.projectName+"/list"});
+                  this.items.push({label:this.route_changes.projectName,url:"/project/"+this.route_changes.projectName+"/list"});
                 
                 this.status=true;
                 this.project=this.route_changes.projectName;
@@ -78,7 +78,7 @@ export class BreadcrumbComponent implements OnInit {
             {
               for (var key in this.items[0]) 
                    {
-                    this.items[0].url="/#/project/"+this.route_changes.projectName+"/list";
+                    this.items[0].url="/project/"+this.route_changes.projectName+"/list";
                     this.items[0].label=this.route_changes.projectName;
                     if(this.project!=this.route_changes.projectName && this.project!='')
                     {
@@ -89,7 +89,7 @@ export class BreadcrumbComponent implements OnInit {
                       this.status=false;
                     }
                    }
-              this.items.push({label:'#'+this.route_changes.params,url:"/#"+this.route_changes.url,type:this.route_changes.type});
+              this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type});
               this.id.push('#'+this.route_changes.params);
               this.count++;
               console.log("==Details Count=="+this.count);
@@ -121,12 +121,12 @@ export class BreadcrumbComponent implements OnInit {
               if(this.id.length!=0)
               {        
                 this.removeItems(1,true);
-                this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
+                this.items.push({label:this.route_changes.page,url:"/"+this.route_changes.url});
                 
               }
               else
               {
-                this.items.push({label:this.route_changes.page,url:"/#"+this.route_changes.url});
+                this.items.push({label:this.route_changes.page,url:"/"+this.route_changes.url});
                 if(this.items.length>1)
                 {
                   console.log("==Items Length=="+this.items.length);
