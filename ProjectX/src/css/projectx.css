@@ -348,6 +348,7 @@ footer{font-size:12px}
 .relate_story .custom_story_button .normal{padding: 19px 12px 19px;}
 .relate_story .ui-autocomplete-panel .ui-autocomplete-list-item{border-radius:0;padding:8px 5px;border-bottom:1px solid #e8e8e8}
 .relate_story .ui-autocomplete-panel .ui-autocomplete-list-item:last-child{border:0}
+.autoSearchTask .ui-autocomplete-panel .ui-autocomplete-list-item{border-radius:0;padding:8px 5px;border-bottom:1px solid #e8e8e8}
 
 .cbx { float: left; margin-right: 20px;}
 .cbx label{ font-weight: normal!important; font-size: 12px!important; vertical-align: top!important;line-height: 25px!important;

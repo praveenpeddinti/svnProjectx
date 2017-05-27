@@ -96,7 +96,9 @@
 #taskerr_msg{
      display:none;
 }
-
+#hoursErrMsg{
+   display:none; 
+}
 .customformfieldstextarea{
     resize: none;
     height:120px;

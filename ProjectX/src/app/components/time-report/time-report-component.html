@@ -147,7 +147,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
-                  <div class="customformfieldsmarginbottom">
+                  <div class="customformfieldsmarginbottom autoSearchTask">
 
                   <p-autoComplete  [(ngModel)]="entryForm.text" name="task"  #task="ngModel" [minLength]="1"  placeholder="Search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)"  required></p-autoComplete>
 
@@ -188,19 +188,17 @@ Row classes are also dynamically. These classes are pass to service layer-->
               <div class="col-xs-12 col-sm-4 col-md-4 ">
                   <label class="timereportlabel"> Hours </label>
                   <div class="relativediv">
-                  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime" (keyup)="inputKeyDown(1)" placeholder="0.00"/>
-                          <div *ngIf="submitted && hours.errors " class="fielderror">
+                  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime" (keyup)="inputKeyDown(1)" placeholder="0.00" maxlength="5"/>
+                 <div *ngIf="submitted && hours.errors " class="fielderror">
                 <div [hidden]="!hours.errors.required">
                     Hours is required
                 </div>
-                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                    Title must be 3 characters long
-                </div>-->
-            </div>
+                </div>
+                 
               </div>
+               <div id="addHoursErrMsg" class="fielderror" style="display:none;"></div>
               </div>
- 
-        
+         
               <div class="col-xs-12 col-sm-8 col-md-8 ">
                   <label class="timereportlabel"> Date </label>
                   <div class="paddingright25 ">
@@ -289,16 +287,14 @@ Row classes are also dynamically. These classes are pass to service layer-->
               <div class="col-xs-12 col-sm-4 col-md-4 ">
                   <label class="timereportlabel"> Hours </label>
                   <div class="relativediv">
-                  <input type="text" class="customformfields " required  [(ngModel)]="extractFields.Time" name="edithours"  #edithours="ngModel" id="editTimelogTime"  (keyup)="inputKeyDown(2)"/>
+                  <input type="text" class="customformfields " required  [(ngModel)]="extractFields.Time" name="edithours"  #edithours="ngModel" id="editTimelogTime"  (keyup)="inputKeyDown(2)" maxlength="5"/>
                           <div *ngIf="esubmitted && edithours.errors " class="fielderror">
                 <div [hidden]="!edithours.errors.required">
                     Hours is required
                 </div>
-                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                    Title must be 3 characters long
-                </div>-->
             </div>
               </div>
+               <div id="editHoursErrMsg" class="fielderror" style="display:none;"></div>
               </div>
  
         
