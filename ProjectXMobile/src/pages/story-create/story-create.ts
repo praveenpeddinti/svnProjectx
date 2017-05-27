@@ -19,7 +19,7 @@ declare var atwho:any;
     templateUrl: 'story-create.html'
 })
 export class StoryCreatePage {
-    
+    public submitted:boolean=false;
     public itemfield: Array<any>;
     public tasktypes: Array<any>;
     public create: { title?: string, description?: string, default_task?: any, planlevel?: any, priority?: any } = { title: "", description: "", default_task: [], planlevel: "", priority: "" };
@@ -105,6 +105,7 @@ export class StoryCreatePage {
         // });
     }
     public onStoryCreate(form): void {
+
         this.myHTML = document.getElementById('editor').innerHTML;
         console.log("submit button clicked2" + JSON.stringify(this.myHTML));
         if (jQuery("#createTitleError").is(":visible") == false && jQuery("#createDescriptionError").is(":visible") == false) {
