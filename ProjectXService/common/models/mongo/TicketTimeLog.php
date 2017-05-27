@@ -158,7 +158,7 @@ class TicketTimeLog extends ActiveRecord
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $skip = $StoryData->offset * $StoryData->pagesize;
             $limit = $skip + $StoryData->pagesize;
-             if($skip>0){
+            if($skip>0){
                 //$skip =$skip-1; 
             }
             $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));

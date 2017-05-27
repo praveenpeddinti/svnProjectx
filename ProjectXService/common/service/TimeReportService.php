@@ -131,6 +131,7 @@ class TimeReportService {
     */
     public function updateDataForTimeLog($ticketData){
         try{
+        
             $projectId = $ticketData->projectId;
             $slug = $ticketData->slug;
             $totalWorkHours = $ticketData->timelogHours;
@@ -161,23 +162,17 @@ class TimeReportService {
                 
             $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
             $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
-            if($oldWorkHours>$totalWorkHours){
-                $temphours=$oldWorkHours-$totalWorkHours;//error_log("---if==".$temphours);
-                $total=($oldTimeLog + $temphours);
-            }else{
-                $temphours=$totalWorkHours-$oldWorkHours;//error_log("---else--".$temphours);
-                $total=($oldTimeLog - $temphours);
-            }
-            //$total=($oldTimeLog + $temphours);
-            //error_log($oldTimeLog."---fdsfd-s----".$total);
+            
+            $temphours=$totalWorkHours-$oldWorkHours;
+            $total=($oldTimeLog + $temphours);
             $slug =  new \MongoDB\BSON\ObjectID();
             error_log("$$$$$$$$$$$$$".$ticketId."###".$projectId."asss".$total.$collabaratorId.$slug);
             $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $collabaratorId,$slug);
             $this->saveNotifications($ticketData, 'TotalTimeLog', $total,'TotalTimeLog',$slug); 
             if ($parenTicketInfo["ParentStoryId"] != "") {
-                $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
+                $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $total);
             }
-                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $totalWorkHours);
+                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, '-2');
                 $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog"));
                 $newTimeLog=$ticketInfo['TotalTimeLog'];
                 $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog;
