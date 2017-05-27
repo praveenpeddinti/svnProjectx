@@ -202,7 +202,10 @@ export class TimeReportComponent{
           document.getElementById("editTimeReport").style.display='block';
     }
     resetForm(){
-        this.submitted= false;
+       // this.submitted= false;
+     //this.search_results=[];
+     jQuery('.ui-autocomplete-list-item').removeClass('ui-state-highlight');
+
     }
     searchTask(event) {
         console.log(event.query);
