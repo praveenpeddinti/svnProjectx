@@ -380,6 +380,7 @@ export class TimeReportComponent{
      }
 
     editTimeEntry(Object){
+    console.log("ssssssss");
           this.extractFields=Object;
           this.oldWorkLogHour=this.extractFields['Time'];
     }
