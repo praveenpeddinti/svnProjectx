@@ -31,7 +31,7 @@ export class StoryCreatePage {
     private lastImage: string = null;
     private progressFile: number;
     public myHTML: any;
-    
+    public formatOptions:boolean=false;
     constructor(
         public navCtrl: NavController,
         public modalController: ModalController,
@@ -265,7 +265,7 @@ export class StoryCreatePage {
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                  this.create.description = this.create.description + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                //document.getElementById('editor').innerHTML = document.getElementById('editor').innerHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                 document.getElementById('editor').innerHTML = document.getElementById('editor').innerHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
             }
         } else {
             this.presentToast('Unable to upload the image.');
@@ -296,6 +296,7 @@ export class StoryCreatePage {
     }
     
     public bindDescription(){
+        this.formatOptions = true;
         this.create.description= jQuery("#editor").html();
         var thisObj=this;
     var reqParam={'ProjectId':1,'search_term':''};
@@ -329,7 +330,8 @@ callback(userList);
   
   };
  handleFormatOption(){
-  console.log("selected__text___"+window.getSelection());
+     this.formatOptions = true;
+  var selected=window.getSelection()
  }
 
 }

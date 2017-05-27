@@ -70,7 +70,7 @@ export class StoryDetailsComments {
     public textFieldValue = "";
     public textAreaValue = "";
     public displayedClassColorValue = "";
-    public myHTML: any;
+    public myHTML: any='';
 
     @ViewChild(Content) content: Content;
     
@@ -669,10 +669,11 @@ export class StoryDetailsComments {
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                 if (where == "comments") {
                    this.myHTML = this.myHTML + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                   jQuery('.comment_editor').html(this.myHTML);
                     this.newSubmitOpenClose = false;
                 } else if (where == "edit_comments") {
-                    appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                    jQuery(".comment_edit_editor_" + comment +).val(appended_content);
+                     this.myHTML =  this.myHTML + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                    jQuery(".comment_edit_editor_"+comment).html( this.myHTML);
                     this.editSubmitOpenClose = false;
                 } 
             }
@@ -683,13 +684,17 @@ export class StoryDetailsComments {
     }
 
     public atmensions(index){
+       
         var selector;
         if(index==-1){
+             jQuery('#hideOrShow').show();
             selector='comment_editor';
         }else{
+             jQuery('#hideOrShow_'+index).show();
             selector='comment_edit_editor_'+index;
         }
     this.myHTML = jQuery("."+selector).html();
+    console.log("Comments___"+this.myHTML);
     var thisObj=this;
     var reqParam={'ProjectId':1,'search_term':''};
     var userList;

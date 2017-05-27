@@ -54,6 +54,15 @@
                             <div id="editor" class="editordiv" (mouseup)="handleFormatOption()" contenteditable="true" (keyup)="bindDescription()" placeholder="Description" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block;  padding:3px; white-space:normal;"></div>
                          
                         </ion-row>
+                        <div  id="hideOrShow" class="editoroption" align="center" style="display: none;">
+        <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold" aria-hidden="true"></i></button>
+        <button id="italic" onclick="RE.click(id)"><i class="fa fa-italic" aria-hidden="true"></i></button>
+        <button id="underline" onclick="RE.click(id)"><i class="fa fa-underline" aria-hidden="true"></i></button>
+        <button id="bullets" onclick="RE.click(id)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>
+        <button id="numbers" onclick="RE.click(id)"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
+        <button id="insertlink" onclick="RE.click(id)"><i class="fa fa-link" aria-hidden="true"></i></button>
+        <button id="close" onclick="RE.click(id)"><i class="fa fa-times" aria-hidden="true"></i></button>
+    </div>
                     </ion-item>
                     
                     <div [hidden]="create.description!=''" *ngIf="submitted && create.description == '' " class="text-md-danger text-ios-danger text-wp-danger">
@@ -73,15 +82,7 @@
     </form>
 </ion-content>
 <ion-footer>
-    <div id="hideOrShow" class="editoroption" align="center" style="display: none;">
-        <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold" aria-hidden="true"></i></button>
-        <button id="italic" onclick="RE.click(id)"><i class="fa fa-italic" aria-hidden="true"></i></button>
-        <button id="underline" onclick="RE.click(id)"><i class="fa fa-underline" aria-hidden="true"></i></button>
-        <button id="bullets" onclick="RE.click(id)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>
-        <button id="numbers" onclick="RE.click(id)"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
-        <button id="insertlink" onclick="RE.click(id)"><i class="fa fa-link" aria-hidden="true"></i></button>
-        <button id="close" onclick="RE.click(id)"><i class="fa fa-times" aria-hidden="true"></i></button>
-    </div>
+    
     <ion-toolbar>
 
     
