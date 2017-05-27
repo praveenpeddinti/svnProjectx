@@ -202,7 +202,7 @@ export class TimeReportComponent{
         this.submitted= false;
     }
     searchTask(event) {
-      //  alert(event.query);
+        console.log(event.query);
         var searchStrg=event.query;
         var modifiedString=event.query.replace("#","");
         var post_data={
@@ -271,7 +271,7 @@ export class TimeReportComponent{
     }
     
     addTimeLog(){ 
-        var getTaskVal=this.text;
+        var getTaskVal=this.entryForm['text'];
         var thisObj = this;
         var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
         date = date.replace(/(\b\d{1}\b)/g, "0$1");
@@ -364,7 +364,7 @@ export class TimeReportComponent{
         this._router.navigate(['project',this.projectName,ticketId,'details']);
      }
 
-    editTimeEntry(Object){alert("-----"+JSON.stringify(Object));
+    editTimeEntry(Object){
           this.extractFields=Object;
           this.oldWorkLogHour=this.extractFields['Time'];
     }
