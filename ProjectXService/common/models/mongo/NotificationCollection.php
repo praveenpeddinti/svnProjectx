@@ -143,4 +143,25 @@ class NotificationCollection extends ActiveRecord
             Yii::log("NotificationCollection:deleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    /**
+     * @author Moin Hussain
+     * @param type $notificationId
+     * @param type $ticketId
+     * @param type $projectId
+     * @return type
+     */
+        public static function getNotificationDetail($notificationId,$ticketId,$projectId){
+        try{
+           $query=new Query();
+            $query->from('NotificationCollection')
+            ->where(["CommentSlug" => $notificationId,"TicketId" => (int)$ticketId,"ProjectId" => (int)$projectId])
+                     ->orderBy(["_id"=>SORT_DESC]);
+           //  ->where(["ProjectId" => (int)$projectId]);
+            $notification = $query->one();
+            return $notification;  
+        } catch (Exception $ex) {
+            Yii::log("NotificationCollection:getNotificationDetail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
+    }
         }
