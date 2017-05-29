@@ -253,29 +253,28 @@ class TicketTimeLog extends ActiveRecord
             $returnValue='failure';
             $loggonDate = "";
             if(!empty($calendardate)){
-                error_log("if---------------");
                 $loggonDate=$calendardate;
             }
 //            }else{
 //                  error_log("else---------------");
 //                $loggonDate=$editableDate;
 //            }
-            error_log("logged on date--------".$loggonDate);
             if(!empty($autocompleteticketId)){
+                  if($loggonDate == ""){
+                     $loggonDate=$editableDate;
+                  }
                 $db =  TicketTimeLog::getCollection();
                 // $currentDate =$loggonDate;
                 $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
                 $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$autocompleteticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$autocompleteticketId,"Time"=>(float)$timelogHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
-                
                 $collection = Yii::$app->mongodb->getCollection('TicketTimeLog');
-                $newdata = array('$pull'=> array('TimeLog' =>array("Time" =>(float)$timelogHours,"Slug"=>new \MongoDB\BSON\ObjectID($slug))));
+                $newdata = array('$pull'=> array('TimeLog' =>array("Slug"=>new \MongoDB\BSON\ObjectID($slug))));
                 $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int)$projectId), $newdata);
                 $returnValue=$slug;
              }else{
                $newData = array('TimeLog.$.Time' =>(float) $timelogHours,'TimeLog.$.Description' => $description);
                  if($loggonDate != ""){
                       $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
-                       error_log("current date--------".$currentDate);
                        $newData['TimeLog.$.LoggedOn'] = $currentDate;
                  }
                
