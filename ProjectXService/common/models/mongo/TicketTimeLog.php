@@ -103,7 +103,7 @@ class TicketTimeLog extends ActiveRecord
 //            }
 //            
           $db =  TicketTimeLog::getCollection();
-          $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($LoggedOn)*1000);error_log("current dataeee".$currentDate);
+          $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($LoggedOn)*1000);
           $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$ticketId,"Time"=>(float)$totalWorkHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
             
             return $returnValue;
@@ -251,11 +251,16 @@ class TicketTimeLog extends ActiveRecord
     public static function updateTimeLogRecords($projectId,$slug,$timelogHours,$ticketId,$autocompleteticketId="",$editableDate,$calendardate="",$userId,$description=""){
         try{
             $returnValue='failure';
+            $loggonDate = "";
             if(!empty($calendardate)){
+                error_log("if---------------");
                 $loggonDate=$calendardate;
-            }else{
-                $loggonDate=$editableDate;
             }
+//            }else{
+//                  error_log("else---------------");
+//                $loggonDate=$editableDate;
+//            }
+            error_log("logged on date--------".$loggonDate);
             if(!empty($autocompleteticketId)){
                 $db =  TicketTimeLog::getCollection();
                 // $currentDate =$loggonDate;
@@ -267,9 +272,16 @@ class TicketTimeLog extends ActiveRecord
                 $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int)$projectId), $newdata);
                 $returnValue=$slug;
              }else{
-                $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
+               $newData = array('TimeLog.$.Time' =>(float) $timelogHours,'TimeLog.$.Description' => $description);
+                 if($loggonDate != ""){
+                      $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
+                       error_log("current date--------".$currentDate);
+                       $newData['TimeLog.$.LoggedOn'] = $currentDate;
+                 }
+               
+              
                 $collection =  TicketTimeLog::getCollection();
-                $newdata = array('$set' => array('TimeLog.$.Time' =>(float) $timelogHours,'TimeLog.$.Description' => $description,'TimeLog.$.LoggedOn' => $currentDate));
+                $newdata = array('$set' =>$newData);
                 $collection->update(array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId,"TimeLog.Slug"=>new \MongoDB\BSON\ObjectID($slug)), $newdata); 
                 $returnValue=$slug;
             }

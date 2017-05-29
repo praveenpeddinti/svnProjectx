@@ -1390,7 +1390,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      */
     public function insertTimeLog($timelog_data) {
         try {
-            
+            $timelog_data->addTimelogTime = CommonUtility::validateDate($timelog_data->addTimelogTime);
             $addTimelogTime = date("Y-m-d H:i:s", strtotime($timelog_data->addTimelogTime));
             $projectId = $timelog_data->projectId;
             $ticketId = $timelog_data->ticketId;
