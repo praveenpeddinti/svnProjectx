@@ -162,7 +162,19 @@ class TimeReportService {
                 
             $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
             $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
-            
+            /*if($oldWorkHours>$totalWorkHours){
+                $temphours=$oldWorkHours-$totalWorkHours;error_log($oldWorkHours."---Old--".$totalWorkHours."---if==".$temphours);
+                $total=($oldTimeLog + $temphours);
+                error_log("----total---if---".$total);
+            }else{
+                $temphours=$totalWorkHours-$oldWorkHours;error_log($oldWorkHours."---Old--".$totalWorkHours."---else==".$temphours);
+                $total=($oldTimeLog - $temphours);
+                error_log("----total---else--".$total);
+            }*/
+            $total=($oldTimeLog + $totalWorkHours);
+            //$total=($oldTimeLog + $temphours);
+            //error_log($oldTimeLog."---fdsfd-s----".$total);
+            error_log("----total--final--".$total);
             $temphours=$totalWorkHours-$oldWorkHours;
             $total=($oldTimeLog + $temphours);
             $slug =  new \MongoDB\BSON\ObjectID();
@@ -172,7 +184,7 @@ class TimeReportService {
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $total);
             }
-                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, '-2');
+                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $total);
                 $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog"));
                 $newTimeLog=$ticketInfo['TotalTimeLog'];
                 $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog;
