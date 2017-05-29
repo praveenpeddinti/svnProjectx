@@ -149,7 +149,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom autoSearchTask">
 
-                  <p-autoComplete  [(ngModel)]="entryForm.text" name="task"  #task="ngModel" [minLength]="1"  placeholder="Search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)"  required></p-autoComplete>
+                  <p-autoComplete  [(ngModel)]="entryForm.text" name="task"  #task="ngModel" [minLength]="1"  placeholder="Search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" ngControl="task" required></p-autoComplete>
 
                   </div>
               </div>
@@ -223,7 +223,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
     
       <div class="modal-footer">
         <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
-        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;resetForm()" >CANCEL</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
       </div>
        </form>
     </div>

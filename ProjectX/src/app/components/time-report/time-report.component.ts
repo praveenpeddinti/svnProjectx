@@ -103,6 +103,7 @@ export class TimeReportComponent{
                 if(jQuery(e.target).closest(".deletebutton").length == 0 ) {
                     jQuery("#delete_timelog").css("display", "none");
                 }
+
       });
         var thisObj = this;
         this.date4 = (this.calendarVal.getMonth() + 1) + '-' + this.calendarVal.getDate() + '-' + this.calendarVal.getFullYear(); 
@@ -208,13 +209,10 @@ export class TimeReportComponent{
           document.getElementById("editTimeReport").style.display='block';
     }
     resetForm(){
-       // this.submitted= false;
-     //this.search_results=[];
-     jQuery('.ui-autocomplete-list-item').removeClass('ui-state-highlight');
-
+        this.extractFields={}
     }
     searchTask(event) {
-        console.log(event.query);
+        console.log("##########"+event.query);
         var searchStrg=event.query;
         var modifiedString=event.query.replace("#","");
         var post_data={
@@ -235,6 +233,7 @@ export class TimeReportComponent{
                             prepareSearchData.push(currentData);
                         }
                         this.search_results=prepareSearchData;
+                        jQuery(".ui-autocomplete-list-item").removeClass("ui-state-highlight");
                     }else{
                         if(!searchStrg.includes("#") && result.status =='401'){
                             let appendstring=['Please select valid story/task'];
@@ -246,6 +245,7 @@ export class TimeReportComponent{
                     
                 });
                },3000);
+ 
     }
 
 
@@ -352,11 +352,7 @@ export class TimeReportComponent{
        //jQuery('#delete_timelog').css('min-width',"auto");
         this.extractDelFields=delObj;
     }
-    showdeleteDiv1(delObj,slug,e){
-         e.stopPropagation();alert(e);
-         alert("asssssssssssssssssssss");
-    }
-    
+  
     removeTimelog(){
         var input="_Input";
         var removeTicketSpilt = this.extractDelFields['ticketDesc'].split(".");
