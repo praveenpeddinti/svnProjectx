@@ -168,8 +168,8 @@ class TimeReportService {
             $temphours=$totalWorkHours-$oldWorkHours;
             $total=($oldTimeLog + $temphours);
             $slug =  new \MongoDB\BSON\ObjectID();
-            error_log("$$$$$$$$$$$$$".$ticketId."###".$projectId."asss".$temphours.$collabaratorId.$slug);
-            $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', abs($temphours), $collabaratorId,$slug);
+           // error_log("$$$$$$$$$$$$$".$ticketId."###".$projectId."asss".$temphours.$collabaratorId.$slug);
+            $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', (float)$total, $collabaratorId,$slug);
             $this->saveNotifications($ticketData, 'TotalTimeLog', $temphours,'TotalTimeLog',$slug); 
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $temphours);
