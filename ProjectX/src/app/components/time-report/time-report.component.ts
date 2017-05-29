@@ -36,6 +36,7 @@ export class TimeReportComponent{
     public extractFields={};
     public extractDelFields={};
     public submitted=false;
+    public oldticketDesc: string='';
     @ViewChild('myTable') table: any;
     rows = [];
     row1 = [];
@@ -98,6 +99,11 @@ export class TimeReportComponent{
             };
         }
     ngOnInit() {
+        jQuery(document).click(function(e){
+                if(jQuery(e.target).closest(".deletebutton").length == 0 ) {
+                    jQuery("#delete_timelog").css("display", "none");
+                }
+      });
         var thisObj = this;
         this.date4 = (this.calendarVal.getMonth() + 1) + '-' + this.calendarVal.getDate() + '-' + this.calendarVal.getFullYear(); 
         var maxDate = new Date();//set current date to datepicker as min date
@@ -217,24 +223,29 @@ export class TimeReportComponent{
         'searchString':modifiedString.trim()
         }
         let prepareSearchData = [];
-            this._ajaxService.AjaxSubscribe("time-report/get-story-details-for-timelog",post_data,(result)=>
-            {
-                if(result.status !='401'){ 
-                    var subTaskData = result.data;
-                    for(let subTaskfield of subTaskData){
-                        var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
-                        prepareSearchData.push(currentData);
+        this.search_results=[];
+           setTimeout(() => { 
+                this._ajaxService.AjaxSubscribe("time-report/get-story-details-for-timelog",post_data,(result)=>
+                {
+                    
+                    if(result.status !='401'){ 
+                        var subTaskData = result.data;
+                        for(let subTaskfield of subTaskData){
+                            var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
+                            prepareSearchData.push(currentData);
+                        }
+                        this.search_results=prepareSearchData;
+                    }else{
+                        if(!searchStrg.includes("#") && result.status =='401'){
+                            let appendstring=['Please select valid story/task'];
+                        //  alert("333333333333333");
+                            this.search_results=appendstring;
+                        }
+                    
                     }
-                    this.search_results=prepareSearchData;
-                }else{
-                    if(!searchStrg.includes("#") && result.status =='401'){
-                        let appendstring=['Please select valid story/task'];
-                      //  alert("333333333333333");
-                        this.search_results=appendstring;
-                    }
-                   
-                }
-            });
+                    
+                });
+               },3000);
     }
 
 
@@ -248,7 +259,7 @@ export class TimeReportComponent{
     editTimeLog(){
         this.selectedValForDate = null;
         var editableDate=  new Date(this.extractFields['readableDate']);
-        var updateTicketSpilt = this.extractFields['ticketDesc'].split(".");
+        var updateTicketSpilt =  this.oldticketDesc.split(".");
         var updateTicketId = updateTicketSpilt[0].split("#");
         var post_data={
             'projectId':this.projectId,
@@ -261,6 +272,7 @@ export class TimeReportComponent{
             'calendardate':this.selectedValForDate,
             'oldWorkHours':this.oldWorkLogHour
         }
+      //  alert("assssssssssss"+JSON.stringify(post_data));
        if(this.extractFields['Time']!=0){
             this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
             { 
@@ -327,8 +339,9 @@ export class TimeReportComponent{
             jQuery("#"+id).fadeOut(4000);
          
         }
-    showdeleteDiv(delObj,slug){
-        jQuery("#delete_timelog").css("display", "block");
+ 
+    showdeleteDiv(delObj,slug,e){
+         jQuery("#delete_timelog").css("display", "block");
         var delbutton_Height=25;
         var delbutton_Width=jQuery('#del_'+slug).width()/2;
         var delete_popup=jQuery('.delete_followersbgtable').width()/2;
@@ -338,6 +351,10 @@ export class TimeReportComponent{
         jQuery('#delete_timelog').css({'top':offsetTop,'left':offsetRight,'min-width':"auto"});
        //jQuery('#delete_timelog').css('min-width',"auto");
         this.extractDelFields=delObj;
+    }
+    showdeleteDiv1(delObj,slug,e){
+         e.stopPropagation();alert(e);
+         alert("asssssssssssssssssssss");
     }
     
     removeTimelog(){
@@ -382,8 +399,8 @@ export class TimeReportComponent{
      }
 
     editTimeEntry(Object){
-    console.log("ssssssss");
-          this.extractFields=Object;
+            this.extractFields=Object;
           this.oldWorkLogHour=this.extractFields['Time'];
+          this.oldticketDesc=this.extractFields['ticketDesc'];
     }
 }

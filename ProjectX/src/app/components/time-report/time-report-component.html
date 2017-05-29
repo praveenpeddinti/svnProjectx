@@ -111,7 +111,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
         
           <!--<input type="button" class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" (click)="clearDateTimeEntry()" data-backdrop="false"  data-toggle="modal"   [attr.data-target]="'#myModal_'+ row[i].Slug.$oid" />-->
           <input type="button" class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" (click)="editTimeEntry(row[i])" data-backdrop="false"  data-toggle="modal"   data-target="#editTimelogModel" />
-          <input type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey tablebuttons marb5" name="DELETE" value="DELETE" id="del_{{row[i].Slug.$oid}}" (click)="showdeleteDiv(row[i],row[i].Slug.$oid)"/>
+          <input type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey deletebutton tablebuttons marb5" name="DELETE" value="DELETE" id="del_{{row[i].Slug.$oid}}" (click)="showdeleteDiv(row[i],row[i].Slug.$oid,$event)"/>
 
       </div> 
 
