@@ -1345,9 +1345,7 @@ $text_message=$html . $text_message .
                     $ticketCommentsData = $query->aggregate($pipeline);
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
-                   // error_log("commentsssssssssssss".print_r($ticketCommentsData,1));
-                    
-                       foreach($ticketCommentsData as $extractComments){
+                        foreach($ticketCommentsData as $extractComments){
                           $ticketCollectionModel = new TicketCollection();
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
                            $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
@@ -1482,13 +1480,11 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('Y-m-d H:i');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
-                        error_log("projectIdddddddddddddddd".$extractCollection["ProjectId"]);
                         $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
                         $forTicketCollection['Project'] = $projectDetails; 
                        
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
-                 //   error_log("eeeeeeeeeeeeeeeeeeee".print_r($TicketCollFinalArray,1));
                     $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
                     if(!empty($projectId)){
                         $matchArray = array('Activities.CrudeCDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>(int)$projectId);
@@ -1508,8 +1504,6 @@ $text_message=$html . $text_message .
                     $ticketCommentsData = $query->aggregate($pipeline);
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
-                    error_log("fffffffddddddddddddddd".$projectId);
-              
                         foreach($ticketCommentsData as $extractComments){
                           $ticketCollectionModel = new TicketCollection();
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
