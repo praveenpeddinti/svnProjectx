@@ -246,6 +246,7 @@ export class TimeReportComponent{
         this.selectedValForDate=event; 
     }
     editTimeLog(){
+        this.selectedValForDate = null;
         var editableDate=  new Date(this.extractFields['readableDate']);
         var updateTicketSpilt = this.extractFields['ticketDesc'].split(".");
         var updateTicketId = updateTicketSpilt[0].split("#");
@@ -282,9 +283,7 @@ export class TimeReportComponent{
     addTimeLog(){ 
         var getTaskVal=this.entryForm['text'];
         var thisObj = this;
-        var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
-        date = date.replace(/(\b\d{1}\b)/g, "0$1");
-        var finalDate=this.dateVal.toString();
+        var finalDate= this.entryForm['dateVal'].toString();
         var ticketSpilt = getTaskVal.split("#")[1];
         var ticket_Id = ticketSpilt.split(" ")[0];
         var timelogData={
