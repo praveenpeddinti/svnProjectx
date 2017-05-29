@@ -148,6 +148,8 @@ class TimeReportService {
                 $autocompleteticketId=str_replace('#','',$autocompleteTask[0]);
             }
             $editableDate = $ticketData->editableDate;
+            
+            $editableDate = CommonUtility::convert_time_zone(strtotime($editableDate),"UTC",$ticketData->timeZone);   
             if(isset($ticketData->calendardate)){
                 $calendardate = $ticketData->calendardate;
             }
