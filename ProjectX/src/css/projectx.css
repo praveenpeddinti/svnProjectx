@@ -841,3 +841,5 @@ padding-left:0px!important;
 .story_tasks .bucket {margin: 0 0 0 16px!important;}
 .story_tasks .duedate{margin: 0 0 0 8px!important;}
 .story_tasks .assignedto{margin: 0 0 0 8px!important;}
+.timelogSuccessMsg{background-color: #dff0d8;border-color: #d6e9c6;color: #3c763d;margin-bottom: 5px;padding: 5px;}
+.timelogpaddingright5{padding-right:5px}

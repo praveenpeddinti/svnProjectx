@@ -7,16 +7,17 @@
            <div class="row">
         <div class="col-xs-12 col-sm-4 col-md-4 errorshow ">
             <label class="timereportlabel">From</label>
+            <div class="timelogpaddingright5 ">
             <p-calendar [(ngModel)]="fromDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="selectFromDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
       </p-calendar>
-        <!--<div id="fromDate_error" [hidden]="true" class="alert alert-danger">From Date is Required</div>-->
-            
-        </div>
+            </div>
+         </div>
         <div class="col-xs-12 col-sm-4 col-md-4 ">
             <label class="timereportlabel">To</label>
+              <div class="timelogpaddingright5 ">
              <p-calendar [(ngModel)]="toDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="selectToDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
       </p-calendar>
-            
+          </div>   
         <div id="toDate_error" [hidden]="true" class="fielderror">To Date is must be greater than From Date</div>
             
         </div>
@@ -124,7 +125,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
 </ngx-datatable>
       <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment" id="delete_timelog" style="width:auto">
             <div class="delete_followersbgtable" >  
-                Do you want to remove this Timelog? 
+                Do you want to remove this Time log? 
                 <div class="text-center" style=" padding-top:10px">
                     <div class="yes" id="remove_yes" (click)="removeTimelog()">YES</div>
                     <div class="no" (click)="blockDeleteDiv()">NO</div>
@@ -140,49 +141,40 @@ Row classes are also dynamically. These classes are pass to service layer-->
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="timelogSuccessMsg"> Timelog added successfully</div>
+      
      <form   #timeLogForm="ngForm" (ngSubmit)="submitted && timeLogForm.form.valid && addTimeLog()" novalidate="true">
 
       <div class="modal-body">
+          <div class="timelogSuccessMsg"> Time log added successfully</div>
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom autoSearchTask">
 
-                  <p-autoComplete  [(ngModel)]="entryForm.text" name="task"  #task="ngModel" [minLength]="1"  placeholder="Search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" ngControl="task" required></p-autoComplete>
-
+                  <p-autoComplete  [(ngModel)]="entryForm.text" name="task"  #task="ngModel" [minLength]="1"  placeholder="Search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)"  required></p-autoComplete>
+ <div *ngIf="submitted && task.errors " class="fielderror">
+                <div  [hidden]="!task.errors.required">Story/task is required</div>
+                
+            </div>
                   </div>
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-12 relativediv">
-              <div *ngIf="submitted && task.errors " class="fielderror">
-                <div  [hidden]="!task.errors.required">
-                    Story/task is required
-                </div>
-                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                    Title must be 3 characters long
-                </div>-->
-            </div>
-          </div>
+              
           </div>
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Description </label>
+<div class="customformfieldsmarginbottom relativediv ">
+                  <textarea  [(ngModel)]="entryForm.description" name="description"  #description="ngModel"   class="customformfieldstextarea " id="addTimelogDesc"  required></textarea>
 
-                  <textarea  [(ngModel)]="entryForm.description" name="description"  #description="ngModel"   class="customformfieldstextarea customformfieldsmarginbottom" id="addTimelogDesc"  required></textarea>
-
-<!--                  <input type="text" class="customformfields " value=""  id="addTimelogDesc"/>-->
-          
-              </div>
-              <div class="col-xs-12 col-sm-12 col-md-12 relativediv">
-              <div *ngIf="submitted && description.errors " class="fielderror">
+<div *ngIf="submitted && description.errors " class="fielderror">
                 <div [hidden]="!description.errors.required">
                     Description is required
                 </div>
-                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                    Title must be 3 characters long
-                </div>-->
+               
             </div>
-          </div>
+          
+              </div> </div>
+            
           </div>
           <div class="row">
               <div class="col-xs-12 col-sm-4 col-md-4 ">
@@ -194,9 +186,9 @@ Row classes are also dynamically. These classes are pass to service layer-->
                     Hours is required
                 </div>
                 </div>
-                 
+                 <div id="addHoursErrMsg" class="fielderror" style="display:none;"></div>
               </div>
-               <div id="addHoursErrMsg" class="fielderror" style="display:none;"></div>
+               
               </div>
          
               <div class="col-xs-12 col-sm-8 col-md-8 ">
@@ -207,16 +199,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
   
                   </div>
               </div>
-               <div class="col-xs-12 col-sm-8 col-md-8 relativediv">
-              <div *ngIf="submitted && dateVal.errors " class="fielderror">
-                <div [hidden]="!dateVal.errors.required">
-                    Date is required
-                </div>
-                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                    Title must be 3 characters long
-                </div>-->
-            </div>
-          </div>
+            
           </div>
           
          </div>
@@ -238,63 +221,56 @@ Row classes are also dynamically. These classes are pass to service layer-->
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="timelogSuccessMsg"> Timelog updated successfully</div>
+     
      <form   #timeLogEditForm="ngForm" (ngSubmit)="esubmitted && timeLogEditForm.form.valid && editTimeLog()" novalidate="true">
       <div class="modal-body">
           
-
+ <div class="timelogSuccessMsg" > Time log updated successfully</div>
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
-                  <div class="customformfieldsmarginbottom">
+                  <div class="customformfieldsmarginbottom relativediv">
 
                   <p-autoComplete required [(ngModel)]="extractFields.ticketDesc" name="edittask"  #edittask="ngModel" [minLength]="1"  placeholder="search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" (onSelect)="getSelectedValueForTask($event)"></p-autoComplete>
-
-                  </div>
-              </div>
-              <div class="col-xs-12 col-sm-12 col-md-12 relativediv">
-              <div *ngIf="esubmitted && edittask.errors " class="fielderror">
+  <div *ngIf="esubmitted && edittask.errors " class="fielderror">
                 <div  [hidden]="!edittask.errors.required">
                     Story/task is required
                 </div>
-                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                    Title must be 3 characters long
-                </div>-->
+
             </div>
-          </div>
+                  </div>
+              </div>
+              
           </div>
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Description </label>
-
-                  <textarea  [(ngModel)]="extractFields.description" name="editdescription"  #editdescription="ngModel"   class="customformfieldstextarea customformfieldsmarginbottom"   required></textarea>
-
-<!--                  <input type="text" class="customformfields " value=""  id="addTimelogDesc"/>-->
-           
-              </div>
-              <div class="col-xs-12 col-sm-12 col-md-12 relativediv">
-              <div *ngIf="esubmitted && editdescription.errors " class="fielderror">
+<div class="customformfieldsmarginbottom relativediv ">
+                  <textarea  [(ngModel)]="extractFields.description" name="editdescription"  #editdescription="ngModel"   class="customformfieldstextarea "   required></textarea>
+                  
+<div *ngIf="esubmitted && editdescription.errors " class="fielderror">
                 <div [hidden]="!editdescription.errors.required">
                     Description is required
                 </div>
-                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                    Title must be 3 characters long
-                </div>-->
+
             </div>
-          </div>
+</div>
+              </div>
+              
           </div>
           <div class="row">
               <div class="col-xs-12 col-sm-4 col-md-4 ">
-                  <label class="timereportlabel"> Hours </label>
-                  <div class="relativediv">
+                  <label class="timereportlabel "> Hours </label>
+                  <div class="relativediv ">
                   <input type="text" class="customformfields " required  [(ngModel)]="extractFields.Time" name="edithours"  #edithours="ngModel" id="editTimelogTime"  (keyup)="inputKeyDown(2)" maxlength="5"/>
                           <div *ngIf="esubmitted && edithours.errors " class="fielderror">
                 <div [hidden]="!edithours.errors.required">
                     Hours is required
                 </div>
             </div>
+                         <div id="editHoursErrMsg" class="fielderror" style="display:none;"></div>
               </div>
-               <div id="editHoursErrMsg" class="fielderror" style="display:none;"></div>
+               
               </div>
  
         
@@ -306,23 +282,15 @@ Row classes are also dynamically. These classes are pass to service layer-->
   
                   </div>
               </div>
-               <div class="col-xs-12 col-sm-8 col-md-8 relativediv">
-              <div *ngIf="esubmitted && editdateVal.errors " class="fielderror">
-                <div [hidden]="!editdateVal.errors.required">
-                    Date is required
-                </div>
-                <!--<div [hidden]="title.errors.required && (!title.errors.minlength || !title.errors.maxlength)">
-                    Title must be 3 characters long
-                </div>-->
-            </div>
+               
           </div>
-          </div>
+           </div>
           <div class="modal-footer">
-        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="esubmitted=true;">SUBMIT</button>
+        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="esubmitted=true;">UPDATE</button>
         <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="esubmitted=false;">CANCEL</button>
       </div>
       
-         </div>
+        
      </form>
       
     </div>

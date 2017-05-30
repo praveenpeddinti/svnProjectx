@@ -114,6 +114,7 @@ export class HeaderComponent implements OnInit {
       if(data)
       {
         this.notify_count = data.totalCount;
+        jQuery('#notificationCount').text(this.notify_count);
         jQuery('#'+notify_id).remove();
         // for view all notification page
         jQuery('#mark_'+notify_id).remove(); 

@@ -124,7 +124,7 @@ export class TimeReportComponent{
                     thisObj.projectId=data.data.PId;  
                     this.page(thisObj.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
                     //var thisObj = this;
-                    this.shared.change(this._router.url,null,'TimeReport','Other',thisObj.projectName);
+                    this.shared.change(this._router.url,null,'Time Report','Other',thisObj.projectName);
                 }
                 });
             });
@@ -237,14 +237,13 @@ export class TimeReportComponent{
                     }else{
                         if(!searchStrg.includes("#") && result.status =='401'){
                             let appendstring=['Please select valid story/task'];
-                        //  alert("333333333333333");
                             this.search_results=appendstring;
                         }
                     
                     }
                     
                 });
-               },3000);
+               },1000);
  
     }
 
@@ -272,7 +271,6 @@ export class TimeReportComponent{
             'calendardate':this.selectedValForDate,
             'oldWorkHours':this.oldWorkLogHour
         }
-      //  alert("assssssssssss"+JSON.stringify(post_data));
        if(this.extractFields['Time']!=0){
             this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
             { 
@@ -311,19 +309,11 @@ export class TimeReportComponent{
             { 
                 if (response.statusCode == 200) {
                     this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
-                    //  this.rows.push(response.data[0]);
-                    //   let rows = [...this.rows];
-                    // for (let i = 0; i < response.data.length; i++) {
-                    //     rows[i + 0] = response.data[i];
-                    // }
-                    // this.rows = rows;
-                    // console.log("@@@@@@@@@responseoooo final" +JSON.stringify(this.rows));
                     jQuery('.timelogSuccessMsg').css('display','block');
                     jQuery('.timelogSuccessMsg').fadeOut( "slow" );
                     setTimeout(() => {
                         this.submitted=false;
                         jQuery('#addTimelogModel').modal('hide');
-                        //jQuery('#addTimelogModel').find("input,textarea").val('').end();
                     }, 500);
                 } else {
                 // this.errorMsg = 'dsasdasd';
