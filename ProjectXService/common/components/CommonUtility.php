@@ -1213,7 +1213,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $extractCollection['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('Y-m-d H:i');
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                      
@@ -1265,7 +1265,7 @@ $text_message=$html . $text_message .
                             $UpdatedOn = $getTicketDetails['UpdatedOn'];
                             if(isset($UpdatedOn)){
                                 $datetime = $UpdatedOn->toDateTime();
-                                $readableDate = $datetime->format('Y-m-d H:i');
+                                $readableDate = $datetime->format('M-d-Y H:i:s');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1297,7 +1297,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $getTicketDetails['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('Y-m-d H:i');
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
                         $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1320,7 +1320,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('Y-m-d H:i');
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forUsercollection['UpdatedOn'] = $readableDate; 
                           }
                          array_push($TinyUserFinalArray, $forUsercollection);
@@ -1368,7 +1368,7 @@ $text_message=$html . $text_message .
                             $UpdatedOn = $getTicketDetails['UpdatedOn'];
                             if(isset($UpdatedOn)){
                                 $datetime = $UpdatedOn->toDateTime();
-                                $readableDate = $datetime->format('Y-m-d H:i');
+                                $readableDate = $datetime->format('M-d-Y H:i:s');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1387,7 +1387,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('Y-m-d H:i');
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forUsercollection['UpdatedOn'] = $readableDate; 
                           }
                          array_push($TinyUserFinalArray, $forUsercollection);
@@ -1421,7 +1421,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $getTicketDetails['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('Y-m-d H:i');
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
                         $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1477,7 +1477,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $extractCollection['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('Y-m-d H:i');
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                         $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
@@ -1527,7 +1527,7 @@ $text_message=$html . $text_message .
                             $UpdatedOn = $getTicketDetails['UpdatedOn'];
                             if(isset($UpdatedOn)){
                                 $datetime = $UpdatedOn->toDateTime();
-                                $readableDate = $datetime->format('Y-m-d H:i');
+                                $readableDate = $datetime->format('M-d-Y H:i:s');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1559,7 +1559,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $getTicketDetails['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('Y-m-d H:i');
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
                         $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1580,7 +1580,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('Y-m-d H:i');
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forUsercollection['UpdatedOn'] = $readableDate; 
                           }
                          array_push($TinyUserFinalArray, $forUsercollection);

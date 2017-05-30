@@ -407,11 +407,11 @@ class TicketCollection extends ActiveRecord
      * @return array
      * @updated by suryaprakash reddy
      */
-    public static function getAllTicketDetailsForSearch($projectId,$ticketId,$sortvalue, $searchString,$ticketArray) {
+    public static function getAllTicketDetailsForSearch($projectId,$ticketId,$sortvalue, $searchString,$subTaskArray) {
         try {
-             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $cursor =  $collection->find(array('$or'=>array( array( "TicketIdString"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$ticketArray)),array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$ticketArray)))));
-            $ticketDetails = iterator_to_array($cursor);     
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $cursor =  $collection->find(array('$or'=>array( array( "TicketIdString"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$subTaskArray)),array("Title"=>array('$regex'=>$searchString),"ProjectId" => (int)$projectId,"TicketId"=>array('$nin'=>$subTaskArray)))));
+            $ticketDetails = iterator_to_array($cursor);
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("TicketCollection:getAllTicketDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

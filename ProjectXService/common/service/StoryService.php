@@ -1254,14 +1254,19 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ParentTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("Tasks","RelatedStories") );
             
             $ticketArray = $ParentTicketInfo["Tasks"];
-            array_push($ticketArray, (int)$ticketId);
+            $subTaskArray=array();
+            foreach($ticketArray as $subtickts){
+                array_push($subTaskArray,$subtickts['TaskId']);
+            }
+          
+            array_push($subTaskArray, (int)$ticketId);
             if (!empty($ParentTicketInfo["RelatedStories"])) {
                 for ($i = 0; $i < sizeof($ParentTicketInfo["RelatedStories"]); $i++) {
-                     array_push($ticketArray,(int)$ParentTicketInfo["RelatedStories"][$i] );
+                       array_push($ticketArray,(int)$ParentTicketInfo["RelatedStories"][$i] );
                 }
             }
             $finalData = array();
-            $ticketDetails = TicketCollection::getAllTicketDetailsForSearch($projectId, $ticketId, $sortvalue, $searchString,$ticketArray);
+            $ticketDetails = TicketCollection::getAllTicketDetailsForSearch($projectId, $ticketId, $sortvalue, $searchString,$subTaskArray);
             foreach ($ticketDetails as $ticket) {
                 array_push($finalData, $ticket);
             }
