@@ -1308,9 +1308,6 @@ $text_message=$html . $text_message .
 
                     $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
                     $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
-                    if(!empty($projectId)){
-                         $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                    }
                     $tinyUserData = iterator_to_array($cursor);
                     $TinyUserFinalArray = array();
                     foreach($tinyUserData as $extractUserData){
@@ -1428,6 +1425,60 @@ $text_message=$html . $text_message .
                         $forTicketArtifacts['Project'] = $projectDetails; 
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
+                    }
+                }else if($searchFlag==5){
+                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+                    if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
+                        if(strpos($searchString, '#') !== false){
+                            $searchString=str_replace("#","",$searchString); 
+                            if(!empty($projectId)){
+                                $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                        }else{
+                               $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                        }
+
+                    }else{
+                            if(!empty($projectId)){
+                              $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                         
+                            }else{
+                                $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                             
+                    }
+                        }
+
+                    }else{
+                          if(!empty($projectId)){
+                            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                          }else{
+                            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                        
+                          }
+                       
+                          }
+                   // $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("CrudeDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
+                    $ticketCollectionData = iterator_to_array($cursor);
+                    $TicketCollFinalArray = array();
+                    foreach($ticketCollectionData as $extractCollection){
+                        $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
+                        $forTicketCollection['Title'] = $extractCollection['Title'];
+                        $forTicketCollection['description'] = strip_tags($extractCollection['CrudeDescription']);
+                        if(strpos(strtolower($forTicketCollection['description']),$searchString) !==false){
+                           $forTicketCollection['description']= $forTicketCollection['description'];
+                        }
+                        $forTicketCollection['planlevel'] = $extractCollection['Fields']['planlevel']['value_name'];
+                        $forTicketCollection['reportedby'] = $extractCollection['Fields']['reportedby']['value_name'];
+                        $UpdatedOn = $extractCollection['UpdatedOn'];
+                        if(isset($UpdatedOn)){
+                            $datetime = $UpdatedOn->toDateTime();
+                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $forTicketCollection['UpdatedOn'] = $readableDate;
+                        }
+                     
+                        $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        $forTicketCollection['Project'] = $projectDetails;
+                  
+                        array_push($TicketCollFinalArray, $forTicketCollection);
                     }
                 }else{
                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
