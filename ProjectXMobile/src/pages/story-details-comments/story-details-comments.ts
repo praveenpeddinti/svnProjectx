@@ -224,6 +224,9 @@ export class StoryDetailsComments {
         RE.editor.addEventListener("keyup", RE.keyup);
     console.log('ionViewDidLoad StoryDetailsComments');
   }
+   public hideKeybord(){
+        document.getElementById("hideOrShow").style.display = "none"; 
+   }
    public expandDescription() {
         jQuery('#description').css('height', 'auto');
         jQuery('#show').hide();
