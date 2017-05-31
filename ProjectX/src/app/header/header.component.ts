@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit {
       });
      
     });
-    
+   
   }
   logout() { 
         this._service.logout((data)=>{ 
@@ -87,12 +87,14 @@ export class HeaderComponent implements OnInit {
         // if(searchString=='' || searchString=='undefined'){ 
         //   this.showErrorFunction("searchError","Please Search.")
         // }else{
-          var projectname=localStorage.getItem('ProjectName');
-          if(projectname=='' || projectname==undefined){
+          //var projectname=localStorage.getItem('ProjectName');
+          if(this.ProjectName=='' || this.ProjectName==undefined){
               this._router.navigate(['search',],{queryParams: {q:searchString}});
           }else{
-             this._router.navigate(['project',projectname,'search'],{queryParams: {q:searchString}});
+             this._router.navigate(['project',this.ProjectName,'search'],{queryParams: {q:searchString}});
+
           }
+
           
         // }
       

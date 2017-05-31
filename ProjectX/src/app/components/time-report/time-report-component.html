@@ -156,6 +156,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
                 <div  [hidden]="!task.errors.required">Story/task is required</div>
                 
             </div>
+              <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
                   </div>
               </div>
               
@@ -180,7 +181,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
               <div class="col-xs-12 col-sm-4 col-md-4 ">
                   <label class="timereportlabel"> Hours </label>
                   <div class="relativediv">
-                  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime" (keyup)="inputKeyDown(1)" placeholder="0.00" maxlength="5"/>
+                  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime" (keyup)="inputKeyDown(1)" placeholder="0.00" maxlength="4"/>
                  <div *ngIf="submitted && hours.errors " class="fielderror">
                 <div [hidden]="!hours.errors.required">
                     Hours is required
@@ -238,6 +239,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
                 </div>
 
             </div>
+            <div id="editTitleErrMsg" class="fielderror" style="display:none;"></div>
                   </div>
               </div>
               
@@ -262,7 +264,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
               <div class="col-xs-12 col-sm-4 col-md-4 ">
                   <label class="timereportlabel "> Hours </label>
                   <div class="relativediv ">
-                  <input type="text" class="customformfields " required  [(ngModel)]="extractFields.Time" name="edithours"  #edithours="ngModel" id="editTimelogTime"  (keyup)="inputKeyDown(2)" maxlength="5"/>
+                  <input type="text" class="customformfields " required  [(ngModel)]="extractFields.Time" name="edithours"  #edithours="ngModel" id="editTimelogTime"  (keyup)="inputKeyDown(2)" maxlength="4"/>
                           <div *ngIf="esubmitted && edithours.errors " class="fielderror">
                 <div [hidden]="!edithours.errors.required">
                     Hours is required

@@ -83,14 +83,21 @@ export class SearchComponent implements OnInit{
       console.log("psearchparam"+JSON.stringify(post_data));
           this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
          { 
-                jQuery('#searchsection').html(' ');
-                  if(result.status !='401'){ 
+                   if(result.status !='401'){ 
                      this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
                     this.ready=true;
                     }else{
                         if(scroll=='scroll' && result.status =='401'){
-                           jQuery('#searchsection').html("That's All.No Results found");
+                           if (jQuery('#searchsection:contains("No Results Found")').length > 0) {
+                                console.log("@@@@@@@@@@@@@@");
+                                jQuery('#searchsection').html('No Results Found');
+                          }else{
+                              console.log("asddddddddddddddqwwwwwwwwww");
+                               jQuery('#searchsection').html('');
+                              jQuery('#searchsection').html("That's All.No Results found");
+                          }   
                         }else{
+                            jQuery('#searchsection').html('');
                             jQuery('#searchsection').html('No Results Found');
                         }
                  
@@ -129,6 +136,7 @@ export class SearchComponent implements OnInit{
         this.searchFlag=searchFlag;
         this.page=1;
         // alert("loading12333"+this.projectId);
+         jQuery('#searchsection').html('');
         this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'');
         
      }

@@ -153,7 +153,10 @@ export class TimeReportComponent{
         this.entryForm={'dateVal':new Date()};
         jQuery('#addHoursErrMsg').hide();
         jQuery('#editHoursErrMsg').hide();
-        
+        jQuery('#addTitleErrMsg').hide();
+        jQuery('#editHoursErrMsg').hide();
+        jQuery('#editTitleErrMsg').hide();
+       
     }
     /*
     @params    :  offset,limit,sortvalue,sortorder
@@ -258,73 +261,83 @@ export class TimeReportComponent{
     editTimeLog(){
         this.selectedValForDate = null;
         var editableDate=  new Date(this.extractFields['readableDate']);
-        var updateTicketSpilt =  this.oldticketDesc.split(".");
-        var updateTicketId = updateTicketSpilt[0].split("#");
-        var post_data={
-            'projectId':this.projectId,
-            'slug':this.extractFields['Slug']['$oid'],
-            'timelogHours':this.extractFields['Time'],
-            'ticketId':updateTicketId[1],
-            'description':this.extractFields['description'],
-            'autocompleteTask':this.selectedValForTask,
-            'editableDate':this.extractFields['LogDate'],
-            'calendardate':this.selectedValForDate,
-            'oldWorkHours':this.oldWorkLogHour
-        }
-       if(this.extractFields['Time']!=0){
-            this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
-            { 
-                if (response.statusCode == 200) {
-                    this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
-                    jQuery('.timelogSuccessMsg').css('display','block');
-                    jQuery('.timelogSuccessMsg').fadeOut( "slow" );;
-                    setTimeout(() => {
-                        jQuery('#editTimelogModel').modal('hide');
-                    }, 500);
-                } else {
-                    console.log("fail---");
-                }
-            });
-       }else{
-            this.errorTimeLog('editHoursErrMsg');
-       }
+        if(this.extractFields['ticketDesc'].includes("#")){
+            var updateTicketSpilt =  this.oldticketDesc.split(".");
+            var updateTicketId = updateTicketSpilt[0].split("#");
+            var post_data={
+                'projectId':this.projectId,
+                'slug':this.extractFields['Slug']['$oid'],
+                'timelogHours':this.extractFields['Time'],
+                'ticketId':updateTicketId[1],
+                'description':this.extractFields['description'],
+                'autocompleteTask':this.selectedValForTask,
+                'editableDate':this.extractFields['LogDate'],
+                'calendardate':this.selectedValForDate,
+                'oldWorkHours':this.oldWorkLogHour
+            }
+       
+            if(this.extractFields['Time']!=0){
+                    this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
+                    { 
+                        if (response.statusCode == 200) {
+                            this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+                            jQuery('.timelogSuccessMsg').css('display','block');
+                            jQuery('.timelogSuccessMsg').fadeOut( "slow" );;
+                            setTimeout(() => {
+                                jQuery('#editTimelogModel').modal('hide');
+                            }, 500);
+                        } else {
+                            console.log("fail---");
+                        }
+                    });
+            }else{
+                    this.errorTimeLog('editHoursErrMsg','Invalid Time');
+            }
+        }else{
+                    this.errorTimeLog('editTitleErrMsg','Please select valid story/task');
+            }
     }
     
     addTimeLog(){ 
-        var getTaskVal=this.entryForm['text'];
+        var getTaskVal=this.entryForm['text']; 
         var thisObj = this;
         var finalDate= this.entryForm['dateVal'].toString();
-        var ticketSpilt = getTaskVal.split("#")[1];
-        var ticket_Id = ticketSpilt.split(" ")[0];
-        var timelogData={
-            ticketId:ticket_Id,
-            workHours:this.entryForm['hours'],
-            addTimelogDesc:this.entryForm['description'],
-            addTimelogTime:finalDate,
-            projectId:this.projectId
+        if(getTaskVal.includes("#")){
+            var ticketSpilt = getTaskVal.split("#")[1];
+            var ticket_Id = ticketSpilt.split(" ")[0];
+            var timelogData={
+                ticketId:ticket_Id,
+                workHours:this.entryForm['hours'],
+                addTimelogDesc:this.entryForm['description'],
+                addTimelogTime:finalDate,
+                projectId:this.projectId
 
-        }
-        if(this.entryForm['hours']!=0){
-            this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
-            { 
-                if (response.statusCode == 200) {
-                    this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
-                    jQuery('.timelogSuccessMsg').css('display','block');
-                    jQuery('.timelogSuccessMsg').fadeOut( "slow" );
-                    setTimeout(() => {
-                        this.submitted=false;
-                        jQuery('#addTimelogModel').modal('hide');
-                    }, 500);
-                } else {
-                // this.errorMsg = 'dsasdasd';
-                }
-            });
-        }else{
-             this.errorTimeLog('addHoursErrMsg');
+            }
+        
+            if(this.entryForm['hours']!=0){
+                this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
+                { 
+                    if (response.statusCode == 200) {
+                        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+                        jQuery('.timelogSuccessMsg').css('display','block');
+                        jQuery('.timelogSuccessMsg').fadeOut( "slow" );
+                        setTimeout(() => {
+                            this.submitted=false;
+                            jQuery('#addTimelogModel').modal('hide');
+                        }, 500);
+                    } else {
+                    // this.errorMsg = 'dsasdasd';
+                    }
+                });
+            }else{
+                this.errorTimeLog('addHoursErrMsg','Invalid Time');
+            }
+    }else{
+              this.errorTimeLog('addTitleErrMsg','Please select valid story/task');
         }
     }
-     public  errorTimeLog(id){
-            jQuery("#"+id).html("Invalid Time");
+     public  errorTimeLog(id,msg){
+            jQuery("#"+id).html(msg);
             jQuery("#"+id).show();
             jQuery("#"+id).fadeOut(4000);
          
