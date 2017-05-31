@@ -118,7 +118,7 @@
 </div>
 </div>
 </div>
-<div class="cust_commentsbox margintop10">
+<div class="cust_commentsbox margintop10" (click)="hideKeybord()">
     <div id="commentEditorArea" class="activitiesList" [hidden]='!newCommentOpenClose'>
         <div class="commentedtext porel" [hidden]="!replying">
             <a href="javascript:void(0)" class="commentedtextdelete" (click)="cancelReply()"><i class="fa fa-times" aria-hidden="true"></i></a>

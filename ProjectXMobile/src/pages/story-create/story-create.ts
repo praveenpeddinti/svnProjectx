@@ -143,6 +143,9 @@ export class StoryCreatePage {
             );
         }
     }
+     public hideKeybord(){
+           document.getElementById("hideOrShow").style.display = "none"; 
+    }
     public selectCancel(index) {
         this.showEditableFieldOnly[index] = false;
     }

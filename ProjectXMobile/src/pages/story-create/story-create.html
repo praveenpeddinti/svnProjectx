@@ -21,7 +21,7 @@
             <div [hidden]="!create_title.errors.required" *ngIf="submitted && create_title.errors " class="text-md-danger text-ios-danger text-wp-danger">
                 <i class="fa fa-exclamation-circle" aria-hidden="true" id="createTitleError"></i> Title is required
             </div>
-            <ion-list>
+            <ion-list (click)="hideKeybord()">
                 <ion-row>
                     <ion-item *ngFor="let field of templatedataList; let i=index;" id="item_{{i}}">
                         <label class="customlabel">{{field.title}}</label>
@@ -35,7 +35,7 @@
                     </ion-item>
                 </ion-row>
             </ion-list>
-            <div id="taskcheckbox" *ngIf="this.create.planlevel == 1 ">
+            <div id="taskcheckbox" *ngIf="this.create.planlevel == 1 " (click)="hideKeybord()">
                 <label class="customlabel">Tasks</label>
                 <ion-list>
                     <ion-row>
@@ -81,7 +81,7 @@
         </div>
     </form>
 </ion-content>
-<ion-footer>
+<ion-footer (click)="hideKeybord()">
     
     <ion-toolbar>
 
