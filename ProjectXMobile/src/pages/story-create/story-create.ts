@@ -307,8 +307,6 @@ export class StoryCreatePage {
     var userList;
     jQuery("#editor").atwho({
     at: "@",
-    suffix: ' ',
-    spaceSelectsMatch: true,
      callbacks:{ remoteFilter: function(query, callback){
         console.log("==queyr=="+query);
       if(query.length > 0){
@@ -331,10 +329,10 @@ callback(userList);
         
     },
 }, 
+    highlightFirst: true,
     data:userList,
-     limit: 2,
     displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='20' width='20'/> ${name} </li>",
-    insertTpl: "@${name} ",
+    insertTpl: "@<span contenteditable=true>${name}</span>",
 });
 
   

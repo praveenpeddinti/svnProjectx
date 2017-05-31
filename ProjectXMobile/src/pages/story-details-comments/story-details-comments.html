@@ -85,7 +85,7 @@
 <div class="deletediv"> <a href="javascript:void(0)" class="commentedtextdelete commentedtextdeletenoabsolute" (click)="cancelEdit(i)"><i class="fa fa-times" aria-hidden="true"></i></a>    </div>
 <!--Have to change Text area to editor-->
 <!--<textarea (focus)="showSubmit(i)" class="textEditor commentTextArea" placeholder="Enter text here..."></textarea>-->
-<div id="editor" (keyup)="atmensions(i)" (focus)="showSubmit(i)" placeholder="Enter text here" class="comment_edit_editor_{{i}}" contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
+<div id="editor" (keyup)="atmensions(i)" (focus)="showSubmit(i)" placeholder="Enter text here" class="comment_edit_editor_{{i}}" contenteditable="true" onclick="RE.focus(event)" style="height: 100px;overflow-y:scroll; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
      <div id="hideOrShow_{{i}}" class="editoroption"  style="display: none;">
     
         <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold" aria-hidden="true"></i></button>
@@ -135,7 +135,7 @@
             <!--Have to change Text area to editor-->
             <!--<textarea (focus)="showSubmit(-1)" class="textEditor commentTextArea" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}"
                 placeholder="Enter text here..."></textarea>--> 
-                <div id="editor"  (keyup)="atmensions(-1)" (focus)="showSubmit(-1)" class="textEditor comment_editor commentTextArea" placeholder="Comment" contenteditable="true" onclick="RE.focus(event)" style="height: auto; min-height: 100px; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
+                <div id="editor"  (keyup)="atmensions(-1)" (focus)="showSubmit(-1)" class="textEditor comment_editor commentTextArea" placeholder="Comment" contenteditable="true" onclick="RE.focus(event)" style="height: 100px;overflow-y:scroll; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
                 <div id="hideOrShow" class="editoroption"  style="display: none;">
     
         <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold" aria-hidden="true"></i></button>

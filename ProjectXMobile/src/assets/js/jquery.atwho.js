@@ -832,7 +832,7 @@ EditableController = (function(superClass) {
     } else {
       suffix = (suffix = this.getOpt('suffix')) === "" ? suffix : suffix || "\u00A0";
       data = $li.data('item-data');
-      this.query.el.removeClass('atwho-query').addClass('atwho-inserted').html(content).attr('data-atwho-at-query', "" + data['atwho-at'] + this.query.text).attr('contenteditable', "false");
+      this.query.el.removeClass('atwho-query').addClass('atwho-inserted').html(content).attr('data-atwho-at-query', "" + data['atwho-at'] + this.query.text).attr('contenteditable', "true");
       if (range = this._getRange()) {
         if (this.query.el.length) {
           range.setEndAfter(this.query.el[0]);
@@ -923,7 +923,7 @@ var View;
 View = (function() {
   function View(context) {
     this.context = context;
-    this.$el = $("<div class='atwho-view'><ul class='atwho-view-ul'></ul></div>");
+    this.$el = $("<div style='height:100px;overflow-y:scroll;' class='atwho-view'><ul class='atwho-view-ul'></ul></div>");
     this.$elUl = this.$el.children();
     this.timeoutID = null;
     this.context.$el.append(this.$el);
