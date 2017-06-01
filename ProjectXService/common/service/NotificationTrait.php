@@ -855,7 +855,7 @@ trait NotificationTrait {
                     $assigned_message = $action_user['UserName'];
                     $old_user = Collaborators::getCollaboratorById($notification['OldValue']);
                     if ($old_user != '') {
-                        $assigned_message = $old_user['UserName'] . '=>' . $action_user['UserName'];
+                        $assigned_message = $old_user['UserName'] . ' => ' . $action_user['UserName'];
                     }
                     $preposition = "to";
                     //  $message=array('from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assignedTo'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder'],"Preposition"=>$preposition);
@@ -871,7 +871,7 @@ trait NotificationTrait {
 
                     $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
-        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$storyField['Title']}: {$assigned_message} </td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$activityOn}: {$assigned_message} </td></tr>
 EOD;
 
                     array_push($recipient_list, $notification['NotifiedUser']);
@@ -946,7 +946,7 @@ EOD;
                     }
                     $preposition = $notification['Notification_Type'] == "added" ? "to" : "from";
                     // $message=array('from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower'],"Preposition"=>$preposition);
-                    $follower_message = "Follower :" . " " . $notification['Notification_Type'] . " " . $activityOn;
+                    $follower_message = "Follower:" . " " . $notification['Notification_Type'] . " " . $activityOn;
 
 //                                 $text_message = <<<EOD
 //{$fromUser}  {$message} {$activityOn} as follower {$preposition} <a href={$link}>#{$ticketId} {$title} </a>
@@ -1049,7 +1049,8 @@ EOD;
 //EOD;
                     $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
-        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
+                <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} mentioned you</td></tr>
+   <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
 
                     array_push($recipient_list, $notification['NotifiedUser']);
