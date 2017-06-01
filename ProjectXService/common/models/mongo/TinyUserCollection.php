@@ -51,7 +51,7 @@ class TinyUserCollection extends ActiveRecord
         
         $query = new Query();
         // compose the query
-          $query->select(['CollaboratorId', 'UserName','ProfilePicture','Email'])
+          $query->select(['CollaboratorId','FirstName','LastName','UserName','ProfilePicture','Email',])
                 ->from('TinyUserCollection')
             ->where(['CollaboratorId' => (int)$collaboratorId ]);
         // execute the query
