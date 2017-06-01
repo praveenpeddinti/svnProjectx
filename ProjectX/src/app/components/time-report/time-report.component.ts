@@ -277,7 +277,7 @@ export class TimeReportComponent{
             }
        
             if(this.extractFields['Time']!=0){
-                    this._ajaxService.AjaxSubscribe("time-report/update-timelog-for-edit",post_data,(response)=>
+                    this._ajaxService.AjaxSubscribe("time-report/update-timelog",post_data,(response)=>
                     { 
                         if (response.statusCode == 200) {
                             this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
