@@ -83,7 +83,9 @@ export class SearchComponent implements OnInit{
       console.log("psearchparam"+JSON.stringify(post_data));
           this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
          { 
-                   if(result.status !='401'){ 
+                   if(result.status !='401'){
+                    jQuery('#nosearchdiv').css("display","");
+                    jQuery('#noseachdivclass').addClass('col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero');
                      this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
                     this.ready=true;
                     }else{
@@ -91,12 +93,21 @@ export class SearchComponent implements OnInit{
                            if (jQuery('#searchsection:contains("No Results Found")').length > 0) {
                                 console.log("@@@@@@@@@@@@@@");
                                 jQuery('#searchsection').html('No Results Found');
+                                
                           }else{
+                               jQuery('#noseachdivclass').removeClass();
+                            jQuery('#noseachdivclass').addClass('col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero');
                               console.log("asddddddddddddddqwwwwwwwwww");
+                              jQuery('#nosearchdiv').css("display","");
                                jQuery('#searchsection').html('');
                               jQuery('#searchsection').html("That's All.No Results found");
                           }   
                         }else{
+                            if(searchFlag=='' || searchFlag==undefined){
+                            jQuery('#noseachdivclass').removeClass();
+                            jQuery('#noseachdivclass').addClass('col-xs-12 col-sm-12 col-md-12 tabpaddingleftzero');
+                            jQuery('#nosearchdiv').css("display","none");
+                            }
                             jQuery('#searchsection').html('');
                             jQuery('#searchsection').html('No Results Found');
                         }

@@ -3,7 +3,7 @@
 <span *ngIf="projectName">{{projectName}}</span><span *ngIf="!projectName">All</span></div>
  <div class="tabbable tabs-left row">
  
- <div class="col-xs-12 col-sm-3 col-md-3 tabpaddingrightzero">
+     <div class="col-xs-12 col-sm-3 col-md-3 tabpaddingrightzero" id="nosearchdiv" >
 <ul class="nav nav-tabs">
 <li class="active"><a (click)="callsearchByClick(1)" data-toggle="tab">All</a></li>
 <li ><a (click)="callsearchByClick(5)" data-toggle="tab">Story/Task</a></li>
@@ -13,7 +13,7 @@
 </ul>
 
  </div>
-  <div class="col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero">
+  <div id="noseachdivclass" class="col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero">
       
      <div class="tab-content tab-content_content" >
   <div id="mainSearchDiv" *ngFor="let searchData of searchArray">
