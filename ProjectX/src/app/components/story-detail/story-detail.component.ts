@@ -138,6 +138,8 @@ var thisObj = this;
             
         });
            });
+          localStorage.setItem('ProjectName',this.projectName);
+           
 
       //      this.route.queryParams.subscribe(
       // params => 
@@ -808,7 +810,7 @@ var thisObj = this;
           
           if(result.statusCode== 200){
              if(result.data.updatedState!=''){
-                document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
+                 document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
                 this.statusId = result.data.updatedFieldData;
            }
         /**
@@ -839,11 +841,10 @@ var thisObj = this;
                   this.getArtifacts(ticketIdObj);
                  }
          }
-    
+ 
 if(postEditedText.EditedId == "estimatedpoints"){ 
 jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
 }
-
 
          //  this.commentsList = result.data.Activities;
          if(isChildActivity==0){
@@ -852,9 +853,11 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
             }
        else if(result.data.activityData != "noupdate"){
         this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+
      } 
          }
                
+
  }
         });
 
@@ -919,7 +922,7 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
         'searchString':modifiedString
     }
     let prepareSearchData = [];
-      //  this.search_results=data;GetTicketDetails get-all-ticket-details-for-search
+      //  this.search_results=data;
         this._ajaxService.AjaxSubscribe("story/get-all-ticket-details-for-search",post_data,(result)=>
          { 
            var subTaskData = result.data;
@@ -1366,7 +1369,7 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
     public navigateStoryDetail(ticketId,projectId){ 
     this.fieldsData = []; 
     this.showMyEditableField =[];
-         this.callTicketDetailPage(ticketId,projectId);        
+          this.callTicketDetailPage(ticketId,projectId);        
         }
 
 public callTicketDetailPage(ticId,projectId){
@@ -1428,8 +1431,7 @@ public callTicketDetailPage(ticId,projectId){
             console.log("==Plan Level=="+this.checkPlanLevel);
             this.shared.change(this._router.url,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
             this.childTaskData=data.data.Tasks;
-            // alert("dataaaaaaaa"+JSON.stringify(data.data.Tasks));
-            this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
+             this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
           //alert("subtasksdat"+JSON.stringify(this.childTasksArray.length));
 
 
