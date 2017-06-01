@@ -124,12 +124,12 @@ class TimeReportService {
         }
         
     }
-    /**
+   /**
     * @author Padmaja
-    * @uses updateDataForTimeLog  details
+    * @param type $ticketData
     * @return type
     */
-    public function updateDataForTimeLog($ticketData){
+    public function updateTimelog($ticketData){
         try{
         
             $projectId = $ticketData->projectId;
@@ -143,7 +143,6 @@ class TimeReportService {
             $oldWorkHours = $ticketData->oldWorkHours;
             $calendardate="";
             if(isset($ticketData->autocompleteTask)){
-               // error_log($ticketData->autocompleteTask."@@@@@@@@");
                 $autocompleteTask= explode(" ",$ticketData->autocompleteTask);
                 $autocompleteticketId=str_replace('#','',$autocompleteTask[0]);
             }
@@ -164,32 +163,21 @@ class TimeReportService {
                 
             $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
             $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
-            
+            error_log("total work hours-------".$totalWorkHours."-----old work hours------------".$oldWorkHours);
             $temphours=$totalWorkHours-$oldWorkHours;
             $total=($oldTimeLog + $temphours);
             $slug =  new \MongoDB\BSON\ObjectID();
-           // error_log("$$$$$$$$$$$$$".$ticketId."###".$projectId."asss".$temphours.$collabaratorId.$slug);
             $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', (float)$total, $collabaratorId,$slug);
             $this->saveNotifications($ticketData, 'TotalTimeLog', $temphours,'TotalTimeLog',$slug); 
+            error_log("parent ticketid-------------".$parenTicketInfo["ParentStoryId"]."----------".$temphours);
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $temphours);
             }
-                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $temphours);
-                $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog"));
-                $newTimeLog=$ticketInfo['TotalTimeLog'];
-                $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog;
-                foreach($ticketInfo['Followers'] as $follower) 
-                {
-                    $collaborator=TinyUserCollection::getMiniUserDetails($follower['FollowerId']);
-                    array_push($recipient_list,$collaborator['Email']);
-                }
-
-                return $activityData;
+            $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $temphours);
+            return $activityData;
             }
-             
-            
         } catch (Exception $ex) {
-            Yii::log("TimeReportService:updateDataForTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("TimeReportService:updateTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 }
