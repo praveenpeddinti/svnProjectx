@@ -67,8 +67,8 @@ export class BreadcrumbComponent implements OnInit {
                  
             if((this.route_changes.page=='Detail') && !(this.id.indexOf('#'+this.route_changes.params)>-1))
             { 
-              for (var key in this.items[0]) 
-                   { 
+            //  for (var key in this.items[0]) 
+                 //  { 
                    if( this.items[0].type != "Other"){
 
                     this.items[0].url="/project/"+this.route_changes.projectName+"/list";
@@ -83,7 +83,7 @@ export class BreadcrumbComponent implements OnInit {
                       this.project='';
                       this.status=false;
                     }
-                   }
+                 //  }
               this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type,queryString:''});
               this.id.push('#'+this.route_changes.params);
               this.count++;
