@@ -154,7 +154,7 @@ export class StoryDetailsPage {
                 this.taskDetails.ticketId = result.data.TicketId;
                 this.taskDetails.title = result.data.Title;
                 this.taskDetails.description = result.data.Description;
-                this.taskDetails.type = result.data.StoryType.Name;
+                this.taskDetails.type = result.data.StoryType.Name;                 
                 this.taskDetails.workflowType = result.data.WorkflowType;
                 this.titleAfterEdit = result.data.Title;
                 this.items = result.data.Fields;
@@ -165,6 +165,11 @@ export class StoryDetailsPage {
                 for (let i = 0; i < this.items.length; i++) {
                     var _id = this.items[i].Id;
                     var _title = this.items[i].title;
+                     if (_title == "Total Estimate Points" && this.taskDetails.type == "Task") {
+                     setTimeout(() => {
+                         document.getElementById("item_7").style.display = 'none';
+                     }, 300)
+                 }
                     var _assignTo;
                     if (this.items[i].field_type == "Text") {
                         if (this.items[i].value == "") {
@@ -193,7 +198,7 @@ export class StoryDetailsPage {
                             date.setTime( date.getTime() + date.getTimezoneOffset()*-60*1000 );
                             this.localDate = new Date(date.setDate(date.getDate() )).toISOString();
                         }
-                    }
+                    }            
                     else if (this.items[i].field_type == "DateTime") {
 //                        readable_value
                         if (this.items[i].readable_value == "") {
