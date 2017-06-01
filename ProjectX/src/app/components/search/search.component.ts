@@ -71,7 +71,7 @@ export class SearchComponent implements OnInit{
               
                 });
         });
-        this.shared.change(this._router.url,this.projectName,'Search','Other',this.projectName); //added By Ryan for breadcrumb purpose
+        this.shared.change(this._router.url,this.searchString,'Search','Other',this.projectName); //added By Ryan for breadcrumb purpose
     }
    public  load_contents(page,searchString,searchFlag,projectId,scroll){
         var post_data={

@@ -3,7 +3,9 @@
     <li *ngFor="let item of items;let i=index;let last=last">
         <img *ngIf="item.type=='Story'" src="assets/images/story-icon.png" />
         <img *ngIf="item.type=='Task'" src="assets/images/task-icon.png" />
-        <a *ngIf="item.url!=null && !last" (click)="modifyBreadcrumb(i)" [routerLink]="[item.url]"  >
+  
+       <a *ngIf="item.queryString!=null && item.queryString!='' && item.url!=null && !last" (click)="modifyBreadcrumb(i)" [routerLink]="[item.url]"  [queryParams]="{q:item.queryString}" > {{item.label}}</a>
+        <a *ngIf="(item.queryString == null || item.queryString=='') && item.url!=null && !last" (click)="modifyBreadcrumb(i)" [routerLink]="[item.url]"  >
             {{item.label}}</a>
             <label *ngIf="last">{{item.label}}</label>
         <label style="color:#737171" class="last_item" *ngIf="item.url==null">{{item.label}}</label>

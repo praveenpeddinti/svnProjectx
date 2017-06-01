@@ -57,29 +57,24 @@ export class BreadcrumbComponent implements OnInit {
               // this.removeItems(0,false);
              
                  if(this.route_changes.projectName!=undefined)
-                 {
-                  this.items.push({label:this.route_changes.projectName,url:"/project/"+this.route_changes.projectName+"/list"});
+                 { 
+                  this.items.push({label:this.route_changes.projectName,url:"/project/"+this.route_changes.projectName+"/list",queryString:''});
                 
                 this.status=true;
                 this.project=this.route_changes.projectName;
                  }
               }
-            
-            // console.log("==Index=="+this.id.indexOf('#'+this.route_changes.params));
-            // if(this.id.indexOf('#'+this.route_changes.params)>-1)
-            // {
-            //   this.removeItems(this.id.indexOf('#'+this.route_changes.params)+2,true);
-            // }
-
-            
-
-            
+                 
             if((this.route_changes.page=='Detail') && !(this.id.indexOf('#'+this.route_changes.params)>-1))
-            {
+            { 
               for (var key in this.items[0]) 
-                   {
+                   { alert(this.items[0].type);
+                   if( this.items[0].type != "Other"){
+
                     this.items[0].url="/project/"+this.route_changes.projectName+"/list";
                     this.items[0].label=this.route_changes.projectName;
+                    this.items[0].queryString='';
+                    }
                     if(this.project!=this.route_changes.projectName && this.project!='')
                     {
                       console.log("==not equal==");
@@ -89,7 +84,7 @@ export class BreadcrumbComponent implements OnInit {
                       this.status=false;
                     }
                    }
-              this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type});
+              this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type,queryString:''});
               this.id.push('#'+this.route_changes.params);
               this.count++;
               console.log("==Details Count=="+this.count);
@@ -119,14 +114,19 @@ export class BreadcrumbComponent implements OnInit {
               this.status=true;
               console.log("==Id length=="+this.id.length);
               if(this.id.length!=0)
-              {        
+              {      
                 this.removeItems(1,true);
-                this.items.push({label:this.route_changes.page,url:"/"+this.route_changes.url});
+                var url = this.route_changes.url;
+                var urlPart = url.split("?")[0];
+                this.items.push({label:this.route_changes.page,type:this.route_changes.type,url:"/"+urlPart,queryString:this.route_changes.params});
                 
               }
               else
-              {
-                this.items.push({label:this.route_changes.page,url:"/"+this.route_changes.url});
+              { 
+              var url = this.route_changes.url;
+              // var arrayQueryString = this.getUrlVars(url);
+               var urlPart = url.split("?")[0];
+                this.items.push({label:this.route_changes.page,type:this.route_changes.type,url:"/"+urlPart,queryString:this.route_changes.params});
                 if(this.items.length>1)
                 {
                   console.log("==Items Length=="+this.items.length);
@@ -211,5 +211,16 @@ export class BreadcrumbComponent implements OnInit {
         this.status=status;
       //}
   }
-
+ getUrlVars(url)
+{
+    var vars = [], hash;
+    var hashes = url.slice(url.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
 }

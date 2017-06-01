@@ -45,7 +45,7 @@
 <div class="searchresulttitle">
 <img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" />
 <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" />
- <a [routerLink]="['/project',finalData.Project.ProjectName,finalData.TicketId.TicketId,commentData.Slug.$oid]" (click)="navigateToStoryDetail(finalData.Project,finalData.TicketId.TicketId,commentData.Slug.$oid)">#{{finalData.TicketId.TicketId}} {{finalData.Title}}<span class="heighlight"></span></a>
+ <a [routerLink]="['/project',finalData.Project.ProjectName,finalData.TicketId.TicketId,'details']" [queryParams]= "{Slug:commentData.Slug.$oid}" >#{{finalData.TicketId.TicketId}} {{finalData.Title}}<span class="heighlight"></span></a>
 </div>
 <div class="searchresultcontent" [innerHTML]="commentData.CrudeCDescription">
 <span class="not_mention">
