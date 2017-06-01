@@ -807,9 +807,21 @@ var thisObj = this;
     this.inlineTimeout =  setTimeout(() => { 
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
         {
+          if(result.statusCode== 200){ 
           
-          if(result.statusCode== 200){
-             if(result.data.updatedState!=''){
+          if(postEditedText.editedId == "title" || postEditedText.editedId == "desc"){
+                document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerHTML=result.data.updatedFieldData;
+                if(postEditedText.editedId == "desc"){
+                  var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
+                  this.getArtifacts(ticketIdObj);
+                 }
+          }
+    
+             else if(postEditedText.editedId == "estimatedpoints"){ 
+                 jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
+               }
+          
+             if(result.data.updatedState!=''){ 
                  document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
                 this.statusId = result.data.updatedFieldData;
            }
@@ -846,7 +858,6 @@ if(postEditedText.EditedId == "estimatedpoints"){
 jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
 }
 
-         //  this.commentsList = result.data.Activities;
          if(isChildActivity==0){
             if(result.data.activityData.referenceKey == -1){
              this.commentsList.push(result.data.activityData.data);
