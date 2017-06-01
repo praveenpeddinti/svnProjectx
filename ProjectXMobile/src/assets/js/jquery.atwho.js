@@ -923,7 +923,7 @@ var View;
 View = (function() {
   function View(context) {
     this.context = context;
-    this.$el = $("<div style='height:120px;background-color:white;width:100%;top:50px;left:20px;right:20px;position:fixed;overflow-y:scroll;' class='atwho-view'><ul style='width:100%;' class='atwho-view-ul'></ul></div>");
+    this.$el = $("<div style='height:120px;background-color:gray;width:100%;position:fixed;overflow-y:scroll;' class='atwho-view'><ul style='width:100%;padding:0px;' class='atwho-view-ul'></ul></div>");
     this.$elUl = this.$el.children();
     this.timeoutID = null;
     this.context.$el.append(this.$el);
@@ -1016,7 +1016,7 @@ View = (function() {
     }
      offset = {
       left: 0,
-      top: 56,
+      top: 150,
       right:0,
     };
     this.$el.offset(offset);
