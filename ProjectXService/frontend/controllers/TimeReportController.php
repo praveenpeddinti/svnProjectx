@@ -25,7 +25,6 @@ use common\components\ApiClient; //only for testing purpose
 use common\components\Email; //only for testing purpose
 use common\models\mongo\NotificationCollection;
 use common\models\mongo\TicketTimeLog;
-include_once '../../common/components/ElasticEmailClient.php';
 /**
  * TimeReport Controller
  */
@@ -101,10 +100,10 @@ class TimeReportController extends Controller
     * @uses updating timelog details
     * @return type
     */
-    public function actionUpdateTimelogForEdit(){
+    public function actionUpdateTimelog(){
         try{
             $ticketData = json_decode(file_get_contents("php://input"));
-            $updatedData=ServiceFactory::getTimeReportServiceInstance()->updateDataForTimeLog($ticketData);
+            $updatedData=ServiceFactory::getTimeReportServiceInstance()->updateTimelog($ticketData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -113,7 +112,7 @@ class TimeReportController extends Controller
             return $response;
             
         } catch (Exception $ex) {
-             Yii::log("TimeReportController:actionUpdateTimelogForEdit::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+             Yii::log("TimeReportController:actionUpdateTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
 
     }
