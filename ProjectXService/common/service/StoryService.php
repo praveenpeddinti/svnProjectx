@@ -424,12 +424,16 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketCollectionModel = new TicketCollection();
             $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->ticketId, $projectId);
             $ticketDetails["Title"] = trim($ticket_data->title);
-            $this->saveActivity($ticket_data->ticketId,$projectId,"Title", $ticketDetails["Title"],$userId);
+            $slug =  new \MongoDB\BSON\ObjectID();
+            $this->saveActivity($ticket_data->ticketId,$projectId,"Title", $ticketDetails["Title"],$userId,$slug);
+            $this->saveNotifications($editticket,"Title",$ticketDetails["Title"],'',$slug);
             $description = $ticket_data->description;
             $ticketDetails["CrudeDescription"] = $description;
             $refiendData = CommonUtility::refineDescription($description);
             $ticketDetails["Description"] = $refiendData["description"];
-            $this->saveActivity($ticket_data->ticketId,$projectId,"Description", $description,$userId);
+            $slug =  new \MongoDB\BSON\ObjectID();
+            $this->saveActivity($ticket_data->ticketId,$projectId,"Description", $description,$userId,$slug);
+            $this->saveNotifications($editticket,"Description",$description,'',$slug);
             $newworkflowId = "";
             foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
@@ -437,8 +441,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $fieldDetails =  StoryFields::getFieldDetails($fieldId);
                         $fieldName =  $fieldDetails["Field_Name"];
                          if(is_numeric($ticket_data->$key)){
+                               error_log("+++++++++++== TAsk Types++1222222222221+++++++++");
+
                               $value["value"] = (int)$ticket_data->$key; 
                                if($fieldDetails["Type"] == 6){
+                                 error_log("+++++++++++== TAsk Types++1111111+++++++++");
                                 $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$key);
                                 $value["value_name"] = $collaboratorData["UserName"];
                                 $this->followTicket($ticket_data->$key,$ticket_data->ticketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE,"FullUpdate");
@@ -481,6 +488,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $newworkflowId = $ticket_data->$key;
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
+                                error_log("+++++++++++=priority+66666666666666+++++++++");
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->$key);
                                 $value["value_name"] = $priorityDetail["Name"];
                                 }
@@ -499,6 +507,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $value["value_name"] = $planlevelDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
+                                error_log("+++++++++++== tickettype6666666661111111+++++++++");
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->$key);
                                 $value["value_name"] = $tickettypeDetail["Name"];
                                 }
@@ -655,7 +664,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         if($fieldDetails["Type"] == 6 ){
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
-                          
                             $this->followTicket($ticket_data->value,$ticket_data->ticketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
                            //  $this->saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
 
