@@ -138,7 +138,7 @@ App = (function() {
     if ((ref = this.$el) != null) {
       ref.remove();
     }
-    return $(doc.body).append(this.$el = $("<div class='atwho-container'></div>"));
+    return $(doc.body).append(this.$el = $("<div style='top:25px;' class='atwho-container'></div>"));
   };
 
   App.prototype.setupRootElement = function(iframe, asRoot) {
@@ -923,7 +923,7 @@ var View;
 View = (function() {
   function View(context) {
     this.context = context;
-    this.$el = $("<div style='height:100px;overflow-y:scroll;' class='atwho-view'><ul class='atwho-view-ul'></ul></div>");
+    this.$el = $("<div style='height:120px;background-color:white;width:100%;top:50px;left:20px;right:20px;position:fixed;overflow-y:scroll;' class='atwho-view'><ul style='width:100%;' class='atwho-view-ul'></ul></div>");
     this.$elUl = this.$el.children();
     this.timeoutID = null;
     this.context.$el.append(this.$el);
@@ -1014,6 +1014,11 @@ View = (function() {
     if ((ref = this.context.callbacks("beforeReposition")) != null) {
       ref.call(this.context, offset);
     }
+     offset = {
+      left: 0,
+      top: 56,
+      right:0,
+    };
     this.$el.offset(offset);
     return this.context.trigger("reposition", [offset]);
   };
@@ -1056,7 +1061,7 @@ View = (function() {
     }
   };
 
-  View.prototype.show = function() {
+  View.prototype.show = function() { //alert('1');
     var rect;
     if (this.stopShowing) {
       this.stopShowing = false;
@@ -1064,7 +1069,7 @@ View = (function() {
     }
     if (!this.visible()) {
       this.$el.show();
-      this.$el.scrollTop(0);
+     // this.$el.scrollTop(0);
       this.context.trigger('shown');
     }
     if (rect = this.context.rect()) {
