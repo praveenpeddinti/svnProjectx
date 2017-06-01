@@ -1319,14 +1319,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             }
            
                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $totalWorkHours);
-                $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog")); //added by Ryan
-                $newTimeLog=$ticketInfo['TotalTimeLog']; //added by Ryan
-                $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog; //added by Ryan
-                foreach($ticketInfo['Followers'] as $follower) //added by Ryan
-                {
-                    $collaborator=TinyUserCollection::getMiniUserDetails($follower['FollowerId']);
-                    array_push($recipient_list,$collaborator['Email']);
-                }
+              
                 return $activityData;
             }
         } catch (Exception $ex) {
