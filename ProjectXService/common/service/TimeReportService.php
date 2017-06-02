@@ -101,21 +101,12 @@ class TimeReportService {
             $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
             $total=(-$timelogHours);
             $slug =  new \MongoDB\BSON\ObjectID();
-            error_log("$$$$$$$$$$$$$".$ticketId."###".$projectId."asss".$total.$collabaratorId.$slug);
            $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $collabaratorId,$slug);
            // $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug); 
             if ($parenTicketInfo["ParentStoryId"] != "") {
-                $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $timelogHours);
+                $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $total);
             }
-                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $timelogHours);
-//                $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog"));
-//                $newTimeLog=$ticketInfo['TotalTimeLog'];
-//                $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog;
-//                foreach($ticketInfo['Followers'] as $follower) 
-//                {
-//                    $collaborator=TinyUserCollection::getMiniUserDetails($follower['FollowerId']);
-//                    array_push($recipient_list,$collaborator['Email']);
-//                }
+                 $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $total);
 
                 return $activityData;
             }
