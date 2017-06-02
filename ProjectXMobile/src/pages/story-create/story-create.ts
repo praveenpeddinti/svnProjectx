@@ -331,7 +331,7 @@ callback(userList);
 }, 
     highlightFirst: true,
     data:userList,
-    displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='20' width='20'/> ${name} </li>",
+    displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='30' width='30'/> ${name} </li>",
     insertTpl: "@<span contenteditable=true>${name}</span>",
 });
 

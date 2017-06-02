@@ -101,6 +101,12 @@ export class StoryDetailsComments {
          console.log("the story details comments ticket id " + JSON.stringify(this.storyTicketId));
          this.itemsInActivities = [];
 
+
+
+//     jQuery('body').click(function(evt){ alert("1"); alert(evt.target.class );  
+//        if(evt.target.class == "format_area" || evt.target.id == "editor")
+//           return;
+// });
 //ticket details 
      globalService.getTicketDetailsById(this.constants.taskDetailsById, this.storyTicketId).subscribe(
             result => {
@@ -490,6 +496,7 @@ export class StoryDetailsComments {
                     }
                     this.replying = false;
                    jQuery('.comment_editor').html("");
+                   this.myHTML='';
                    // jQuery(".uploadAndSubmit .textEditor").val('');
                 }, (error) => {
                     this.presentToast('Unsuccessful');
@@ -725,9 +732,13 @@ callback(userList);
     },
 }, 
     data:userList,
-    displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='20' width='20'/> ${name} </li>",
+    displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='30' width='30'/> ${name} </li>",
     insertTpl: "@${name}",
 });
     }
+
+    handleKeyPad(event){
+       // alert(JSON.stringify(event))  ;
+      }
 
 }

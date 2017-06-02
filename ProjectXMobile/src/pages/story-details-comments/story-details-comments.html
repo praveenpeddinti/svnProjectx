@@ -1,4 +1,4 @@
-<ion-content padding>
+<ion-content (click)="handleKeyPad($event)" padding>
 <div>
         <div class="padding10trl"> </div>
      <div class="dashboardbox_header">
@@ -86,15 +86,15 @@
 <!--Have to change Text area to editor-->
 <!--<textarea (focus)="showSubmit(i)" class="textEditor commentTextArea" placeholder="Enter text here..."></textarea>-->
 <div id="editor" (keyup)="atmensions(i)" (focus)="showSubmit(i)" placeholder="Enter text here" class="comment_edit_editor_{{i}}" contenteditable="true" onclick="RE.focus(event)" style="height: 100px;overflow-y:scroll; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
-     <div id="hideOrShow_{{i}}" class="editoroption"  style="display: none;">
+     <div id="hideOrShow_{{i}}" class="editoroption format_area"  style="display: none;">
     
-        <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold" aria-hidden="true"></i></button>
-        <button id="italic" onclick="RE.click(id)"><i class="fa fa-italic" aria-hidden="true"></i></button>
-        <button id="underline" onclick="RE.click(id)"><i class="fa fa-underline" aria-hidden="true"></i></button>
-        <button id="bullets" onclick="RE.click(id)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>
-        <button id="numbers" onclick="RE.click(id)"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
-        <button id="insertlink" onclick="RE.click(id)"><i class="fa fa-link" aria-hidden="true"></i></button>
-        <button id="close" onclick="RE.click(id)"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold format_area" aria-hidden="true"></i></button>
+        <button id="italic" onclick="RE.click(id)"><i class="fa fa-italic format_area" aria-hidden="true"></i></button>
+        <button id="underline" onclick="RE.click(id)"><i class="fa fa-underline format_area" aria-hidden="true"></i></button>
+        <button id="bullets" onclick="RE.click(id)"><i class="fa fa-list-ul format_area" aria-hidden="true"></i></button>
+        <button id="numbers" onclick="RE.click(id)"><i class="fa fa-list-ol format_area" aria-hidden="true"></i></button>
+        <button id="insertlink" onclick="RE.click(id)"><i class="fa fa-link format_area" aria-hidden="true"></i></button>
+        <button id="close" onclick="RE.click(id)"><i class="fa fa-times format_area" aria-hidden="true"></i></button>
     </div>
 <div class="uploadProgress" [hidden]='progressEdit==0'>
     <progress [value]="progressEdit" max="100"></progress>
@@ -136,15 +136,15 @@
             <!--<textarea (focus)="showSubmit(-1)" class="textEditor commentTextArea" [(ngModel)]="commentDesc" [ngModelOptions]="{standalone: true}"
                 placeholder="Enter text here..."></textarea>--> 
                 <div id="editor"  (keyup)="atmensions(-1)" (focus)="showSubmit(-1)" class="textEditor comment_editor commentTextArea" placeholder="Comment" contenteditable="true" onclick="RE.focus(event)" style="height: 100px;overflow-y:scroll; width: 100%; word-wrap: break-word; display: block; border:1px solid #999999; padding:3px; white-space:normal;"></div>
-                <div id="hideOrShow" class="editoroption"  style="display: none;">
+                <div id="hideOrShow" class="editoroption format_area"  style="display: none;">
     
-        <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold" aria-hidden="true"></i></button>
-        <button id="italic" onclick="RE.click(id)"><i class="fa fa-italic" aria-hidden="true"></i></button>
-        <button id="underline" onclick="RE.click(id)"><i class="fa fa-underline" aria-hidden="true"></i></button>
-        <button id="bullets" onclick="RE.click(id)"><i class="fa fa-list-ul" aria-hidden="true"></i></button>
-        <button id="numbers" onclick="RE.click(id)"><i class="fa fa-list-ol" aria-hidden="true"></i></button>
-        <button id="insertlink" onclick="RE.click(id)"><i class="fa fa-link" aria-hidden="true"></i></button>
-        <button id="close" onclick="RE.click(id)"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <button id="bold" onclick="RE.click(id)"><i class="fa fa-bold format_area" aria-hidden="true"></i></button>
+        <button id="italic" onclick="RE.click(id)"><i class="fa fa-italic format_area" aria-hidden="true"></i></button>
+        <button id="underline" onclick="RE.click(id)"><i class="fa fa-underline format_area" aria-hidden="true"></i></button>
+        <button id="bullets" onclick="RE.click(id)"><i class="fa fa-list-ul format_area" aria-hidden="true"></i></button>
+        <button id="numbers" onclick="RE.click(id)"><i class="fa fa-list-ol format_area" aria-hidden="true"></i></button>
+        <button id="insertlink" onclick="RE.click(id)"><i class="fa fa-link format_area" aria-hidden="true"></i></button>
+        <button id="close" onclick="RE.click(id)"><i class="fa fa-times format_area" aria-hidden="true"></i></button>
     </div>
                 <div class="uploadProgress" [hidden]='progressNew==0'>
                 <progress [value]="progressNew" max="100"></progress>

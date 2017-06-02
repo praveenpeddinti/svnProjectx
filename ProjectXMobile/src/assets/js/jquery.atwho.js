@@ -133,7 +133,7 @@ App = (function() {
     this.listen();
   }
 
-  App.prototype.createContainer = function(doc) {
+  App.prototype.createContainer = function(doc) { 
     var ref;
     if ((ref = this.$el) != null) {
       ref.remove();
@@ -141,7 +141,7 @@ App = (function() {
     return $(doc.body).append(this.$el = $("<div style='top:25px;' class='atwho-container'></div>"));
   };
 
-  App.prototype.setupRootElement = function(iframe, asRoot) {
+  App.prototype.setupRootElement = function(iframe, asRoot) { 
     var error;
     if (asRoot == null) {
       asRoot = false;
@@ -923,7 +923,7 @@ var View;
 View = (function() {
   function View(context) {
     this.context = context;
-    this.$el = $("<div style='height:120px;background-color:gray;width:100%;position:fixed;overflow-y:scroll;' class='atwho-view'><ul style='width:100%;padding:0px;' class='atwho-view-ul'></ul></div>");
+    this.$el = $("<div style='background-color: rgb(244, 244, 244); display: none;height: 179px;left: 0;overflow-y: scroll;padding: 10px 10px 10px 0;position: fixed;top: 150px;width: 100%;' class='atwho-view'><ul style='width:100%;padding:0 0 0 10px;' class='atwho-view-ul'></ul></div>");
     this.$elUl = this.$el.children();
     this.timeoutID = null;
     this.context.$el.append(this.$el);
@@ -1014,12 +1014,15 @@ View = (function() {
     if ((ref = this.context.callbacks("beforeReposition")) != null) {
       ref.call(this.context, offset);
     }
+    var top=$("#editor").offset().top;
+    console.log("top---"+top)
      offset = {
       left: 0,
-      top: 150,
       right:0,
+      bottom:top,
     };
     this.$el.offset(offset);
+    this.$el.show();
     return this.context.trigger("reposition", [offset]);
   };
 
@@ -1061,7 +1064,7 @@ View = (function() {
     }
   };
 
-  View.prototype.show = function() { //alert('1');
+  View.prototype.show = function() { 
     var rect;
     if (this.stopShowing) {
       this.stopShowing = false;
