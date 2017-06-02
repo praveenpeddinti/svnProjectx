@@ -28,7 +28,6 @@ class TaskTypes extends ActiveRecord
     }
     /**
      * @author Anand
-     * @param type
      * @return type
      */
     public static function getTaskTypes()

@@ -232,14 +232,17 @@ trait NotificationTrait {
      * @param type $notify_type //comment,reply
      * @param type $slug
      */
-    public static function saveNotificationsForComment($commentData, $userslist, $notify_type, $slug,$processedDesc) {
+    public static function saveNotificationsForComment($commentData, $userslist, $notify_type, $slug) {
         try {
             // error_log("saveNotificationsForComment---".$notify_type."---".$slug);
             $commentOwner = $commentData->Comment->OriginalCommentorId;
             $loggedinUser = $commentData->userInfo->Id;
             $ticketId = (int) $commentData->ticketId;
             $projectId = (int) $commentData->projectId;
-            $commentDescripition = $processedDesc;
+            $description = CommonUtility::refineDescriptionForEmail($commentData->Comment->CrudeCDescription);
+            
+          //  error_log("description------------".$description);
+            $commentDescripition = $description;
             $data = TicketCollection::getTicketDetails($ticketId, $projectId);
             $followers = $data['Followers'];
             $followers = CommonUtility::filterFollowers($followers);
@@ -340,7 +343,12 @@ trait NotificationTrait {
             // error_log("ticketDetails==============FFFFFFFFFFF".print_r($ticketDetails,1));
             $followers = CommonUtility::filterFollowers($followers);
             if ($notifyType == "Title" || $notifyType == "Description" || $notifyType == "TotalTimeLog") {
-                $oldValue = $ticketDetails[$notifyType];
+                if($notifyType == "Description"){
+                    $oldValue = $ticketDetails["CrudeDescription"]; 
+                }else{
+                     $oldValue = $ticketDetails[$notifyType];
+                }
+               
 
                 if ($oldValue == $activityOn) {
                     return;
@@ -483,6 +491,8 @@ trait NotificationTrait {
                     error_log("in descrioton--------#$#$");
                     $tic->Notification_Type = $notification_Type;
                     $tic->ActivityOn = $notifyType;
+                    $oldValue = CommonUtility::refineDescriptionForEmail($oldValue);
+                    $newValue = CommonUtility::refineDescriptionForEmail($newValue);
                     $tic->OldValue = $oldValue;
                     $tic->NewValue = $newValue;
                     $tic->Status = 0;

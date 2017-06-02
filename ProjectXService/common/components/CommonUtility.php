@@ -680,6 +680,46 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
       }
   }
   
+  /**
+   * @author Moin Hussain
+   * @param type $description
+   * @return type
+   */
+   public static function refineDescriptionForEmail($description){
+      try{
+           $description = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $description);
+           
+           $uploadedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+              $matches=[];
+              $userlist=[];//for email purpose added by ryan
+              //preg_match_all('/(@\w+.\w+)/', $description, $mention_matches);//added by ryan
+          
+              
+              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
+              $filematches = $matches[0];
+              $artifactsList=array();
+              for($i = 0; $i< count($filematches); $i++){
+                   $value = $filematches[$i];
+                   $firstArray =  explode("/", $value);
+                   $secondArray = explode("|", $firstArray[1]);
+                   $tempFileName = $secondArray[0];
+                   $originalFileName = $secondArray[1];
+                   $originalFileName = str_replace("]]", "", $originalFileName);
+                   
+                  $newPath = Yii::$app->params['ServerURL'].Yii::$app->params['StoryArtifactPath']."/".$tempFileName."-".$originalFileName;
+               
+                 $replaceString = "<a href='" . $newPath . "' target='_blank'/>" . $originalFileName . "</a>";
+                 $artifactType = "other";
+                 $description = str_replace($value, $replaceString, $description);
+
+              } 
+              return $description;
+      } catch (Exception $ex) {
+Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+      }
+  }
+  
+  
     /*
      * @author Jagadish
      * @return array

@@ -185,7 +185,7 @@ class TicketTimeLog extends ActiveRecord
                 foreach($timelogs as $eachOne){
                     $ticketCollectionModel = new TicketCollection();
                     $getTicketDetails = $ticketCollectionModel->getTicketDetails($eachOne['TicketId'],$projectId,$selectFields=[]);
-                    $ticketDesc= '#'.$getTicketDetails['TicketId'].".".$getTicketDetails['Title'];
+                    $ticketDesc= '#'.$getTicketDetails['TicketId']." ".$getTicketDetails['Title'];
                     $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
                     $datetime = $eachOne['LoggedOn']->toDateTime();  
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
