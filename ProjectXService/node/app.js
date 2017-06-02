@@ -2,7 +2,7 @@ var Express = require("express");
 var spawn = require('child_process').spawn;
 var bodyParser = require("body-parser");
 var multer = require("multer");
-var uploads = multer({ dest: 'uploads/' });
+var uploads = multer({ dest: '/usr/share/nginx/www/ProjectXService/node/uploads/' });
 //app.use(multer({dest:__dirname+'/file/uploads/'}));
 var app = Express();
 
@@ -28,8 +28,12 @@ console.log("the file-------- " );
     if (!req.files) {
         res.send('No files were uploaded.');
     } else{
-        //console.log("the responce -------- " + req.files + " --- " + JSON.stringify(req.files));
-        //console.log( "the new file name " + typeof JSON.stringify(req.files['filename']) + "|" + typeof req.files.originalname );
+       // console.log("the responce -------- " + req.files[0].path + " --- " + JSON.stringify(req.files));
+     for(var i=0;i<req.files.length;i++){
+        var path = req.files[i].path;
+        path = path.replace("/usr/share/nginx/www/ProjectXService/node/", "");
+        req.files[i].path = path; 
+     }
         res.send(req.files);
     }
     
