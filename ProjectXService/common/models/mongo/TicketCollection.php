@@ -537,11 +537,9 @@ class TicketCollection extends ActiveRecord
      */
     public static function getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString){
         try{
-         // error_log($projectId."sssss"."wwww".$sortvalue."22222222".$searchString);
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $cursor =  $collection->find(array('$or'=>array( array( "TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))));
             $ticketDetails = iterator_to_array($cursor);
-            error_log("ssssssssss".print_r($ticketDetails,1));
             return $ticketDetails;
         } catch (Exception $ex) {
              Yii::log("TicketCollection:getAllStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
