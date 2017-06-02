@@ -15,7 +15,6 @@
 .tabpaddingrightzero{padding-right:0}
 .tabs-left .nav-tabs > li > a{border-radius:0;font-family: "robotoregular";font-size:16px;color:#7c7c7c;background:#f8f8f8;border-color: #f0f0f0 transparent #f0f0f0 #f0f0f0;border-right:0;margin-right:0;cursor:pointer}
 .tabs-left .nav-tabs > li.active > a, .tabs-left .nav-tabs > li.active > a:hover, .tabs-left .nav-tabs > li.active > a:focus{border-color: #f0f0f0 transparent #f0f0f0 #f0f0f0;color:#0199e0;background: #fff;margin-right:-1px;position:relative;border-radius:0;border-right:0;z-index: 1}
-.tab-content_content{border:1px solid #f0f0f0;min-height:220px;padding:10px 20px}
 
-
+.tab-content_content{border:1px solid #f0f0f0;min-height:221px;padding:10px 20px}
 
