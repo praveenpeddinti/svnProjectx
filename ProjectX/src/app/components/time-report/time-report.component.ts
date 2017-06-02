@@ -264,14 +264,11 @@ export class TimeReportComponent{
         this.selectedValForDate = null;
         var editableDate=  new Date(this.extractFields['readableDate']);
         if(this.extractFields['ticketDesc'].includes("#")){
-            var updateTicketSpilt =  this.oldticketDesc.split(".");
-            var updateTicketId = updateTicketSpilt[0].split("#");
             var post_data={
                 'projectId':this.projectId,
                 'slug':this.extractFields['Slug']['$oid'],
                 'timelogHours':this.extractFields['Time'],
-                'ticketId':updateTicketId[1],
-                'description':this.extractFields['description'],
+                 'description':this.extractFields['description'].trim(),
                 'autocompleteTask':this.extractFields['ticketDesc'],
                 'editableDate':this.extractFields['LogDate'],
                 'calendardate':this.selectedValForDate,
@@ -311,7 +308,7 @@ export class TimeReportComponent{
             var timelogData={
                 ticketId:ticket_Id,
                 workHours:this.entryForm['hours'],
-                addTimelogDesc:this.entryForm['description'],
+                addTimelogDesc:this.entryForm['description'].trim(),
                 addTimelogTime:finalDate,
                 projectId:this.projectId
 
