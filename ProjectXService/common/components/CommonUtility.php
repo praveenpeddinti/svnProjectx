@@ -664,7 +664,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 } else {
                     $replaceString = "<a href='" . $newPath . "' target='_blank'/>" . $originalFileName . "</a>";
                     $artifactType = "other";
-                }
+                }            
                 $description = str_replace($value, $replaceString, $description);
 
                 if ($push) {
@@ -1124,7 +1124,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
      * @return type
      */
     
-    public static function sendEmail($recipient_list,$text_message,$subject="ProjectX",$attachment_list=array()){
+    public static function sendEmail($recipient_list,$text_message,$subject,$attachment_list=array()){
         try{
             
 $html="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
@@ -1136,12 +1136,12 @@ $html="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://ww
 <body>
 <table width='600' border='0' align='center' cellpadding='0' cellspacing='0'>";          
 $text_message=$html . $text_message . 
-        "<tr><td align='center' style='border:1px solid #f0f0f0; padding:5px;font-family:Arial; font-size:12px;line-height:40px;color:#333333; text-align:center;' >Update Your <a href='#' style='color:#0199e0; text-decoration:none;'>Email Alert Preferences</a></td></tr>
+        "<tr><td align='center' style='border:1px solid #f0f0f0; padding:5px;font-family:Arial; font-size:12px;line-height:40px;color:#333333; text-align:center;' >Update Your <a href=".''.Yii::$app->params['AppURL'].'/home'." style='color:#0199e0; text-decoration:none;'>Email Alert Preferences</a></td></tr>
         <tr><td bgcolor='#787878' align='left' valign='top' height='35'>
         <table width='100%'  border='0' align='center' cellpadding='0' cellspacing='0' height:'35'>
   <tr>
   <td width='15' height:'35'>&nbsp;</td>
-        <td width='512' align='left' height:'35' style='font-family:Arial; font-size:12px;line-height:35px; color:#fff;'>This message was sent by <a href='#' style='color:#d0ebff;font-size:13dpx;text-decoration:none;'>ProjectX</a></td>
+       <td wdth='512' align='left' height:'35' style='font-family:Arial; font-size:12px;line-height:35px; color:#fff;'>This message was sent by <a href='#' style='color:#d0ebff;font-size:13dpx;text-decoration:none;'>ProjectX</a></td>
         <td width='20' align='left'height:'35' ><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/facebook.png'." style=' border:none; outline:none;'/></a></td>
         <td width='20' align='left' height:'35'><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/twit.png'." style=' border:none; outline:none;'/></a></td>
         <td width='20' align='center' height:'35'><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/linkedin.png'." style=' border:none; outline:none;'/></a></td>
@@ -1153,6 +1153,7 @@ $text_message=$html . $text_message .
 </table>
 </body>
 </html>";
+//$subject_text="<span style='background:237ea7; color:#fff; font-size:14px;'>ProjectX</span>";
 //         echo("4. In CommonUtiltiy sendEmail started\n");
 //         ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
 //        $attachments=array();//list of artifacts
@@ -1168,7 +1169,7 @@ $text_message=$html . $text_message .
               Yii::$app->mailer->compose()
            ->setFrom(Yii::$app->params['ProjectEmail'])
            ->setTo($recipient_list)
-           ->setSubject($subject)
+           ->setSubject("ProjectX | ".$subject)
            ->setTextBody('This is ProjectX')
            ->setHtmlBody($text_message)
            ->send();
