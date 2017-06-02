@@ -148,7 +148,7 @@ export class TimeReportComponent{
         this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
         }
     }
-    clearDateTimeEntry(){ 
+    clearDateTimeEntry(){
         this.entryForm={};
         this.entryForm={'dateVal':new Date()};
         jQuery('#addHoursErrMsg').hide();
@@ -212,7 +212,9 @@ export class TimeReportComponent{
           document.getElementById("editTimeReport").style.display='block';
     }
     resetForm(){
-        this.extractFields={}
+       // alert("asdddddddddddd");
+        this.extractFields=[];
+        
     }
     searchTask(event) {
         console.log("##########"+event.query);
@@ -273,7 +275,8 @@ export class TimeReportComponent{
                 'autocompleteTask':this.selectedValForTask,
                 'editableDate':this.extractFields['LogDate'],
                 'calendardate':this.selectedValForDate,
-                'oldWorkHours':this.oldWorkLogHour
+                'oldWorkHours':this.oldWorkLogHour,
+                'oldTicketDesc':this.oldticketDesc
             }
        
             if(this.extractFields['Time']!=0){
@@ -398,7 +401,7 @@ export class TimeReportComponent{
      }
 
     editTimeEntry(Object){
-            this.extractFields=Object;
+          this.extractFields=Object;
           this.oldWorkLogHour=this.extractFields['Time'];
           this.oldticketDesc=this.extractFields['ticketDesc'];
     }
