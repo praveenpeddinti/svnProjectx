@@ -400,8 +400,9 @@ export class TimeReportComponent{
         this._router.navigate(['project',this.projectName,ticketId,'details']);
      }
 
-    editTimeEntry(Object){
-          this.extractFields=Object;
+    editTimeEntry(row){
+           var copy = Object.assign({}, row);
+          this.extractFields=copy;
           this.oldWorkLogHour=this.extractFields['Time'];
           this.oldticketDesc=this.extractFields['ticketDesc'];
     }
