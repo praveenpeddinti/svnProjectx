@@ -99,23 +99,23 @@ class TimeReportService {
                 
             $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
             $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
-            $total=($oldTimeLog - $timelogHours);
+            $total=(-$timelogHours);
             $slug =  new \MongoDB\BSON\ObjectID();
             error_log("$$$$$$$$$$$$$".$ticketId."###".$projectId."asss".$total.$collabaratorId.$slug);
-            $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $collabaratorId,$slug);
-            $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug); 
+           $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $collabaratorId,$slug);
+           // $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug); 
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $timelogHours);
             }
                  $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $timelogHours);
-                $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog"));
-                $newTimeLog=$ticketInfo['TotalTimeLog'];
-                $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog;
-                foreach($ticketInfo['Followers'] as $follower) 
-                {
-                    $collaborator=TinyUserCollection::getMiniUserDetails($follower['FollowerId']);
-                    array_push($recipient_list,$collaborator['Email']);
-                }
+//                $ticketInfo=TicketCollection::getTicketDetails($ticketId,$projectId,array("Followers","Title","TotalTimeLog"));
+//                $newTimeLog=$ticketInfo['TotalTimeLog'];
+//                $oldTimeLog==0?$action='set to '.$newTimeLog : $action='changed from '. $oldTimeLog. 'to '. $newTimeLog;
+//                foreach($ticketInfo['Followers'] as $follower) 
+//                {
+//                    $collaborator=TinyUserCollection::getMiniUserDetails($follower['FollowerId']);
+//                    array_push($recipient_list,$collaborator['Email']);
+//                }
 
                 return $activityData;
             }
@@ -147,8 +147,7 @@ class TimeReportService {
                 $autocompleteticketId=str_replace('#','',$autocompleteTask[0]);
             }
             $editableDate = $ticketData->editableDate;
-            
-            $editableDate = CommonUtility::convert_time_zone(strtotime($editableDate),"UTC",$ticketData->timeZone);   
+             $editableDate = CommonUtility::convert_time_zone(strtotime($editableDate),"UTC",$ticketData->timeZone);   
             if(isset($ticketData->calendardate)){
                 $calendardate = $ticketData->calendardate;
             }
@@ -156,25 +155,69 @@ class TimeReportService {
             
             $recipient_list=array();
             $action='';
+            $ticketIdforlog=$ticketId;
             if ($ticketTimeLog != "failure") {
-                 if(!empty($autocompleteticketId)){
-                    $ticketId=$autocompleteticketId;
+               error_log("old hoursssssssss".$oldWorkHours."newww hoursssssssss".$totalWorkHours);
+               error_log("old ticketId".$ticketId."autocompletedId".$autocompleteticketId);
+               if(empty($autocompleteticketId)){ // If old ticketId and New Id are same 
+                   if($oldWorkHours != $totalWorkHours){
+                       $temphours=$totalWorkHours-$oldWorkHours;// newone -old one
+                       error_log("tempppp".$temphours);
+                       $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
+                        if ($parenTicketInfo["ParentStoryId"] != "") {
+                            $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $temphours);
+                        }
+                        $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $temphours);
+                   }
+                   
+               }elseif ($autocompleteticketId != $ticketId) {
+                   if($autocompleteticketId){ // For the new one
+                         $temphours=$totalWorkHours;
+                        error_log("autocompletett@@@@@@@".$temphours."temptt".$autocompleteticketId);
+                        $parenTicketInfo = TicketCollection::getTicketDetails($autocompleteticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
+                        if ($parenTicketInfo["ParentStoryId"] != "") {
+                             $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $temphours);
+                          }
+                        $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $autocompleteticketId, $temphours);
+                   }
+                   if($ticketId){ // For the old one
+                        $temphours=(-$oldWorkHours);
+                        error_log($ticketId."@@@@@@@@@@@@".$temphours);
+                        $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
+                        if ($parenTicketInfo["ParentStoryId"] != "") {
+                             $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $temphours);
+                          }
+                        $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $temphours);
+                   }
+                    error_log("old ticketIdasddddddddd".$temphours);
                 }
-                
-            $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
-            $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
-            error_log("total work hours-------".$totalWorkHours."-----old work hours------------".$oldWorkHours);
-            $temphours=$totalWorkHours-$oldWorkHours;
-            $total=($oldTimeLog + $temphours);
-            $slug =  new \MongoDB\BSON\ObjectID();
-            $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', (float)$total, $collabaratorId,$slug);
-            $this->saveNotifications($ticketData, 'TotalTimeLog', $temphours,'TotalTimeLog',$slug); 
-            error_log("parent ticketid-------------".$parenTicketInfo["ParentStoryId"]."----------".$temphours);
-            if ($parenTicketInfo["ParentStoryId"] != "") {
-                $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $temphours);
-            }
-            $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $temphours);
-            return $activityData;
+                return $slug;
+//                 if(!empty($autocompleteticketId)){
+//                    $ticketId=$autocompleteticketId;
+//               }
+//                
+//            $parenTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("ParentStoryId","TotalTimeLog") );
+//            $oldTimeLog=$parenTicketInfo['TotalTimeLog'];
+//            if(isset($autocompleteticketId)){
+//                if($ticketIdforlog==$autocompleteticketId)
+//                {
+//                   $temphours=$totalWorkHours-$oldWorkHours;
+//                }else {
+//                    $temphours=$totalWorkHours;
+//                }
+//            }else{
+//                $temphours=$totalWorkHours-$oldWorkHours;
+//            }
+//            
+//            $total=($oldTimeLog + $temphours);
+//            $slug =  new \MongoDB\BSON\ObjectID();
+//           // $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', (float)$total, $collabaratorId,$slug);
+//           // $this->saveNotifications($ticketData, 'TotalTimeLog', $temphours,'TotalTimeLog',$slug); 
+//              if ($parenTicketInfo["ParentStoryId"] != "") {
+//                $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $temphours);
+//            }
+//            $updateindivisualTotalTimeLog = TicketCollection::updateTotalTimeLog($projectId, $ticketId, $temphours);
+//            return $activityData;
             }
         } catch (Exception $ex) {
             Yii::log("TimeReportService:updateTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
