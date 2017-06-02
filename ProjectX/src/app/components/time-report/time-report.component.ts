@@ -272,7 +272,7 @@ export class TimeReportComponent{
                 'timelogHours':this.extractFields['Time'],
                 'ticketId':updateTicketId[1],
                 'description':this.extractFields['description'],
-                'autocompleteTask':this.selectedValForTask,
+                'autocompleteTask':this.extractFields['ticketDesc'],
                 'editableDate':this.extractFields['LogDate'],
                 'calendardate':this.selectedValForDate,
                 'oldWorkHours':this.oldWorkLogHour,
