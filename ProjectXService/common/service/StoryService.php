@@ -942,7 +942,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 //                                       $notify_type = "reply";
 //                                        $actionName = "replied";
 //                                    }
-                               $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
+                               $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug,$processedDesc);
 
                             } catch (Exception $ex) {
                                 Yii::log("$this->saveNotifications:" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
