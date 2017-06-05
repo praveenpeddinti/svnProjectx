@@ -4,7 +4,7 @@ import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
 import {SharedService} from '../../services/shared.service';
-
+import {CookieService} from 'angular2-cookie/core';
 @Component({
     selector: 'login-view',
     templateUrl: 'login-component.html',
@@ -17,27 +17,44 @@ export class LoginComponent implements OnInit{
     public errorMsg = '';
     public submitted = false;
     public checkData=false;
+    public tURl;
     returnUrl: string;
     /*
     * Added by Padmaja
     * if the user object is set then we redirecting to dashboard page and if it is not set then redirecting to login
     */
-    ngOnInit(){
-     var getAllObj=JSON.parse(localStorage.getItem("user"));
-    if(getAllObj != null){
-        this._router.navigate(['home']); 
-    }else{
-        this._router.navigate(['login']);
-    }
-    }
+    
 
     constructor(
         private _router: Router,
         private _service: LoginService,
         private _authGuard:AuthGuard,
         private route: ActivatedRoute,
-        private shared:SharedService
-        ) { }
+        private shared:SharedService,
+        private _cookieService:CookieService
+        ) { 
+           /*
+           *@Lakshmi
+           * Setting cookie to redirect page for specified url after login
+           */
+       this.route.queryParams.subscribe(
+      params => 
+      { 
+            var rURL=params['returnUrl'];
+            if(rURL!=undefined && rURL!=''){
+               this._cookieService.putObject("rUrl",rURL);
+            }
+       })
+    }
+
+     ngOnInit(){
+     var getAllObj=JSON.parse(localStorage.getItem("user"));
+    if(getAllObj != null){
+        this._router.navigate(['home']); 
+    }else{
+        this._router.navigate(['login']);
+    }        
+    }
 /*
 * Added by Padmaja
 *This is login used for login of the user it returns string if it is error and redirect to the dashboard page if it is success
@@ -45,8 +62,15 @@ export class LoginComponent implements OnInit{
     login() {
         this._service.login(this.user,(data)=>{ 
             if(data.status==200){
-                this._router.navigate(['home']); 
-                this.shared.change(null,null,'LogIn',null,'');  //newly changed
+            //Getting cookie to redirect page for specified url after login
+            var rURL =this._cookieService.getObject("rUrl");
+             if(rURL!=undefined && rURL!=''){
+            this._cookieService.remove("rUrl");
+            this._router.navigate([rURL]); 
+             }else{
+             this._router.navigate(['home']); 
+             this.shared.change(null,null,'LogIn',null,'');  //newly changed
+             }
             }else{
                 this.checkData=true;
                 this.errorMsg = 'Invalid Email/Password';
