@@ -56,7 +56,7 @@ class StoryController extends Controller
     public function actionGetTicketDetails(){
         try{
         $ticket_data = json_decode(file_get_contents("php://input"));
-        $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data->ticketId,$ticket_data->projectId);
+        $data = ServiceFactory::getStoryServiceInstance()->getTicketDetails($ticket_data);
         $responseBean = new ResponseBean();
         if(is_array($data)){
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -136,7 +136,7 @@ class StoryController extends Controller
         try{
 
         $ticket_data = json_decode(file_get_contents("php://input"));
-        $data['ticket_details'] = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,$ticket_data->projectId);
+        $data['ticket_details'] = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data);
         if(!empty($data['ticket_details']))
         $data['task_types'] = ServiceFactory::getStoryServiceInstance()->getTaskTypes();
         else
@@ -210,7 +210,8 @@ class StoryController extends Controller
     public function actionNewStoryTemplate(){
         try{
         $post_data = json_decode(file_get_contents("php://input"));
-        $projectId = 1;
+        $timezone = $post_data->timeZone;
+        $projectId = $post_data->projectId;
         $response_data['story_fields'] = ServiceFactory::getStoryServiceInstance()->getNewTicketStoryFields();
         $response_data['task_types'] = ServiceFactory::getStoryServiceInstance()->getTaskTypes();
         foreach ($response_data['story_fields'] as &$storyField){
@@ -236,10 +237,10 @@ class StoryController extends Controller
              $storyField['data'] = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();
            }
           else if($fieldType == 4){
-             $storyField['DefaultValue'] = CommonUtility::convert_date_zone(strtotime(date("m-d-Y H:i:s")), "Asia/Kolkata");
+             $storyField['DefaultValue'] = CommonUtility::convert_date_zone(strtotime(date("m-d-Y H:i:s")), $timezone);
            }
           else if($fieldType == 5){
-             $storyField['DefaultValue'] = CommonUtility::convert_time_zone(strtotime(date("m-d-Y H:i:s")), "Asia/Kolkata");
+             $storyField['DefaultValue'] = CommonUtility::convert_time_zone(strtotime(date("m-d-Y H:i:s")), $timezone);
            }
             $storyField["Field_Type"] =  $storyField["Name"];
             
@@ -509,7 +510,7 @@ class StoryController extends Controller
     public function actionGetTicketActivity(){
         try{
             $post_data=json_decode(file_get_contents("php://input"));
-            $data = ServiceFactory::getStoryServiceInstance()->getTicketActivity($post_data->ticketId,$post_data->projectId);
+            $data = ServiceFactory::getStoryServiceInstance()->getTicketActivity($post_data);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -533,7 +534,7 @@ class StoryController extends Controller
             //save followers to Ticket
           
                ServiceFactory::getStoryServiceInstance()->followTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId, $post_data->userInfo->Id, "follower");
-               $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Followed', $post_data->collaboratorId, $post_data->userInfo->Id);
+               $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Followed', $post_data->collaboratorId, $post_data->userInfo->Id,"",$post_data->timeZone);
                $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);
                $followerData = array();
                $followerData["ProfilePicture"] = $collaboratorData["ProfilePicture"];
@@ -563,7 +564,7 @@ class StoryController extends Controller
             $post_data = json_decode(file_get_contents("php://input"));
             //remove followers to Ticket
             ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId);
-            $activitydata =  ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Unfollowed', $post_data->collaboratorId, $post_data->userInfo->Id);
+            $activitydata =  ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Unfollowed', $post_data->collaboratorId, $post_data->userInfo->Id,"",$post_data->timeZone);
             $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);//added by Ryan
             ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'remove', $post_data->collaboratorId,"FollowObj");
                /* notifications end */
@@ -651,8 +652,9 @@ class StoryController extends Controller
           $ticketId = $storyData->ticketId;
           $searchTicketId = $storyData->relatedSearchTicketId;
           $loginUserId=$storyData->userInfo->Id;
+          $timezone = $storyData->timeZone;
           $pdateRelateTask = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($projectId,$ticketId,$searchTicketId,$loginUserId);
-          $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($ticketId, $projectId,'Related', (int)$searchTicketId, $loginUserId);
+          $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($ticketId, $projectId,'Related', (int)$searchTicketId, $loginUserId,"",$timezone);
           $notifyType="Relate";
           $slug =  new \MongoDB\BSON\ObjectID();
           ServiceFactory::getStoryServiceInstance()->saveNotifications($storyData, $notifyType,'','',$slug,$searchTicketId);
@@ -728,6 +730,7 @@ class StoryController extends Controller
     public function actionGetMyTicketAttachments() {
         try {
             $post_data = json_decode(file_get_contents("php://input"));
+            $timezone = $post_data->timeZone;
             $Artifacts = ServiceFactory::getStoryServiceInstance()->getTicketAttachments($post_data->ticketId, $post_data->projectId);
             $tinyUserModel = new TinyUserCollection();
             $Artifacts = $Artifacts["Artifacts"];
@@ -743,7 +746,7 @@ class StoryController extends Controller
                 }
                 if ($Artifact["UploadedOn"] != "") {
                     $datetime = $Artifact["UploadedOn"]->toDateTime();
-                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                    $datetime->setTimezone(new \DateTimeZone($timezone));
                     $readableDate = $datetime->format('M-d-Y H:i:s');
                     $Artifacts[$key]["UploadedOn"] = $readableDate;
                 } else {
@@ -776,7 +779,8 @@ class StoryController extends Controller
             $parentTicketId = $ticketData->ticketId;
             $unRelateTicketId = $ticketData->unRelateTicketId;
             $loginUserId=$ticketData->userInfo->Id;
-            $response['activityData'] = ServiceFactory::getStoryServiceInstance()->unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId);
+            $timezone=$ticketData->timeZone;
+            $response['activityData'] = ServiceFactory::getStoryServiceInstance()->unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId,$timezone);
             $notifyType="UnRelate";
             $slug =  new \MongoDB\BSON\ObjectID();
             ServiceFactory::getStoryServiceInstance()->saveNotifications($ticketData, $notifyType,'','',$slug,$unRelateTicketId);

@@ -155,6 +155,7 @@ class TicketTimeLog extends ActiveRecord
     
     public static function getAllTimeReportDetails($StoryData, $projectId) {
         try {
+            $timezone = $StoryData->timeZone;
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $skip = $StoryData->offset * $StoryData->pagesize;
             $limit = $skip + $StoryData->pagesize;
@@ -188,7 +189,7 @@ class TicketTimeLog extends ActiveRecord
                     $ticketDesc= '#'.$getTicketDetails['TicketId']." ".$getTicketDetails['Title'];
                     $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
                     $datetime = $eachOne['LoggedOn']->toDateTime();  
-                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                    $datetime->setTimezone(new \DateTimeZone($timezone));
                     $LogDate = $datetime->format('M-d-Y H:i:s');
                     $readableDate =$datetime->format('Y-m-d H:i:s');
                     $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => $ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);

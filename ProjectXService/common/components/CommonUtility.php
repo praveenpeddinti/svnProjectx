@@ -303,7 +303,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @return type
      * @modification by Anand = Modified TaskId since we are getting Object of subtask insted of just Ids from ticket collection.
      */
-    public static function prepareTicketDetails($ticketDetails, $projectId, $flag = "part") {
+    public static function prepareTicketDetails($ticketDetails, $projectId,$timezone, $flag = "part") {
         try {
             // $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);
 
@@ -328,10 +328,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     if ($value["value"] != "") {
                         $datetime = $value["value"]->toDateTime();
                         if ($storyFieldDetails["Type"] == 4) {
-                            $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                            $datetime->setTimezone(new \DateTimeZone($timezone));
                             $readableDate = $datetime->format('M-d-Y');
                         } else {
-                            $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                            $datetime->setTimezone(new \DateTimeZone($timezone));
                             $readableDate = $datetime->format('M-d-Y H:i:s');
                         }
                         $value["readable_value"] = $readableDate;
@@ -449,7 +449,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @param type $projectId
      * @return type
      */
-    public static function prepareTicketEditDetails($ticketId, $projectId) {
+    public static function prepareTicketEditDetails($ticketId, $projectId,$timezone) {
         try {
             $ticketDetails = TicketCollection::getTicketDetails($ticketId, $projectId);
             $workFlowDetails = array();
@@ -477,10 +477,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     if ($value["value"] != "") {
                         $datetime = $value["value"]->toDateTime();
                         if ($storyFieldDetails["Type"] == 4) {
-                            $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                            $datetime->setTimezone(new \DateTimeZone($timezone));
                             $readableDate = $datetime->format('M-d-Y');
                         } else {
-                            $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                            $datetime->setTimezone(new \DateTimeZone($timezone));
                             $readableDate = $datetime->format('M-d-Y H:i:s');
                         }
                         $value["readable_value"] = $readableDate;
@@ -732,7 +732,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
      * @param type $flag
      * @return array
      */
-    public static function prepareDashboardDetails($ticketDetails, $projectId, $fieldsOrderArray, $flag = "part",$filter=null) {
+    public static function prepareDashboardDetails($ticketDetails, $projectId,$timezone, $fieldsOrderArray, $flag = "part",$filter=null) {
         try {
             $newArray = array();
             $arr2ordered = array();
@@ -784,10 +784,10 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                         if ($value["value"] != "") {
                             $datetime = $value["value"]->toDateTime();
                             if ($storyFieldDetails["Type"] == 4) {
-                                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                                $datetime->setTimezone(new \DateTimeZone($timezone));
                                 $readableDate = $datetime->format('M-d-Y');
                             } else {
-                                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                                $datetime->setTimezone(new \DateTimeZone($timezone));
                                 $readableDate = $datetime->format('M-d-Y H:i:s');
                             }
                             $value["readable_value"] = $readableDate;
@@ -903,19 +903,19 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
      * @param type $value
      * @param type $projectId
      */
-    public static function prepareActivity(&$value, $projectId) {
+    public static function prepareActivity(&$value, $projectId,$timezone) {
         try {
             $userProfile = TinyUserCollection::getMiniUserDetails($value["ActivityBy"]);
             $value["ActivityBy"] = $userProfile;
             $datetime = $value["ActivityOn"]->toDateTime();
-            $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+            $datetime->setTimezone(new \DateTimeZone($timezone));
             $readableDate = $datetime->format('M-d-Y H:i:s');
             $value["ActivityOn"] = $readableDate;
             $propertyChanges = $value["PropertyChanges"];
             $poppedFromChild = $value["PoppedFromChild"];
             if (count($propertyChanges) > 0) {
                 foreach ($value["PropertyChanges"] as &$property) {
-                    CommonUtility::prepareActivityProperty($property,$projectId,$poppedFromChild);
+                    CommonUtility::prepareActivityProperty($property,$projectId,$timezone,$poppedFromChild);
                 }
             }
         } catch (Exception $ex) {
@@ -929,7 +929,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
      * @param type $projectId
      * @return type
      */
-    public static function prepareActivityProperty(&$property,$projectId,$poppedFromChild="") {
+    public static function prepareActivityProperty(&$property,$projectId,$timezone,$poppedFromChild="") {
         try {
             $fieldName = $property["ActionFieldName"];
             $property["SpecialActivity"]=0;
@@ -1030,13 +1030,13 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
             else if ($type == 4) {
                 if ($property["PreviousValue"] != "") {
                     $datetime = $property["PreviousValue"]->toDateTime();
-                    $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                    $datetime->setTimezone(new \DateTimeZone($timezone));
                     $property["PreviousValue"] = $datetime->format('M-d-Y');
                 }
 
 
                 $datetime = $property["NewValue"]->toDateTime();
-                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $datetime->setTimezone(new \DateTimeZone($timezone));
                 $property["NewValue"] = $datetime->format('M-d-Y');
             }
             else if ($type == 8) {
@@ -1064,7 +1064,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                 $property["NewValue"] = $ticketTypeDetails["Name"];
             }
             $datetime = $property["CreatedOn"]->toDateTime();
-            $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+            $datetime->setTimezone(new \DateTimeZone($timezone));
             $readableDate = $datetime->format('M-d-Y H:i:s');
             $property["ActivityOn"] = $readableDate;
             if ($property["NewValue"] == "") {

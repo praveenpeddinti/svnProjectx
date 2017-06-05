@@ -86,6 +86,7 @@ class TimeReportService {
             $slug = $timelog_data->slug;
             $timelogHours = $timelog_data->workHours;
             $ticketId=$timelog_data->ticketId;
+            $timezone=$timelog_data->timeZone;
             $collabaratorId=$timelog_data->userInfo->Id;
             $autocompleteticketId=$ticketId;
             $returnSlug=  TicketTimeLog::removeTimelogData($projectId,$ticketId,$slug,$timelogHours,$collabaratorId);
@@ -101,7 +102,7 @@ class TimeReportService {
             $total=(-$timelogHours);
             $newTotalTime = $oldTimeLog + $total;
             $slug =  new \MongoDB\BSON\ObjectID();
-           $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $newTotalTime, $collabaratorId,$slug);
+           $activityData= $this->saveActivity($ticketId, $projectId,'TotalTimeLog', $newTotalTime, $collabaratorId,$slug,$timezone);
             $this->saveNotifications($timelog_data, 'TotalTimeLog', $newTotalTime,'TotalTimeLog',$slug); 
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $total);
@@ -129,6 +130,7 @@ class TimeReportService {
             //$ticketDesc= explode(".",$ticketData->ticketDesc);
            // $ticketId=$ticketData->ticketId;
             $collabaratorId=$ticketData->userInfo->Id;
+            $timezone=$ticketData->timeZone;
             $description=str_replace('.','',$ticketData->description);
             $autocompleteticketId="";
             $oldWorkHours = $ticketData->oldWorkHours;
@@ -166,7 +168,7 @@ class TimeReportService {
                        $ticketNewTimeLog = $ticketTimeLog + $temphours;
                     $slug =  new \MongoDB\BSON\ObjectID();
                     error_log("ticketId-----------".$oldTicketId."---".$projectId."----".$ticketNewTimeLog);
-                    $activityData= $this->saveActivity($oldTicketId, $projectId,'TotalTimeLog', (float)$ticketNewTimeLog, $collabaratorId,$slug);
+                    $activityData= $this->saveActivity($oldTicketId, $projectId,'TotalTimeLog', (float)$ticketNewTimeLog, $collabaratorId,$slug,$timezone);
                    $ticketData->ticketId = $oldTicketId;
                     $this->saveNotifications($ticketData, 'TotalTimeLog', (float)$ticketNewTimeLog,'TotalTimeLog',$slug);            
                      if ($parenTicketInfo["ParentStoryId"] != "") {
@@ -184,7 +186,7 @@ class TimeReportService {
                        $ticketTimeLog = $parenTicketInfo["TotalTimeLog"];
                        $ticketNewTimeLog = $ticketTimeLog + $temphours;
                         
-                        $activityData= $this->saveActivity($autocompleteticketId, $projectId,'TotalTimeLog', (float)$ticketNewTimeLog, $collabaratorId,$slug);
+                        $activityData= $this->saveActivity($autocompleteticketId, $projectId,'TotalTimeLog', (float)$ticketNewTimeLog, $collabaratorId,$slug,$timezone);
                        $ticketData->ticketId = $autocompleteticketId;
                         $this->saveNotifications($ticketData, 'TotalTimeLog', (float)$ticketNewTimeLog,'TotalTimeLog',$slug);            
 
@@ -199,7 +201,7 @@ class TimeReportService {
                         $parenTicketInfo = TicketCollection::getTicketDetails($oldTicketId,$projectId,array("ParentStoryId","TotalTimeLog") );
                        $ticketTimeLog = $parenTicketInfo["TotalTimeLog"];
                          $ticketNewTimeLog = $ticketTimeLog + $temphours;
-                         $activityData= $this->saveActivity($oldTicketId, $projectId,'TotalTimeLog', (float)$ticketNewTimeLog, $collabaratorId,$slug);
+                         $activityData= $this->saveActivity($oldTicketId, $projectId,'TotalTimeLog', (float)$ticketNewTimeLog, $collabaratorId,$slug,$timezone);
                          $ticketData->ticketId = $oldTicketId;
                          $this->saveNotifications($ticketData, 'TotalTimeLog', (float)$ticketNewTimeLog,'TotalTimeLog',$slug);            
       

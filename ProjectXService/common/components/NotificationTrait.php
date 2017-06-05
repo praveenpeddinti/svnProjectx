@@ -80,7 +80,7 @@ trait NotificationTrait {
      * @param type $newValue
      * @param type $activityUserId
      */
-    public function saveActivity($ticketId, $projectId, $actionfieldName, $newValue, $activityUserId, $slug = "") {
+    public function saveActivity($ticketId, $projectId, $actionfieldName, $newValue, $activityUserId, $slug = "",$timezone) {
         $oldValue = "";
         $action = "";
         $returnValue = "noupdate";
@@ -138,7 +138,7 @@ trait NotificationTrait {
                 );
                 $v = $db->findAndModify(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array('$addToSet' => array('Activities' => $commentDataArray)), array('new' => 1, "upsert" => 1));
                 $v = $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $activityUserId, "Activity" => "PropertyChange"));
-                CommonUtility::prepareActivity($commentDataArray, $projectId);
+                CommonUtility::prepareActivity($commentDataArray, $projectId,$timezone);
                 $returnValue = array("referenceKey" => -1, "data" => $commentDataArray);
             } else {
                 $recentSlug = $record["RecentActivitySlug"];
@@ -150,7 +150,7 @@ trait NotificationTrait {
                 if ($activitiesCount > 0) {
                     $activitiesCount = $activitiesCount - 1;
                 }
-                CommonUtility::prepareActivityProperty($property, $projectId);
+                CommonUtility::prepareActivityProperty($property, $projectId,$timezone);
                 $returnValue = array("referenceKey" => $activitiesCount, "data" => $property);
             }
             if ($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow") {
@@ -677,11 +677,7 @@ trait NotificationTrait {
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                     $Date = $datetime->format('M-d-Y H:i:s');
                     $collaborator = new Collaborators();
-                    //$collaborator=$collaborator->getCollaboratorByUserName($from_user['UserName']);
-                    //error_log("===Collaborator==".print_r($collaborator,1));                       
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
-                    //$ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
-                    //  $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
                     if ($notification['Notification_Type'] == 'comment') {
                         //Eg : moin.hussain commented on #33 Ticket 
                         if ($notification['ActivityFrom'] != $user) {
@@ -709,11 +705,7 @@ trait NotificationTrait {
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                     $Date = $datetime->format('M-d-Y H:i:s');
                     $collaborator = new Collaborators();
-                    //$collaborator=$collaborator->getCollaboratorByUserName($from_user['UserName']);
-                    //error_log("===Collaborator==".print_r($collaborator,1));                       
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
-                    // $ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
-                    // $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
                     if ($notification['Notification_Type'] == 'mention') {
                         error_log("==in mention==");
 
@@ -996,13 +988,7 @@ EOD;
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                     $Date = $datetime->format('M-d-Y H:i:s');
                     $collaborator = new Collaborators();
-                    //$collaborator=$collaborator->getCollaboratorByUserName($from_user['UserName']);
-                    //error_log("===Collaborator==".print_r($collaborator,1));                       
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
-                    //$ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
-                    //  $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
-                    // $message=array('from'=>$from_user['UserName'],'object'=>$object,'type'=>$type,'Slug'=>$notification['CommentSlug'],'date'=>$Date,'id'=>$notification['_id'],'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"Preposition"=>$preposition);
-                    // array_push($result_msg,$message);
                     $link .= "?Slug=" . $notification['CommentSlug'];
                     if ($notification['Notification_Type'] == "comment") {
                         //  error_log("comment-----------------------22222");
@@ -1064,11 +1050,7 @@ EOD;
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                     $Date = $datetime->format('M-d-Y H:i:s');
                     $collaborator = new Collaborators();
-                    //$collaborator=$collaborator->getCollaboratorByUserName($from_user['UserName']);
-                    //error_log("===Collaborator==".print_r($collaborator,1));                       
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
-                    // $ticket_data=ServiceFactory::getStoryServiceInstance()->getTicketDetails($notification['TicketId'],$projectId,$selectfields);
-                    // $collaborator=Collaborators::getCollaboratorWithProfile($from_user['UserName']);
 //            $text_message = <<<EOD
 //<a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$fromUser}
 //EOD;

@@ -21,12 +21,15 @@ class StoryService {
      * @param type $projectId
      * @return type
      */
-    public function getTicketDetails($ticketId, $projectId) {
+    public function getTicketDetails($ticket_data) {
         try {
-          $details = "NOTFOUND";  
+          $details = "NOTFOUND"; 
+          $ticketId = $ticket_data->ticketId;
+          $projectId = $ticket_data->projectId ;
+          $timezone = $ticket_data->timeZone ;
          $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId); 
          if(!empty($ticketDetails)){
-          $details =  CommonUtility::prepareTicketDetails($ticketDetails, $projectId);   
+          $details =  CommonUtility::prepareTicketDetails($ticketDetails, $projectId,$timezone);   
          }
            
        
@@ -43,43 +46,19 @@ class StoryService {
      * @param type $projectId
      * @return type
      */
-       public function getTicketEditDetails($ticketId, $projectId) {
+       public function getTicketEditDetails($ticket_data) {
         try {
-         $editDetails =  CommonUtility::prepareTicketEditDetails($ticketId, $projectId);
+          $ticketId = $ticket_data->ticketId;
+          $projectId = $ticket_data->projectId ;
+          $timezone = $ticket_data->timeZone ;
+         $editDetails =  CommonUtility::prepareTicketEditDetails($ticketId, $projectId,$timezone);
          return $editDetails;
         } catch (Exception $ex) {
             Yii::log("StoryService:getTicketEditDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
       } 
-      public function getAllTicketDetails($projectId) {
-        try {
-
-            $priorityObj = new Priority();
-            $priorityDetails = $priorityObj->getPriorityDetails($ticketDetails["Priority"]);
-            $projectObj = new Projects();
-            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
-            $workFlowObj = new WorkFlowFields();
-            $workFlowDetails = WorkFlowFields::getWorkFlowDetails($ticketDetails["Status"]);
-            $ticketDetails["Priority"] = $priorityDetails;
-            $ticketDetails["Project"] = $projectDetails;
-            $ticketDetails["Status"] = $workFlowDetails;
-            $ticketDetails["AssignedTo"] = $assignedToDetails;
-            $ticketDetails["ReportedBy"] = $reportedByDetails;
-            $ticketDetails["Bucket"] = $bucketName;
-            $ticketDetails["TicketType"] = $ticketTypeDetails;
-            //error_log(print_r($priorityDetails)."-----".print_r($projectDetails)."--".print_r($workFlowDetails)."--".print_r($tinyUserDetails));
-            // error_log(print_r($ticketDetails));
-            return $ticketDetails;
-
-         $details =  CommonUtility::prepareTicketDetails($ticketId, $projectId);
-         print_r($details);
-
-        } catch (Exception $ex) {
-            Yii::log("StoryService:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
-    }
-
+     
     /**
      * @author Moin Hussain
      * @return type
@@ -314,7 +293,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      */
     public function getAllStoryDetails($StoryData, $projectId) {
         try {
-           // $ticketModel = new TicketCollection();
+            $timezone = $StoryData->timeZone;
             $ticketDetails = TicketCollection::getAllTicketDetails($StoryData, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array();
             $fieldsOrderArray = [5,6,7,3,10];
@@ -326,7 +305,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
               }
           
             foreach ($ticketDetails as $ticket) {
-                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray,"part",$fitlerOption);
+                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
                 array_push($finalData, $details);
             }
             return $finalData;
@@ -417,6 +396,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              $editticket=$ticket_data;
              $userdata =  $ticket_data->userInfo;
              $projectId =  $ticket_data->projectId;
+             $timezone =  $ticket_data->timeZone;
              $userId = $userdata->Id;
              $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
             $ticket_data = $ticket_data->data;
@@ -425,14 +405,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->ticketId, $projectId);
             $ticketDetails["Title"] = trim($ticket_data->title);
             $slug =  new \MongoDB\BSON\ObjectID();
-            $this->saveActivity($ticket_data->ticketId,$projectId,"Title", $ticketDetails["Title"],$userId,$slug);
+            $this->saveActivity($ticket_data->ticketId,$projectId,"Title", $ticketDetails["Title"],$userId,$slug,$timezone);
             $this->saveNotifications($editticket,"Title",$ticketDetails["Title"],'',$slug);
             $description = $ticket_data->description;
             $ticketDetails["CrudeDescription"] = $description;
             $refiendData = CommonUtility::refineDescription($description);
             $ticketDetails["Description"] = $refiendData["description"];
             $slug =  new \MongoDB\BSON\ObjectID();
-            $this->saveActivity($ticket_data->ticketId,$projectId,"Description", $description,$userId,$slug);
+            $this->saveActivity($ticket_data->ticketId,$projectId,"Description", $description,$userId,$slug,$timezone);
             $this->saveNotifications($editticket,"Description",$description,'',$slug);
             $newworkflowId = "";
             foreach ($ticketDetails["Fields"] as $key => &$value) {
@@ -561,7 +541,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         
                         error_log($fieldName."----------activtiyr reuls---------------");
                         $slug =  new \MongoDB\BSON\ObjectID();
-                        $activity=$this->saveActivity($ticket_data->ticketId,$projectId,$fieldName, $value["value"],$userId,$slug);
+                        $activity=$this->saveActivity($ticket_data->ticketId,$projectId,$fieldName, $value["value"],$userId,$slug,$timezone);
                         if($activity != "noupdate")
                         {
                             
@@ -608,6 +588,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $field_id = $ticket_data->id;
             $loggedInUser = $ticket_data->userInfo->Id;
             $projectId=$ticket_data->projectId;
+            $timezone =$ticket_data->timeZone;
             $artifacts = array();
             $workFlowDetail=array();
             $valueName = "";
@@ -820,7 +801,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $slug =  new \MongoDB\BSON\ObjectID();
             $this->saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldType,$slug);
     error_log("updateStoryFieldInline---13");
-                $activityData = $this->saveActivity($ticket_data->ticketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser,$slug);
+                $activityData = $this->saveActivity($ticket_data->ticketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser,$slug,$timezone);
                 $updateStaus = $collection->update($condition, $newData);
                 if($field_name=='workflow'){
                 $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value,$loggedInUser);
@@ -854,8 +835,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     public function removeComment($commentData){
      $res = TicketComments::removeComment($commentData);
      $notify_type = "delete";
-    // $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
-    // $mentionArray = $refinedData['UsersList']; 
      $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
      $this->saveNotificationsForComment($commentData,array(),$notify_type,new \MongoDB\BSON\ObjectID($commentData->Comment->Slug));
      
@@ -863,7 +842,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
   
     public function saveComment($commentData){
         try{
-            error_log("saveComment-------------1");
             $slug="";
             $refinedData = CommonUtility::refineDescription($commentData->Comment->CrudeCDescription);
             $ticketDetails=TicketCollection::getTicketDetails($commentData->ticketId,$commentData->projectId);//added By Ryan
@@ -872,15 +850,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $processedDesc = $refinedData["description"];
             $artifacts = $refinedData["ArtifactsList"];
             $commentDesc = $commentData->Comment->CrudeCDescription;
+            $timezone = $commentData->timeZone;
             if (isset($commentData->Comment->Slug)) {
-                 $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
-                 $notify_type = "edit";
-                    $slug= new \MongoDB\BSON\ObjectID($commentData->Comment->Slug);
-                 $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
-                 error_log("saveComment-------------2");
-             
+                $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
+                $notify_type = "edit";
+                $slug= new \MongoDB\BSON\ObjectID($commentData->Comment->Slug);
+                $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
                 $collection = Yii::$app->mongodb->getCollection('TicketComments');
-//}
                 $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc));
                 $collection->update(array("TicketId" => (int) $commentData->ticketId, "ProjectId" => (int) $commentData->projectId, "Activities.Slug" => new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
                 $retData = array("CrudeCDescription" => $commentDesc,
@@ -893,12 +869,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                
                 return $retData;
             } else {
- error_log("saveComment-------------3***");
- 
                 $commentedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
-
                 $slug = new \MongoDB\BSON\ObjectID();
-                error_log("saveComment-------------444**");
                 $commentDataArray = array(
                     "Slug" => $slug,
                     "CDescription" => $processedDesc,
@@ -921,36 +893,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $userProfile = $tinyUserModel->getMiniUserDetails($commentDataArray["ActivityBy"]);
                 $commentDataArray["ActivityBy"] = $userProfile;
                 $datetime = $commentDataArray["ActivityOn"]->toDateTime();
-                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
+                $datetime->setTimezone(new \DateTimeZone($timezone));
                 $readableDate = $datetime->format('M-d-Y H:i:s');
                 $commentDataArray["ActivityOn"] = $readableDate;
-                
-                /* Send Notifications to @mentioned user by Ryan and send email in the comment section*/
+                $mentionArray = $refinedData['UsersList'];
+                $notify_type = "comment";
+                $actionName = "commented";
+                $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
 
-                            try
-                            {
-                                
-                                $link=Yii::$app->params['AppURL']."/#/story-detail/".$ticketDetails['TicketId']."?Slug=".$slug;
-                                $mentionArray = $refinedData['UsersList'];
-                                   // if($commentData->Comment->Reply==false)
-                                   // {
-                                       $notify_type = "comment";
-                                       $actionName = "commented";
-                                   // }
-//                                    else
-//                                    {
-//                                       $notify_type = "reply";
-//                                        $actionName = "replied";
-//                                    }
-                               $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
-
-                            } catch (Exception $ex) {
-                                Yii::log("$this->saveNotifications:" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-                            }
-
-                            
-                            /* Send Notification End By Ryan */
- error_log("saveComment-------------4");
                 return $commentDataArray;
             }
         }catch(Exception $ex){
@@ -1051,13 +1001,16 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
  * @param type $ticketId
  * @param type $projectId
  */
-    public function getTicketActivity($ticketId, $projectId){
+    public function getTicketActivity($ticket_data){
         try{
+          $ticketId = $ticket_data->ticketId;
+          $projectId = $ticket_data->projectId ;
+          $timezone = $ticket_data->timeZone ;
            $ticketActivity = TicketComments::getTicketActivity($ticketId, $projectId);
          
            if(isset($ticketActivity["Activities"])){
            foreach ($ticketActivity["Activities"] as &$value) {
-                 CommonUtility::prepareActivity($value,$projectId);
+                 CommonUtility::prepareActivity($value,$projectId,$timezone);
            }
            }
            return $ticketActivity;
@@ -1130,6 +1083,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
     
         try{
             $returnStatus="failure";
+            $timezone = $postData->timeZone;
             $ticketCollectionModel = new TicketCollection();
            $loggedInUserId =  $postData->userInfo->Id;
            $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->ticketId, $postData->projectId);
@@ -1240,7 +1194,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                $notifyType="Create Task";
                $slug =  new \MongoDB\BSON\ObjectID();
                $this->saveNotifications($postData, $notifyType,'','',$slug,$ticketModel->TicketId);
-               $activityData= $this->saveActivity($postData->ticketId,$postData->projectId,"ChildTask", $ticketNumber,$postData->userInfo->Id,$slug);
+               $activityData= $this->saveActivity($postData->ticketId,$postData->projectId,"ChildTask", $ticketNumber,$postData->userInfo->Id,$slug,$timezone);
                $returnStatus=array('Tasks'=>$subTicketDetails,'activityData'=>$activityData);
                /* end Notifications */
             }
@@ -1308,6 +1262,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $addTimelogTime = date("Y-m-d H:i:s", strtotime($timelog_data->addTimelogTime));
             $projectId = $timelog_data->projectId;
             $ticketId = $timelog_data->ticketId;
+            $timezone = $timelog_data->timeZone;
             $userId = $timelog_data->userInfo->Id;
             $totalWorkHours = (float) $timelog_data->workHours;
             $description = $timelog_data->addTimelogDesc;
@@ -1320,7 +1275,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $oldTimeLog=$parenTicketInfo['TotalTimeLog']; //added by Ryan
             $total=($oldTimeLog + $totalWorkHours); //added by Ryan
             $slug =  new \MongoDB\BSON\ObjectID();
-            $activityData=$this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $userId,$slug); //added by Ryan
+            $activityData=$this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $userId,$slug,$timezone); //added by Ryan
             $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug); //added by Ryan
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
@@ -1404,10 +1359,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @author suryaprakash reddy 
      * @return type array
      */
-    public function unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId='') {
+    public function unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId='',$timezone) {
         try {
             $slug =  new \MongoDB\BSON\ObjectID();
-            $activityData = $this->saveActivity($parentTicketId, $projectId, 'Unrelated', $unRelateTicketId, $loginUserId,$slug);
+            $activityData = $this->saveActivity($parentTicketId, $projectId, 'Unrelated', $unRelateTicketId, $loginUserId,$slug,$timezone);
             $unRelateChild = TicketCollection::unRelateTask($projectId, $parentTicketId, $unRelateTicketId);
         return $activityData;
         } catch (Exception $ex) {
