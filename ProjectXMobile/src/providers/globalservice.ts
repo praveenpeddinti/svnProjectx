@@ -13,7 +13,7 @@ import {Storage} from '@ionic/storage';
 export class Globalservice {
     localDate = new Date().toISOString();
     private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
-    params: {userInfo?: any, projectId?: any} = {};
+    params: {userInfo?: any, projectId?: any,timeZone?:any} = {};
     constructor(public http: Http, public storage: Storage) {
         console.log('Globalservice');
     }
@@ -22,6 +22,7 @@ export class Globalservice {
             this.params.userInfo = value;
         });
         this.params.projectId = 1;
+        this.params.timeZone = "Asia/Kolkata";
         return this.params;
     }
     public getLoginValidation(url, data) {
@@ -51,12 +52,18 @@ export class Globalservice {
         );
         return response;
     }
+     public getfilterOptions(url, params){
+        var response = this.http.post(url, JSON.stringify(params), {headers: this.headers}).map(
+            res => res.json()
+        );
+        return response;
+    }
     public getFieldItemById(url, fieldDetails) {
         var fieldItemParams = this.getUserInfo();
         fieldItemParams["fieldId"] = fieldDetails.id;
         fieldItemParams["ticketId"] = fieldDetails.ticketId;
         fieldItemParams["projectId"] = 1;
-        fieldItemParams["timeZone"] = "Asia/Kolkata";
+//        fieldItemParams["timeZone"] = "Asia/Kolkata";
         fieldItemParams["workflowType"] = fieldDetails.workflowType;
         fieldItemParams["statusId"] = fieldDetails.readableValue.StateId;
        
@@ -77,7 +84,7 @@ export class Globalservice {
             fieldUpdateParams["statusId"] = fieldDetails.readableValue.StateId;
         }
         fieldUpdateParams["projectId"] = 1;
-        fieldUpdateParams["timeZone"] = "Asia/Kolkata";
+//        fieldUpdateParams["timeZone"] = "Asia/Kolkata";
         delete fieldUpdateParams["fieldId"];
       
        // delete fieldUpdateParams["projectId"];
@@ -97,7 +104,7 @@ export class Globalservice {
     public createStoryORTask(url, data) {
         var createStoryParams = this.getUserInfo();
         createStoryParams["data"] = data;
-        createStoryParams["timeZone"] = "Asia/Kolkata";
+//        createStoryParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(createStoryParams), this.headers).map(
             res => res.json()
         );
@@ -106,7 +113,7 @@ export class Globalservice {
     public getTicketActivity(url, activityParams) {
         var ticketActivityParams = this.getUserInfo();
         ticketActivityParams["ticketId"] = activityParams;
-        ticketActivityParams["timeZone"] = "Asia/Kolkata";
+//        ticketActivityParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(ticketActivityParams), this.headers).map(
             res => res.json()
         );
@@ -168,7 +175,7 @@ export class Globalservice {
         getWorklogParams["ticketId"] = worklogParams;
         getWorklogParams["getimelog"] = worklogParams.getimelog;
         getWorklogParams["projectId"] = 1;
-        getWorklogParams["timeZone"] = "Asia/Kolkata";
+       // getWorklogParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(getWorklogParams), this.headers).map(
             res => res.json()
         );
@@ -181,7 +188,7 @@ export class Globalservice {
         insertTimelogParams["addTimelogDesc"] = "";
         insertTimelogParams["addTimelogTime"] = this.localDate;
         insertTimelogParams["projectId"] = 1;
-        insertTimelogParams["timeZone"] = "Asia/Kolkata";
+//        insertTimelogParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(insertTimelogParams), this.headers).map(
             res => res.json()
         );
@@ -194,7 +201,7 @@ export class Globalservice {
         searchTicketParams["projectId"] = 1;
         searchTicketParams["sortvalue"] = ticketParams.sortvalue;
         searchTicketParams["searchString"] = ticketParams.searchString;
-         searchTicketParams["timeZone"] = "Asia/Kolkata";
+//         searchTicketParams["timeZone"] = "Asia/Kolkata";
          var response = this.http.post(url,JSON.stringify(searchTicketParams),this.headers).map(
              res => res.json()
          );
@@ -206,7 +213,6 @@ export class Globalservice {
         relateTaskParams["ticketId"] = relatedTask.TicketId;
         relateTaskParams["projectId"] = 1;
         relateTaskParams["relatedSearchTicketId"] = relatedTask.relatedSearchTicketId;
-         relateTaskParams["timeZone"] = "Asia/Kolkata";
          var response = this.http.post(url,JSON.stringify(relateTaskParams),this.headers).map(
              res => res.json()
          );
@@ -215,12 +221,11 @@ export class Globalservice {
 
    public getCollaborators(url, requestParams) {
         requestParams['userInfo'] = this.getUserInfo();
-        requestParams["timeZone"] = "Asia/Kolkata";
         var response = this.http.post(url, JSON.stringify(requestParams), this.headers).map(
             res => res.json()
         );
         return response;
     }
     //sprint 5 end :- prabhu
-
+    
 }
