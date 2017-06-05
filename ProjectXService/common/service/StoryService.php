@@ -979,7 +979,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @param type $projectId
      * @return array
      */
-     public function getAllMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId) {
+     public function getAllMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId,$timezone) {
         try {
            // $ticketModel = new TicketCollection();
             $ticketDetails = TicketCollection::getMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
@@ -987,7 +987,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $fieldsOrderArray = [5,6,7,3,9,10];
            //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             foreach ($ticketDetails as $ticket) {
-                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
+                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray);
                 unset($details['project_name']);
                 array_push($finalData, $details);
             }
