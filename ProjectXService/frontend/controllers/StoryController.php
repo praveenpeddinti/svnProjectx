@@ -24,7 +24,6 @@ use common\models\mysql\Collaborators;
 use common\components\ApiClient; //only for testing purpose
 use common\components\Email; //only for testing purpose
 use common\models\mongo\NotificationCollection;
-include_once '../../common/components/ElasticEmailClient.php';
 /**
  * Story Controller
  */
