@@ -7,22 +7,10 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
-use frontend\models\PasswordResetRequestForm;
-
-use common\models\mongo\ProjectTicketSequence;
-use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
-use frontend\models\ContactForm;
 use common\components\CommonUtility;
 use common\models\bean\ResponseBean;
 use common\components\ServiceFactory;
-use common\models\mongo\TicketCollection;
-use common\models\User;
 use common\models\mongo\TinyUserCollection;
-use common\models\mysql\Collaborators;
-use common\components\ApiClient; //only for testing purpose
-use common\components\Email; //only for testing purpose
 use common\models\mongo\NotificationCollection;
 /**
  * Story Controller
@@ -147,8 +135,7 @@ class StoryController extends Controller
     public function actionEditTicket(){
         try{
 
-            $ticket_data = json_decode(file_get_contents("php://input"));
-            error_log("++++++++++++++++++++++++dfsdfsdfsdf+++++++++++++".$ticket_data->ticketId);
+        $ticket_data = json_decode(file_get_contents("php://input"));
         $data['ticket_details'] = ServiceFactory::getStoryServiceInstance()->getTicketEditDetails($ticket_data->ticketId,$ticket_data->projectId);
         if(!empty($data['ticket_details']))
         $data['task_types'] = ServiceFactory::getStoryServiceInstance()->getTaskTypes();
@@ -418,11 +405,6 @@ class StoryController extends Controller
              $pageLength = $StoryData->pagesize;
              $offset = $StoryData->offset;
             
-//            $userId=11;
-//            $projectId=1;
-//            $sortorder =  "desc";
-//            $sortvalue = "Id";
-            
             $totalCount = ServiceFactory::getStoryServiceInstance()->getMyTicketsCount($userId,$projectId);
             $data = ServiceFactory::getStoryServiceInstance()->getAllMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId);
 
@@ -494,7 +476,6 @@ class StoryController extends Controller
 
 
    public function actionSubmitComment(){
-       error_log("submit comment==============");
        $comment_post_data=json_decode(file_get_contents("php://input"));
        error_log(print_r($comment_post_data,1));
        
@@ -562,21 +543,7 @@ class StoryController extends Controller
                $followerData["Flag"] ="follower";
                $followerData["DefaultFollower"] =0;
                $followerData['activityData']=$activityData;
-              //  array_push($followers_pics, $followerData);
-//               if($followerData["UserName"]!='') // added by Ryan for email purpose
-//               {
-//                   try
-//                   {
-//                    CommonUtility::sendMail(null, $followerData["UserName"]);
-//                   }
-//                   catch(Exception $ex)
-//                   {
-//                      Yii::log("CommonUtility::sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
-//                   }
-//               } //end by Ryan
-               
-               /* added by Ryan for notifications */
-               
+              
               ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'add',  $post_data->collaboratorId,"FollowObj");
                /* notifications end */
           
@@ -598,21 +565,7 @@ class StoryController extends Controller
             ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId);
             $activitydata =  ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Unfollowed', $post_data->collaboratorId, $post_data->userInfo->Id);
             $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);//added by Ryan
-//            if($collaboratorData['UserName']!='') //added by Ryan for email purpose
-//            {
-//               try
-//                   {
-//                    CommonUtility::sendMail(null, $followerData["UserName"]);
-//                   }
-//                   catch(Exception $ex)
-//                   {
-//                      Yii::log("CommonUtility::sendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
-//                   } 
-//            }//end by Ryan
-            
-            /* added by Ryan for notifications */
-               
-              ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'remove', $post_data->collaboratorId,"FollowObj");
+            ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'remove', $post_data->collaboratorId,"FollowObj");
                /* notifications end */
             $UnfollowData['collaboratorId']  = $post_data->collaboratorId;
             $UnfollowData['activityData']  = $activitydata;
@@ -860,41 +813,7 @@ class StoryController extends Controller
         }
     }
 
-    /**
-     * @author Ryan Marshal
-     * @description Send Mail for AssignedTo and StakeHolder dropdown select in the story-edit page
-     * @return 
-     */
-    public function actionSendMail()
-    {
-        try
-        {
-            error_log("==in send mail==");
-            $ticketData=json_decode(file_get_contents("php://input"));
-            $loggedinuser=$ticketData->userInfo->username;
-            error_log("logged in".$loggedinuser);
-            $collaboratorData=Collaborators::getCollboratorByFieldType("Id",$ticketData->collaborator);
-            $assigned_member=$collaboratorData['UserName'];
-            error_log("==assigned member==".$assigned_member);
-            $ticketDetails = TicketCollection::getTicketDetails($ticketData->ticketId,$ticketData->projectId); 
-            error_log("==Recepients==".print_r($ticketDetails,1));
-            
-             try
-                {
-                 CommonUtility::sendMail($loggedinuser, $assigned_member, $ticketDetails); 		
-                }
-                catch (Exception $e)
-                {
-                    echo 'Something went wrong with email sending: ', $e->getMessage(), '\n';
-
-                    return;
-                }		
-            
-        } catch (Exception $ex) {
-            
-            Yii::log("StoryController:actionSendMail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
-    }
+   
     /**
      * @author Anand
      * @uses Get all bucket details for current project
@@ -999,15 +918,12 @@ class StoryController extends Controller
      */
     
     public function actionUploadCommentArtifacts(){
-        error_log("actionUploadCommentArtifacts---------------------");
         $postData = array();
         $data_array = array();
         $originalname = '';
         try{
             if(is_array($_POST) && !empty($_POST)){
                 $postData = $_POST;
-                error_log("comments post data : ".print_r($postData,1));
-                error_log("comments files data : ".print_r($_FILES,1));
                 $directory = $postData['directory'];
                 $location = (__DIR__) . '/../../node/'.$directory;
                 $uploadfile = $postData['filename'];
