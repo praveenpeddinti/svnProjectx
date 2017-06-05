@@ -405,9 +405,10 @@ class StoryController extends Controller
              $sortvalue = $StoryData->sortvalue;
              $pageLength = $StoryData->pagesize;
              $offset = $StoryData->offset;
+             $timezone = $StoryData->timeZone;
             
             $totalCount = ServiceFactory::getStoryServiceInstance()->getMyTicketsCount($userId,$projectId);
-            $data = ServiceFactory::getStoryServiceInstance()->getAllMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId);
+            $data = ServiceFactory::getStoryServiceInstance()->getAllMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId,$timezone);
 
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
