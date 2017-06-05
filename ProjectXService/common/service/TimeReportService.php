@@ -4,8 +4,7 @@ use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequen
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters};
 use common\models\bean\FieldBean;
 use Yii;
-use common\components\{CommonUtility};
-use common\service\NotificationTrait;
+use common\components\{CommonUtility,NotificationTrait};
 
 /*
  * To change this license header, choose License Headers in Project Properties.

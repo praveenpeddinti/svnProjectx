@@ -1,6 +1,6 @@
 <?php
 
-namespace common\service;
+namespace common\components;
 
 use common\models\mongo\{
     TicketCollection,

@@ -1,11 +1,11 @@
 <?php
 namespace common\service;
 use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
-use common\components\{CommonUtility};
+use common\components\{CommonUtility,NotificationTrait};
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects};
 use common\models\bean\FieldBean;
 use Yii;
-use common\service\NotificationTrait;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
