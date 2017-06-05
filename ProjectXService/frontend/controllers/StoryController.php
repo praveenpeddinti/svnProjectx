@@ -966,10 +966,10 @@ class StoryController extends Controller
         try{
         $project_data = json_decode(file_get_contents("php://input"));
         $data = ServiceFactory::getStoryServiceInstance()->getProjectDetailsByName($project_data->projectName);
-        $responseBean = new ResponseBean();
+            $responseBean = new ResponseBean();
         if(is_array($data)){
-           $responseBean->statusCode = ResponseBean::SUCCESS;
-           $responseBean->message = ResponseBean::SUCCESS_MESSAGE; 
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
         }else{
              $responseBean->statusCode = ResponseBean::NOTFOUND;
              $responseBean->message = ResponseBean::NOTFOUND_MESSAGE;

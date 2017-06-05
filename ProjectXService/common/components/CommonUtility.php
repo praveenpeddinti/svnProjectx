@@ -1011,7 +1011,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                 if ($property["NewValue"] != "") {
                     $property["NewValue"] = TinyUserCollection::getMiniUserDetails($property["NewValue"]);
                 } else {
-                    $property["NewValue"] = "-none-";
+                    $property["NewValue"] = "-zero-";
                 }
                 $property["type"] = "user";
             }
@@ -1067,8 +1067,21 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
             $datetime->setTimezone(new \DateTimeZone($timezone));
             $readableDate = $datetime->format('M-d-Y H:i:s');
             $property["ActivityOn"] = $readableDate;
+            error_log("$$$$$$$$$$$$$".gettype($property["NewValue"]));   
+            if(gettype($property["PreviousValue"]) == 'double'){
+                $property["PreviousValue"]= number_format((float)$property["PreviousValue"], 1, '.', '');
+                 error_log("^^^^^^^^^^^6".$property["PreviousValue"]);   
+            }else{
+                $property["PreviousValue"]=$property["PreviousValue"];
+            }
+            if(gettype($property["NewValue"]) == 'double'){
+                $property["NewValue"]= number_format((float)$property["NewValue"], 1, '.', '');
+           }else{
+                $property["NewValue"]=$property["NewValue"];
+            }
+          
             if ($property["NewValue"] == "") {
-                $property["NewValue"] = "-none-";
+                $property["NewValue"] = "-zero-";
             }
             return $property;
         } catch (Exception $ex) {
@@ -1152,10 +1165,10 @@ $text_message=$html . $text_message .
     * @param type $projectId
     * @return array
     */
-    public static function getAllDetailsForSearch($searchString,$page,$searchFlag="",$projectId=""){
+    public static function getAllDetailsForSearch($searchString,$page,$searchFlag="",$projectId="",$pageLength){
         try{
                 $page = $page ;
-                $pageLength = 10;
+              //  $pageLength = 10;
                 if ($page == 1) {
                     $offset = $page - 1;
                     $limit = $pageLength;   
@@ -1164,7 +1177,7 @@ $text_message=$html . $text_message .
                     $limit = $pageLength;
                 }
             $searchString=strtolower($searchString);    
-            if (preg_match('/[^@!%^&*()<>.,#\\-$]/', $searchString) && !empty($searchString)) {
+            if (preg_match('/[^@!%^&*()<>\\-$]/', $searchString) && !empty($searchString)) {
                 $TicketCollFinalArray = array();
                 $TicketArtifactsFinalArray = array();
                 $TicketCommentsFinalArray = array();
@@ -1177,7 +1190,7 @@ $text_message=$html . $text_message .
                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
                     if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
                         if(strpos($searchString, '#') !== false){
-                            $searchString=str_replace("#","",$searchString); 
+                        //    $searchString=str_replace("#","",$searchString); 
                             if(!empty($projectId)){
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                         }else{
@@ -1246,7 +1259,7 @@ $text_message=$html . $text_message .
                     $ticketCommentsData = $query->aggregate($pipeline);
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
-
+                    
                        foreach($ticketCommentsData as $extractComments){
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
                            $getTicketDetails = TicketCollection::getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
@@ -1411,7 +1424,7 @@ $text_message=$html . $text_message .
                         $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],$extractArtifacts['ProjectId']);
                         $getArtifactsEach=array();
                         foreach($artifacts['Artifacts'] as $getArtifact){
-                             array_push($getArtifactsEach,$getArtifact['OriginalFileName']);
+                            array_push($getArtifactsEach,$getArtifact['OriginalFileName']);
                         }
                         $forTicketArtifacts['description'] =$getArtifactsEach;
                         $forTicketArtifacts['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
@@ -1431,7 +1444,7 @@ $text_message=$html . $text_message .
                      $collection = Yii::$app->mongodb->getCollection('TicketCollection');
                     if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
                         if(strpos($searchString, '#') !== false){
-                            $searchString=str_replace("#","",$searchString); 
+                           // $searchString=str_replace("#","",$searchString); 
                             if(!empty($projectId)){
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                         }else{
@@ -1489,31 +1502,31 @@ $text_message=$html . $text_message .
                     );
                     if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
                         if(strpos($searchString, '#') !== false){
-                            $searchString=str_replace("#","",$searchString); 
+                          //  $searchString=str_replace("#","",$searchString); 
                             if(!empty($projectId)){
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                         }else{
                                $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'#'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options); 
                         }
 
-                    }else{
-                                if(!empty($projectId)){  
-                                    $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                        
-                                }else{
-                                     $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
-                         
-                    }
-                            }
+                        }else{
+                                    if(!empty($projectId)){  
+                                        $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+
+                                    }else{
+                                         $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+
+                        }
+                                }
 
                     }else{
-                        if(!empty($projectId)){ 
+                         if(!empty($projectId)){ 
                          $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("CrudeDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                     
                         }else{
                             $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i')),array("CrudeDescription"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i')),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
                         }
-                        }
+                    }
                    // $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("CrudeDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)1))),array(),$options);
                     $ticketCollectionData = iterator_to_array($cursor);
                     $TicketCollFinalArray = array();
