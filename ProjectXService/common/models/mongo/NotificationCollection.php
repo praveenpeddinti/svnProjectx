@@ -66,11 +66,14 @@ class NotificationCollection extends ActiveRecord
             $notifications = $query->all();
             return $notifications;  
         } catch (Exception $ex) {
+            Yii::log("NotificationCollection:getNotificationDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
         }
     }
      public static function getNotificationsCount($user,$projectId)
-    { error_log("getNotificationsCount----UserId---".$user."*******projectId******".$projectId);
+    { 
+         try{
+         error_log("getNotificationsCount----UserId---".$user."*******projectId******".$projectId);
           $query=new Query();
             $query->from('NotificationCollection')
             ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0])
@@ -78,10 +81,15 @@ class NotificationCollection extends ActiveRecord
             $notificationsCount=$query->count();
             error_log("getNotificationsCount----".$notificationsCount);
             return $notificationsCount;
+         } catch (Exception $ex) {
+            Yii::log("NotificationCollection:getNotificationsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
      }
     
       public static function getNotifications($user,$projectId,$offset=0,$limit=5,$viewAll=0)
     { 
+           try{
           $cond=["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0] ; 
           if($viewAll==1){
             $cond=["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId] ; 
@@ -95,6 +103,10 @@ class NotificationCollection extends ActiveRecord
             ->limit($limit);
             $notifications=$query->all();
             return $notifications;
+          } catch (Exception $ex) {
+            Yii::log("NotificationCollection:getNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
      }
     
  
@@ -106,9 +118,7 @@ class NotificationCollection extends ActiveRecord
      */
     public static function deleteNotification($notify)
     {
-        error_log("==in delete notification==");
         $user=$notify->userInfo->Id;
-        error_log("==user==".$user);
         $notifyid=$notify->notifyid;
         try
         {
@@ -140,7 +150,7 @@ class NotificationCollection extends ActiveRecord
             return;
         }catch(Exception $ex)
         {
-            Yii::log("NotificationCollection:deleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            Yii::log("NotificationCollection:deleteAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     /**
