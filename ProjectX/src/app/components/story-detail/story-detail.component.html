@@ -340,11 +340,23 @@
             <div class="addtask_status">{{relatedTask.Fields.workflow.value_name}}</div>
         </div>
     </div>
-    <div class="col-md-1" (click)="unRelateTask(relatedTask.TicketId)" >
-        <div class="mart10"><i class="fa fa-times removetask" aria-hidden="true"></i></div>
+    <div class="col-md-1"  >
+        <div class="mart10" (click)="showdeleteDiv(1,relatedTask.TicketId)"><i class="fa fa-times removetask" aria-hidden="true"></i></div>
+           <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment" id="delete_relateTask_{{relatedTask.TicketId}}" style="width:auto">
+            <div class="delete_followersbgtable delete_followersbgtablesinglepop" >  
+                Do you want to unrelate? 
+                <div class="text-center" style=" padding-top:10px">
+                    <div class="yes" id="remove_yes" (click)="unRelateTask(relatedTask.TicketId)" >YES</div>
+                    <div class="no" (click)="showdeleteDiv(2,relatedTask.TicketId)">NO</div>
+        </div>
+            </div>
+        </div>
+       
 </div>
     
     <div class="clearfix"></div>
+
+
 </div> 
 
 
@@ -370,7 +382,7 @@
      <a  *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/project',projectName,property.PoppedChildId,'details']" (click)="navigateStoryDetail(property.PoppedChildId)" >#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a>
  <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
  
- <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-none-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
+ <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-zero-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-zero-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
                 </span>
     <span *ngIf="property.type!='user'"> 
         <span *ngIf="property.PreviousValue!=0" class="bold" [innerHTML]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerHTML]= "property.NewValue"></span> 

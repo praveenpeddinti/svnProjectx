@@ -1343,6 +1343,15 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
           jQuery("#timelog").fadeOut(4000);
           jQuery("#workedhours").val("");
         }
+        showdeleteDiv(id,ticId){
+          if(id==1){
+              jQuery("#delete_relateTask_"+ticId).css("display", "block");
+          }else{
+            //alert("delet3eeeeee");;
+            jQuery("#delete_relateTask_"+ticId).css("display", "none");
+          }
+      }
+
         /**
         * @author:suryaprakash
         * @description : unrelate task from Story.
@@ -1362,7 +1371,8 @@ jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.upda
             }
              else if(data.data.activityData != "noupdate"){
         this.commentsList[data.data.activityData.referenceKey]["PropertyChanges"].push(data.data.activityData.data);
-     }  
+          }  
+          jQuery('#delete_relateTask').hide();
               }
         });
         }
