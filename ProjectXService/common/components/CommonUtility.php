@@ -305,28 +305,18 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      */
     public static function prepareTicketDetails($ticketDetails, $projectId, $flag = "part") {
         try {
-            $ticketCollectionModel = new TicketCollection();
-            // $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId,$projectId);
-            $storyFieldsModel = new StoryFields();
-            $storyCustomFieldsModel = new StoryCustomFields();
-            $tinyUserModel = new TinyUserCollection();
-            $bucketModel = new Bucket();
-            $priorityModel = new Priority();
-            $mapListModel = new MapListCustomStoryFields();
-            $planlevelModel = new PlanLevel();
-            $workFlowModel = new WorkFlowFields();
-            $ticketTypeModel = new TicketType();
+            // $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);
 
             foreach ($ticketDetails["Fields"] as &$value) {
                 if (isset($value["custom_field_id"])) {
-                    $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
+                    $storyFieldDetails = StoryCustomFields::getFieldDetails($value["Id"]);
                     if ($storyFieldDetails["Name"] == "List") {
 
-                        $listDetails = $mapListModel->getListValue($value["Id"], $value["value"]);
+                        $listDetails = MapListCustomStoryFields::getListValue($value["Id"], $value["value"]);
                         $value["readable_value"] = $listDetails;
                     }
                 } else {
-                    $storyFieldDetails = $storyFieldsModel->getFieldDetails($value["Id"]);
+                    $storyFieldDetails = StoryFields::getFieldDetails($value["Id"]);
                 }
                 $value["position"] = $storyFieldDetails["Position"];
                 $value["title"] = $storyFieldDetails["Title"];
@@ -352,7 +342,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 if ($storyFieldDetails["Type"] == 6) {
                     $value["readable_value"] = "";
                     if ($value["value"] != "") {
-                        $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
+                        $assignedToDetails = TinyUserCollection::getMiniUserDetails($value["value"]);
                         $assignedToDetails["ProfilePicture"] = Yii::$app->params['ServerURL'] . $assignedToDetails["ProfilePicture"];
                         $value["readable_value"] = $assignedToDetails;
                     }
@@ -360,7 +350,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 if ($storyFieldDetails["Type"] == 10) {
                     $value["readable_value"] = "";
                     if ($value["value"] != "") {
-                        $bucketName = $bucketModel->getBucketName($value["value"], $ticketDetails["ProjectId"]);
+                        $bucketName = Bucket::getBucketName($value["value"], $ticketDetails["ProjectId"]);
                         if($ticketDetails["IsChild"]==1){
                           $value["readonly"] = 1;  
                         }
@@ -370,7 +360,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 if ($storyFieldDetails["Field_Name"] == "priority") {
                     $value["readable_value"] = "";
                     if ($value["value"] != "") {
-                        $priorityDetails = $priorityModel->getPriorityDetails($value["value"]);
+                        $priorityDetails = Priority::getPriorityDetails($value["value"]);
                         $value["readable_value"] = $priorityDetails;
                         $ticketDetails["StoryPriority"] = $priorityDetails;
                     }
@@ -378,7 +368,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 if ($storyFieldDetails["Field_Name"] == "planlevel") {
                     $value["readable_value"] = "";
                     if ($value["value"] != "") {
-                        $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
+                        $planlevelDetails = PlanLevel::getPlanLevelDetails($value["value"]);
                         $value["readable_value"] = $planlevelDetails;
                         $ticketDetails["StoryType"] = $planlevelDetails;
                     }
@@ -387,7 +377,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 
                     $value["readable_value"] = "";
                     if ($value["value"] != "") {
-                        $workFlowDetails = $workFlowModel->getWorkFlowDetails($value["value"]);
+                        $workFlowDetails = WorkFlowFields::getWorkFlowDetails($value["value"]);
                         $value["readable_value"] = $workFlowDetails;
                     }
                 }
@@ -399,7 +389,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 if ($storyFieldDetails["Field_Name"] == "tickettype") {
                     $value["readable_value"] = "";
                     if ($value["value"] != "") {
-                        $ticketTypeDetails = $ticketTypeModel->getTicketType($value["value"]);
+                        $ticketTypeDetails = TicketType::getTicketType($value["value"]);
                         $value["readable_value"] = $ticketTypeDetails;
                     }
                 }
@@ -410,8 +400,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             });
             //  return $ticketDetails["Fields"];
             // $ticketDetails["Fields"]="";
-            $projectObj = new Projects();
-            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
+            $projectDetails = Projects::getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
 
             $selectFields = [];
@@ -420,11 +409,11 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }
             $selectFields = ['Title', 'TicketId', 'Fields.priority', 'Fields.assignedto', 'Fields.workflow'];
             foreach ($ticketDetails["Tasks"] as &$task) {
-                $taskDetails = $ticketCollectionModel->getTicketDetails($task['TaskId'], $projectId, $selectFields);
+                $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId, $selectFields);
                 $task = (array) $taskDetails;
             }
             foreach ($ticketDetails["RelatedStories"] as &$relatedStory) {
-                $relatedStoryDetails = $ticketCollectionModel->getTicketDetails($relatedStory, $projectId, $selectFields);
+                $relatedStoryDetails = TicketCollection::getTicketDetails($relatedStory, $projectId, $selectFields);
                 $relatedStory = $relatedStoryDetails;
             }
             if (!empty($ticketDetails["Followers"])) {
@@ -433,7 +422,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 foreach ($ticketDetails["Followers"] as &$followersList) {
                     //error_log($followersList['FollowerId']."----Follower--1--".print_r($followersList,1));
 
-                    $projectFDetails = $tinyUserModel->getMiniUserDetails($followersList['FollowerId']);
+                    $projectFDetails = TinyUserCollection::getMiniUserDetails($followersList['FollowerId']);
                     $followersList["ProfilePicture"] = $projectFDetails["ProfilePicture"];
                     $followersList["UserName"] = $projectFDetails["UserName"];
                     //$followersList["readable_value"] = $projectFDetails;
@@ -462,29 +451,19 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      */
     public static function prepareTicketEditDetails($ticketId, $projectId) {
         try {
-            $ticketCollectionModel = new TicketCollection();
-            $ticketDetails = $ticketCollectionModel->getTicketDetails($ticketId, $projectId);
-            $storyFieldsModel = new StoryFields();
-            $storyCustomFieldsModel = new StoryCustomFields();
-            $tinyUserModel = new TinyUserCollection();
-            $bucketModel = new Bucket();
-            $priorityModel = new Priority();
-            $mapListModel = new MapListCustomStoryFields();
-            $planlevelModel = new PlanLevel();
-            $workFlowModel = new WorkFlowFields();
-            $ticketTypeModel = new TicketType();
+            $ticketDetails = TicketCollection::getTicketDetails($ticketId, $projectId);
             $workFlowDetails = array();
             if(!empty($ticketDetails)){
                foreach ($ticketDetails["Fields"] as &$value) {
                 if (isset($value["custom_field_id"])) {
-                    $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
+                    $storyFieldDetails = StoryCustomFields::getFieldDetails($value["Id"]);
                     if ($storyFieldDetails["Name"] == "List") {
 
-                        $listDetails = $mapListModel->getListValue($value["Id"], $value["value"]);
+                        $listDetails = MapListCustomStoryFields::getListValue($value["Id"], $value["value"]);
                         $value["readable_value"] = $listDetails;
                     }
                 } else {
-                    $storyFieldDetails = $storyFieldsModel->getFieldDetails($value["Id"]);
+                    $storyFieldDetails = StoryFields::getFieldDetails($value["Id"]);
                 }
                 $value["position"] = $storyFieldDetails["Position"];
                 $value["title"] = $storyFieldDetails["Title"];
@@ -515,48 +494,48 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 
 
                 if ($storyFieldDetails["Type"] == 6) {
-                    $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
+                    $assignedToDetails = TinyUserCollection::getMiniUserDetails($value["value"]);
                     $value["readable_value"] = $assignedToDetails;
                 }
                 if ($storyFieldDetails["Type"] == 10) {
 
-                    $bucketName = $bucketModel->getBucketName($value["value"], $ticketDetails["ProjectId"]);
+                    $bucketName = Bucket::getBucketName($value["value"], $ticketDetails["ProjectId"]);
                     $value["readable_value"] = $bucketName;
-                    $value["meta_data"] = $bucketModel->getBucketsList($projectId);
+                    $value["meta_data"] = Bucket::getBucketsList($projectId);
                     if($ticketDetails['IsChild']==1){
                         $value["readonly"] = 1; 
                     }
                 }
                 if ($storyFieldDetails["Field_Name"] == "priority") {
 
-                    $priorityDetails = $priorityModel->getPriorityDetails($value["value"]);
+                    $priorityDetails = Priority::getPriorityDetails($value["value"]);
                     $value["readable_value"] = $priorityDetails;
-                    $value["meta_data"] = $priorityModel->getPriorityList();
+                    $value["meta_data"] = Priority::getPriorityList();
                 }
                 if ($storyFieldDetails["Field_Name"] == "planlevel") {
 
-                    $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
+                    $planlevelDetails = PlanLevel::getPlanLevelDetails($value["value"]);
                     $value["readable_value"] = $planlevelDetails;
                     $ticketDetails["StoryType"] = $planlevelDetails;
-                    $value["meta_data"] = $planlevelModel->getPlanLevelList();
+                    $value["meta_data"] = PlanLevel::getPlanLevelList();
                 }
                 if ($storyFieldDetails["Field_Name"] == "workflow") {
 
 
-                    $workFlowDetails = $workFlowModel->getWorkFlowDetails($value["value"]);
+                    $workFlowDetails = WorkFlowFields::getWorkFlowDetails($value["value"]);
                     $value["readable_value"] = $workFlowDetails;
-                    $value["meta_data"] = $workFlowModel->getStoryWorkFlowList($ticketDetails['WorkflowType'],$value["value"]);
+                    $value["meta_data"] = WorkFlowFields::getStoryWorkFlowList($ticketDetails['WorkflowType'],$value["value"]);
                 }
                 if ($storyFieldDetails["Field_Name"] == "state") {
                    $value["value"] =$workFlowDetails['State'];
                    $value["readable_value"] = $workFlowDetails['State'];
-//                    $value["meta_data"] = $workFlowModel->getStoryWorkFlowList($ticketDetails['WorkflowType'],$value["value"]);
+//                    $value["meta_data"] = WorkFlowFields::getStoryWorkFlowList($ticketDetails['WorkflowType'],$value["value"]);
                 }
                 if ($storyFieldDetails["Field_Name"] == "tickettype") {
 
-                    $ticketTypeDetails = $ticketTypeModel->getTicketType($value["value"]);
+                    $ticketTypeDetails = TicketType::getTicketType($value["value"]);
                     $value["readable_value"] = $ticketTypeDetails;
-                    $value["meta_data"] = $ticketTypeModel->getTicketTypeList();
+                    $value["meta_data"] = TicketType::getTicketTypeList();
                 }
             }
             $ticketDetails['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($projectId);
@@ -566,8 +545,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             });
             //  return $ticketDetails["Fields"];
             // $ticketDetails["Fields"]="";
-            $projectObj = new Projects();
-            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
+            $projectDetails = Projects::getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
 
 
@@ -756,26 +734,13 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
      */
     public static function prepareDashboardDetails($ticketDetails, $projectId, $fieldsOrderArray, $flag = "part",$filter=null) {
         try {
-            $ticketCollectionModel = new TicketCollection();
-            $storyFieldsModel = new StoryFields();
-            $storyCustomFieldsModel = new StoryCustomFields();
-            $tinyUserModel = new TinyUserCollection();
-            $bucketModel = new Bucket();
-            $priorityModel = new Priority();
-            $mapListModel = new MapListCustomStoryFields();
-            $planlevelModel = new PlanLevel();
-            $workFlowModel = new WorkFlowFields();
-            $ticketTypeModel = new TicketType();
             $newArray = array();
-
             $arr2ordered = array();
-
             $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDetails["TicketId"], "other_data" => "");
             $ticketTitle = array("field_name" => "Title", "value_id" => "", "field_value" => $ticketDetails["Title"], "other_data" => "");
-
             array_push($arr2ordered, $ticketId);
             array_push($arr2ordered, $ticketTitle);
-               $arr2ordered[1]["other_data"] = sizeof($ticketDetails["Tasks"]); 
+            $arr2ordered[1]["other_data"] = sizeof($ticketDetails["Tasks"]); 
             $Othervalue = array();
             foreach ($ticketDetails["Fields"] as $key => $value) {
 
@@ -803,14 +768,14 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                 if (in_array($value["Id"], $fieldsOrderArray)) {
 
                     if (isset($value["custom_field_id"])) {
-                        $storyFieldDetails = $storyCustomFieldsModel->getFieldDetails($value["Id"]);
+                        $storyFieldDetails = StoryCustomFields::getFieldDetails($value["Id"]);
                         if ($storyFieldDetails["Name"] == "List") {
 
-                            $listDetails = $mapListModel->getListValue($value["Id"], $value["value"]);
+                            $listDetails = MapListCustomStoryFields::getListValue($value["Id"], $value["value"]);
                             $value["readable_value"] = $listDetails;
                         }
                     } else {
-                        $storyFieldDetails = $storyFieldsModel->getFieldDetails($value["Id"]);
+                        $storyFieldDetails = StoryFields::getFieldDetails($value["Id"]);
                     }
                     $value["title"] = $storyFieldDetails["Title"];
 
@@ -833,7 +798,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                     if ($storyFieldDetails["Type"] == 6) {
                         $value["readable_value"] = "";
                         if ($value["value"] != "") {
-                            $assignedToDetails = $tinyUserModel->getMiniUserDetails($value["value"]);
+                            $assignedToDetails = TinyUserCollection::getMiniUserDetails($value["value"]);
                             $assignedToDetails["ProfilePicture"] = $assignedToDetails["ProfilePicture"];
                             $value["readable_value"] = $assignedToDetails;
                         }
@@ -841,21 +806,21 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                     if ($storyFieldDetails["Type"] == 10) {
                         $value["readable_value"] = "";
                         if ($value["value"] != "") {
-                            $bucketName = $bucketModel->getBucketName($value["value"], $ticketDetails["ProjectId"]);
+                            $bucketName = Bucket::getBucketName($value["value"], $ticketDetails["ProjectId"]);
                             $value["readable_value"] = $bucketName;
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "priority") {
                         $value["readable_value"] = "";
                         if ($value["value"] != "") {
-                            $priorityDetails = $priorityModel->getPriorityDetails($value["value"]);
+                            $priorityDetails = Priority::getPriorityDetails($value["value"]);
                             $value["readable_value"] = $priorityDetails;
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "planlevel") {
                         $value["readable_value"] = "";
                         if ($value["value"] != "") {
-                            $planlevelDetails = $planlevelModel->getPlanLevelDetails($value["value"]);
+                            $planlevelDetails = PlanLevel::getPlanLevelDetails($value["value"]);
                             $value["readable_value"] = $planlevelDetails;
                             $ticketDetails["StoryType"] = $planlevelDetails;
                         }
@@ -864,14 +829,14 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
 
                         $value["readable_value"] = "";
                         if ($value["value"] != "") {
-                            $workFlowDetails = $workFlowModel->getWorkFlowDetails($value["value"]);
+                            $workFlowDetails = WorkFlowFields::getWorkFlowDetails($value["value"]);
                             $value["readable_value"] = $workFlowDetails;
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "tickettype") {
                         $value["readable_value"] = "";
                         if ($value["value"] != "") {
-                            $ticketTypeDetails = $ticketTypeModel->getTicketType($value["value"]);
+                            $ticketTypeDetails = TicketType::getTicketType($value["value"]);
                             $value["readable_value"] = $ticketTypeDetails;
                         }
                     }
@@ -925,8 +890,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                array_push($arr2ordered, $arrow);
             unset($ticketDetails["Fields"]);
             $ticketDetails = $arr2ordered;
-            $projectObj = new Projects();
-            $projectDetails = $projectObj->getProjectMiniDetails($projectId);
+            $projectDetails = Projects::getProjectMiniDetails($projectId);
             $ticketDetails['project_name']=$projectDetails['ProjectName'];
             return $ticketDetails;
         } catch (Exception $ex) {
@@ -941,8 +905,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
      */
     public static function prepareActivity(&$value, $projectId) {
         try {
-            $tinyUserModel = new TinyUserCollection();
-            $userProfile = $tinyUserModel->getMiniUserDetails($value["ActivityBy"]);
+            $userProfile = TinyUserCollection::getMiniUserDetails($value["ActivityBy"]);
             $value["ActivityBy"] = $userProfile;
             $datetime = $value["ActivityOn"]->toDateTime();
             $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -968,7 +931,6 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
      */
     public static function prepareActivityProperty(&$property,$projectId,$poppedFromChild="") {
         try {
-            $tinyUserModel = new TinyUserCollection();
             $fieldName = $property["ActionFieldName"];
             $property["SpecialActivity"]=0;
             $storyFieldDetails = StoryFields::getFieldDetails($fieldName, "Field_Name");
@@ -1008,7 +970,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                switch($actionFieldName){
               case 'Followed':
               case 'Unfollowed':
-                             $user=$tinyUserModel->getMiniUserDetails($property["NewValue"]);
+                             $user=TinyUserCollection::getMiniUserDetails($property["NewValue"]);
                              $action=array("Id"=>$user['_id'],"Name"=>$user['UserName']);
                              $newVal="followers"; 
                              $property["type"]='follower';
@@ -1044,10 +1006,10 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
 
             else if ($type == 6) {
                 if ($property["PreviousValue"] != "") {
-                    $property["PreviousValue"] = $tinyUserModel->getMiniUserDetails($property["PreviousValue"]);
+                    $property["PreviousValue"] = TinyUserCollection::getMiniUserDetails($property["PreviousValue"]);
                 }
                 if ($property["NewValue"] != "") {
-                    $property["NewValue"] = $tinyUserModel->getMiniUserDetails($property["NewValue"]);
+                    $property["NewValue"] = TinyUserCollection::getMiniUserDetails($property["NewValue"]);
                 } else {
                     $property["NewValue"] = "-none-";
                 }
@@ -1182,11 +1144,14 @@ $text_message=$html . $text_message .
 
         }
     }
-     /**
-     * @author Padmaja
-     * @param type $searchString
-     * @return type
-     */
+   /**
+    * @author Padmaja
+    * @param type $searchString
+    * @param type $page
+    * @param type $searchFlag
+    * @param type $projectId
+    * @return array
+    */
     public static function getAllDetailsForSearch($searchString,$page,$searchFlag="",$projectId=""){
         try{
                 $page = $page ;
@@ -1198,7 +1163,6 @@ $text_message=$html . $text_message .
                     $offset = ($page - 1) * $pageLength;
                     $limit = $pageLength;
                 }
-            $projectObj = new Projects();    
             $searchString=strtolower($searchString);    
             if (preg_match('/[^@!%^&*()<>.,#\\-$]/', $searchString) && !empty($searchString)) {
                 $TicketCollFinalArray = array();
@@ -1258,7 +1222,7 @@ $text_message=$html . $text_message .
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                      
-                        $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        $projectDetails = Projects::getProjectMiniDetails($extractCollection["ProjectId"]);
                         $forTicketCollection['Project'] = $projectDetails;
                   
                         array_push($TicketCollFinalArray, $forTicketCollection);
@@ -1284,9 +1248,8 @@ $text_message=$html . $text_message .
                     $commentsArray= array();
 
                        foreach($ticketCommentsData as $extractComments){
-                          $ticketCollectionModel = new TicketCollection();
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
-                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
+                           $getTicketDetails = TicketCollection::getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
                          //  $forTicketComments['comments'] =  $extractComments['commentData'];
@@ -1309,7 +1272,7 @@ $text_message=$html . $text_message .
                                 $readableDate = $datetime->format('M-d-Y H:i:s');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
-                            $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                            $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
                              $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
@@ -1321,9 +1284,8 @@ $text_message=$html . $text_message .
                     $ticketArtifactsData = iterator_to_array($cursor);
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
-                        $ticketCollectionModel = new TicketCollection();
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
-                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
+                        $getTicketDetails = TicketCollection::getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
                         $ticketArtifactsModel = new TicketArtifacts();
@@ -1341,7 +1303,7 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
-                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
                         $forTicketArtifacts['Project'] = $projectDetails; 
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
@@ -1384,9 +1346,8 @@ $text_message=$html . $text_message .
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
                         foreach($ticketCommentsData as $extractComments){
-                          $ticketCollectionModel = new TicketCollection();
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
-                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
+                           $getTicketDetails = TicketCollection::getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
                          //  $forTicketComments['comments'] =  $extractComments['commentData'];
@@ -1409,7 +1370,7 @@ $text_message=$html . $text_message .
                                 $readableDate = $datetime->format('M-d-Y H:i:s');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
-                            $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                            $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
                              $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
@@ -1442,9 +1403,8 @@ $text_message=$html . $text_message .
                     $ticketArtifactsData = iterator_to_array($cursor);
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
-                        $ticketCollectionModel = new TicketCollection();
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
-                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
+                        $getTicketDetails = TicketCollection::getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
                         $ticketArtifactsModel = new TicketArtifacts();
@@ -1462,7 +1422,7 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
-                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
                         $forTicketArtifacts['Project'] = $projectDetails; 
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
@@ -1516,7 +1476,7 @@ $text_message=$html . $text_message .
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                      
-                        $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        $projectDetails = Projects::getProjectMiniDetails($extractCollection["ProjectId"]);
                         $forTicketCollection['Project'] = $projectDetails;
                   
                         array_push($TicketCollFinalArray, $forTicketCollection);
@@ -1572,7 +1532,7 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
-                        $projectDetails = $projectObj->getProjectMiniDetails($extractCollection["ProjectId"]);
+                        $projectDetails = Projects::getProjectMiniDetails($extractCollection["ProjectId"]);
                         $forTicketCollection['Project'] = $projectDetails; 
                        
                         array_push($TicketCollFinalArray, $forTicketCollection);
@@ -1597,9 +1557,8 @@ $text_message=$html . $text_message .
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
                         foreach($ticketCommentsData as $extractComments){
-                          $ticketCollectionModel = new TicketCollection();
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
-                           $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
+                           $getTicketDetails = TicketCollection::getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
                          //  $forTicketComments['comments'] =  $extractComments['commentData'];
@@ -1622,7 +1581,7 @@ $text_message=$html . $text_message .
                                 $readableDate = $datetime->format('M-d-Y H:i:s');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
-                            $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                            $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
                              $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
@@ -1634,9 +1593,8 @@ $text_message=$html . $text_message .
                     $ticketArtifactsData = iterator_to_array($cursor);
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
-                        $ticketCollectionModel = new TicketCollection();
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
-                        $getTicketDetails = $ticketCollectionModel->getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
+                        $getTicketDetails = TicketCollection::getTicketDetails($extractArtifacts['TicketId'],$extractArtifacts['ProjectId'],$selectFields);
                         $forTicketArtifacts['TicketId'] =$extractArtifacts['TicketId'];
                         $forTicketArtifacts['Title'] =$getTicketDetails['Title'];
                         $ticketArtifactsModel = new TicketArtifacts();
@@ -1654,7 +1612,7 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('M-d-Y H:i:s');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
-                        $projectDetails = $projectObj->getProjectMiniDetails($getTicketDetails["ProjectId"]);
+                        $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
                         $forTicketArtifacts['Project'] = $projectDetails; 
                         array_push($TicketArtifactsFinalArray, $forTicketArtifacts);
 
