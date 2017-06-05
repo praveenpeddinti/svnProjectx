@@ -190,7 +190,7 @@ class TicketTimeLog extends ActiveRecord
                     $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
                     $datetime = $eachOne['LoggedOn']->toDateTime();  
                     $datetime->setTimezone(new \DateTimeZone($timezone));
-                    $LogDate = $datetime->format('M-d-Y H:i:s');
+                    $LogDate = $datetime->format('M-d-Y');
                     $readableDate =$datetime->format('Y-m-d H:i:s');
                     $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => $ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
                     $time = array("field_name" => "Date", "value_id" => "", "field_value" => $eachOne['Time'], "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
