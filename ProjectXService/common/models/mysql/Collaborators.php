@@ -11,9 +11,6 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-//use common\components\ApiClient; //only for testing purpose
-//use common\components\Email; //only for testing purpose
-//include_once '../../common/components/ElasticEmailClient.php';
 
 class Collaborators extends ActiveRecord 
 {
