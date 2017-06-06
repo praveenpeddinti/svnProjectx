@@ -42,7 +42,7 @@ export class TimeReportComponent{
     row1 = [];
     count: number = 0;
     offset: number = 0;
-    limit: number = 5;
+    limit: number = 10;
     sortvalue: string = "Id";
     sortorder: string = "desc";
     loading: boolean = false;
