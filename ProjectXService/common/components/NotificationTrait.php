@@ -884,16 +884,16 @@ EOD;
                     array_push($recipient_list, $notification['NotifiedUser']);
                 }
 
-//                else if ($notification['ActivityOn']  == "tickettype" || $notification['ActivityOn']  == "dod" || $notification['ActivityOn']  == "bucket" || $notification['ActivityOn']  == "stakeholder" || $notification['ActivityOn'] == "workflow" || $notification['ActivityOn']  == "priority" ) {
-//                    $message = array('IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
-//                    $ticketState = $notification['OldValue'] . " => " . $notification['NewValue'];
-//             $text_message = <<<EOD
-//             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser} :</td></tr>
-//             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$storyField['Title']}:{$ticketState} </td></tr>
-//EOD;
-//             
-//                    array_push($recipient_list, $notification['NotifiedUser']);
-//                }
+                else if ($notification['ActivityOn']  == "tickettype" || $notification['ActivityOn']  == "dod" || $notification['ActivityOn']  == "bucket" || $notification['ActivityOn']  == "stakeholder" || $notification['ActivityOn'] == "workflow" || $notification['ActivityOn']  == "priority"  || $notification['ActivityOn']  == "estimatedpoints") {
+                    $message = array('IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
+                    $ticketState = $notification['OldValue'] . " => " . $notification['NewValue'];
+             $text_message = <<<EOD
+             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser} :</td></tr>
+             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$storyField['Title']}: {$ticketState} </td></tr>
+EOD;
+             
+                    array_push($recipient_list, $notification['NotifiedUser']);
+                }
                 else if ($notification['ActivityOn'] == "duedate") {
                     //$message = array('IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
                     $dueDate = $notification['OldValue'] . " => " . $notification['NewValue'];
