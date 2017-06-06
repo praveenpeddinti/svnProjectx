@@ -631,6 +631,8 @@ trait NotificationTrait {
                     }
                     array_push($result_msg, $message);
                 } else if ($notification['ActivityOn'] == 'TotalTimeLog') {
+                    $notification['OldValue'] = number_format((float)$notification['OldValue'], 1, '.', '');
+                    $notification['NewValue'] = number_format((float)$notification['NewValue'], 1, '.', '');
                     $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "work log", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => "Total Time Log", 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue'], 'Preposition' => 'to');
                     array_push($result_msg, $message);
                 }
@@ -748,7 +750,7 @@ trait NotificationTrait {
                         $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                         array_push($result_msg, $message);
                     } else if ($storyField['Type'] != 6) {
-                        if($notification['ActivityOn'] != "workflow"){
+                        if($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype"){
                           $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
                           $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);  
                         }
@@ -912,6 +914,8 @@ EOD;
                 }
                 /*------To display the total worked hours in mail-----start----------*/
                 else if($notification['ActivityOn']=='TotalTimeLog'){
+                     $notification['OldValue'] = number_format((float)$notification['OldValue'], 1, '.', '');
+                     $notification['NewValue'] = number_format((float)$notification['NewValue'], 1, '.', '');
                 $workedHours = $notification['OldValue'] . " => " . $notification['NewValue'];
                 $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
@@ -1090,7 +1094,7 @@ EOD;
                         $message = array('from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                         array_push($result_msg, $message);
                     } else if ($storyField['Type'] != 6) {
-                         if($notification['ActivityOn'] != "workflow"){
+                         if($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype"){
                            $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
                            $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
                          }
