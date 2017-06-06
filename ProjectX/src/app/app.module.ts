@@ -47,8 +47,7 @@ import { StandupComponent }  from './components/standup/standup.component';
 import {PageNotFoundComponent} from './components/pagenotfound/pagenotfound.component';
 import {UrlSerializer} from '@angular/router';
 import {CustomUrlSerializer} from './CustomUrlSerializer';
-
-
+import { CookieService } from 'angular2-cookie/services/cookies.service';
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',redirectTo: 'error',pathMatch: 'full' },
@@ -148,7 +147,7 @@ const ROUTES=[
 
   declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent ],
   bootstrap:    [ AppComponent ],
-  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
+  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
