@@ -64,9 +64,16 @@ export class LoginComponent implements OnInit{
             if(data.status==200){
             //Getting cookie to redirect page for specified url after login
             var rURL =this._cookieService.getObject("rUrl");
+            var rURLString:string;
+            rURLString = JSON.stringify(rURL);
+            rURLString = rURLString.replace(/"/g,'');
              if(rURL!=undefined && rURL!=''){
             this._cookieService.remove("rUrl");
-            this._router.navigate([rURL]); 
+            
+            var urlPartArray = rURLString.split("?");
+            var queryParams = urlPartArray[1];
+            var queryParamArray = queryParams.split("=");
+            this._router.navigate([urlPartArray[0]], { queryParams: { Slug : queryParamArray[1] } }); 
              }else{
              this._router.navigate(['home']); 
              this.shared.change(null,null,'LogIn',null,'');  //newly changed
