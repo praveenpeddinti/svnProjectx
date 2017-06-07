@@ -41,6 +41,7 @@ export class StoryEditComponent implements OnInit
   public dragdrop={extraPlugins:'dragdrop'};
   public taskArray:any;
   public taskIds=[];
+  private childTaskData="";
   //ckeditor configuration options
   public toolbar={toolbar : [
       [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList']
@@ -50,7 +51,7 @@ export class StoryEditComponent implements OnInit
   public hasFileDroped:boolean = false;
   public fileUploadStatus:boolean = false;
   public defaultTasksShow:boolean=true;
-
+  public checkPlanLevel='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,private mention:MentionService,private projectService:ProjectService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) { 
@@ -92,6 +93,8 @@ export class StoryEditComponent implements OnInit
             }
              this.ticketData = data.data.ticket_details;
              this.description= this.ticketData.CrudeDescription;
+             this.childTaskData=this.ticketData.Tasks;
+             this.checkPlanLevel=this.ticketData.StoryType.Name;
              this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);      
              jQuery("#description").summernote('code',this.description);   
           }else{
