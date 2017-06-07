@@ -80,7 +80,7 @@ trait NotificationTrait {
      * @param type $newValue
      * @param type $activityUserId
      */
-    public function saveActivity($ticketId, $projectId, $actionfieldName, $newValue, $activityUserId, $slug = "",$timezone) {
+    public function saveActivity($ticketId, $projectId, $actionfieldName, $newValue, $activityUserId, $slug = "", $timezone) {
         $oldValue = "";
         $action = "";
         $returnValue = "noupdate";
@@ -138,7 +138,7 @@ trait NotificationTrait {
                 );
                 $v = $db->findAndModify(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array('$addToSet' => array('Activities' => $commentDataArray)), array('new' => 1, "upsert" => 1));
                 $v = $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $activityUserId, "Activity" => "PropertyChange"));
-                CommonUtility::prepareActivity($commentDataArray, $projectId,$timezone);
+                CommonUtility::prepareActivity($commentDataArray, $projectId, $timezone);
                 $returnValue = array("referenceKey" => -1, "data" => $commentDataArray);
             } else {
                 $recentSlug = $record["RecentActivitySlug"];
@@ -150,7 +150,7 @@ trait NotificationTrait {
                 if ($activitiesCount > 0) {
                     $activitiesCount = $activitiesCount - 1;
                 }
-                CommonUtility::prepareActivityProperty($property, $projectId,$timezone);
+                CommonUtility::prepareActivityProperty($property, $projectId, $timezone);
                 $returnValue = array("referenceKey" => $activitiesCount, "data" => $property);
             }
             if ($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow") {
@@ -240,8 +240,8 @@ trait NotificationTrait {
             $ticketId = (int) $commentData->ticketId;
             $projectId = (int) $commentData->projectId;
             $description = CommonUtility::refineDescriptionForEmail($commentData->Comment->CrudeCDescription);
-            
-          //  error_log("description------------".$description);
+
+            //  error_log("description------------".$description);
             $commentDescripition = $description;
             $data = TicketCollection::getTicketDetails($ticketId, $projectId);
             $followers = $data['Followers'];
@@ -343,12 +343,12 @@ trait NotificationTrait {
             // error_log("ticketDetails==============FFFFFFFFFFF".print_r($ticketDetails,1));
             $followers = CommonUtility::filterFollowers($followers);
             if ($notifyType == "Title" || $notifyType == "Description" || $notifyType == "TotalTimeLog") {
-                if($notifyType == "Description"){
-                    $oldValue = $ticketDetails["CrudeDescription"]; 
-                }else{
-                     $oldValue = $ticketDetails[$notifyType];
+                if ($notifyType == "Description") {
+                    $oldValue = $ticketDetails["CrudeDescription"];
+                } else {
+                    $oldValue = $ticketDetails[$notifyType];
                 }
-               
+
 
                 if ($oldValue == $activityOn) {
                     return;
@@ -754,7 +754,7 @@ trait NotificationTrait {
                           $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
                           $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);  
                         }
-                        
+
                         $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
                         $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                         array_push($result_msg, $message);
@@ -840,7 +840,7 @@ trait NotificationTrait {
                 $ticketId = $notification['TicketId'];
                 $title = $ticket_data['Title'];
                 $fromUser = $from_user['UserName'];
-
+                $mailingName= $from_user['FirstName']." ". $from_user['LastName'];
                 $projectDetails = Projects::getProjectMiniDetails($projectId);
                 $projectName = $projectDetails["ProjectName"];
                 $link = Yii::$app->params['AppURL'] . "/project/$projectName/" . $ticketId . "/details";
@@ -886,44 +886,19 @@ EOD;
                     array_push($recipient_list, $notification['NotifiedUser']);
                 }
 
-                else if ($notification['ActivityOn']  == "tickettype" || $notification['ActivityOn']  == "dod" || $notification['ActivityOn']  == "bucket" || $notification['ActivityOn']  == "stakeholder" || $notification['ActivityOn'] == "workflow" || $notification['ActivityOn']  == "priority"  || $notification['ActivityOn']  == "estimatedpoints") {
-                    $message = array('IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
-                    $ticketState = $notification['OldValue'] . " => " . $notification['NewValue'];
-             $text_message = <<<EOD
-             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser} :</td></tr>
-             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$storyField['Title']}: {$ticketState} </td></tr>
-EOD;
-             
-                    array_push($recipient_list, $notification['NotifiedUser']);
-                }
-                else if ($notification['ActivityOn'] == "duedate") {
-                    //$message = array('IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
-                    $dueDate = $notification['OldValue'] . " => " . $notification['NewValue'];
-                    $newdate = $notification['NewValue']->toDateTime();
-                    $newdate->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $newValue = $newdate->format('M-d-Y');
-                    $olddate = $notification['OldValue']->toDateTime();
-                    $olddate->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $oldValue = $olddate->format('M-d-Y');
-                    $dueDate = $oldValue . " => " . $newValue;
-                    $text_message = <<<EOD
-             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
-             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$storyField['Title']}: {$dueDate} </td></tr>
-EOD;
-                    array_push($recipient_list, $notification['NotifiedUser']);
-                }
-                /*------To display the total worked hours in mail-----start----------*/
-                else if($notification['ActivityOn']=='TotalTimeLog'){
+
+                /* ------To display the total worked hours in mail-----start---------- */ 
+                else if ($notification['ActivityOn'] == 'TotalTimeLog') {
                      $notification['OldValue'] = number_format((float)$notification['OldValue'], 1, '.', '');
                      $notification['NewValue'] = number_format((float)$notification['NewValue'], 1, '.', '');
-                $workedHours = $notification['OldValue'] . " => " . $notification['NewValue'];
-                $text_message = <<<EOD
+                    $workedHours = $notification['OldValue'] . " => " . $notification['NewValue'];
+                    $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Total invested hours: {$workedHours}</td></tr>
 EOD;
                     array_push($recipient_list, $notification['NotifiedUser']);
                 }
-               /*------To display the total worked hours in mail-----end----------*/
+                /* ------To display the total worked hours in mail-----end---------- */
 
 
                 /* Left Panel newly assigned Field Values End */
@@ -1089,18 +1064,30 @@ EOD;
                             $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                             $oldValue = $datetime->format('M-d-Y');
                         }
-
-                        $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
-                        $message = array('from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
-                        array_push($result_msg, $message);
+                        $dueDate = $newValue;
+                        if ($oldValue != '') {
+                            $dueDate = $oldValue . " => " . $newValue;
+                        }
+                        $text_message = <<<EOD
+             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
+             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$storyField['Title']}: {$dueDate} </td></tr>
+EOD;
+                        array_push($recipient_list, $notification['NotifiedUser']);
                     } else if ($storyField['Type'] != 6) {
-                         if($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype"){
-                           $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
-                           $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
-                         }
-                        $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
-                        $message = array('from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
-                        array_push($result_msg, $message);
+                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
+                            $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
+                            $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
+                        }
+                        $ticketState = $notification['NewValue'];
+                        if ($notification['OldValue'] != '') {
+                            $ticketState = $notification['OldValue'] . " => " . $notification['NewValue'];
+                        }
+                        $text_message = <<<EOD
+            <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
+            <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$storyField['Title']}: {$ticketState} </td></tr>
+EOD;
+                        array_push($recipient_list, $notification['NotifiedUser']);
+
                     }
                 }
                 echo ("3. sending email ...");
@@ -1112,11 +1099,12 @@ EOD;
                     $display_name = $collaboratorData['FirstName'] . " " . $collaboratorData['LastName'];
                     //   error_log("EMAIL________________+++++++++++_____________".$value);
                 }
-                $subject = $projectName;
+                $ticket_title=" | #".$ticketId.": ".$title;
+                $subject = "ProjectX | ".$projectName.$ticket_title;
                 $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
                                  <table width='100%' border='0' cellspacing='0' cellpadding='0'><tr>
                                  <td style='padding:5px;' width='160'><a href={$redirectToHome}><img  src=" . '' . Yii::$app->params['EmailServerURL'] . '/files/tool/logo-emailer.png' . " style='border:0px; outline:0px;'/></a></td>
-                                  <td style='padding:5px;font-family:Arial; font-size:12px;line-height:24px;color:#333333;' align='right'>Activity alert by <a href={$redirectToHome} style='color:#0199e0'>{$fromUser}</a><br/>  project: <a href={$redirectToHome} style='color:#0199e0'>{$subject}<a href=''></a>
+                                  <td style='padding:5px;font-family:Arial; font-size:12px;line-height:24px;color:#333333;' align='right'>Activity alert by <a href={$redirectToHome} style='color:#0199e0'>{$fromUser}</a><br/>  project: <a href={$redirectToHome} style='color:#0199e0'>{$projectName}<a href=''></a>
                                      </td></tr></table></td></tr>
                              <tr><td bgcolor='#f8f8f8' style='border-bottom:solid 1px #fff;'>
                              <table width='100%' border='0' cellspacing='0' cellpadding='0'>
@@ -1130,7 +1118,7 @@ EOD;
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
                 $text_message = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
                 echo("==going to send mail==");
-                CommonUtility::sendEmail($recipient_list, $text_message, $subject);
+                CommonUtility::sendEmail($mailingName,$recipient_list, $text_message, $subject);
             }
         } catch (Exception $ex) {
             Yii::log("NotificationTrait:sendEmailNotificationFromBackground::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
