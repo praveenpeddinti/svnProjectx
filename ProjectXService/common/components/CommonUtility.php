@@ -137,6 +137,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 
     static function refineActivityData($html,$length="35") {
         // $html = CommonUtility::closetags($html);
+        error_log("lengthtttttt".$length);
          $html = strip_tags($html);
         if (strlen($html) > $length) {
             $html = substr($html, 0, $length) . "...";
@@ -737,7 +738,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
             $newArray = array();
             $arr2ordered = array();
             $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDetails["TicketId"], "other_data" => "");
-            $ticketDetails["Title"]= self::refineActivityData($ticketDetails["Title"],30);
+            $ticketDetails["Title"]= self::refineActivityData($ticketDetails["Title"],100);
             $ticketTitle = array("field_name" => "Title", "value_id" => "", "field_value" => $ticketDetails["Title"], "other_data" => "");
             array_push($arr2ordered, $ticketId);
             array_push($arr2ordered, $ticketTitle);
