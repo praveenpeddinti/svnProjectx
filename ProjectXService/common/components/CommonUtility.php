@@ -1097,7 +1097,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
      * @return type
      */
     
-    public static function sendEmail($recipient_list,$text_message,$subject,$attachment_list=array()){
+    public static function sendEmail($mailingName="ProjectX",$recipient_list,$text_message,$subject,$attachment_list=array()){
         try{
             
 $html="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
@@ -1126,26 +1126,26 @@ $text_message=$html . $text_message .
 </table>
 </body>
 </html>";
-//$subject_text="<span style='background:237ea7; color:#fff; font-size:14px;'>ProjectX</span>";
-//         echo("4. In CommonUtiltiy sendEmail started\n");
-//         ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
-//        $attachments=array();//list of artifacts
-//        $EEemail = new Email();
-//
-//        $from=Yii::$app->params['ProjectEmail'];
-//        $fromName="ProjectX";
-//        $html="<h1> $text_message </h1>";
-//        $text=$text_message;
-//        $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
-//                
+//$subject_text="ProjectX | ".$subject;
+         echo("4. In CommonUtiltiy sendEmail started\n");
+         ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
+        $attachments=array();//list of artifacts
+        $EEemail = new Email();
 
-              Yii::$app->mailer->compose()
-           ->setFrom(Yii::$app->params['ProjectEmail'])
-           ->setTo($recipient_list)
-           ->setSubject("ProjectX | ".$subject)
-           ->setTextBody('This is ProjectX')
-           ->setHtmlBody($text_message)
-           ->send();
+        $from=Yii::$app->params['ProjectEmail'];
+        $fromName= $mailingName;
+        $html=$text_message;
+        $text=$text_message;
+        $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
+                
+
+//              Yii::$app->mailer->compose()
+//           ->setFrom(Yii::$app->params['ProjectEmail'])
+//           ->setTo($recipient_list)
+//           ->setSubject("ProjectX | ".$subject)
+//           ->setTextBody('This is ProjectX')
+//           ->setHtmlBody($text_message)
+//           ->send();
              error_log("in send mail");
 //        echo("5. In CommonUtiltiy sendEmail completed..\n");
 //        echo("6. Sending email background job has completed\n");
