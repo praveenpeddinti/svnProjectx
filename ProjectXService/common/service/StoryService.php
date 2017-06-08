@@ -357,13 +357,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @description This method is used to getting subtask details for the particular story.
      * @return type subtasks
      */
-    public function getSubTaskDetails($subTaskIds, $projectId) {
+    public function getSubTaskDetails($subTaskIds, $projectId,$timezone) {
         try {
            $ticketDetails = TicketCollection::getSubTaskDetails($subTaskIds, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array();
             $fieldsOrderArray = [5,6,7,3,10];
             foreach ($ticketDetails as $ticket) {
-                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$fieldsOrderArray);
+                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray);
                 array_push($finalData, $details);
             }
             return $finalData;

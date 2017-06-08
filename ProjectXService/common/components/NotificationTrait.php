@@ -929,7 +929,6 @@ EOD;
 
                 /*                 * ******* Followers Messages **************** */ else if ($notification['ActivityOn'] == 'FollowObj') {
                     //  error_log("added");
-                    echo ("5. Add follower");
                     if ($notification['NotifiedUser'] == $notification['NewValue']) { //if logged in user has been added
                         //Eg : moin.hussain added you as a follower to ticket #33
                         $activityOn = 'you';
@@ -1117,8 +1116,9 @@ EOD;
                 $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
                 $text_message = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
-                echo("==going to send mail==");
+               
                 CommonUtility::sendEmail($mailingName,$recipient_list, $text_message, $subject);
+                 echo ("4. sending email comppleted ...");
             }
         } catch (Exception $ex) {
             Yii::log("NotificationTrait:sendEmailNotificationFromBackground::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

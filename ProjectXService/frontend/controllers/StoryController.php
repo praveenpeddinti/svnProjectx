@@ -112,11 +112,12 @@ class StoryController extends Controller
             //$projectId=1;
             $subtaskIds=array();
             $projectId = $StoryData->projectId;
+             $timezone = $StoryData->timeZone;
             $getSubTaskIds = ServiceFactory::getStoryServiceInstance()->getSubTaskIds($StoryData->storyId,$projectId);
             foreach($getSubTaskIds['Tasks'] as $task){
                array_push($subtaskIds,$task['TaskId']);
             }
-            $data = ServiceFactory::getStoryServiceInstance()->getSubTaskDetails($subtaskIds, $projectId);
+            $data = ServiceFactory::getStoryServiceInstance()->getSubTaskDetails($subtaskIds, $projectId,$timezone);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
