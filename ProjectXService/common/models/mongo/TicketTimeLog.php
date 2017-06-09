@@ -144,7 +144,7 @@ class TicketTimeLog extends ActiveRecord
             Yii::log("TicketTimeLog:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
+
     /**
      * @author Praveen P
      * @param type $projectId
@@ -187,6 +187,7 @@ class TicketTimeLog extends ActiveRecord
                     $ticketCollectionModel = new TicketCollection();
                     $getTicketDetails = $ticketCollectionModel->getTicketDetails($eachOne['TicketId'],$projectId,$selectFields=[]);
                     $ticketDesc= '#'.$getTicketDetails['TicketId']." ".$getTicketDetails['Title'];
+                    $ticketDesc= self::refineActivityData($ticketDesc,200);
                     $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
                     $datetime = $eachOne['LoggedOn']->toDateTime();  
                     $datetime->setTimezone(new \DateTimeZone($timezone));
@@ -313,6 +314,19 @@ class TicketTimeLog extends ActiveRecord
         }
         
     }
+      /**
+     * @author Padmaja
+     * @return type
+     */
+    public  static function refineActivityData($html,$length="35") {
+        // $html = CommonUtility::closetags($html);
+         $html = strip_tags($html);
+        if (strlen($html) > $length) {
+            $html = substr($html, 0, $length) . "...";
         }
+        return $html;
+    }
+    
+    }
 ?>
 

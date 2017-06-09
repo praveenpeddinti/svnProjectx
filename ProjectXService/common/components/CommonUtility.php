@@ -738,7 +738,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
             $newArray = array();
             $arr2ordered = array();
             $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDetails["TicketId"], "other_data" => "");
-            $ticketDetails["Title"]= self::refineActivityData($ticketDetails["Title"],100);
+            $ticketDetails["Title"]= self::refineActivityData($ticketDetails["Title"],200);
             $ticketTitle = array("field_name" => "Title", "value_id" => "", "field_value" => $ticketDetails["Title"], "other_data" => "");
             array_push($arr2ordered, $ticketId);
             array_push($arr2ordered, $ticketTitle);
