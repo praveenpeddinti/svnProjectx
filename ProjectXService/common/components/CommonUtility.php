@@ -137,7 +137,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 
     static function refineActivityData($html,$length="35") {
         // $html = CommonUtility::closetags($html);
-        error_log("lengthtttttt".$length);
+        //error_log("lengthtttttt".$length);
          $html = strip_tags($html);
         if (strlen($html) > $length) {
             $html = substr($html, 0, $length) . "...";
@@ -1113,14 +1113,13 @@ $html="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://ww
 $text_message=$html . $text_message . 
         "<tr><td align='center' style='border:1px solid #f0f0f0; padding:5px;font-family:Arial; font-size:12px;line-height:40px;color:#333333; text-align:center;' >Update Your <a href=".''.Yii::$app->params['AppURL'].'/home'." style='color:#0199e0; text-decoration:none;'>Email Alert Preferences</a></td></tr>
         <tr><td bgcolor='#787878' align='left' valign='top' height='35'>
-        <table width='100%'  border='0' align='center' cellpadding='0' cellspacing='0' height:'35'>
+        <table width='600'  border='0' align='left' cellpadding='0' cellspacing='0' height:'35'>
   <tr>
-  <td width='15' height:'35'>&nbsp;</td>
-       <td wdth='512' align='left' height:'35' style='font-family:Arial; font-size:12px;line-height:35px; color:#fff;'>This message was sent by <a href='#' style='color:#d0ebff;font-size:13dpx;text-decoration:none;'>ProjectX</a></td>
-        <td width='20' align='left'height:'35' ><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/facebook.png'." style=' border:none; outline:none;'/></a></td>
-        <td width='20' align='left' height:'35'><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/twit.png'." style=' border:none; outline:none;'/></a></td>
-        <td width='20' align='center' height:'35'><a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/linkedin.png'." style=' border:none; outline:none;'/></a></td>
-        <td width='15'>&nbsp;</td>
+       <td width='10' height:'35'>&nbsp;</td>
+       <td width='510' align='left' height:'35' style='font-family:Arial; font-size:12px;line-height:35px;text-align:left; color:#fff;'>This message was sent by <a href='#' style='color:#d0ebff;font-size:13dpx;text-decoration:none;'>ProjectX</a></td>
+        <td width='70' align='right'height:'35' >
+        <a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/facebook.png'." style=' border:none; outline:none;'/></a>&nbsp;<a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/twit.png'." style=' border:none; outline:none;'/></a>&nbsp;<a href='#'><img src=".''.Yii::$app->params['EmailServerURL'].'/files/tool/linkedin.png'." style=' border:none; outline:none;'/></a></td>
+        <td width='10'>&nbsp;</td>
         </tr>
        </table>
        </td>
@@ -1148,7 +1147,7 @@ $text_message=$html . $text_message .
 //           ->setTextBody('This is ProjectX')
 //           ->setHtmlBody($text_message)
 //           ->send();
-             error_log("in send mail");
+            // error_log("in send mail");
 //        echo("5. In CommonUtiltiy sendEmail completed..\n");
 //        echo("6. Sending email background job has completed\n");
         }catch(Exception $ex){
