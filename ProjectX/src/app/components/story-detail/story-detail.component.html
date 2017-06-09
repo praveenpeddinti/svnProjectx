@@ -9,7 +9,7 @@
 <!--<vg-player>
     <video vgMedia id="singleVideo" preload="auto" controls>
         <source src="https://10.10.73.21/files/story/Matrix.mp4" type="video/mp4">
-    </video>
+    </video> (keydown)="submitOnEnter($event)"
 </vg-player>-->
 
 
@@ -31,7 +31,8 @@
               <div class="ticketdescriptionarea minheight50">
                 <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
                 </div>
-                <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
+               <!-- <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />-->
+                <textarea style='resize:none' class='autoExpand editinput' maxlength="512" id="{{ticketData?.data?.TicketId}}_titleInput"  [hidden]="showTitleEdit"  value="{{ticketData?.data?.Title}}" (blur)="closeTitleEdit($event.target.value)" ></textarea>
                 <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
                 </div>-->
               </div>
