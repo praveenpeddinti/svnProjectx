@@ -438,7 +438,7 @@ class StoryController extends Controller
         try
         {
             $post_data=json_decode(file_get_contents("php://input"));
-            $team=ServiceFactory::getCollaboratorServiceInstance()->getFilteredProjectTeam($post_data->ProjectId,$post_data->search_term);
+            $team=ServiceFactory::getCollaboratorServiceInstance()->getFilteredProjectTeam($post_data->projectId,$post_data->search_term);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
