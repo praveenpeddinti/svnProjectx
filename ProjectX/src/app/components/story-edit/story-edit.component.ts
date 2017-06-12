@@ -96,8 +96,8 @@ export class StoryEditComponent implements OnInit
              this.childTaskData=this.ticketData.Tasks;
              this.checkPlanLevel=this.ticketData.StoryType.Name;
              this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);      
-             jQuery("#description").summernote('code',this.description);   
-          }else{
+             jQuery("#description").summernote('code',this.description); 
+        }else{
             this._router.navigate(['project',this.projectName,this.url_TicketId,'error']);
           }
            
@@ -126,19 +126,26 @@ export class StoryEditComponent implements OnInit
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
         this.rows = minRows + rows;
     });
-    jQuery("#title").keydown(function(e){
-// Enter was pressed without shift key
-if (e.keyCode == 13 && !e.shiftKey)
-{
-    // prevent default behavior
-    e.preventDefault();
-}
-});  
-      }
+        jQuery("#title").keydown(function(e){
+        if (e.keyCode == 13 && !e.shiftKey)
+        {
+            e.preventDefault();
+        }
+        }); 
+
+  }
 
   ngAfterViewInit() 
   {
-   
+     var $textArea = jQuery("#title");
+     var nativeRowPadding = 15;
+    setTimeout(()=>{
+        resizeTextArea($textArea);
+   },500);
+             
+    function resizeTextArea($textArea) {
+         $textArea.height($textArea[0].scrollHeight);
+    }
     this.editor.initialize_editor('description',null,null);      
   }
 
@@ -261,12 +268,13 @@ if (e.keyCode == 13 && !e.shiftKey)
     @Description: Submit Edit Story/Ticket
     */
   editStorySubmit(edit_data)
-  {  
+  { 
     jQuery("#title_error").hide();
     jQuery("#desc_error").hide();
     var desc=jQuery("#description").summernote('code');
     desc=jQuery(desc).text().trim();
     var error = 0;
+   // alert(edit_data.title);
     if(edit_data.title=='')
     {
       jQuery("#title_error").show();

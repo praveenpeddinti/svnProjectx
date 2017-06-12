@@ -160,7 +160,6 @@ var thisObj = this;
         this.editor.initialize_editor('commentEditor',null,null); //for comment
          console.log("=Plan Level="+this.checkPlanLevel);
       //jQuery('span[id^="check_"]').hide();
-   
 
     }
 
@@ -346,8 +345,11 @@ cancelReply(){
 */
 private showTitleEdit=true;
 // private titleError="";
+
 editTitle(titleId){
-  //alert("+++++++++"+titleId);
+ // alert("+++++++++"+titleId);
+
+  jQuery('.viewinputtext').height();
   this.showTitleEdit = false;
   setTimeout(()=>{jQuery("#"+titleId).focus();
    jQuery(document)
@@ -364,32 +366,20 @@ editTitle(titleId){
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
         this.rows = minRows + rows;
     });
-
-    //          jQuery(document)
-    // .one('focus.autoExpand', 'textarea.autoExpand', function(){
-    //   jQuery(".textarea.autoExpand").css("resize", "none");
-    //   //jQuery('.textarea.autoExpand').css('resize','none');
-    //     var savedValue = this.value;
-    //     this.value = '';
-    //     this.baseScrollHeight = this.scrollHeight;
-    //     var minRows = this.getAttribute('data-min-rows')|0, rows;
-    //     this.rows = minRows;
-    //     rows = Math.ceil((this.scrollHeight) / 17);
-    //     this.rows = minRows + rows;
-    //     this.value = savedValue;
-    //     // alert(this.rows+"in one===>"+this.baseScrollHeight+"*****"+this.scrollHeight);
-    // })
-    // .on('input.autoExpand', 'textarea.autoExpand', function(){
-    //   // alert(rows);
-    //     var minRows = this.getAttribute('data-min-rows')|0, rows;
-    //     this.rows = minRows;
-    //     rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
-    //     this.rows = minRows + rows;
-    // });
-
+      var $textArea = jQuery("#"+titleId);
+      this.resizeTextArea($textArea);
+      jQuery("#"+titleId).keydown(function(e){
+        if (e.keyCode == 13 && !e.shiftKey)
+        {
+            e.preventDefault();
+        }
+     });
 },150);
   
 }
+ resizeTextArea($textArea) {
+    $textArea.height($textArea[0].scrollHeight);
+ }
 
 closeTitleEdit(editedText){ 
         if(editedText !=""){
