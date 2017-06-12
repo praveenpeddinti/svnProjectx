@@ -115,7 +115,7 @@ background-color: #237ea7;
 .loginformlabel{font-weight:normal}
 .customfield{border:1px solid #ccc;border-radius:0;font-size:15px}
 .minheight50{min-height: 50px}
-.viewinputtext{ font-size: 20px;padding: 4px 10px 0;
+.viewinputtext{ font-size: 20px;padding: 4px 10px 0;word-break: break-all;
     
     /*padding: 4px 10px 0;overflow: hidden;min-height:50px;min-height: 38px;white-space: nowrap;*//*text-overflow: ellipsis;*/background:#fff}
 /* custom data table*/
