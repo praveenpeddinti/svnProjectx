@@ -14,7 +14,7 @@
             <div [hidden]="!user_name.errors.required" *ngIf="submitted && user_name.errors " class="text-md-danger text-ios-danger text-wp-danger">
                 <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Email is required</div>
             <ion-item>
-                <ion-input type="password" placeholder="Password"[(ngModel)]="login.password" class="form-control customfield" required name="user_password" #user_password="ngModel"></ion-input>
+                <ion-input type="password" placeholder="Password" [(ngModel)]="login.password" class="form-control customfield" required name="user_password" #user_password="ngModel"></ion-input>
             </ion-item>
             <div [hidden]="!user_password.errors.required" *ngIf=" submitted && user_password.errors" class="text-md-danger text-ios-danger text-wp-danger">
                 <i class="fa fa-exclamation-circle" aria-hidden="true"></i> Password is required</div>

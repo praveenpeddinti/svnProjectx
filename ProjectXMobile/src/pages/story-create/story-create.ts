@@ -48,9 +48,9 @@ export class StoryCreatePage {
         private alertCtrl: AlertController,
         public loadingController: LoadingController,private ngZone: NgZone,
         private storage: Storage, private constants: Constants) {
-        this.storage.get('userCredentials').then((value) => {
-            this.userName = value.username;
-        });
+        var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
+            this.userName = userInfo.username;
+
         globalService.newStoryTemplate(this.constants.templateForStoryCreation, this.navParams.get("id")).subscribe(
             (result) => {
                 this.itemfield = result.data.story_fields;

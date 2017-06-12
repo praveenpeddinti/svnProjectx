@@ -143,12 +143,12 @@ export class StoryDetailsPage {
         this.minDate = new Date().toISOString();
         let loader = this.loadingController.create({ content: "Loading..." });
         loader.present();
-        this.storage.get('userCredentials').then((value) => {
-            this.userName = value.username;
+       var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
+            this.userName = userInfo.username;
             // Ticket #113
-            this.userId = value.Id;
+            this.userId = userInfo.Id;
             // Ticket #113 ended
-        });
+      //  });
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.navParams.get("id")).subscribe(
             result => {
                 this.taskDetails.ticketId = result.data.TicketId;
@@ -347,6 +347,7 @@ export class StoryDetailsPage {
             });
     }
     public inputBlurMethod(event, index, fieldDetails) {
+        alert("input blur from story details");
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
@@ -366,36 +367,35 @@ export class StoryDetailsPage {
             });
     }
     public openPopover(myEvent) {
-        let userCredentials = { username: this.userName };
-        let popover = this.popoverCtrl.create(LogoutPage, userCredentials);
+         let popover = this.popoverCtrl.create(LogoutPage);
         popover.present({
             ev: myEvent
         });
     }
 
-    public titleEdit(event) {
-        //this.enableEdatable = true;
-    }
+//    public titleEdit(event) {
+//        //this.enableEdatable = true;
+//    }
 
-    public updateTitleSubmit() {
-        this.enableEdatable = false;
-        this.taskDetails.title = this.titleAfterEdit;
-    }
-    public updateTitleCancel() {
-        this.enableEdatable = false;
-        this.titleAfterEdit = this.taskDetails.title;
-    }
-    public expandDescription() {
-        jQuery('#description').css('height', 'auto');
-        jQuery('#show').hide();
-        jQuery('#hide').show();
-    }
-    public collapseDescription() {
-        jQuery('#hide').hide();
-        jQuery('#show').show();
-        jQuery('#description').css("height", "200px");
-        jQuery('#description').css("overflow", "hidden");
-    }
+//    public updateTitleSubmit() {
+//        this.enableEdatable = false;
+//        this.taskDetails.title = this.titleAfterEdit;
+//    }
+//    public updateTitleCancel() {
+//        this.enableEdatable = false;
+//        this.titleAfterEdit = this.taskDetails.title;
+//    }
+//    public expandDescription() {
+//        jQuery('#description').css('height', 'auto');
+//        jQuery('#show').hide();
+//        jQuery('#hide').show();
+//    }
+//    public collapseDescription() {
+//        jQuery('#hide').hide();
+//        jQuery('#show').show();
+//        jQuery('#description').css("height", "200px");
+//        jQuery('#description').css("overflow", "hidden");
+//    }
     public isColorChange(fieldDetails) {
         if (fieldDetails.title == "Created on") {
             return true;
@@ -411,20 +411,17 @@ export class StoryDetailsPage {
         }
     }
     public openOptionsModal(fieldDetails, index) {
+        alert("open option model from story details.");
         fieldDetails['workflowType'] = this.taskDetails.workflowType;
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
                 (result) => {
                     if (fieldDetails.fieldType == "Team List") {
                         this.displayFieldvalue.push({ "Id": "", "Name": "--none--", "Email": "null" })
-                        for (let data of result.getFieldDetails) {
+                    } 
+                     for (let data of result.getFieldDetails) {
                             this.displayFieldvalue.push(data);
                         }
-                    } else {
-                        for (let data of result.getFieldDetails) {
-                            this.displayFieldvalue.push(data);
-                        }
-                    }
                     StoryDetailsPage.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
                     StoryDetailsPage.optionsModal.onDidDismiss((data) => {
                         if (data != null && (data.Name != data.previousValue)) {
@@ -462,423 +459,424 @@ export class StoryDetailsPage {
         });
         toast.present();
     }
-    public navigateToParentComment(parentCommentId) {
-        jQuery("#"+parentCommentId)[0].scrollIntoView({
-            behavior: "smooth", // or "auto" or "instant"
-            block: "start" // or "end"
-        });
-    }
-    public replyComment(commentId) {
-        jQuery(".commentAction").removeClass("fab-close-active");
-        jQuery(".fab-list-active").removeClass("fab-list-active");
-        this.replyToComment = commentId;
-        this.replying = true;
-        jQuery("#commentEditorArea").addClass("replybox");
-        this.content.resize();
-        setTimeout(function(){
-            jQuery("#uploadAndSubmit")[0].scrollIntoView({
-                behavior: "smooth", // or "auto" or "instant"
-                block: "end" // or "start"
-            });
-        },500);
-    }
-    public cancelReply() {
-        this.replying = false;
-        this.replyToComment = -1;
-        jQuery("#commentEditorArea").removeClass("replybox");
-    }
-    public presentConfirmDelete(commentId, slug) {
-        jQuery(".commentAction").removeClass("fab-close-active");
-        jQuery(".fab-list-active").removeClass("fab-list-active");
-        let alert = this.alertController.create({
-            title: 'Confirm Delete',
-            message: 'Do you want to delete this comment?',
-            buttons: [
-            {
-                text: 'CANCEL',
-                role: 'cancel',
-                handler: () => {}
-            },
-            {
-                text: 'OK',
-                handler: () => {
-                    this.deleteComment(commentId, slug);
-                }
-            }
-            ]
-        });
-        alert.present();
-    }
-    public deleteComment(commentId, slug) {
-        var editedContent= jQuery("#Activity_content_"+commentId+" .commentp").html();
-        var commentParams;
-        var parentCommentId;
-        if (this.itemsInActivities[commentId].Status == 2) {
-            parentCommentId = parseInt(this.itemsInActivities[commentId].ParentIndex);
-            commentParams = {
-                TicketId: this.taskDetails.ticketId,
-                Comment: {
-                    Slug: slug,
-                    ParentIndex: parentCommentId,
-                    CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
-                },
-            };
-        } else {
-            commentParams = {
-                TicketId: this.taskDetails.ticketId,
-                Comment: {
-                    Slug: slug,
-                    CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
-                },
-            };
-        }
-        this.globalService.deleteCommentById(this.constants.deleteCommentById, commentParams).subscribe(
-            (result) => {
-                if (this.itemsInActivities[commentId].Status == 2) {
-                    this.itemsInActivities[parentCommentId].repliesCount--;
-                }
-                this.itemsInActivities.splice(commentId, 1);
-            }, (error) => {
-                this.presentToast('Unsuccessful');
-            }
-        );
-    }
-    public editComment(commentId) {
-        var thisObj = this;
-        jQuery(".commentAction").removeClass("fab-close-active");
-        jQuery(".fab-list-active").removeClass("fab-list-active");
-        jQuery("div").each(function (index,element) {
-            if(jQuery(element).hasClass("commentingTextArea")) {
-                var actionIdArray =  jQuery(element).attr('id').split('_'); 
-                var commentid = actionIdArray[1];
-                thisObj.editTheComment[commentid] = false;
-                thisObj.editCommentOpenClose[commentid] = false;
-            }
-        });
-        jQuery("#Actions_" + commentId + " .textEditor").val(this.itemsInActivities[commentId].CrudeCDescription);
-        this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
-        this.newCommentOpenClose = false;
-        this.editCommentOpenClose[commentId] = true;
-    }
-    public cancelEdit(commentId){
-        this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
-        this.editCommentOpenClose[commentId] = false;
-        this.newCommentOpenClose = true;
-    }
-    public showSubmit(commentId){
-        if(commentId==-1){
-            this.newSubmitOpenClose = false;
-        }
-        else{
-            this.editSubmitOpenClose = false; 
-        }
-    }
-    public submitComment() {
-        var commentText = jQuery(".uploadAndSubmit .textEditor").val();
-        if (commentText != "" && commentText.trim() != "") {
-            this.commentDesc = "";
-            jQuery("#commentEditorArea").removeClass("replybox");
-            var commentedOn = new Date();
-            var formatedDate = (commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' + commentedOn.getFullYear();
-            var commentData = {
-                TicketId: this.taskDetails.ticketId,
-                Comment: {
-                    CrudeCDescription: commentText.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
-                    CommentedOn: formatedDate,
-                    ParentIndex: "",
-                    Reply:this.replying,
-                    OriginalCommentorId:""
-                },
-            };
-            if (this.replying == true) {
-                if (this.replyToComment != -1) {
-                    commentData.Comment.OriginalCommentorId = jQuery("#replySnippetContent").attr("class");
-                    commentData.Comment.ParentIndex = this.replyToComment + "";
-                }
-            }
-            this.globalService.submitComment(this.constants.submitComment, commentData).subscribe(
-                (result) => {
-                    this.itemsInActivities.push(result.data);
-                    if (this.replying == true) {
-                        this.itemsInActivities[this.replyToComment].repliesCount++;
-                    }
-                    this.replying = false;
-                    jQuery(".uploadAndSubmit .textEditor").val('');
-                }, (error) => {
-                    this.presentToast('Unsuccessful');
-                }
-            );
-        }
-    }
-    public submitEditedComment(commentId, slug) {
-        var editedContent = jQuery("#Actions_" + commentId + " .textEditor").val();
-        if (editedContent != "" && editedContent.trim() != "") {
-            var commentedOn = new Date();
-            var formatedDate = (commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' + commentedOn.getFullYear();
-            var commentData = {
-                TicketId: this.taskDetails.ticketId,
-                Comment: {
-                    CrudeCDescription: editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),
-                    CommentedOn: formatedDate,
-                    ParentIndex: "",
-                    Slug: slug
-                },
-            };
-            this.globalService.submitComment(this.constants.submitComment, commentData).subscribe(
-                (result) => {
-                    this.itemsInActivities[commentId].CrudeCDescription = result.data.CrudeCDescription;
-                    this.itemsInActivities[commentId].CDescription = result.data.CDescription;
-                    this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
-                    this.editCommentOpenClose[commentId] = false;
-                    this.newCommentOpenClose = true;
-                }, (error) => {
-                    this.presentToast('Unsuccessful');
-                }
-            );
-        }
-    }
-    public presentActionSheet(comeFrom: string, where:string, comment:string) {
-        let actionSheet = this.actionSheetCtrl.create({
-            title: 'Select Image Source',
-            buttons: [
-                {
-                    text: 'Load from Library',
-                    handler: () => {
-                        this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY,comeFrom, where, comment);
-                    }
-                },
-                {
-                    text: 'Use Camera',
-                    handler: () => {
-                        this.takePicture(this.camera.PictureSourceType.CAMERA,comeFrom, where, comment);
-                    }
-                },
-                {
-                    text: 'Cancel',
-                    role: 'cancel'
-                }
-            ]
-            });
-        actionSheet.present();
-    }
-    public takePicture(sourceType,comeFrom: string, where:string, comment:string) {
-        var options = {
-            quality: 100,
-            sourceType: sourceType,
-            destinationType: this.camera.DestinationType.FILE_URI,
-            encodingType: this.camera.EncodingType.JPEG,
-            saveToPhotoAlbum: false,
-            correctOrientation: true,
-        };
-        this.camera.getPicture(options).then((imagePath) => {
-            if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
-                this.filePath.resolveNativePath(imagePath).then((filePath) => {
-                    let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
-                    let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
-                    this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
-                }, (err) => {});
-            } else {
-                var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-                var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-                this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
-            }
-        }, (err) => {});
-    }
-    private createFileName(originalName) {
-        var d = new Date(),
-        n = d.getTime(),
-        newFileName =  "image"+n;
-        return newFileName;
-    }
-    private copyFileToLocalDir(namePath, currentName, newFileName, comeFrom: string, where:string, comment:string) {
-        this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
-            this.lastImage = newFileName;
-            this.uploadImage(currentName, newFileName, comeFrom, where, comment);
-        }, error => {});
-    }
-    public pathForImage(img) {
-        if (img === null) {
-            return '';
-        } else {
-            return cordova.file.dataDirectory + img;
-        }
-    }
-    public onProgressNew = (progressEvent: ProgressEvent) : void => {
-        this.ngZone.run(() => {
-            if (progressEvent.lengthComputable) {
-                let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
-                this.progressNew = progress;
-                document.getElementById('progressFileUploadNew').innerHTML = progress + "% loaded...";
-            } else {
-                if (document.getElementById('progressFileUploadNew').innerHTML == "") {
-                    document.getElementById('progressFileUploadNew').innerHTML = "Loading";
-                } else {
-                    document.getElementById('progressFileUploadNew').innerHTML += ".";
-                }
-            }
-        });
-    }
-    public onProgressEdit = (progressEvent: ProgressEvent) : void => {
-        this.ngZone.run(() => {
-            if (progressEvent.lengthComputable) {
-                let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
-                this.progressEdit = progress;
-                document.getElementById('progressFileUploadEdit').innerHTML = progress + "% loaded...";
-            } else {
-                if (document.getElementById('progressFileUploadEdit').innerHTML == "") {
-                    document.getElementById('progressFileUploadEdit').innerHTML = "Loading";
-                } else {
-                    document.getElementById('progressFileUploadEdit').innerHTML += ".";
-                }
-            }
-        });
-    }
-    public uploadImage(originalname, savedname, comeFrom: string, where:string, comment:string) {
-        var url = this.constants.filesUploading;
-        var targetPath = this.pathForImage(this.lastImage);
-        var filename = this.lastImage;
-        var options = {
-            fileKey: "commentFile",
-            fileName: filename,
-            chunkedMode: false,
-            mimeType: "image/jpeg",
-            params : {'filename': filename,'directory':this.constants.fileUploadsFolder,'originalname': originalname}
-        };
-       // const fileTransfer = new Transfer();
-        const fileTransfer: TransferObject = this.transfer.create();
-        if(where == "comments"){
-            fileTransfer.onProgress(this.onProgressNew);
-        }
-        if(where=="edit_comments"){
-            fileTransfer.onProgress(this.onProgressEdit);
-        }
-        fileTransfer.upload(targetPath, url, options).then(
-            (data) => {
-                var statusUpload = this.uploadedInserver(data, comeFrom, where, comment);
-                if(statusUpload=='uploaded'){
-                    if(where == "comments"){
-                        this.progressNew = 0;
-                        document.getElementById('progressFileUploadNew').innerHTML = "";
-                    }
-                    if(where=="edit_comments"){
-                        this.progressEdit = 0;
-                        document.getElementById('progressFileUploadEdit').innerHTML = "";
-                    }
-                }else if(statusUpload=='notuploaded'){
-                    this.presentToast('Unable to upload the image.');
-                }
-            }, (err) => {
-                this.presentToast('Unable to upload the image.');
-        });
-    }
-    public uploadedInserver(dataUploaded, comeFrom: string, where:string, comment:string){
-        var serverResponse = JSON.parse(dataUploaded.response);
-        if (serverResponse['status'] == '1') {
-            var editor_contents;
-            var appended_content;
-            if(where=="edit_comments"){
-                editor_contents = jQuery("#Actions_"+comment+" .textEditor").val();
-            }
-            var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
-            if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                if (where == "comments") {
-                    this.commentDesc = this.commentDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                    this.newSubmitOpenClose = false;
-                } else if (where == "edit_comments") {
-                    appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                    jQuery("#Actions_" + comment + " .textEditor").val(appended_content);
-                    this.editSubmitOpenClose = false;
-                } 
-            }
-            return 'uploaded';
-        }else{
-            return 'notuploaded';
-        }
-    }
+//    public navigateToParentComment(parentCommentId) {
+//        jQuery("#"+parentCommentId)[0].scrollIntoView({
+//            behavior: "smooth", // or "auto" or "instant"
+//            block: "start" // or "end"
+//        });
+//    }
+//    public replyComment(commentId) {
+//        jQuery(".commentAction").removeClass("fab-close-active");
+//        jQuery(".fab-list-active").removeClass("fab-list-active");
+//        this.replyToComment = commentId;
+//        this.replying = true;
+//        jQuery("#commentEditorArea").addClass("replybox");
+//        this.content.resize();
+//        setTimeout(function(){
+//            jQuery("#uploadAndSubmit")[0].scrollIntoView({
+//                behavior: "smooth", // or "auto" or "instant"
+//                block: "end" // or "start"
+//            });
+//        },500);
+//    }
+//    public cancelReply() {
+//        this.replying = false;
+//        this.replyToComment = -1;
+//        jQuery("#commentEditorArea").removeClass("replybox");
+//    }
+//    public presentConfirmDelete(commentId, slug) {
+//        jQuery(".commentAction").removeClass("fab-close-active");
+//        jQuery(".fab-list-active").removeClass("fab-list-active");
+//        let alert = this.alertController.create({
+//            title: 'Confirm Delete',
+//            message: 'Do you want to delete this comment?',
+//            buttons: [
+//            {
+//                text: 'CANCEL',
+//                role: 'cancel',
+//                handler: () => {}
+//            },
+//            {
+//                text: 'OK',
+//                handler: () => {
+//                    this.deleteComment(commentId, slug);
+//                }
+//            }
+//            ]
+//        });
+//        alert.present();
+//    }
+//    public deleteComment(commentId, slug) {
+//        var editedContent= jQuery("#Activity_content_"+commentId+" .commentp").html();
+//        var commentParams;
+//        var parentCommentId;
+//        if (this.itemsInActivities[commentId].Status == 2) {
+//            parentCommentId = parseInt(this.itemsInActivities[commentId].ParentIndex);
+//            commentParams = {
+//                TicketId: this.taskDetails.ticketId,
+//                Comment: {
+//                    Slug: slug,
+//                    ParentIndex: parentCommentId,
+//                    CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
+//                },
+//            };
+//        } else {
+//            commentParams = {
+//                TicketId: this.taskDetails.ticketId,
+//                Comment: {
+//                    Slug: slug,
+//                    CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
+//                },
+//            };
+//        }
+//        this.globalService.deleteCommentById(this.constants.deleteCommentById, commentParams).subscribe(
+//            (result) => {
+//                if (this.itemsInActivities[commentId].Status == 2) {
+//                    this.itemsInActivities[parentCommentId].repliesCount--;
+//                }
+//                this.itemsInActivities.splice(commentId, 1);
+//            }, (error) => {
+//                this.presentToast('Unsuccessful');
+//            }
+//        );
+//    }
+//    public editComment(commentId) {
+//        var thisObj = this;
+//        jQuery(".commentAction").removeClass("fab-close-active");
+//        jQuery(".fab-list-active").removeClass("fab-list-active");
+//        jQuery("div").each(function (index,element) {
+//            if(jQuery(element).hasClass("commentingTextArea")) {
+//                var actionIdArray =  jQuery(element).attr('id').split('_'); 
+//                var commentid = actionIdArray[1];
+//                thisObj.editTheComment[commentid] = false;
+//                thisObj.editCommentOpenClose[commentid] = false;
+//            }
+//        });
+//        jQuery("#Actions_" + commentId + " .textEditor").val(this.itemsInActivities[commentId].CrudeCDescription);
+//        this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
+//        this.newCommentOpenClose = false;
+//        this.editCommentOpenClose[commentId] = true;
+//    }
+//    public cancelEdit(commentId){
+//        this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
+//        this.editCommentOpenClose[commentId] = false;
+//        this.newCommentOpenClose = true;
+//    }
+//    public showSubmit(commentId){
+//        if(commentId==-1){
+//            this.newSubmitOpenClose = false;
+//        }
+//        else{
+//            this.editSubmitOpenClose = false; 
+//        }
+//    }
+//    public submitComment() {
+//        alert("submit edit from story details");
+//        var commentText = jQuery(".uploadAndSubmit .textEditor").val();
+//        if (commentText != "" && commentText.trim() != "") {
+//            this.commentDesc = "";
+//            jQuery("#commentEditorArea").removeClass("replybox");
+//            var commentedOn = new Date();
+//            var formatedDate = (commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' + commentedOn.getFullYear();
+//            var commentData = {
+//                TicketId: this.taskDetails.ticketId,
+//                Comment: {
+//                    CrudeCDescription: commentText.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
+//                    CommentedOn: formatedDate,
+//                    ParentIndex: "",
+//                    Reply:this.replying,
+//                    OriginalCommentorId:""
+//                },
+//            };
+//            if (this.replying == true) {
+//                if (this.replyToComment != -1) {
+//                    commentData.Comment.OriginalCommentorId = jQuery("#replySnippetContent").attr("class");
+//                    commentData.Comment.ParentIndex = this.replyToComment + "";
+//                }
+//            }
+//            this.globalService.submitComment(this.constants.submitComment, commentData).subscribe(
+//                (result) => {
+//                    this.itemsInActivities.push(result.data);
+//                    if (this.replying == true) {
+//                        this.itemsInActivities[this.replyToComment].repliesCount++;
+//                    }
+//                    this.replying = false;
+//                    jQuery(".uploadAndSubmit .textEditor").val('');
+//                }, (error) => {
+//                    this.presentToast('Unsuccessful');
+//                }
+//            );
+//        }
+//    }
+//    public submitEditedComment(commentId, slug) {
+//        var editedContent = jQuery("#Actions_" + commentId + " .textEditor").val();
+//        if (editedContent != "" && editedContent.trim() != "") {
+//            var commentedOn = new Date();
+//            var formatedDate = (commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' + commentedOn.getFullYear();
+//            var commentData = {
+//                TicketId: this.taskDetails.ticketId,
+//                Comment: {
+//                    CrudeCDescription: editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),
+//                    CommentedOn: formatedDate,
+//                    ParentIndex: "",
+//                    Slug: slug
+//                },
+//            };
+//            this.globalService.submitComment(this.constants.submitComment, commentData).subscribe(
+//                (result) => {
+//                    this.itemsInActivities[commentId].CrudeCDescription = result.data.CrudeCDescription;
+//                    this.itemsInActivities[commentId].CDescription = result.data.CDescription;
+//                    this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
+//                    this.editCommentOpenClose[commentId] = false;
+//                    this.newCommentOpenClose = true;
+//                }, (error) => {
+//                    this.presentToast('Unsuccessful');
+//                }
+//            );
+//        }
+//    }
+//    public presentActionSheet(comeFrom: string, where:string, comment:string) {
+//        let actionSheet = this.actionSheetCtrl.create({
+//            title: 'Select Image Source',
+//            buttons: [
+//                {
+//                    text: 'Load from Library',
+//                    handler: () => {
+//                        this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY,comeFrom, where, comment);
+//                    }
+//                },
+//                {
+//                    text: 'Use Camera',
+//                    handler: () => {
+//                        this.takePicture(this.camera.PictureSourceType.CAMERA,comeFrom, where, comment);
+//                    }
+//                },
+//                {
+//                    text: 'Cancel',
+//                    role: 'cancel'
+//                }
+//            ]
+//            });
+//        actionSheet.present();
+//    }
+//    public takePicture(sourceType,comeFrom: string, where:string, comment:string) {
+//        var options = {
+//            quality: 100,
+//            sourceType: sourceType,
+//            destinationType: this.camera.DestinationType.FILE_URI,
+//            encodingType: this.camera.EncodingType.JPEG,
+//            saveToPhotoAlbum: false,
+//            correctOrientation: true,
+//        };
+//        this.camera.getPicture(options).then((imagePath) => {
+//            if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+//                this.filePath.resolveNativePath(imagePath).then((filePath) => {
+//                    let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+//                    let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
+//                    this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
+//                }, (err) => {});
+//            } else {
+//                var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+//                var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+//                this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
+//            }
+//        }, (err) => {});
+//    }
+//    private createFileName(originalName) {
+//        var d = new Date(),
+//        n = d.getTime(),
+//        newFileName =  "image"+n;
+//        return newFileName;
+//    }
+//    private copyFileToLocalDir(namePath, currentName, newFileName, comeFrom: string, where:string, comment:string) {
+//        this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
+//            this.lastImage = newFileName;
+//            this.uploadImage(currentName, newFileName, comeFrom, where, comment);
+//        }, error => {});
+//    }
+//    public pathForImage(img) {
+//        if (img === null) {
+//            return '';
+//        } else {
+//            return cordova.file.dataDirectory + img;
+//        }
+//    }
+//    public onProgressNew = (progressEvent: ProgressEvent) : void => {
+//        this.ngZone.run(() => {
+//            if (progressEvent.lengthComputable) {
+//                let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+//                this.progressNew = progress;
+//                document.getElementById('progressFileUploadNew').innerHTML = progress + "% loaded...";
+//            } else {
+//                if (document.getElementById('progressFileUploadNew').innerHTML == "") {
+//                    document.getElementById('progressFileUploadNew').innerHTML = "Loading";
+//                } else {
+//                    document.getElementById('progressFileUploadNew').innerHTML += ".";
+//                }
+//            }
+//        });
+//    }
+//    public onProgressEdit = (progressEvent: ProgressEvent) : void => {
+//        this.ngZone.run(() => {
+//            if (progressEvent.lengthComputable) {
+//                let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+//                this.progressEdit = progress;
+//                document.getElementById('progressFileUploadEdit').innerHTML = progress + "% loaded...";
+//            } else {
+//                if (document.getElementById('progressFileUploadEdit').innerHTML == "") {
+//                    document.getElementById('progressFileUploadEdit').innerHTML = "Loading";
+//                } else {
+//                    document.getElementById('progressFileUploadEdit').innerHTML += ".";
+//                }
+//            }
+//        });
+//    }
+//    public uploadImage(originalname, savedname, comeFrom: string, where:string, comment:string) {
+//        var url = this.constants.filesUploading;
+//        var targetPath = this.pathForImage(this.lastImage);
+//        var filename = this.lastImage;
+//        var options = {
+//            fileKey: "commentFile",
+//            fileName: filename,
+//            chunkedMode: false,
+//            mimeType: "image/jpeg",
+//            params : {'filename': filename,'directory':this.constants.fileUploadsFolder,'originalname': originalname}
+//        };
+//       // const fileTransfer = new Transfer();
+//        const fileTransfer: TransferObject = this.transfer.create();
+//        if(where == "comments"){
+//            fileTransfer.onProgress(this.onProgressNew);
+//        }
+//        if(where=="edit_comments"){
+//            fileTransfer.onProgress(this.onProgressEdit);
+//        }
+//        fileTransfer.upload(targetPath, url, options).then(
+//            (data) => {
+//                var statusUpload = this.uploadedInserver(data, comeFrom, where, comment);
+//                if(statusUpload=='uploaded'){
+//                    if(where == "comments"){
+//                        this.progressNew = 0;
+//                        document.getElementById('progressFileUploadNew').innerHTML = "";
+//                    }
+//                    if(where=="edit_comments"){
+//                        this.progressEdit = 0;
+//                        document.getElementById('progressFileUploadEdit').innerHTML = "";
+//                    }
+//                }else if(statusUpload=='notuploaded'){
+//                    this.presentToast('Unable to upload the image.');
+//                }
+//            }, (err) => {
+//                this.presentToast('Unable to upload the image.');
+//        });
+//    }
+//    public uploadedInserver(dataUploaded, comeFrom: string, where:string, comment:string){
+//        var serverResponse = JSON.parse(dataUploaded.response);
+//        if (serverResponse['status'] == '1') {
+//            var editor_contents;
+//            var appended_content;
+//            if(where=="edit_comments"){
+//                editor_contents = jQuery("#Actions_"+comment+" .textEditor").val();
+//            }
+//            var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
+//            if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+//                if (where == "comments") {
+//                    this.commentDesc = this.commentDesc + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+//                    this.newSubmitOpenClose = false;
+//                } else if (where == "edit_comments") {
+//                    appended_content = editor_contents + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+//                    jQuery("#Actions_" + comment + " .textEditor").val(appended_content);
+//                    this.editSubmitOpenClose = false;
+//                } 
+//            }
+//            return 'uploaded';
+//        }else{
+//            return 'notuploaded';
+//        }
+//    }
     // Followers dummy
-    public getUsersForFollow() {
-        this.follower_search_results = [];
-        var addFollowerData = {
-            ticketId: this.taskDetails.ticketId,
-            projectId: 1,
-            searchValue: "madan"
-        };
-        this.globalService.getUsersForFollow(this.constants.getUsersForFollow, addFollowerData).subscribe(
-            (result) => {
-                if (result.statusCode == 200) {
-                    var fList: any = [];
-                    for (var l = 0; l < result.data.length; l++) {
-                        fList.push({ Name: result.data[l].Name, id: result.data[l].Id, ProfilePic: result.data[l].ProfilePic });
-                    }
-                    this.follower_search_results = fList;
-                } else {
-                    console.log("service failed");
-                }
-            },
-            (error) => {
-                console.log("error in getUsersForFollow");
-            }
-        );
-    }
-    public addFollower(followerId) {
-        var followerData = {
-            ticketId: this.taskDetails.ticketId,
-            collaboratorId: followerId,
-        };
-        this.globalService.makeUsersFollowTicket(this.constants.makeUsersFollowTicket, followerData).subscribe(
-            (result) => {
-                if (result.statusCode == 200) {
-                    this.followers.push(result.data);
-                }
-            },
-            (error) => {
-                console.log("error in makeUsersFollowTicket");
-            }
-        );
-    }
-    public presentConfirmRemoveFollower(followerId) {
-        let alert = this.alertController.create({
-            title: 'Confirm Remove Follower',
-            message: 'Do you want to delete this follower?',
-            buttons: [
-            {
-                text: 'CANCEL',
-                role: 'cancel',
-                handler: () => {}
-            },
-            {
-                text: 'OK',
-                handler: () => {
-                    this.removeFollower(followerId);
-                }
-            }
-            ]
-        });
-        alert.present();
-    }
-    public removeFollower(followerId) {
-        var followerData = {
-            icketId: this.taskDetails.ticketId,
-            collaboratorId: followerId
-        };
-        this.globalService.makeUsersUnfollowTicket(this.constants.makeUsersUnfollowTicket, followerData).subscribe(
-            (result) => {
-                if (result.statusCode == 200) {
-                    jQuery("#followerdiv_" + followerId).remove();
-                    this.followers = this.followers.filter(function (el) {
-                        return el.FollowerId !== followerId;
-                    });
-                }
-            },
-            (error) => {
-                console.log("error in makeUsersUnfollowTicket");
-            }
-        );
-    }
-    itemCustomSelected($event){
-        this.addFollower($event.Id);
-        this.searchbar.clearValue();
-    }
+//    public getUsersForFollow() {
+//        this.follower_search_results = [];
+//        var addFollowerData = {
+//            ticketId: this.taskDetails.ticketId,
+//            projectId: 1,
+//            searchValue: "madan"
+//        };
+//        this.globalService.getUsersForFollow(this.constants.getUsersForFollow, addFollowerData).subscribe(
+//            (result) => {
+//                if (result.statusCode == 200) {
+//                    var fList: any = [];
+//                    for (var l = 0; l < result.data.length; l++) {
+//                        fList.push({ Name: result.data[l].Name, id: result.data[l].Id, ProfilePic: result.data[l].ProfilePic });
+//                    }
+//                    this.follower_search_results = fList;
+//                } else {
+//                    console.log("service failed");
+//                }
+//            },
+//            (error) => {
+//                console.log("error in getUsersForFollow");
+//            }
+//        );
+//    }
+//    public addFollower(followerId) {
+//        var followerData = {
+//            ticketId: this.taskDetails.ticketId,
+//            collaboratorId: followerId,
+//        };
+//        this.globalService.makeUsersFollowTicket(this.constants.makeUsersFollowTicket, followerData).subscribe(
+//            (result) => {
+//                if (result.statusCode == 200) {
+//                    this.followers.push(result.data);
+//                }
+//            },
+//            (error) => {
+//                console.log("error in makeUsersFollowTicket");
+//            }
+//        );
+//    }
+//    public presentConfirmRemoveFollower(followerId) {
+//        let alert = this.alertController.create({
+//            title: 'Confirm Remove Follower',
+//            message: 'Do you want to delete this follower?',
+//            buttons: [
+//            {
+//                text: 'CANCEL',
+//                role: 'cancel',
+//                handler: () => {}
+//            },
+//            {
+//                text: 'OK',
+//                handler: () => {
+//                    this.removeFollower(followerId);
+//                }
+//            }
+//            ]
+//        });
+//        alert.present();
+//    }
+//    public removeFollower(followerId) {
+//        var followerData = {
+//            icketId: this.taskDetails.ticketId,
+//            collaboratorId: followerId
+//        };
+//        this.globalService.makeUsersUnfollowTicket(this.constants.makeUsersUnfollowTicket, followerData).subscribe(
+//            (result) => {
+//                if (result.statusCode == 200) {
+//                    jQuery("#followerdiv_" + followerId).remove();
+//                    this.followers = this.followers.filter(function (el) {
+//                        return el.FollowerId !== followerId;
+//                    });
+//                }
+//            },
+//            (error) => {
+//                console.log("error in makeUsersUnfollowTicket");
+//            }
+//        );
+//    }
+//    itemCustomSelected($event){
+//        this.addFollower($event.Id);
+//        this.searchbar.clearValue();
+//    }
     // onInput($event){
     //     this.getUsersForFollowEvent($event);
     // }
@@ -981,7 +979,7 @@ export class StoryDetailsPage {
     //             this.presentToast('Unsuccessful');
     //         });
     // }
-     onTabSelect(tab: { index: number; id: string; }) {
-      console.log(`Selected tab: `, tab);
-     }
+//     onTabSelect(tab: { index: number; id: string; }) {
+//      console.log(`Selected tab: `, tab);
+//     }
 }

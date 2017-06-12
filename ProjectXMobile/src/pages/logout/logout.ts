@@ -28,26 +28,24 @@ export class LogoutPage {
             private storage:Storage,
             public navParams: NavParams, 
             public viewCtrl: ViewController) {
-              this.storage.get('userCredentials').then((value) => {
-                this.logoutParams.userInfo.Id= value.Id;
-                this.logoutParams.userInfo.username=value.username;
-                this.logoutParams.userInfo.token=value.token;
-              });
+            
+                var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
+                this.logoutParams.userInfo.Id= userInfo.Id;
+                this.logoutParams.userInfo.username=userInfo.username;
+                this.logoutParams.userInfo.token=userInfo.token;
+                this.userName = userInfo.username;
             }
   public close() {
     this.viewCtrl.dismiss();
   }
   ionViewDidLoad() {
-    this.userName = this.navParams.get("username");
   }
   public logoutApp() {
     this.close();
     this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
         data =>{
-             this.storage.remove('userCredentials');  
-                 this.storage.clear().then (()=>{
-                    this.app.getRootNav().setRoot(LoginPage); 
-                 });
+           localStorage.removeItem("userCredentials")
+           this.app.getRootNav().setRoot(LoginPage);           
             },
         error=>{ console.log("the error " + JSON.stringify(error));},
         ()=> console.log('logout api call complete'));

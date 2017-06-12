@@ -94,19 +94,13 @@ export class StoryDetailsComments {
         private alertController: AlertController,) {
        let loader = this.loadingController.create({ content: "Loading..." });
        loader.present();
-         this.storage.get('userCredentials').then((value) => {
-            this.userName = value.username;
-        });
+        var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
+            this.userName = userInfo.username;
+            
          this.storyTicketId = this.navParams.data.ticketId;
          console.log("the story details comments ticket id " + JSON.stringify(this.storyTicketId));
          this.itemsInActivities = [];
 
-
-
-//     jQuery('body').click(function(evt){ alert("1"); alert(evt.target.class );  
-//        if(evt.target.class == "format_area" || evt.target.id == "editor")
-//           return;
-// });
 //ticket details 
      globalService.getTicketDetailsById(this.constants.taskDetailsById, this.storyTicketId).subscribe(
             result => {
@@ -245,11 +239,6 @@ export class StoryDetailsComments {
         jQuery('#description').css("overflow", "hidden");
     }
       ionViewDidEnter() {
-//        if (jQuery('#description').height() > 200) {
-//            jQuery('#description').css("height", "200px");
-//            jQuery('.show-morediv').show();
-//            jQuery('#show').show();
-//        }
         var thisObj = this;
         jQuery(document).ready(function(){
             jQuery(document).bind("click",function(event){ 
@@ -261,51 +250,41 @@ export class StoryDetailsComments {
         });
     }
     ionViewWillEnter() {
-//        if (jQuery('#description').height() > 200) {
-//            jQuery('#description').css("height", "200px");
-//            jQuery('.show-morediv').show();
-//            jQuery('#show').show();
-//        }
     }
 //    public selectCancel(index) {
 //        this.showEditableFieldOnly[index] = false;
 //    }
-       public changeOption(event, index, fieldDetails) {
-//        this.readOnlyDropDownField = false;
-//        this.showEditableFieldOnly[index] = false;
-        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe(
-            (result) => {
-                setTimeout(() => {
-                    if (result.data.activityData.referenceKey == -1) {
-                        this.itemsInActivities.push(result.data.activityData.data);
-                    } else {
-                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
-                    }
-                }, 300);
-            },
-            (error) => {
-                this.presentToast('Unsuccessful');
-            });
-    }
-       public inputBlurMethod(event, index, fieldDetails) {
-        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
-            (result) => {
-                setTimeout(() => {
-//                    this.enableTextField[index] = false;
-//                    this.enableTextArea[index] = false;
-//                    document.getElementById("field_title_" + index).style.display = 'block';
+//       public changeOption(event, index, fieldDetails) {
+//        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe(
+//            (result) => {
+//                setTimeout(() => {
+//                    if (result.data.activityData.referenceKey == -1) {
+//                        this.itemsInActivities.push(result.data.activityData.data);
+//                    } else {
+//                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+//                    }
+//                }, 300);
+//            },
+//            (error) => {
+//                this.presentToast('Unsuccessful');
+//            });
+//    }
+//       public inputBlurMethod(event, index, fieldDetails) {
+//        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
+//            (result) => {
+//                setTimeout(() => {
 //                    document.getElementById("field_title_" + index).innerHTML = (event.target.value);
-                    if (result.data.activityData.referenceKey == -1) {
-                        this.itemsInActivities.push(result.data.activityData.data);
-                    } else {
-                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
-                    }
-                }, 200);
-            },
-            (error) => {
-                this.presentToast('Unsuccessful');
-            });
-    }
+//                    if (result.data.activityData.referenceKey == -1) {
+//                        this.itemsInActivities.push(result.data.activityData.data);
+//                    } else {
+//                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+//                    }
+//                }, 200);
+//            },
+//            (error) => {
+//                this.presentToast('Unsuccessful');
+//            });
+//    }
     public titleEdit(event) {
         //this.enableEdatable = true;
     }
@@ -329,24 +308,24 @@ export class StoryDetailsComments {
 //        jQuery('#description').css("height", "200px");
 //        jQuery('#description').css("overflow", "hidden");
 //    }
-    public openOptionsModal(fieldDetails, index) {
-        console.log("open option method from story details comment.");
-       if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
-           this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
-               (result) => {
-                StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
-                console.log("the index of open model is" + index);
-                       StoryDetailsComments.optionsModal.onDidDismiss((data) => {
-                       if (data != null && (data.Name != data.previousValue)) {
-                           this.changeOption(data, index, fieldDetails);
-                       }
-                    
-                   });
-               },
-               (error) => {
-               });
-       }
-   }
+//    public openOptionsModal(fieldDetails, index) {
+//        alert("open option from Story comment");
+//       if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
+//           this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
+//               (result) => {
+//                StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
+//                console.log("the index of open model is" + index);
+//                       StoryDetailsComments.optionsModal.onDidDismiss((data) => {
+//                       if (data != null && (data.Name != data.previousValue)) {
+//                           this.changeOption(data, index, fieldDetails);
+//                       }
+//                    
+//                   });
+//               },
+//               (error) => {
+//               });
+//       }
+//   }
     public replyComment(commentId) {
         jQuery(".commentAction").removeClass("fab-close-active");
         jQuery(".fab-list-active").removeClass("fab-list-active");
@@ -461,6 +440,7 @@ export class StoryDetailsComments {
         }
     }
     public submitComment() {
+        alert("submit clicked from story detauil comment");
         console.log("submit button clicked1");
         this.myHTML = jQuery('.comment_editor').html();
         console.log("submit button clicked2" + JSON.stringify(this.myHTML));

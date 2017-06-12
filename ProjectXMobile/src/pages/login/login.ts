@@ -31,17 +31,12 @@ export class LoginPage {
           this.loginService.getLoginValidation(this.urlConstants.loginUrl, this.login).subscribe(
                 (result)=>{
                         if (result.status=='200'){
-                            this.storage.ready().then( ()=>{
-                                this.storage.set('userCredentials', result.data).then( ()=>{
-                                    let userCredentials = {username: this.login.username};
-                                    this.navCtrl.setRoot(DashboardPage, userCredentials);
-                                    loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
-                                },
-                                (error)=>{
-                                    console.log("error while storing");
-                                });
-                                this.storage.set('projectId', 1);
-                            });
+                            localStorage.setItem("userCredentials",JSON.stringify(result.data));
+                           // alert(localStorage.getItem("userCredentials"));
+                            // alert('out-'+ this.login.username);
+                             let userCredentials = {username: this.login.username};
+                             this.navCtrl.setRoot(DashboardPage, userCredentials);
+                      loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                       } else{
                         loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                         this.hideElement=false;
