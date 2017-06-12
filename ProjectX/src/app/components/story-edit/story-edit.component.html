@@ -1,29 +1,16 @@
 
 <form  #editstoryForm="ngForm"  novalidate="true">
-      <div class="paddingbottom10">
-
-        <div class="titlearea  ">
-            <div class="row">
-                <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
-                    <div class="ticketidarea">
+    <div class="row">
+        <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom"> 
+            <div class="paddingbottom10"> 
+        <div class="titlearea">
+            <div class="ticketidarea">
                         <img *ngIf="ticketData?.StoryType?.Id==1" src="assets/images/story-icon.png"  title="{{ticketData?.StoryType?.Name}}"  />       
                         <img  *ngIf="ticketData?.StoryType?.Id==2" src="assets/images/task-icon.png" title="{{ticketData?.StoryType?.Name}}" /> 
                         #{{ticketData?.TicketId}}</div>
-                </div>
-                <div class="col-xs-12 col-sm-9 col-md-9">
-                    <div class="ticketdescriptionarea minheight50">
-                        <input type="hidden" [ngModel]="ticketData.TicketId"  name="ticketId">
-                        <!--<input id="title" class="editinput" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">-->
-                         <textarea style='resize:none' id="title"  class='autoExpand editinput' maxlength="512" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title" ></textarea>
-                               <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
-                    </div>
-                </div>
             </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom">  <!-->left panel <-->
+                </div>
+            <!-->left panel <-->
             <div class="leftpaneldiv">
                 <div>
 
@@ -63,6 +50,14 @@
         </div>
 
         <div class="col-xs-12 col-sm-9 col-md-9">
+             <div class="paddingbottom10"> 
+        <div class="titlearea">
+             <div class="ticketdescriptionarea ">
+                        <input type="hidden" [ngModel]="ticketData.TicketId"  name="ticketId">
+                        <!--<input id="title" class="editinput" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">-->
+                         <textarea style='resize:none' id="title"  class='autoExpand tickettitle_textarea' maxlength="512" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title" rows='2' data-min-rows='2'></textarea>
+                               <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
+                    </div> </div> </div>
             <div>
 
                 <div class="rightdescriptionarea">

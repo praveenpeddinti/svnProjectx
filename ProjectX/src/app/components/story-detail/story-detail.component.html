@@ -12,12 +12,10 @@
     </video> (keydown)="submitOnEnter($event)"
 </vg-player>-->
 
-
-<div  class="paddingbottom10">
-    <!--Title Part-->
-        <div class="titlearea" (keydown)="submitOnEnter($event)">
-          <div class="row">
-              <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
+<div  class="row">
+      <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom" style="margin:0px;padding:0px;">
+          <div class="paddingbottom10">
+              <div class="ticketidareanorightpadding titlearea ">
                   <div class="ticketidarea">
                        <div class="pull-left paddingL10">
                   <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">EDIT</button>
@@ -27,25 +25,10 @@
                       #{{ticketData?.data?.TicketId}}
                   </div>
               </div>
-            <div class="col-xs-12 col-sm-9 col-md-9">
-              <div class="ticketdescriptionarea minheight50">
-                <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
-                </div>
-               <!-- <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />-->
-                <textarea style='resize:none' class='autoExpand editinput' maxlength="512" id="{{ticketData?.data?.TicketId}}_titleInput"  [hidden]="showTitleEdit"  value="{{ticketData?.data?.Title}}" (blur)="closeTitleEdit($event.target.value)" ></textarea>
-                <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
-                </div>-->
               </div>
-            </div>
-          </div>
-      </div>
-      <!--Title Part End-->
-  </div>
-
-<div  class="row">
-      <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom" style="margin:0px;padding:0px;">
           <!--Left Pannel Starts-->
           <div class="leftpaneldiv">
+              
               <!--<div class="leftpanelsections">
                   <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">Edit</button>
               </div>-->
@@ -128,6 +111,17 @@
     </div>
 
     <div class="col-xs-12 col-sm-9 col-md-9">
+         <div class="paddingbottom10"> 
+        <div class="titlearea" (keydown)="submitOnEnter($event)">
+              <div class="ticketdescriptionarea">
+                <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
+                </div>
+               <!-- <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />-->
+                <textarea  style="resize: none;" class='autoExpand tickettitle_textarea' maxlength="512" id="{{ticketData?.data?.TicketId}}_titleInput"  [hidden]="showTitleEdit"  value="{{ticketData?.data?.Title}}" (blur)="closeTitleEdit($event.target.value)"  rows='3' data-min-rows='3'></textarea>
+                <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
+                </div>-->
+              </div>
+            </div></div>
       <div>
           <!--Description Part-->
         <div class="rightdescriptionarea" [hidden]="!showDescEditor">

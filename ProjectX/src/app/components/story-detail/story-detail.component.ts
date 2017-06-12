@@ -147,6 +147,7 @@ var thisObj = this;
       //   // for navigation to ticket
       // this.route.params.subscribe(params => {
       //       this.searchSlug = params['Slug'];
+
         
 }
 
@@ -346,9 +347,47 @@ cancelReply(){
 private showTitleEdit=true;
 // private titleError="";
 editTitle(titleId){
-  // alert("+++++++++"+titleId);
+  //alert("+++++++++"+titleId);
   this.showTitleEdit = false;
-  setTimeout(()=>{jQuery("#"+titleId).focus();},150);
+  setTimeout(()=>{jQuery("#"+titleId).focus();
+   jQuery(document)
+    .one('focus.autoExpand', 'textarea.autoExpand', function(){
+       // alert("in one===>"+this.baseScrollHeight+"*****"+this.scrollHeight);
+        var savedValue = this.value;
+        this.value = '';
+        this.baseScrollHeight = this.scrollHeight;
+        this.value = savedValue;
+    })
+    .on('input.autoExpand', 'textarea.autoExpand', function(){
+        var minRows = this.getAttribute('data-min-rows')|0, rows;
+        this.rows = minRows;
+        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
+        this.rows = minRows + rows;
+    });
+
+    //          jQuery(document)
+    // .one('focus.autoExpand', 'textarea.autoExpand', function(){
+    //   jQuery(".textarea.autoExpand").css("resize", "none");
+    //   //jQuery('.textarea.autoExpand').css('resize','none');
+    //     var savedValue = this.value;
+    //     this.value = '';
+    //     this.baseScrollHeight = this.scrollHeight;
+    //     var minRows = this.getAttribute('data-min-rows')|0, rows;
+    //     this.rows = minRows;
+    //     rows = Math.ceil((this.scrollHeight) / 17);
+    //     this.rows = minRows + rows;
+    //     this.value = savedValue;
+    //     // alert(this.rows+"in one===>"+this.baseScrollHeight+"*****"+this.scrollHeight);
+    // })
+    // .on('input.autoExpand', 'textarea.autoExpand', function(){
+    //   // alert(rows);
+    //     var minRows = this.getAttribute('data-min-rows')|0, rows;
+    //     this.rows = minRows;
+    //     rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
+    //     this.rows = minRows + rows;
+    // });
+
+},150);
   
 }
 
