@@ -10,11 +10,11 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Constants {
   // Local URL
-//    public baseUrl = 'http://10.10.73.33/';
+    public baseUrl = 'http://localhost/';
   // Sandbox URL
-  public baseUrl = 'http://10.10.73.77/';
+ // public baseUrl = 'http://10.10.73.77/';
   // Public URL
-  //  public baseUrl = 'http://113.193.181.131/';
+   // public baseUrl = 'http://113.193.181.131/';
   
   // Mobile team URL
   // public baseUrl = 'http://10.10.73.62/';
@@ -46,6 +46,9 @@ export class Constants {
    public allDetailsforSearch = this.baseUrl+"story/get-all-ticket-details-for-search";
    public relateTask = this.baseUrl+"story/update-related-tasks";
    public getCollaboratorsUrl=this.baseUrl+"story/get-collaborators";
+   // Ticket #153 filter
+   public filterOptions = this.baseUrl+"story/get-filter-options";
+   public getallStoryDetails = this.baseUrl+"story/get-all-story-details";
    constructor() {
       console.log('Constants');
    }
