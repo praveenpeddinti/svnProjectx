@@ -126,7 +126,15 @@ export class StoryEditComponent implements OnInit
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
         this.rows = minRows + rows;
     });
-  }
+    jQuery("#title").keydown(function(e){
+// Enter was pressed without shift key
+if (e.keyCode == 13 && !e.shiftKey)
+{
+    // prevent default behavior
+    e.preventDefault();
+}
+});  
+      }
 
   ngAfterViewInit() 
   {
