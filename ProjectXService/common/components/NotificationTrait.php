@@ -1075,7 +1075,7 @@ EOD;
 EOD;
                         array_push($recipient_list, $notification['NotifiedUser']);
                     } else if ($storyField['Type'] != 6) {
-                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
+                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype" && $notification['ActivityOn'] != "dod") {
                             $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
                             $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
                         }
@@ -1246,7 +1246,7 @@ EOD;
 EOD;
                         $msg = $msg . $text_message;
                     } else if ($storyField['Type'] != 6) {
-                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
+                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype" && $notification['ActivityOn'] != "dod") {
                             $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
                             $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
                         }
@@ -1304,11 +1304,11 @@ EOD;
                               <table width='570' border='0' align='left' cellpadding='0' cellspacing='0'>
                                 <tr><td height='15'>&nbsp;</td></tr>";
             $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
-            $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:40px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
+            $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:30px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
             $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
             $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
-            $activity = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Activity by {$fromUser}:";
+            $activity = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333; padding-bottom:10px;padding-top:10px;' width='570'>Activity by {$fromUser}:";
             $text_message = $project_logo . $user_message . $ticket_message . $activity . $msg . $view_ticket_message;
             CommonUtility::sendEmail($mailingName, $notificationUsers, $text_message, $subject);
         } catch (Exception $ex) {
