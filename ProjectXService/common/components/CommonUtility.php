@@ -1101,7 +1101,6 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
     
     public static function sendEmail($mailingName="ProjectX",$recipient_list,$text_message,$subject,$attachment_list=array()){
         try{
-            
 $html="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
@@ -1128,18 +1127,15 @@ $text_message=$html . $text_message .
 </body>
 </html>";
 //$subject_text="ProjectX | ".$subject;
-         echo("4. In CommonUtiltiy sendEmail started\n");
+         echo("4. In CommonUtiltiy sendEmail started\n".print_r($recipient_list,1));
          ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
         $attachments=array();//list of artifacts
         $EEemail = new Email();
-
         $from=Yii::$app->params['ProjectEmail'];
         $fromName= $mailingName;
         $html=$text_message;
         $text=$text_message;
         $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
-                
-
 //              Yii::$app->mailer->compose()
 //           ->setFrom(Yii::$app->params['ProjectEmail'])
 //           ->setTo($recipient_list)
@@ -1710,10 +1706,29 @@ public static function filterFollowers($followers){
              );
              return $followers;
     } catch (Exception $ex) {
+         Yii::log("CommonUtility:filterFollowers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
     }
 }
+public static function getUniqueArrayObjects($arrayOfObjects){
+    try{
+       // echo "getUniqueArrayObjects--".print_r($arrayOfObjects[0],1);
+          $uniqueArrayObjects = array_filter($arrayOfObjects, function($obj) {
+             // echo "actovintu o----".$obj["ActivityOn"];
+                    static $idList = array();
+                    if (in_array($obj["ActivityOn"], $idList)) {
+                        return false;
+                    }
+                    $idList [] = $obj["ActivityOn"];
+                    return true;
+                }
+             );
+             return $uniqueArrayObjects;
+    } catch (Exception $ex) {
+         Yii::log("CommonUtility:getUniqueArrayObjects::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
+    }
+}
 
     /**
      * @description This method is to prepare follower list when edit the inline for Stack Holder, Assigned to and Reported by
