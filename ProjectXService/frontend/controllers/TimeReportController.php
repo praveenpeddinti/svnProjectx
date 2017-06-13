@@ -128,7 +128,8 @@ class TimeReportController extends Controller
            // $ticketId = $searchData->ticketId;
             $sortvalue = $searchData->sortvalue;
             $searchString = $searchData->searchString;
-            $getSearchDetails = TicketCollection::getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
+            $getSearchDetails=ServiceFactory::getTimeReportServiceInstance()->getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
+            
             if(!empty($getSearchDetails)){
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;
