@@ -1306,7 +1306,7 @@ EOD;
                 $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
                 $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
-                  $activity="<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Activity by {$fromUser}";
+                  $activity="<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Activity by {$fromUser}:";
                 $text_message = $project_logo . $user_message . $ticket_message .$activity. $msg . $view_ticket_message;
                 CommonUtility::sendEmail($mailingName,$notificationUsers, $text_message, $subject);
                 } catch (Exception $ex) {
