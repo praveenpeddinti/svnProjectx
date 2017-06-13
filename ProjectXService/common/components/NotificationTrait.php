@@ -1120,7 +1120,7 @@ EOD;
                                    </tr>
                                    <tr>
                                    <td style='font-family:Arial; font-size:12px;line-height:24px;color:#333333;' align='left' width='392'>
-                                   <p style='text-align:right; margin:0px; padding:0px;'>project: <a href={$redirectToHome} style='color:#0199e0'>{$projectName}<a href=''></a></p>
+                                   <p style='text-align:right; margin:0px; padding:0px;'>Project: <a href={$redirectToHome} style='color:#0199e0'>{$projectName}<a href=''></a></p>
                                        </td>
                                    </tr>
                                   </table>
@@ -1289,7 +1289,7 @@ EOD;
                                    </tr>
                                    <tr>
                                    <td style='font-family:Arial; font-size:12px;line-height:24px;color:#333333;' align='left' width='392'>
-                                   <p style='text-align:right; margin:0px; padding:0px;'>project: <a href={$redirectToHome} style='color:#0199e0'>{$projectName}<a href=''></a></p>
+                                   <p style='text-align:right; margin:0px; padding:0px;'>Project: <a href={$redirectToHome} style='color:#0199e0'>{$projectName}<a href=''></a></p>
                                        </td>
                                    </tr>
                                   </table>
