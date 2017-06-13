@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ProjectX</title>
+  <base href="/">
+  <!--<script src="//cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>-->
+  <link rel="stylesheeet" href="assets/js/ckeditor/contents.css">
+  <!--<script>var CKEDITOR_BASEPATH = 'assets/js/ckeditor/';</script>-->
+  <!--<script src="assets/js/ckeditor/ckeditor.js"></script> CKEDITOR-->
+  
+<!--  <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>-->
+  <script src="assets/js/jquery-1.11.2.min.js"></script>
+  <script src="assets/js/jquery.caret.js"></script> 
+  <script src="assets/js/jquery.atwho.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/timezone.js"></script>
+  <!--<script src='assets/js/jquery.tinymce.min.js'></script>  Tiny MCE--> 
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
+  <script src="http://10.10.73.33:4201/socket.io/socket.io.js"></script>
+
+  <!--<script src="assets/js/tinymce.min.js"></script>-->
+  <!-- <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.js"></script>-->
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <script type="text/javascript">
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+}) 
+
+var socket = io.connect('http://10.10.73.33:4201');
+ 
+
+</script>
+</head>
+<body>
+  <div id="commonSpinner" class="unloading">
+    <img src="/assets/images/loading.svg"/>
+  </div>
+  <app-root>
+    <div class="loading">
+    <img src="/assets/images/loading.svg"/>
+   </div>
+  </app-root>
+</body>
+</html>

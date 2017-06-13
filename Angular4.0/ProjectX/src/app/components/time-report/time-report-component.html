@@ -1,0 +1,302 @@
+<!-- Menu -->
+<div class="custom_menu ">
+    <div class="widgethedsub">Time Report</div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6 ">
+            
+           <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4 errorshow ">
+            <label class="timereportlabel">From</label>
+            <div class="timelogpaddingright5 ">
+            <p-calendar [(ngModel)]="fromDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="selectFromDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
+      </p-calendar>
+            </div>
+         </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 ">
+            <label class="timereportlabel">To</label>
+              <div class="timelogpaddingright5 ">
+             <p-calendar [(ngModel)]="toDateVal" class="primeDateComponent customcalenderdiv" (onSelect)="selectToDate($event)" [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true" [hidden]="showMyEditableField" dateFormat="M-dd-yy" >
+      </p-calendar>
+          </div>   
+        <div id="toDate_error" [hidden]="true" class="fielderror">To Date is must be greater than From Date</div>
+            
+        </div>
+               
+       <div class="col-xs-12 col-sm-4 col-md-4 paddingtop20">
+           
+            <button (click)="dateFilterSearch()" class="normal bluebutton bluebuttonmedium buttonmediumheight">GO</button>
+            
+        </div>
+
+    </div>
+            
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 ">
+            <div class=" pull-right">
+                <div class="timereportdiv">
+                    <ul>
+                        <li>
+                            <div class="timeboxtitle"><b>From:</b> {{fromDateString}} &nbsp;&nbsp; <b>To:</b> {{toDateString}}</div>
+                            <div  class="timeboxlabel">Total worked hours</div>
+                            
+                        </li>
+                        <li>
+                            <div class="timecountouter"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                            <div class="timewrapbox">{{totaltimehours}}</div>
+                            </div>
+                        </li>
+                        
+                    </ul>
+                        
+                    </div>
+                        
+                    </div>
+            
+            
+        </div>
+    </div>
+    <hr class="topdivider"/>
+  <div class="row paddingtop5">
+      <div class="col-xs-12 col-sm-6 col-md-6 ">
+          <div class="widgethedsub">Time Tracking</div>
+      </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 ">
+        <div class="pull-right">
+           
+        <div (click)="clearDateTimeEntry()" class="add" data-backdrop="false" data-toggle="modal" data-target="#addTimelogModel"  ><i  class="fa fa-plus"></i>
+        </div>
+     
+</div>
+    </div>
+   </div>
+
+</div>
+
+<ngx-datatable
+        #myTable 
+        class="material expandable customdatatable"
+        [rows]="rows"
+        [columnMode]="'flex'"
+        [headerHeight]="40"
+        [footerHeight]="40"
+        [rowHeight]="'auto'"
+        [externalPaging]="true"
+        [externalSorting]="true"
+        [count]="count"
+        [offset]="offset"
+        [limit]="limit"
+        [sortable]= "true"
+        (page)="onPage($event)"
+        (sort)="onSort($event)"
+        >
+<!-- Column Template -->
+<!--The table column(s) width take dynamically.
+Row classes are also dynamically. These classes are pass to service layer-->
+ <ngx-datatable-column *ngFor="let column of columns;let i=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
+  [flexGrow]="column.flexGrow">
+  
+  <ng-template let-row="row" ngx-datatable-cell-template >
+     <div style="cursor:default" class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name!='Id'" >
+      {{row[i].field_value}}
+       
+   
+   </div>
+        <div class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name=='Id'" >
+        <img *ngIf="row[i].other_data==1" src="assets/images/story-icon.png"  />
+      <img *ngIf="row[i].other_data==2" src="assets/images/task-icon.png" />
+      <a *ngIf="row[i].field_name=='Id'" (click)="navigateToStoryDetail(row[i].ticketId)">{{row[i].field_value}} </a>
+       
+   
+   </div>
+      <div style="cursor:default" *ngIf="row[i].field_name =='action'" class="{{column.class}}" style="position: relative">
+        
+          <!--<input type="button" class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" (click)="clearDateTimeEntry()" data-backdrop="false"  data-toggle="modal"   [attr.data-target]="'#myModal_'+ row[i].Slug.$oid" />-->
+          <input type="button" class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" (click)="editTimeEntry(row[i])" data-backdrop="false"  data-toggle="modal"   data-target="#editTimelogModel" />
+          <input type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey deletebutton tablebuttons marb5" name="DELETE" value="DELETE" id="del_{{row[i].Slug.$oid}}" (click)="showdeleteDiv(row[i],row[i].Slug.$oid,$event)"/>
+
+      </div> 
+
+
+</ng-template>
+</ngx-datatable-column>
+
+<!-- Column Template -->
+
+</ngx-datatable>
+      <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment" id="delete_timelog" style="width:auto">
+            <div class="delete_followersbgtable" >  
+                Do you want to remove this Time log? 
+                <div class="text-center" style=" padding-top:10px">
+                    <div class="yes" id="remove_yes" (click)="removeTimelog()">YES</div>
+                    <div class="no" (click)="blockDeleteDiv()">NO</div>
+        </div>
+            </div>
+        </div>
+              <div class="modal fade custommodel"  id="addTimelogModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Entry</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+     <form   #timeLogForm="ngForm" (ngSubmit)="submitted && timeLogForm.form.valid && addTimeLog()" novalidate="true">
+
+      <div class="modal-body">
+          <div class="timelogSuccessMsg"> Time log added successfully</div>
+          <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                  <label class="timereportlabel"> Story/Task </label>
+                  <div class="customformfieldsmarginbottom autoSearchTask">
+
+                  <p-autoComplete  [(ngModel)]="entryForm.text" name="task"  #task="ngModel" [minLength]="1"  placeholder="Search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)"  required></p-autoComplete>
+ <div *ngIf="submitted && task.errors " class="fielderror">
+                <div  [hidden]="!task.errors.required">Story/task is required</div>
+                
+            </div>
+              <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
+                  </div>
+              </div>
+              
+          </div>
+          <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                  <label class="timereportlabel"> Description </label>
+<div class="customformfieldsmarginbottom relativediv ">
+                  <textarea  [(ngModel)]="entryForm.description" name="description"  #description="ngModel"   class="customformfieldstextarea " id="addTimelogDesc"  required></textarea>
+
+<div *ngIf="submitted && description.errors " class="fielderror">
+                <div [hidden]="!description.errors.required">
+                    Description is required
+                </div>
+               
+            </div>
+          
+              </div> </div>
+            
+          </div>
+          <div class="row">
+              <div class="col-xs-12 col-sm-4 col-md-4 ">
+                  <label class="timereportlabel"> Hours </label>
+                  <div class="relativediv">
+                  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.hours" name="hours"  #hours="ngModel"  id="addTimelogTime" (keyup)="inputKeyDown(1)" placeholder="0.00" maxlength="4"/>
+                 <div *ngIf="submitted && hours.errors " class="fielderror">
+                <div [hidden]="!hours.errors.required">
+                    Hours is required
+                </div>
+                </div>
+                 <div id="addHoursErrMsg" class="fielderror" style="display:none;"></div>
+              </div>
+               
+              </div>
+         
+              <div class="col-xs-12 col-sm-8 col-md-8 ">
+                  <label class="timereportlabel"> Date </label>
+                  <div class="paddingright25 ">
+                             <p-calendar required  [(ngModel)]="entryForm.dateVal" name="dateVal"  #dateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate">
+                        </p-calendar>
+  
+                  </div>
+              </div>
+            
+          </div>
+          
+         </div>
+    
+      <div class="modal-footer">
+        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
+      </div>
+       </form>
+    </div>
+  </div>
+</div>
+           <div class="modal fade custommodel"  id="editTimelogModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Entry</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     
+     <form   #timeLogEditForm="ngForm" (ngSubmit)="esubmitted && timeLogEditForm.form.valid && editTimeLog()" novalidate="true">
+      <div class="modal-body">
+          
+ <div class="timelogSuccessMsg" > Time log updated successfully</div>
+          <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                  <label class="timereportlabel"> Story/Task </label>
+                  <div class="customformfieldsmarginbottom relativediv">
+
+                  <p-autoComplete required [(ngModel)]="extractFields.ticketDesc" name="edittask"  #edittask="ngModel" [minLength]="1"  placeholder="search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" (onSelect)="getSelectedValueForTask($event)"></p-autoComplete>
+  <div *ngIf="esubmitted && edittask.errors " class="fielderror">
+                <div  [hidden]="!edittask.errors.required">
+                    Story/task is required
+                </div>
+
+            </div>
+            <div id="editTitleErrMsg" class="fielderror" style="display:none;"></div>
+                  </div>
+              </div>
+              
+          </div>
+          <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                  <label class="timereportlabel"> Description </label>
+<div class="customformfieldsmarginbottom relativediv ">
+                  <textarea  [(ngModel)]="extractFields.description" name="editdescription"  #editdescription="ngModel"   class="customformfieldstextarea "   required></textarea>
+                  
+<div *ngIf="esubmitted && editdescription.errors " class="fielderror">
+                <div [hidden]="!editdescription.errors.required">
+                    Description is required
+                </div>
+
+            </div>
+</div>
+              </div>
+              
+          </div>
+          <div class="row">
+              <div class="col-xs-12 col-sm-4 col-md-4 ">
+                  <label class="timereportlabel "> Hours </label>
+                  <div class="relativediv ">
+                  <input type="text" class="customformfields " required  [(ngModel)]="extractFields.Time" name="edithours"  #edithours="ngModel" id="editTimelogTime"  (keyup)="inputKeyDown(2)" maxlength="4"/>
+                          <div *ngIf="esubmitted && edithours.errors " class="fielderror">
+                <div [hidden]="!edithours.errors.required">
+                    Hours is required
+                </div>
+            </div>
+                         <div id="editHoursErrMsg" class="fielderror" style="display:none;"></div>
+              </div>
+               
+              </div>
+ 
+        
+              <div class="col-xs-12 col-sm-8 col-md-8 ">
+                  <label class="timereportlabel"> Date </label>
+                  <div class="paddingright25 ">
+                             <p-calendar required  [(ngModel)]="extractFields.LogDate" name="editdateVal"  #editdateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [maxDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" (onSelect)="getSelectedValueForDate($event)">
+                        </p-calendar>
+  
+                  </div>
+              </div>
+               
+          </div>
+           </div>
+          <div class="modal-footer">
+        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="esubmitted=true;">UPDATE</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="esubmitted=false;resetForm();">CANCEL</button>
+      </div>
+      
+        
+     </form>
+      
+    </div>
+  </div>
+</div>
+ 
+
