@@ -791,9 +791,9 @@ trait NotificationTrait {
      */
     public static function sendEmailNotification($notificationIds, $projectId, $bulkUpdate = 0) {
         try {
-           //  error_log("send e,ao;====nr==================" . $bulkUpdate);
+            //  error_log("send e,ao;====nr==================" . $bulkUpdate);
             $notificationIds = json_encode($notificationIds);
-           // error_log("send e,ao;=======222222222===============");
+            // error_log("send e,ao;=======222222222===============");
             $path = "/data/logs/ProjectX";
             if (!file_exists($path)) {
                 mkdir($path, 0755, true);
@@ -1099,7 +1099,7 @@ EOD;
                     $display_name = $collaboratorData['FirstName'] . " " . $collaboratorData['LastName'];
                     //   error_log("EMAIL________________+++++++++++_____________".$value);
                 }
-                echo "---dsdsadasda-s-sdasd-as-dd--".print_r($recipient_list,1);
+                echo "---dsdsadasda-s-sdasd-as-dd--" . print_r($recipient_list, 1);
                 $ticket_title = " | #" . $ticketId . ": " . $title;
                 $subject = "ProjectX | " . $projectName . $ticket_title;
                 $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
@@ -1140,7 +1140,7 @@ EOD;
                 $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
                 $text_message = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
-                echo ("4. 11111111111 sending email comppleted ..hhhhhhhhh.".print_r($recipient_list,1));
+                echo ("4. 11111111111 sending email comppleted ..hhhhhhhhh." . print_r($recipient_list, 1));
                 CommonUtility::sendEmail($mailingName, $recipient_list, $text_message, $subject);
                 echo ("4. sending email comppleted ...");
             }
@@ -1149,24 +1149,28 @@ EOD;
         }
     }
 
-    public function sendBulkEmailNotification($notificationIds, $projectId,$bulkUpdate='') {
+    /**
+     * @author Lakshmi
+     * @param type $notificationIds
+     * @param type $projectId
+     * @param type $bulkUpdate=''
+     */
+    public function sendBulkEmailNotification($notificationIds, $projectId, $bulkUpdate = '') {
         try {
-            echo "sendBulkEmailNotification---------------".count($notificationIds);
+            //echo "sendBulkEmailNotification---------------".count($notificationIds);
             $message = array();
             $result_msg = array();
             $project_logo = '';
             $user_message = '';
             $ticket_message = '';
             $view_ticket_message = '';
-            $msg=<<<EOD
+            $msg = <<<EOD
 EOD;
-            $recipient_list=array();
+            $recipient_list = array();
             $notifications = NotificationCollection::getNotificationDetails($notificationIds);
-           $uniqueNotifications = CommonUtility::getUniqueArrayObjects($notifications);
-           echo "@@@@@@@@@@@@@@@@@@2".print_r($uniqueNotifications,1);
-    
-           foreach($uniqueNotifications as $notification){
-              // echo(count($notificationIds)."-------uniaqu----------".count($uniqueNotifications));
+            $uniqueNotifications = CommonUtility::getUniqueArrayObjects($notifications);
+            foreach ($uniqueNotifications as $notification) {
+                // echo(count($notificationIds)."-------uniaqu----------".count($uniqueNotifications));
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                 $Date = $datetime->format('M-d-Y H:i:s');
@@ -1177,24 +1181,23 @@ EOD;
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
                 $from_user = TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
                 $storyField = StoryFields::getFieldDetails($activityOn, "Field_Name");
-                //echo("notificationIds-------uniaqu---ppppp-------".count($storyField));
                 $activityOnFieldType = $storyField["Type"];
                 $ticketId = $notification['TicketId'];
                 $title = $ticket_data['Title'];
                 $fromUser = $from_user['UserName'];
                 $mailingName = $from_user['FirstName'] . " " . $from_user['LastName'];
-                 $projectDetails = Projects::getProjectMiniDetails($projectId);
+                $projectDetails = Projects::getProjectMiniDetails($projectId);
                 $projectName = $projectDetails["ProjectName"];
                 $link = Yii::$app->params['AppURL'] . "/project/$projectName/" . $ticketId . "/details";
                 $redirectToHome = Yii::$app->params['AppURL'] . "/home";
-                   if ($activityOn == "Title") {
-                   $description_message = $notification['OldValue'] . " => " . $notification['NewValue'];
+                if ($activityOn == "Title") {
+                    $description_message = $notification['OldValue'] . " => " . $notification['NewValue'];
                     $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;padding-top:10px;">Title: {$description_message}</td></tr>
 EOD;
-                    $msg=$msg.$text_message;
+                    $msg = $msg . $text_message;
                 }
-              if ($activityOn == "Description") {
+                if ($activityOn == "Description") {
                     $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;padding-top:10px;">A story description has been edited</td></tr>
         <tr><td height="10">&nbsp;</td></tr>
@@ -1203,9 +1206,9 @@ EOD;
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"><b>Description after editing was:</b></td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
-                    $msg=$msg.$text_message;
+                    $msg = $msg . $text_message;
                 }
-                      if ($activityOn == "assignedto" || $activityOn == "stakeholder") {
+                if ($activityOn == "assignedto" || $activityOn == "stakeholder") {
                     $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
                     $assigned_message = $action_user['UserName'];
                     $old_user = Collaborators::getCollaboratorById($notification['OldValue']);
@@ -1215,9 +1218,9 @@ EOD;
                     $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;padding-top:10px;">{$storyField['Title']}: {$assigned_message}</td></tr>
 EOD;
-                    $msg=$msg.$text_message;
+                    $msg = $msg . $text_message;
                 }
-                  if (isset($storyField['Title'])) {
+                if (isset($storyField['Title'])) {
 
                     $storyFieldName = $storyField['Title'];
                     //Eg : moin.hussain set duedate to 'apr-14-2017'
@@ -1229,7 +1232,6 @@ EOD;
                             $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                             $newValue = $datetime->format('M-d-Y');
                         }
-
                         if ($notification['OldValue'] != "") {
                             $datetime = $notification['OldValue']->toDateTime();
                             $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -1242,7 +1244,7 @@ EOD;
                         $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;padding-top:10px;">{$storyField['Title']}: {$dueDate} </td></tr>
 EOD;
-                    $msg=$msg.$text_message;
+                        $msg = $msg . $text_message;
                     } else if ($storyField['Type'] != 6) {
                         if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
                             $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
@@ -1255,22 +1257,22 @@ EOD;
                         $text_message = <<<EOD
             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;padding-top:10px;">{$storyField['Title']}: {$ticketState} </td></tr>
 EOD;
-                      $msg=$msg.$text_message;
+                        $msg = $msg . $text_message;
                     }
-                  }
-              }
-               $notificationUsers=array();
-               $notificationUsers = array_column($notifications,'NotifiedUser');
-                 foreach ($notificationUsers as &$value) {
-                    $collaborator = TinyUserCollection::getMiniUserDetails($value);
-                    $value = $collaborator['Email'];
-                    $notified_user = $collaborator['UserName'];
-                    $display_name = $collaborator['FirstName'] . " " . $collaborator['LastName'];
-                 }
+                }
+            }
+            $notificationUsers = array();
+            $notificationUsers = array_column($notifications, 'NotifiedUser');
+            foreach ($notificationUsers as &$value) {
+                $collaborator = TinyUserCollection::getMiniUserDetails($value);
+                $value = $collaborator['Email'];
+                $notified_user = $collaborator['UserName'];
+                $display_name = $collaborator['FirstName'] . " " . $collaborator['LastName'];
+            }
 
-              $ticket_title = " | #" . $ticketId . ": " . $title;
-               $subject = "ProjectX | " . $projectName . $ticket_title;
-        $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
+            $ticket_title = " | #" . $ticketId . ": " . $title;
+            $subject = "ProjectX | " . $projectName . $ticket_title;
+            $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
                                    <table width='598' border='0' cellspacing='0' cellpadding='0' align='left'>
                                  <tr>
                                   <td colspan='4' height='7'></td>
@@ -1301,15 +1303,15 @@ EOD;
                              <tr><td width='15'>&nbsp;</td><td width='570' align='left' valign:'top'>
                               <table width='570' border='0' align='left' cellpadding='0' cellspacing='0'>
                                 <tr><td height='15'>&nbsp;</td></tr>";
-                $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
-                $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:40px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
-                $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
-                $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
+            $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
+            $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:40px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
+            $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
+            $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
-                  $activity="<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Activity by {$fromUser}:";
-                $text_message = $project_logo . $user_message . $ticket_message .$activity. $msg . $view_ticket_message;
-                CommonUtility::sendEmail($mailingName,$notificationUsers, $text_message, $subject);
-                } catch (Exception $ex) {
+            $activity = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Activity by {$fromUser}:";
+            $text_message = $project_logo . $user_message . $ticket_message . $activity . $msg . $view_ticket_message;
+            CommonUtility::sendEmail($mailingName, $notificationUsers, $text_message, $subject);
+        } catch (Exception $ex) {
             Yii::log("NotificationTrait:sendEmailNotificationFromBackground::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
