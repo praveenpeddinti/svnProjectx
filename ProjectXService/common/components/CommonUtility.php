@@ -142,6 +142,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         if (strlen($html) > $length) {
             $html = substr($html, 0, $length) . "...";
         }
+       $html = htmlspecialchars_decode($html);
         return $html;
     }
 
@@ -411,6 +412,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $selectFields = ['Title', 'TicketId', 'Fields.priority', 'Fields.assignedto', 'Fields.workflow'];
             foreach ($ticketDetails["Tasks"] as &$task) {
                 $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId, $selectFields);
+                $taskDetails["Title"] = htmlspecialchars_decode($taskDetails["Title"]);
                 $task = (array) $taskDetails;
             }
             foreach ($ticketDetails["RelatedStories"] as &$relatedStory) {
@@ -435,7 +437,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             });
             unset($ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
-
+            $ticketDetails["Title"] = htmlspecialchars_decode($ticketDetails["Title"]); 
 
             return $ticketDetails;
         } catch (Exception $ex) {
@@ -548,9 +550,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             // $ticketDetails["Fields"]="";
             $projectDetails = Projects::getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
-
-
-
+            $ticketDetails["Title"] = htmlspecialchars_decode($ticketDetails["Title"]); 
             unset($ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
             unset($ticketDetails["ArtifactsRef"]);

@@ -146,6 +146,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
               $dataArray = array();
               $fieldsArray = array();
               $title =  trim($ticket_data->title);
+              $title = htmlspecialchars($title);
               $description =  trim($ticket_data->description);
               $workflowType=$ticket_data->WorkflowType;
               $crudeDescription = $description;
@@ -404,6 +405,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketCollectionModel = new TicketCollection();
             $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->ticketId, $projectId);
             $ticketDetails["Title"] = trim($ticket_data->title);
+            $ticketDetails["Title"] = htmlspecialchars($ticketDetails["Title"]);
             $slug =  new \MongoDB\BSON\ObjectID();
             $this->saveActivity($ticket_data->ticketId,$projectId,"Title", $ticketDetails["Title"],$userId,$slug,$timezone);
             $this->saveNotifications($editticket,"Title",$ticketDetails["Title"],'',$slug);
@@ -603,6 +605,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                  if($ticket_data->id=='Title'){
                      $fieldType = "Title";
                       $field_name = "Title";
+                        $ticket_data->value = htmlspecialchars($ticket_data->value);
                     $newData = array('$set' => array("Title" => trim($ticket_data->value)));
                     $condition=array("TicketId" => (int)$ticket_data->ticketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$ticket_data->value;
@@ -823,6 +826,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $returnValue=$selectedValue;
            // }
                  error_log("updateStoryFieldInline---16");
+                 if($ticket_data->editedId == "title"){
+                      $returnValue = htmlspecialchars_decode($returnValue);
+                 }
+                
             $returnValue =  array("updatedFieldData" =>$returnValue,"activityData"=>$activityData,'updatedState'=>$updatedState);
             return $returnValue;
 
