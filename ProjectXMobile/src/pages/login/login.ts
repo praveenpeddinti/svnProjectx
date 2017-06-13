@@ -36,7 +36,7 @@ export class LoginPage {
                             // alert('out-'+ this.login.username);
                              let userCredentials = {username: this.login.username};
                              this.navCtrl.setRoot(DashboardPage, userCredentials);
-                      loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
+                             loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                       } else{
                         loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                         this.hideElement=false;

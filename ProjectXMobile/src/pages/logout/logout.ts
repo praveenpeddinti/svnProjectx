@@ -19,7 +19,7 @@ import {App} from 'ionic-angular';
 export class LogoutPage {
   userName: string='';
   login: {username?: string, password?: string,token?:any} = {};
-  logoutParams = {"userInfo":{"Id":"","username":"","token":""},"projectId":1}
+  logoutParams = {}
   constructor(protected app: App,
             private globalService: Globalservice,
             private constants: Constants,
@@ -30,9 +30,6 @@ export class LogoutPage {
             public viewCtrl: ViewController) {
             
                 var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
-                this.logoutParams.userInfo.Id= userInfo.Id;
-                this.logoutParams.userInfo.username=userInfo.username;
-                this.logoutParams.userInfo.token=userInfo.token;
                 this.userName = userInfo.username;
             }
   public close() {
@@ -44,7 +41,7 @@ export class LogoutPage {
     this.close();
     this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
         data =>{
-           localStorage.removeItem("userCredentials")
+           localStorage.removeItem("userCredentials");
            this.app.getRootNav().setRoot(LoginPage);           
             },
         error=>{ console.log("the error " + JSON.stringify(error));},

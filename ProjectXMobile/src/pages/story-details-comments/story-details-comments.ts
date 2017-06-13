@@ -440,7 +440,6 @@ export class StoryDetailsComments {
         }
     }
     public submitComment() {
-        alert("submit clicked from story detauil comment");
         console.log("submit button clicked1");
         this.myHTML = jQuery('.comment_editor').html();
         console.log("submit button clicked2" + JSON.stringify(this.myHTML));
@@ -686,7 +685,7 @@ export class StoryDetailsComments {
     this.myHTML = jQuery("."+selector).html();
     console.log("Comments___"+this.myHTML);
     var thisObj=this;
-    var reqParam={'ProjectId':1,'search_term':''};
+    var reqParam={'search_term':''};
     var userList;
     jQuery("."+selector).atwho({
     at: "@",

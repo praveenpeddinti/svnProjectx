@@ -303,7 +303,7 @@ export class StoryCreatePage {
         this.formatOptions = true;
         this.create.description= jQuery("#editor").html();
         var thisObj=this;
-    var reqParam={'ProjectId':1,'search_term':''};
+    var reqParam={'search_term':''};
     var userList;
     jQuery("#editor").atwho({
     at: "@",

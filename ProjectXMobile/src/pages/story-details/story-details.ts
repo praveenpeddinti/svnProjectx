@@ -347,7 +347,6 @@ export class StoryDetailsPage {
             });
     }
     public inputBlurMethod(event, index, fieldDetails) {
-        alert("input blur from story details");
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
@@ -411,7 +410,6 @@ export class StoryDetailsPage {
         }
     }
     public openOptionsModal(fieldDetails, index) {
-        alert("open option model from story details.");
         fieldDetails['workflowType'] = this.taskDetails.workflowType;
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
