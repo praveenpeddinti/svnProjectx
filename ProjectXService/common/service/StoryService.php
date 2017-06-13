@@ -1231,12 +1231,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             array_push($subTaskArray, (int)$ticketId);
             if (!empty($ParentTicketInfo["RelatedStories"])) {
                 for ($i = 0; $i < sizeof($ParentTicketInfo["RelatedStories"]); $i++) {
-                       array_push($ticketArray,(int)$ParentTicketInfo["RelatedStories"][$i] );
+                       array_push($subTaskArray,(int)$ParentTicketInfo["RelatedStories"][$i] );
                 }
             }
             $finalData = array();
             $ticketDetails = TicketCollection::getAllTicketDetailsForSearch($projectId, $ticketId, $sortvalue, $searchString,$subTaskArray);
             foreach ($ticketDetails as $ticket) {
+                $ticket["Title"] = htmlspecialchars_decode($ticket["Title"]);
                 array_push($finalData, $ticket);
             }
             return $finalData;
@@ -1354,6 +1355,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketArray = $ParentTicketInfo["RelatedStories"];
             $ticketDetails = TicketCollection::getAllRelateStory($projectId, $ticketId, $ticketArray);
             foreach ($ticketDetails as $ticket) {
+                $ticket["Title"] = htmlspecialchars_decode($ticket["Title"]);
                 array_push($finalData, $ticket);
             }
             return $finalData;

@@ -155,7 +155,6 @@ class TicketTimeLog extends ActiveRecord
     
     public static function getAllTimeReportDetails($StoryData, $projectId) {
         try {
-            $timezone = $StoryData->timeZone;
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $skip = $StoryData->offset * $StoryData->pagesize;
             $limit = $skip + $StoryData->pagesize;
@@ -178,35 +177,7 @@ class TicketTimeLog extends ActiveRecord
                 
                 );
             $timeReportDetails = $query->aggregate($pipeline);
-            $TimeLogDetailsFinalArray = array();
-            $TimeLogDataArray= array();
-            if(count($timeReportDetails) > 0){
-               $timelogs = $timeReportDetails[0]["data"];  
-           
-                foreach($timelogs as $eachOne){
-                    $ticketCollectionModel = new TicketCollection();
-                    $getTicketDetails = $ticketCollectionModel->getTicketDetails($eachOne['TicketId'],$projectId,$selectFields=[]);
-                    $ticketDesc= '#'.$getTicketDetails['TicketId']." ".$getTicketDetails['Title'];
-                    $ticketDesc= self::refineActivityData($ticketDesc,200);
-                    $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
-                    $datetime = $eachOne['LoggedOn']->toDateTime();  
-                    $datetime->setTimezone(new \DateTimeZone($timezone));
-                    $LogDate = $datetime->format('M-d-Y');
-                    $readableDate =$datetime->format('Y-m-d H:i:s');
-                    $eachOne['Time']=number_format((float)$eachOne['Time'], 1, '.', '');
-                    $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => $ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
-                    $time = array("field_name" => "Date", "value_id" => "", "field_value" => $eachOne['Time'], "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
-                    $date = array("field_name" => "Time", "value_id" => "", "field_value" => $LogDate, "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
-                    $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
-                    $forTicketComments[0] = $date;
-                    $forTicketComments[1] =  $ticketId;
-                    $forTicketComments[2] = $time;
-                    $forTicketComments[3] = $action;
-
-                   array_push($TimeLogDataArray,$forTicketComments);
-                }
-               }
-            return $TimeLogDataArray;
+            return $timeReportDetails;
         } catch (Exception $ex) {
             Yii::log("TicketTimeLog:getAllTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -314,19 +285,7 @@ class TicketTimeLog extends ActiveRecord
         }
         
     }
-      /**
-     * @author Padmaja
-     * @return type
-     */
-    public  static function refineActivityData($html,$length="35") {
-        // $html = CommonUtility::closetags($html);
-         $html = strip_tags($html);
-        if (strlen($html) > $length) {
-            $html = substr($html, 0, $length) . "...";
-        }
-        return $html;
-    }
-    
+
     }
 ?>
 

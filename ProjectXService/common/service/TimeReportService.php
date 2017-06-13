@@ -41,7 +41,39 @@ class TimeReportService {
         try {
             $finalData = array();
             $timeReportDetails = TicketTimeLog::getAllTimeReportDetails($StoryData,$projectId);
-            return $timeReportDetails;
+            $timezone = $StoryData->timeZone;
+
+                     
+            $TimeLogDataArray= array();
+            if(count($timeReportDetails) > 0){
+               $timelogs = $timeReportDetails[0]["data"];  
+           
+                foreach($timelogs as $eachOne){
+                    $ticketCollectionModel = new TicketCollection();
+                    $getTicketDetails = $ticketCollectionModel->getTicketDetails($eachOne['TicketId'],$projectId,$selectFields=[]);
+                  
+                    $ticketDesc= '#'.$getTicketDetails['TicketId']." ".$getTicketDetails['Title'];
+                    $ticketDesc= CommonUtility::refineActivityData($ticketDesc,200);
+                    $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
+                    $datetime = $eachOne['LoggedOn']->toDateTime();  
+                    $datetime->setTimezone(new \DateTimeZone($timezone));
+                    $LogDate = $datetime->format('M-d-Y');
+                    $readableDate =$datetime->format('Y-m-d H:i:s');
+                    $eachOne['Time']=number_format((float)$eachOne['Time'], 1, '.', '');
+                    $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => $ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
+                    $time = array("field_name" => "Date", "value_id" => "", "field_value" => $eachOne['Time'], "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
+                    $date = array("field_name" => "Time", "value_id" => "", "field_value" => $LogDate, "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
+                    $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
+                    $forTicketComments[0] = $date;
+                    $forTicketComments[1] =  $ticketId;
+                    $forTicketComments[2] = $time;
+                    $forTicketComments[3] = $action;
+
+                   array_push($TimeLogDataArray,$forTicketComments);
+                }
+               }
+            
+            return $TimeLogDataArray;
         } catch (Exception $ex) {
             Yii::log("TimeReportService:getAllTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -64,10 +96,12 @@ class TimeReportService {
         }
     }
     
-    public function getAllStoryDetailsForTimelog($projectId,$ticketId,$sortvalue, $searchString){
+    public function getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString){
         try{
-             $ticketDetails = TicketCollection::getAllStoryDetailsForAutoSearch($projectId,$ticketId,$sortvalue, $searchString);
-
+             $ticketDetails = TicketCollection::getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
+          foreach ($ticketDetails as &$value) {
+                $value["Title"] = htmlspecialchars_decode($value["Title"]);
+            }
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("TimeReportService:getAllStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
