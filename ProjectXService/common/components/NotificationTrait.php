@@ -1270,17 +1270,38 @@ EOD;
 
               $ticket_title = " | #" . $ticketId . ": " . $title;
                $subject = "ProjectX | " . $projectName . $ticket_title;
-               $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
-                                 <table width='100%' border='0' cellspacing='0' cellpadding='0'><tr>
-                                 <td style='padding:5px;' width='160'><a href={$redirectToHome}><img  src=" . '' . Yii::$app->params['EmailServerURL'] . '/files/tool/logo-emailer.png' . " style='border:0px; outline:0px;'/></a></td>
-                                  <td style='padding:5px;font-family:Arial; font-size:12px;line-height:24px;color:#333333;' align='right'>Activity alert by <a href={$redirectToHome} style='color:#0199e0'>{$fromUser}</a><br/>  Project: <a href={$redirectToHome} style='color:#0199e0'>{$projectName}<a href=''></a>
-                                     </td></tr></table></td></tr>
+        $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
+                                   <table width='598' border='0' cellspacing='0' cellpadding='0' align='left'>
+                                 <tr>
+                                  <td colspan='4' height='7'></td>
+                                 </tr>
+                                 <tr>
+                                 <td width='10'>&nbsp;</td>
+                                 <td width='186' height='55' align='left' valign='top'><a href={$redirectToHome}><img  src=" . '' . Yii::$app->params['EmailServerURL'] . '/files/tool/logo-emailer.png' . " style='border:0px; outline:0px; width:100%;'/></a></td>
+                                  <td width='392' align='left' valign='top'>
+                                  <table width='392' border='0' cellspacing='0' cellpadding='0' align='left'>
+                                   <tr>
+                                   <td style='font-family:Arial; font-size:12px;line-height:24px;color:#333333;' align='left' width='392'>
+                                   <p style='text-align:right; margin:0px; padding:0px;'>Activity alert by <a href={$redirectToHome} style='color:#0199e0'>{$fromUser}</a></p>
+                                       </td>
+                                   </tr>
+                                   <tr>
+                                   <td style='font-family:Arial; font-size:12px;line-height:24px;color:#333333;' align='left' width='392'>
+                                   <p style='text-align:right; margin:0px; padding:0px;'>project: <a href={$redirectToHome} style='color:#0199e0'>{$projectName}<a href=''></a></p>
+                                       </td>
+                                   </tr>
+                                  </table>
+                                     </td>
+                                   <td width='10'>&nbsp;</td> 
+                                  </tr>
+                                  </table>
+                                     </td></tr>
                              <tr><td bgcolor='#f8f8f8' style='border-bottom:solid 1px #fff;'>
                              <table width='100%' border='0' cellspacing='0' cellpadding='0'>
                              <tr><td width='15'>&nbsp;</td><td width='570' align='left' valign:'top'>
                               <table width='570' border='0' align='left' cellpadding='0' cellspacing='0'>
                                 <tr><td height='15'>&nbsp;</td></tr>";
-                $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;'>Dear {$display_name},<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
+                $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
                 $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:40px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
                 $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
                 $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
