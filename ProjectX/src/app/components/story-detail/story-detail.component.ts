@@ -384,7 +384,7 @@ editTitle(titleId){
 closeTitleEdit(editedText){ 
         if(editedText !=""){
           // this.titleError="";
-          document.getElementById(this.ticketId+"_title").innerHTML= editedText;
+          document.getElementById(this.ticketId+"_title").innerText= editedText;
           this.showTitleEdit = true;
       // Added by Padmaja for Inline Edit
           var postEditedText={
@@ -398,7 +398,7 @@ closeTitleEdit(editedText){
           this.postDataToAjax(postEditedText);
       }else{
         this.showTitleEdit = true;
-        editedText = document.getElementById(this.ticketId+"_title").innerHTML;
+        editedText = document.getElementById(this.ticketId+"_title").innerText;
 
       }
 }
@@ -837,20 +837,22 @@ var thisObj = this;
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
         {
           if(result.statusCode== 200){ 
-          
           if(postEditedText.editedId == "title" || postEditedText.editedId == "desc"){
-                document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerHTML=result.data.updatedFieldData;
-                if(postEditedText.editedId == "desc"){
-                  var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
-                  this.getArtifacts(ticketIdObj);
-                 }
+                     if(postEditedText.editedId == "title"){
+                        document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerText=result.data.updatedFieldData;
+                      }else if(postEditedText.editedId == "desc"){
+                      document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerHTML=result.data.updatedFieldData;
+                       var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
+                      this.getArtifacts(ticketIdObj);
+                   }
+               
           }
     
              else if(postEditedText.editedId == "estimatedpoints"){ 
                  jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
                }
           
-             if(result.data.updatedState!=''){ 
+             else if(result.data.updatedState!=''){ 
                  document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
                 this.statusId = result.data.updatedFieldData;
            }
@@ -875,17 +877,7 @@ var thisObj = this;
             });
         }
       }
-         if(postEditedText.EditedId == "title" || postEditedText.EditedId == "desc"){
-                document.getElementById(this.ticketId+'_'+postEditedText.EditedId).innerHTML=result.data.updatedFieldData;
-                if(postEditedText.EditedId == "desc"){
-                  var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
-                  this.getArtifacts(ticketIdObj);
-                 }
-         }
- 
-if(postEditedText.EditedId == "estimatedpoints"){ 
-jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
-}
+
 
          if(isChildActivity==0){
             if(result.data.activityData.referenceKey == -1){

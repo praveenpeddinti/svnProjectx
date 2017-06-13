@@ -114,7 +114,7 @@
          <div class="paddingbottom10"> 
         <div class="titlearea" (keydown)="submitOnEnter($event)">
               <div class="ticketdescriptionarea">
-                <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
+                <div class="viewinputtext " [innerText]="(ticketData != null)? ticketData?.data?.Title : ''" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
                 </div>
                <!-- <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />-->
                 <textarea  style="resize: none;" class='autoExpand tickettitle_textarea' maxlength="512" id="{{ticketData?.data?.TicketId}}_titleInput"  [hidden]="showTitleEdit"  value="{{ticketData?.data?.Title}}" (blur)="closeTitleEdit($event.target.value)"  rows='3' data-min-rows='3'></textarea>
@@ -380,7 +380,7 @@
  <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-zero-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-zero-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
                 </span>
     <span *ngIf="property.type!='user'"> 
-        <span *ngIf="property.PreviousValue!=0" class="bold" [innerHTML]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerHTML]= "property.NewValue"></span> 
+        <span *ngIf="property.PreviousValue!=0" class="bold" [innerText]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerText]= "property.NewValue"></span> 
                 </span>
   </span>              
    <span *ngIf="property.SpecialActivity=='1'"> 
