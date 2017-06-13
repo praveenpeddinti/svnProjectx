@@ -1100,10 +1100,9 @@ EOD;
                     //   error_log("EMAIL________________+++++++++++_____________".$value);
                 }
                 echo "---dsdsadasda-s-sdasd-as-dd--" . print_r($recipient_list, 1);
-                $ticket_title = " | #" . $ticketId . ": " . $title;
-                $subject = "ProjectX | " . $projectName . $ticket_title;
-                $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
-
+               $ticket_title = " | #" . $ticketId . ": " . $title;
+            $subject = "ProjectX | " . $projectName . $ticket_title;
+            $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
                                    <table width='598' border='0' cellspacing='0' cellpadding='0' align='left'>
                                  <tr>
                                   <td colspan='4' height='7'></td>
@@ -1134,10 +1133,10 @@ EOD;
                              <tr><td width='15'>&nbsp;</td><td width='570' align='left' valign:'top'>
                               <table width='570' border='0' align='left' cellpadding='0' cellspacing='0'>
                                 <tr><td height='15'>&nbsp;</td></tr>";
-                $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
-                $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:40px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
-                $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
-                $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
+            $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
+            $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:30px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
+            $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
+            $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
                 $text_message = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
                 echo ("4. 11111111111 sending email comppleted ..hhhhhhhhh." . print_r($recipient_list, 1));
