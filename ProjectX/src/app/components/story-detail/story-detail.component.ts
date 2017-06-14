@@ -354,32 +354,34 @@ editTitle(titleId){
   setTimeout(()=>{jQuery("#"+titleId).focus();
    jQuery(document)
     .one('focus.autoExpand', 'textarea.autoExpand', function(){
-       // alert("in one===>"+this.baseScrollHeight+"*****"+this.scrollHeight);
+         var minRows = this.getAttribute('data-min-rows')|0, rows;
         var savedValue = this.value;
         this.value = '';
         this.baseScrollHeight = this.scrollHeight;
         this.value = savedValue;
+        rows = Math.floor((this.scrollHeight) / 30);
+        this.rows = minRows + rows;
     })
     .on('input.autoExpand', 'textarea.autoExpand', function(){
-        var minRows = this.getAttribute('data-min-rows')|0, rows;
+         var minRows = this.getAttribute('data-min-rows')|0, rows;
         this.rows = minRows;
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
-        this.rows = minRows + rows;
+       // console.log('rows---'+rows);
+        var newrows = Math.floor(this.scrollHeight/30);
+       // console.log(this.scrollHeight+"--------"+this.baseScrollHeight+"------"+newrows);
+        this.rows = newrows;
     });
-      var $textArea = jQuery("#"+titleId);
-      this.resizeTextArea($textArea);
-      jQuery("#"+titleId).keydown(function(e){
+    var $textArea = jQuery("#"+titleId);
+    $textArea.trigger("focus");
+    jQuery("#"+titleId).keydown(function(e){
         if (e.keyCode == 13 && !e.shiftKey)
         {
             e.preventDefault();
-        }
+         }
      });
 },150);
   
 }
- resizeTextArea($textArea) {
-    $textArea.height($textArea[0].scrollHeight);
- }
 
 closeTitleEdit(editedText){ 
         if(editedText !=""){

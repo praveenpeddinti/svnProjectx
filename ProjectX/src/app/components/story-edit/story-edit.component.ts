@@ -52,6 +52,7 @@ export class StoryEditComponent implements OnInit
   public fileUploadStatus:boolean = false;
   public defaultTasksShow:boolean=true;
   public checkPlanLevel='';
+  public getRows='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,private mention:MentionService,private projectService:ProjectService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) { 
@@ -114,39 +115,40 @@ export class StoryEditComponent implements OnInit
     this.minDate=new Date(); //set current date to datepicker as min date
      jQuery(document)
     .one('focus.autoExpand', 'textarea.autoExpand', function(){
-       // alert("in one===>"+this.baseScrollHeight+"*****"+this.scrollHeight);
+         var minRows = this.getAttribute('data-min-rows')|0, rows;
         var savedValue = this.value;
         this.value = '';
         this.baseScrollHeight = this.scrollHeight;
         this.value = savedValue;
+         rows = Math.floor((this.scrollHeight) / 30);
+        this.rows = rows;
     })
     .on('input.autoExpand', 'textarea.autoExpand', function(){
-        var minRows = this.getAttribute('data-min-rows')|0, rows;
+       
+      var minRows = this.getAttribute('data-min-rows')|0, rows;
         this.rows = minRows;
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
-        this.rows = minRows + rows;
+      //  console.log('rows---'+rows);
+        var newrows = Math.floor(this.scrollHeight/30);
+      //  console.log(this.scrollHeight+"--------"+this.baseScrollHeight+"------"+newrows);
+        this.rows = newrows;
+        //  this.rows = minRows + rows;
     });
-        jQuery("#title").keydown(function(e){
+    jQuery("#title").keydown(function(e){
         if (e.keyCode == 13 && !e.shiftKey)
         {
             e.preventDefault();
         }
-        }); 
-
+    }); 
   }
 
   ngAfterViewInit() 
   {
      var $textArea = jQuery("#title");
-     var nativeRowPadding = 15;
-    setTimeout(()=>{
-        resizeTextArea($textArea);
+     setTimeout(()=>{
+       $textArea.trigger("focus");
    },500);
-             
-    function resizeTextArea($textArea) {
-         $textArea.height($textArea[0].scrollHeight);
-    }
-    this.editor.initialize_editor('description',null,null);      
+     this.editor.initialize_editor('description',null,null);      
   }
 
   /*

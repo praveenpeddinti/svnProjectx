@@ -55,7 +55,7 @@
              <div class="ticketdescriptionarea ">
                         <input type="hidden" [ngModel]="ticketData.TicketId"  name="ticketId">
                         <!--<input id="title" class="editinput" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">-->
-                         <textarea style='resize:none' id="title"  class='autoExpand tickettitle_textarea' maxlength="512" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title" rows='2' data-min-rows='2'></textarea>
+                         <textarea style='resize:none' id="title"  class='autoExpand tickettitle_textarea' maxlength="512" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title" rows=rows data-min-rows=1></textarea>
                           
                                <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
                     </div> </div> </div>
