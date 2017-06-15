@@ -33,6 +33,7 @@ class TicketCollection extends ActiveRecord
             "Title",
             "Description",
             "CrudeDescription",
+            "PlainDescription",
             "Fields",
             "CreatedOn",
             "UpdatedOn",
