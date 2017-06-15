@@ -88,10 +88,10 @@ class NotificationsController extends Controller
      * @param type $notificationIds
      * @param type $projectId
      */
-      public function actionForkEmailNotificationProcess($notificationIds,$projectId){
+      public function actionForkEmailNotificationProcess($notificationIds,$projectId,$bulkUpdate){
           try{
-           echo("\n".date("Y-m-d H:i:s T")."****************************************************************\n");
-           echo("0. Sending email background job has started\n");
+          // echo("\n".date("Y-m-d H:i:s T")."****************************************************************\n");
+          echo("Sending email background job has startedSSSSS\n=====".$bulkUpdate."********mailFlag");
          // echo "actionSendEmailNotification--".$notificationIds;
            $notificationIds = json_decode($notificationIds,true);
             // echo "actionSendEmailNotification-)))****-".$notificationIds;
@@ -100,7 +100,13 @@ class NotificationsController extends Controller
                array_push($notificationArray, new \MongoDB\BSON\ObjectID($v['$oid']));
            }
             //echo "actionSendEmailNotification-- after".print_r($notificationArray,1);
-           $result_data = ServiceFactory::getStoryServiceInstance()->sendEmailNotificationFromBackground($notificationArray,$projectId);
+          if($bulkUpdate==1){
+              echo ("!!!!!!!!!!!!!!!");
+            $result_data = ServiceFactory::getStoryServiceInstance()->sendBulkEmailNotification($notificationArray,$projectId,$bulkUpdate);
+          }else{
+              echo ("!!!@@@@@@@@@~!!!!!!!!!!!!!!1");
+            $result_data = ServiceFactory::getStoryServiceInstance()->sendEmailNotificationFromBackground($notificationArray,$projectId);
+          }
           } catch (Exception $ex) {
  Yii::log("NotificationsController:actionForkEmailNotificationProcess::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
           }
