@@ -1171,7 +1171,7 @@ $text_message=$html . $text_message .
                     $offset = ($page - 1) * $pageLength;
                     $limit = $pageLength;
                 }
-            $searchString=strtolower($searchString);
+           // $searchString=strtolower($searchString);
             if ( !empty($searchString)) {
                 $TicketCollFinalArray = array();
                 $TicketArtifactsFinalArray = array();
@@ -1271,7 +1271,7 @@ $text_message=$html . $text_message .
                               $commentsArray['CrudeCDescription']=$eachOne['PlainDescription'];
                               $commentsArray['Slug']=$eachOne['Slug'];
                               $commentsArray['ActivityOn']=$eachOne['ActivityOn'];
-                               if(strpos($commentsArray['CrudeCDescription'],$searchString)!==false){
+                               if(stripos($commentsArray['CrudeCDescription'],$searchString)!==false){
                                 array_push($commentsfinalArray,$commentsArray);
                               }
                            }
@@ -1339,7 +1339,7 @@ $text_message=$html . $text_message .
                     }
                 }else if($searchFlag==2){
                   //  $searchString=stripslashes($searchString);
-                  $searchString = \quotemeta($searchString);
+                    $searchString = \quotemeta($searchString);
                    $searchString=htmlspecialchars($searchString);
                     $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
                     if(!empty($projectId)){
@@ -1371,7 +1371,8 @@ $text_message=$html . $text_message .
                               $commentsArray['CrudeCDescription']=$eachOne['PlainDescription'];
                               $commentsArray['Slug']=$eachOne['Slug'];
                               $commentsArray['ActivityOn']=$eachOne['ActivityOn'];
-                               if(strpos($commentsArray['CrudeCDescription'],$searchString)!==false){
+                              error_log("comment test -------".$searchString);
+                               if(stripos($commentsArray['CrudeCDescription'],$searchString)!==false){
                                 array_push($commentsfinalArray,$commentsArray);
                               }
                            }
@@ -1525,7 +1526,7 @@ $text_message=$html . $text_message .
                             }
                         }
                     }else{
-                        $searchString = \quotemeta($searchString);
+                       $searchString = \quotemeta($searchString);
                         $searchString=htmlspecialchars($searchString);
                          if(!empty($projectId)){ 
                             $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
@@ -1556,8 +1557,8 @@ $text_message=$html . $text_message .
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
                     error_log("beforeeeeeeeeeeeeeee".$searchString);
-                    //$searchString=stripslashes($searchString);
-                   // $searchString = \quotemeta($searchString);
+//                    $searchString=stripslashes($searchString);
+//                   $searchString = \quotemeta($searchString);
                    // $searchString=htmlspecialchars($searchString);
                    // $searchString=htmlspecialchars_decode($searchString);
                     $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
@@ -1586,12 +1587,16 @@ $text_message=$html . $text_message .
                            $forTicketComments['TicketId'] =  $extractComments['_id'];
                            $forTicketComments['Title'] =$getTicketDetails['Title'];
                            $commentsfinalArray =array();
+                           
                           foreach($extractComments['commentData'] as $eachOne){
                               $searchString= stripslashes($searchString);
                               $commentsArray['CrudeCDescription']=$eachOne['PlainDescription'];
                               $commentsArray['Slug']=$eachOne['Slug'];
                               $commentsArray['ActivityOn']=$eachOne['ActivityOn'];
-                               if(strpos($commentsArray['CrudeCDescription'],$searchString)!==false){
+                             // error_log("crudeeeeeeeee------------".$commentsArray['CrudeCDescription']);
+                             // error_log($searchString."----"."asddddd##########".(int)stripos($commentsArray['CrudeCDescription'],stripslashes($searchString)));
+                               if(stripos($commentsArray['CrudeCDescription'],$searchString)!==false){
+                                   error_log("####################");
                                 array_push($commentsfinalArray,$commentsArray);
                               }
                            }
