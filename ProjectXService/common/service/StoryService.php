@@ -270,7 +270,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                           
                 if(!empty($refinedData['UsersList']))
                 {
-                    error_log("===in if mail sending.....==");
+                    //error_log("===in if mail sending.....==");
                     $newticket_data->ticketId = $ticketNumber;
                     self::saveNotificationsToMentionOnly($newticket_data,$refinedData['UsersList'],'mention');
 
@@ -394,6 +394,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
  */
        public function updateTicketDetails($ticket_data) {
         try {
+             $notificationIds=array();
              $editticket=$ticket_data;
              $userdata =  $ticket_data->userInfo;
              $projectId =  $ticket_data->projectId;
@@ -408,14 +409,18 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketDetails["Title"] = htmlspecialchars($ticketDetails["Title"]);
             $slug =  new \MongoDB\BSON\ObjectID();
             $this->saveActivity($ticket_data->ticketId,$projectId,"Title", $ticketDetails["Title"],$userId,$slug,$timezone);
-            $this->saveNotifications($editticket,"Title",$ticketDetails["Title"],'',$slug);
+            $notificationTitleIds=$this->saveNotifications($editticket,"Title",$ticketDetails["Title"],'',$slug,$bulkUpdate=1);
+            if($notificationTitleIds!='')
+            $notificationIds=array_merge($notificationIds,$notificationTitleIds);
             $description = $ticket_data->description;
             $ticketDetails["CrudeDescription"] = $description;
             $refiendData = CommonUtility::refineDescription($description);
             $ticketDetails["Description"] = $refiendData["description"];
             $slug =  new \MongoDB\BSON\ObjectID();
             $this->saveActivity($ticket_data->ticketId,$projectId,"Description", $description,$userId,$slug,$timezone);
-            $this->saveNotifications($editticket,"Description",$description,'',$slug);
+            $notificationDescIds=$this->saveNotifications($editticket,"Description",$description,'',$slug,$bulkUpdate=1);
+            if($notificationDescIds!='')
+            $notificationIds=array_merge($notificationIds,$notificationDescIds);
             $newworkflowId = "";
             foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
@@ -423,11 +428,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $fieldDetails =  StoryFields::getFieldDetails($fieldId);
                         $fieldName =  $fieldDetails["Field_Name"];
                          if(is_numeric($ticket_data->$key)){
-                               error_log("+++++++++++== TAsk Types++1222222222221+++++++++");
+                             //  error_log("+++++++++++== TAsk Types++1222222222221+++++++++");
 
                               $value["value"] = (int)$ticket_data->$key; 
                                if($fieldDetails["Type"] == 6){
-                                 error_log("+++++++++++== TAsk Types++1111111+++++++++");
+                             //    error_log("+++++++++++== TAsk Types++1111111+++++++++");
                                 $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->$key);
                                 $value["value_name"] = $collaboratorData["UserName"];
                                 $this->followTicket($ticket_data->$key,$ticket_data->ticketId,$projectId,$userId,$fieldDetails["Field_Name"],TRUE,"FullUpdate");
@@ -470,7 +475,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $newworkflowId = $ticket_data->$key;
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
-                                error_log("+++++++++++=priority+66666666666666+++++++++");
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->$key);
                                 $value["value_name"] = $priorityDetail["Name"];
                                 }
@@ -489,7 +493,6 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $value["value_name"] = $planlevelDetail["Name"];
                                 }
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
-                                error_log("+++++++++++== tickettype6666666661111111+++++++++");
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->$key);
                                 $value["value_name"] = $tickettypeDetail["Name"];
                                 }
@@ -541,14 +544,14 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                              
                          }
                         
-                        error_log($fieldName."----------activtiyr reuls---------------");
+                       // error_log($fieldName."----------activtiyr reuls---------------");
                         $slug =  new \MongoDB\BSON\ObjectID();
                         $activity=$this->saveActivity($ticket_data->ticketId,$projectId,$fieldName, $value["value"],$userId,$slug,$timezone);
                         if($activity != "noupdate")
                         {
-                            
-                        $this->saveNotifications($editticket,$fieldName,$ticket_data->$key,$fieldDetails["Type"],$slug);
-                        
+                        $notificationPanelIds=$this->saveNotifications($editticket,$fieldName,$ticket_data->$key,$fieldDetails["Type"],$slug,$bulkUpdate=1);
+                        if($notificationPanelIds!='')
+                        $notificationIds=array_merge($notificationIds,$notificationPanelIds);
                         }     
                         
                        }else{
@@ -562,12 +565,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              }
              if($newworkflowId != ""){
                 $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId,$userId);
-
              }
              $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->ticketId,$projectId);
              $ticketDetails["Followers"] = $newTicketDetails["Followers"];
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $collection->save($ticketDetails);
+            self::sendEmailNotification($notificationIds, $projectId,1);
             TicketArtifacts::saveArtifacts($ticket_data->ticketId, $projectId, $refiendData["ArtifactsList"],$userId);
             
         } catch (Exception $ex) {
@@ -1284,7 +1287,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $total=($oldTimeLog + $totalWorkHours); //added by Ryan
             $slug =  new \MongoDB\BSON\ObjectID();
             $activityData=$this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $userId,$slug,$timezone); //added by Ryan
-            $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug); //added by Ryan
+            $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug,$bulkUpdate=1); //added by Ryan
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
             }
@@ -1442,13 +1445,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             case 1 :
                             case 7 :   // 1-New,7 -- Invalid
                                 // send notification to assigned to person
-                            $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                            $this->saveNotifications($ticket_data,'workflow',$newWorkflowId,'','',$bulkUpdate=1);
                             $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                             //$this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             break;
 
                             case 8 : // 8-Fixed
-                            $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                            $this->saveNotifications($ticket_data,'workflow',$newWorkflowId,'','',$bulkUpdate=1);
                             $fixedworkflowDetail = WorkFlowFields::getWorkFlowDetails(8);
                             $workFlowDetail = WorkFlowFields::getWorkFlowDetails(14); // Get closed status details
                             if ($taskDetails['WorkflowType'] == 1) {
@@ -1465,13 +1468,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                             case 10 : // 10 -Reopen
                                 
                             if ($taskDetails['Fields']['workflow']['value'] == 7) {
-                                $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                                $this->saveNotifications($ticket_data,'workflow',$newWorkflowId,'','',$bulkUpdate=1);
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                             // send notification to all child ticket
                                 
                             } else if ($taskDetails['Fields']['state']['value'] == 6 && ($taskDetails['WorkflowType'] == 3 || $taskDetails['WorkflowType'] == 4)) {
                                   // send notification to Peer and QA
-                                $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
+                                $this->saveNotifications($ticket_data,'workflow',$newWorkflowId,'','',$bulkUpdate=1);
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                                     //send notification to Peer  
                             }
@@ -1480,7 +1483,8 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         }
 
                      }
-                    } error_log("Send notification to AssignedTo person and Peer person");
+                    }
+                    //error_log("Send notification to AssignedTo person and Peer person");
                     return true;
                 } else {
                     return true;
@@ -1544,7 +1548,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                          $workFlowDetail = WorkFlowFields::getWorkFlowDetails(8); 
                          $newWorkflowId = 8;
                         }
-                     $this->saveNotifications($child_ticket_data,'workflow',$newWorkflowId);
+                     $this->saveNotifications($child_ticket_data,'workflow',$newWorkflowId,'','',$bulkUpdate=1);
                    $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                         
                     }
@@ -1552,10 +1556,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $ticketId = $oldTicketObj['ParentStoryId'];
                     $workFlowDetail = WorkFlowFields::getWorkFlowDetails(8); // Fixed parent ticket
                     // Parent ticket status updated to re-open
-                     $this->saveNotifications($ticket_data,'workflow',8);
+                     $this->saveNotifications($ticket_data,'workflow',8,'','',$bulkUpdate=1);
                     $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                     // Send Notification toAll followers.
-                    error_log("Send Notification to All followers");
+                    //error_log("Send Notification to All followers");
                    
                     break;
                 }
@@ -1593,12 +1597,12 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             {
                 if($task['TaskType']==$type)//peer ticket
                 {
-                    error_log("==Type==".$type);
+                    //error_log("==Type==".$type);
                     //get peer task details
                     $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
-                    error_log("==Task details==".print_r($taskDetails,1));
+                   // error_log("==Task details==".print_r($taskDetails,1));
                     $collaborator=$taskDetails['Fields']['assignedto']['value'];
-                    error_log("==collaborator==".$collaborator);
+                    //error_log("==collaborator==".$collaborator);
                     return $collaborator;   
                 }
             }
