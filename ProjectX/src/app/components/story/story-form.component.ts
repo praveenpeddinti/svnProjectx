@@ -113,10 +113,15 @@ export class StoryComponent
         this.value = savedValue;
     })
     .on('input.autoExpand', 'textarea.autoExpand', function(){
-        var minRows = this.getAttribute('data-min-rows')|0, rows;
+      var minRows = this.getAttribute('data-min-rows')|0, rows;
         this.rows = minRows;
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
-        this.rows = minRows + rows;
+      //  console.log('rows---'+rows);
+       console.log("--expand--"+this.scrollHeight);
+        var newrows = Math.floor(this.scrollHeight/30);
+      //  console.log(this.scrollHeight+"--------"+this.baseScrollHeight+"------"+newrows);
+        this.rows = newrows;
+        //  this.rows = minRows + rows;
     });
 
     }
