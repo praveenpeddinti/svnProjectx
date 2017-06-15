@@ -356,9 +356,9 @@ editTitle(titleId){
     .one('focus.autoExpand', 'textarea.autoExpand', function(){
          var minRows = this.getAttribute('data-min-rows')|0, rows;
         var savedValue = this.value;
-        this.value = '';
+        // this.value = '';
         this.baseScrollHeight = this.scrollHeight;
-        this.value = savedValue;
+        // this.value = savedValue;
         rows = Math.floor((this.scrollHeight) / 30);
         this.rows = minRows + rows;
     })
@@ -381,7 +381,8 @@ editTitle(titleId){
   
 }
 
-closeTitleEdit(editedText){ 
+closeTitleEdit(editedText){
+  alert(editedText); 
         if(editedText !=""){
           // this.titleError="";
           document.getElementById(this.ticketId+"_title").innerText= editedText;
@@ -1415,7 +1416,9 @@ var thisObj = this;
         }
 
 public callTicketDetailPage(ticId,projectId){
+  alert("callTicketDetailPage");
     var thisObj = this;
+    thisObj.text="";
     jQuery(document).ready(function(){
         window.scrollTo(0,0);
 
@@ -1450,6 +1453,7 @@ public callTicketDetailPage(ticId,projectId){
       }else{  
           this.ticketId = ticId;
       }
+      jQuery("#commentEditor").summernote('reset');
       var ticketIdObj={'ticketId': this.ticketId,'projectId':projectId};
         this._ajaxService.AjaxSubscribe("story/get-ticket-details",ticketIdObj,(data)=>
         { 
