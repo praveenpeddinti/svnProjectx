@@ -1422,7 +1422,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         try {
             $collection = TicketCollection::getCollection();
             $projectId = $oldTicketObj['ProjectId'];
-            $ticket_array=array('TicketId'=>$oldTicketObj['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
+            $ticket_array=array('ticketId'=>$oldTicketObj['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
             $ticket_data=json_decode(json_encode($ticket_array,1));//added by Ryan
             if ($oldTicketObj['WorkflowType'] == 1) { // 1-Story,General Task,
                 if ($newWorkflowId == 5) {
@@ -1496,7 +1496,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             } else if ($oldTicketObj['WorkflowType'] == 3) { // 3- Peer
                 
                 $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId); 
-                $ticket_array=array('TicketId'=>$parentTicketDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
+                $ticket_array=array('ticketId'=>$parentTicketDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
                 $ticket_data=json_decode(json_encode($ticket_array,1));
                 switch($newWorkflowId)
                 {
@@ -1518,7 +1518,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             } else if ($oldTicketObj['WorkflowType'] == 4) { // 4--QA
                  error_log("updateWorkflowAndSendNotification-----------------3");
                 $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
-                $ticket_array=array('TicketId'=>$parentTicketDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
+                $ticket_array=array('ticketId'=>$parentTicketDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));//added by Ryan
                 $ticket_data=json_decode(json_encode($ticket_array,1));
                 switch($newWorkflowId)
                 {
