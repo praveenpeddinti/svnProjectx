@@ -152,11 +152,11 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
               $crudeDescription = $description;
               $refinedData = CommonUtility::refineDescription($description);
               $description = $refinedData["description"];
-            
+             $plainDescription=trim($ticket_data->description);
              
              
               unset($ticket_data->title);
-              unset($ticket_data->description);
+             unset($ticket_data->description);
               
                $storyField = new StoryFields();
                   $standardFields = $storyField->getStoryFieldList();
@@ -240,6 +240,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
            $ticketModel->Title = $title;
            $ticketModel->Description = $description;
            $ticketModel->CrudeDescription = $crudeDescription;
+           $ticketModel->PlainDescription = (string) strip_tags($plainDescription);
            $ticketModel->Fields = $dataArray;
            $ticketModel->ProjectId = (int)$projectId;
            $ticketModel->RelatedStories= [];
@@ -416,6 +417,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketDetails["CrudeDescription"] = $description;
             $refiendData = CommonUtility::refineDescription($description);
             $ticketDetails["Description"] = $refiendData["description"];
+            $ticketDetails["PlainDescription"] = (string)strip_tags($ticket_data->description);
             $slug =  new \MongoDB\BSON\ObjectID();
             $this->saveActivity($ticket_data->ticketId,$projectId,"Description", $description,$userId,$slug,$timezone);
             $notificationDescIds=$this->saveNotifications($editticket,"Description",$description,'',$slug,$bulkUpdate=1);
@@ -618,8 +620,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     $fieldType = "Description";
                     $refinedData = CommonUtility::refineDescription($ticket_data->value);
                     $actualdescription = $refinedData["description"];
+                    $plainDescription=strip_tags($ticket_data->value);
                     $artifacts=$refinedData["ArtifactsList"];
-                    $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$ticket_data->value ));
+                    $newData = array('$set' => array("Description" => $actualdescription,"CrudeDescription" =>$ticket_data->value,"PlainDescription" => (string)$plainDescription));
                     $condition=array("TicketId" => (int)$ticket_data->ticketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$actualdescription;
                     $activityNewValue = $ticket_data->value;
@@ -860,6 +863,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $processedDesc = $refinedData["description"];
             $artifacts = $refinedData["ArtifactsList"];
             $commentDesc = $commentData->Comment->CrudeCDescription;
+            $plainDescription= strip_tags($commentData->Comment->CrudeCDescription);
             $timezone = $commentData->timeZone;
             if (isset($commentData->Comment->Slug)) {
                 $commentData->Comment->OriginalCommentorId=$commentData->userInfo->Id;
@@ -867,7 +871,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 $slug= new \MongoDB\BSON\ObjectID($commentData->Comment->Slug);
                 $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
                 $collection = Yii::$app->mongodb->getCollection('TicketComments');
-                $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc));
+                $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc,"Activities.$.PlainDescription" => (string)$plainDescription));
                 $collection->update(array("TicketId" => (int) $commentData->ticketId, "ProjectId" => (int) $commentData->projectId, "Activities.Slug" => new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
                 $retData = array("CrudeCDescription" => $commentDesc,
                     "CDescription" => $processedDesc);
@@ -885,6 +889,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                     "Slug" => $slug,
                     "CDescription" => $processedDesc,
                     "CrudeCDescription" => $commentDesc,
+                    "PlainDescription"=>(string)$plainDescription,
                     "ActivityOn" => $commentedOn,
                     "ActivityBy" => (int) $commentData->userInfo->Id,
                     "Status" => ($commentData->Comment->ParentIndex == "") ? (int) 1 : (int) 2,
