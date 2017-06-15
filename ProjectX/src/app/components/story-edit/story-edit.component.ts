@@ -114,7 +114,7 @@ export class StoryEditComponent implements OnInit
     
     this.minDate=new Date(); //set current date to datepicker as min date
      jQuery(document)
-    .one('focus.autoExpand', 'textarea.autoExpand', function(){
+    .one('focus.autoExpand', 'textarea.autoExpand', function(){ console.log('focus');
          var minRows = this.getAttribute('data-min-rows')|0, rows;
         var savedValue = this.value;
         this.value = '';
@@ -128,12 +128,14 @@ export class StoryEditComponent implements OnInit
       var minRows = this.getAttribute('data-min-rows')|0, rows;
         this.rows = minRows;
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
-      //  console.log('rows---'+rows);
         var newrows = Math.floor(this.scrollHeight/30);
-      //  console.log(this.scrollHeight+"--------"+this.baseScrollHeight+"------"+newrows);
         this.rows = newrows;
-        //  this.rows = minRows + rows;
     });
+    
+       var $textArea = jQuery("#title");
+      setTimeout(()=>{
+       $textArea.trigger("focus");
+        },1000);
     jQuery("#title").keydown(function(e){
         if (e.keyCode == 13 && !e.shiftKey)
         {
@@ -144,10 +146,9 @@ export class StoryEditComponent implements OnInit
 
   ngAfterViewInit() 
   {
-     var $textArea = jQuery("#title");
-     setTimeout(()=>{
-       $textArea.trigger("focus");
-   },500);
+   
+  
+ 
      this.editor.initialize_editor('description',null,null);      
   }
 
