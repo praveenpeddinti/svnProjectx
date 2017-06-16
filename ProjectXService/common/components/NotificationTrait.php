@@ -1097,12 +1097,13 @@ EOD;
                     $value = $collaboratorData['Email'];
                     $notified_user = $collaboratorData['UserName'];
                     $display_name = $collaboratorData['FirstName'] . " " . $collaboratorData['LastName'];
-                    //   error_log("EMAIL________________+++++++++++_____________".$value);
+                      echo("EMAIL________________+++++++++++_____________".print_r($display_name,1));
                 }
                 echo "---dsdsadasda-s-sdasd-as-dd--" . print_r($recipient_list, 1);
-               $ticket_title = " | #" . $ticketId . ": " . $title;
-            $subject = "ProjectX | " . $projectName . $ticket_title;
-            $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
+                $ticket_title = " | #" . $ticketId . ": " . $title;
+                $subject = "ProjectX | " . $projectName . $ticket_title;
+                $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
+
                                    <table width='598' border='0' cellspacing='0' cellpadding='0' align='left'>
                                  <tr>
                                   <td colspan='4' height='7'></td>
@@ -1133,10 +1134,10 @@ EOD;
                              <tr><td width='15'>&nbsp;</td><td width='570' align='left' valign:'top'>
                               <table width='570' border='0' align='left' cellpadding='0' cellspacing='0'>
                                 <tr><td height='15'>&nbsp;</td></tr>";
-            $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
-            $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:30px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
-            $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
-            $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
+                $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
+                $link_message = "<a  style='font-family:Arial;font-size:16px;line-height:40px;color:#0199e0;' href={$link}>#{$ticketId}: {$title} </a>";
+                $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
+                $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
                 $text_message = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
                 echo ("4. 11111111111 sending email comppleted ..hhhhhhhhh." . print_r($recipient_list, 1));
@@ -1166,7 +1167,9 @@ EOD;
             $msg = <<<EOD
 EOD;
             $recipient_list = array();
+           // echo ("============notifications ids--------11111111------".print_r($notificationIds,1));
             $notifications = NotificationCollection::getNotificationDetails($notificationIds);
+            echo ("============notifications ids--------22222222------".print_r($notifications,1));
             $uniqueNotifications = CommonUtility::getUniqueArrayObjects($notifications);
             foreach ($uniqueNotifications as $notification) {
                 // echo(count($notificationIds)."-------uniaqu----------".count($uniqueNotifications));
@@ -1262,13 +1265,13 @@ EOD;
             }
             $notificationUsers = array();
             $notificationUsers = array_column($notifications, 'NotifiedUser');
-            foreach ($notificationUsers as &$value) {
+            foreach (array_unique($notificationUsers) as &$value) {
+                $resUser=array();
                 $collaborator = TinyUserCollection::getMiniUserDetails($value);
+                array_push($resUser,$collaborator['Email']);
                 $value = $collaborator['Email'];
                 $notified_user = $collaborator['UserName'];
                 $display_name = $collaborator['FirstName'] . " " . $collaborator['LastName'];
-            }
-
             $ticket_title = " | #" . $ticketId . ": " . $title;
             $subject = "ProjectX | " . $projectName . $ticket_title;
             $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
@@ -1309,8 +1312,9 @@ EOD;
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
             $activity = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333; padding-bottom:10px;padding-top:10px;' width='570'>Activity by {$fromUser}:";
             $text_message = $project_logo . $user_message . $ticket_message . $activity . $msg . $view_ticket_message;
-            CommonUtility::sendEmail($mailingName, $notificationUsers, $text_message, $subject);
-        } catch (Exception $ex) {
+            CommonUtility::sendEmail($mailingName, $resUser, $text_message, $subject);
+        }
+            } catch (Exception $ex) {
             Yii::log("NotificationTrait:sendEmailNotificationFromBackground::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
