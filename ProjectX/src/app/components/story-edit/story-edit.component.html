@@ -27,7 +27,7 @@
                             <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.id}}">{{field.value}}</div>
 
                             <div class="leftreadonlyfontgreycolor" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
-                                <input class="editinput custominput width100per" *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value">  
+                                <input class="editinput custominput width100per" *ngSwitchCase="'input'"  type="{{field.type}}"  name="{{field.fieldName}}" [ngModel]="field.value" (keydown)="inputKeyDown($event,'editInpuId')" id="editInpuId"/>  
                                 <div class="customdropdown" *ngSwitchCase="'select'">
                                  
                                     <p-dropdown  [style]="{'width':'100%'}"  [ngModel]="field.fieldDataId" name="{{field.fieldName}}" [displayOptions]="field.listDisplayData"  [options]="field.listdata" ></p-dropdown>    

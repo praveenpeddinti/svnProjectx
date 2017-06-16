@@ -146,12 +146,25 @@ export class StoryEditComponent implements OnInit
 
   ngAfterViewInit() 
   {
-   
-  
- 
-     this.editor.initialize_editor('description',null,null);      
+      this.editor.initialize_editor('description',null,null);      
   }
+  inputKeyDown(event,eleId){
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
 
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || 
+            (event.keyCode >= 96 && event.keyCode <= 105) || 
+            event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+            event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+        } else {
+            event.preventDefault();
+        }
+
+        if(jQuery("#"+eleId).val().indexOf('.') !== -1 && event.keyCode == 190)
+            event.preventDefault(); 
+  }
   /*
     @params    :  fieldsArray,ticketId
     @ParamType :  array,int

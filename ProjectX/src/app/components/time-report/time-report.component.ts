@@ -235,6 +235,9 @@ export class TimeReportComponent{
                         var subTaskData = result.data;
                         for(let subTaskfield of subTaskData){
                             var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
+                            if (currentData.length > 55){
+                              var currentData= currentData.substring(0,55) + '...';
+                            }
                             prepareSearchData.push(currentData);
                         }
                         this.search_results=prepareSearchData;

@@ -62,7 +62,7 @@
                         </div>
 
                         <input *ngSwitchCase="'input'" class="editinput" (keyup.enter)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
-                            (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" (keyup)="inputKeyDown($event.target.value,field.elId+'_'+i)" />
+                            (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)"  (keydown)="inputKeyDown($event,field.elId+'_'+i)" />
 
                         <p-calendar *ngSwitchCase="'date'" [(ngModel)]="dateVal" class="primeDateComponent" name="date_{{i}}" (onBlur)="dateBlur($event,i)" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="M-dd-yy" >
                         </p-calendar>
@@ -278,7 +278,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="addtask_bor">
-                            <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/project',projectName,childTasks.TicketId,'details']" >{{childTasks.Title  | truncate:140}}</a></div>
+                            <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/project',projectName,childTasks.TicketId,'details']" >{{childTasks.Title  | truncate:50}}</a></div>
                             <div class="addtask_status" *ngIf="childTasks.TicketId">{{childTasks.Fields[2].data.value_name}}</div>
                         </div>
                     </div>
@@ -331,7 +331,7 @@
     </div>
     <div class="col-md-10">
         <div class="addtask_bor">
-            <div class="addtask_title"><a [routerLink]="['/project',projectName,relatedTask.TicketId,'details']" (click)="navigateStoryDetail(relatedTask.TicketId)">{{relatedTask.Title}}</a></div>
+            <div class="addtask_title"><a [routerLink]="['/project',projectName,relatedTask.TicketId,'details']" (click)="navigateStoryDetail(relatedTask.TicketId)">{{relatedTask.Title | truncate:145}}</a></div>
             <div class="addtask_status">{{relatedTask.Fields.workflow.value_name}}</div>
         </div>
     </div>
