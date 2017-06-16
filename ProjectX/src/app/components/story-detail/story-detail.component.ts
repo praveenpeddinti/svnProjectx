@@ -254,22 +254,8 @@ public commentDesc = "";//"sdadas<img src='https://10.10.73.21/files/story/thumb
 
 public commentCount = 0;
 submitComment(){
-//var commentText = this.detail_comment_ckeditor.instance.getData();
 var commentText=jQuery("#commentEditor").summernote('code');
-// alert("****comment editor data***"+commentText);
-// var commentPushData = {
-//   text:commentText,//jQuery(commentText).html(),
-//   id:this.commentCount++,
-//   repliedToComment:"",
-//   parentId:""
-// };
-// if(this.replying == true){
-//   // commentPushData.text = "<div style='background:#C0C0C0;'>"+this.replyToComment.text+"</div>"+commentPushData.text;
-//   commentPushData.repliedToComment=this.replyToComment.text
-//   commentPushData.parentId = this.replyToComment.id;
-// }
-// alert("====comment data==>"+JSON.stringify(commentPushData));
-// this.commentsList.push(commentPushData);
+
 if(commentText != "" && jQuery(commentText).text().trim() != ""){
 this.commentDesc="";
 jQuery("#commentEditor").summernote('reset');
@@ -291,7 +277,6 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
 
     },
   };
-  // alert(JSON.stringify(reqData));
   if(this.replying == true){
     if(this.replyToComment != -1){
     reqData.Comment.OriginalCommentorId = jQuery("#replySnippetContent").attr("class");
@@ -302,7 +287,6 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
   this._ajaxService.AjaxSubscribe("story/submit-comment",reqData,(result)=>
         { 
           
-          // alert("++++++++++++++++++++"+JSON.stringify(result));
           this.commentsList.push(result.data);
           if(this.replying == true){
             this.commentsList[this.replyToComment].repliesCount++;
@@ -322,29 +306,19 @@ private replyToComment=-1;
 private replying=false;
 private commentAreaColor="";
 replyComment(commentId,userId){ 
-// var commentEditorObject = document.getElementById("commentEditorArea");
-// var offset = commentEditorObject.offsetTop;
-// alert(commentId);
-// var commentToReply = this.commentsList[commentId];//jQuery("#"+commentId+" #commentContent").html();
-// this.replyToComment = this.commentsList[commentId];
-// alert(JSON.stringify(this.commentsList[commentId]));
+
 this.replyToComment = commentId;
 this.replying = true;
-// this.commentDesc = commentToReply+"<br/><img src='https://10.10.73.21/files/story/thumb1.png' height='50%' width='50%' />";
-// alert(this.commentDesc)
 this.commentAreaColor = jQuery("#commentEditorArea").css("background");
 jQuery("#commentEditorArea").addClass("replybox");
 jQuery('html, body').animate({
         scrollTop: jQuery("#commentEditorArea").offset().top
     }, 1000);
 
-// jQuery.scrollTo(jQuery("#commentEditorArea"),500);
 }
 
 
 navigateToParentComment(parentId){
-// alert(parentId+"---"+jQuery("#"+parentId).length);
-// alert(jQuery("#"+parentId).offset().top);
   jQuery('html, body').animate({
         scrollTop: jQuery("#"+parentId).offset().top
     }, 1000);
@@ -382,7 +356,6 @@ editTitle(titleId){
 }
 
 closeTitleEdit(editedText){
-  alert(editedText); 
         if(editedText !=""){
           // this.titleError="";
           document.getElementById(this.ticketId+"_title").innerText= editedText;
@@ -407,19 +380,15 @@ closeTitleEdit(editedText){
 
 //Navigate to Edit Page
   goToEditPage(){
-  //  this._router.navigate(['story-edit',this.ticketId]);
 this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
   }
 
 //Changes inline editable filed to thier respective edit modes - Left Column fields.
 //Renders data to dropdowns dynamically.
   editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType,where){ 
-   // alert(event+fieldIndex+"--"+fieldId+"--"+fieldDataId+"--"+fieldTitle+"--"+renderType+"--");
-    // this.dropList={};
  var thisObj=this;
      this.dropList=[];
 
-    // var fieldName = fieldId.split("_")[1];alert(fieldName);
     var inptFldId = fieldId+"_"+fieldIndex;
     var q =0;
       for(let taskRow of this.taskFieldsEditable){
@@ -439,7 +408,6 @@ this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
       this.showMyEditableField[fieldIndex] = false;
     
    
-   // this.showMyEditableTaskField[fieldIndex] = true;
     setTimeout(()=>{document.getElementById(inptFldId).focus();},150);
     }
     if(renderType == "select"){
@@ -453,15 +421,12 @@ this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
         //Fetches the field list data for current dropdown in edit mode.
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
             { 
-                // var currentId = document.getElementById(inptFldId+"_currentSelected").getAttribute("value");
                 var listData = {
-                  // currentSelectedId: (currentId != "" &&currentId != null )? currentId:"",
                   list:data.getFieldDetails
                 };
                  var priority=(fieldTitle=="Priority"?true:false);
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
                 this.dropList=this.dropDisplayList[0].filterValue;
-                //alert("#"+inptFldId+" div");
                 //sets the dropdown prefocused
                 jQuery("#"+inptFldId+" div").click();
                 
@@ -705,11 +670,6 @@ public fileOverBase(fileInput:any,where:string,comment:string):void {
     
     jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
 
-    // if(jQuery("#cke_Activity_content_"+comment).length >0)
-    // {
-    //   jQuery("#dropble_comment_"+comment).addClass("dragdrop","true");
-    // }
-
     if(jQuery("#Activity_content_"+comment).length >0)
     {
       jQuery("#dropble_comment_"+comment).addClass("dragdrop","true");
@@ -743,7 +703,6 @@ var thisObj = this;
     }
      this.dragTimeout = setTimeout(function(){
      jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
-    //  alert(comment);
      thisObj.hasBaseDropZoneOver = false;
     
      
@@ -764,7 +723,6 @@ var thisObj = this;
    if(comeFrom == 'fileChange'){
         this.filesToUpload = <Array<File>> fileInput.target.files;
    } else if(comeFrom == 'fileDrop'){
-    //  alert(JSON.stringify(Object.keys(fileInput))+"**********************");
         this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
    } else{
         this.filesToUpload = <Array<File>> fileInput.target.files;
@@ -1146,20 +1104,15 @@ var thisObj = this;
    public editComment(comment)
    {
     this.commentorId=this.commentsList[comment].ActivityBy.CollaboratorId
-    //var comment_div=document.getElementById("Activity_content_"+comment);
-    //var editorInstance = CKEDITOR.replace(comment_div,this.toolbarForDetail);
     var edit_comment='Activity_content_'+comment;
     /* added for summernote */
       this.editor.initialize_editor(edit_comment,null,null);
       jQuery("#Activity_content_"+comment).summernote('code',this.commentsList[comment].CrudeCDescription);
       jQuery("#Reply_Icons_"+comment).hide();
-    //editorInstance.setData(this.commentsList[comment].CrudeCDescription);
-    //this.commentEditorsInstance[comment] = editorInstance;
     jQuery("#Actions_"+comment).show();//show submit and cancel button on editor replace at the bottom
    }
 
    submitEditedComment(commentIndex,slug){
-     //var editedContent = this.commentEditorsInstance[commentIndex].getData();
      var editedContent= jQuery("#Activity_content_"+commentIndex).summernote('code');//added for summernote
      if(editedContent != "" && jQuery(editedContent).text().trim() != ""){
      var commentedOn = new Date()
@@ -1174,21 +1127,10 @@ var thisObj = this;
       Slug:slug,
     },
   };
-  // alert(JSON.stringify(reqData)+"<---->edited content");
   this._ajaxService.AjaxSubscribe("story/submit-comment",reqData,(result)=>
         { 
-          // this.replying = false;
-          // var obj = {"statusCode":200,
-          // "message":"success",
-          // "data":{"CrudeCDescription":"<p>test comment asjkdhaskjdhals edited by madan</p>\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n",
-          // "CDescription":"<p>test comment asjkdhaskjdhals edited by madan</p>\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n<!--template bindings={\n  \"ng-reflect-ng-if\": \"true\"\n}-->\n\n<p>&nbsp;</p>\n"},"totalCount":0}
-          // alert("++++++++++++++++++++"+JSON.stringify(result));
             this.commentsList[commentIndex].CrudeCDescription = result.data.CrudeCDescription;
             this.commentsList[commentIndex].CDescription = result.data.CDescription;
-          //this.commentEditorsInstance[commentIndex].destroy(true);
-
-          
-          
           var code= jQuery("#Activity_content_"+commentIndex).summernote('code',result.data.CDescription);
           jQuery("#Activity_content_"+commentIndex).summernote('destroy');
           jQuery("#Reply_Icons_"+commentIndex).show();
@@ -1198,10 +1140,8 @@ var thisObj = this;
           jQuery("#Actions_"+commentIndex).hide();
           var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
           this.getArtifacts(ticketIdObj);
-          // this.commentsList.push(result.data);
           
         });
-    //  alert(editedContent);
      }
 
    }
@@ -1237,9 +1177,7 @@ var thisObj = this;
      this._ajaxService.AjaxSubscribe("story/delete-comment",reqData,(result)=>
         { 
           
-          // alert("++++++++++++++++++++"+JSON.stringify(result));
           if(this.commentsList[commentIndex].Status == 2){
-            // parent = parseInt(this.commentsList[commentIndex].ParentIndex);
             this.commentsList[parent].repliesCount--;
           }
           this.commentsList[commentIndex].Status = 0;
@@ -1250,9 +1188,6 @@ var thisObj = this;
 
 
    cancelEdit(commentIndex){
-    //  var comment_div=document.getElementById("Activity_content_"+commentIndex);
-    //  var name="cke_"+comment_div;
-   //this.commentEditorsInstance[commentIndex].destroy(true);
    jQuery("#Activity_content_"+commentIndex).summernote('code',this.commentsList[commentIndex].CDescription);
    jQuery("#Activity_content_"+commentIndex).summernote('destroy');
     jQuery("#Actions_"+commentIndex).hide();
@@ -1269,12 +1204,9 @@ var thisObj = this;
        for(let subTaskfield of taskArray){
           obj = {data:{},fieldName:""};
         for(let fields in subTaskfield.Fields){
-          // alert(fields+"+++++++taskDataBuilder+++++++++");
           obj.data = subTaskfield.Fields[fields];
           obj.fieldName = fields;
-          // alert("******************"+JSON.stringify(obj));
           prepareData.push(Object.assign({},obj));
-          // alert("--prepareData---"+JSON.stringify(prepareData));
           fieldsEditable.push(false);
         }
         subTaskfield.Fields = prepareData;
@@ -1369,7 +1301,6 @@ var thisObj = this;
           if(id==1){
               jQuery("#delete_relateTask_"+ticId).css("display", "block");
           }else{
-            //alert("delet3eeeeee");;
             jQuery("#delete_relateTask_"+ticId).css("display", "none");
           }
       }
@@ -1416,7 +1347,6 @@ var thisObj = this;
         }
 
 public callTicketDetailPage(ticId,projectId){
-  alert("callTicketDetailPage");
     var thisObj = this;
     thisObj.text="";
     jQuery(document).ready(function(){
@@ -1469,19 +1399,13 @@ public callTicketDetailPage(ticId,projectId){
             this.ticketEditableDesc = this.ticketCrudeDesc = data.data.CrudeDescription;
             jQuery("#detailEditor").html(this.ticketEditableDesc);//for summernote editor
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
-          // var totalEstimated={"title":"Assigned tossssssssssss","value":"","valueId":"","readonly":false,"required":true,"elId":"247_assignedto","fieldType":"Team List","renderType":"select","type":"","Id":5}
-          // this.fieldsData.push(totalEstimated);
-            //alert("fieldsDatass"+JSON.stringify(this.fieldsData));
-            //alert("fieldsDatass@@@@@@@@@@@"+JSON.stringify(this.ticketData));
             this.checkPlanLevel=data.data.StoryType.Name;
             console.log("==Plan Level=="+this.checkPlanLevel);
             this.shared.change(this._router.url,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
             this.childTaskData=data.data.Tasks;
              this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
-          //alert("subtasksdat"+JSON.stringify(this.childTasksArray.length));
 
 
-            // this.commentsList = [];
             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
               console.log(data.data.Activities);
