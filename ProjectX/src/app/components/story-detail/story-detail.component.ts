@@ -106,7 +106,25 @@ var thisObj = this;
     }
    });
 
-   
+   jQuery(document).ready(function(){
+       jQuery(document)
+    .one('focus.autoExpand', 'textarea.autoExpand', function(){ console.log("********focus");
+         var minRows = this.getAttribute('data-min-rows')|0, rows;
+        var savedValue = this.value;
+        this.value = '';
+        this.baseScrollHeight = this.scrollHeight;
+        this.value = savedValue;
+         rows = Math.floor((this.scrollHeight) / 30);
+        this.rows = rows;
+    })
+    .on('input.autoExpand', 'textarea.autoExpand', function(){
+         var minRows = this.getAttribute('data-min-rows')|0, rows;
+        this.rows = minRows;
+        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
+        var newrows = Math.floor(this.scrollHeight/30);
+        this.rows = newrows;
+    });
+      })
 
   
 
@@ -347,37 +365,19 @@ private showTitleEdit=true;
 // private titleError="";
 
 editTitle(titleId){
- // alert("+++++++++"+titleId);
-
   jQuery('.viewinputtext').height();
   this.showTitleEdit = false;
-  setTimeout(()=>{jQuery("#"+titleId).focus();
-   jQuery(document)
-    .one('focus.autoExpand', 'textarea.autoExpand', function(){
-         var minRows = this.getAttribute('data-min-rows')|0, rows;
-        var savedValue = this.value;
-        // this.value = '';
-        this.baseScrollHeight = this.scrollHeight;
-        // this.value = savedValue;
-        rows = Math.floor((this.scrollHeight) / 30);
-        this.rows = minRows + rows;
-    })
-    .on('input.autoExpand', 'textarea.autoExpand', function(){
-         var minRows = this.getAttribute('data-min-rows')|0, rows;
-        this.rows = minRows;
-        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
-        var newrows = Math.floor(this.scrollHeight/30);
-        this.rows = newrows;
-    });
-    var $textArea = jQuery("#"+titleId);
-    $textArea.trigger("focus");
     jQuery("#"+titleId).keydown(function(e){
         if (e.keyCode == 13 && !e.shiftKey)
         {
             e.preventDefault();
          }
      });
-},150);
+
+ setTimeout(()=>{ console.log('time');
+  jQuery("#"+titleId).focus();
+
+ },200);
   
 }
 
