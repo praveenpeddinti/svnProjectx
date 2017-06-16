@@ -147,6 +147,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
               $fieldsArray = array();
               $title =  trim($ticket_data->title);
               $title = htmlspecialchars($title);
+              $ticket_data->description = str_replace('&nbsp;', ' ', $ticket_data->description);
               $description =  trim($ticket_data->description);
               $workflowType=$ticket_data->WorkflowType;
               $crudeDescription = $description;
@@ -413,7 +414,9 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $notificationTitleIds=$this->saveNotifications($editticket,"Title",$ticketDetails["Title"],'',$slug,$bulkUpdate=1);
             if($notificationTitleIds!='')
             $notificationIds=array_merge($notificationIds,$notificationTitleIds);
+            $ticket_data->description = str_replace('&nbsp;', ' ', $ticket_data->description);
             $description = $ticket_data->description;
+            
             $ticketDetails["CrudeDescription"] = $description;
             $refiendData = CommonUtility::refineDescription($description);
             $ticketDetails["Description"] = $refiendData["description"];
@@ -566,7 +569,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 
              }
              if($newworkflowId != ""){
-                $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId,$userId);
+               // $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId,$userId);
              }
              $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->ticketId,$projectId);
              $ticketDetails["Followers"] = $newTicketDetails["Followers"];
@@ -618,6 +621,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 }else if($ticket_data->id=='Description'){
                     $field_name = "Description";
                     $fieldType = "Description";
+                    $ticket_data->value = str_replace('&nbsp;', ' ', $ticket_data->value);
                     $refinedData = CommonUtility::refineDescription($ticket_data->value);
                     $actualdescription = $refinedData["description"];
                     $plainDescription=strip_tags($ticket_data->value);
