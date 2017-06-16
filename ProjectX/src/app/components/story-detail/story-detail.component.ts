@@ -474,7 +474,7 @@ private dateVal = new Date();
           switch(renderType){
             case "input":
             case "textarea":
-            document.getElementById(restoreFieldId).innerHTML = (editedObj == "") ? "--":editedObj;
+            document.getElementById(restoreFieldId).innerText = (editedObj == "") ? "--":editedObj;
             postEditedText.value = editedObj;
             break;
             
@@ -812,7 +812,7 @@ var thisObj = this;
                }
           
              else if(result.data.updatedState!=''){ 
-                 document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerHTML=result.data.updatedState.state;
+                 document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerText=result.data.updatedState.state;
                 this.statusId = result.data.updatedFieldData;
            }
         /**
