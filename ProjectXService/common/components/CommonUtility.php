@@ -763,7 +763,9 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]);   
              }
                     
-                    
+                $projectDetails = Projects::getProjectMiniDetails($projectId);
+                 $Othervalue["project_name"] =  $projectDetails['ProjectName'];
+                
                     
                     $arr2ordered[0]["other_data"] = $Othervalue;
                 }
@@ -893,7 +895,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
             unset($ticketDetails["Fields"]);
             $ticketDetails = $arr2ordered;
             $projectDetails = Projects::getProjectMiniDetails($projectId);
-            $ticketDetails['project_name']=$projectDetails['ProjectName'];
+           
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
