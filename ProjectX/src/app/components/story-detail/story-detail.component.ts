@@ -460,9 +460,7 @@ private dateVal = new Date();
 //Also prepares the data to be sent to service to save the changes.
 //This is common to left Column fields.
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,where,isChildActivity=0){
-   editedObj=editedObj.trim();
-  jQuery("textarea#"+restoreFieldId+"_"+fieldIndex).val(editedObj);
-     var intRegex = /^\d+$/;
+    var intRegex = /^\d+$/;
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
 
       var postEditedText={
@@ -476,6 +474,9 @@ private dateVal = new Date();
           switch(renderType){
             case "input":
             case "textarea":
+            editedObj=editedObj.trim();
+            if(restoreFieldId == this.ticketId+"_dod".trim())
+            jQuery("textarea#"+restoreFieldId+"_"+fieldIndex).val(editedObj);
             document.getElementById(restoreFieldId).innerText = (editedObj == "") ? "--":editedObj;
             postEditedText.value = editedObj;
             break;
