@@ -251,7 +251,7 @@ export class TimeReportComponent{
                     }
                     
                 });
-               },1000);
+               },700);
  
     }
 
