@@ -1015,7 +1015,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                 if ($property["NewValue"] != "") {
                     $property["NewValue"] = TinyUserCollection::getMiniUserDetails($property["NewValue"]);
                 } else {
-                    $property["NewValue"] = "-zero-";
+                    $property["NewValue"] = "-none-";
                 }
                 $property["type"] = "user";
             }

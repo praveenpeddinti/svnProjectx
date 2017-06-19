@@ -603,6 +603,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $loggedInUser = $ticket_data->userInfo->Id;
             $projectId=$ticket_data->projectId;
             $timezone =$ticket_data->timeZone;
+            $ticket_data->value = trim($ticket_data->value);
             $artifacts = array();
             $workFlowDetail=array();
             $valueName = "";
