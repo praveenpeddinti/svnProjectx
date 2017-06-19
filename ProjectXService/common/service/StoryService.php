@@ -557,6 +557,10 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                         $notificationPanelIds=$this->saveNotifications($editticket,$fieldName,$ticket_data->$key,$fieldDetails["Type"],$slug,$bulkUpdate=1);
                         if($notificationPanelIds!='')
                         $notificationIds=array_merge($notificationIds,$notificationPanelIds);
+                        }else{
+                            if($fieldDetails["Field_Name"] == "workflow"){
+                                 $newworkflowId = ""; 
+                           }
                         }     
                         
                        }else{
