@@ -270,10 +270,9 @@ class TicketTimeLog extends ActiveRecord
      */
     public static function removeTimelogData($projectId,$ticketId,$slug,$timelogHours,$userId){
         try{
-            $returnValue= 'failure';
+            $returnValue= 'failure'; 
             $collection = Yii::$app->mongodb->getCollection('TicketTimeLog');
-            $newdata = array('$pull'=> array('TimeLog' =>array("Time" => $timelogHours,"Slug"=>new \MongoDB\BSON\ObjectID($slug)),"multi"=>FALSE));
-
+            $newdata = array('$pull'=> array('TimeLog' =>array("Time" => (float)$timelogHours,"Slug"=>new \MongoDB\BSON\ObjectID($slug)),"multi"=>FALSE));
             if($collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int)$projectId), $newdata)){
                 return $returnValue=$slug;
             }
