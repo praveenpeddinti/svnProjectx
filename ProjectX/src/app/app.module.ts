@@ -50,7 +50,7 @@ import {CustomUrlSerializer} from './CustomUrlSerializer';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
-              {path: '404',redirectTo: 'error',pathMatch: 'full' },
+              {path: '404',component: PageNotFoundComponent },
               {path: 'home',children:[
                 { path: '' , component: HomeComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
@@ -122,6 +122,7 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
+               { path: '**', component: PageNotFoundComponent }
              ];
 @NgModule({
   imports:      [
