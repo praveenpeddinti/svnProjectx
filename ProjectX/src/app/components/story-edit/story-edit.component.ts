@@ -289,6 +289,9 @@ export class StoryEditComponent implements OnInit
     jQuery("#desc_error").hide();
     var desc=jQuery("#description").summernote('code');
     desc=jQuery(desc).text().trim();
+    alert(JSON.stringify(edit_data));
+    edit_data.dod=edit_data.dod.trim();
+    alert("After__"+JSON.stringify(edit_data));
     var error = 0;
    // alert(edit_data.title);
     if(edit_data.title=='')

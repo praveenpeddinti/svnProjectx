@@ -66,8 +66,7 @@
 
                         <p-calendar *ngSwitchCase="'date'" [(ngModel)]="dateVal" class="primeDateComponent" name="date_{{i}}" (onBlur)="dateBlur($event,i)" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="M-dd-yy" >
                         </p-calendar>
-
-                        <textarea *ngSwitchCase="'textarea'" class="custtextarea width100per" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
+                        <textarea  *ngSwitchCase="'textarea'" class="custtextarea width100per" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
                         </textarea>
 
                         <div class="customdropdown">
@@ -377,7 +376,7 @@
      <a  *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/project',projectName,property.PoppedChildId,'details']" (click)="navigateStoryDetail(property.PoppedChildId)" >#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a>
  <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
  
- <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-zero-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-zero-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
+ <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-zero-' || property.NewValue=='-none-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-zero-' || property.NewValue=='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
                 </span>
     <span *ngIf="property.type!='user'"> 
         <span *ngIf="property.PreviousValue!=0" class="bold" [innerText]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerText]= "property.NewValue"></span> 

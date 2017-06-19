@@ -460,6 +460,8 @@ private dateVal = new Date();
 //Also prepares the data to be sent to service to save the changes.
 //This is common to left Column fields.
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,where,isChildActivity=0){
+   editedObj=editedObj.trim();
+  jQuery("textarea#"+restoreFieldId+"_"+fieldIndex).val(editedObj);
      var intRegex = /^\d+$/;
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
 
