@@ -56,7 +56,7 @@
                     <div class="leftreadonlyfontgreycolor customcalender" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
                         <div (click)="editThisField($event,i,field.elId,field.Id,field.title,field.renderType)" [hidden]="!showMyEditableField[i]" data-text="not readonly" 
                              id="{{field.elId}}" class="{{(field.title=='Status')? field.value:''}}">
-                            {{(field.value == "") ? '--': field.value}} 
+                            {{(field.value === "") ? '--': field.value}} 
                             <i *ngIf="field.title == 'Priority'"  class="fa fa-circle {{field.value}}" aria-hidden="true">
                             </i>
                         </div>
