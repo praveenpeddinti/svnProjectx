@@ -1100,9 +1100,8 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
            }else{
                 $property["NewValue"]=$property["NewValue"];
             }
-          
-            if ($property["NewValue"] == "") {
-                $property["NewValue"] = "-zero-";
+            if ($property["NewValue"] === "") {
+                $property["NewValue"] = "-none-";
             }
             return $property;
         } catch (Exception $ex) {
