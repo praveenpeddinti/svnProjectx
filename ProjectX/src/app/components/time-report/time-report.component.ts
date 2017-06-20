@@ -66,10 +66,16 @@ export class TimeReportComponent{
                     class: 'paddingleft10'
                 },
                 {
-                    name: 'Story / Task Description',
+                    name: 'Story / Task',
                     flexGrow: 3,
                     sortby: 'Id',
                     class: 'titlecolumn paddingleft10'
+                },
+                {
+                    name: 'Description',
+                    flexGrow: 3,
+                    sortby: 'Id',
+                    class: 'paddingleft10'
                 },
                 {
                     name: 'Hours',
@@ -405,5 +411,9 @@ export class TimeReportComponent{
           this.extractFields=copy;
           this.oldWorkLogHour=this.extractFields['Time'];
           this.oldticketDesc=this.extractFields['ticketDesc'];
+    }
+    
+    fullTextshow(a){jQuery("#fullText_"+a).css("display", "block");
+    
     }
 }

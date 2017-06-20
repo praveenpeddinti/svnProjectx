@@ -96,16 +96,21 @@ Row classes are also dynamically. These classes are pass to service layer-->
   [flexGrow]="column.flexGrow">
   
   <template let-row="row" ngx-datatable-cell-template >
-     <div style="cursor:default" class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name!='Id'" >
+     <div style="cursor:default" class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name!='Id' && row[i].field_name!='Description'" >
       {{row[i].field_value}}
        
    
    </div>
-        <div class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name=='Id'" >
+        <div class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name=='Id' && row[i].field_name!='Description'" >
         <img *ngIf="row[i].other_data==1" src="assets/images/story-icon.png"  />
       <img *ngIf="row[i].other_data==2" src="assets/images/task-icon.png" />
       <a *ngIf="row[i].field_name=='Id'" (click)="navigateToStoryDetail(row[i].ticketId)">{{row[i].field_value}} </a>
        
+   
+   </div>
+      <div id="{{row[i].ticketId}}" style="cursor:default" class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name=='Description'" >
+           {{row[i].field_value}}<span *ngIf="row[i].ticketDesc.length>0" (click)="fullTextshow(row[i].ticketId)" >...</span>
+      <div id="fullText_{{row[i].ticketId}}" style="display:none">{{row[i].ticketDesc}}</div>
    
    </div>
       <div style="cursor:default" *ngIf="row[i].field_name =='action'" class="{{column.class}}" style="position: relative">
