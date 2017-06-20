@@ -407,6 +407,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $workFlowDetail = array();
             $ticketCollectionModel = new TicketCollection();
             $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->ticketId, $projectId);
+            $oldEsimatedPoints=$ticketDetails['Fields']['estimatedpoints']['value'];
             $ticketDetails["Title"] = trim($ticket_data->title);
             $ticketDetails["Title"] = htmlspecialchars($ticketDetails["Title"]);
             $slug =  new \MongoDB\BSON\ObjectID();
@@ -501,6 +502,15 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->$key);
                                 $value["value_name"] = $tickettypeDetail["Name"];
                                 }
+                                else if($fieldDetails["Field_Name"] == "estimatedpoints"){
+                                    if($ticketDetails['IsChild']==0){
+                                        $ticketId= $ticket_data->ticketId;
+                                    }else{
+                                        $ticketId= $ticketDetails['ParentStoryId'];
+                                }
+                                $updatedEstimatedPts=(int)$ticket_data->$key-(int)$oldEsimatedPoints;
+                                $ticketDetails['Fields']['totalestimatepoints']['value'] += $updatedEstimatedPts;
+                              }
                                         
                          }else{
                              if($ticket_data->$key != ""){
@@ -755,21 +765,19 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                   $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
                                   TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
                                   }
-                        error_log("updateStoryFieldInline---7");
-
                          $leftsideFieldVal = (int)$ticket_data->value;  
                     }else{
                          error_log("updateStoryFieldInline---8");
                         if($ticket_data->value != ""){
                              error_log("updateStoryFieldInline---9");
                             $validDate = CommonUtility::validateDate($ticket_data->value);
-                            if($validDate){
-                               $ticket_data->value = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                               $leftsideFieldVal = $ticket_data->value; 
-                            }else{
+                                if($validDate){
+                                   $ticket_data->value = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+                                   $leftsideFieldVal = $ticket_data->value; 
+                                }else{
                                 //error_log("===Field Name==".$leftsideFieldVal);
-                                $leftsideFieldVal = $ticket_data->value; 
-                            } 
+                                    $leftsideFieldVal = $ticket_data->value; 
+                                }
                         }else{
                              error_log("updateStoryFieldInline---10");
                             $leftsideFieldVal = $ticket_data->value;
@@ -795,7 +803,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 }
                         }
                     }
-                     error_log("updateStoryFieldInline---12");
+                    error_log("updateStoryFieldInline---12");
                     $fieldtochange1= "Fields.".$field_name.".value";
                     $fieldtochange2 = "Fields.".$field_name.".value_name";
                     $fieldtochangeId = "Fields.".$field_name.".Id";

@@ -409,7 +409,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             if ($flag == "part") {
                 $selectFields = ['Title', 'TicketId'];
             }
-            $selectFields = ['Title', 'TicketId', 'Fields.priority', 'Fields.assignedto', 'Fields.workflow'];
+            $selectFields = ['Title', 'TicketId', 'Fields.priority', 'Fields.assignedto', 'Fields.workflow','Fields.estimatedpoints'];
             foreach ($ticketDetails["Tasks"] as &$task) {
                 $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId, $selectFields);
                 $taskDetails["Title"] = htmlspecialchars_decode($taskDetails["Title"]);
