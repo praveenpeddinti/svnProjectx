@@ -49,7 +49,7 @@ public blurTimeout=[];
   private follower_search_results:string[];
   private texts:string;
   private check_status:boolean=false;
-
+private showTotalEstimated=false;
   private childTasksArray=[];
   private childTaskData="";
   public commentsList=[];
@@ -96,6 +96,7 @@ public blurTimeout=[];
 
  //public form={description:''};//added by ryan
   ngOnInit() {
+      this.showTotalEstimated=false;
 var thisObj = this;
     //let jsonform={};//added by ryan
     //jsonform['description']='';//added by ryan
@@ -1234,7 +1235,7 @@ var thisObj = this;
           obj.fieldName = fields;
           prepareData.push(Object.assign({},obj));
           fieldsEditable.push(false);
-          if(subTaskfield.Fields[fields].id == 9 && subTaskfield.Fields[fields].value != ""){
+          if(fields == 'estimatedpoints' && subTaskfield.Fields[fields].value != ""){
             this.showTotalEstimated=true;
           }
         }
@@ -1377,12 +1378,13 @@ var thisObj = this;
           jQuery("#"+id).fadeOut(4000);
             }
 
-    public navigateStoryDetail(ticketId,projectId){ 
+    public navigateStoryDetail(ticketId,projectId){
+    this.showTotalEstimated=false;
     this.fieldsData = []; 
     this.showMyEditableField =[];
-          this.callTicketDetailPage(ticketId,projectId);        
+          //this.callTicketDetailPage(ticketId,projectId);        
         }
-private showTotalEstimated=false;
+
 public callTicketDetailPage(ticId,projectId){
     var thisObj = this;
     thisObj.text="";
