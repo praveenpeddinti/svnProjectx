@@ -223,15 +223,13 @@ toggleExpandRow(row) { console.log("dsfdsfsdfdsexpandrow========");
         */
     onActivate(event) {
         if (event.hasOwnProperty("row")) {
-            this._router.navigate(['project',event.row.project_name, event.row[0].field_value,'details']);
-        }
+this._router.navigate(['project',event.row[0].other_data.project_name, event.row[0].field_value,'details']);        }
     }
      /* @Praveen P
         * This method is used story/task details when story/task id click component
         */
     showStoryDetail(event) {
-
-            this._router.navigate(['project',event.project_name, event[0].field_value,'details']);
+            this._router.navigate(['project',event[0].other_data.project_name, event[0].field_value,'details']);
     }
 
     
