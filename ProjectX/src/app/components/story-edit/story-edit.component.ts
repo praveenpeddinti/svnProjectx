@@ -11,6 +11,7 @@ import { GlobalVariable } from '../../config';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 import * as io from 'socket.io-client';
 import { ProjectService} from '../../services/project.service';
+import {SharedService} from '../../services/shared.service'; //added by Ryan
 
 declare var jQuery:any; //reference to jquery
 declare var summernote:any; //reference to summernote
@@ -55,7 +56,7 @@ export class StoryEditComponent implements OnInit
   public getRows='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,private mention:MentionService,private projectService:ProjectService,
-    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) { 
+    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private shared:SharedService) { 
            this.filesToUpload = [];
     }
 
@@ -98,10 +99,10 @@ export class StoryEditComponent implements OnInit
              this.checkPlanLevel=this.ticketData.StoryType.Name;
              this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);      
              jQuery("#description").summernote('code',this.description); 
+             this.shared.change(this._router.url,this.url_TicketId,'Detail',this.checkPlanLevel,this.projectName); //added by Ryan
         }else{
             this._router.navigate(['project',this.projectName,this.url_TicketId,'error']);
           }
-           
         });
        }else{
           this._router.navigate(['project',this.projectName,'error']);
