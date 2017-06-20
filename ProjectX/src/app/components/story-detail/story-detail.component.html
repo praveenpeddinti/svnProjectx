@@ -36,7 +36,7 @@
                   <!--Left pannel fields
                   Loop renders the fields based on the renderType passed in fieldsData-->
                   <div  *ngFor="let field of fieldsData;let i=index;">
-                      <div class="leftpanelsections" *ngIf="field.elId == ticketId+'_totalestimatepoints' && field.value !='' && checkPlanLevel !='Task' && childTaskData!=''">
+                      <div class="leftpanelsections" *ngIf="field.elId == ticketId+'_totalestimatepoints' && field.value !='' && checkPlanLevel !='Task' && showTotalEstimated">
                              <label for="email" class="leftlabels" >{{field.title}}</label>
                             <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elId}}">
                              {{field.value}}
@@ -335,16 +335,8 @@
         </div>
     </div>
     <div class="col-md-1"  >
-        <div class="mart10" (click)="showdeleteDiv(1,relatedTask.TicketId)"><i class="fa fa-times removetask" aria-hidden="true"></i></div>
-           <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment" id="delete_relateTask_{{relatedTask.TicketId}}" style="width:auto">
-            <div class="delete_followersbgtable delete_followersbgtablesinglepop" >  
-                Do you want to unrelate? 
-                <div class="text-center" style=" padding-top:10px">
-                    <div class="yes" id="remove_yes" (click)="unRelateTask(relatedTask.TicketId)" >YES</div>
-                    <div class="no" (click)="showdeleteDiv(2,relatedTask.TicketId)">NO</div>
-        </div>
-            </div>
-        </div>
+        <div class="mart10" (click)="showdeleteDiv(1,relatedTask.TicketId)"><i class="fa fa-times removetask deletebutton" aria-hidden="true" id="del_{{relatedTask.TicketId}}"></i></div>
+
        
 </div>
     
@@ -352,7 +344,15 @@
 
 
 </div> 
-
+           <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment del" id="delete_relateTask" style="width:auto">
+            <div class="delete_followersbgtable delete_followersbgtablesinglepop" >  
+                Do you want to unrelate? 
+                <div class="text-center" style=" padding-top:10px">
+                    <div class="yes" id="remove_yes" (click)="unRelateTask()" >YES</div>
+                    <div class="no" (click)="showdeleteDiv(2,'')">NO</div>
+        </div>
+            </div>
+        </div>
 
 
  </div>

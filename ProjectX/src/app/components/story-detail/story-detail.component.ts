@@ -75,6 +75,7 @@ public blurTimeout=[];
   public hide:boolean=false;//added by Ryan
   public attachmentsData=[];
   public searchSlug='';
+  public relateTicketId='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private projectService:ProjectService,private shared:SharedService) {
@@ -165,6 +166,13 @@ var thisObj = this;
       //   // for navigation to ticket
       // this.route.params.subscribe(params => {
       //       this.searchSlug = params['Slug'];
+//alert("onInit"+JSON.stringify(this.relatedTaskArray));
+      jQuery(document).click(function(e){
+                if(jQuery(e.target).closest(".deletebutton").length == 0 ) {
+                    jQuery("#delete_relateTask").css("display", "none");
+                }
+
+      });
 
         
 }
@@ -1226,6 +1234,9 @@ var thisObj = this;
           obj.fieldName = fields;
           prepareData.push(Object.assign({},obj));
           fieldsEditable.push(false);
+          if(subTaskfield.Fields[fields].id == 9 && subTaskfield.Fields[fields].value != ""){
+            this.showTotalEstimated=true;
+          }
         }
         subTaskfield.Fields = prepareData;
         subTasksArray.push(subTaskfield);
@@ -1316,10 +1327,18 @@ var thisObj = this;
           jQuery("#workedhours").val("");
         }
         showdeleteDiv(id,ticId){
-          if(id==1){
-              jQuery("#delete_relateTask_"+ticId).css("display", "block");
+          this.relateTicketId=ticId;
+           if(id==1){
+              jQuery("#delete_relateTask").css("display", "block");
+               var delbutton_Height=10;
+              var delbutton_Width=jQuery('#del_'+ticId).width()/2;
+              var delete_popup=jQuery('.delete_followersbgtable').width()/2;
+              var offset=jQuery('#del_'+ticId).offset();
+              var offsetTop=offset.top+delbutton_Height-100;
+              var offsetRight=offset.left;
+             jQuery('#delete_relateTask').css({'top':offsetTop,'right':30,'min-width':"auto"});
           }else{
-            jQuery("#delete_relateTask_"+ticId).css("display", "none");
+            jQuery("#delete_relateTask").css("display", "none");
           }
       }
 
@@ -1327,17 +1346,17 @@ var thisObj = this;
         * @author:suryaprakash
         * @description : unrelate task from Story.
         */
-        public unRelateTask(ticketId){
+        public unRelateTask(){
             var unRelateTicketData={
                 ticketId:this.ticketId,
                 projectId:this.projectId,
-                unRelateTicketId:ticketId,
+                unRelateTicketId: this.relateTicketId,
               };
             this._ajaxService.AjaxSubscribe("story/un-relate-task",unRelateTicketData,(data)=>
               { 
               if(data.statusCode== 200){
                    this.relatedTaskArray=data.data.ticketInfo;
-                   if(data.data.activityData.referenceKey == -1){
+                    if(data.data.activityData.referenceKey == -1){
              this.commentsList.push(data.data.activityData.data);
             }
              else if(data.data.activityData != "noupdate"){
@@ -1363,10 +1382,11 @@ var thisObj = this;
     this.showMyEditableField =[];
           this.callTicketDetailPage(ticketId,projectId);        
         }
-
+private showTotalEstimated=false;
 public callTicketDetailPage(ticId,projectId){
     var thisObj = this;
     thisObj.text="";
+    thisObj.showTotalEstimated=false;
     jQuery(document).ready(function(){
         window.scrollTo(0,0);
 
@@ -1422,9 +1442,7 @@ public callTicketDetailPage(ticId,projectId){
             this.shared.change(this._router.url,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
             this.childTaskData=data.data.Tasks;
              this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
-
-
-            this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
+             this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
               console.log(data.data.Activities);
               this.commentsList = data.data.Activities;
