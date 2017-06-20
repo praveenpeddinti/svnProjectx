@@ -145,6 +145,17 @@ static function validateDateFormat($date, $format = 'M-d-Y')
        $html = htmlspecialchars_decode($html);
         return $html;
     }
+    
+    static function refineActivityDataTimeDesc($html,$length="35") {
+        // $html = CommonUtility::closetags($html);
+        //error_log("lengthtttttt".$length);
+         $html = strip_tags($html);
+        if (strlen($html) > $length) {
+            $html = substr($html, 0, $length);
+        }
+       $html = htmlspecialchars_decode($html);
+        return $html;
+    }
 
     static function closetags($html) {
 
@@ -743,14 +754,20 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
             array_push($arr2ordered, $ticketId);
             array_push($arr2ordered, $ticketTitle);
             $arr2ordered[1]["other_data"] = sizeof($ticketDetails["Tasks"]); 
+             
             $Othervalue = array();
+            //$Othervalue['childClass']="child_2";
+            //$arr2ordered[3]["other_data"] = $Othervalue['childClass'];
             foreach ($ticketDetails["Fields"] as $key => $value) {
 
                 if ($key == "planlevel") {
                     //$arr2ordered[0]["other_data"] = $value["value"];
                     $Othervalue["planlevel"] = $value["value"];
+                    //$Othervalue["childClass"] = "child_2";
+                    $Othervalue["parentStoryId"] = $ticketDetails['ParentStoryId'];
                    // $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]);
                     
+                    //if($ticketDetails['ParentStoryId'])
                       if($filter != null){
                 $showChild = $filter->showChild ;
                $filterType = $filter->type ;
@@ -769,6 +786,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                     
                     $arr2ordered[0]["other_data"] = $Othervalue;
                 }
+                
                 if (in_array($value["Id"], $fieldsOrderArray)) {
 
                     if (isset($value["custom_field_id"])) {
@@ -896,6 +914,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
             $ticketDetails = $arr2ordered;
             $projectDetails = Projects::getProjectMiniDetails($projectId);
            
+            error_log("----final data ---".print_r($ticketDetails[0],1));
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -1631,8 +1650,12 @@ $text_message=$html . $text_message .
                         $artifacts = $ticketArtifactsModel->getTicketArtifacts($extractArtifacts['TicketId'],$extractArtifacts['ProjectId']);
                         $getArtifactsEach=array();
                         foreach($artifacts['Artifacts'] as $getArtifact){
-                             array_push($getArtifactsEach,$getArtifact['OriginalFileName']);
-                        }
+                             if($getArtifact['ArtifactType']=="image"){
+                             $path=Yii::$app->params['ServerURL'].$getArtifact['ThumbnailPath']."/".$getArtifact['OriginalFileName'];
+                             $Showimage = "<a href='" . $path . "' target='_blank'/>" . $getArtifact['OriginalFileName'] . "</a>";
+                             array_push($getArtifactsEach,$Showimage);}
+                            else{array_push($getArtifactsEach,$getArtifact['OriginalFileName']);}
+                             }
                         $forTicketArtifacts['description'] =$getArtifactsEach;
                         $forTicketArtifacts['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
                         $forTicketArtifacts['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
@@ -1772,6 +1795,106 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             return $ticketDetails["Followers"];
         } catch (Exception $ex) {
             Yii::log("CommonUtility:prepareFollowerDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    
+    
+    /**
+     * @author Moin Hussain
+     * @param type $ticketDetails
+     * @param type $projectId
+     * @param type $fieldsOrderArray
+     * @param type $flag
+     * @return array
+     */
+    public static function prepareDashboardDetailsTemp($ticketDetails, $projectId, $fieldsOrderArray, $flag = "part",$filter=null) {
+        try {
+            $ticketCollectionModel = new TicketCollection();
+            $storyFieldsModel = new StoryFields();
+            $storyCustomFieldsModel = new StoryCustomFields();
+            $tinyUserModel = new TinyUserCollection();
+            $bucketModel = new Bucket();
+            $priorityModel = new Priority();
+            $mapListModel = new MapListCustomStoryFields();
+            $planlevelModel = new PlanLevel();
+            $workFlowModel = new WorkFlowFields();
+            $ticketTypeModel = new TicketType();
+            $newArray = array();
+            $finalData=array();
+            $arr2ordered = array();
+            error_log("-------------".$ticketDetails["TicketId"]);
+            //get the sub task count
+            if(empty($ticketDetails['ParentStoryId']) )  
+                $totalSubtasks = sizeof($ticketDetails["Tasks"]);
+            else
+                $totalSubtasks = '0'; 
+            
+            $finalData = array("Id" => $ticketDetails["TicketId"], "title" => $ticketDetails["Title"],'totalSubtasks'=>$totalSubtasks);
+            //$ticketTitle = array("field_name" => "Title", "value_id" => "", "field_value" => $ticketDetails["Title"], "other_data" => "");
+      // $fieldsOrderArray = ["assignedto","priority","workflow","bucket"];
+                $finalData['ProfilePicture']='';
+        foreach ($fieldsOrderArray as $value) {
+            
+            error_log($value."-----1--ass--".$ticketDetails["Fields"][$value]["value"]);
+
+            if($value=='assignedto'){
+                if ($ticketDetails["Fields"][$value]["value"] != "") {
+                    $assignedToDetails = TinyUserCollection::getMiniUserDetails($ticketDetails["Fields"][$value]["value"]);
+                    $finalData['ProfilePicture'] =$assignedToDetails["ProfilePicture"];
+                }
+            $finalData[$value] = $ticketDetails["Fields"][$value]["value_name"];   
+            }
+            if($value=='priority'){
+                $finalData[$value] = $ticketDetails["Fields"][$value]["value_name"];   
+            }
+            if($value=='workflow'){
+                if ($ticketDetails["Fields"][$value]["value"] != "") {
+                    $workFlowDetails = WorkFlowFields::getWorkFlowDetails($ticketDetails["Fields"][$value]["value"]);
+                    $workFlowStatus = $workFlowDetails['State'];
+                    $finalData['workFlowStatus'] = $workFlowStatus;
+                }
+                $finalData[$value] = $ticketDetails["Fields"][$value]["value_name"];   
+            }
+            if($value=='bucket'){
+                $finalData[$value] = $ticketDetails["Fields"][$value]["value_name"];   
+            }
+            if($value=='duedate'){
+                 if ($ticketDetails["Fields"][$value]["value"] != "") {error_log($ticketDetails["Fields"][$value]["value"]."---if--".$value);
+                            $datetime1 = $ticketDetails["Fields"][$value]["value"]->toDateTime();
+                           // error_log("---ifdate-1-". $datetime1);
+                            $timezone="Asia/Kolkata";
+                            $datetime1->setTimezone(new \DateTimeZone($timezone));
+                            $duedate = $datetime1->format('M-d-Y');
+                           // error_log($timezone."---ifdate-2-".$duedate);
+                        } else {error_log("---else--".$value);
+                            $duedate = "";
+                        }
+                        error_log($duedate."-----".$value);
+            $finalData[$value] = $duedate;   
+            }
+            if($value=='planlevel'){
+            $finalData[$value] = $ticketDetails["Fields"][$value]["value"];   
+            }
+              
+            //}
+            //if($value!='assignedto'){
+            // $finalData[$value] = $ticketDetails["Fields"][$value]["value"];   
+            //}
+             
+            
+        }
+        if($ticketDetails["ParentStoryId"]!=""){
+             $finalData["hide"] = true;
+                $finalData["childClass"] = "child_".$ticketDetails["ParentStoryId"];
+        }else{
+            $finalData["hide"] = false;
+             $finalData["childClass"] = "";
+        }
+        //  error_log("----final data---".print_r($finalData,1));     
+            return $finalData;
+        } catch (Exception $ex) {
+            Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
