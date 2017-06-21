@@ -206,11 +206,14 @@ getArtifacts(obj){
   */
   openDescEditor(){
     var formobj=this;//added by ryan
-    this.showDescEditor = false;
+    
+    
     //added by Ryan for summernote
     this.editor.initialize_editor('detailEditor',null,null);
      jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
+    //  alert("here");
     //  jQuery("#detailEditor").summernote('code',jQuery("#detailEditor").html());
+    this.showDescEditor = false;
 
   }
 
@@ -348,6 +351,7 @@ private showTitleEdit=true;
 // private titleError="";
 
 editTitle(titleId){
+//  alert("+++++++++"+titleId);
   jQuery('.viewinputtext').height();
   this.showTitleEdit = false;
     jQuery("#"+titleId).keydown(function(e){
@@ -365,7 +369,9 @@ editTitle(titleId){
 }
 
 closeTitleEdit(editedText){
-        if(editedText !=""){
+  // alert(editedText.trim());
+        if(editedText.trim() !=""){
+          // alert("if");
           // this.titleError="";
           document.getElementById(this.ticketId+"_title").innerText= editedText;
           this.showTitleEdit = true;
@@ -380,8 +386,9 @@ closeTitleEdit(editedText){
           };
           this.postDataToAjax(postEditedText);
       }else{
+        //  alert("else");
         this.showTitleEdit = true;
-        editedText = document.getElementById(this.ticketId+"_title").innerText;
+        jQuery("#"+this.ticketId+"_titleInput").val(document.getElementById(this.ticketId+"_title").innerText) ;
 
       }
 }
@@ -516,22 +523,10 @@ private dateVal = new Date();
        
        this.postDataToAjax(postEditedText,isChildActivity);
   }
-  inputKeyDown(event,eleId){
-        if (event.shiftKey == true) {
-            event.preventDefault();
-        }
+  inputKeyDown(value,eleId){
+    
+    jQuery("#"+eleId).val(value.replace(/([^0-9])+/g,''));
 
-        if ((event.keyCode >= 48 && event.keyCode <= 57) || 
-            (event.keyCode >= 96 && event.keyCode <= 105) || 
-            event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
-            event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
-
-        } else {
-            event.preventDefault();
-        }
-
-        if(jQuery("#"+eleId).val().indexOf('.') !== -1 && event.keyCode == 190)
-            event.preventDefault(); 
   }
   closeCalendar(fieldIndex){
 
@@ -562,7 +557,7 @@ private dateVal = new Date();
    var i;
    if(where =="Tasks"){
      i = fieldIndex.split("_")[0];
-   }else{
+   }else{this.showDescEditor = false;
      i = fieldIndex;
    }
     if(this.blurTimeout[i] != undefined && this.blurTimeout[i] != "undefined"){
@@ -943,9 +938,6 @@ var thisObj = this;
            var subTaskData = result.data;
             for(let subTaskfield of subTaskData){
                var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
-                if (currentData.length > 145){
-                var currentData= currentData.substring(0,145) + '...';
-                }
                  prepareSearchData.push(currentData);
             }
            this.search_results=prepareSearchData;
@@ -1386,8 +1378,10 @@ var thisObj = this;
         }
 
 public callTicketDetailPage(ticId,projectId){
+
     var thisObj = this;
     thisObj.text="";
+    thisObj.showDescEditor = true;
     thisObj.showTotalEstimated=false;
     jQuery(document).ready(function(){
         window.scrollTo(0,0);
