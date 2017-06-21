@@ -170,6 +170,11 @@ export class StoryDetailsPage {
                          document.getElementById("item_7").style.display = 'none';
                      }, 300)
                  }
+                     if (_title == "Total Estimate Points" && this.items[i].value == ""){
+                      setTimeout(() => {
+                         document.getElementById("item_7").style.display = 'none';
+                     }, 300)
+                 }
                     var _assignTo;
                     if (this.items[i].field_type == "Text") {
                         if (this.items[i].value == "") {
@@ -422,6 +427,7 @@ export class StoryDetailsPage {
                         }
                     StoryDetailsPage.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
                     StoryDetailsPage.optionsModal.onDidDismiss((data) => {
+                        alert(JSON.stringify(data));
                         if (data != null && (data.Name != data.previousValue)) {
                             this.changeOption(data, index, fieldDetails);
                         }

@@ -1,0 +1,51 @@
+ <ion-header class="popupheight">
+    <ion-toolbar>
+        <ion-title>
+<!--            {{activatedFieldTitle}} -->
+            Filters
+        </ion-title>
+        <ion-buttons end>
+            <button ion-button right color="light" (click)="dismiss({})">
+            <ion-icon name="md-close"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content #scrollContent padding>   
+<!-- <div right *ngFor="let field of displayFieldvalue; let i=index;">
+          <label class="customlabel" style="border-bottom: 1px solid #ccc; font-size: 18px; color: #005b80; padding-left: 15px;">{{field.type}}</label>
+      <ion-list>
+      <ion-row>
+      <ion-item *ngFor="let listObj of field.filterValue; let i=index;" id="modelitem_{{listObj.value.id}}"  [ngClass]="{'selectedMember': listObj.value.label == activatedFieldValue }"
+               style="border-bottom: 1px solid #ccc;" (click)="filterDashboard()" center>
+     <div id="field_title_{{i}}" class="item customdropdown spinnerlabel marginbottom8" (onChange)="filterDashboard()">
+         <ion-icon *ngIf="listObj.value.label == activatedFieldValue " name="checkmark"></ion-icon>
+         {{listObj.value.label}}
+         <i class="fa fa-circle {{listObj.value.label}}" aria-hidden="true"></i> 
+      </div>
+      </ion-item>
+      </ion-row>
+      </ion-list>
+      </div>-->
+     
+      <div right *ngFor="let field of displayFieldvalue; let i=index;">
+      <label class="customlabel" style="font-size: 18px; color: #005b80; padding-left: 15px;">{{field.type}}</label>
+      <ion-list>
+      <ion-row>
+      <ion-item *ngFor="let listObj of field.filterValue; let i=index;" style="border-bottom: 1px solid #ccc;"
+          id="modelitem_{{listObj.value.id}}" 
+          [ngClass]="{'selectedMember': listObj.value.label == activatedFieldValue }"
+          (click)="dismiss(listObj)" center>
+     <div>
+         {{listObj.value.label}}
+         <ion-icon *ngIf="listObj.value.label == activatedFieldValue " name="checkmark"></ion-icon>
+         <i class="fa fa-circle{{listObj.value.label}}" aria-hidden="true"></i> 
+      </div>
+      </ion-item>
+      </ion-row>
+      </ion-list> 
+      
+      </div>
+    
+    
+</ion-content>
