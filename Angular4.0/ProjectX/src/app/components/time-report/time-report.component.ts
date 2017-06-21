@@ -66,10 +66,16 @@ export class TimeReportComponent{
                     class: 'paddingleft10'
                 },
                 {
-                    name: 'Story / Task Description',
+                    name: 'Story / Task',
                     flexGrow: 3,
                     sortby: 'Id',
                     class: 'titlecolumn paddingleft10'
+                },
+                {
+                    name: 'Description',
+                    flexGrow: 3,
+                    sortby: 'Id',
+                    class: 'paddingleft10'
                 },
                 {
                     name: 'Hours',
@@ -235,6 +241,9 @@ export class TimeReportComponent{
                         var subTaskData = result.data;
                         for(let subTaskfield of subTaskData){
                             var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
+                            if (currentData.length > 55){
+                              var currentData= currentData.substring(0,55) + '...';
+                            }
                             prepareSearchData.push(currentData);
                         }
                         this.search_results=prepareSearchData;
@@ -248,7 +257,7 @@ export class TimeReportComponent{
                     }
                     
                 });
-               },1000);
+               },700);
  
     }
 
@@ -349,8 +358,8 @@ export class TimeReportComponent{
         var delbutton_Width=jQuery('#del_'+slug).width()/2;
         var delete_popup=jQuery('.delete_followersbgtable').width()/2;
         var offset=jQuery('#del_'+slug).offset();
-        var offsetTop=offset.top+delbutton_Height;
-        var offsetRight=offset.right-(delbutton_Width+delete_popup);
+        var offsetTop=offset.top+delbutton_Height+2;
+        var offsetRight=offset.left-(delbutton_Width+delete_popup)+16;
         jQuery('#delete_timelog').css({'top':offsetTop,'left':offsetRight,'min-width':"auto"});
        //jQuery('#delete_timelog').css('min-width',"auto");
         this.extractDelFields=delObj;
@@ -358,7 +367,7 @@ export class TimeReportComponent{
   
     removeTimelog(){
         var input="_Input";
-        var removeTicketSpilt = this.extractDelFields['ticketDesc'].split(".");
+        var removeTicketSpilt = this.extractDelFields['ticketDesc'].split(" ");
         var removeTicketId = removeTicketSpilt[0].split("#");
         var postObj={
             ticketId:removeTicketId[1],
@@ -366,7 +375,7 @@ export class TimeReportComponent{
             slug:this.extractDelFields['Slug']['$oid'],
             projectId:this.projectId
         }
-        this._ajaxService.AjaxSubscribe("time-report/remove-timelog",postObj,(response)=>
+            this._ajaxService.AjaxSubscribe("time-report/remove-timelog",postObj,(response)=>
         { 
             jQuery('#delete_timelog').hide();
             this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
@@ -402,5 +411,9 @@ export class TimeReportComponent{
           this.extractFields=copy;
           this.oldWorkLogHour=this.extractFields['Time'];
           this.oldticketDesc=this.extractFields['ticketDesc'];
+    }
+    
+    fullTextshow(a){jQuery("#fullText_"+a).css("display", "block");
+    
     }
 }

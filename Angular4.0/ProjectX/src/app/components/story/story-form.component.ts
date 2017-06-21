@@ -88,6 +88,12 @@ export class StoryComponent
                     console.log("storyFrom Component ngOnInit fail---");
               }
         });
+          jQuery("#title").keydown(function(e){
+        if (e.keyCode == 13 && !e.shiftKey)
+        {
+            e.preventDefault();
+        }
+        }); 
     }
 
     /**
@@ -99,6 +105,20 @@ export class StoryComponent
 
         var formobj=this;
         this.editor.initialize_editor('summernote','keyup',formobj);
+        jQuery(document)
+    .one('focus.autoExpand', 'textarea.autoExpand', function(){
+        var savedValue = this.value;
+        this.value = '';
+        this.baseScrollHeight = this.scrollHeight;
+        this.value = savedValue;
+    })
+    .on('input.autoExpand', 'textarea.autoExpand', function(){
+      var minRows = this.getAttribute('data-min-rows')|0, rows;
+        this.rows = minRows;
+        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
+        var newrows = Math.floor(this.scrollHeight/30);
+        this.rows = newrows;
+    });
 
     }
 

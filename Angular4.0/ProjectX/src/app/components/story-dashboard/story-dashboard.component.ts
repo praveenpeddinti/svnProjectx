@@ -13,7 +13,7 @@ declare var jQuery:any;
     selector: 'story-dashboard-view',
     providers: [StoryService,ProjectService],
     templateUrl: 'story-dashboard-component.html',
-    styleUrls: ['story-dashboard.component.css']
+    styleUrls: ['./story-dashboard.component.css']
 
 })
 
@@ -176,7 +176,7 @@ expanded: any = {};
     /*
     @When Clicking pages
     */
-    onPage(event) {console.log("etRowVCla===="+JSON.stringify(event));
+    onPage(event) {
         this.offset = event.offset;
         this.limit = event.limit;
         this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
@@ -194,11 +194,10 @@ expanded: any = {};
 collapseAll(){ 
     this.table.rowDetail.collapseAllRows()
 }
-toggleExpandRow(row) { console.log("dsfdsfsdfdsexpandrow========");
+toggleExpandRow(row) { 
     if(row.$$expanded!=1){jQuery("#collapsediv").click();}
     this.row1=[];
-   // console.log('Toggled Expand Row!', row[0].field_value);
-   // jQuery(".childTask_"+row[0].field_value).toggleClass("childTask");
+    console.log('Toggled Expand Row!', row[0].field_value);
     this._service.getSubTasksDetails(1, row[0].field_value, (response) => {
                    let jsonForm = {};
             if (response.statusCode == 200) {
@@ -223,7 +222,8 @@ toggleExpandRow(row) { console.log("dsfdsfsdfdsexpandrow========");
         */
     onActivate(event) {
         if (event.hasOwnProperty("row")) {
-this._router.navigate(['project',event.row[0].other_data.project_name, event.row[0].field_value,'details']);        }
+			this._router.navigate(['project',event.row[0].other_data.project_name, event.row[0].field_value,'details']);        
+}
     }
      /* @Praveen P
         * This method is used story/task details when story/task id click component

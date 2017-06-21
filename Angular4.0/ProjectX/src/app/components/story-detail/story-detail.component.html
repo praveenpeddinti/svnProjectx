@@ -9,15 +9,13 @@
 <!--<vg-player>
     <video vgMedia id="singleVideo" preload="auto" controls>
         <source src="https://10.10.73.21/files/story/Matrix.mp4" type="video/mp4">
-    </video>
+    </video> (keydown)="submitOnEnter($event)"
 </vg-player>-->
 
-
-<div  class="paddingbottom10">
-    <!--Title Part-->
-        <div class="titlearea" (keydown)="submitOnEnter($event)">
-          <div class="row">
-              <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpadding">
+<div  class="row">
+      <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom" style="margin:0px;padding:0px;">
+          <div class="paddingbottom10">
+              <div class="ticketidareanorightpadding titlearea ">
                   <div class="ticketidarea">
                        <div class="pull-left paddingL10">
                   <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">EDIT</button>
@@ -27,24 +25,10 @@
                       #{{ticketData?.data?.TicketId}}
                   </div>
               </div>
-            <div class="col-xs-12 col-sm-9 col-md-9">
-              <div class="ticketdescriptionarea minheight50">
-                <div class="viewinputtext " [innerHTML]="ticketData?.data?.Title" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
-                </div>
-                <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />
-                <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
-                </div>-->
               </div>
-            </div>
-          </div>
-      </div>
-      <!--Title Part End-->
-  </div>
-
-<div  class="row">
-      <div class="col-xs-12 col-sm-3 col-md-3 ticketidareanorightpaddingbottom" style="margin:0px;padding:0px;">
           <!--Left Pannel Starts-->
           <div class="leftpaneldiv">
+              
               <!--<div class="leftpanelsections">
                   <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">Edit</button>
               </div>-->
@@ -52,7 +36,7 @@
                   <!--Left pannel fields
                   Loop renders the fields based on the renderType passed in fieldsData-->
                   <div  *ngFor="let field of fieldsData;let i=index;">
-                      <div class="leftpanelsections" *ngIf="field.elId == ticketId+'_totalestimatepoints' && field.value !='' && checkPlanLevel !='Task' && childTaskData!=''">
+                      <div class="leftpanelsections" *ngIf="field.elId == ticketId+'_totalestimatepoints' && field.value !='' && checkPlanLevel !='Task' && showTotalEstimated">
                              <label for="email" class="leftlabels" >{{field.title}}</label>
                             <div class="leftreadonlyfontbluecolor" *ngIf="field.readonly" data-text="readonly" id="{{field.elId}}">
                              {{field.value}}
@@ -72,18 +56,17 @@
                     <div class="leftreadonlyfontgreycolor customcalender" [ngSwitch]="field.renderType" *ngIf="!field.readonly">
                         <div (click)="editThisField($event,i,field.elId,field.Id,field.title,field.renderType)" [hidden]="!showMyEditableField[i]" data-text="not readonly" 
                              id="{{field.elId}}" class="{{(field.title=='Status')? field.value:''}}">
-                            {{(field.value == "") ? '--': field.value}} 
+                            {{(field.value === "") ? '--': field.value}} 
                             <i *ngIf="field.title == 'Priority'"  class="fa fa-circle {{field.value}}" aria-hidden="true">
                             </i>
                         </div>
 
                         <input *ngSwitchCase="'input'" class="editinput" (keyup.enter)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' type="{{field.type}}" value="{{field.value}}" [hidden]="showMyEditableField[i]"
-                            (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)" (keyup)="inputKeyDown($event.target.value,field.elId+'_'+i)" />
+                            (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)"  (keydown)="inputKeyDown($event,field.elId+'_'+i)" />
 
                         <p-calendar *ngSwitchCase="'date'" [(ngModel)]="dateVal" class="primeDateComponent" name="date_{{i}}" (onBlur)="dateBlur($event,i)" (onSelect)="restoreField($value,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}' [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" [hidden]="showMyEditableField[i]" dateFormat="M-dd-yy" >
                         </p-calendar>
-
-                        <textarea *ngSwitchCase="'textarea'" class="custtextarea width100per" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
+                        <textarea  *ngSwitchCase="'textarea'" class="custtextarea width100per" id='{{field.elId}}_{{i}}' name="{{field.fieldType}}" [ngModel]="field.value" [hidden]="showMyEditableField[i]" (blur)="restoreField($event.target.value,field.elId,i,field.renderType,field.Id)">
                         </textarea>
 
                         <div class="customdropdown">
@@ -127,6 +110,17 @@
     </div>
 
     <div class="col-xs-12 col-sm-9 col-md-9">
+         <div class="paddingbottom10"> 
+        <div class="titlearea" (keydown)="submitOnEnter($event)">
+              <div class="ticketdescriptionarea">
+                <div class="viewinputtext " [innerText]="(ticketData != null)? ticketData?.data?.Title : ''" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
+                </div>
+               <!-- <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />-->
+                <textarea rows=1 data-min-rows=1  style="resize: none;" class='autoExpand tickettitle_textarea' maxlength="512" id="{{ticketData?.data?.TicketId}}_titleInput"  [hidden]="showTitleEdit"  value="{{ticketData?.data?.Title}}" (blur)="closeTitleEdit($event.target.value)"  ></textarea>
+                <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
+                </div>-->
+              </div>
+            </div></div>
       <div>
           <!--Description Part-->
         <div class="rightdescriptionarea" [hidden]="!showDescEditor">
@@ -283,7 +277,7 @@
                     </div>
                     <div class="col-md-5">
                         <div class="addtask_bor">
-                            <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/project',projectName,childTasks.TicketId,'details']" >{{childTasks.Title  | truncate:140}}</a></div>
+                            <div class="addtask_title" id="childTaskTitle"><a [routerLink]="['/project',projectName,childTasks.TicketId,'details']" >{{childTasks.Title  | truncate:50}}</a></div>
                             <div class="addtask_status" *ngIf="childTasks.TicketId">{{childTasks.Fields[2].data.value_name}}</div>
                         </div>
                     </div>
@@ -336,21 +330,13 @@
     </div>
     <div class="col-md-10">
         <div class="addtask_bor">
-            <div class="addtask_title"><a [routerLink]="['/project',projectName,relatedTask.TicketId,'details']" (click)="navigateStoryDetail(relatedTask.TicketId)">{{relatedTask.Title}}</a></div>
+            <div class="addtask_title"><a [routerLink]="['/project',projectName,relatedTask.TicketId,'details']" (click)="navigateStoryDetail(relatedTask.TicketId)">{{relatedTask.Title | truncate:145}}</a></div>
             <div class="addtask_status">{{relatedTask.Fields.workflow.value_name}}</div>
         </div>
     </div>
     <div class="col-md-1"  >
-        <div class="mart10" (click)="showdeleteDiv(1,relatedTask.TicketId)"><i class="fa fa-times removetask" aria-hidden="true"></i></div>
-           <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment" id="delete_relateTask_{{relatedTask.TicketId}}" style="width:auto">
-            <div class="delete_followersbgtable delete_followersbgtablesinglepop" >  
-                Do you want to unrelate? 
-                <div class="text-center" style=" padding-top:10px">
-                    <div class="yes" id="remove_yes" (click)="unRelateTask(relatedTask.TicketId)" >YES</div>
-                    <div class="no" (click)="showdeleteDiv(2,relatedTask.TicketId)">NO</div>
-        </div>
-            </div>
-        </div>
+        <div class="mart10" (click)="showdeleteDiv(1,relatedTask.TicketId)"><i class="fa fa-times removetask deletebutton" aria-hidden="true" id="del_{{relatedTask.TicketId}}"></i></div>
+
        
 </div>
     
@@ -358,7 +344,15 @@
 
 
 </div> 
-
+           <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment del" id="delete_relateTask" style="width:auto">
+            <div class="delete_followersbgtable delete_followersbgtablesinglepop" >  
+                Do you want to unrelate? 
+                <div class="text-center" style=" padding-top:10px">
+                    <div class="yes" id="remove_yes" (click)="unRelateTask()" >YES</div>
+                    <div class="no" (click)="showdeleteDiv(2,'')">NO</div>
+        </div>
+            </div>
+        </div>
 
 
  </div>
@@ -382,10 +376,10 @@
      <a  *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/project',projectName,property.PoppedChildId,'details']" (click)="navigateStoryDetail(property.PoppedChildId)" >#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a>
  <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
  
- <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-zero-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-zero-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
+ <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-zero-' || property.NewValue=='-none-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-zero-' || property.NewValue=='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
                 </span>
     <span *ngIf="property.type!='user'"> 
-        <span *ngIf="property.PreviousValue!=0" class="bold" [innerHTML]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerHTML]= "property.NewValue"></span> 
+        <span *ngIf="property.PreviousValue!=0" class="bold" [innerText]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerText]= "property.NewValue"></span> 
                 </span>
   </span>              
    <span *ngIf="property.SpecialActivity=='1'"> 

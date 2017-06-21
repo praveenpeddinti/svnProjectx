@@ -196,7 +196,7 @@ export class HeaderComponent implements OnInit {
       if(data)
       {
         this.notify_count=0;
-        
+        jQuery('#notificationCount').text(this.notify_count);
          jQuery(".notificationlist").remove();
          jQuery(".notificationdelete").remove();
          jQuery('.notificationdiv').removeClass('unreadnotification'); 

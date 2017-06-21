@@ -11,6 +11,7 @@ import { GlobalVariable } from '../../config';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 import * as io from 'socket.io-client';
 import { ProjectService} from '../../services/project.service';
+import {SharedService} from '../../services/shared.service'; //added by Ryan
 
 declare var jQuery:any; //reference to jquery
 declare var summernote:any; //reference to summernote
@@ -41,6 +42,7 @@ export class StoryEditComponent implements OnInit
   public dragdrop={extraPlugins:'dragdrop'};
   public taskArray:any;
   public taskIds=[];
+  private childTaskData="";
   //ckeditor configuration options
   public toolbar={toolbar : [
       [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList']
@@ -50,10 +52,11 @@ export class StoryEditComponent implements OnInit
   public hasFileDroped:boolean = false;
   public fileUploadStatus:boolean = false;
   public defaultTasksShow:boolean=true;
-
+  public checkPlanLevel='';
+  public getRows='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,private mention:MentionService,private projectService:ProjectService,
-    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService) { 
+    private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private shared:SharedService) { 
            this.filesToUpload = [];
     }
 
@@ -92,12 +95,14 @@ export class StoryEditComponent implements OnInit
             }
              this.ticketData = data.data.ticket_details;
              this.description= this.ticketData.CrudeDescription;
+             this.childTaskData=this.ticketData.Tasks;
+             this.checkPlanLevel=this.ticketData.StoryType.Name;
              this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);      
-             jQuery("#description").summernote('code',this.description);   
-          }else{
+             jQuery("#description").summernote('code',this.description); 
+             this.shared.change(this._router.url,this.url_TicketId,'Detail',this.checkPlanLevel,this.projectName); //added by Ryan
+        }else{
             this._router.navigate(['project',this.projectName,this.url_TicketId,'error']);
           }
-           
         });
        }else{
           this._router.navigate(['project',this.projectName,'error']);
@@ -109,14 +114,58 @@ export class StoryEditComponent implements OnInit
       
     
     this.minDate=new Date(); //set current date to datepicker as min date
+     jQuery(document)
+    .one('focus.autoExpand', 'textarea.autoExpand', function(){ console.log('focus');
+         var minRows = this.getAttribute('data-min-rows')|0, rows;
+        var savedValue = this.value;
+        this.value = '';
+        this.baseScrollHeight = this.scrollHeight;
+        this.value = savedValue;
+         rows = Math.floor((this.scrollHeight) / 30);
+        this.rows = rows;
+    })
+    .on('input.autoExpand', 'textarea.autoExpand', function(){
+       
+      var minRows = this.getAttribute('data-min-rows')|0, rows;
+        this.rows = minRows;
+        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 17);
+        var newrows = Math.floor(this.scrollHeight/30);
+        this.rows = newrows;
+    });
+    
+       var $textArea = jQuery("#title");
+      setTimeout(()=>{
+       $textArea.trigger("focus");
+        },1000);
+    jQuery("#title").keydown(function(e){
+        if (e.keyCode == 13 && !e.shiftKey)
+        {
+            e.preventDefault();
+        }
+    }); 
   }
 
   ngAfterViewInit() 
   {
-   
-    this.editor.initialize_editor('description',null,null);      
+      this.editor.initialize_editor('description',null,null);      
   }
+  inputKeyDown(event,eleId){
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
 
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || 
+            (event.keyCode >= 96 && event.keyCode <= 105) || 
+            event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+            event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+        } else {
+            event.preventDefault();
+        }
+
+        if(jQuery("#"+eleId).val().indexOf('.') !== -1 && event.keyCode == 190)
+            event.preventDefault(); 
+  }
   /*
     @params    :  fieldsArray,ticketId
     @ParamType :  array,int
@@ -236,12 +285,14 @@ export class StoryEditComponent implements OnInit
     @Description: Submit Edit Story/Ticket
     */
   editStorySubmit(edit_data)
-  {  
+  { 
     jQuery("#title_error").hide();
     jQuery("#desc_error").hide();
     var desc=jQuery("#description").summernote('code');
     desc=jQuery(desc).text().trim();
+    edit_data.dod=edit_data.dod.trim();
     var error = 0;
+   // alert(edit_data.title);
     if(edit_data.title=='')
     {
       jQuery("#title_error").show();
