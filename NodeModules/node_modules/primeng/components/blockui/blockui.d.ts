@@ -4,8 +4,8 @@ export declare class BlockUI implements AfterViewInit, OnDestroy {
     el: ElementRef;
     domHandler: DomHandler;
     target: any;
+    mask: ElementRef;
     _blocked: boolean;
-    _mask: HTMLDivElement;
     constructor(el: ElementRef, domHandler: DomHandler);
     blocked: boolean;
     ngAfterViewInit(): void;

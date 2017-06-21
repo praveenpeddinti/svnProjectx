@@ -12,6 +12,7 @@ export declare class GMap implements AfterViewInit, DoCheck {
     onOverlayDragStart: EventEmitter<any>;
     onOverlayDrag: EventEmitter<any>;
     onOverlayDragEnd: EventEmitter<any>;
+    onMapReady: EventEmitter<any>;
     differ: any;
     map: any;
     constructor(el: ElementRef, differs: IterableDiffers, cd: ChangeDetectorRef, zone: NgZone);
