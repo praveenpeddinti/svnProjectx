@@ -369,7 +369,6 @@ editTitle(titleId){
 }
 
 closeTitleEdit(editedText){
-  // alert(editedText.trim());
         if(editedText.trim() !=""){
           // alert("if");
           // this.titleError="";
@@ -386,7 +385,6 @@ closeTitleEdit(editedText){
           };
           this.postDataToAjax(postEditedText);
       }else{
-        //  alert("else");
         this.showTitleEdit = true;
         jQuery("#"+this.ticketId+"_titleInput").val(document.getElementById(this.ticketId+"_title").innerText) ;
 
@@ -523,10 +521,22 @@ private dateVal = new Date();
        
        this.postDataToAjax(postEditedText,isChildActivity);
   }
-  inputKeyDown(value,eleId){
-    
-    jQuery("#"+eleId).val(value.replace(/([^0-9])+/g,''));
+    inputKeyDown(event,eleId){
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
 
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || 
+            (event.keyCode >= 96 && event.keyCode <= 105) || 
+            event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+            event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+        } else {
+            event.preventDefault();
+        }
+
+        if(jQuery("#"+eleId).val().indexOf('.') !== -1 && event.keyCode == 190)
+            event.preventDefault(); 
   }
   closeCalendar(fieldIndex){
 
@@ -557,7 +567,7 @@ private dateVal = new Date();
    var i;
    if(where =="Tasks"){
      i = fieldIndex.split("_")[0];
-   }else{this.showDescEditor = false;
+   }else{
      i = fieldIndex;
    }
     if(this.blurTimeout[i] != undefined && this.blurTimeout[i] != "undefined"){
@@ -583,10 +593,10 @@ private dateVal = new Date();
 //And creates a Common data array to render in Angular Views.
   fieldsDataBuilder(fieldsArray,ticketId){
     let fieldsBuilt = [];
-    let data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:""};
+    let data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:"",displayFlag:true};
     for(let field of fieldsArray){
       if(field.field_name != "customfield_2"){
-      data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:""};
+      data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:"",displayFlag:true};
           switch(field.field_type){
             case "Text":
             case "TextArea":
@@ -654,6 +664,9 @@ private dateVal = new Date();
           data.elId =  ticketId+"_"+field.field_name;
           data.Id = field.Id;
             data.fieldType = field.field_type;
+            if('totalestimatepoints'==field.field_name){
+              data.displayFlag=false;
+            }
 
             if(field.field_name == "dod"){
               data.renderType = "textarea";
@@ -938,6 +951,9 @@ var thisObj = this;
            var subTaskData = result.data;
             for(let subTaskfield of subTaskData){
                var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
+               if (currentData.length > 145){
+                var currentData= currentData.substring(0,145) + '...';
+                }
                  prepareSearchData.push(currentData);
             }
            this.search_results=prepareSearchData;
@@ -1385,7 +1401,7 @@ public callTicketDetailPage(ticId,projectId){
     thisObj.showTotalEstimated=false;
     jQuery(document).ready(function(){
         window.scrollTo(0,0);
-
+    
       jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                            //sets the flag, to know if the click happend on the dropdown or outside  
           if(jQuery(event.target).closest('div.customdropdown').length == 0){
           thisObj.clickedOutside = true;
