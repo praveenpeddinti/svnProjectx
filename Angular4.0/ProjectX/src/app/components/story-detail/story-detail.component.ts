@@ -369,7 +369,6 @@ editTitle(titleId){
 }
 
 closeTitleEdit(editedText){
-  // alert(editedText.trim());
         if(editedText.trim() !=""){
           // alert("if");
           // this.titleError="";
@@ -386,7 +385,7 @@ closeTitleEdit(editedText){
           };
           this.postDataToAjax(postEditedText);
       }else{
-        //  alert("else");
+
         this.showTitleEdit = true;
         jQuery("#"+this.ticketId+"_titleInput").val(document.getElementById(this.ticketId+"_title").innerText) ;
 
@@ -557,7 +556,7 @@ private dateVal = new Date();
    var i;
    if(where =="Tasks"){
      i = fieldIndex.split("_")[0];
-   }else{this.showDescEditor = false;
+   }else{
      i = fieldIndex;
    }
     if(this.blurTimeout[i] != undefined && this.blurTimeout[i] != "undefined"){
