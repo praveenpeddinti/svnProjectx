@@ -583,10 +583,10 @@ private dateVal = new Date();
 //And creates a Common data array to render in Angular Views.
   fieldsDataBuilder(fieldsArray,ticketId){
     let fieldsBuilt = [];
-    let data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:""};
+    let data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:"",displayFlag:true};
     for(let field of fieldsArray){
       if(field.field_name != "customfield_2"){
-      data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:""};
+      data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:"",displayFlag:true};
           switch(field.field_type){
             case "Text":
             case "TextArea":
@@ -654,6 +654,9 @@ private dateVal = new Date();
           data.elId =  ticketId+"_"+field.field_name;
           data.Id = field.Id;
             data.fieldType = field.field_type;
+            if('totalestimatepoints'==field.field_name){
+              data.displayFlag=false;
+            }
 
             if(field.field_name == "dod"){
               data.renderType = "textarea";
@@ -1385,7 +1388,7 @@ public callTicketDetailPage(ticId,projectId){
     thisObj.showTotalEstimated=false;
     jQuery(document).ready(function(){
         window.scrollTo(0,0);
-
+    
       jQuery(document).bind("click",function(event){                                                                                                                                                                                                                                                            //sets the flag, to know if the click happend on the dropdown or outside  
           if(jQuery(event.target).closest('div.customdropdown').length == 0){
           thisObj.clickedOutside = true;
