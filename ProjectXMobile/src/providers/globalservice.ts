@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Storage} from '@ionic/storage';
-
+declare var socket:any;
 /*
   Generated class for the Globalservice provider.
 
@@ -20,6 +20,7 @@ export class Globalservice {
     public ajaxCall(url,data){
         var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
         data["userInfo"] = userInfo;
+        data["clientType"] = 'mobile';
         data["timeZone"] = "Asia/Kolkata";
         data["projectId"] = 1;
           var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
@@ -131,5 +132,46 @@ export class Globalservice {
    public getCollaborators(url, requestParams) {
         return this.ajaxCall(url,requestParams);
     }
-    
+
+    public getAllNotification(url:string,params:Object){
+    var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
+   if(userInfo != null){
+      params["clientType"] = 'mobile';
+      params["userInfo"] = userInfo;
+      params["projectId"] = 1;
+      params["timeZone"] = "Asia/Kolkata"
+    }
+        var response = this.http.post(url, params, this.headers).map(
+            res => res.json()
+        );
+        return response;
+}
+
+public SocketSubscribe(url:string,params:Object)
+{ 
+   var userInfo=JSON.parse(localStorage.getItem("userCredentials"));;
+   if(userInfo != null){
+      params["userInfo"] = userInfo;
+      params["projectId"] = 1;
+      params["timeZone"] = "Asia/Kolkata"
+    }
+  
+      socket.emit(url,params);
+     
+}
+
+
+public deleteNotification(url:string,params:Object){
+     var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
+   if(userInfo != null){
+      params["clientType"] = 'mobile';
+      params["userInfo"] = userInfo;
+      params["projectId"] = 1;
+      params["timeZone"] = "Asia/Kolkata"
+    }
+     var response = this.http.post(url, params, this.headers).map(
+            res => res.json()
+        );
+        return response;
+}
 }

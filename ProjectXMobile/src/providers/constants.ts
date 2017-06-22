@@ -10,7 +10,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Constants {
   // Local URL
-    public baseUrl = 'http://localhost/';
+  //  public baseUrl = 'http://localhost/';
   // Sandbox URL
  // public baseUrl = 'http://10.10.73.77/';
   // Public URL
@@ -21,8 +21,9 @@ export class Constants {
 
   //    public baseUrl = 'http://10.10.73.12:802/';
     //anand
-  //  public baseUrl = 'http://10.10.73.9:8099/';
-    
+    public baseUrl = 'http://10.10.73.9:8099/';
+    public notificationUrl='http://10.10.73.9:4201/getAllNotifications'
+    public deleteNotificationUrl=this.baseUrl+'story/delete-notification'
    public loginUrl = this.baseUrl+"site/user-authentication";
    public getAllTicketDetails = this.baseUrl + "story/get-my-tickets-details";
    public taskDetailsById = this.baseUrl + "story/get-ticket-details";
