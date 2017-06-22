@@ -54,6 +54,9 @@ export class StoryEditComponent implements OnInit
   public defaultTasksShow:boolean=true;
   public checkPlanLevel='';
   public getRows='';
+  private childTasks = [];
+  private showTotalEstimated=false;   
+  private taskFieldsEditable=[]; 
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,private mention:MentionService,private projectService:ProjectService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private shared:SharedService) { 
@@ -97,7 +100,8 @@ export class StoryEditComponent implements OnInit
              this.description= this.ticketData.CrudeDescription;
              this.childTaskData=this.ticketData.Tasks;
              this.checkPlanLevel=this.ticketData.StoryType.Name;
-             this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId);      
+             this.fieldsData = this.fieldsDataBuilder(this.ticketData.Fields,this.ticketData.TicketId); 
+             this.childTasks=this.taskDataBuilder(this.ticketData.childTasks);     
              jQuery("#description").summernote('code',this.description); 
              this.shared.change(this._router.url,this.url_TicketId,'Detail',this.checkPlanLevel,this.projectName); //added by Ryan
         }else{
@@ -441,5 +445,30 @@ export class StoryEditComponent implements OnInit
                 
     //   }
     // }
-
+   taskDataBuilder(taskArray){
+     var subTasksArray = [];
+       let prepareData = [];
+       var fieldsEditable = [];
+       var i=0;
+       var obj;
+       for(let subTaskfield of taskArray){
+          obj = {data:{},fieldName:""};
+        for(let fields in subTaskfield.Fields){
+           obj.data = subTaskfield.Fields[fields];
+          obj.fieldName = fields;
+          prepareData.push(Object.assign({},obj));
+          fieldsEditable.push(false);
+          if(fields == 'estimatedpoints' && subTaskfield.Fields[fields].value != ""){
+            this.showTotalEstimated=true;
+           }
+        }
+        subTaskfield.Fields = prepareData;
+        subTasksArray.push(subTaskfield);
+        this.taskFieldsEditable.push(fieldsEditable);
+        fieldsEditable = [];
+        prepareData=[];
+      }
+     
+        return subTasksArray;
+    }
 }
