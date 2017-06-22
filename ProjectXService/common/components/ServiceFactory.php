@@ -5,6 +5,7 @@ namespace common\components;
 use common\service\StoryService;
 use common\service\CollaboratorService;
 use common\service\TimeReportService;
+use common\service\BucketService;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,7 +18,7 @@ class ServiceFactory {
     private static $inst_story_service = null;
     private static $inst_collaborator_service = null;
     private static $inst_timereport_service = null;
-
+    private static $inst_bucket_service = null;
     private function __construct() {
         
     }
@@ -52,6 +53,17 @@ class ServiceFactory {
             return self::$inst_timereport_service;
         } catch (Exception $ex) {
             Yii::log("ServiceFactory:getTimeReportServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    public static function getBucketServiceInstance() {
+        try {
+            if (!self::$inst_bucket_service) {
+                self::$inst_bucket_service = new BucketService();
+            }
+            return self::$inst_bucket_service;
+        } catch (Exception $ex) {
+            Yii::log("ServiceFactory:getBucketServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

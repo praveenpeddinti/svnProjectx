@@ -155,6 +155,21 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
             Yii::log("CollaboratorService:getTicketFollowersList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+     /**
+    * @author Praveen
+    * @description This is to get filtered team list in creating buckets 
+    * @return type 
+    * @param type $projectId, $role
+     */      
+    public function getResponsibleProjectTeam($projectId,$role){
+        try{
+         $collaboratorModel = new Collaborators();
+         return $collaboratorModel->getResponsibleProjectTeam($projectId,$role);
+        } catch (Exception $ex) {
+            Yii::log("CollaboratorService:getResponsibleProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
 
 }
 

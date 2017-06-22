@@ -58,7 +58,34 @@ class StoryService {
         }
        
       } 
-     
+
+      public function getAllTicketDetails($projectId) {
+        try {
+
+            $priorityObj = new Priority();
+            $priorityDetails = $priorityObj->getPriorityDetails($ticketDetails["Priority"]);
+            $projectObj = new Projects();
+            $projectDetails = $projectObj->getProjectMiniDetails($ticketDetails["ProjectId"]);
+            $workFlowObj = new WorkFlowFields();
+            $workFlowDetails = WorkFlowFields::getWorkFlowDetails($ticketDetails["Status"]);
+            $ticketDetails["Priority"] = $priorityDetails;
+            $ticketDetails["Project"] = $projectDetails;
+            $ticketDetails["Status"] = $workFlowDetails;
+            $ticketDetails["AssignedTo"] = $assignedToDetails;
+            $ticketDetails["ReportedBy"] = $reportedByDetails;
+            $ticketDetails["Bucket"] = $bucketName;
+            $ticketDetails["TicketType"] = $ticketTypeDetails;
+            //error_log(print_r($priorityDetails)."-----".print_r($projectDetails)."--".print_r($workFlowDetails)."--".print_r($tinyUserDetails));
+            // error_log(print_r($ticketDetails));
+            return $ticketDetails;
+
+         $details =  CommonUtility::prepareTicketDetails($ticketId, $projectId);
+        
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+
     /**
      * @author Moin Hussain
      * @return type
@@ -310,7 +337,20 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             foreach ($ticketDetails as $ticket) {
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
                 array_push($finalData, $details);
+                 /*$tasks = $ticket["Tasks"];
+                 error_log("Task Id---".print_r($tasks,1));
+               
+              
+               foreach ($tasks as $task) {
+               error_log("Task Id--1-".$task["TaskId"]);
+                  $task = TicketCollection::getTicketDetails($task["TaskId"],$projectId,$select=['TicketId', 'Title','Fields','ProjectId','ParentStoryId','Tasks']);
+                  if(is_array($task)){ error_log("Task Id--2-".$task["TicketId"]);
+                  $details = CommonUtility::prepareDashboardDetails($task, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
+                array_push($finalData, $details);  
+               }
+               }*/ 
             }
+            
             return $finalData;
         } catch (Exception $ex) {
             Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -1671,6 +1711,50 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
         {
             Yii::log("StoryService:getProjectDetailsByName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }  
+    }
+    
+    
+    /**
+     * @author Praveen P
+     * @return type
+     */
+    public function getAllStoryDetailsNew($draw,$offset, $projectId) {
+        try {error_log("-----service----");
+           // $ticketModel = new TicketCollection();
+            $ticketDetails = TicketCollection::getAllTicketDetailsNew($draw,$offset, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
+            $finalData = array("draw"=>$draw,"recordsTotal"=>60,"recordsFiltered"=>60);
+            $data = array();
+            $fieldsOrderArray = ["assignedto","priority","workflow","bucket","duedate","planlevel"];
+           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
+            $fitlerOption=null;
+              /*if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
+                   //error_log("fitler-------ss----".$StoryData->filterOption);
+                   $fitlerOption=$StoryData->filterOption;
+              }*/
+          
+            foreach ($ticketDetails as $ticket) {
+                $details = CommonUtility::prepareDashboardDetailsTemp($ticket, $projectId,$fieldsOrderArray,"part",$fitlerOption);
+                array_push($data, $details);
+                $tasks = $ticket["Tasks"];
+                
+               foreach ($tasks as $task) {
+                   //error_log("Task Id---".$task["TaskId"]);
+                 $task = TicketCollection::getTicketDetails($task["TaskId"],$projectId,$select=['TicketId', 'Title','Fields','ProjectId','ParentStoryId']);
+                if(is_array($task)){
+                  // error_log("Task Id-sds--".print_r($task,1));
+                 $details = CommonUtility::prepareDashboardDetailsTemp($task, $projectId,$fieldsOrderArray,"part",$fitlerOption);
+                 array_push($data, $details);   
+                    
+                }
+                 
+               }
+               //break;
+            }
+            $finalData["data"]=$data;
+            return $finalData;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
     }
 
 }

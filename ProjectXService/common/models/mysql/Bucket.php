@@ -23,7 +23,7 @@ class Bucket extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            //TimestampBehavior::className(),
         ];
     }
     /**
@@ -102,6 +102,67 @@ class Bucket extends ActiveRecord
         }
        
     }
+    
+    /**
+     * @author Praveen
+     * @param type $projectId,$type
+     * @return type
+     */
+    public function getBucketTypeFilter($projectId,$type)
+    {
+        try{
+        if($type="New"){
+            $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketType=2 AND BucketStatus=1 AND Projectid=$projectId"; 
+            $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
+            if(empty($checkCurrentBucket)){
+                $qry = "SELECT * FROM BucketType";
+            }else{
+                $qry = "SELECT * FROM BucketType WHERE Id NOT IN (2)";
+                
+            }
+            $data = Yii::$app->db->createCommand($qry)->queryAll();
+        }else{
+          $qry = "SELECT * FROM BucketType";
+         $data = Yii::$app->db->createCommand($qry)->queryAll();  
+        }
+         return $data;
+            
+        } catch (Exception $ex) {
+            Yii::log("Bucket:getBucketTypeFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+       
+    }
+    
+    public function saveBucketDetails($bucketDetails) {
+        try {
+            $startDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->startDateVal)));
+            $notifyEmail=0;
+            $sendReminder=0;
+            if(count($bucketDetails->data->notifyEmail)==1){$notifyEmail=1;}
+            if(count($bucketDetails->data->sendReminder)==1){$sendReminder=1;}
+            $returnValue = 'failure';
+            $bucket = new Bucket();
+            $bucket->ProjectId = (int)$bucketDetails->projectId;
+            $bucket->Name = $bucketDetails->data->title;
+            $bucket->Description = $bucketDetails->data->description;
+            $bucket->StartDate = $startDate;
+            $bucket->DueDate = $bucketDetails->data->dueDateVal;
+            $bucket->Responsible = (int)$bucketDetails->data->selectedUserFilter;
+            $bucket->BucketType = (int)$bucketDetails->data->selectedBucketTypeFilter;
+            $bucket->BucketStatus = (int)0;
+            $bucket->EmailNotify = (int)$notifyEmail;
+            $bucket->EmailReminder = (int)$sendReminder;
+            $bucket->save();
+            //if ($bucket->save()) {
+            //    $returnValue = $bucket->Id;
+            //}
+            return $returnValue;
+        } catch (Exception $ex) {
+            Yii::log("Bucket:saveBucketDetails::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');
+            $returnValue = 'failure';
+        }
+    }
+ 
 }
 
 
