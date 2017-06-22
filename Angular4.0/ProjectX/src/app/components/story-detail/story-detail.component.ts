@@ -385,7 +385,6 @@ closeTitleEdit(editedText){
           };
           this.postDataToAjax(postEditedText);
       }else{
-
         this.showTitleEdit = true;
         jQuery("#"+this.ticketId+"_titleInput").val(document.getElementById(this.ticketId+"_title").innerText) ;
 
