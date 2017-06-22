@@ -115,9 +115,9 @@ background-color: #237ea7;
 .loginformlabel{font-weight:normal}
 .customfield{border:1px solid #ccc;border-radius:0;font-size:15px}
 .minheight50{min-height: 50px}
-.viewinputtext{min-height:50px; font-size: 20px;
-    min-height: 38px;
-    padding: 4px 10px 0;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;background:#fff}
+.viewinputtext{ font-size: 20px;padding: 4px 10px 0;word-break: break-all;
+    
+    /*padding: 4px 10px 0;overflow: hidden;min-height:50px;min-height: 38px;white-space: nowrap;*//*text-overflow: ellipsis;*/background:#fff}
 /* custom data table*/
 .customdatatable .datatable-header{background:#ececec;color:#7d7977;padding:10px 8px;font-size:15px;margin-bottom:15px}
 .customdatatable .datatable-row-wrapper{cursor: pointer}
@@ -814,6 +814,11 @@ padding-left:0px!important;
 	border-width: 6px;
 	margin-left: -10px;
 }
+.delete_followersbgtablesinglepop:after {
+	left: auto;
+	right:37px;
+	
+}
 .customdropdown-menutable {
     background-clip: padding-box;
     background-color: transparent;
@@ -843,9 +848,16 @@ padding-left:0px!important;
 .story_tasks .assignedto{margin: 0 0 0 8px!important;}
 .timelogSuccessMsg{background-color: #dff0d8;border-color: #d6e9c6;color: #3c763d;margin-bottom: 5px;padding: 5px;}
 .timelogpaddingright5{padding-right:5px}
-.age-is-ten {display:none}
-
-
-.datatable-row-wrapper .childTask{
-  display: none !important
+.yes{cursor: pointer}
+.no{cursor: pointer}
+.tickettitle_textarea{  
+   background: #fff none repeat scroll 0 0;
+    border: 0 none;
+    font-size: 20px;
+     padding: 5px 10px;
+    width: 100%;
+	 box-sizing: padding-box;
+	 overflow:hidden;
+	 
+	 
 }
