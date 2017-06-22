@@ -557,6 +557,14 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 // echo $a["position"]."\n";
                 return $a["position"] >= $b["position"];
             });
+            $selectFields = ['Title', 'TicketId','Fields.estimatedpoints'];
+            $getchiledTasks=array();
+               foreach ($ticketDetails["Tasks"] as &$task) {
+                $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId, $selectFields);
+               // $taskDetails["Title"] = htmlspecialchars_decode($taskDetails["Title"]);
+                 array_push($getchiledTasks,$taskDetails);
+            }
+            $ticketDetails["childTasks"] =$getchiledTasks;
             //  return $ticketDetails["Fields"];
             // $ticketDetails["Fields"]="";
             $projectDetails = Projects::getProjectMiniDetails($ticketDetails["ProjectId"]);
