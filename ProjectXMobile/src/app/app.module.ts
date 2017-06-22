@@ -35,8 +35,8 @@ import {StoryDetailsFollowers} from '../pages/story-details-followers/story-deta
 import {StoryDetailsTask} from '../pages/story-details-task/story-details-task';
 import {StoryDetailsWorklog} from '../pages/story-details-worklog/story-details-worklog';
 //import { StoryWorklogPage } from '../pages/story-worklog/story-worklog';
-
-
+import { NotificationPage } from '../pages/notification/notification';
+import { HeaderPage } from '../pages/header/header';
 
 @NgModule({
   declarations: [
@@ -52,7 +52,9 @@ import {StoryDetailsWorklog} from '../pages/story-details-worklog/story-details-
     StoryDetailsWorklog,
     StoryDetailsFollowers,
     StoryDetailsTask,
-    StoryDetailsComments
+    StoryDetailsComments,
+    NotificationPage,
+    HeaderPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -76,7 +78,9 @@ import {StoryDetailsWorklog} from '../pages/story-details-worklog/story-details-
     StoryDetailsWorklog,
     StoryDetailsFollowers,
     StoryDetailsTask,
-    StoryDetailsComments
+    StoryDetailsComments,
+    NotificationPage,
+    HeaderPage
   ],
   providers: [AutoCompleteProvider, Globalservice, Camera, File, Transfer, FilePath, Constants, {provide: ErrorHandler, useClass: IonicErrorHandler}]
 

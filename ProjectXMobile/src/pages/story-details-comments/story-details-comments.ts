@@ -7,7 +7,7 @@ import { Constants } from '../../providers/constants';
 import { Storage } from '@ionic/storage';
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
-import { Transfer,TransferObject } from '@ionic-native/transfer';
+import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { DatePipe } from '@angular/common';
 import { CustomModalPage } from '../custom-modal/custom-modal';
@@ -23,15 +23,15 @@ declare var RE: any;
  */
 @IonicPage()
 @Component({
-  selector: 'page-story-details-comments',
-  templateUrl: 'story-details-comments.html',
-   providers: [DatePipe]
+    selector: 'page-story-details-comments',
+    templateUrl: 'story-details-comments.html',
+    providers: [DatePipe]
 })
 export class StoryDetailsComments {
     //ticket details
     public taskDetails = { ticketId: "", title: "", description: "", type: "", workflowType: "" };
     public ticketId: any;
-    public rootParams: any = {ticketId: ""};
+    public rootParams: any = { ticketId: "" };
     public itemsInActivities: Array<any>;
     private replyToComment = -1;
     private replying = false;
@@ -45,36 +45,36 @@ export class StoryDetailsComments {
     private progressNew: number;
     private progressEdit: number;
     public storyTicketId: any;
-    
-    
-   
+
+
+
     public items: Array<any>;
     public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
     public displayFieldvalue = [];
-   // public showEditableFieldOnly = [];
+    // public showEditableFieldOnly = [];
     //public readOnlyDropDownField: boolean = false;
-    
+
     //public enableDataPicker = [];
-   // public enableTextField = [];
-  //  public enableTextArea = [];
+    // public enableTextField = [];
+    //  public enableTextArea = [];
     public titleAfterEdit: string = "";
-   // public enableEdatable: boolean = false;
-   // public taskDetails = { ticketId: "", title: "", description: "", type: "", workflowType: "" };
-   // public options = "options";
+    // public enableEdatable: boolean = false;
+    // public taskDetails = { ticketId: "", title: "", description: "", type: "", workflowType: "" };
+    // public options = "options";
     public localDate: any = new Date();
     public minDate: any = new Date();
     public userName: any = '';
     public static optionsModal;
-  //  public static isMenuOpen: boolean = false;
-//    public static menuControler;
+    //  public static isMenuOpen: boolean = false;
+    //    public static menuControler;
     public textFieldValue = "";
     public textAreaValue = "";
     public displayedClassColorValue = "";
-    public myHTML: any='';
+    public myHTML: any = '';
 
     @ViewChild(Content) content: Content;
-    
-  constructor(public navCtrl: NavController, public navParams: NavParams,
+
+    constructor(public navCtrl: NavController, public navParams: NavParams,
         menu: MenuController,
         private app: App,
         private modalController: ModalController,
@@ -84,25 +84,25 @@ export class StoryDetailsComments {
         private camera: Camera,
         private file: File,
         private transfer: Transfer,
-        private filePath:FilePath,
+        private filePath: FilePath,
         public loadingController: LoadingController,
         public popoverCtrl: PopoverController,
         public actionSheetCtrl: ActionSheetController,
         public platform: Platform,
-        private storage: Storage, 
+        private storage: Storage,
         private ngZone: NgZone,
-        private alertController: AlertController,) {
-       let loader = this.loadingController.create({ content: "Loading..." });
-       loader.present();
-        var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
-            this.userName = userInfo.username;
-            
-         this.storyTicketId = this.navParams.data.ticketId;
-         console.log("the story details comments ticket id " + JSON.stringify(this.storyTicketId));
-         this.itemsInActivities = [];
+        private alertController: AlertController, ) {
+        let loader = this.loadingController.create({ content: "Loading..." });
+        loader.present();
+        var userInfo = JSON.parse(localStorage.getItem("userCredentials"));
+        this.userName = userInfo.username;
 
-//ticket details 
-     globalService.getTicketDetailsById(this.constants.taskDetailsById, this.storyTicketId).subscribe(
+        this.storyTicketId = this.navParams.data.ticketId;
+        console.log("the story details comments ticket id " + JSON.stringify(this.storyTicketId));
+        this.itemsInActivities = [];
+
+        //ticket details 
+        globalService.getTicketDetailsById(this.constants.taskDetailsById, this.storyTicketId).subscribe(
             result => {
                 this.taskDetails.ticketId = this.storyTicketId;
                 this.taskDetails.title = result.data.Title;
@@ -132,20 +132,20 @@ export class StoryDetailsComments {
                             _assignTo = this.items[i].value;
                             this.textAreaValue = this.items[i].value;
                         }
-                    } else if(this.items[i].field_type == "Date"){
-//                        readable_value
-                       if(this.items[i].readable_value == ""){
-                             _assignTo = "--"; 
+                    } else if (this.items[i].field_type == "Date") {
+                        //                        readable_value
+                        if (this.items[i].readable_value == "") {
+                            _assignTo = "--";
                             this.localDate = new Date().toISOString();
-                          } else {
+                        } else {
                             _assignTo = this.items[i].readable_value;
                             var date = new Date(this.items[i].readable_value);
-                            date.setTime( date.getTime() + date.getTimezoneOffset()*-60*1000 );
-                            this.localDate = new Date(date.setDate(date.getDate() )).toISOString();
+                            date.setTime(date.getTime() + date.getTimezoneOffset() * -60 * 1000);
+                            this.localDate = new Date(date.setDate(date.getDate())).toISOString();
                         }
                     }
                     else if (this.items[i].field_type == "DateTime") {
-//                        readable_value
+                        //                        readable_value
                         if (this.items[i].readable_value == "") {
                             _assignTo = "--";
                         } else {
@@ -177,16 +177,16 @@ export class StoryDetailsComments {
         );
 
 
-         globalService.getTicketActivity(this.constants.getTicketActivity, this.storyTicketId).subscribe(
-             (result) => {
-                 this.itemsInActivities = result.data.Activities;
-             }, (error) => {
-             }
-         );
-         this.progressNew = 0;
-         this.progressEdit = 0;
-  }
-     private presentToast(text) {
+        globalService.getTicketActivity(this.constants.getTicketActivity, this.storyTicketId).subscribe(
+            (result) => {
+                this.itemsInActivities = result.data.Activities;
+            }, (error) => {
+            }
+        );
+        this.progressNew = 0;
+        this.progressEdit = 0;
+    }
+    private presentToast(text) {
         let toast = this.toastCtrl.create({
             message: text,
             duration: 3000,
@@ -196,7 +196,7 @@ export class StoryDetailsComments {
         });
         toast.present();
     }
-   public dateChange(event, index, fieldDetails) {
+    public dateChange(event, index, fieldDetails) {
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
@@ -212,22 +212,33 @@ export class StoryDetailsComments {
             });
     }
 
-     public navigateToParentComment(parentCommentId) {
-        jQuery("#"+parentCommentId)[0].scrollIntoView({
+    public navigateToParentComment(parentCommentId) {
+        jQuery("#" + parentCommentId)[0].scrollIntoView({
             behavior: "smooth", // or "auto" or "instant"
             block: "start" // or "end"
         });
     }
-  ionViewDidLoad() {
+    ionViewDidLoad() {
+        setTimeout(() => {
+            var slug = this.navParams.get("slug"); 
+            if (jQuery("." + slug).length > 0) {
+                jQuery("." + slug)[0].scrollIntoView({
+                    behavior: "smooth", // or "auto" or "instant"
+                    block: "start" // or "end"
+                });
+            }
+
+        }, 300);
+
         RE.editor = document.getElementById('editor');
         RE.editor.setAttribute("placeholder", "Comment");
         RE.editor.addEventListener("keyup", RE.keyup);
-    console.log('ionViewDidLoad StoryDetailsComments');
-  }
-   public hideKeybord(){
-        document.getElementById("hideOrShow").style.display = "none"; 
-   }
-   public expandDescription() {
+        console.log('ionViewDidLoad StoryDetailsComments');
+    }
+    public hideKeybord() {
+        document.getElementById("hideOrShow").style.display = "none";
+    }
+    public expandDescription() {
         jQuery('#description').css('height', 'auto');
         jQuery('#show').hide();
         jQuery('#hide').show();
@@ -238,11 +249,11 @@ export class StoryDetailsComments {
         jQuery('#description').css("height", "200px");
         jQuery('#description').css("overflow", "hidden");
     }
-      ionViewDidEnter() {
+    ionViewDidEnter() {
         var thisObj = this;
-        jQuery(document).ready(function(){
-            jQuery(document).bind("click",function(event){ 
-                if(jQuery(event.target).closest('.submitcommentupload').length == 0 && jQuery(event.target).closest('.commentTextArea').length == 0){ 
+        jQuery(document).ready(function () {
+            jQuery(document).bind("click", function (event) {
+                if (jQuery(event.target).closest('.submitcommentupload').length == 0 && jQuery(event.target).closest('.commentTextArea').length == 0) {
                     thisObj.newSubmitOpenClose = true;
                     thisObj.editSubmitOpenClose = true;
                 }
@@ -251,81 +262,81 @@ export class StoryDetailsComments {
     }
     ionViewWillEnter() {
     }
-//    public selectCancel(index) {
-//        this.showEditableFieldOnly[index] = false;
-//    }
-//       public changeOption(event, index, fieldDetails) {
-//        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe(
-//            (result) => {
-//                setTimeout(() => {
-//                    if (result.data.activityData.referenceKey == -1) {
-//                        this.itemsInActivities.push(result.data.activityData.data);
-//                    } else {
-//                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
-//                    }
-//                }, 300);
-//            },
-//            (error) => {
-//                this.presentToast('Unsuccessful');
-//            });
-//    }
-//       public inputBlurMethod(event, index, fieldDetails) {
-//        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
-//            (result) => {
-//                setTimeout(() => {
-//                    document.getElementById("field_title_" + index).innerHTML = (event.target.value);
-//                    if (result.data.activityData.referenceKey == -1) {
-//                        this.itemsInActivities.push(result.data.activityData.data);
-//                    } else {
-//                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
-//                    }
-//                }, 200);
-//            },
-//            (error) => {
-//                this.presentToast('Unsuccessful');
-//            });
-//    }
+    //    public selectCancel(index) {
+    //        this.showEditableFieldOnly[index] = false;
+    //    }
+    //       public changeOption(event, index, fieldDetails) {
+    //        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe(
+    //            (result) => {
+    //                setTimeout(() => {
+    //                    if (result.data.activityData.referenceKey == -1) {
+    //                        this.itemsInActivities.push(result.data.activityData.data);
+    //                    } else {
+    //                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+    //                    }
+    //                }, 300);
+    //            },
+    //            (error) => {
+    //                this.presentToast('Unsuccessful');
+    //            });
+    //    }
+    //       public inputBlurMethod(event, index, fieldDetails) {
+    //        this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
+    //            (result) => {
+    //                setTimeout(() => {
+    //                    document.getElementById("field_title_" + index).innerHTML = (event.target.value);
+    //                    if (result.data.activityData.referenceKey == -1) {
+    //                        this.itemsInActivities.push(result.data.activityData.data);
+    //                    } else {
+    //                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+    //                    }
+    //                }, 200);
+    //            },
+    //            (error) => {
+    //                this.presentToast('Unsuccessful');
+    //            });
+    //    }
     public titleEdit(event) {
         //this.enableEdatable = true;
     }
 
-//    public updateTitleSubmit() {
-//        this.enableEdatable = false;
-//        this.taskDetails.title = this.titleAfterEdit;
-//    }
-//    public updateTitleCancel() {
-//        this.enableEdatable = false;
-//        this.titleAfterEdit = this.taskDetails.title;
-//    }
-//    public expandDescription() {
-//        jQuery('#description').css('height', 'auto');
-//        jQuery('#show').hide();
-//        jQuery('#hide').show();
-//    }
-//    public collapseDescription() {
-//        jQuery('#hide').hide();
-//        jQuery('#show').show();
-//        jQuery('#description').css("height", "200px");
-//        jQuery('#description').css("overflow", "hidden");
-//    }
-//    public openOptionsModal(fieldDetails, index) {
-//        alert("open option from Story comment");
-//       if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
-//           this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
-//               (result) => {
-//                StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
-//                console.log("the index of open model is" + index);
-//                       StoryDetailsComments.optionsModal.onDidDismiss((data) => {
-//                       if (data != null && (data.Name != data.previousValue)) {
-//                           this.changeOption(data, index, fieldDetails);
-//                       }
-//                    
-//                   });
-//               },
-//               (error) => {
-//               });
-//       }
-//   }
+    //    public updateTitleSubmit() {
+    //        this.enableEdatable = false;
+    //        this.taskDetails.title = this.titleAfterEdit;
+    //    }
+    //    public updateTitleCancel() {
+    //        this.enableEdatable = false;
+    //        this.titleAfterEdit = this.taskDetails.title;
+    //    }
+    //    public expandDescription() {
+    //        jQuery('#description').css('height', 'auto');
+    //        jQuery('#show').hide();
+    //        jQuery('#hide').show();
+    //    }
+    //    public collapseDescription() {
+    //        jQuery('#hide').hide();
+    //        jQuery('#show').show();
+    //        jQuery('#description').css("height", "200px");
+    //        jQuery('#description').css("overflow", "hidden");
+    //    }
+    //    public openOptionsModal(fieldDetails, index) {
+    //        alert("open option from Story comment");
+    //       if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
+    //           this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
+    //               (result) => {
+    //                StoryDetailsComments.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
+    //                console.log("the index of open model is" + index);
+    //                       StoryDetailsComments.optionsModal.onDidDismiss((data) => {
+    //                       if (data != null && (data.Name != data.previousValue)) {
+    //                           this.changeOption(data, index, fieldDetails);
+    //                       }
+    //                    
+    //                   });
+    //               },
+    //               (error) => {
+    //               });
+    //       }
+    //   }
     public replyComment(commentId) {
         jQuery(".commentAction").removeClass("fab-close-active");
         jQuery(".fab-list-active").removeClass("fab-list-active");
@@ -333,12 +344,12 @@ export class StoryDetailsComments {
         this.replying = true;
         jQuery("#commentEditorArea").addClass("replybox");
         this.content.resize();
-        setTimeout(function(){
+        setTimeout(function () {
             jQuery("#uploadAndSubmit")[0].scrollIntoView({
                 behavior: "smooth", // or "auto" or "instant"
                 block: "end" // or "start"
             });
-        },500);
+        }, 500);
     }
     public cancelReply() {
         this.replying = false;
@@ -352,23 +363,23 @@ export class StoryDetailsComments {
             title: 'Confirm Delete',
             message: 'Do you want to delete this comment?',
             buttons: [
-            {
-                text: 'CANCEL',
-                role: 'cancel',
-                handler: () => {}
-            },
-            {
-                text: 'OK',
-                handler: () => {
-                    this.deleteComment(commentId, slug);
+                {
+                    text: 'CANCEL',
+                    role: 'cancel',
+                    handler: () => { }
+                },
+                {
+                    text: 'OK',
+                    handler: () => {
+                        this.deleteComment(commentId, slug);
+                    }
                 }
-            }
             ]
         });
         alert.present();
     }
     public deleteComment(commentId, slug) {
-        var editedContent= jQuery("#Activity_content_"+commentId+" .commentp").html();
+        var editedContent = jQuery("#Activity_content_" + commentId + " .commentp").html();
         var commentParams;
         var parentCommentId;
         if (this.itemsInActivities[commentId].Status == 2) {
@@ -378,7 +389,7 @@ export class StoryDetailsComments {
                 Comment: {
                     Slug: slug,
                     ParentIndex: parentCommentId,
-                    CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
+                    CrudeCDescription: editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),
                 },
             };
         } else {
@@ -386,7 +397,7 @@ export class StoryDetailsComments {
                 TicketId: this.storyTicketId,
                 Comment: {
                     Slug: slug,
-                    CrudeCDescription:editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,""),
+                    CrudeCDescription: editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),
                 },
             };
         }
@@ -407,36 +418,36 @@ export class StoryDetailsComments {
         var thisObj = this;
         jQuery(".commentAction").removeClass("fab-close-active");
         jQuery(".fab-list-active").removeClass("fab-list-active");
-        jQuery("div").each(function (index,element) {
-            if(jQuery(element).hasClass("commentingTextArea")) {
-                var actionIdArray =  jQuery(element).attr('id').split('_'); 
+        jQuery("div").each(function (index, element) {
+            if (jQuery(element).hasClass("commentingTextArea")) {
+                var actionIdArray = jQuery(element).attr('id').split('_');
                 var commentid = actionIdArray[1];
                 thisObj.editTheComment[commentid] = false;
                 thisObj.editCommentOpenClose[commentid] = false;
             }
         });
-        jQuery(".comment_edit_editor_" + commentId ).html(this.itemsInActivities[commentId].CrudeCDescription);
+        jQuery(".comment_edit_editor_" + commentId).html(this.itemsInActivities[commentId].CrudeCDescription);
         this.editTheComment[commentId] = true;//show submit and cancel button on editor replace at the bottom
         this.newCommentOpenClose = false;
         this.editCommentOpenClose[commentId] = true;
     }
-    public cancelEdit(commentId){
+    public cancelEdit(commentId) {
         this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
         this.editCommentOpenClose[commentId] = false;
         this.newCommentOpenClose = true;
     }
-    public showSubmit(commentId){
-       var thisObj = this;
-             if(commentId==-1){ 
-                 setTimeout(function(){
-              thisObj.newSubmitOpenClose = false;   
-            },100)
-           
+    public showSubmit(commentId) {
+        var thisObj = this;
+        if (commentId == -1) {
+            setTimeout(function () {
+                thisObj.newSubmitOpenClose = false;
+            }, 100)
+
         }
-        else{
-            setTimeout(function(){
-               thisObj.editSubmitOpenClose = false;   
-            },100)
+        else {
+            setTimeout(function () {
+                thisObj.editSubmitOpenClose = false;
+            }, 100)
         }
     }
     public submitComment() {
@@ -445,8 +456,8 @@ export class StoryDetailsComments {
         console.log("submit button clicked2" + JSON.stringify(this.myHTML));
         //var commentText = jQuery(".uploadAndSubmit .textEditor").val();
         // var commentText = this.commentDesc;
-        if (this.myHTML != "" && this.myHTML.trim() != "" ) {
-          //  this.commentDesc = "";
+        if (this.myHTML != "" && this.myHTML.trim() != "") {
+            //  this.commentDesc = "";
             console.log("submit button clicked3");
             jQuery("#commentEditorArea").removeClass("replybox");
             var commentedOn = new Date();
@@ -457,8 +468,8 @@ export class StoryDetailsComments {
                     CrudeCDescription: this.myHTML.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
                     CommentedOn: formatedDate,
                     ParentIndex: "",
-                    Reply:this.replying,
-                    OriginalCommentorId:""
+                    Reply: this.replying,
+                    OriginalCommentorId: ""
                 },
             };
             if (this.replying == true) {
@@ -474,9 +485,9 @@ export class StoryDetailsComments {
                         this.itemsInActivities[this.replyToComment].repliesCount++;
                     }
                     this.replying = false;
-                   jQuery('.comment_editor').html("");
-                   this.myHTML='';
-                   // jQuery(".uploadAndSubmit .textEditor").val('');
+                    jQuery('.comment_editor').html("");
+                    this.myHTML = '';
+                    // jQuery(".uploadAndSubmit .textEditor").val('');
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
@@ -484,7 +495,7 @@ export class StoryDetailsComments {
         }
     }
     public submitEditedComment(commentId, slug) {
-        var editedContent = jQuery(".comment_edit_editor_" + commentId ).html();
+        var editedContent = jQuery(".comment_edit_editor_" + commentId).html();
         if (editedContent != "" && editedContent.trim() != "") {
             var commentedOn = new Date();
             var formatedDate = (commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' + commentedOn.getFullYear();
@@ -504,27 +515,27 @@ export class StoryDetailsComments {
                     this.editTheComment[commentId] = false;//hide submit and cancel button on editor replace at the bottom
                     this.editCommentOpenClose[commentId] = false;
                     this.newCommentOpenClose = true;
-                    jQuery(".comment_edit_editor_" + commentId ).html("");
+                    jQuery(".comment_edit_editor_" + commentId).html("");
                 }, (error) => {
                     this.presentToast('Unsuccessful');
                 }
             );
         }
     }
-    public presentActionSheet(comeFrom: string, where:string, comment:string) {
+    public presentActionSheet(comeFrom: string, where: string, comment: string) {
         let actionSheet = this.actionSheetCtrl.create({
             title: 'Select Image Source',
             buttons: [
                 {
                     text: 'Load from Library',
                     handler: () => {
-                        this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY,comeFrom, where, comment);
+                        this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY, comeFrom, where, comment);
                     }
                 },
                 {
                     text: 'Use Camera',
                     handler: () => {
-                        this.takePicture(this.camera.PictureSourceType.CAMERA,comeFrom, where, comment);
+                        this.takePicture(this.camera.PictureSourceType.CAMERA, comeFrom, where, comment);
                     }
                 },
                 {
@@ -532,10 +543,10 @@ export class StoryDetailsComments {
                     role: 'cancel'
                 }
             ]
-            });
+        });
         actionSheet.present();
     }
-    public takePicture(sourceType,comeFrom: string, where:string, comment:string) {
+    public takePicture(sourceType, comeFrom: string, where: string, comment: string) {
         var options = {
             quality: 100,
             sourceType: sourceType,
@@ -550,25 +561,25 @@ export class StoryDetailsComments {
                     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1);
                     let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?'));
                     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
-                }, (err) => {});
+                }, (err) => { });
             } else {
                 var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
                 var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
                 this.copyFileToLocalDir(correctPath, currentName, this.createFileName(currentName), comeFrom, where, comment);
             }
-        }, (err) => {});
+        }, (err) => { });
     }
     private createFileName(originalName) {
         var d = new Date(),
-        n = d.getTime(),
-        newFileName =  "image"+n;
+            n = d.getTime(),
+            newFileName = "image" + n;
         return newFileName;
     }
-    private copyFileToLocalDir(namePath, currentName, newFileName, comeFrom: string, where:string, comment:string) {
+    private copyFileToLocalDir(namePath, currentName, newFileName, comeFrom: string, where: string, comment: string) {
         this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
             this.lastImage = newFileName;
             this.uploadImage(currentName, newFileName, comeFrom, where, comment);
-        }, error => {});
+        }, error => { });
     }
     public pathForImage(img) {
         if (img === null) {
@@ -577,7 +588,7 @@ export class StoryDetailsComments {
             return cordova.file.dataDirectory + img;
         }
     }
-    public onProgressNew = (progressEvent: ProgressEvent) : void => {
+    public onProgressNew = (progressEvent: ProgressEvent): void => {
         this.ngZone.run(() => {
             if (progressEvent.lengthComputable) {
                 let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
@@ -592,7 +603,7 @@ export class StoryDetailsComments {
             }
         });
     }
-    public onProgressEdit = (progressEvent: ProgressEvent) : void => {
+    public onProgressEdit = (progressEvent: ProgressEvent): void => {
         this.ngZone.run(() => {
             if (progressEvent.lengthComputable) {
                 let progress = Math.floor(progressEvent.loaded / progressEvent.total * 100);
@@ -607,7 +618,7 @@ export class StoryDetailsComments {
             }
         });
     }
-    public uploadImage(originalname, savedname, comeFrom: string, where:string, comment:string) {
+    public uploadImage(originalname, savedname, comeFrom: string, where: string, comment: string) {
         var url = this.constants.filesUploading;
         var targetPath = this.pathForImage(this.lastImage);
         var filename = this.lastImage;
@@ -616,64 +627,64 @@ export class StoryDetailsComments {
             fileName: filename,
             chunkedMode: false,
             mimeType: "image/jpeg",
-            params : {'filename': filename,'directory':this.constants.fileUploadsFolder,'originalname': originalname}
+            params: { 'filename': filename, 'directory': this.constants.fileUploadsFolder, 'originalname': originalname }
         };
-       // const fileTransfer = new Transfer();
+        // const fileTransfer = new Transfer();
         const fileTransfer: TransferObject = this.transfer.create();
-        if(where == "comments"){
+        if (where == "comments") {
             fileTransfer.onProgress(this.onProgressNew);
         }
-        if(where=="edit_comments"){
+        if (where == "edit_comments") {
             fileTransfer.onProgress(this.onProgressEdit);
         }
         fileTransfer.upload(targetPath, url, options).then(
             (data) => {
                 var statusUpload = this.uploadedInserver(data, comeFrom, where, comment);
-                if(statusUpload=='uploaded'){
-                    if(where == "comments"){
+                if (statusUpload == 'uploaded') {
+                    if (where == "comments") {
                         this.progressNew = 0;
                         document.getElementById('progressFileUploadNew').innerHTML = "";
                     }
-                    if(where=="edit_comments"){
+                    if (where == "edit_comments") {
                         this.progressEdit = 0;
                         document.getElementById('progressFileUploadEdit').innerHTML = "";
                     }
-                }else if(statusUpload=='notuploaded'){
+                } else if (statusUpload == 'notuploaded') {
                     this.presentToast('Unable to upload the image.');
                 }
             }, (err) => {
                 this.presentToast('Unable to upload the image.');
-        });
+            });
     }
-    public uploadedInserver(dataUploaded, comeFrom: string, where:string, comment:string){
-       
+    public uploadedInserver(dataUploaded, comeFrom: string, where: string, comment: string) {
+
         var serverResponse = JSON.parse(dataUploaded.response);
         if (serverResponse['status'] == '1') {
             var editor_contents;
             var appended_content;
-            if(where=="edit_comments"){
+            if (where == "edit_comments") {
                 editor_contents = this.myHTML;
             }
             var uploadedFileExtension = (serverResponse['originalname']).split('.').pop();
             if (uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
                 if (where == "comments") {
-                   this.myHTML = this.myHTML + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                   jQuery('.comment_editor').html(this.myHTML);
+                    this.myHTML = this.myHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                    jQuery('.comment_editor').html(this.myHTML);
                     this.newSubmitOpenClose = false;
                 } else if (where == "edit_comments") {
-                     this.myHTML =  this.myHTML + "[[image:" +serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
-                    jQuery(".comment_edit_editor_"+comment).html( this.myHTML);
+                    this.myHTML = this.myHTML + "[[image:" + serverResponse['path'] + "|" + serverResponse['originalname'] + "]] ";
+                    jQuery(".comment_edit_editor_" + comment).html(this.myHTML);
                     this.editSubmitOpenClose = false;
-                } 
+                }
             }
             return 'uploaded';
-        }else{
+        } else {
             return 'notuploaded';
         }
     }
 
-    public atmensions(index){
-       
+    public atmensions(index) {
+
         var selector;
         if(index==-1){
              jQuery('#hideOrShow').show();
@@ -708,16 +719,16 @@ callback(userList);
         }else{
              callback(userList);
         }
-    },
-}, 
-    data:userList,
-    displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='30' width='30'/> ${name} </li>",
-    insertTpl: "@${name}",
-});
+                },
+            },
+            data: userList,
+            displayTpl: "<li class='atmentionuserstyles' ><img src='${profilepic}' height='30' width='30'/> ${name} </li>",
+            insertTpl: "@${name}",
+        });
     }
 
-    handleKeyPad(event){
-       // alert(JSON.stringify(event))  ;
-      }
+    handleKeyPad(event) {
+        // alert(JSON.stringify(event))  ;
+    }
 
 }

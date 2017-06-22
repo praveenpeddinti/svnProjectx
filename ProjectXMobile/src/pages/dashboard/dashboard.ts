@@ -9,6 +9,7 @@ import {Constants} from '../../providers/constants';
 import { CustomModalPage } from '../custom-modal/custom-modal';
 import {FilterModal} from '../filter-modal/filter-modal';
 declare var jQuery: any;
+declare var socket:any;
 /*
   Generated class for the Dashboard page.
 
@@ -56,7 +57,6 @@ export class DashboardPage {
         public navParams: NavParams,
         public platform: Platform,
         public loadingController: LoadingController,
-        public popoverCtrl: PopoverController,
         public alertController: AlertController,
         private storage: Storage,
         public viewCtrl: ViewController,
@@ -65,13 +65,14 @@ export class DashboardPage {
         this.headerName = "All My Stories/Task";
         this.SelectValue = "All My Stories/Task";
             this.arrayObject = [];
+            localStorage.setItem('headerInfo',JSON.stringify({'title':"My All Stories",'backButton':"hideBackButton",'logo':1,'leftPannel':0}));
             this.filterList = [];
             var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
-                this.userName = userInfo.username;
+            this.userName = userInfo.username;
                 this.params.userInfo = userInfo;
              //   this.filterParam.userInfo = userInfo;
               //  this.filterParam.filterOption = {id:"3",label:"My Assigned Stories/Task",showChild:"0",type:"general"};
-                  this.getallfilterOptions();
+                 // this.getallfilterOptions();
                  // this.getAllStoriesList();
                  this.getallTickets();
                  this.getallGlobalsearch();
@@ -90,16 +91,12 @@ export class DashboardPage {
                         }
                     }
                 });
-            
-    }
-    ionViewDidLoad() {}
-    ionViewWillEnter() {}
-    public openPopover(myEvent) {  
-        let popover = this.popoverCtrl.create(LogoutPage);
-        popover.present({
-            ev: myEvent
-        });
-    }
+         
+        }
+   public  ionViewDidLoad() {};
+    ionViewWillEnter() {};
+
+  
     public doRefresh(refresher) {
        var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
          if(userInfo != null ||userInfo != undefined){
@@ -363,5 +360,5 @@ export class DashboardPage {
             }
         }, 2000);
 
+    }       
     }
-}

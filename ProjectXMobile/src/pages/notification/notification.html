@@ -1,0 +1,57 @@
+<page-header></page-header>
+<ion-content *ngIf="unread" >
+  <div class="padding10"> 
+   <ion-list>
+    <ion-item-sliding *ngFor="let notify of notification_msg " (click)="gotoNotificationDetails(notify.TicketId,notify.Slug.$oid)"
+        no-padding>
+        <ion-item text-wrap no-padding no-lines class="dashboardouterbox">
+
+            <div class="notificationdiv" id="{{notify.id.$oid}}">
+                <span class="notificationusericon">
+<img src="{{notify.Profile}}"/>
+</span>
+                <span>{{notify.id.$oid}}</span>
+                <span>Seen-Notification--{{notify.IsSeen}}</span>
+                <div class="not_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
+
+
+            </div>
+
+        </ion-item>
+        <ion-item-options side="right" (ionSwipe)="gotoNotificationDetails(notify.TicketId,notify.Slug.$oid)"></ion-item-options>
+    </ion-item-sliding>
+</ion-list>
+    <div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> No more data available. </div>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content *ngIf="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  </div>
+  </ion-content>
+<!--  
+  <ion-content  *ngIf="!unread" >
+    <ul class="nav navbar-nav navbar-right top-menu top-right-menu">
+        <li *ngFor="let notify of notification_msg " class="notificationlist">
+            <div class="notificationdiv" id="{{notify.id.$oid}}">
+            
+<span>{{notify.id.$oid}}</span>
+<span>Seen-{{notify.IsSeen}}</span>
+  <div class="not_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
+          
+                <a type="button" data-toggle="tooltip" data-placement="top" title="Mark As Read" (click)="deleteNotification(notify.Project,notify.id.$oid,$event)"
+                    class="notificationdelete">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </a>
+            </div>
+        </li>
+    </ul>
+    <div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> No more data available. </div>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content *ngIf="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  </ion-content>-->
+  <ion-footer >
+  <ion-tabs>
+    <ion-tab  tabTitle="Unread"  ></ion-tab>
+    <ion-tab (click)="getTotalNotifications()" tabTitle="All" ></ion-tab>
+   </ion-tabs>
+</ion-footer>

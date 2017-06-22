@@ -124,7 +124,7 @@ export class StoryDetailsPage {
         private alertController: AlertController,
         public navCtrl: NavController,
         public autoCompleteProvider: AutoCompleteProvider ) {
-
+        localStorage.setItem('headerInfo',JSON.stringify({'title':"Story Details",'backButton':"",'logo':0,'leftPannel':1}));
            this.navParams = navParams;
            this.StoryDetailsComments = StoryDetailsComments;
            this.StoryDetailsFollowers = StoryDetailsFollowers;
@@ -138,7 +138,9 @@ export class StoryDetailsPage {
         // this.pageTitle = navParams.get('pageTitle');
         
         this.ticketId = this.navParams.get("id");
+        var slug= this.navParams.get("slug"); 
         this.rootParams.ticketId =  this.navParams.get("id");
+        this.rootParams.slug =  this.navParams.get("slug");
         StoryDetailsPage.menuControler = menu;
         this.minDate = new Date().toISOString();
         let loader = this.loadingController.create({ content: "Loading..." });

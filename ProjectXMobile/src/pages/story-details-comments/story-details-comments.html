@@ -1,5 +1,5 @@
 <ion-content (click)="handleKeyPad($event)" padding>
-<div>
+<div class="top60">
         <div class="padding10trl"> </div>
      <div class="dashboardbox_header">
                 <i class="{{taskDetails.type}}"></i>
@@ -25,7 +25,7 @@
     <div class="custab-content">
         <div role="tabpanel" class="custtab-pane  active" id="t_comments">
             <div class="activitiesList" style="margin-bottom:10px" *ngFor="let eachActivity of itemsInActivities; let i=index;" id="activity_{{i}}">
-<div id="{{i}}" data-slug="eachActivity.Slug.$oid">
+<div id="{{i}}" data-slug="eachActivity.Slug.$oid" >
     <div class="cust_commentsbox">
         <div class="cust_com_title">
             <div class="user">
@@ -46,7 +46,7 @@
         </div>
         <div class="cust_com_content">
             <div class="userActivity" *ngFor="let eachProperty of eachActivity.PropertyChanges;">
-                <div class="ticketActivity" *ngIf="eachProperty.SpecialActivity==0" >
+                <div class="ticketActivity {{eachProperty.Slug.$oid}}" *ngIf="eachProperty.SpecialActivity==0" >
                     <span class="bold">{{eachProperty.ActionFieldTitle}}</span> {{eachProperty.Action}}
                     <span *ngIf="eachProperty.type=='user'"> 
                                             <span class="property"><a href="javascript:void(0);" data-id="{{eachProperty.PreviousValue.CollaboratorId}}" data-name="{{eachProperty.PreviousValue.UserName}}">{{eachProperty.PreviousValue.UserName}}</a></span>
