@@ -116,7 +116,7 @@
                 <div class="viewinputtext " [innerText]="(ticketData != null)? ticketData?.data?.Title : ''" id="{{ticketData?.data?.TicketId}}_title" (dblclick)="editTitle(ticketData.data.TicketId+'_titleInput')" [hidden]="!showTitleEdit">
                 </div>
                <!-- <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />-->
-                <textarea rows=1 data-min-rows=1  style="resize: none;" class='autoExpand tickettitle_textarea' maxlength="512" id="{{ticketData?.data?.TicketId}}_titleInput"  [hidden]="showTitleEdit"  value="{{ticketData?.data?.Title}}" (blur)="closeTitleEdit($event.target.value)"  ></textarea>
+                <textarea rows={{min_row}} data-min-rows=1  style="resize: none;" class='autoExpand tickettitle_textarea' maxlength="512" id="{{ticketData?.data?.TicketId}}_titleInput"  [hidden]="showTitleEdit"  value="{{ticketData?.data?.Title}}" (blur)="closeTitleEdit($event.target.value)"  ></textarea>
                 <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
                 </div>-->
               </div>

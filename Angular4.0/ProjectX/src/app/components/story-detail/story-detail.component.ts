@@ -193,7 +193,7 @@ var thisObj = this;
 getArtifacts(obj){
   this._ajaxService.AjaxSubscribe("story/get-my-ticket-attachments",obj,(data)=>
         { 
-        if(data.statusCode == 200){
+        if(data.statusCode == 200 && data.data.length!= 0){
                          this.attachmentsData = data.data;                            
         } else {
             this.attachmentsData =[];
@@ -348,23 +348,27 @@ cancelReply(){
 * Title part
 */
 private showTitleEdit=true;
+public min_row:any=1;
 // private titleError="";
 
 editTitle(titleId){
 //  alert("+++++++++"+titleId);
-  jQuery('.viewinputtext').height();
+  var offsetHeight:any = parseInt(jQuery('.viewinputtext').height());
+  var lineheight:any = parseInt(jQuery('#'+this.ticketId+"_title").css('line-height'));
   this.showTitleEdit = false;
+  this.min_row = offsetHeight/lineheight;
+  jQuery("#"+titleId).focus();
     jQuery("#"+titleId).keydown(function(e){
         if (e.keyCode == 13 && !e.shiftKey)
         {
             e.preventDefault();
          }
      });
-
- setTimeout(()=>{ console.log('time');
+jQuery("#"+titleId).focus();
+ setTimeout(()=>{ 
   jQuery("#"+titleId).focus();
-
- },200);
+console.log('time');
+ },100);
   
 }
 
