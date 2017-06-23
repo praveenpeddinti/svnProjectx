@@ -183,7 +183,7 @@ export class TimeReportComponent{
                     rows[i + start] = data[i];
                     jQuery('.datatable-row-wrapper').addClass('gggg');
                 }
-                this.rows = rows;
+                this.rows = data;
                 this.count = response.totalCount;
                 this.totaltimehours=response.data.totalHours;
             
