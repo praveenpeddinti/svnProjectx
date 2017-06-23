@@ -736,7 +736,8 @@ class StoryController extends Controller
             $Artifacts = ServiceFactory::getStoryServiceInstance()->getTicketAttachments($post_data->ticketId, $post_data->projectId);
             $tinyUserModel = new TinyUserCollection();
             $Artifacts = $Artifacts["Artifacts"];
-            foreach ($Artifacts as $key => $Artifact) {
+            if(!empty($Artifacts)){ // For newly created child task if no artifacts.
+              foreach ($Artifacts as $key => $Artifact) {
                 if($Artifact["FileName"] != ""){
                   $Artifacts[$key]["FileName"] = Yii::$app->params['ServerURL'].Yii::$app->params['StoryArtifactPath']."/".$Artifact["FileName"].".".$Artifact["Extension"];
                 }
@@ -754,6 +755,9 @@ class StoryController extends Controller
                 } else {
                     $Artifacts[$key]["UploadedOn"] = "";
                 }
+            }  
+            }else{
+             $Artifacts=array();
             }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
