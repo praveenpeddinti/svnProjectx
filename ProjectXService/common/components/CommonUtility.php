@@ -449,7 +449,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             unset($ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
             $ticketDetails["Title"] = htmlspecialchars_decode($ticketDetails["Title"]); 
-
+            
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -1269,9 +1269,9 @@ $text_message=$html . $text_message .
                  // $searchString=stripslashes($searchString);
                   //  $searchString = \quotemeta($searchString);
                  //   $searchString=htmlspecialchars($searchString);
-                    $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
+                    $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1);
                     if(!empty($projectId)){
-                        $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>(int)$projectId);
+                        $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>(int)$projectId);
                     }
                     $query = Yii::$app->mongodb->getCollection('TicketComments');
                     $pipeline = array(
@@ -1369,9 +1369,9 @@ $text_message=$html . $text_message .
                   //  $searchString=stripslashes($searchString);
                     $searchString = \quotemeta($searchString);
                    $searchString=htmlspecialchars($searchString);
-                    $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
+                    $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1);
                     if(!empty($projectId)){
-                        $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>(int)$projectId);
+                        $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>(int)$projectId);
                     }
                     $query = Yii::$app->mongodb->getCollection('TicketComments');
                     $pipeline = array(
@@ -1589,10 +1589,10 @@ $text_message=$html . $text_message .
 //                   $searchString = \quotemeta($searchString);
                    // $searchString=htmlspecialchars($searchString);
                    // $searchString=htmlspecialchars_decode($searchString);
-                    $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'));
+                    $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1);
                     if(!empty($projectId)){
                         error_log("serachstringggggggg".$searchString);
-                        $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>(int)$projectId);
+                        $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>(int)$projectId);
                     }
                     $query = Yii::$app->mongodb->getCollection('TicketComments');
                     $pipeline = array(
