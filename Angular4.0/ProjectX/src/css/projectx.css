@@ -861,3 +861,6 @@ padding-left:0px!important;
 	 
 	 
 }
+/*@mentions box width*/
+.note-hint-popover .popover-content { width:220px;}
+.popover { line-height:14px!important;}
