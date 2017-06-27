@@ -28,7 +28,7 @@ class NotificationCollection extends ActiveRecord
       "_id",      
      "TicketId",
      "ProjectId",
-     "NotifiedUser",
+     "CollaboratorUsers",
      "Notification_Type",
      "ActivityFrom",
      "Status",
@@ -76,7 +76,7 @@ class NotificationCollection extends ActiveRecord
          error_log("getNotificationsCount----UserId---".$user."*******projectId******".$projectId);
           $query=new Query();
             $query->from('NotificationCollection')
-            ->where(["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0])
+            ->where(["CollaboratorUsers" =>["CollaboratorId" =>(int) $user,"IsRead" =>(int)0],'ProjectId'=>(int)$projectId])
             ->andWhere(['!=','ActivityFrom', (int)$user]);
             $notificationsCount=$query->count();
             error_log("getNotificationsCount----".$notificationsCount);
@@ -90,9 +90,9 @@ class NotificationCollection extends ActiveRecord
       public static function getNotifications($user,$projectId,$offset=0,$limit=5,$viewAll=0)
     { 
            try{
-          $cond=["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId,'Status'=>(int) 0] ; 
+          $cond=["CollaboratorUsers" =>["CollaboratorId" =>(int) $user,"IsRead" =>(int)0],'ProjectId'=>(int)$projectId] ; 
           if($viewAll==1){
-            $cond=["NotifiedUser" =>(int) $user,'ProjectId'=>(int)$projectId] ; 
+            $cond=["CollaboratorUsers.CollaboratorId" =>(int) $user,'ProjectId'=>(int)$projectId] ; 
           }
          $query=new Query();
             $query->from('NotificationCollection')
@@ -123,7 +123,7 @@ class NotificationCollection extends ActiveRecord
         try
         {
             $notifications=NotificationCollection::getCollection();
-            $notifications->update(array('_id'=>$notifyid,'NotifiedUser'=>(int)$user), array("Status"=>1));
+            $notifications->update(array('_id'=>$notifyid,'CollaboratorUsers.CollaboratorId'=>(int)$user), array('$set'=>array('CollaboratorUsers.$.IsRead'=>1)));
             return;
         }catch(Exception $ex)
         {
@@ -145,7 +145,7 @@ class NotificationCollection extends ActiveRecord
             $notification=NotificationCollection::getCollection();
             foreach($notification as $notify)
             {
-                $notification->update(array('NotifiedUser'=>(int)$user), array("Status"=>1));
+                $notification->update(array('CollaboratorUsers.CollaboratorId'=>(int)$user), array('$set'=>array('CollaboratorUsers.$.IsRead'=>1)));
             }
             return;
         }catch(Exception $ex)

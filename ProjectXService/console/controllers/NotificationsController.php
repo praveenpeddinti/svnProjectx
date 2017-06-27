@@ -36,12 +36,15 @@ class NotificationsController extends Controller
             $offset = 0;
             $limit = 5;
             $notification_data = json_decode($data);
-           // error_log("Post__DATA".print_r($notification_data,1));
+            error_log("Post__DATA___from___MObile".print_r($notification_data,1));
             $page=$notification_data->page;
             $viewAll=$notification_data->viewAll;
             if($viewAll==1) {
               $limit=15; 
               $offset=($page-1) * $limit;
+            }else if(isset ($notification_data->clientType) && $notification_data->clientType=='mobile'){
+               $limit = 10; 
+               $offset=($page-1) * $limit;
             }
             $projectId=$notification_data->projectId;
             $notified_userid=$notification_data->userInfo->Id;
@@ -99,12 +102,13 @@ class NotificationsController extends Controller
            foreach($notificationIds as $v){
                array_push($notificationArray, new \MongoDB\BSON\ObjectID($v['$oid']));
            }
+           echo ("CAME___");
             //echo "actionSendEmailNotification-- after".print_r($notificationArray,1);
           if($bulkUpdate==1){
               echo ("!!!!!!!!!!!!!!!");
             $result_data = ServiceFactory::getStoryServiceInstance()->sendBulkEmailNotification($notificationArray,$projectId,$bulkUpdate);
           }else{
-              echo ("!!!@@@@@@@@@~!!!!!!!!!!!!!!1");
+              echo ("!!!@@@@@@@@@~!!!!!!!!!!!!!!1__SIZE".  sizeof($notificationArray));
             $result_data = ServiceFactory::getStoryServiceInstance()->sendEmailNotificationFromBackground($notificationArray,$projectId);
           }
           } catch (Exception $ex) {
