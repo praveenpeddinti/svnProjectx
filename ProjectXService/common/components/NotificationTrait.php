@@ -204,7 +204,7 @@ trait NotificationTrait {
                     $tic = new NotificationCollection();
                     $tic->TicketId = $ticketId;
                     $tic->ProjectId = $projectId;
-                    $tic->CollaboratorUsers = $collaboratorIds;
+                    $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->ActivityFrom = (int) $loggedinUser;
                     $tic->NotificationDate = $currentDate;
                     $tic->Notification_Type = 'mention';
@@ -260,7 +260,7 @@ trait NotificationTrait {
                     $tic = new NotificationCollection();
                     $tic->TicketId = $ticketId;
                     $tic->ProjectId = $projectId;
-                    $tic->CollaboratorUsers = $collaboratorIds;
+                    $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->ActivityFrom = (int) $loggedinUser;
                     $tic->NotificationDate = $currentDate;
                     $tic->OldValue = $oldValue; //added for consistency
@@ -286,7 +286,7 @@ trait NotificationTrait {
                     }
             }
                     $tic = new NotificationCollection();
-                    $tic->CollaboratorUsers = $collaboratorIds;
+                    $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->TicketId = $ticketId;
                     $tic->ProjectId = $projectId;
                     $tic->ActivityFrom = (int) $loggedinUser;
@@ -308,7 +308,7 @@ trait NotificationTrait {
                     if($commentOwner !=''){
                     array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsRead"=>0));
                     $tic = new NotificationCollection();
-                    $tic->CollaboratorUsers = $collaboratorIds;
+                    $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->TicketId = $ticketId;
                     $tic->ProjectId = $projectId;
                     $tic->ActivityFrom = (int) $loggedinUser;
@@ -423,7 +423,7 @@ trait NotificationTrait {
                 $tic->CommentSlug = $slug;
                 $tic->TicketId = $ticketId;
                 $tic->ProjectId = $projectId;
-                $tic->CollaboratorUsers =array(array('CollaboratorId'=>(int) $newCollaborator,'IsRead'=>0)) ; //new use case "setting newly assigned mem
+                $tic->NotifiedCollaborators =array(array('CollaboratorId'=>(int) $newCollaborator,'IsRead'=>0)) ; //new use case "setting newly assigned mem
                 $tic->ActivityFrom = (int) $loggedInUser;
                 $tic->Notification_Type = $activityOn;
                 $tic->ActivityOn = $notify_type;
@@ -454,7 +454,7 @@ trait NotificationTrait {
                     $tic->CommentSlug = $slug;
                     $tic->TicketId = $ticketId;
                     $tic->ProjectId = $projectId;
-                    $tic->CollaboratorUsers = array(array('CollaboratorId'=>(int) $activityOn,'IsRead'=>0) ); //new use case "setting newly assigned mem
+                    $tic->NotifiedCollaborators = array(array('CollaboratorId'=>(int) $activityOn,'IsRead'=>0) ); //new use case "setting newly assigned mem
                     $tic->ActivityFrom = (int) $loggedInUser;
                     $tic->Notification_Type = $notification_Type;
                     $tic->ActivityOn = $fieldType;
@@ -500,7 +500,7 @@ trait NotificationTrait {
             }
                 $tic = new NotificationCollection();
                 $tic->CommentSlug = $slug;
-                $tic->CollaboratorUsers = $collaboratorUser;
+                $tic->NotifiedCollaborators = $collaboratorUser;
                 $tic->TargetTicketId = $taskId; //added for child task and relate task
                 $tic->TicketId = $ticketId;
                 $tic->ProjectId = $projectId;
@@ -591,21 +591,22 @@ trait NotificationTrait {
         $status='';
         try {
             $projectObj = new Projects();
-            $notifications = NotificationCollection::getNotifications($user, $projectId, $offset, $limit, $viewAll);
+            $notifications = NotificationCollection::getNotifications($user, $offset, $limit, $viewAll);
             //constucting the notifications for the user
-            error_log("not cont--------------------" . print_r($notifications,1));
             foreach ($notifications as $notification) {
-                foreach($notification['CollaboratorUsers']  as $key => &$value){
-                    error_log("---Collab Id---".print_r($value,1));
-                    error_log($value['CollaboratorId']."MATCH__OUT---".$user);
+
+                if($viewAll == 0){
+                   $notification['Status'] = 0;
+                   $notification['NotifiedUser']= $user;  
+                }else{
+                 foreach($notification['NotifiedCollaborators']  as $key => &$value){
                     if($value['CollaboratorId']==(int)$user){
-                        error_log("Match___");
                        $notification['Status']=$value['IsRead'];
                        $notification['NotifiedUser']= $value['CollaboratorId'];
+                       break;
                     }
+                 }  
                 }
-                
-                error_log($notification['_id'] . "==Notification Type==" . $notification['Notification_Type']);
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                 $Date = $datetime->format('M-d-Y H:i:s');
@@ -613,7 +614,6 @@ trait NotificationTrait {
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
-                error_log("activtiy form---------------" . $notification['ActivityFrom']);
                 $from_user = TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
 
                 $projectDetails = $projectObj->getProjectMiniDetails($notification["ProjectId"]);
@@ -653,7 +653,6 @@ trait NotificationTrait {
                 }
                 //for child task create...by Ryan
                 else if ($notification['ActivityOn'] == 'Create Task' || $notification['ActivityOn'] == 'Relate' || $notification['ActivityOn'] == 'UnRelate') {
-                    error_log("==In Create Task== ");
                     $targetTicketData = TicketCollection::getTicketDetails($notification['TargetTicketId'], $projectId);
                     $targetPlanLevel = $targetTicketData["Fields"]["planlevel"]["value"];
                     if ($notification['ActivityOn'] == 'Create Task') {
@@ -678,7 +677,6 @@ trait NotificationTrait {
 
 
                 /*                 * ******* Followers Messages **************** */ else if ($notification['ActivityOn'] == 'FollowObj') {
-                    error_log("added");
 
                     if ($notification['NotifiedUser'] == $notification['NewValue']) { //if logged in user has been added
                         //Eg : moin.hussain added you as a follower to ticket #33
@@ -710,7 +708,6 @@ trait NotificationTrait {
 
 
                 /*                 * *** Any changes in Editor ********** */
-                error_log("notifc t-------------------" . $notification['Notification_Type']);
                 $commentAllowedArray = ["comment", "reply", "edit", "delete"];
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
                     $datetime = $notification['NotificationDate']->toDateTime();
@@ -747,7 +744,6 @@ trait NotificationTrait {
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                     if ($notification['Notification_Type'] == 'mention') {
-                        error_log("==in mention==");
 
                         if ($notification['NotifiedUser'] == $user) {
                             //Eg : moin.hussain mentioned you in a comment or
@@ -765,7 +761,6 @@ trait NotificationTrait {
                 // {
                 // $storyField = StoryFields::getFieldDetails($notification['ActivityOn'],"Field_Name");
                 else if (isset($storyField['Title'])) {
-                    error_log("*******************************************" . $storyField['Title']);
 
                     $storyFieldName = $storyField['Title'];
                     //Eg : moin.hussain set duedate to 'apr-14-2017'
@@ -883,7 +878,7 @@ trait NotificationTrait {
                 $projectName = $projectDetails["ProjectName"];
                 $link = Yii::$app->params['AppURL'] . "/project/$projectName/" . $ticketId . "/details";
                 $redirectToHome = Yii::$app->params['AppURL'] . "/home";
-                foreach($notification['CollaboratorUsers'] as $notifyuser){
+                foreach($notification['NotifiedCollaborators'] as $notifyuser){
                    $notification['NotifiedUser'] = $notifyuser['CollaboratorId'];
                 //  echo ("3. sending email .11111.." . $notification['ActivityOn'] . "SSSSSSS");
                 if ($activityOnFieldType == 6) {//newly assigned  
@@ -1301,8 +1296,8 @@ EOD;
                 }
             }
             $notificationUsers = array();
-           // $notificationUsers = array_column($notifications, 'CollaboratorUsers');
-            foreach ($notifications[0]['CollaboratorUsers'] as &$value) {
+           // $notificationUsers = array_column($notifications, 'NotifiedCollaborators');
+            foreach ($notifications[0]['NotifiedCollaborators'] as &$value) {
                 $resUser=array();
                 $collaborator = TinyUserCollection::getMiniUserDetails($value['CollaboratorId']);
                 array_push($resUser,$collaborator['Email']);

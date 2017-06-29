@@ -78,7 +78,7 @@ class NotificationsController extends Controller
             $notified_userid=$notification_data->userInfo->Id;
             $notified_username=$notification_data->userInfo->username;
             //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
-            $result_count=NotificationCollection::getNotificationsCount($notified_userid,$projectId);
+            $result_count=NotificationCollection::getNotificationsCount($notified_userid);
             echo json_encode(array('count'=>$result_count));
             
         } catch (Exception $ex) {
