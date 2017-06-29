@@ -878,6 +878,8 @@ trait NotificationTrait {
                 $projectName = $projectDetails["ProjectName"];
                 $link = Yii::$app->params['AppURL'] . "/project/$projectName/" . $ticketId . "/details";
                 $redirectToHome = Yii::$app->params['AppURL'] . "/home";
+                $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
+                $old_user = Collaborators::getCollaboratorById($notification['OldValue']);
                 foreach($notification['NotifiedCollaborators'] as $notifyuser){
                    $notification['NotifiedUser'] = $notifyuser['CollaboratorId'];
                 //  echo ("3. sending email .11111.." . $notification['ActivityOn'] . "SSSSSSS");
@@ -888,15 +890,15 @@ trait NotificationTrait {
                         //for logged in user
                         //Eg : moin.hussain assigned you to ticket #33
                         $to = "you";
-                        $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
+                        
                     } else {
-                        $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
+                       
                         //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
                         //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
                         $to = $action_user['UserName'];
                     }
                     $assigned_message = $action_user['UserName'];
-                    $old_user = Collaborators::getCollaboratorById($notification['OldValue']);
+                    
                     if ($old_user != '') {
                         $assigned_message = $old_user['UserName'] . ' => ' . $action_user['UserName'];
                     }
@@ -907,11 +909,6 @@ trait NotificationTrait {
                         $fieldName = $storyField["Title"];
                     }
                     $fieldName = $fieldName == "" ? "" : "as a " . $fieldName;
-
-//                                $text_message = <<<EOD
-//{$fromUser} has assigned {$to} {$fieldName} to <a href={$link}>#{$ticketId} {$title} </a>
-//EOD;
-
                     $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$storyField['Title']}: {$assigned_message} </td></tr>
@@ -965,11 +962,9 @@ EOD;
                     if ($notification['NotifiedUser'] == $notification['NewValue']) { //if logged in user has been added
                         //Eg : moin.hussain added you as a follower to ticket #33
                         $activityOn = 'you';
-                        $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
                         $activityOn = $action_user['UserName'];
                     } else {
                         //Eg : moin.hussain added sateesh.mandru as a follower to Ticket #33
-                        $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
                         $activityOn = $action_user['UserName'];
                     }
                     $preposition = $notification['Notification_Type'] == "added" ? "to" : "from";
