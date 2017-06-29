@@ -918,7 +918,8 @@ EOD;
                 }
 
 
-                /* ------To display the total worked hours in mail-----start---------- */ else if ($notification['ActivityOn'] == 'TotalTimeLog') {
+                /* ------To display the total worked hours in mail-----start---------- */ 
+                else if ($notification['ActivityOn'] == 'TotalTimeLog') {
                     $notification['OldValue'] = number_format((float) $notification['OldValue'], 1, '.', '');
                     $notification['NewValue'] = number_format((float) $notification['NewValue'], 1, '.', '');
                     $workedHours = $notification['OldValue'] . " => " . $notification['NewValue'];
@@ -957,7 +958,8 @@ EOD;
                 }
                 /* ----------------Title and Description changes----end------ */
 
-                /*                 * ******* Followers Messages **************** */ else if ($notification['ActivityOn'] == 'FollowObj') {
+                /*                 * ******* Followers Messages **************** */ 
+                else if ($notification['ActivityOn'] == 'FollowObj') {
                     //  error_log("added");
                     if ($notification['NotifiedUser'] == $notification['NewValue']) { //if logged in user has been added
                         //Eg : moin.hussain added you as a follower to ticket #33
