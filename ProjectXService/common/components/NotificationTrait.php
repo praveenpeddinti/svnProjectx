@@ -557,7 +557,7 @@ trait NotificationTrait {
                             array_push($notificationIds, $notificationId);
                         }
                     }
-                } else {
+                } else {    
                     $tic->Notification_Type = $activityOn;
                    // $tic->Status = 0;
                     $oldValue = ($fieldType == 4) ? $oldValue : (string) $oldValue;
@@ -843,17 +843,14 @@ trait NotificationTrait {
      */
     public function sendEmailNotificationFromBackground($notificationIds, $projectId) {
         try {
-            // echo "1. SendEmailNotificationFromBackground----started--------\n";
+             echo "1. SendEmailNotificationFromBackground----started--------\n";
             $msg = '';
             $message = array();
             $result_msg = array();
             $user_message="";
-             echo("sendEmailNotification--New==".print_r($notificationIds,1));
             $notifications = NotificationCollection::getNotificationDetails($notificationIds);
-             echo("2. Notifications Count-------------New" . print_r($notifications,1) . "\n");
+             echo("2. Notifications Count-------------" . count($notifications) . "\n");
             foreach ($notifications as $notification) {
-                //echo $notification['_id'];
-                 echo("3. Processing Notification-------------New" . $notification['_id'] . "---" . $notification['ActivityOn'] . "\n");
                 $recipient_list = array();
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -864,11 +861,8 @@ trait NotificationTrait {
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
                 $from_user = TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
 
-
-                /*                 * ************* Left Panel Field Values newly assigned ******************** */
                 $activityOn = $notification['ActivityOn'];
                 $storyField = StoryFields::getFieldDetails($activityOn, "Field_Name");
-//                                  error_log("activtiy form---------------".$activityOn);
                 $activityOnFieldType = $storyField["Type"];
                 $ticketId = $notification['TicketId'];
                 $title = $ticket_data['Title'];
@@ -878,11 +872,9 @@ trait NotificationTrait {
                 $projectName = $projectDetails["ProjectName"];
                 $link = Yii::$app->params['AppURL'] . "/project/$projectName/" . $ticketId . "/details";
                 $redirectToHome = Yii::$app->params['AppURL'] . "/home";
-                $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
-                $old_user = Collaborators::getCollaboratorById($notification['OldValue']);
+              
                 echo ("3. sending email ...");
                 /* Left Panel Changed Field Values Start */
-                echo "---dsdsadasda-s-sdasd-as-dd--" . print_r($recipient_list, 1);
                 $ticket_title = " | #" . $ticketId . ": " . $title;
                 $subject = "ProjectX | " . $projectName . $ticket_title;
                 $project_logo = "<tr><td align='left' valign='top' style='border:solid 1px #f0f0f0;'>
@@ -922,28 +914,11 @@ trait NotificationTrait {
                 $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
                 $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
-                foreach($notification['NotifiedCollaborators'] as $notifyuser){
-                   $notification['NotifiedUser'] = $notifyuser['CollaboratorId'];
-                    $collaboratorData = TinyUserCollection::getMiniUserDetails($notification['NotifiedUser']);
-                    $recipient_list = array($collaboratorData['Email']);
-                    $notified_user = $collaboratorData['UserName'];
-                    $display_name = $collaboratorData['FirstName'] . " " . $collaboratorData['LastName'];
-                    
-                //  echo ("3. sending email .11111.." . $notification['ActivityOn'] . "SSSSSSS");
-                if ($activityOnFieldType == 6) {//newly assigned  
+              
+              if ($activityOnFieldType == 6) {//newly assigned  
                     //$action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
-                    if ($notification['NotifiedUser'] == $notification['NewValue']) {
-
-                        //for logged in user
-                        //Eg : moin.hussain assigned you to ticket #33
-                        $to = "you";
-                        
-                    } else {
-                       
-                        //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
-                        //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
-                        $to = $action_user['UserName'];
-                    }
+                     $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
+                     $old_user = Collaborators::getCollaboratorById($notification['OldValue']);
                     $assigned_message = $action_user['UserName'];
                     
                     if ($old_user != '') {
@@ -975,15 +950,7 @@ EOD;
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Total invested hours: {$workedHours}</td></tr>
 EOD;
                 }
-                /* ------To display the total worked hours in mail-----end---------- */
-
-
-                /* Left Panel newly assigned Field Values End */
-
-                /* ----------------Title and Description changes----start------ */
-//                else if ($activityOn == "Description" || $activityOn == "Title") {
-//                    $message = array('IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
-////                       
+                      
                 else if ($activityOn == "Title") {
                     $description_message = $notification['OldValue'] . " => " . $notification['NewValue'];
                     $text_message = <<<EOD
@@ -1000,40 +967,7 @@ EOD;
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
                 }
-                /* ----------------Title and Description changes----end------ */
-
-                /*                 * ******* Followers Messages **************** */ 
-                else if ($notification['ActivityOn'] == 'FollowObj') {
-                    //  error_log("added");
-                    if ($notification['NotifiedUser'] == $notification['NewValue']) { //if logged in user has been added
-                        //Eg : moin.hussain added you as a follower to ticket #33
-                        $activityOn = 'you';
-                        $activityOn = $action_user['UserName'];
-                    } else {
-                        //Eg : moin.hussain added sateesh.mandru as a follower to Ticket #33
-                        $activityOn = $action_user['UserName'];
-                    }
-                    $preposition = $notification['Notification_Type'] == "added" ? "to" : "from";
-                    // $message=array('from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower'],"Preposition"=>$preposition);
-                    $follower_message = "Follower:" . " " . $notification['Notification_Type'] . " " . $activityOn;
-
-//                                 $text_message = <<<EOD
-//{$fromUser}  {$message} {$activityOn} as follower {$preposition} <a href={$link}>#{$ticketId} {$title} </a>
-//EOD;
-
-                    $text_message = <<<EOD
-        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
-        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$follower_message} </td></tr>
-EOD;
-
-                }
-
-
-                /*                 * ***** Followers Message End ********* */
-
-
-                /*                 * *** Any changes in Editor ********** */
-                $commentAllowedArray = ["comment", "reply", "edit", "delete"];
+                 $commentAllowedArray = ["comment", "reply", "edit", "delete"];
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -1042,7 +976,6 @@ EOD;
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                     $link .= "?Slug=" . $notification['CommentSlug'];
                     if ($notification['Notification_Type'] == "comment") {
-                        //  error_log("comment-----------------------22222");
                         $preposition = "on";
                         $object = "comment";
                         $type = Yii::$app->params['comment'];
@@ -1052,13 +985,10 @@ EOD;
    <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
                     } else if ($notification['Notification_Type'] == "reply") {
-                        //  error_log("replyyyyyyyyyyyyy-----------------------111111111111s");
                         $preposition = "";
                         $object = "reply";
                         $type = Yii::$app->params['reply'];
-//            $text_message = <<<EOD
-//<a href={$link}>#{$ticketId} {$title} </a> <br/> replied by {$fromUser}
-//EOD;
+
                         $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} replied to your comment
@@ -1069,9 +999,7 @@ EOD;
                         $preposition = "";
                         $object = "edit";
                         $type = Yii::$app->params['reply'];
-//            $text_message = <<<EOD
-//<a href={$link}>#{$ticketId} {$title} </a> <br/> comment edited by {$fromUser}
-//EOD;
+
                         $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">A story comment has been edited by {$fromUser}:</td></tr>
         <tr><td height="10">&nbsp;</td></tr>
@@ -1085,9 +1013,7 @@ EOD;
                         $preposition = "";
                         $object = "delete";
                         $type = Yii::$app->params['delete'];
-//            $text_message = <<<EOD
-//<a href={$link}>#{$ticketId} {$title} </a> <br/> comment deleted by {$fromUser}
-//EOD;
+
                         $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} deleted comment</td></tr>
@@ -1095,15 +1021,13 @@ EOD;
 EOD;
                     }
 
-                } else if ($notification['Notification_Type'] == "mention") {
+                }   else if ($notification['Notification_Type'] == "mention") {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                     $Date = $datetime->format('M-d-Y H:i:s');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
-//            $text_message = <<<EOD
-//<a href={$link}>#{$ticketId} {$title} </a> <br/> mentiond you by {$fromUser}
-//EOD;
+
                     $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
                 <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} mentioned you</td></tr>
@@ -1113,9 +1037,6 @@ EOD;
                 }
 
 
-                //if($notification['Notification_Type']=='duedate' || $notification['Notification_Type']=='dod' || $notification['Notification_Type']=='estimatedpoints')
-                // {
-                // $storyField = StoryFields::getFieldDetails($notification['ActivityOn'],"Field_Name");
                 if (isset($storyField['Title'])) {
 
                     $storyFieldName = $storyField['Title'];
@@ -1157,10 +1078,44 @@ EOD;
 EOD;
                     }
                 }
+                 if ($notification['ActivityOn'] == 'FollowObj') {//newly assigned  
+                     $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
+                 }
+                foreach($notification['NotifiedCollaborators'] as $notifyuser){
+                   $notification['NotifiedUser'] = $notifyuser['CollaboratorId'];
+                    $collaboratorData = TinyUserCollection::getMiniUserDetails($notification['NotifiedUser']);
+                    $recipient_list = array($collaboratorData['Email']);
+                    $notified_user = $collaboratorData['UserName'];
+                    $display_name = $collaboratorData['FirstName'] . " " . $collaboratorData['LastName'];
+              
+                /* ----------------Title and Description changes----end------ */
+
+                /*                 * ******* Followers Messages **************** */ 
+                 if ($notification['ActivityOn'] == 'FollowObj') {
+                    //  error_log("added");
+                    if ($notification['NotifiedUser'] == $notification['NewValue']) { //if logged in user has been added
+                        //Eg : moin.hussain added you as a follower to ticket #33
+                        $activityOn = 'you';
+                        $activityOn = $action_user['UserName'];
+                    } else {
+                        //Eg : moin.hussain added sateesh.mandru as a follower to Ticket #33
+                        $activityOn = $action_user['UserName'];
+                    }
+                    $preposition = $notification['Notification_Type'] == "added" ? "to" : "from";
+                    // $message=array('from'=>$from_user['UserName'],'object'=>"follower",'type'=> Yii::$app->params[$notification['Notification_Type']],'to'=>$activityOn,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['follower'],"Preposition"=>$preposition);
+                    $follower_message = "Follower:" . " " . $notification['Notification_Type'] . " " . $activityOn;
+
+                    $text_message = <<<EOD
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$follower_message} </td></tr>
+EOD;
+
+                }
+
+             
                 $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
-                $text_message = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
-                echo ("4. 11111111111 sending email comppleted ..hhhhhhhhh." . print_r($recipient_list, 1));
-                CommonUtility::sendEmail($mailingName, $recipient_list, $text_message, $subject);
+                $text_newmessage = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
+                CommonUtility::sendEmail($mailingName, $recipient_list, $text_newmessage, $subject);
                 echo ("4. sending email comppleted ...");  
             }
                 
@@ -1191,7 +1146,6 @@ EOD;
             $recipient_list = array();
            // echo ("============notifications ids--------11111111------".print_r($notificationIds,1));
             $notifications = NotificationCollection::getNotificationDetails($notificationIds);
-            echo ("============notifications ids--------22222222------".print_r($notifications,1));
             $uniqueNotifications = CommonUtility::getUniqueArrayObjects($notifications);
             foreach ($uniqueNotifications as $notification) {
                 // echo(count($notificationIds)."-------uniaqu----------".count($uniqueNotifications));
@@ -1232,7 +1186,7 @@ EOD;
 EOD;
                     $msg = $msg . $text_message;
                 }
-                if ($activityOn == "assignedto" || $activityOn == "stakeholder") {
+                if ($activityOnFieldType == 6) {
                     $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
                     $assigned_message = $action_user['UserName'];
                     $old_user = Collaborators::getCollaboratorById($notification['OldValue']);
