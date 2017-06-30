@@ -1372,7 +1372,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $total=($oldTimeLog + $totalWorkHours); //added by Ryan
             $slug =  new \MongoDB\BSON\ObjectID();
             $activityData=$this->saveActivity($ticketId, $projectId,'TotalTimeLog', $total, $userId,$slug,$timezone); //added by Ryan
-            $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug,$bulkUpdate=1); //added by Ryan
+            $this->saveNotifications($timelog_data, 'TotalTimeLog', $total,'TotalTimeLog',$slug); //added by Ryan
             if ($parenTicketInfo["ParentStoryId"] != "") {
                 $updateParentTotalTime = TicketCollection::updateTotalTimeLog($projectId, $parenTicketInfo["ParentStoryId"], $totalWorkHours);
             }
