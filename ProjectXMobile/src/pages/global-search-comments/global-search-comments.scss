@@ -1,3 +1,28 @@
 page-global-search-comments {
+.dashboardouterbox{}
+.dashboardbox_header{padding:8px 10px 2px;font-size:14px;line-height:16px}
+.dashboardbox_header i{width:22px;height:22px;border-radius:100px;display: inline-block;vertical-align: middle}
+.dashboardbox_header i.Story{background:#04355e;position: relative}
+.dashboardbox_header i.Task{background:#21b3ff;position: relative}
+.dashboardbox_header i:after{font-style:normal;color:#fff ;font-family: arial;font-weight:bold;position: absolute;left:0;right:0;text-align: center;font-size: 16px}
+.dashboardbox_header i.Story:after{content:"S";top:3px}
+.dashboardbox_header i.Task:after{content:"T";top:3px;}
+.dashboardbox_header .ticketid{font-weight:bold;color:#007ca9}
+.dashboardbox_header .tickettitle{font-weight:normal;color:#5b5b5b}
+.dashboardouterbox.item-md.item-block .item-inner, .dashboardouterbox.item-ios.item-block .item-inner, .dashboardouterbox.item-wp.item-block .item-inner{padding-right:0}
+.dashboardouterbox .label-md,.dashboardouterbox .label-ios, .dashboardouterbox .label-wp{margin:0}
+.dashboardbox_content{padding:2px 10px 5px}
+.dashboardbox_content .dashboardbox_contentouterdiv .width33per{width:33%;float:left}
+.dashboardbox_content .dashboardbox_contentouterdiv  .width34per{width:34%;float:left}
+.dashboardbox_content .dashboardbox_contentouterdiv:after{content:"";clear:both;display:block}
+.dashboardbox_content .collabels{font-style: italic;color:#5b5b5b;font-size:12px}
+.dashboardbox_content .colresults{font-style: normal;font-size:13px}
+.dashboardbox_content .colresultssmall{font-style: normal;font-size: 11px;}
+.dashboardbox_footer{padding:7px 10px 5px;position: relative}
+.dashboardbox_footer:after{border-top:1px solid #fff;top:0;left:10px;right:10px;position: absolute;content:""}
+.dashboardbox_footer .assignlabel{font-style: italic;color:#5b5b5b;font-size:12px;vertical-align: text-top;line-height: 13px}
+.dashboardbox_footer .usericon {font-size:20px;color:#9c9c9c}
+.dashboardbox_footer .username{font-weight:bold;font-size:13px;vertical-align: top}
+.customcontention .list-md ion-item-sliding, .customcontention .list-ios ion-item-sliding, .customcontention .list-wp ion-item-sliding{background: #f4f4f4;margin-bottom:10px}
 
 }

@@ -29,7 +29,7 @@
 <ion-list>
             <ion-item *ngFor="let item of dataArtifacts">
                     <div class="dashboardbox_header">
-                        <i *ngIf="item.planlevel==Story" class="Story"></i><i *ngIf="item.planlevel==Task" class="Task"></i> <span class="ticketid">#{{item.TicketId}}</span> <span class="tickettitle">{{item.Title}}</span>
+                        <i class="{{item.planlevel}}"></i> <span class="ticketid">#{{item.TicketId}}</span> <span class="tickettitle">{{item.Title}}</span>
                     </div>
                 <div>
                    <span class="ticketDesc">{{item.description}}</span> 
