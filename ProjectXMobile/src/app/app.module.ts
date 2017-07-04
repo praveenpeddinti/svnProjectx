@@ -24,6 +24,8 @@ import { StoryDetailsPage } from '../pages/story-details/story-details';
 import { StoryCreatePage } from '../pages/story-create/story-create';
 import { SelectAlertless } from '../pages/story-details/SelectAlert';
 import {CustomModalPage} from '../pages/custom-modal/custom-modal';
+import {FilterModal} from '../pages/filter-modal/filter-modal';
+import {GlobalSearch} from '../pages/global-search/global-search';
 import { LogoutPage } from '../pages/logout/logout';
 // Ticket #113
 import { CustomAutocompleteItem } from '../pages/story-details/custom-autocomplete-item';
@@ -34,6 +36,11 @@ import { StoryDetailsComments } from '../pages/story-details-comments/story-deta
 import {StoryDetailsFollowers} from '../pages/story-details-followers/story-details-followers';
 import {StoryDetailsTask} from '../pages/story-details-task/story-details-task';
 import {StoryDetailsWorklog} from '../pages/story-details-worklog/story-details-worklog';
+import {GlobalSearchAll} from '../pages/global-search-all/global-search-all';
+import {GlobalSearchArtifacts} from '../pages/global-search-artifacts/global-search-artifacts';
+import {GlobalSearchComments} from '../pages/global-search-comments/global-search-comments';
+import {GlobalSearchStorytask} from'../pages/global-search-storytask/global-search-storytask';
+import {GlobalSearchUsers} from '../pages/global-search-users/global-search-users';
 //import { StoryWorklogPage } from '../pages/story-worklog/story-worklog';
 import { NotificationPage } from '../pages/notification/notification';
 import { HeaderPage } from '../pages/header/header';
@@ -43,6 +50,8 @@ import { HeaderPage } from '../pages/header/header';
     MyApp,
     DashboardPage,
     CustomModalPage,
+    FilterModal,
+    GlobalSearch,
     LoginPage,
     StoryDetailsPage,
     StoryCreatePage,
@@ -53,6 +62,11 @@ import { HeaderPage } from '../pages/header/header';
     StoryDetailsFollowers,
     StoryDetailsTask,
     StoryDetailsComments,
+    GlobalSearchAll,
+    GlobalSearchArtifacts,
+    GlobalSearchComments,
+    GlobalSearchStorytask,
+    GlobalSearchUsers,
     NotificationPage,
     HeaderPage
   ],
@@ -70,6 +84,8 @@ import { HeaderPage } from '../pages/header/header';
     MyApp,
     DashboardPage,
     CustomModalPage,
+    FilterModal,
+    GlobalSearch,
     LoginPage,
     StoryDetailsPage,
     StoryCreatePage,
@@ -79,6 +95,11 @@ import { HeaderPage } from '../pages/header/header';
     StoryDetailsFollowers,
     StoryDetailsTask,
     StoryDetailsComments,
+    GlobalSearchAll,
+    GlobalSearchArtifacts,
+    GlobalSearchComments,
+    GlobalSearchStorytask,
+    GlobalSearchUsers,
     NotificationPage,
     HeaderPage
   ],

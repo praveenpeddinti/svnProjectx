@@ -1,8 +1,9 @@
-import {Component} from '@angular/core';
-import {NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController, ModalController, Platform} from 'ionic-angular';
+import {Component,ViewChild} from '@angular/core';
+import {NavController, NavParams,Content, AlertController, ViewController, LoadingController, PopoverController, ModalController, Platform} from 'ionic-angular';
 import {Storage} from "@ionic/storage";
 import {LogoutPage} from '../logout/logout';
 import {StoryDetailsPage} from '../story-details/story-details';
+import {GlobalSearch} from '../global-search/global-search';
 import {StoryCreatePage} from '../story-create/story-create';
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
@@ -16,11 +17,14 @@ declare var socket:any;
   See http://ionicframework.com/docs/v2/components/#navigation for more info on
   Ionic pages and navigation.
 */
+   
 @Component({
     selector: 'page-dashboard',
     templateUrl: 'dashboard.html'
 })
 export class DashboardPage {
+    @ViewChild(Content) content: Content;
+    
     SelectValue : any;
     public static optionsModal;
     public displayFieldvalue : any;
@@ -56,6 +60,7 @@ export class DashboardPage {
     public modalController: ModalController,
         public navParams: NavParams,
         public platform: Platform,
+         public popoverCtrl: PopoverController,
         public loadingController: LoadingController,
         public alertController: AlertController,
         private storage: Storage,
@@ -65,17 +70,16 @@ export class DashboardPage {
         this.headerName = "All My Stories/Task";
         this.SelectValue = "All My Stories/Task";
             this.arrayObject = [];
-            localStorage.setItem('headerInfo',JSON.stringify({'title':"My All Stories",'backButton':"hideBackButton",'logo':1,'leftPannel':0}));
+            localStorage.setItem('headerInfo',JSON.stringify({'title':this.headerName,'backButton':"hideBackButton",'logo':1,'leftPannel':0,'searchBar':1}));
             this.filterList = [];
             var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
             this.userName = userInfo.username;
                 this.params.userInfo = userInfo;
              //   this.filterParam.userInfo = userInfo;
               //  this.filterParam.filterOption = {id:"3",label:"My Assigned Stories/Task",showChild:"0",type:"general"};
-                 // this.getallfilterOptions();
+                  this.getallfilterOptions();
                  // this.getAllStoriesList();
                  this.getallTickets();
-                 this.getallGlobalsearch();
                 platform.registerBackButtonAction(() => {
                     if (StoryDetailsPage.optionsModal && StoryDetailsPage.optionsModal.index == 0) {
                         StoryDetailsPage.optionsModal.dismiss();
@@ -91,12 +95,19 @@ export class DashboardPage {
                         }
                     }
                 });
-         
-        }
-   public  ionViewDidLoad() {};
-    ionViewWillEnter() {};
-
-  
+            
+    }
+    ionViewDidLoad() {}
+    ionViewWillEnter() {}
+    clickSearch(){
+        this.navCtrl.setRoot(GlobalSearch);
+    }
+    public openPopover(myEvent) {  
+        let popover = this.popoverCtrl.create(LogoutPage);
+        popover.present({
+            ev: myEvent
+        });
+    }
     public doRefresh(refresher) {
        var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
          if(userInfo != null ||userInfo != undefined){
@@ -210,14 +221,6 @@ export class DashboardPage {
             () => console.log('listing stories api call complete')
         );
     }
-    
-    public getallGlobalsearch():void{
-        this.globalService.getGlobalSearch(this.urlConstants.globalSearch, this.searchParam).subscribe(
-       data => {
-           console.log("the globalsearch"+JSON.stringify(data));
-       }
-         );
-    }
 //    public getAllStoriesList(): void {
 //        if (this.params.offset == 0) {
 //            this.params.offset = 0;
@@ -326,10 +329,13 @@ export class DashboardPage {
                              this.SelectValue = data.label;
                              console.log("selectvalue" + this.SelectValue);
                              this.headerName = data.label;
+                             console.log("header name" + this.headerName);
+                              localStorage.setItem('headerInfo',JSON.stringify({'title':"this.headerName",'backButton':"hideBackButton",'logo':1,'leftPannel':0,'searchBar':1}));
                              this.params.filterOption = data.value;
                              this.params.sortvalue = data.value.type;
                              this.params.offset = 0;
                              this.arrayObject =[]; 
+                             this.content.resize();
                              console.log("filtersOption set to"+JSON.stringify(this.params.filterOption));
                                 this.viewCtrl.dismiss();
                                  setTimeout(()=> {

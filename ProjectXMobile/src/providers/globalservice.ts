@@ -23,30 +23,27 @@ export class Globalservice {
         data["clientType"] = 'mobile';
         data["timeZone"] = "Asia/Kolkata";
         data["projectId"] = 1;
-          var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
+        var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
             res => res.json()
         );
-         return response;
-    }
-    public getLoginValidation (url,data){
-        return this.ajaxCall(url,data);
+        return response;
     }
     public getLogout(url, data) {
            return this.ajaxCall(url,data);
+    }
+    public getLoginValidation (url,data){
+        return this.ajaxCall(url,data);
     }
     public getTicketDetailsById(url, data) {
         var ticketDetailsParams = {};
         ticketDetailsParams["ticketId"] = data;
         return this.ajaxCall(url,ticketDetailsParams);
     }
-    public getStoriesList(url, params) {
-        return this.ajaxCall(url,params);
-    }
     public getallStoriesList(url,params){
         return this.ajaxCall(url, params);
     }
-     public getfilterOptions(url, params){
-         return this.ajaxCall(url,params);
+    public getStoriesList(url, params) {
+        return this.ajaxCall(url,params);
     }
     public getFieldItemById(url, fieldDetails) {
         var fieldItemParams = {};
@@ -122,6 +119,9 @@ export class Globalservice {
         insertTimelogParams["addTimelogTime"] = this.localDate;
         return this.ajaxCall(url,insertTimelogParams);
     }
+     public getfilterOptions(url, params){
+         return this.ajaxCall(url,params);
+    }
     public searchTicket(url, ticketParams){
         var searchTicketParams = {};
         searchTicketParams["ticketId"] = ticketParams.TicketId;
@@ -131,6 +131,10 @@ export class Globalservice {
     }
    public getCollaborators(url, requestParams) {
         return this.ajaxCall(url,requestParams);
+    }
+
+    public getGlobalSearch(url,searchParams){
+        return this.ajaxCall(url, searchParams);
     }
 
     public getAllNotification(url:string,params:Object){

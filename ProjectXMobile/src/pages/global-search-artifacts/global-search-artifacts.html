@@ -1,0 +1,45 @@
+<!--
+  Generated template for the GlobalSearchArtifacts page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+<!--  <ion-navbar>
+    <ion-title>globalSearch-artifacts</ion-title>
+  </ion-navbar>-->
+<!--    <div>
+    <ion-icon *ngIf="!toggled" (click)="toggle()" name="search"></ion-icon>
+    <ion-searchbar
+       *ngIf="toggled"
+       [(ngModel)]="someValue"
+       (ionInput)="searchThis($event)"
+       (ionCancel)="cancelSearch($event)"
+       (ionClear) = "cancelSearch($event)"
+       [showCancelButton]="true">
+    </ion-searchbar>
+</div>-->
+
+</ion-header>
+
+
+<ion-content padding>
+<div>Search result for <span class="heighlight">{{searchValue}}</span> in ProjectX.0</div>
+<ion-list>
+            <ion-item *ngFor="let item of dataArtifacts">
+                    <div class="dashboardbox_header">
+                        <i *ngIf="item.planlevel==Story" class="Story"></i><i *ngIf="item.planlevel==Task" class="Task"></i> <span class="ticketid">#{{item.TicketId}}</span> <span class="tickettitle">{{item.Title}}</span>
+                    </div>
+                <div>
+                   <span class="ticketDesc">{{item.description}}</span> 
+                </div>
+                    <div class="dashboardbox_content">
+                        <div class="dashboardbox_contentouterdiv">
+                            <div class="width33per collabels">Last modified on <span class="ticketDate">({{item.UpdatedOn}})</span>, Created by <span class="createdBy">{{item.reportedby}}</span></div>
+                        </div>
+                    </div>
+            </ion-item>
+</ion-list>
+ <div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> No results found. </div>
+</ion-content>

@@ -1,0 +1,47 @@
+<ion-header>
+    <ion-navbar>
+        <ion-searchbar [(ngModel)]="searchValue" (ionInput)="search($event)" autocorrect="off"></ion-searchbar>
+    </ion-navbar>
+<!--    <ion-list>
+            <ion-item *ngFor="let item of dataCollection">
+                    <div class="dashboardbox_header">
+                        <i class="{{item.storyOrTask}}"></i> <span class="ticketid">#{{item.id}}</span> <span class="tickettitle">{{item.title}}</span>
+                    </div>
+                <div>
+                   <span class="ticketDesc">{{item.description}}</span> 
+                </div>
+                    <div class="dashboardbox_content">
+                        <div class="dashboardbox_contentouterdiv">
+                            <div class="width33per collabels">Last modified on <span class="ticketDate">({{item.updatedon}})</span>, Created by <span class="createdBy">{{item.reportedby}}</span></div>
+                        </div>
+                    </div>
+            </ion-item>
+      </ion-list>-->
+</ion-header>
+<ion-content  #content no-padding>
+<!--    <div>hello</div>-->
+<!--<ion-searchbar [(ngModel)]="searchString" (ionInput)="search($event)" autocorrect="off"></ion-searchbar>
+<div>Search result for <span class="heighlight">{{searchValue}}</span> in ProjectX.0</div>-->
+<!--      <ion-list>
+            <ion-item *ngFor="let item of allList">
+                    <div class="dashboardbox_header">
+                        <i class="{{item.storyOrTask}}"></i> <span class="ticketid">#{{item.id}}</span> <span class="tickettitle">{{item.title}}</span>
+                    </div>
+                <div>
+                   <span class="ticketDesc">{{item.description}}</span> 
+                </div>
+                    <div class="dashboardbox_content">
+                        <div class="dashboardbox_contentouterdiv">
+                            <div class="width33per collabels">Last modified on <span class="ticketDate">({{item.updatedon}})</span>, Created by <span class="createdBy">{{item.reportedby}}</span></div>
+                        </div>
+                    </div>
+            </ion-item>
+      </ion-list>-->
+<ion-tabs tabbarPlacement="bottom">
+    <ion-tab [root]="GlobalSearchAll"  tabTitle="All" [rootParams]="rootParams"></ion-tab>
+    <ion-tab [root]="GlobalSearchStorytask" tabTitle="Story/Task" [rootParams]="rootParams"></ion-tab>
+    <ion-tab [root]="GlobalSearchComments" tabTitle="Comments" [rootParams]="rootParams"></ion-tab>
+    <ion-tab [root]="GlobalSearchUsers" tabTitle="Users" [rootParams]="rootParams"></ion-tab>
+    <ion-tab [root]="GlobalSearchArtifacts" tabTitle="Artifacts" [rootParams]="rootParams"></ion-tab>
+</ion-tabs>
+</ion-content>

@@ -12,17 +12,17 @@ export class Constants {
   // Local URL
   //  public baseUrl = 'http://localhost/';
   // Sandbox URL
- // public baseUrl = 'http://10.10.73.77/';
+  //public baseUrl = 'http://10.10.73.77/';
   // Public URL
-   // public baseUrl = 'http://113.193.181.131/';
+   public baseUrl = 'http://113.193.181.131/';
   
   // Mobile team URL
-  // public baseUrl = 'http://10.10.73.62/';
+   //public baseUrl = 'http://10.10.73.62/';
 
   //    public baseUrl = 'http://10.10.73.12:802/';
     //anand
-    public baseUrl = 'http://10.10.73.9:8099/';
-    public notificationUrl='http://10.10.73.9:4201/getAllNotifications'
+  //  public baseUrl = 'http://10.10.73.9:8099/';
+    public notificationUrl='http://10.10.73.33:4201/getAllNotifications'
     public deleteNotificationUrl=this.baseUrl+'story/delete-notification'
    public loginUrl = this.baseUrl+"site/user-authentication";
    public getAllTicketDetails = this.baseUrl + "story/get-my-tickets-details";
@@ -50,6 +50,7 @@ export class Constants {
    // Ticket #153 filter
    public filterOptions = this.baseUrl+"story/get-filter-options";
    public getallStoryDetails = this.baseUrl+"story/get-all-story-details";
+   public globalSearch = this.baseUrl+"site/global-search";
    constructor() {
       console.log('Constants');
    }

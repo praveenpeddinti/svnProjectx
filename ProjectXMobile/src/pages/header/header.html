@@ -10,11 +10,29 @@
         <img src="assets/images/logo.png"/>
       </ion-buttons>
       <ion-title center>{{title}}</ion-title>
+<!--      <ion-searchbar [(ngModel)]="searchValue" (ionInput)="search($event)" autocorrect="off"></ion-searchbar>-->
+<!--        <ion-buttons right (click)="clickSearch()" *ngIf="searchBar==1">
+          <a ion-button icon-only >
+            <i class="ion-ios-search-strong" aria-hidden="true"></i>
+        </a>
+       </ion-buttons>-->
+    <div right>
+    <ion-icon *ngIf="!toggled && searchBar==1" (click)="toggle()" name="search"></ion-icon>
+    <ion-searchbar
+       *ngIf="toggled"
+       [(ngModel)]="searchValue"
+       (ionInput)="clickSearch($event)"
+       (ionCancel)="cancelSearch($event)"
+       (ionClear) = "cancelSearch($event)"
+       [showCancelButton]="true">
+    </ion-searchbar>
+    </div>
        <ion-buttons right>{{notify_count}}
          <a ion-button icon-only (click)="gotoNotification()">
             <i class="fa fa-bell" aria-hidden="true"></i>
         </a>
        </ion-buttons>
+<!--      <ion-icon name="search" (click)="clickSearch()" *ngIf="searchBar==1"></ion-icon>-->
       <ion-buttons right>
         <a ion-button icon-only (click)="openPopover($event)">
           <i class="fa fa-user-circle-o" aria-hidden="true"></i>
