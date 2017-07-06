@@ -1,16 +1,16 @@
 page-global-search-all {
-.globalsearch_header{padding:8px 10px 2px;font-size:14px;line-height:16px}
-.globalsearch_header i{width:22px;height:22px;border-radius:100px;display: inline-block;vertical-align: middle}
+.globalsearch_header{font-size:12px;line-height:16px}
+.globalsearch_header i{width:18px;height:18px;border-radius:100px;display: inline-block;vertical-align: middle}
 .globalsearch_header i.Story{background:#04355e;position: relative}
 .globalsearch_header i.Task{background:#21b3ff;position: relative}
-.globalsearch_header i:after{font-style:normal;color:#fff ;font-family: arial;font-weight:bold;position: absolute;left:0;right:0;text-align: center;font-size: 16px}
-.globalsearch_header i.Story:after{content:"S";top:3px}
-.globalsearch_header i.Task:after{content:"T";top:3px;}
-.globalsearch_content{padding:2px 10px 5px}
+.globalsearch_header i:after{font-style:normal;color:#fff ;font-family: arial;font-weight:bold;position: absolute;left:0;right:0;text-align: center;font-size: 14px}
+.globalsearch_header i.Story:after{content:"S";top:1px}
+.globalsearch_header i.Task:after{content:"T";top:2px;}
+.globalsearch_content{padding:2px 0px;}
 .globalsearch_content .globalsearch_contentouterdiv .width33per{width:33%;float:left}
 .globalsearch_content .globalsearch_contentouterdiv  .width34per{width:34%;float:left}
 .globalsearch_content .globalsearch_contentouterdiv:after{content:"";clear:both;display:block}
-.globalsearch_content .collabels{font-style: italic;color:#5b5b5b;font-size:12px}
+.globalsearch_content .collabels{font-style: italic;color:#a2a2a2;font-size:10px}
 .globalsearch_content .colresults{font-style: normal;font-size:13px}
 .globalsearch_content .colresultssmall{font-style: normal;font-size: 11px;}
 .globalsearch_footer{padding:7px 10px 5px;position: relative}
@@ -18,4 +18,46 @@ page-global-search-all {
 .globalsearch_footer .assignlabel{font-style: italic;color:#5b5b5b;font-size:12px;vertical-align: text-top;line-height: 13px}
 .globalsearch_footer .usericon {font-size:20px;color:#9c9c9c}
 .globalsearch_footer .username{font-weight:bold;font-size:13px;vertical-align: top}
+
+.ticketDate{ color: #0199e0;}
+.item-md{ padding:0px 10px ;border-bottom: soild 1px #f0f0f0;font-size:12px;}
+.ticketid{color: #0199e0;}
+.tickettitle{color: #0199e0;}
+.createdBy{color: #0199e0;}
+.ticketDesc{ font-size:12px; color: #4c4c4c;}
+ion-label {
+/*    white-space: nowrap;*/
+    white-space: normal;
+}
+
+.leftpanelcust {
+    padding: 65px 0px 5px 10px;
+    background: #ebedee;
+    color: #7b7b7b;
+    font-size: 14px;
+    line-height: 20px;
+}
+.leftpanelcust::after {
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAHBAMAAADzDtBxAAAAD1BMVEUAAAAAAAAAAAAAAAAAAABPDueNAAAABXRSTlMUCS0gBIh/TXEAAAAaSURBVAjXYxCEAgY4UIICBmMogMsgFLtAAQCNSwXZKOdPxgAAAABJRU5ErkJggg==);
+    background-repeat: repeat-x;
+    background-position: 0 -2px;
+    content: "";
+}
+
+item-md.item-block .item-inner {
+     padding-right: 0px; 
+    border-bottom: none;
+}
+.label-md {
+    margin: 10px 0px 10px 0;
+}
+
+.item-md.item-block .item-inner {padding-right: 0px!important}
+
+
 }

@@ -14,7 +14,7 @@
 
 
 <ion-content padding>
-    <div>Search result for <span class="heighlight">{{searchValue}}</span> in ProjectX.0</div>
+    <div class="leftpanelcust">Search result for <span class="heighlight">{{searchValue}}</span> in ProjectX.0</div>
 <ion-list>
             <ion-item *ngFor="let item of dataStoryTask">
                     <div class="dashboardbox_header">
@@ -23,12 +23,17 @@
                 <div>
                    <span class="ticketDesc">{{item.description}}</span> 
                 </div>
-                    <div class="dashboardbox_content">
+<!--                    <div class="dashboardbox_content">
                         <div class="dashboardbox_contentouterdiv">
                             <div class="width33per collabels">Last modified on <span class="ticketDate">({{item.UpdatedOn}})</span>, Created by <span class="createdBy">{{item.reportedby}}</span></div>
                         </div>
+                    </div>-->       
+                <div class="dashboardbox_content">
+                    <div class="dashboardbox_contentouterdiv">
+                        <div class="collabels">Last modified on <span class="ticketDate">({{item.UpdatedOn}})</span>, Created by <span class="createdBy">{{item.reportedby}}</span></div>
                     </div>
+                </div>
             </ion-item>
 </ion-list>
-<div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> No results found. </div>
+<div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> That’s all. No results found. </div>
 </ion-content>

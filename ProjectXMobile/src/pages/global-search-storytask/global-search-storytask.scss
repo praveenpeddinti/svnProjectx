@@ -1,21 +1,26 @@
 page-global-search-storytask {
-.dashboardouterbox{}
-.dashboardbox_header{padding:8px 10px 2px;font-size:14px;line-height:16px}
-.dashboardbox_header i{width:22px;height:22px;border-radius:100px;display: inline-block;vertical-align: middle}
+
+.dashboardbox_header{font-size:12px;line-height:16px}
+.dashboardbox_header i{width:18px;height:18px;border-radius:100px;display: inline-block;vertical-align: middle}
 .dashboardbox_header i.Story{background:#04355e;position: relative}
 .dashboardbox_header i.Task{background:#21b3ff;position: relative}
-.dashboardbox_header i:after{font-style:normal;color:#fff ;font-family: arial;font-weight:bold;position: absolute;left:0;right:0;text-align: center;font-size: 16px}
-.dashboardbox_header i.Story:after{content:"S";top:3px}
-.dashboardbox_header i.Task:after{content:"T";top:3px;}
-.dashboardbox_header .ticketid{font-weight:bold;color:#007ca9}
-.dashboardbox_header .tickettitle{font-weight:normal;color:#5b5b5b}
-.dashboardouterbox.item-md.item-block .item-inner, .dashboardouterbox.item-ios.item-block .item-inner, .dashboardouterbox.item-wp.item-block .item-inner{padding-right:0}
-.dashboardouterbox .label-md,.dashboardouterbox .label-ios, .dashboardouterbox .label-wp{margin:0}
+.dashboardbox_header i:after{font-style:normal;color:#fff ;font-family: arial;font-weight:bold;position: absolute;left:0;right:0;text-align: center;font-size: 14px}
+.dashboardbox_header i.Story:after{content:"S";top:1px}
+.dashboardbox_header i.Task:after{content:"T";top:2px;}
+.dashboardbox_content{padding:2px 0px!important;}
+.dashboardbox_header .globalsearch_contentouterdiv .width33per{width:33%;float:left}
+.dashboardbox_content .globalsearch_contentouterdiv  .width34per{width:34%;float:left}
+.dashboardbox_content .globalsearch_contentouterdiv:after{content:"";clear:both;display:block}
+.dashboardbox_content .collabels{font-style: italic;color:#a2a2a2;font-size:10px}
+.dashboardbox_content .colresults{font-style: normal;font-size:13px}
+.dashboardbox_content .colresultssmall{font-style: normal;font-size: 11px;}
+//.dashboardbox_header .tickettitle{font-weight:normal;color:#5b5b5b}
+.dashboardouterbox.item-md.item-block .item-inner, .dashboardouterbox.item-ios.item-block .item-inner, .dashboardouterbox.item-wp.item-block .item-inner{padding-right:0px!important;}
+.dashboardouterbox .label-md,.dashboardouterbox .label-ios, .dashboardouterbox .label-wp{margin:0px;}
 .dashboardbox_content{padding:2px 10px 5px}
 .dashboardbox_content .dashboardbox_contentouterdiv .width33per{width:33%;float:left}
 .dashboardbox_content .dashboardbox_contentouterdiv  .width34per{width:34%;float:left}
 .dashboardbox_content .dashboardbox_contentouterdiv:after{content:"";clear:both;display:block}
-.dashboardbox_content .collabels{font-style: italic;color:#5b5b5b;font-size:12px}
 .dashboardbox_content .colresults{font-style: normal;font-size:13px}
 .dashboardbox_content .colresultssmall{font-style: normal;font-size: 11px;}
 .dashboardbox_footer{padding:7px 10px 5px;position: relative}
@@ -24,4 +29,44 @@ page-global-search-storytask {
 .dashboardbox_footer .usericon {font-size:20px;color:#9c9c9c}
 .dashboardbox_footer .username{font-weight:bold;font-size:13px;vertical-align: top}
 .customcontention .list-md ion-item-sliding, .customcontention .list-ios ion-item-sliding, .customcontention .list-wp ion-item-sliding{background: #f4f4f4;margin-bottom:10px}
+
+.ticketDate{ color: #0199e0;}
+.item-md{ padding:0px 10px ;border-bottom: soild 1px #f0f0f0;font-size:12px;}
+.ticketid{color: #0199e0;}
+.tickettitle{color: #0199e0;}
+.createdBy{color: #0199e0;}
+.ticketDesc{ font-size:12px; color: #4c4c4c;}
+ion-label {
+/*    white-space: nowrap;*/
+    white-space: normal;
+}
+
+.leftpanelcust {
+    padding: 65px 0px 5px 10px;
+    background: #ebedee;
+    color: #7b7b7b;
+    font-size: 14px;
+    line-height: 20px;
+}
+.leftpanelcust::after {
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAHBAMAAADzDtBxAAAAD1BMVEUAAAAAAAAAAAAAAAAAAABPDueNAAAABXRSTlMUCS0gBIh/TXEAAAAaSURBVAjXYxCEAgY4UIICBmMogMsgFLtAAQCNSwXZKOdPxgAAAABJRU5ErkJggg==);
+    background-repeat: repeat-x;
+    background-position: 0 -2px;
+    content: "";
+}
+
+item-md.item-block .item-inner {
+     padding-right: 0px; 
+    border-bottom: none;
+}
+.label-md {
+    margin: 10px 0px 10px 0;
+}
+
+
 }

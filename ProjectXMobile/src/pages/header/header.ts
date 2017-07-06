@@ -5,6 +5,7 @@ import {LogoutPage} from '../logout/logout';
 import {NotificationPage} from '../notification/notification';
 import {Globalservice} from '../../providers/globalservice';
 import {GlobalSearch} from '../global-search/global-search';
+import {DashboardPage} from '../dashboard/dashboard';
 declare var jQuery: any;
 declare var socket:any;
 /**
@@ -28,7 +29,9 @@ public searchBar:any;
 public searchValue : any;
  public toggled: boolean;
  
-  constructor(private globalService: Globalservice,public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
+  constructor(private globalService: Globalservice,public navCtrl: NavController, 
+      public navParams: NavParams, public popoverCtrl: PopoverController,
+      private alertController: AlertController) {
   this.toggled = false;
   var headerInfo=JSON.parse(localStorage.getItem("headerInfo"));
   this.title=headerInfo.title;
@@ -37,13 +40,13 @@ public searchValue : any;
   this.leftPannel =headerInfo.leftPannel;
   this.searchBar = headerInfo.searchBar;
   var post_data = {};
-            var thisObj = this;
-            this.globalService.SocketSubscribe('getAllNotificationsCount', post_data);
-            socket.on('getAllNotificationsCountResponse', function (data) {
-                data = JSON.parse(data);
-                console.log("getAllNotificationsCountResponse-------Mobile----" + data.count);
-                thisObj.notify_count = data.count;
-            });
+//            var thisObj = this;
+//            this.globalService.SocketSubscribe('getAllNotificationsCount', post_data);
+//            socket.on('getAllNotificationsCountResponse', function (data) {
+//                data = JSON.parse(data);
+//                console.log("getAllNotificationsCountResponse-------Mobile----" + data.count);
+//                thisObj.notify_count = data.count;
+//            });
 
  }
 
@@ -58,10 +61,35 @@ public searchValue : any;
     public cancelSearch(){
        this.toggle(); 
     }
+    public backToggled(){
+        console.log("backToggled");
+        this.toggled = false;
+        this.navCtrl.setRoot(DashboardPage);
+    }
    public clickSearch(){
        console.log("searchValue is" + this.searchValue);
        var searchData = {"searchValue": this.searchValue};
+        //this.navCtrl.push(GlobalSearch, searchData);
+    }
+    submitSearch(){
+        var searchData = {"searchValue": this.searchValue};
+        if (this.searchValue == undefined) {
+            let alert = this.alertController.create({
+            title: 'Warning!',
+            message: 'Please enter search value!',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    handler: () => { }
+                }
+            ]
+        });
+        alert.present();
+        } else {
+        console.log("searchValue is22222" + this.searchValue);
         this.navCtrl.push(GlobalSearch, searchData);
+        }
     }
   public openPopover(myEvent) {  
         let popover = this.popoverCtrl.create(LogoutPage);

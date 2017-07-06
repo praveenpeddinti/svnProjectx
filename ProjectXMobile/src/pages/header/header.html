@@ -6,19 +6,31 @@
 -->
 <ion-header>
     <ion-navbar backbutton>
-      <ion-buttons left *ngIf="logo==1">
+      <ion-buttons left *ngIf="logo==1 && !toggled">
         <img src="assets/images/logo.png"/>
       </ion-buttons>
-      <ion-title center>{{title}}</ion-title>
+      <ion-title center *ngIf="!toggled">{{title}}</ion-title>
 <!--      <ion-searchbar [(ngModel)]="searchValue" (ionInput)="search($event)" autocorrect="off"></ion-searchbar>-->
 <!--        <ion-buttons right (click)="clickSearch()" *ngIf="searchBar==1">
           <a ion-button icon-only >
             <i class="ion-ios-search-strong" aria-hidden="true"></i>
         </a>
        </ion-buttons>-->
-    <div right>
-    <ion-icon *ngIf="!toggled && searchBar==1" (click)="toggle()" name="search"></ion-icon>
-    <ion-searchbar
+    
+<!--    <ion-icon *ngIf="!toggled && searchBar==1" (click)="toggle()" name="search"></ion-icon>-->
+<ion-buttons right *ngIf="!toggled && searchBar==1" >
+         <a ion-button icon-only (click)="toggle()">
+            <i class="fa fa-search" aria-hidden="true"></i>
+        </a>
+       </ion-buttons>
+
+<div class="search_border" *ngIf="toggled">
+    
+    <ion-row>
+        <button left *ngIf="toggled" (click)="backToggled()">
+        <ion-icon ios="ios-arrow-back2" md="md-arrow-back2"></ion-icon>
+    </button>
+    <ion-searchbar 
        *ngIf="toggled"
        [(ngModel)]="searchValue"
        (ionInput)="clickSearch($event)"
@@ -26,14 +38,19 @@
        (ionClear) = "cancelSearch($event)"
        [showCancelButton]="true">
     </ion-searchbar>
-    </div>
-       <ion-buttons right>{{notify_count}}
+    <button  *ngIf="toggled" type="submit" class="btn js-search-submit" (click)="submitSearch()">
+        <ion-icon name="search"></ion-icon>
+    </button>
+    </ion-row>
+ </div>
+    
+       <ion-buttons right *ngIf="!toggled">{{notify_count}}
          <a ion-button icon-only (click)="gotoNotification()">
             <i class="fa fa-bell" aria-hidden="true"></i>
         </a>
        </ion-buttons>
 <!--      <ion-icon name="search" (click)="clickSearch()" *ngIf="searchBar==1"></ion-icon>-->
-      <ion-buttons right>
+      <ion-buttons right *ngIf="!toggled">
         <a ion-button icon-only (click)="openPopover($event)">
           <i class="fa fa-user-circle-o" aria-hidden="true"></i>
         </a>

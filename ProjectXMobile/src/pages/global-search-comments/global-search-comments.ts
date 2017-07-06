@@ -58,14 +58,4 @@ ionViewDidEnter(){
   ionViewDidLoad() {
     console.log('ionViewDidLoad GlobalSearchComments');
   }
-//    search(event){
-//         var getglobalParams = { page: 1, searchString:this.searchValue};
-//         console.log("this.searchString" + this.searchValue);
-//        this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
-//       (result) => {
-//           this.dataCollection = result.data.ticketComments;
-//           console.log("ticketCollection main page" + JSON.stringify(this.dataCollection));
-//       },(error) => {
-//      });
-//}
 }

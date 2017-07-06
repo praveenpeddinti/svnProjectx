@@ -1,3 +1,65 @@
 page-header {
+.toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {
+    width: 50%;
+}
+
+/*.search_border{ border-bottom: solid 1px #fff;}*/
+
+.js-search-submit{ position: absolute; right:0px; top: 8px; font-size: 1.8em;color:#fff; background: none!important;}
+
+.searchbar-input{color: #fff!important; background: none!important;box-shadow: none!important; }
+.page-header .toolbar .searchbar-md, .page-header .toolbar .searchbar-ios, .page-header .toolbar .searchbar-wp{
+    width: 100%;
+}
+.searchbar-search-icon { background-image:none!important; display: none!important;}
+
+.searchbar-clear-icon {background-image:none!important;}
+
+/*.searchbar-md .searchbar-search-icon{ background-image: url(../assets/icon/search-all.png)!important;
+    background-repeat: no-repeat;}*/
+.ion-md-search{ top:5px!important;}
+.ion-md-search::before{content:"\f002"!important;font-family: FontAwesome!important;
+color: #fff!important;
+/*    font-size:0.8em!important;*/
+}
+
+
+
+/*.searchbar-md .searchbar-search-icon{   content: "\f060"!important;
+    color: #fff!important; font-family: FontAwesome!important;}*/
+
+.ion-md-arrow-back2{ left:10px!important;}
+.ion-md-arrow-back2::before {
+    content: "\f060"!important;
+    color: #fff!important;
+     font-family: FontAwesome!important;
+     font-size: 1.6em!important;
+}
+
+.ion-md-arrow-back::before {
+   background: none;
+    color: #fff!important;
+     font-family: FontAwesome!important;
+     font-size: 1.6em!important;
+     display:none!important;
+}
+
+/*.searchbar-md .searchbar-clear-icon{ background-image: url(../assets/icon/search-all.png)!important;
+    background-repeat: no-repeat;}*/
+.toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {
+    width: 90%;
+    border-bottom:soild 1px #fff;
+}
+
+
+.searchbar-input{ color: #fff!important; padding-left: 0px!important;}
+
+.searchbar-input::before{display: none!important;}
+
+button{ background: none!important;}
+.searchbar-has-focus{ content: none!important; background: none!important;}
+
+.searchbar{ border-bottom:soild 1px #fff;}
+
 
 }

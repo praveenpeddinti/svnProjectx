@@ -31,11 +31,14 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="padding10">
-      <div>
-          <ion-row>
-          <label class="customlabel pull-right">{{totalCount}} total</label>
-          <label class="customlabel pull-left padding-left: 10px;" let i=index; (tap)="openOptionsModal(field, i)"><ion-icon ios="ios-options" md="md-options"></ion-icon>Filters</label>
-          </ion-row>
+      <div style="clear:both;">
+ 
+              <div class="col50">
+                  <label class="customlabel">{{totalCount}} total</label></div>
+           <div class="col50">
+               <div class="col50textright"><label class="customlabel " let i=index; (tap)="openOptionsModal(field, i)"><ion-icon ios="ios-options" md="md-options"></ion-icon> &nbsp;Filters</label>
+           </div>
+           </div> 
       </div>
       
       
