@@ -179,10 +179,16 @@ ion-header{
     .toolbar-md { padding: 0px!important;}
 }
 
-.searchbar{ border-bottom:soild 1px #fff;}
+/*.searchbar{ border-bottom:soild 1px #fff;}*/
 .toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {
     width: 100%!important;
-    border-bottom:soild 1px #fff!important;
+    
+}
+
+
+
+.searchbar-input-container {
+   border-bottom:solid 1px #fff!important;
 }
 
 }

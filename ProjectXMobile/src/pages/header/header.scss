@@ -1,15 +1,15 @@
 page-header {
-.toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {
+/*.toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {
     width: 50%;
-}
+}*/
 
 /*.search_border{ border-bottom: solid 1px #fff;}*/
 
 .js-search-submit{ position: absolute; right:0px; top: 8px; font-size: 1.8em;color:#fff; background: none!important;}
 
 .searchbar-input{color: #fff!important; background: none!important;box-shadow: none!important; }
-.page-header .toolbar .searchbar-md, .page-header .toolbar .searchbar-ios, .page-header .toolbar .searchbar-wp{
-    width: 100%;
+.toolbar .searchbar-md, .toolbar .searchbar-ios, .toolbar .searchbar-wp{
+    width:70%!important;
 }
 .searchbar-search-icon { background-image:none!important; display: none!important;}
 
@@ -46,10 +46,7 @@ color: #fff!important;
 
 /*.searchbar-md .searchbar-clear-icon{ background-image: url(../assets/icon/search-all.png)!important;
     background-repeat: no-repeat;}*/
-.toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {
-    width: 70%;
-    border-bottom:soild 1px #fff;
-}
+
 
 
 .searchbar-input{ color: #fff!important; padding-left: 0px!important;}
@@ -61,5 +58,8 @@ button{ background: none!important;}
 
 .searchbar{ border-bottom:soild 1px #fff;}
 
+.searchbar-input-container {
+   border-bottom:solid 1px #fff!important;
+}
 
 }
