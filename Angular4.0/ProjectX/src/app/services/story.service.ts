@@ -80,4 +80,16 @@ getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,selectedOption,
     });
   }
 
+  getPreferences(getPreferenceDetailsCallback)
+  {
+    var post_data={
+      
+    }
+    this._ajaxService.AjaxSubscribe("story/get-preference",post_data,(data)=>
+    { 
+         
+    getPreferenceDetailsCallback(data);
+    });
+  }
+
 }
