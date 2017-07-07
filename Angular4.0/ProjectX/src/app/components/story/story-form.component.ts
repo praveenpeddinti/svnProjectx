@@ -51,17 +51,16 @@ export class StoryComponent
   
     ngOnInit() 
     {
+        let jsonForm={};//added by Ryan
         this._service.getStoryFields(1,(response)=>
         {
-            for (let task of response.data.task_types) {
-            this.selectedTickets.push(task.Id)
-            }
+            
             this.taskArray=response.data.task_types;
-              let jsonForm={};
+              
               let DefaultValue;
                jsonForm['title'] ='';
                jsonForm['description'] ='';
-               jsonForm['tasks']=this.selectedTickets;
+               //jsonForm['tasks']=this.selectedTickets;--> removed
                jsonForm['default_task']=[];
               if(response.statusCode==200)
               {
@@ -83,7 +82,7 @@ export class StoryComponent
                        {'lable':element.Title,'model':element.Field_Name,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray[0].filterValue,"labels":listItemArray}
                        )
                   });
-                this.form = jsonForm;
+                //this.form = jsonForm;-->removed
               }else{
                     console.log("storyFrom Component ngOnInit fail---");
               }
@@ -93,7 +92,21 @@ export class StoryComponent
         {
             e.preventDefault();
         }
-        }); 
+    }); 
+    
+    /* Added By Ryan */ 
+    this._service.getPreferences((response)=>
+    {
+        var preferences=response.data.PreferenceItems;
+        var preferences_array=preferences.split(',');
+        for(let item of preferences_array)
+        {
+            
+            this.selectedTickets.push(item.trim());
+        }
+        jsonForm['tasks']=this.selectedTickets;//shifted by Ryan from above
+    })
+        this.form = jsonForm;//shifted by Ryan from above
     }
 
     /**
