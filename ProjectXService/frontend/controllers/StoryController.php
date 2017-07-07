@@ -187,7 +187,8 @@ class StoryController extends Controller
                     $ticketNumber = ServiceFactory::getStoryServiceInstance()->saveTicketDetails($ticket_data,$parentTicNumber);
                     array_push($childTicketObjArray, array("TaskId"=>$ticketNumber,"TaskType"=>(int)$value->Id));
                     }
-                $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($projectId,$parentTicNumber,$childTicketObjArray);     
+                $updateParentTaskArray = ServiceFactory::getStoryServiceInstance()->updateParentTicketTaskField($projectId,$parentTicNumber,$childTicketObjArray);
+                ServiceFactory::getStoryServiceInstance()->saveUserPreferences($ticket_data->userInfo->Id,$defaultTicketsArray); //added by Ryan
                 }
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -1009,8 +1010,31 @@ class StoryController extends Controller
         }
     }
     
+     /*
+    * @author Ryan Marshal
+    * @description This method is used to get the preferences of prechecked tasks in Story Creation.
+    * @return type Json
+    */
+    public function actionGetPreference()
+    {
+        try{
+            $ticketData = json_decode(file_get_contents("php://input"));
+            $loginUserId=$ticketData->userInfo->Id;
+            $preference_items = ServiceFactory::getStoryServiceInstance()->getUserPreferences($loginUserId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $preference_items;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+            
+        } catch (Exception $ex) {
+            Yii::log("StoryController:actionGetPreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            
+        }
+    }
+    
 }
-
 
 
 ?>
