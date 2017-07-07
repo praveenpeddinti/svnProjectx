@@ -22,8 +22,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 .toolbar .searchbar-md, .toolbar .searchbar-wp{
     width:70%!important;
 }
-
 .toolbar .searchbar-ios{width:80%!important;}
+
 .searchbar-search-icon { background-image:none!important; display: none!important;}
 
 .searchbar-clear-icon {background-image:none!important;}
@@ -110,7 +110,8 @@ button{ background: none!important;}
 }
 .toolbar .searchbar-ios.searchbar-has-focus .searchbar-ios-cancel{ display:none!important;}
 
-.bar-button-md, .bar-button-ios, .bar-button-wp{font-size:0.8em!important;} 
+/*.bar-button-md, .bar-button-ios, .bar-button-wp{font-size:0.8em!important;} */
+
 
 
 }
