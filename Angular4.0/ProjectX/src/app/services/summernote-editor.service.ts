@@ -40,11 +40,11 @@ export class SummerNoteEditorService
                             users:function(keyword,callback)
                             {
                                 console.log("===In users=="+keyword);
-                                var params={ProjectId:1,search_term:keyword};
+                                var params={search_term:keyword};
                                 var getAllData=  JSON.parse(localStorage.getItem('user'));
                                 if(getAllData != null){
                                     params["userInfo"] = getAllData;
-                                    params["projectId"] = 1;
+                                    params["projectId"] = localStorage.getItem('ProjectId');
                                     params["timeZone"] = jstz.determine_timezone().name();
                                     }
                                 var url=GlobalVariable.BASE_API_URL+"story/get-collaborators";
