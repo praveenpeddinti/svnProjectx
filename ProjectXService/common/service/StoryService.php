@@ -2,7 +2,7 @@
 namespace common\service;
 use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
 use common\components\{CommonUtility,NotificationTrait};
-use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects};
+use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects,UserPreferences};
 use common\models\bean\FieldBean;
 use Yii;
 
@@ -305,7 +305,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
 
                 }
                            
-
+                
               /* Notification End By Ryan */
                 return $ticketNumber;
           }
@@ -1754,6 +1754,38 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             return $finalData;
         } catch (Exception $ex) {
             Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+     /**
+     * @author Ryan
+     * @uses Saves User Preferences in Story Creation
+     * @return type
+     */
+    public function saveUserPreferences($userid,$tasks)
+    {
+        try{
+            
+            UserPreferences::savePreference($userid,$tasks);
+        } catch (Exception $ex) {
+            Yii::log("StoryService:saveUserPreferences::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
+    }
+    
+    /**
+     * @author Ryan
+     * @uses Gets User Preferences 
+     * @return type
+     */
+    public function getUserPreferences($userid)
+    {
+        try
+        {
+           $preference_items=UserPreferences::getPreference($userid);
+           return $preference_items;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getUserPreferences::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 
