@@ -110,9 +110,9 @@ color:#fff; font-size:12px; text-align: center; vertical-align: middle; font-wei
 
 
 
-.searchbar-md .searchbar-input{ color: #fff!important; padding-left: 0px!important;}
-.searchbar-ios .searchbar-input{ color: #fff!important; padding-left: 0px!important;}
-.searchbar-wp .searchbar-input{ color: #fff!important; padding-left: 0px!important;}
+.searchbar-md .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
+.searchbar-ios .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
+.searchbar-wp .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
 
 .searchbar-input::before{display: none!important;}
 
