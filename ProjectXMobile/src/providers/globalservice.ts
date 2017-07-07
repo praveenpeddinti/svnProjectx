@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable,Input,Output,EventEmitter} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Storage} from '@ionic/storage';
@@ -11,6 +11,7 @@ declare var socket:any;
 */
 @Injectable()
 export class Globalservice {
+     @Output() latestActivity: EventEmitter<any> = new EventEmitter();
     localDate = new Date().toISOString();
     private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
     params: {userInfo?: any, projectId?: any,timeZone?:any} = {};
@@ -171,11 +172,17 @@ public deleteNotification(url:string,params:Object){
       params["clientType"] = 'mobile';
       params["userInfo"] = userInfo;
       params["projectId"] = 1;
-      params["timeZone"] = "Asia/Kolkata"
+      params["timeZone"] = "Asia/Kolkata";
     }
-     var response = this.http.post(url, params, this.headers).map(
-            res => res.json()
-        );
-        return response;
+      return this.ajaxCall(url,params);
+}
+
+public setActivity(data:any){
+    var activity={activityData:data}
+    this.latestActivity.emit(activity);
+}
+
+public getActivity(){
+    return this.latestActivity;
 }
 }

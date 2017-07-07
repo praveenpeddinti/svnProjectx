@@ -10,14 +10,6 @@
         <img src="assets/images/logo.png"/>
       </ion-buttons>
       <ion-title center *ngIf="!toggled">{{title}}</ion-title>
-<!--      <ion-searchbar [(ngModel)]="searchValue" (ionInput)="search($event)" autocorrect="off"></ion-searchbar>-->
-<!--        <ion-buttons right (click)="clickSearch()" *ngIf="searchBar==1">
-          <a ion-button icon-only >
-            <i class="ion-ios-search-strong" aria-hidden="true"></i>
-        </a>
-       </ion-buttons>-->
-    
-<!--    <ion-icon *ngIf="!toggled && searchBar==1" (click)="toggle()" name="search"></ion-icon>-->
 <ion-buttons right *ngIf="!toggled && searchBar==1" >
          <a ion-button icon-only (click)="toggle()">
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -44,13 +36,14 @@
     </ion-row>
  </div>
     
-       <ion-buttons right *ngIf="!toggled">{{notify_count}}
+       <ion-buttons right *ngIf="!toggled && notification==1">
+ <div class="not_count" *ngIf="notify_count!=0">{{notify_count}}</div>
          <a ion-button icon-only (click)="gotoNotification()">
             <i class="fa fa-bell" aria-hidden="true"></i>
         </a>
        </ion-buttons>
 <!--      <ion-icon name="search" (click)="clickSearch()" *ngIf="searchBar==1"></ion-icon>-->
-      <ion-buttons right *ngIf="!toggled">
+      <ion-buttons right *ngIf="!toggled && profile==1">
         <a ion-button icon-only (click)="openPopover($event)">
           <i class="fa fa-user-circle-o" aria-hidden="true"></i>
         </a>

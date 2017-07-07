@@ -44,7 +44,9 @@ import {GlobalSearchUsers} from '../pages/global-search-users/global-search-user
 //import { StoryWorklogPage } from '../pages/story-worklog/story-worklog';
 import { NotificationPage } from '../pages/notification/notification';
 import { HeaderPage } from '../pages/header/header';
-
+import { UnreadNotificationPage } from '../pages/unread-notification/unread-notification';
+import { AllNotificationPage } from '../pages/all-notification/all-notification';
+declare var socket:any;
 @NgModule({
   declarations: [
     MyApp,
@@ -68,7 +70,9 @@ import { HeaderPage } from '../pages/header/header';
     GlobalSearchStorytask,
     GlobalSearchUsers,
     NotificationPage,
-    HeaderPage
+    HeaderPage,
+    UnreadNotificationPage,
+    AllNotificationPage
   ],
   imports: [
     IonicModule.forRoot(MyApp),
@@ -101,7 +105,9 @@ import { HeaderPage } from '../pages/header/header';
     GlobalSearchStorytask,
     GlobalSearchUsers,
     NotificationPage,
-    HeaderPage
+    HeaderPage,
+    UnreadNotificationPage,
+    AllNotificationPage
   ],
   providers: [AutoCompleteProvider, Globalservice, Camera, File, Transfer, FilePath, Constants, {provide: ErrorHandler, useClass: IonicErrorHandler}]
 

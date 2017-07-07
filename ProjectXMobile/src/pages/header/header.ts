@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,NgZone } from '@angular/core';
 import {IonicPage,NavController, NavParams, AlertController, ViewController, LoadingController, PopoverController, ModalController, Platform} from 'ionic-angular';
 import {Storage} from "@ionic/storage";
 import {LogoutPage} from '../logout/logout';
@@ -24,29 +24,36 @@ public notify_count:any='';
 public title:any;
 public backbutton:any;
 public logo:any;
+public ngZone:any;
 public leftPannel:any
+public notification:any;
+public profile:any;
 public searchBar:any;
 public searchValue : any;
  public toggled: boolean;
- 
-  constructor(private globalService: Globalservice,public navCtrl: NavController, 
-      public navParams: NavParams, public popoverCtrl: PopoverController,
-      private alertController: AlertController) {
+  constructor(private globalService: Globalservice,public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController, private alertController: AlertController) {
   this.toggled = false;
   var headerInfo=JSON.parse(localStorage.getItem("headerInfo"));
   this.title=headerInfo.title;
   this.backbutton=headerInfo.backbutton;
   this.logo =headerInfo.logo;
   this.leftPannel =headerInfo.leftPannel;
+  this.notification=headerInfo.notification;
+  this.profile=headerInfo.profile;
   this.searchBar = headerInfo.searchBar;
   var post_data = {};
-//            var thisObj = this;
-//            this.globalService.SocketSubscribe('getAllNotificationsCount', post_data);
-//            socket.on('getAllNotificationsCountResponse', function (data) {
-//                data = JSON.parse(data);
-//                console.log("getAllNotificationsCountResponse-------Mobile----" + data.count);
-//                thisObj.notify_count = data.count;
-//            });
+  this.ngZone = new NgZone({ enableLongStackTrace: false });
+            var thisObj = this;
+            this.globalService.SocketSubscribe('getAllNotificationsCount', post_data);
+            socket.on('getAllNotificationsCountResponse', function (data) {
+                data = JSON.parse(data);
+                console.log("getAllNotificationsCountResponse-------Mobile----" + data.count);
+               thisObj.ngZone.run(() => {
+                   thisObj.notify_count = data.count;
+                 });
+              
+                console.log("new__count__"+thisObj.notify_count);
+            });
 
  }
 

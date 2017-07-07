@@ -6,7 +6,7 @@
 }
 .unread_notifications{ background:#ebedee; margin-bottom:1px; padding:10px 25px 5px 35px; position:relative;
  height:auto; min-height: 60px!important;}
-.read_notifications{ background:#fff!important; border-bottom:1px soild #f3f4f5!important;}
+.read_notifications{ background:#fff!important; border-bottom:1px solid #f3f4f5!important;}
 .notifications_name{ color:#0199e0;vertical-align:top; }
 .notifications_name a{ color:#0199e0; text-decoration:none;}
 .notifications_name2{ color:#4c4c4c;vertical-align:top;}
@@ -103,71 +103,3 @@ font-size: 12px; padding-top:2px;
     left:4px;
      font-size: 12px;
 }*/
-
-.unread_tab{
- margin-right: 5px;background-color: #0199e0;
-}
-.tabs-md .tabbar, .tabs-ios .tabbar, .tabs-wp .tabbar {
-    background: #2087b6 none repeat scroll 0 0;
-}
-
-.tabs-md .tab-button[aria-selected="true"], .tabs-ios .tab-button[aria-selected="true"], .tabs-wp .tab-button[aria-selected="true"]{background: #1a6c92;color:#fff}
-.tabs-md .tab-button, .tabs-wp .tab-button {color: rgba(255, 255, 255, 1); font-size: 2.5rem;min-width:3rem}
-.tabs-md .tab-button[aria-selected="true"] .tab-button-text, .tabs-ios .tab-button[aria-selected="true"] .tab-button-text, .tabs-wp .tab-button[aria-selected="true"] .tab-button-text{transform: scale3d(1, 1, 1);}
-.tabs-ios .tab-button{color: rgba(255, 255, 255, 1); font-size: 1.6rem;min-width:3rem}
-
-.tabs .tab-item .icon.allnotifications {
-  background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-  background-image: url('../assets/icon/All-notifictions.png');
-  background-size:contain;
-}
-
-.tabs .tab-item .icon.Unreadnotifications {
-  background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-  background-image: url('../assets/icon/unread-notifictions.png');
-  background-size:contain;
-}
-
-.ion-md-Unread::before, .ion-ios-Unread::before, .ion-wp-Unread::before {
-    background-image: url('../assets/icon/unread-notifictions.png');
-    background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-    color:#fff;
-    content:"";
-    display:block
-     /*background-size:contain;
-    content: "\f0f3";color:#fff;*/
-}
-
-/*.Unread{background-image: url('../../assets/icon/unread-notifictions.png');
-    background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-    color:#fff;
-     background-size:contain;}*/
-
-.ion-md-Unread, .ion-ios-Unread,ion-wp-Unread,.ion-md-All, .ion-ios-All, .ion-wp-All{height:30px; width:25px;}
-/*.ion-md-All::before, .ion-ios-All::before, .ion-wp-All::before {
-    
-     content: "\f0f3";color:#fff;
-}*/
-
-.ion-md-All::before, .ion-ios-All::before, .ion-wp-All::before {
-    background-image: url('../assets/icon/All-notifictions.png');
-    background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-    color:#fff;
-    content:"";
-    display:block
-     /*background-size:contain;
-    content: "\f0f3";color:#fff;*/
-}
-
-
-

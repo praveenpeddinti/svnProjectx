@@ -113,10 +113,14 @@ export class StoryDetailsFollowers {
             ticketId: this.storyTicketId,
             collaboratorId: followerId,
         };
+        var thisObj=this;
         this.globalService.makeUsersFollowTicket(this.constants.makeUsersFollowTicket, followerData).subscribe(
             (result) => {
                 if (result.statusCode == 200) {
                     this.followers.push(result.data);
+                    if (result.data.activityData!='') {
+                        thisObj.globalService.setActivity(result.data.activityData);
+                    }
                 }
             },
             (error) => {
@@ -149,6 +153,7 @@ export class StoryDetailsFollowers {
             ticketId: this.storyTicketId,
             collaboratorId: followerId
         };
+        var thisObj=this;
         this.globalService.makeUsersUnfollowTicket(this.constants.makeUsersUnfollowTicket, followerData).subscribe(
             (result) => {
                 if (result.statusCode == 200) {
@@ -156,6 +161,9 @@ export class StoryDetailsFollowers {
                     this.followers = this.followers.filter(function (el) {
                         return el.FollowerId !== followerId;
                     });
+                     if (result.data.activityData!='') {
+                        thisObj.globalService.setActivity(result.data.activityData);
+                    }
                 }
             },
             (error) => {

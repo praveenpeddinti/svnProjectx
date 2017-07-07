@@ -124,7 +124,7 @@ export class StoryDetailsPage {
         private alertController: AlertController,
         public navCtrl: NavController,
         public autoCompleteProvider: AutoCompleteProvider ) {
-        localStorage.setItem('headerInfo',JSON.stringify({'title':"Story Details",'backButton':"",'logo':0,'leftPannel':1}));
+        localStorage.setItem('headerInfo',JSON.stringify({'title':"Story Details",'backButton':"",'logo':0,'leftPannel':1,notification:1,profile:1}));
            this.navParams = navParams;
            this.StoryDetailsComments = StoryDetailsComments;
            this.StoryDetailsFollowers = StoryDetailsFollowers;
@@ -144,7 +144,7 @@ export class StoryDetailsPage {
         StoryDetailsPage.menuControler = menu;
         this.minDate = new Date().toISOString();
         let loader = this.loadingController.create({ content: "Loading..." });
-        loader.present();
+       // loader.present();
        var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
             this.userName = userInfo.username;
             // Ticket #113
@@ -153,6 +153,7 @@ export class StoryDetailsPage {
       //  });
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.navParams.get("id")).subscribe(
             result => {
+                console.log("ticket_details___"+JSON.stringify(result));
                 this.taskDetails.ticketId = result.data.TicketId;
                 this.taskDetails.title = result.data.Title;
                 this.taskDetails.description = result.data.Description;
@@ -272,17 +273,16 @@ export class StoryDetailsPage {
         StoryDetailsPage.isMenuOpen = false;
     }
     public dateChange(event, index, fieldDetails) {
+        var thisObj=this;
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, this.localDate, fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
                     document.getElementById("field_title_" + index).innerHTML = this.datePipe.transform(this.localDate, 'MMM-dd-yyyy');
                     this.enableDataPicker[index] = false;
                     document.getElementById("field_title_" + index).style.display = 'block';
-                    if (result.data.activityData.referenceKey == -1) {
-                        this.itemsInActivities.push(result.data.activityData.data);
-                    } else {
-                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
-                    }
+                    if (result.data.activityData!='') {
+                         thisObj.globalService.setActivity(result.data.activityData);
+                    } 
                 }, 300);
             },
             (error) => {
@@ -331,6 +331,7 @@ export class StoryDetailsPage {
         this.showEditableFieldOnly[index] = false;
     }
     public changeOption(event, index, fieldDetails) {
+        var thisObj=this;
         this.readOnlyDropDownField = false;
         this.showEditableFieldOnly[index] = false;
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.Id), fieldDetails).subscribe(
@@ -342,11 +343,14 @@ export class StoryDetailsPage {
                     } else if(fieldDetails.fieldName == "workflow"){
                         jQuery("#field_title_" + (index-1) + " div").text(result.data.updatedState.state);
                     }
-                    if (result.data.activityData.referenceKey == -1) {
-                        this.itemsInActivities.push(result.data.activityData.data);
-                    } else {
-                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+                    if (result.data.activityData!='') {
+                        thisObj.globalService.setActivity(result.data.activityData);
                     }
+                    // if (result.data.activityData.referenceKey == -1) {
+                    //     this.itemsInActivities.push(result.data.activityData.data);
+                    // } else {
+                    //     this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+                    // }
                 }, 300);
             },
             (error) => {
@@ -354,6 +358,7 @@ export class StoryDetailsPage {
             });
     }
     public inputBlurMethod(event, index, fieldDetails) {
+         var thisObj=this;
         this.globalService.leftFieldUpdateInline(this.constants.leftFieldUpdateInline, (event.target.value), fieldDetails).subscribe(
             (result) => {
                 setTimeout(() => {
@@ -361,11 +366,14 @@ export class StoryDetailsPage {
                     this.enableTextArea[index] = false;
                     document.getElementById("field_title_" + index).style.display = 'block';
                     document.getElementById("field_title_" + index).innerHTML = (event.target.value);
-                    if (result.data.activityData.referenceKey == -1) {
-                        this.itemsInActivities.push(result.data.activityData.data);
-                    } else {
-                        this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+                    if (result.data.activityData!='') {
+                        thisObj.globalService.setActivity(result.data.activityData);
                     }
+                    // if (result.data.activityData.referenceKey == -1) {
+                    //     this.itemsInActivities.push(result.data.activityData.data);
+                    // } else {
+                    //     this.itemsInActivities[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
+                    // }
                 }, 200);
             },
             (error) => {
@@ -429,7 +437,6 @@ export class StoryDetailsPage {
                         }
                     StoryDetailsPage.optionsModal = this.modalController.create(CustomModalPage, { activeField: fieldDetails, activatedFieldIndex: index, displayList: this.displayFieldvalue });
                     StoryDetailsPage.optionsModal.onDidDismiss((data) => {
-                        alert(JSON.stringify(data));
                         if (data != null && (data.Name != data.previousValue)) {
                             this.changeOption(data, index, fieldDetails);
                         }

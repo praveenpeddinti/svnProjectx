@@ -64,6 +64,7 @@
                 </div>
                   <div class="ticketActivity" *ngIf="eachProperty.SpecialActivity== 1" >
                   <span *ngIf="eachProperty.type=='follower'"><span class="bold">{{(eachActivity.ActivityBy.UserName == eachProperty.ActionFieldTitle.Name)?'You':eachProperty.ActionFieldTitle.Name}}</span> {{eachProperty.Action}}&nbsp; <span class="bold" >{{ eachProperty.NewValue}}</span> </span> 
+                <div class="activityDate">({{eachProperty.ActivityOn}})</div>
                 </div>
                 <div class="divider"></div>
             </div>

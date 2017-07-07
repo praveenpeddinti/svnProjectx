@@ -32,7 +32,7 @@ export class LoginPage {
                 (result)=>{
                         if (result.status=='200'){
                             localStorage.setItem("userCredentials",JSON.stringify(result.data));
-                           // alert(localStorage.getItem("userCredentials"));
+// alert(localStorage.getItem("userCredentials"));
                             // alert('out-'+ this.login.username);
                              let userCredentials = {username: this.login.username};
                              this.navCtrl.setRoot(DashboardPage, userCredentials);

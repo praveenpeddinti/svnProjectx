@@ -15,6 +15,7 @@ import { CustomModalPage } from '../custom-modal/custom-modal';
 declare var cordova: any;
 declare var jQuery: any;
 declare var RE: any;
+declare var socket:any;
 /**
  * Generated class for the StoryDetailsComments page.
  *
@@ -64,6 +65,7 @@ export class StoryDetailsComments {
     public localDate: any = new Date();
     public minDate: any = new Date();
     public userName: any = '';
+    public ngZone: any;
     public static optionsModal;
     //  public static isMenuOpen: boolean = false;
     //    public static menuControler;
@@ -90,18 +92,27 @@ export class StoryDetailsComments {
         public actionSheetCtrl: ActionSheetController,
         public platform: Platform,
         private storage: Storage,
-        private ngZone: NgZone,
         private alertController: AlertController, ) {
         let loader = this.loadingController.create({ content: "Loading..." });
         loader.present();
         var userInfo = JSON.parse(localStorage.getItem("userCredentials"));
         this.userName = userInfo.username;
-
+        this.ngZone = new NgZone({ enableLongStackTrace: false });
+        var thisObj=this;
         this.storyTicketId = this.navParams.data.ticketId;
+        var post_data = {'ticketId': this.storyTicketId}; 
         console.log("the story details comments ticket id " + JSON.stringify(this.storyTicketId));
         this.itemsInActivities = [];
-
-        //ticket details 
+        this.globalService.SocketSubscribe('getLatestActivities', post_data);
+         socket.on('getLatestActivitiesResponse', function (data) {
+                data = JSON.parse(data);
+                console.log("getLatestActivitiesResponse------Mobile----" + JSON.stringify(data));
+                thisObj.ngZone.run(() => {
+                   thisObj.itemsInActivities=data.activityData.Activities;
+                   // console.log("getLatestActivitiesResponse------Zone" + JSON.stringify(thisObj.itemsInActivities));
+                 });
+              
+            });
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.storyTicketId).subscribe(
             result => {
                 this.taskDetails.ticketId = this.storyTicketId;
@@ -181,6 +192,7 @@ export class StoryDetailsComments {
             (result) => {
                 this.itemsInActivities = result.data.Activities;
             }, (error) => {
+                 loader.dismiss();
             }
         );
         this.progressNew = 0;
@@ -219,6 +231,17 @@ export class StoryDetailsComments {
         });
     }
     ionViewDidLoad() {
+        this.globalService.getActivity().subscribe(value=>
+      {
+          console.log("___________________III___________LL____"+JSON.stringify(value));
+           if (value.activityData.referenceKey == -1) {
+                        this.itemsInActivities.push(value.activityData.data);
+                    } else {
+                        this.itemsInActivities[value.activityData.referenceKey]["PropertyChanges"].push(value.activityData.data);
+                    } 
+
+
+      })
         setTimeout(() => {
             var slug = this.navParams.get("slug"); 
             if (jQuery("." + slug).length > 0) {
@@ -730,5 +753,12 @@ callback(userList);
     handleKeyPad(event) {
         // alert(JSON.stringify(event))  ;
     }
+
+    /**
+     * Node call for getting the activity
+     */
+
+     
+           
 
 }

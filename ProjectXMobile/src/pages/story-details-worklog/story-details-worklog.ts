@@ -84,7 +84,11 @@ export class StoryDetailsWorklog {
         setTimeout(() => {
           thisObj.inputHourslog = null;
           thisObj.workedLogtime= result.data.timeLogData;
+            
         }, 200);
+        if (result.data.activityData!='') {
+              thisObj.globalService.setActivity(result.data.activityData);
+       }
       },
       (error) => {
       });

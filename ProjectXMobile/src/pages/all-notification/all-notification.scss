@@ -1,0 +1,68 @@
+/* notification div */
+.padding10{padding:65px 0px 0px}
+.item-md.item-block .item-inner {padding-right:0px!important; border-bottom:none!important;}
+.label-md {
+    margin:0px!important;
+}
+.unread_notifications{ background:#ebedee; margin-bottom:1px; padding:10px 25px 5px 35px; position:relative;
+ height:auto; min-height: 60px!important;}
+.read_notifications{ background:#fff!important; border-bottom:1px solid #f3f4f5!important;}
+.notifications_name{ color:#0199e0;vertical-align:top; }
+.notifications_name a{ color:#0199e0; text-decoration:none;}
+.notifications_name2{ color:#4c4c4c;vertical-align:top;}
+.noti_date{ color:#a2a2a2; font-size:10px; float: left; width: 100%; line-height: 15px;}
+.notificationusericon{ position: absolute; width: 24px; height: 24px; left:5px;}
+.notificationusericon img{ width: 24px; height: 24px; border-radius:100%;}
+.unread_notifications i.Story {
+    background: #04355e none repeat scroll 0 0;
+    position: relative;
+    color: #fff;
+}
+
+.unread_notifications i.Story::after {
+    content: "S";
+    position: absolute;
+    top: 2px;
+    left:4px;
+    font-weight: bold; font-size: 12px;
+}
+.unread_notifications i.Task {
+    background: #0199e0 none repeat scroll 0 0;
+    position: relative;
+    color: #fff;
+}
+
+.unread_notifications i.Task::after {
+    content: "T";
+    position: absolute;
+    top: 2px;
+    left:4px;
+    font-weight: bold; font-size: 12px;
+}
+
+.unread_notifications i {
+    border-radius: 100%;
+    display: inline-block;
+    height: 18px;
+    vertical-align: middle;
+    width: 18px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+
+
+.label-md {
+    line-height: 1!important;
+}
+
+.not_close{  position: absolute; right:5px; top:5px; text-align: center;width: 18px; height: 18px;border-radius:100%;background: #ddd; }
+.not_close i{   cursor: pointer;
+font-size: 12px; padding-top:2px; 
+}
+/*.not_close i::after{content: "";
+    position: absolute;
+    top: 2px;
+    left:4px;
+     font-size: 12px;
+}*/

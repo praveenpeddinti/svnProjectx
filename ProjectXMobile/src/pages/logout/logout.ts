@@ -5,6 +5,7 @@ import { LoginPage } from '../login/login';
 import { Globalservice } from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
 import {App} from 'ionic-angular';
+declare var socket:any;
 /*
   Generated class for the Popover page.
 
@@ -38,6 +39,7 @@ export class LogoutPage {
   ionViewDidLoad() {
   }
   public logoutApp() {
+    socket.emit("clearInterval");
     this.close();
     this.globalService.getLogout(this.constants.LogutUrl,this.logoutParams).subscribe(
         data =>{
