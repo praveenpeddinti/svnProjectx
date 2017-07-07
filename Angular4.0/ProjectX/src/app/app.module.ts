@@ -37,82 +37,9 @@ import {UrlSerializer} from '@angular/router';
 import {CustomUrlSerializer} from './CustomUrlSerializer';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-const ROUTES=[
-              {path: '',redirectTo: 'login',pathMatch: 'full' },
-              {path: '404',component: PageNotFoundComponent },
-              {path: 'home',children:[
-                { path: '' , component: HomeComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-              {path: 'login', component: LoginComponent},
-                {path: 'project/:projectName/list',children:[
-                { path: '' , component: StoryDashboardComponent,data:{breadcrumb:'Dashboard'}},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-                {path: 'project/:projectName/new',children:[
-                { path: '' , component: StoryComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-             {path: 'project/:projectName/:id/details',children:[
-                { path: '' , component: StoryDetailComponent,data:{breadcrumb:'Detail'}},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               {path: 'project/:projectName/:id/edit',children:[
-                { path: '' , component: StoryEditComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               {path: 'project/:projectName/search',children:[
-                { path: '' , component: SearchComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               {path: 'search',children:[
-                { path: '' , component: SearchComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               {path: 'project/:projectName/time-report',children:[
-                { path: '' , component: TimeReportComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-              {path: 'collaborator/notifications',children:[
-                { path: '' , component: NotificationComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               {path: 'standup',children:[
-                { path: '' , component: StandupComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               {path: 'project/:projectName/:id/error',children:[
-                { path: '' , component: PageNotFoundComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               {path: 'pagenotfound',children:[
-                { path: '' , component: PageNotFoundComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-                {path: 'project/:projectName/error',children:[
-                { path: '' , component: PageNotFoundComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               {path: 'error',children:[
-                { path: '' , component: PageNotFoundComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
-               { path: '**', component: PageNotFoundComponent }
-             ];
+
+import {ROUTES} from './app.router';
+
 @NgModule({
   imports:      [
    BrowserModule,
