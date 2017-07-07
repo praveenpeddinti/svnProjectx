@@ -13,7 +13,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 .bar-button-md[icon-only] i, .bar-button-ios[icon-only] i, .bar-button-wp[icon-only] i{font-size:2.4em;color:#fff}
 .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default, .bar-button-default-ios, .bar-button-clear-ios-default, .bar-button-ios-default, .bar-button-default-wp, .bar-button-clear-wp-default, .bar-button-wp-default{color:#fff}
 
-.toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {
+.toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {}
 
 
 .js-search-submit{ position: absolute; right:0px; top: 8px; font-size: 1.8em;color:#fff; background: none!important;}
@@ -75,4 +75,4 @@ button{ background: none!important;}
    border-bottom:solid 1px #fff!important;
 }
 
-}}
+}
