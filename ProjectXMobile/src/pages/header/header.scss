@@ -23,7 +23,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
     width:70%!important;
 }
 
-.toolbar .searchbar-ios{width:100%!important;}
+.toolbar .searchbar-ios{width:80%!important;}
 .searchbar-search-icon { background-image:none!important; display: none!important;}
 
 .searchbar-clear-icon {background-image:none!important;}
@@ -92,5 +92,6 @@ button{ background: none!important;}
 .searchbar-input-container {
    border-bottom:solid 1px #fff!important;
 }
+.button-inner{ display:none!important;}
 
 }
