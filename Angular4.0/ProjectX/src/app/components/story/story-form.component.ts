@@ -1,13 +1,14 @@
 import { Component,ViewChild,Output } from '@angular/core';
 import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
-import {Router} from '@angular/router';
+import {Router,ActivatedRoute} from '@angular/router';
 import { FileUploadService } from '../../services/file-upload.service';
 import { GlobalVariable } from '../../config';
 import {AccordionModule,DropdownModule,SelectItem,CalendarModule,CheckboxModule} from 'primeng/primeng';
 import { MentionService } from '../../services/mention.service';
 import { AjaxService } from '../../ajax/ajax.service';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
+import {SharedService} from '../../services/shared.service'; //added by Ryan
 
 declare var jQuery:any;    //Reference to Jquery
 //declare const CKEDITOR;
@@ -43,8 +44,9 @@ export class StoryComponent
     public hasFileDroped:boolean = false;
     editorData:string='';
     public fileUploadStatus:boolean = false;
+    public projectName;
 
-    constructor(private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService,private editor:SummerNoteEditorService) {
+    constructor(private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService,private editor:SummerNoteEditorService,private shared:SharedService,private route:ActivatedRoute) {
         this.filesToUpload = [];
     }
 
@@ -107,6 +109,18 @@ export class StoryComponent
         jsonForm['tasks']=this.selectedTickets;//shifted by Ryan from above
     })
         this.form = jsonForm;//shifted by Ryan from above
+
+        /* Code Block added for fixing Refresh issue in breadcrumb for story form */
+        var thisObj = this;
+        thisObj.route.queryParams.subscribe(
+        params => 
+        { 
+            thisObj.route.params.subscribe(params => {
+           thisObj.projectName=params['projectName'];
+           this.shared.change(this._router.url,thisObj.projectName,'Dashboard','',thisObj.projectName);
+        });
+        });
+        /* Code Block End */
     }
 
     /**
