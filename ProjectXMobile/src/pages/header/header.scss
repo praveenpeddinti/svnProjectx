@@ -20,9 +20,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 
 .searchbar-input{color: #fff!important; background: none!important;box-shadow: none!important; }
 .toolbar .searchbar-md, .toolbar .searchbar-wp{
-    width:70%!important;
+    width:90%!important;
 }
-.toolbar .searchbar-ios{width:80%!important;}
+.toolbar .searchbar-ios{width:90%!important;}
 
 .searchbar-search-icon { background-image:none!important; display: none!important;}
 
@@ -35,6 +35,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 color: #fff!important;
 /*    font-size:0.8em!important;*/
 }
+.ion-ios-search{ top:5px!important;}
+.ion-ios-search::before{content:"\f002"!important;font-family: FontAwesome!important;
+color: #fff!important;
+/*    font-size:0.8em!important;*/
+}
+
+.ion-wp-search{ top:5px!important;}
+.ion-wp-search::before{content:"\f002"!important;font-family: FontAwesome!important;
+color: #fff!important;
+/*    font-size:0.8em!important;*/
+}
+
+
+
 
 
 .notifhed{ position: relative;}
@@ -96,7 +110,9 @@ color:#fff; font-size:12px; text-align: center; vertical-align: middle; font-wei
 
 
 
-.searchbar-input{ color: #fff!important; padding-left: 0px!important;}
+.searchbar-md .searchbar-input{ color: #fff!important; padding-left: 0px!important;}
+.searchbar-ios .searchbar-input{ color: #fff!important; padding-left: 0px!important;}
+.searchbar-wp .searchbar-input{ color: #fff!important; padding-left: 0px!important;}
 
 .searchbar-input::before{display: none!important;}
 
