@@ -51,6 +51,22 @@ color:#fff; font-size:12px; text-align: center; vertical-align: middle; font-wei
      font-size: 1.6em!important;
 }
 
+.ion-ios-arrow-back2{ left:10px!important;}
+.ion-ios-arrow-back2::before {
+    content: "\f060"!important;
+    color: #fff!important;
+     font-family: FontAwesome!important;
+     font-size: 1.6em!important;
+}
+
+.ion-wp-arrow-back2{ left:10px!important;}
+.ion-wp-arrow-back2::before {
+    content: "\f060"!important;
+    color: #fff!important;
+     font-family: FontAwesome!important;
+     font-size: 1.6em!important;
+}
+
 .ion-md-arrow-back::before {
    background: none;
     color: #fff!important;
@@ -92,6 +108,6 @@ button{ background: none!important;}
 .searchbar-input-container {
    border-bottom:solid 1px #fff!important;
 }
-.search_border .searchbar .searchbar-ios-cancel .button-inner{ display:none!important;}
+.toolbar .searchbar-ios.searchbar-has-focus .searchbar-ios-cancel{ display:none!important;}
 
 }
