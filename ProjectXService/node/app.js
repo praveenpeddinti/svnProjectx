@@ -75,7 +75,7 @@ console.log("===collaborator=="+request.ticketId);
 app.post("/getAllNotifications",function(req,res,cb)
 {
     var request = req.body;
-    console.log(JSON.stringify(request));
+    console.log("data____REQ___IN____NODE___"+JSON.stringify(request));
   child=spawn(dir+"/yii",['notifications/get-all-notifications',JSON.stringify(request)]);
         child.stdout.setEncoding('utf-8');
         child.stdout.on('data', function(data) {
@@ -145,6 +145,36 @@ app.post("/propertyChange",function(req,res,cb)
                 console.log(client.id+"----getUnreadNotificationsCount-------error- "+data );
            });
     }
+    
+    client.on('getLatestActivities', function(request) {
+            console.log('******************getLatestActivities***************'+JSON.stringify(request));
+     getNewActivity(request,client);
+    
+    clearInterval(globalArray[client.id]);
+     var interval = setInterval(function(){
+          console.log("--pining interval----Activity");
+           getNewActivity(request,client);
+        },100000)
+     globalArray[client.id] = interval;
+
+       });
+       
+         function getNewActivity(request,client){
+                      child=spawn(dir+"/yii",['notifications/get-latest-activity',JSON.stringify(request)]);
+            child.stdout.setEncoding('utf-8');
+            child.stdout.on('data', function(data) {
+              console.log("get-latest-activity-- " +data);
+                if(data!="" && data!=0 && data!=null){
+                     client.emit("getLatestActivitiesResponse",data);
+                }
+                
+           });
+              child.stderr.on('data', function(data) {
+    //            logger.trace('stderr: ' + data);
+                console.log(client.id+"----getLatestActivities-------error- "+data );
+           });
+    }
+    
      client.on('clearInterval', function()
     {
 //        logger.trace('Client disconnected');
