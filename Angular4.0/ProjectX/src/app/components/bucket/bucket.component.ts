@@ -263,13 +263,13 @@ addBucket(){
        this.errorBucketLog('responsibleErrMsg','Please select Responsible');
     }
     this._service.saveBucket(this.form,(response)=>{
-    if(response.data=='failure'){alert("----if---"+response.data);
+    if(response.data=='failure'){
       jQuery('#bucketSuccessMsg').show();
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
       jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
       jQuery("#bucketSuccessMsg").html('Bucket already created');
       //jQuery('#bucketSuccessMsg').fadeOut( "slow" );
-    }else{alert("----else---"+response.data);
+    }else{
         jQuery('#bucketSuccessMsg').show();
         jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
         //jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
@@ -349,14 +349,14 @@ filterBucketChange(bucketId,event){//alert("----"+JSON.stringify(bucketId));
    toggle_visibility(id,event) {
        var e = document.getElementById(id);
        
-       if(e.style.display == 'block'){alert("==if==="+JSON.stringify(event));
+       if(e.style.display == 'block'){
        var el = jQuery("#example-one");
   el.text() == el.data("text-swap") 
     ? el.text(el.data("text-original")) 
     : el.text(el.data("text-swap"));
           e.style.display = 'none';
           jQuery("#bucket_description_short").css("display", "block");
-       }else{alert("===else=="+JSON.stringify(event));
+       }else{
         var el = jQuery("#example-one");
         el.text() == el.data("text-swap") 
         ? el.text(el.data("text-original")) 
