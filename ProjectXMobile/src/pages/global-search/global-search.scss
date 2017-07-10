@@ -196,11 +196,11 @@ color: #fff!important;
     font-size: 1.6em!important;
 }
 
-.ion-md-arrow-back:before {
+.ion-md-arrow-back:before, .ion-ios-arrow-back:before, .ion-wp-arrow-back:before {
     content: "\f060"!important;
     color: #fff!important;
     font-family: FontAwesome;
-    font-size: 1.2em!important;
+    font-size: 0.8em!important;
 }
 
 /*.searchbar-md .searchbar-clear-icon {
@@ -264,5 +264,7 @@ searchbar-md .searchbar-input{ color: #fff!important; padding-left: 0px!importan
 .header-md::after{
 bottom:0px!important;
 }
+
+.back-button-text{display: none!important;}
 
 }
