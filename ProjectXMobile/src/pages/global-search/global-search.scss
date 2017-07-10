@@ -20,7 +20,7 @@ page-global-search {
      content: "\f0f3";color:#fff;
 }*/
 
-.ion-md-All, .ion-ios-All, .ion-wp-All::before {
+.ion-md-All::before, .ion-ios-All::before, .ion-wp-All::before {
     background-image: url('../assets/icon/search-all.png');
     background-repeat: no-repeat;
   background-position: 50%;
@@ -197,7 +197,7 @@ ion-header{
 
 .bar-button-default-ios{ color:#fff!important;}
 
-.searchbar-input-container{ padding-bottom: 12px!important;}
+.searchbar-input-container{ padding-bottom: 1px!important;}
 
 searchbar-md .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
 .searchbar-ios .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px; background: none!important;}
