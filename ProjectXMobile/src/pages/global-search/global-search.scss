@@ -20,7 +20,7 @@ page-global-search {
      content: "\f0f3";color:#fff;
 }*/
 
-.ion-md-All::before, .ion-wp-All::before {
+.ion-md-All::before, .ion-ios-All::before, .ion-wp-All::before {
     background-image: url('../assets/icon/search-all.png');
     background-repeat: no-repeat;
   background-position: 50%;
@@ -28,28 +28,8 @@ page-global-search {
     color:#fff;
     content:"";
     display:block;
-     
+     width:30px;
 }
-
-.ion-ios-All::before{background-image: url('../assets/icon/search-all.png');
-    background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-    color:#fff;
-    content:"";
-    display:block;
-     
-}
-
-.ion-ios-All-outline::before{  background-image: url('../assets/icon/search-all.png');
-    background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-    color:#fff;
-    content:"";
-    }
-
-
 
 .ion-md-StoryTask::before, .ion-ios-StoryTask::before, .ion-wp-StoryTask::before {
     background-image: url('../assets/icon/search-storytask.png');
@@ -58,18 +38,10 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block
-     
+    display:block;
+     width:30px;
 }
 
-.ion-ios-StoryTask-outline::before{
-    background-image: url('../assets/icon/search-storytask.png');
-    background-repeat: no-repeat;
-  background-position: 50%;
-  height: 100%;
-    color:#fff;
-    content:"";
-}
 
 .ion-md-Comments::before, .ion-ios-Comments::before, .ion-wp-Comments::before {
     background-image: url('../assets/icon/search-comment.png');
@@ -78,8 +50,8 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block
-     
+    display:block;
+   width:30px;  
 }
 .ion-md-Users::before, .ion-ios-Users::before, .ion-wp-Users::before {
     background-image: url('../assets/icon/search-users.png');
@@ -88,8 +60,8 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block
-     
+    display:block;
+    width:30px; 
 }
 .ion-md-Artifacts::before, .ion-ios-Artifacts::before, .ion-wp-Artifacts::before {
     background-image: url('../assets/icon/search-artifacts.png');
@@ -98,8 +70,8 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block
-     
+    display:block;
+    width:30px; 
 }
 
 
@@ -233,8 +205,6 @@ searchbar-md .searchbar-input{ color: #fff!important; padding-left: 0px!importan
 .searchbar-ios .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px; background: none!important;}
 .searchbar-wp .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
 .no-padding{ padding: 0px!important;}
-
-
 
 
 }
