@@ -169,5 +169,26 @@ font-size: 12px; padding-top:2px;
     content: "\f0f3";color:#fff;*/
 }
 
+ion-ios-All-outline::before{
+   background-image: url('../assets/icon/All-notifictions.png');
+    background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+    color:#fff;
+    content:"";
+  width:30px; 
+     
+}
+
+.ion-ios-Unread::before{
+    background-image: url('../assets/icon/unread-notifictions.png');
+    background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+    color:#fff;
+    content:"";
+      width:30px; 
+}
+
 
 
