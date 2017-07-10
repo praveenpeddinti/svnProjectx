@@ -1,0 +1,64 @@
+.search{}.search .searchresulttext{border-bottom:solid 1px #f0f0f0;padding:10px 0px;font-size:16px;color:#000;margin-bottom:20px;font-weight:600;}
+.search .searchdiv{padding:10px 0;border-bottom:1px dotted #ccc;}
+.search .searchdiv .searchresulttitle a{color:#0199e0;font-size:16px;font-weight:600}
+.search .searchdiv .searchresulttitle img{vertical-align:text-bottom}
+.search .searchdiv .searchresultcontent{word-wrap: break-word;}
+.search .searchdiv .modifieddate{font-size:12px;color:#7b7b7b;}
+.search .searchdiv .modifieddate span{color:#0199e0}
+.heighlight{background-color:#faf6d4;color:#0199e0}
+.searchresulttitleusericon{width:30px;height:30px;max-width:30px;max-height:30px;display: inline-block;vertical-align: middle}
+.searchresulttitleusericon img{max-width:100%;border-radius:100px;border:1px solid #e8e8e8;}
+#searchsection{font-size:18px;font-weight: 600;text-align: center;color:#005072;padding-top:10px}
+.searchresulttextmarginzero{border:0;margin-bottom:0}
+.tabs-left .nav-tabs > li{float:none}
+.tabpaddingleftzero{padding-left:0}
+.tabpaddingrightzero{padding-right:0}
+.tabs-left .nav-tabs > li > a{border-radius:0;font-family: "robotoregular";font-size:16px;color:#7c7c7c;background:#f8f8f8;border-color: #f0f0f0 transparent #f0f0f0 #f0f0f0;border-right:0;margin-right:0;cursor:pointer}
+.tabs-left .nav-tabs > li.active > a, .tabs-left .nav-tabs > li.active > a:hover, .tabs-left .nav-tabs > li.active > a:focus{border-color: #f0f0f0 transparent #f0f0f0 #f0f0f0;color:#0199e0;background: #fff;margin-right:-1px;position:relative;border-radius:0;border-right:0;z-index: 1}
+
+.tab-content_content{border:1px solid #f0f0f0;min-height:221px;padding:10px 20px}
+
+.add{
+    background: #207fa9 none repeat scroll 0 0;
+    border-radius: 0;
+    cursor: pointer;
+    display: table-cell;
+    float: right;
+    height: 30px;
+    padding: 5px 10px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+}
+.add i{
+    color: #fff;
+}
+
+.timelogSuccessMsg{
+   display:none;
+
+}
+
+
+/*BucketDashboard CSS*/
+.dashboard_project{ background:#f8f8f8; border:solid 1px #f0f0f0; font-family:'robotoregular'; padding:2px 0px; height:auto; min-height:150px; margin-bottom:30px;}
+.project_name{ font-size:16px; color:#0199e0; padding:5px 5px 9px; line-height:20px; border-bottom:1px solid #fff;}
+.protaskbg{border-bottom:1px solid #fff; width:100%; clear:both; height:auto; min-height:50px;}
+.protask1{ width:50%; border-right:1px solid #fff; padding:1% 0px ; float:left; text-align:center; color:#333333;font-family:'robotoregular'; font-size:14px; height:auto; min-height:50px;}
+.protask2{ width:50%; padding:1% 0px ; float:left; color:#333333;font-family:'robotoregular';font-size:14px;text-align:center;height:auto; min-height:50px;}
+.protaskcount{color:#032632;font-family:'robotoregular'; font-weight:bold; font-size:14px;text-align:center;}
+.teambg{ background:#ededed!important;}
+.createdbgbg{ background:#ededed; height:auto; min-height:50px; clear:both; position:relative; padding-left:50px; color:#333333;font-family:'robotoregular';font-size:14px; color:#333;}
+.creater{color:#0199e0; font-size:16px;}
+.creater_date{color:#a2a2a2; font-size:12px;}
+.createrimg{ width:30px; height:30px; position:absolute; left:10px; top:5px;}
+.createrimg img{width:30px; height:30px; border-radius:100%;}
+.knowemore{font-size:16px; color:#0199e0; line-height:30px; font-family:'robotoregular'; text-align:center; cursor:pointer; padding:7px 0px;}
+.knowemore a{color:#0199e0;}
+.knowemore a:hover{color:#0199e0;}
+
+@media screen and (min-device-width:992px) and (max-device-width:1199px) { 
+ .protask1{ font-size:12px!important;}
+ .protask2{ font-size:12px!important;}
+}

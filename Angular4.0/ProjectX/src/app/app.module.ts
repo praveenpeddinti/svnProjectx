@@ -37,8 +37,89 @@ import {UrlSerializer} from '@angular/router';
 import {CustomUrlSerializer} from './CustomUrlSerializer';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
-import {ROUTES} from './app.router';
+import { BucketComponent }  from './components/bucket/bucket.component';
+import {BucketService} from './services/bucket.service';
+const ROUTES=[
+              {path: '',redirectTo: 'login',pathMatch: 'full' },
+              {path: '404',component: PageNotFoundComponent },
+              {path: 'home',children:[
+                { path: '' , component: HomeComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+              {path: 'login', component: LoginComponent},
+                {path: 'project/:projectName/list',children:[
+                { path: '' , component: StoryDashboardComponent,data:{breadcrumb:'Dashboard'}},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+                {path: 'project/:projectName/new',children:[
+                { path: '' , component: StoryComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+             {path: 'project/:projectName/:id/details',children:[
+                { path: '' , component: StoryDetailComponent,data:{breadcrumb:'Detail'}},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/:id/edit',children:[
+                { path: '' , component: StoryEditComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/search',children:[
+                { path: '' , component: SearchComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'search',children:[
+                { path: '' , component: SearchComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/time-report',children:[
+                { path: '' , component: TimeReportComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+              {path: 'collaborator/notifications',children:[
+                { path: '' , component: NotificationComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'standup',children:[
+                { path: '' , component: StandupComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/:id/error',children:[
+                { path: '' , component: PageNotFoundComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'pagenotfound',children:[
+                { path: '' , component: PageNotFoundComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+                {path: 'project/:projectName/error',children:[
+                { path: '' , component: PageNotFoundComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'error',children:[
+                { path: '' , component: PageNotFoundComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/bucket',children:[
+                { path: '' , component: BucketComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               { path: '**', component: PageNotFoundComponent }
+             ];
 
 @NgModule({
   imports:      [
@@ -56,9 +137,9 @@ import {ROUTES} from './app.router';
    RouterModule.forRoot(ROUTES),
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent ],
   bootstrap:    [ AppComponent ],
-  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
+  providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })

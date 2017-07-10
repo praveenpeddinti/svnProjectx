@@ -903,3 +903,36 @@ padding-left:0px!important;
 /*@mentions box width*/
 .note-hint-popover .popover-content { width:220px;}
 .popover { line-height:14px!important;}
+
+
+/* Bucket CSS*/
+.sprint_hed{font-size:18px; color:#0199e0; line-height:25px; font-family:'robotoregular'; margin-bottom:20px; }
+.sprint_hed a{color:#0199e0;padding:7px 0px; text-decoration:none;font-size:18px;}
+.sprintdetails{ padding:20px 0px; background:#f8f8f8; clear:both;}
+.sprintdetails .totaltasks{ background:#fff; text-align:center; padding:30px 0px; width:100%; color:#6d6d6d; font-size:18px;line-height:25px; font-family:'robotoregular';}
+.sprintdetails .closedtasks{background:#f2998f; text-align:center; padding:30px 0px; width:50%; float:left; font-size:18px;line-height:25px; font-family:'robotoregular'; color:#fff;}
+.sprintdetails .opentasks{background:#fbcd8c; text-align:center; padding:30px 0px; width:50%; float:left; font-size:18px;line-height:25px; font-family:'robotoregular'; color:#fff;}
+.sprintdetails .workedhors{ background:#f8f8f8; text-align:center; padding:30px 0px; width:100%; border:solid 1px #fff; border-top:none; color:#6d6d6d;font-size:18px;line-height:25px; font-family:'robotoregular'; clear:both;}
+.resultcount{color:#032632;font-size:30px;line-height:30px; font-family:'robotoregular'; font-weight:bold; clear:both;}
+.sprintdetails .probox{ background:#f8f8f8; padding:10px; border:solid 1px #fff; float:left; margin-right:20px; margin-bottom:20px; color:#6d6d6d;font-size:13px;line-height:20px; font-family:'robotoregular';}
+.createduser{ text-align:center; width:33px; height:33px; margin:auto;border:solid 1px #dddddd; border-radius:100%;}
+.createduser img{ width:30px; height:30px; border-radius:100%;border:solid 2px #fff;}
+.sprintdate_username{ color:#0199e0; font-size:16px; text-align:center; }
+.sprintdate_username a{ color:#0199e0; text-decoration:none;}
+.sprint_date{ color:#333333;font-size:16px; margin-bottom:12px;}
+.green_color{ color:#1acc33;font-size:14px;}
+.description_hed{ color:#333333;font-size:18px;line-height:20px; font-family:'robotoregular'; margin-bottom:10px; font-weight:800;}
+.description_content{ color:#333333;font-size:15px;line-height:24px; font-family:'robotoregular' }
+
+.viewmore_click{ background:#f8f8f8;  font:normal 14px/22px 'robotoregular', Verdana, Geneva, sans-serif; color:#0199e0; clear:both; float:right;padding:5px 10px; cursor:pointer; border:none; outline: none; clear:both;}	
+ 
+  .viewmore_click:hover{background:#f8f8f8;color:#333;}
+  .viewmore_click:focus{ outline: none!important; border: none!important; box-shadow: none!important;}
+
+@media screen and (max-device-width:779px) { 
+.sprintdetails{ padding:20px 0px;}
+.sprint_date{margin-bottom:0px; }
+.sprintdetails .probox{ width:100%; margin-bottom:10px;padding:5px 10px;}
+.sprintdetails .totaltasks{ margin-top:40px;}
+.sprint_hed{margin-bottom:0px!important;}
+}
