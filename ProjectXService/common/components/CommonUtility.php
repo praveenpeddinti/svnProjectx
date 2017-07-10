@@ -2,7 +2,7 @@
 
 namespace common\components;
 use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts};
-use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields};
+use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields,ProjectTeam,Collaborators};
 use Yii;
 
 use common\components\ApiClient; //only for testing purpose
@@ -922,7 +922,7 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
             $ticketDetails = $arr2ordered;
             $projectDetails = Projects::getProjectMiniDetails($projectId);
            
-            error_log("----final data ---".print_r($ticketDetails[0],1));
+           // error_log("----final data ---".print_r($ticketDetails[0],1));
             return $ticketDetails;
         } catch (Exception $ex) {
             Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -1209,6 +1209,7 @@ $text_message=$html . $text_message .
                     "limit" =>$limit,
                     "skip" => $offset
                 );
+                error_log("search------------".print_r($options,1));
                 if($searchFlag==1){
                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
                  if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
@@ -1355,7 +1356,7 @@ $text_message=$html . $text_message .
                     $TinyUserFinalArray = array();
                     foreach($tinyUserData as $extractUserData){
                         $forUsercollection['Title']=  $extractUserData['UserName'];
-                        $forUsercollection['ProfilePicture']=  $extractUserData['ProfilePicture'];
+                        $forUsercollection['ProfilePicture']=  Yii::$app->params['ServerURL'].$extractUserData['ProfilePicture'];
                         $forUsercollection['description']=  $extractUserData['Email'];
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
@@ -1424,7 +1425,7 @@ $text_message=$html . $text_message .
                     $TinyUserFinalArray = array();
                     foreach($tinyUserData as $extractUserData){
                         $forUsercollection['Title']=  $extractUserData['UserName'];
-                        $forUsercollection['ProfilePicture']=  $extractUserData['ProfilePicture'];
+                        $forUsercollection['ProfilePicture']=  Yii::$app->params['ServerURL'].$extractUserData['ProfilePicture'];
                         $forUsercollection['description']=  $extractUserData['Email'];
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
@@ -1684,7 +1685,7 @@ $text_message=$html . $text_message .
                  
                     foreach($tinyUserData as $extractUserData){
                         $forUsercollection['Title']=  $extractUserData['UserName'];
-                        $forUsercollection['ProfilePicture']=  $extractUserData['ProfilePicture'];
+                        $forUsercollection['ProfilePicture']=  Yii::$app->params['ServerURL'].$extractUserData['ProfilePicture'];
                         $forUsercollection['description']=  $extractUserData['Email'];
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
@@ -1904,7 +1905,117 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    /**
+     * @author Padmaja
+     * @description This method is used to get Ticket details for dashboard
+     * @return type array
+     */
+    public static function getTicketDetailsForDashboard($userId,$page,$pageLength,$projectFlag=""){
+        try{
+                $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+                $assignedtoDetails =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId))));
+                $followersDetails =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId))));
+             if($assignedtoDetails !=0 || $followersDetails != 0){
+                 error_log("=============ascrollllllllll-------");
+                 //$projectDetails = ProjectTeam::getProjectTeamDetailsByRole($userId,$options['limit'],$options['skip']);
+               $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$page);
+                if($projectFlag==1){   
+                   $prepareDetails= self::getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId);
+                }elseif($projectFlag==2){
+                    $prepareDetails=array();
+                }else{
+                    error_log("ascrollllllllll-------");
+                  $prepareDetails= self::getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId);
+                }
+             }
+             return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails,'ProjectwiseInfo'=>$prepareDetails);  
+        } catch (Exception $ex) {
+                Yii::log("TicketCollection:getTicketDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
+        }
+         
+    }
+    /**
+     * @author Padmaja
+     * @description This method is used to get Project details for dashboard
+     * @return type array
+     */
+    public static function getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId){        
+        try{   
+                $prepareDetails=array();
+                  foreach($projectDetails as $extractDetails){
+                     $projects=Projects::getProjectMiniDetails($extractDetails['ProjectId']);
+                     $userDetails=Collaborators::getCollaboratorById($projects['CreatedBy']);
+                     $projectTeamDetails=Collaborators::getFilteredProjectTeam($extractDetails['ProjectId'],$userDetails['UserName']);
+                     $projectInfo['ProjectId']=$extractDetails['ProjectId'];
+                     $projectInfo['createdBy']=$userDetails['UserName'];
+                      $projectInfo['ProfilePic']=$projectTeamDetails[0]['ProfilePic'];
+                      $projectInfo['projectName']=$projects['ProjectName'];
+                      $projectInfo['CreatedOn'] =$extractDetails['CreatedOn'];
+                      $projecTeam=ProjectTeam::getProjectTeamCount($extractDetails['ProjectId']);
+                      $projectInfo['Team']=$projecTeam['TeamCount'];
+                      $projectInfo['assignedtoDetails'] =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$extractDetails['ProjectId']))));
+                      $projectInfo['followersDetails'] =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId,"ProjectId"=>(int)$extractDetails['ProjectId']))));
+                      $projectInfo['closedTickets'] =TicketCollection::getActiveOrClosedTicketsCount($extractDetails['ProjectId'],$userId,'Fields.state.value',6,array());
+                      $projectInfo['activeTickets'] =TicketCollection::getActiveOrClosedTicketsCount($extractDetails['ProjectId'],$userId,'Fields.state.value',3,array());
+                      $bucketDetails=Bucket::getActiveBucketId($extractDetails['ProjectId']);
+                      if($bucketDetails=='failure'){
+                          $projectInfo['currentBucket'] ='';
+                     }else{
+                      $projectInfo['currentBucket'] =$bucketDetails['Name'];
+                     }
+                      array_push($prepareDetails,$projectInfo);
+                    }
+                    return $prepareDetails;
+                // error_log("arrayyyyyyyyyyyyyyy-------".print_r($prepareDetails,1));
+
+               
+            } catch (Exception $ex) {
+                Yii::log("TicketCollection:getProjectDeatils::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
+    }
+      /**
+     * @author Padmaja
+     * @description This method is used to get Last Id Project details for dashboard
+     * @return type array
+     */
+    public static function getLastProjectDetails($projectId,$userId){
+        try{
+            $projectInfo=array();
+            $prepareDetails=array();
+            $projectDetails=Projects::getProjectMiniDetails($projectId);
+            $projectInfo['projectName']=$projectDetails['ProjectName'];
+            $userDetails=Collaborators::getCollaboratorById($projectDetails['CreatedBy']);
+            $projectInfo['createdBy']=$userDetails['UserName'];
+            $projectInfo['CreatedOn'] =$projectDetails['CreatedOn'];
+            $projectTeamDetails=Collaborators::getFilteredProjectTeam($projectId,$userDetails['UserName']);
+            $projectInfo['ProfilePic']=$projectTeamDetails[0]['ProfilePic'];
+            $projecTeam=ProjectTeam::getProjectTeamCount($projectId);
+            $projectInfo['Team']=$projecTeam['TeamCount'];
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $projectInfo['assignedtoDetails'] =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$projectId))));
+            $projectInfo['followersDetails'] =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId,"ProjectId"=>(int)$projectId))));
+            $projectInfo['closedTickets'] =TicketCollection::getActiveOrClosedTicketsCount($projectId,$userId,'Fields.state.value',6,array());
+            $projectInfo['activeTickets'] =TicketCollection::getActiveOrClosedTicketsCount($projectId,$userId,'Fields.state.value',3,array());
+            $bucketDetails=Bucket::getActiveBucketId($projectId);
+            if($bucketDetails=='failure'){
+                $projectInfo['currentBucket'] ='';
+            }else{
+               $projectInfo['currentBucket'] =$bucketDetails['Name'];
+            }
+            array_push($prepareDetails,$projectInfo);
+            $assignedtoDetails =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId))));
+            $followersDetails =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId))));
+            $totalProjects=ProjectTeam::getProjectsCountByUserId($userId);
+            $totalProjectCount=count($totalProjects);
+            return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails,'ProjectwiseInfo'=>$prepareDetails,'TotalProjectCount'=>$totalProjectCount);  
+            
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getLastProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+        
+    }
 }
 
 ?>

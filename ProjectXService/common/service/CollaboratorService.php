@@ -5,6 +5,8 @@ use common\components\CommonUtility;
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
 use common\models\mongo\AccessTokenCollection;
+use common\models\mysql\ProjectTeam;
+use common\models\mysql\Projects;
 use Yii;
 
 /*
@@ -155,6 +157,23 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
             Yii::log("CollaboratorService:getTicketFollowersList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+       /**
+     * @authorPadmaja
+     * @description This method to get the collaborators of a project.
+     * @param type $ticketId
+     * @param type $projectId
+     * @return type
+     */
+   
+    
+    public function getProjectTeamDetailsByRole($projectId){
+        try{
+         $ProjectTeamModel = new ProjectTeam();
+         return $ProjectTeamModel->getProjectTeamDetailsByRole($projectId);
+        } catch (Exception $ex) {
+Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     
      /**
     * @author Praveen
@@ -168,6 +187,84 @@ Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" .
          return $collaboratorModel->getResponsibleProjectTeam($projectId,$role);
         } catch (Exception $ex) {
             Yii::log("CollaboratorService:getResponsibleProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    
+    /**
+     * @authorPadmaja
+     * @description This method to verify  the  project.
+     * @param type $projectId
+     * @return type
+     */
+   
+    
+    public function verifyProjectName($projectName){
+        try{
+         $ProjectModel = new Projects();
+         return $ProjectModel->verifyingProjectName($projectName);
+        } catch (Exception $ex) {
+Yii::log("CollaboratorService:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+     /**
+     * @authorPadmaja
+     * @description This method to verify  the  project.
+     * @param type $projectId
+     * @return type
+     */
+    public function savingProjectDetails($projectName,$description,$userId){
+        try{
+            $ProjectModel = new Projects();
+            return $ProjectModel->savingProjectDetails($projectName,$description,$userId);
+            
+        } catch (Exception $ex) {
+            Yii::log("CollaboratorService:savingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+     /**
+     * @authorPadmaja
+     * @description This method to verify  the  project.
+     * @param type $projectId
+     * @return type
+     */
+     public function savingProjectTeamDetails($projectId,$userId){
+        try{
+            error_log($projectId."=======".$userId);
+            $ProjectModel = new ProjectTeam();
+            return $ProjectModel->saveProjectTeamDetails($projectId,$userId);
+            
+        } catch (Exception $ex) {
+            Yii::log("CollaboratorService:savingProjectTeamDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+     /**
+     * @authorPadmaja
+     * @description This method to   project count.
+     * @param type $userId
+     * @return type
+     */
+    public function getTotalProjectCount($userId){
+        try{
+            $ProjectModel = new ProjectTeam();
+            $total= $ProjectModel->getProjectsCountByUserId($userId);
+            return count($total);
+        } catch (Exception $ex) {
+             Yii::log("CollaboratorService:getTotalProjectCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+     /**
+     * @authorPadmaja
+     * @description This method to   project Names by UserId
+     * @param type $userId
+     * @return type
+     */
+    public function getProjectNameByUserId($userId){
+        try{
+            $ProjectModel = new Projects();
+            return $ProjectModel->getProjectNameByUserId($userId);
+        } catch (Exception $ex) {
+             Yii::log("CollaboratorService:getProjectNameByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

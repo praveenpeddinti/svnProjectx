@@ -6,6 +6,7 @@ use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketTyp
 use common\models\bean\FieldBean;
 use Yii;
 
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -1756,7 +1757,19 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
+     /**
+     * @author Padmaja
+     * @description This method is used to get all project details for dashboard
+     * @return type
+     */
+       public function getProjectDetailsForDashboard($userId,$page,$pageLength,$projectFlag) {
+        try {
+            $totalCount = CommonUtility::getTicketDetailsForDashboard($userId,$page,$pageLength,$projectFlag);
+            return $totalCount;
+        } catch (Exception $ex) {
+            Yii::log("StoryService:getProjectDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
      /**
      * @author Ryan
      * @uses Saves User Preferences in Story Creation

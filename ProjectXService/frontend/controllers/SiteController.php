@@ -24,6 +24,7 @@ use frontend\service\AccesstokenService;
 use common\components\ServiceFactory;
 use common\models\mysql\Collaborators;
 use common\models\mongo\TinyUserCollection;
+use common\models\mysql\ProjectTeam;
 use common\service\CollaboratorService;
 
 
@@ -186,7 +187,7 @@ class SiteController extends Controller
                 $collabaratorTokenData = ServiceFactory::getCollaboratorServiceInstance()->getCollabaratorAccesstoken($collabaratorId);
                 if(count($collabaratorTokenData)==0){
                     $accesstoken =  $this->GeneratingAccesstoken($collabaratorId);
-                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture']);
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture'],"Email"=>$collaboratorProfileData['Email']);
                     $browserType=$_SERVER['HTTP_USER_AGENT'];
                     $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
                     $responseBean = new ResponseBean;
@@ -196,7 +197,7 @@ class SiteController extends Controller
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==1) {
                     $collabaratorLastToken= $collabaratorTokenData[0]['Accesstoken'];
-                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$collabaratorLastToken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture']);
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$collabaratorLastToken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture'],"Email"=>$collaboratorProfileData['Email']);
                     $accesstoken="response";
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::SUCCESS;
@@ -205,7 +206,7 @@ class SiteController extends Controller
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==0){
                     $accesstoken =  $this->GeneratingAccesstoken($collabaratorId);
-                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture']);
+                    $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture'],"Email"=>$collaboratorProfileData['Email']);
                     $browserType=$_SERVER['HTTP_USER_AGENT'];
                     $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
                     $responseBean = new ResponseBean;
@@ -423,7 +424,7 @@ class SiteController extends Controller
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
            
             }else{
-                   $responseBean = new ResponseBean;
+                $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $searchData;
@@ -434,7 +435,143 @@ class SiteController extends Controller
               Yii::log("SiteController:actionGlobalSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
-    
+   /**
+    * @author Padmaja
+    *  @description This is used for verifying projects is exists or not
+    * @param type 
+    * @return array
+    */
+    public function actionVerifyingProjectName(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            error_log("prjectctcccccc@@@@@@@@@@@@-------".$postData->projectName);
+            $getProjectDetails=ServiceFactory::getCollaboratorServiceInstance()->verifyProjectName($postData->projectName);
+            error_log("prjectctcccccc".print_r($getProjectDetails,1));
+            if(!empty($getProjectDetails)){
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $getProjectDetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $getProjectDetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }
+            return $response;
+            error_log("resonse------------".print_r($response,1));
+        } catch (Exception $ex) {
+             Yii::log("SiteController:actionVerifyingProjectName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+     /**
+    * @author Padmaja
+    * @description This is used for saving project details
+    * @param type 
+    * @return array
+    */
+    public function actionSaveProjectDetails(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $savingStatus=ServiceFactory::getCollaboratorServiceInstance()->savingProjectDetails($postData->projectName,$postData->description,$postData->userInfo->Id);
+            if($savingStatus!='failure'){
+                error_log("ssssssssssssssss");
+                $projectId=$savingStatus;
+                $getStatus=ServiceFactory::getCollaboratorServiceInstance()->savingProjectTeamDetails($projectId,$postData->userInfo->Id);
+                $getlastIdDetails= CommonUtility::getLastProjectDetails($projectId,$postData->userInfo->Id);
+                // error_log("status-----------".$savingStatus);
+            }
+             if($getStatus == 'failure' || $savingStatus=='failure'){
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $getlastIdDetails;
+               // $responseBean->lastProjectDetails =$getlastIdDetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $getlastIdDetails;
+               // $responseBean->lastProjectDetails =$getlastIdDetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json");
+         
+            }
+            return $response;
+        } catch (Exception $ex) {
+            Yii::log("SiteController:actionsaveProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+        /**
+    * @author Padmaja
+     * @description This is used for get all project details
+    * @param type 
+    * @return array
+    */
+    public function actionGetAllProjectsByUser(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $projectFlag=!empty($postData->projectFlag)?$postData->projectFlag:"";
+            $limit=!empty($postData->limit)?$postData->limit:"";
+            $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData->userInfo->Id,$postData->page,$limit,$projectFlag);
+            $totalProjectCount=ServiceFactory::getCollaboratorServiceInstance()->getTotalProjectCount($postData->userInfo->Id);
+            if(!empty($projectInfo['ProjectwiseInfo'] || empty($projectInfo['ProjectwiseInfo']))){
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                if(!empty($projectInfo['ProjectwiseInfo'])){
+                    $responseBean->data = $projectInfo;
+                }else{
+                     $responseBean->data = "No Results Found";
+                }
+                $responseBean->totalProjectCount = $totalProjectCount;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $projectInfo;
+                $responseBean->totalProjectCount = $totalProjectCount;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }
+            return $response;
+            
+        } catch (Exception $ex) {
+            Yii::log("SiteController:actionScrollProjectsByUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+        
+    }
+         /**
+    * @author Padmaja
+   * @description This is used for showing list of projects in dropdoown
+    * @param type 
+    * @return array
+    */
+    public function actionGetProjectNameByUserid(){
+       try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $userId=!empty($postData->userId)?$postData->userId:"";
+            $projectsInfo=ServiceFactory::getCollaboratorServiceInstance()->getProjectNameByUserId($userId);
+              if(!empty($projectsInfo)){
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $projectsInfo;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $projectsInfo;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }
+            return $response;
+       } catch (Exception $ex) {
+            Yii::log("SiteController:actionGetProjectNameByUserid::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+       } 
+    }
+           
 }
 ?>

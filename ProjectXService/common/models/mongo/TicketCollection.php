@@ -317,9 +317,8 @@ class TicketCollection extends ActiveRecord
      */
        public static function getMyTicketsCount($userId,$projectId,$selectFields=[]){
       try{
-           
            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-           $cursor =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$projectId),array("Followers.FollowerId"=>array('$in'=>array((int)$userId)),"ProjectId"=>(int)$projectId))));
+                $cursor =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$projectId),array("Followers.FollowerId"=>array('$in'=>array((int)$userId)),"ProjectId"=>(int)$projectId))));
            return $cursor;  
       } catch (Exception $ex) {
       Yii::log("TicketCollection:getMyTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -534,9 +533,70 @@ class TicketCollection extends ActiveRecord
              Yii::log("TicketCollection:getAllStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+               /**
+     * @author Padmaja
+     * @description This method is used to get Ticket details for dashboard
+     * @return type array
+     */
+    public static function getTicketDetailsForDashboard($userId){
+        try{
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $assignedtoDetails =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId))));
+            $followersDetails =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId))));
+            return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails);  
+        } catch (Exception $ex) {
+                Yii::log("TicketCollection:getTicketDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
 
-    
-    
+        }
+         
+    }
+        /**
+     * @author Padmaja
+     * @param type $userId
+     * @param type $projectId
+     * @return type
+     */
+    public static function getClosedTicketsCount($projectId,$userId,$FieldName,$value,$selectFields=[]){
+      try{
+            $query = new Query();
+            if(count($selectFields)>0){
+                $query->select($selectFields) ;
+            }
+            
+            $query->from('TicketCollection')
+            ->where(['Fields.assignedto.value' => (int)$userId, "ProjectId" =>(int)$projectId,$FieldName=>(int)$value ]);
+         
+           $ticketDetails = $query->count();
+           return $ticketDetails;  
+      } catch (Exception $ex) {
+      Yii::log("TicketCollection:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+      }  
+    }
+           /**
+     * @author Padmaja
+     * @param type $userId
+     * @param type $projectId
+     * @return type
+     */
+    public static function getActiveOrClosedTicketsCount($projectId,$userId,$FieldName,$value,$selectFields=[]){
+      try{
+            $query = new Query();
+            if(count($selectFields)>0){
+                $query->select($selectFields);
+            }
+             $query->from('TicketCollection')
+            ->where(['Fields.assignedto.value' => (int)$userId, "ProjectId" =>(int)$projectId])
+            ->orWhere(['Followers.FollowerId'=>(int)$userId, "ProjectId" =>(int)$projectId])
+            ->andWhere([$FieldName=>(int)$value, "ProjectId" =>(int)$projectId]);
+            $ticketDetails = $query->count();
+           return $ticketDetails;  
+      } catch (Exception $ex) {
+      Yii::log("TicketCollection:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+      }  
+    }
+
     public static function getAllTicketsCount($projectId,$value,$FieldBucket,$FieldState,$taskFlag){
      try{
             $query = new Query();
