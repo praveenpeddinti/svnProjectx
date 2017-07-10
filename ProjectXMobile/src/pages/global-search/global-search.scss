@@ -20,7 +20,7 @@ page-global-search {
      content: "\f0f3";color:#fff;
 }*/
 
-.ion-md-All::before, .ion-ios-All::before, .ion-wp-All::before {
+.ion-md-All, .ion-ios-All, .ion-wp-All::before {
     background-image: url('../assets/icon/search-all.png');
     background-repeat: no-repeat;
   background-position: 50%;
@@ -190,5 +190,7 @@ ion-header{
 .searchbar-input-container {
    border-bottom:solid 1px #fff!important;
 }
+
+.toolbar .searchbar-ios .searchbar-input{background:none!important;}
 
 }
