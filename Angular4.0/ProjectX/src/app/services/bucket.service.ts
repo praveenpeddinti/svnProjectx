@@ -42,7 +42,6 @@ getResponsibleFilter(projectId,role,getResponsibleDetailsCallback) {
       'projectId':projectId,
       'Type':type,
     }
-    alert("--fbt---"+JSON.stringify(post_data));
     this._ajaxService.AjaxSubscribe("bucket/get-bucket-filters",post_data,(data)=>
     { 
          getBucketTypeFilterDetailsCallback(data);
