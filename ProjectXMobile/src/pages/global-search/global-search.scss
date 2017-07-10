@@ -28,8 +28,21 @@ page-global-search {
     color:#fff;
     content:"";
     display:block;
-     width:30px;
+     
 }
+
+
+.ion-ios-All-outline::before{  background-image: url('../assets/icon/search-all.png');
+    background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+    color:#fff;
+    content:"";
+    width:30px;
+    
+    }
+
+
 
 .ion-md-StoryTask::before, .ion-ios-StoryTask::before, .ion-wp-StoryTask::before {
     background-image: url('../assets/icon/search-storytask.png');
@@ -38,10 +51,19 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block;
-     width:30px;
+    display:block
+     
 }
 
+.ion-ios-StoryTask-outline::before{
+    background-image: url('../assets/icon/search-storytask.png');
+    background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+    color:#fff;
+    content:"";
+    width:30px;
+}
 
 .ion-md-Comments::before, .ion-ios-Comments::before, .ion-wp-Comments::before {
     background-image: url('../assets/icon/search-comment.png');
@@ -50,8 +72,8 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block;
-   width:30px;  
+    display:block
+     
 }
 .ion-md-Users::before, .ion-ios-Users::before, .ion-wp-Users::before {
     background-image: url('../assets/icon/search-users.png');
@@ -60,8 +82,8 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block;
-    width:30px; 
+    display:block
+     
 }
 .ion-md-Artifacts::before, .ion-ios-Artifacts::before, .ion-wp-Artifacts::before {
     background-image: url('../assets/icon/search-artifacts.png');
@@ -70,8 +92,8 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block;
-    width:30px; 
+    display:block
+     
 }
 
 
