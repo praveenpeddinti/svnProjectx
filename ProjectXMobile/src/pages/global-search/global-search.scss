@@ -124,7 +124,7 @@ page-global-search {
     font-weight: bold;*/
 
 font-family: FontAwesome;
-   content: "\f095";
+  content: "\f00d";
    display: inline-block;
    padding-right: 3px;
    vertical-align: middle;
@@ -159,6 +159,8 @@ color: #fff!important;
 
 .searchbar-md .searchbar-input{ color:#fff!important;}
 
+.searchbar-ios .searchbar-clear-icon {top:0px!important;}
+
 .searchbar-clear-icon{ background-image:none!important; top:5px!important; right:5px!important;}
 
 .searchbar-clear-icon:before {
@@ -192,5 +194,7 @@ ion-header{
 }
 
 .toolbar .searchbar-ios .searchbar-input{background:none!important;}
+
+.bar-button-default-ios{ color:#fff!important;}
 
 }
