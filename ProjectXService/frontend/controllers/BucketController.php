@@ -21,6 +21,7 @@ use common\models\mongo\TicketCollection;
 use common\models\User;
 use common\models\mongo\TinyUserCollection;
 use common\models\mysql\Collaborators;
+use common\models\mysql\Bucket;
 use common\components\ApiClient; //only for testing purpose
 use common\components\Email; //only for testing purpose
 use common\models\mongo\NotificationCollection;
@@ -71,12 +72,13 @@ class BucketController extends Controller
     */
    public function actionGetAllBucketDetails() {
         try { 
-            $StoryData = json_decode(file_get_contents("php://input"));
-            $projectId = $StoryData->projectId; 
+            $bucketData = json_decode(file_get_contents("php://input"));
+            $bucketDetails=ServiceFactory::getBucketServiceInstance()->getBucketDetails($bucketData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             //$responseBean->totalCount = $totalCount;
+            $responseBean->data = $bucketDetails;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (Exception $ex) {
@@ -112,12 +114,12 @@ class BucketController extends Controller
     public function actionGetBucketFilters(){
         try{
         $postData = json_decode(file_get_contents("php://input"));
-        error_log("----bucfi---".print_r($postData,1));
         $bucketFilterData=ServiceFactory::getBucketServiceInstance()->getBucketTypeFilter($postData->projectId,$postData->Type);
-            $responseBean = new ResponseBean();
+        $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $bucketFilterData;
+            $responseBean->totalCount = 'New';
             $response = CommonUtility::prepareResponse($responseBean,"json");
       return $response;  
         } catch (Exception $ex) {
@@ -127,15 +129,63 @@ class BucketController extends Controller
     
     /**
      * @author Praveen
-     * @uses Get buckets for current project
+     * @uses Saving the bucket
      * @return type
      */
     public function actionSaveBucketDetails(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-            //error_log("bucket details------".print_r($postData,1));
-            $saveBucketDetails=ServiceFactory::getBucketServiceInstance()->getSaveBucketDetails($postData);
-        
+            $checkbucket=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->data->title,$postData->projectId);
+            if($checkbucket=='failure'){
+                $saveBucketDetails=ServiceFactory::getBucketServiceInstance()->getSaveBucketDetails($postData);
+                $response='success';
+                $responseBean = new ResponseBean();
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+                $responseBean->data = $response;
+                return $response = CommonUtility::prepareResponse($responseBean,"json");
+            }else{
+                $response='failure';
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "FAILURE";
+                $responseBean->data =    $response;
+                return $response = CommonUtility::prepareResponse($responseBean,"json");
+            }
+           
+        //    error_log(count($postData->data->notifyEmail)."==save bucket details ------".count($postData->data->sendReminder));
+        } catch (Exception $ex){
+           Yii::log("BucketController:actionSaveBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
+        }
+    }
+    
+    
+    /**
+     * @author Praveen
+     * @uses Updating the bucket
+     * @return type
+     */
+    public function actionUpdateBucketDetails(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $checkbucket=ServiceFactory::getBucketServiceInstance()->checkupdateBucketName($postData->data->title,$postData->data->Id,$postData->projectId);
+            if($checkbucket=='failure'){
+                $saveBucketDetails=ServiceFactory::getBucketServiceInstance()->updateBucketDetails($postData);
+                $response='success';
+                $responseBean = new ResponseBean();
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+                $responseBean->data = $response;
+                return $response = CommonUtility::prepareResponse($responseBean,"json");
+            }else{
+                $response='failure';
+                $responseBean = new ResponseBean;
+                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->message = "FAILURE";
+                $responseBean->data =    $response;
+                return $response = CommonUtility::prepareResponse($responseBean,"json");
+            }
+           
         //    error_log(count($postData->data->notifyEmail)."==save bucket details ------".count($postData->data->sendReminder));
         } catch (Exception $ex){
            Yii::log("BucketController:actionSaveBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 

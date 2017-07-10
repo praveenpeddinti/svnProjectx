@@ -1,7 +1,7 @@
 <?php
 namespace common\service;
 use common\models\mongo\TicketCollection;
-use common\components\CommonUtility;
+use common\components\CommonUtilityTwo;
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
 use common\models\mysql\Bucket;
@@ -20,21 +20,64 @@ class BucketService {
 
     /**
     * @author Praveen
+    * @description This is to get bucket details in bucket table(mysql
+    * @return type 
+    * @param type $projectId, $bucketStatus
+     */      
+    public function getBucketDetails($bucketData){
+        try{
+            $timezone = $bucketData->timeZone;
+            $finalData = array();
+            $bucketModel = new Bucket();
+            $bucketDetails = $bucketModel->getBucketDetails($bucketData);
+            //error_log(print_r($bucketDetails,1)."----bucquery--serv--".sizeof($bucketDetails));
+            foreach ($bucketDetails as $bucket) {error_log("----1---s---".$bucket['Id']);
+                $details = CommonUtilityTwo::prepareBucketDashboardDetails($bucket,$bucketData->projectId,$timezone);
+                array_push($finalData, $details);
+                //break;
+            } 
+            //error_log("finalBucketData---".print_r($finalData,1));
+            //return $bucketDetails;
+            return $finalData;
+        } catch (Exception $ex) {
+            Yii::log("BucketService:getBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
+    
+    
+    /**
+    * @author Praveen
     * @description This is to get filtered bucket list in creating buckets 
     * @return type 
     * @param type $projectId
      */      
     public function getBucketTypeFilter($projectId,$type){
-        try{error_log("---bservice");
+        try{
          $bucketModel = new Bucket();
          return $bucketModel->getBucketTypeFilter($projectId,$type);
         } catch (Exception $ex) {
             Yii::log("BucketService:getBucketTypeFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
     /**
     * @author Praveen
-    * @description This is to saving the bucket details (creating bucket) 
+    * @description This method is used to check the bucket is existing in the project before saving the bucket details  
+    * @return type 
+    * @param type $bucketData
+     */      
+    public function checkBucketName($bucketName,$projectId){
+        try{
+         $bucketModel = new Bucket();
+         return $bucketModel->checkBucketName($bucketName,$projectId);
+        } catch (Exception $ex) {
+            Yii::log("BucketService:checkBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
+    * @author Praveen
+    * @description This is to saving the bucket details 
     * @return type 
     * @param type $bucketData
      */      
@@ -46,6 +89,37 @@ class BucketService {
             Yii::log("BucketService:getSaveBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    
+    /**
+    * @author Praveen
+    * @description This method is used to check the bucket is existing in the project before updating the bucket details  
+    * @return type 
+    * @param type $bucketData
+     */      
+    public function checkUpdateBucketName($bucketName,$bucketId,$projectId){
+        try{
+         $bucketModel = new Bucket();
+         return $bucketModel->checkUpdateBucketName($bucketName,$bucketId,$projectId);
+        } catch (Exception $ex) {
+            Yii::log("BucketService:checkUpdateBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    /**
+    * @author Praveen
+    * @description This is to updating the bucket details 
+    * @return type 
+    * @param type $bucketData
+     */      
+    public function updateBucketDetails($bucketData){
+        try{
+         $bucketModel = new Bucket();
+         return $bucketModel->updateBucketDetails($bucketData);
+        } catch (Exception $ex) {
+            Yii::log("BucketService:updateBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
 
 }
 

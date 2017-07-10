@@ -535,6 +535,77 @@ class TicketCollection extends ActiveRecord
         }
     }
 
+    
+    
+    public static function getAllTicketsCount($projectId,$value,$FieldBucket,$FieldState,$taskFlag){
+     try{
+            $query = new Query();
+            if($taskFlag=='All')
+                $condition = [$FieldBucket=>(int)$value, "ProjectId" =>(int)$projectId];
+            if($taskFlag=='Closed')
+                $condition = [$FieldBucket=>(int)$value, "ProjectId" =>(int)$projectId, $FieldState=>array('$in' => array(6,7))];
+            if($taskFlag=='Open')
+                $condition = [$FieldBucket=>(int)$value, "ProjectId" =>(int)$projectId, $FieldState=>array('$in' => array(1,2,3,4,5))];
+            
+            $query->from('TicketCollection')
+                    ->where($condition);
+           //->where(['Fields.assignedto.value' => (int)$userId, "ProjectId" =>(int)$projectId])
+           //->orWhere(['Followers.FollowerId'=>(int)$userId, "ProjectId" =>(int)$projectId])
+           //->andWhere([$FieldName=>(int)$value, "ProjectId" =>(int)$projectId]);
+           $ticketDetails = $query->count();
+          return $ticketDetails;  
+     } catch (Exception $ex) {
+     Yii::log("TicketCollection:getAllTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+     } 
+ 
+   }
+   
+   
+   public static function getTotalWorkHoursForBucket($projectId,$value,$FieldBucket){
+    try{
+    $query = Yii::$app->mongodb->getCollection('TicketCollection');
+    $pipeline = array(
+    array( '$match' => array('Fields.bucket.value' => (int)$value, "ProjectId" => (int) $projectId,'IsChild'=>(int)0)),
+    array( '$group' => array(
+            '_id' => null,
+            'totalHours' => array( '$sum' => '$TotalTimeLog' ),
+            ),
+        ),
+    );
+    $result = $query->aggregate($pipeline);
+    return $result[0]['totalHours'];    
+           
+     } catch (Exception $ex) {
+         error_log($ex->getMessage());
+     Yii::log("TicketCollection:getTotalWorkHoursForBucket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+     } 
+   }
+   
+    public static function checkTicketsinBuckets($projectId,$bucketId){
+        try{
+            $query = new Query();
+            // compose the query
+            $query->select(['TicketId'])
+                ->from('TicketCollection')
+                    ->where(['Fields.bucket.value'=>(int)$bucketId ,'ProjectId'=>(int)$projectId])
+                ->limit(1);
+            $models = $query->all();
+           
+//             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+//         $cursor =  $collection->find(array('$or'=>array( array( "Fields.bucket.value"=>(int)$bucketId ,"ProjectId"=>(int)$projectId))));
+//         error_log("count------------------".$cursor); 
+//         $mergedChatUsers = iterator_to_array($cursor);
+           
+           return $models;  
+      } catch (Exception $ex) {
+      Yii::log("TicketCollection:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+      }  
+        
+     
+    }
 
 }  
 ?>
