@@ -86,25 +86,33 @@ color:#fff; font-size:12px; text-align: center; vertical-align: middle; font-wei
    background: none;
     color: #fff!important;
      font-family: FontAwesome!important;
-     font-size: 1.6em!important;
-     display:none!important;
+     font-size: 1.2em!important;
+     content: "\f060"!important;
+     
 }
 
 .ion-ios-arrow-back::before {
    background: none;
     color: #fff!important;
      font-family: FontAwesome!important;
-     font-size: 1.6em!important;
-     display:none!important;
+     font-size: 1.2em!important;
+     content: "\f060"!important;
+     
 }
+
+
 
 .ion-wp-arrow-back::before {
    background: none;
     color: #fff!important;
      font-family: FontAwesome!important;
-     font-size: 1.6em!important;
-     display:none!important;
+     font-size: 1.2em!important;
+     content: "\f060"!important;
+    
 }
+
+.searchbar-input-container .ion-md-arrow-back::before { display:none!important;}
+
 
 /*.searchbar-md .searchbar-clear-icon{ background-image: url(../assets/icon/search-all.png)!important;
     background-repeat: no-repeat;}*/
@@ -120,7 +128,7 @@ color:#fff; font-size:12px; text-align: center; vertical-align: middle; font-wei
 button{ background: none!important;}
 .searchbar-has-focus{ content: none!important; background: none!important;}
 
-.searchbar{ border-bottom:solid 1px #fff;}
+/*.searchbar{ border-bottom:solid 1px #fff;}*/
 
 .searchbar-input-container {
    border-bottom:solid 1px #fff!important;
