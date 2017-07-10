@@ -20,8 +20,18 @@ page-global-search {
      content: "\f0f3";color:#fff;
 }*/
 
-.ion-md-All::before, .ion-ios-All::before, .ion-wp-All::before {
+.ion-md-All::before, .ion-wp-All::before {
     background-image: url('../assets/icon/search-all.png');
+    background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+    color:#fff;
+    content:"";
+    display:block;
+     
+}
+
+.ion-ios-All::before{background-image: url('../assets/icon/search-all.png');
     background-repeat: no-repeat;
   background-position: 50%;
   height: 100%;
