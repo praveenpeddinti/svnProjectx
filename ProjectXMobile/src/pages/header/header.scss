@@ -11,7 +11,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 }
 .toolbar-title-md, .toolbar-title-ios, .toolbar-title-wp{text-align: center;color:#fff;}
 .bar-button-md[icon-only] i, .bar-button-ios[icon-only] i, .bar-button-wp[icon-only] i{font-size:2.4em;color:#fff}
-.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default, .bar-button-default-ios, .bar-button-clear-ios-default, .bar-button-ios-default, .bar-button-default-wp, .bar-button-clear-wp-default, .bar-button-wp-default{color:#fff}
+.bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default, .bar-button-default-ios, .bar-button-clear-ios-default, .bar-button-ios-default, .bar-button-default-wp, .bar-button-clear-wp-default, .bar-button-wp-default{color:#fff!important;}
 
 .toolbar .searchbar-md, .searchbar-ios, .searchbar-wp {}
 
@@ -21,6 +21,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
 .searchbar-input{color: #fff!important; background: none!important;box-shadow: none!important; }
 .toolbar .searchbar-md, .toolbar .searchbar-wp{
     width:89%!important;
+    padding: 0px;
 }
 .toolbar .searchbar-ios{width:85%!important;}
 
@@ -111,7 +112,7 @@ color:#fff; font-size:12px; text-align: center; vertical-align: middle; font-wei
 
 
 .searchbar-md .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
-.searchbar-ios .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
+.searchbar-ios .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px; background: none!important;}
 .searchbar-wp .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
 
 .searchbar-input::before{display: none!important;}
