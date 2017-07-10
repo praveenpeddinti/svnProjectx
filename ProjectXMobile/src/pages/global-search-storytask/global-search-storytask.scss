@@ -31,7 +31,7 @@ page-global-search-storytask {
 .customcontention .list-md ion-item-sliding, .customcontention .list-ios ion-item-sliding, .customcontention .list-wp ion-item-sliding{background: #f4f4f4;margin-bottom:10px}
 
 .ticketDate{ color: #0199e0;}
-.item-md{ padding:0px 10px ;border-bottom: solid 1px #f0f0f0;font-size:12px;}
+.item-md, .item-ios, .item-wp { padding:0px 10px ;border-bottom: solid 1px #f0f0f0;font-size:12px;}
 .ticketid{color: #0199e0;}
 .tickettitle{color: #0199e0;}
 .createdBy{color: #0199e0;}
