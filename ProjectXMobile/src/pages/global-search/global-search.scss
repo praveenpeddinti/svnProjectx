@@ -223,5 +223,10 @@ searchbar-md .searchbar-input{ color: #fff!important; padding-left: 0px!importan
 .searchbar-ios .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px; background: none!important;}
 .searchbar-wp .searchbar-input{ color: #fff!important; padding-left: 0px!important;padding: 6px 0px 6px 55px;}
 .no-padding{ padding: 0px!important;}
+ion-app
+{
+.ios [padding] .scroll-content{ padding:0px!important;}
+}
+
 
 }
