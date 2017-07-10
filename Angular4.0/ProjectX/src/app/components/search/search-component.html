@@ -27,7 +27,7 @@
 </div>
 <div class="searchresulttitle" *ngIf="finalData.ProfilePicture">
     <span class="searchresulttitleusericon">
-<img *ngIf="finalData.ProfilePicture" src="assets/images/user_noimage.png" />
+<img *ngIf="finalData.ProfilePicture" src="{{finalData.ProfilePicture}}" />
 </span>
 
  <a> {{finalData.Title}}</a>
