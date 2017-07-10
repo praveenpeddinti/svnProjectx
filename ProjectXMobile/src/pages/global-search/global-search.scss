@@ -27,9 +27,19 @@ page-global-search {
   height: 100%;
     color:#fff;
     content:"";
-    display:block
+    display:block;
      
 }
+
+.ion-ios-All-outline::before{  background-image: url('../assets/icon/search-all.png');
+    background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+    color:#fff;
+    content:"";
+    }
+
+
 
 .ion-md-StoryTask::before, .ion-ios-StoryTask::before, .ion-wp-StoryTask::before {
     background-image: url('../assets/icon/search-storytask.png');
@@ -41,6 +51,16 @@ page-global-search {
     display:block
      
 }
+
+.ion-ios-StoryTask-outline::before{
+    background-image: url('../assets/icon/search-storytask.png');
+    background-repeat: no-repeat;
+  background-position: 50%;
+  height: 100%;
+    color:#fff;
+    content:"";
+}
+
 .ion-md-Comments::before, .ion-ios-Comments::before, .ion-wp-Comments::before {
     background-image: url('../assets/icon/search-comment.png');
     background-repeat: no-repeat;
