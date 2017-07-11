@@ -30,14 +30,11 @@ class BucketService {
             $finalData = array();
             $bucketModel = new Bucket();
             $bucketDetails = $bucketModel->getBucketDetails($bucketData);
-            //error_log(print_r($bucketDetails,1)."----bucquery--serv--".sizeof($bucketDetails));
-            foreach ($bucketDetails as $bucket) {error_log("----1---s---".$bucket['Id']);
-                $details = CommonUtilityTwo::prepareBucketDashboardDetails($bucket,$bucketData->projectId,$timezone);
+            foreach ($bucketDetails as $bucket) {
+                $details = CommonUtilityTwo::prepareBucketDashboardDetails($bucket,$bucketData->projectId,$timezone,$bucketData->bucketStatus);
                 array_push($finalData, $details);
                 //break;
             } 
-            //error_log("finalBucketData---".print_r($finalData,1));
-            //return $bucketDetails;
             return $finalData;
         } catch (Exception $ex) {
             Yii::log("BucketService:getBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -67,10 +64,10 @@ class BucketService {
     * @return type 
     * @param type $bucketData
      */      
-    public function checkBucketName($bucketName,$projectId){
+    public function checkBucketName($bucketName,$projectId,$btype){
         try{
          $bucketModel = new Bucket();
-         return $bucketModel->checkBucketName($bucketName,$projectId);
+         return $bucketModel->checkBucketName($bucketName,$projectId,$btype);
         } catch (Exception $ex) {
             Yii::log("BucketService:checkBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
@@ -119,8 +116,21 @@ class BucketService {
             Yii::log("BucketService:updateBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    /**
+    * @author Praveen
+    * @description This is to change the status for bucket 
+    * @return type 
+    * @param type $projectId,$bucketId,statusType
+     */      
+    public function getBucketChangeStatus($projectId,$bucketId,$StatusType){
+        try{
+         $bucketModel = new Bucket();
+         return $bucketModel->getBucketChangeStatus($projectId,$bucketId,$StatusType);
+        } catch (Exception $ex) {
+            Yii::log("BucketService:getBucketChangeStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
     
-
 }
 
   

@@ -133,7 +133,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         }
     }
     
-    public static function prepareBucketDashboardDetails($bucketDetails, $projectId,$timezone) {
+    public static function prepareBucketDashboardDetails($bucketDetails, $projectId,$timezone,$bType) {
         try {
             if(!empty($bucketDetails["StartDate"])){
             $startDateTime = strtotime($bucketDetails["StartDate"]);
@@ -164,6 +164,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $prepareBucketArray['EmailNotify'] =$bucketDetails["EmailNotify"];
             $prepareBucketArray['EmailReminder'] =$bucketDetails["EmailReminder"];
             $prepareBucketArray['DropDownBucket'] =(int)0;
+            $prepareBucketArray['BucketRole'] = $bType;
             $checkTicketsinBuckets = TicketCollection::checkTicketsinBuckets($projectId,$bucketDetails['Id']);
             if(count($checkTicketsinBuckets)==0){
                 $prepareBucketArray['AllTasks'] =(int)0;

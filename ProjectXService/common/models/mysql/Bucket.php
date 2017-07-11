@@ -123,17 +123,18 @@ class Bucket extends ActiveRecord
                     error_log($offset."--page---".$limit);
                 //error_log("----bucquery----".print_r($bucketData,1));
             if($bucketData->bucketStatus==1){
-              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=2 AND BucketStatus=0 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
+              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=2 AND BucketStatus=0 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
               
             }
             if($bucketData->bucketStatus==2){
-              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=2 AND BucketStatus=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
+              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=2 AND BucketStatus=1 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
               
             }
             if($bucketData->bucketStatus==0){
-              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
+              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=1 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
               
             }
+            error_log($offset."--page-1--".$bucketsQuery);
             $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
             return $bucketDetails;
         } catch (Exception $ex) {
@@ -153,7 +154,7 @@ class Bucket extends ActiveRecord
     public function getBucketTypeFilter($projectId,$type)
     {
         try{
-        if($type="New"){
+        /*if($type="New"){
             $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketType=2 AND BucketStatus=0 AND Projectid=$projectId"; 
             $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
             if(empty($checkCurrentBucket)){
@@ -163,10 +164,10 @@ class Bucket extends ActiveRecord
                 
             }
             $data = Yii::$app->db->createCommand($qry)->queryAll();
-        }else{
+        }else{*/
           $qry = "SELECT * FROM BucketType";
          $data = Yii::$app->db->createCommand($qry)->queryAll();  
-        }
+        //}
          return $data;
             
         } catch (Exception $ex) {
@@ -182,13 +183,29 @@ class Bucket extends ActiveRecord
      * @return type 
      * 
      */   
-    public static function checkBucketName($bucketName,$projectId){
+    public static function checkBucketName($bucketName,$projectId,$btype){
         try{
             $returnValue='failure';
-            $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'";
+            if($btype==2){
+            $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketType=2 AND BucketStatus=0 AND Projectid=$projectId"; 
+            $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
+                if(empty($checkCurrentBucket)){error_log("---1----");
+                $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'";
+                $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+                    if(sizeof($bucketData)>0){
+                        $returnValue='Yes';
+                    }else{
+                       $returnValue='failure'; 
+                    }
+                }else{$returnValue='current'; }
+            }else{
+                 $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'";
             $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
-             if(sizeof($bucketData)>0){
-                $returnValue='Yes';
+                if(sizeof($bucketData)>0){
+                    $returnValue='Yes';
+                }else{
+                   $returnValue='failure'; 
+                }  
             }
             return $returnValue;
 
@@ -217,6 +234,7 @@ class Bucket extends ActiveRecord
             $bucket->BucketStatus = (int)0;
             $bucket->EmailNotify = (int)$notifyEmail;
             $bucket->EmailReminder = (int)$sendReminder;
+            $bucket->Status = (int)1;
             $bucket->save();
             //if ($bucket->save()) {
             //    $returnValue = $bucket->Id;
@@ -240,6 +258,34 @@ class Bucket extends ActiveRecord
     public static function checkUpdateBucketName($bucketName,$bucketId,$projectId){
         try{
             $returnValue='failure';
+            
+            if($btype==2){
+            $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketType=2 AND BucketStatus=0 AND Projectid=$projectId"; 
+            $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
+                if(empty($checkCurrentBucket)){error_log("---1----");
+                $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
+            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+             if(sizeof($bucketData)>0){
+                $returnValue='Yes';
+            }else{
+                       $returnValue='failure'; 
+                    }
+                }else{$returnValue='current'; }
+            }else{
+            $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
+            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+             if(sizeof($bucketData)>0){
+                $returnValue='Yes';
+            }else{
+                   $returnValue='failure'; 
+                }  
+            }
+            
+            
+            
+            
+            
+            
             $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
             $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
              if(sizeof($bucketData)>0){
@@ -283,9 +329,49 @@ class Bucket extends ActiveRecord
             $returnValue = 'failure';
         }
     }
+    
+    public function getBucketChangeStatus($projectId,$bucketId,$StatusType) {
+        try {
+            
+            $bucket=Bucket::findOne($bucketId);
+            if($StatusType=='Set as Completed')
+            {
+                $bucket->BucketStatus = (int)1;
+            }
+            if($StatusType=='Set as Backlog') {
+                $bucket->BucketType = (int)1;
+            }
+            if($StatusType=='Delete') {
+                $bucket->Status = (int)0;
+            }
+            if($StatusType=='Re-opened milestone'){
+                
+            }
+            if($StatusType=='Set as Current'){
+                $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketType=2 AND BucketStatus=0 AND Projectid=$projectId"; 
+            $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
+                if(empty($checkCurrentBucket)){
+                    $bucket->BucketType = (int)2;
+                }else{$bucket->BucketType = (int)1;}
+                
+            }
+            $bucket->update();
+            if ($bucket->update() !== false) {
+                $result = "success";
+            } else {
+                $result = "Current Bucket is Exist";
+            }
+            return $result;
+        } catch (Exception $ex) {
+            Yii::log("Bucket:getBucketChangeStatus::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');
+            $returnValue = 'failure';
+        }
+    }
  
 }
 
 
+            
+            
 
 ?>
