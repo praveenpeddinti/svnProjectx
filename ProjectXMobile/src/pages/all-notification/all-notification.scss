@@ -1,6 +1,7 @@
 /* notification div */
 .padding10{padding:65px 0px 0px}
-.item-md.item-block .item-inner {padding-right:0px!important; border-bottom:none!important;}
+.item-md.item-block .item-inner, .item-ios.item-block .item-inner, .item-wp.item-block .item-inner {padding-right:0px!important; border-bottom:none!important;}
+
 .label-md {
     margin:0px!important;
 }
