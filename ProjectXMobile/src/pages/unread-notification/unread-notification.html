@@ -11,7 +11,7 @@
             <ion-item-sliding *ngFor="let notify of notification_msg " 
                 no-padding>
                 <ion-item text-wrap no-padding no-lines class="dashboardouterbox">
-                    <div class="unread_notifications">
+                    <div class="unread_notifications {{(notify.IsSeen==1)?'read_notifications':''}}">
                         <div class="notificationdiv" id="{{notify.id.$oid}}" *ngIf="notify.status=='changed'">
                             <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid)">
                             <span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
