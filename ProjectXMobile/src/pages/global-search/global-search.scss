@@ -267,4 +267,16 @@ bottom:0px!important;
 
 .back-button-text-ios{display:none!important;}
 
+.searchbar-input::-moz-placeholder {
+  color: white;
+}
+
+.searchbar-input:-ms-input-placeholder {
+  color: white;
+}
+
+.searchbar-input::-webkit-input-placeholder {
+  color: white;
+}
+
 }
