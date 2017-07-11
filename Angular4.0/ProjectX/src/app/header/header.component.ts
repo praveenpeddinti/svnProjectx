@@ -264,4 +264,7 @@ export class HeaderComponent implements OnInit {
   TimeReport(){
   this._router.navigate(['project',localStorage.getItem('ProjectName'),'time-report']);
 }
+Bucket(){
+  this._router.navigate(['project',localStorage.getItem('ProjectName'),'bucket']);
+}
 }
