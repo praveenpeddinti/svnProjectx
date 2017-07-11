@@ -17,12 +17,13 @@
 <div class="tabbable tabs-left row">
     <div class="col-xs-12 col-sm-3 col-md-3 tabpaddingrightzero" id="nosearchdiv" >
         <ul class="nav nav-tabs">
-            <li class="active"><a (click)="callshowBuckets(1)" data-toggle="tab">Open Bucket</a></li>
-            <li ><a (click)="callshowBuckets(2)" data-toggle="tab">Closed Buckets</a></li>
+            <li class="active"><a (click)="callshowBuckets(1)" data-toggle="tab">Current</a></li>
+            <li ><a (click)="callshowBuckets(2)" data-toggle="tab">Closed</a></li>
             <li ><a (click)="callshowBuckets(0)" data-toggle="tab">Backlog</a></li>
         </ul>
     </div>
     <div id="noseachdivclass" class="col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero">
+        <div id="bucketStatusErrorMsg" class="alert alert-danger" style="display:none"> </div> 
         <div class="tab-content tab-content_content" >
             <div class="col-md-12 col-sm-12" *ngFor="let bDetails of bucketDetails;let i=index;">
                 <div class="col-md-12">
@@ -153,7 +154,10 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
                         <label class="timereportlabel"> Due Date </label>
                         <div class="paddingright25 ">
-                            <p-calendar [(ngModel)]="form.dueDateVal" name="dueDateVal"  #dueDateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"></p-calendar>
+                            <p-calendar required [(ngModel)]="form.dueDateVal" name="dueDateVal"  #dueDateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"></p-calendar>
+                        </div>
+                        <div *ngIf="submitted && dueDateVal.errors " class="fielderror">
+                            <div  [hidden]="!dueDateVal.errors.required">Due Date is required</div>
                         </div>
                         <div id="addDueDateErrMsg" class="fielderror" style="display:none;"></div>
                     </div>

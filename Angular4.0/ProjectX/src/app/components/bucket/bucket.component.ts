@@ -93,7 +93,7 @@ export class BucketComponent{
                         thisObj.FilterOptionToDisplay=this.prepareItemArray(response.data,false,'Member');
                         thisObj.FilterOption=this.FilterOptionToDisplay[0].filterValue;
                     }); 
-                    thisObj._service.getBucketTypeFilter(this.projectId,this.Type,(response) => {
+                    thisObj._service.getBucketTypeFilter(this.projectId,'New',(response) => {
                         this.isCurrentBucketExist=response.data.length;
                         thisObj.BucketFilterOptionToDisplay=this.prepareItemArray(response.data,false,'bucket');
                         thisObj.BucketFilterOption=this.BucketFilterOptionToDisplay[0].filterValue;
@@ -109,7 +109,6 @@ export class BucketComponent{
                 if (thisObj.ready && jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height())) {
                     thisObj.ready=false;
                     thisObj.page++;
-                  //alert(thisObj.bStatus+"loading"+thisObj.page);
                     thisObj.load_bucketContents(thisObj.page,thisObj.bStatus,'scroll'); 
                 }
             });
@@ -135,7 +134,7 @@ export class BucketComponent{
         'page':page
         }
         this._ajaxService.AjaxSubscribe("bucket/get-all-bucket-details",postData,(response) => {
-            if (response.statusCode == 200) {console.log("-----result----"+JSON.stringify(response));
+            if (response.statusCode == 200) {
             this.zone.run(() =>{ 
                 this.bucketDetails= this.prepareBucketData(response.data,this.bucketDetails);
                 var listData=[];
@@ -219,18 +218,15 @@ export class BucketComponent{
            }
         }
         listMainArray.push({type:"",filterValue:listItem});
-        //console.log("list for user---"+JSON.stringify(listMainArray));
         return listMainArray;
     }
  
-filterCreateBucketUsers(){
+/*filterCreateBucketUsers(){
 var finalDate= this.form['selectedUserFilter'];
-    //console.log("this.selectedFilter==="+JSON.stringify(finalDate));
 }
 filterBucketType(){
 var finalDate= this.form['selectedBucketTypeFilter'];
-    //console.log("this.selectedFilter==="+JSON.stringify(finalDate));
-}
+}*/
 
 /*
 @params    :  type,priority,status
@@ -257,6 +253,7 @@ addBucket(){
     if(this.form['dueDateVal']!=undefined){
         if( (new Date(this.form['startDateVal']) > new Date(this.form['dueDateVal']))){
             this.errorBucketLog('addDueDateErrMsg','Start Date is must be greater than Due Date');
+            return false;
         }
     }
     if(this.form['selectedUserFilter']==''){
@@ -268,7 +265,15 @@ addBucket(){
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
       jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
       jQuery("#bucketSuccessMsg").html('Bucket already created');
-      //jQuery('#bucketSuccessMsg').fadeOut( "slow" );
+      jQuery('#bucketSuccessMsg').fadeOut( "slow" );
+      this.callshowBuckets(1);
+    }else if(response.data=='current'){
+      jQuery('#bucketSuccessMsg').show();
+      jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
+      jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
+      jQuery("#bucketSuccessMsg").html('Current Bucket is exist');
+      jQuery('#bucketSuccessMsg').fadeOut( "slow" );
+      this.callshowBuckets(1);
     }else{
         jQuery('#bucketSuccessMsg').show();
         jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
@@ -297,8 +302,8 @@ editBucketPopup(){
     this.form['dueDateVal'] = this.editBucketallDetails.DueDate;
     this.form['selectedUserFilter']=this.editBucketallDetails.ResponsibleUser;
     this.form['selectedBucketTypeFilter']=this.editBucketallDetails.BucketType;
-    (this.editBucketallDetails.EmailNotify==0)?this.form['notifyEmail']=['0']:this.form['notifyEmail']=['1'];
-    (this.editBucketallDetails.EmailReminder==0)?this.form['sendReminder']=['0']:this.form['sendReminder']=['1'];
+    //(this.editBucketallDetails.EmailNotify==0)?this.form['notifyEmail']=['0']:this.form['notifyEmail']=['1'];
+    //(this.editBucketallDetails.EmailReminder==0)?this.form['sendReminder']=['0']:this.form['sendReminder']=['1'];
     }    
  
 editBucket(){
@@ -320,7 +325,6 @@ editBucket(){
     if(this.form['selectedUserFilter']==''){
        this.errorBucketLog('responsibleErrMsg','Please select Responsible');
     }
-    console.log("Edit form fields-----"+JSON.stringify(this.form));
     this._service.updateBucket(this.form,(response)=>{
     if(response.data=='failure'){
       jQuery('#bucketSuccessMsg').show();
@@ -330,20 +334,44 @@ editBucket(){
     }else{
         jQuery('#bucketSuccessMsg').show();
         jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
-        //jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
         jQuery("#bucketSuccessMsg").html('Bucket updated successfully');
       //jQuery('#bucketSuccessMsg').fadeOut( "slow" );
-      //this.callshowBuckets(1);
+      this.callshowBuckets(1);
     }
     });
     }
       
-filterBucketChange(bucketId,event){//alert("----"+JSON.stringify(bucketId));
+filterBucketChange(bucketId,event){
 
     this.editBucketallDetails = bucketId;
     if(event.text=='Edit'){
-    //this.getBucketTypeFilter(this.projectId,"Edit");
-    jQuery("#editBucketButton").click();}
+        //this.getBucketTypeFilter(this.projectId,"Edit");
+        jQuery("#editBucketButton").click();
+    }else{
+      
+       var postData={
+       'projectId':this.projectId,
+       'bucketId':bucketId.BucketId,
+       'changeStatus':event.text
+       }
+       this._ajaxService.AjaxSubscribe("bucket/get-bucket-change-status",postData,(response) => {
+        if(response.data=='success'){
+               jQuery('#bucketStatusErrorMsg').show();  
+      jQuery("#bucketStatusErrorMsg").html('Bucket Status is updated');
+      jQuery('#bucketStatusErrorMsg').fadeOut( "slow" );
+      //jQuery('#bucketSuccessMsg').fadeOut( "slow" );
+      this.callshowBuckets(bucketId.BucketRole);
+      
+    }else{
+      jQuery('#bucketStatusErrorMsg').show();
+      jQuery('#bucketSuccessMsg').removeClass('alert alert-danger');
+      jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
+      jQuery("#bucketSuccessMsg").html('Current Bucket is exist');
+    }       
+       });
+   }
+    
+    
 } 
 
    toggle_visibility(id,event) {
