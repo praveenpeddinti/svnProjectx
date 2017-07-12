@@ -19,7 +19,7 @@ getProjectDetails(projectName,getProjectCallback) {
       'projectName':projectName,
       'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
     }
-     this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(post_data), headers)
+     this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(post_data))
       .subscribe(
       (data) => {
         var res = data.json();//For Success Response
