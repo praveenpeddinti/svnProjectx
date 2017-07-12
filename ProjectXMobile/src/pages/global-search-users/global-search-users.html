@@ -31,5 +31,11 @@
                 </div>
     </ion-item>
   </ion-list>
-     <div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> That’s all. No results found. </div>
+<!--     <div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> That’s all. No results found. </div>-->
+
+<!--uday added-->
+<div *ngIf="!moreDataLoaded" class="globalsearch_footer" style="text-align: center;">{{errorMessage}}</div>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content *ngIf="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

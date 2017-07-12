@@ -25,13 +25,14 @@ export class GlobalSearch {
     GlobalSearchComments:any;
     GlobalSearchStorytask:any;
     GlobalSearchUsers:any;
+ 
    
    public searchValue : any;
      public rootParams: any = {searchValue: "" ,dataCollection:{} };
     //public getglobalParams = { page: 1, searchString:"moin"};
     public dataCollection = [];
     public allList: Array<{ id: string, title: string, description: string, planleve: string, reportedby: string, updatedon: string }>;
-
+    public errorMessage: string="No results found.";
   constructor(public navCtrl: NavController, public navParams: NavParams,
       private http:Http,private constants: Constants,
        public globalService: Globalservice) {
@@ -63,14 +64,41 @@ export class GlobalSearch {
         this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
        (result) => {
            this.dataCollection = result.data;
-           console.log("ticketCollection main page" + JSON.stringify(this.dataCollection));
-           this.rootParams.dataCollection = this.dataCollection;
+            this.rootParams.dataCollection = this.dataCollection;
+           
+             if (this.dataCollection.length == 0) {
+                        this.moreDataLoaded = false;
+                         this.errorMessage="No results found.";
+                    }else{
+                
+            this.errorMessage="That’s all. No results found.";
+            }
+          
        },(error) => {
+       
+         this.errorMessage="No results found.";
       });
 }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad GlobalSearch');
   }
+  public moreDataLoaded: boolean = true;
+  public doInfinite(infiniteScroll) {
+        setTimeout(() => {
+            if (this.moreDataLoaded == true) {
+                this.getAllsearchResults();
+                infiniteScroll.complete();
+            } else {
+                infiniteScroll.complete();
+            }
+        }, 2000);
+
+    }    
+    
+    public getAllsearchResults():void{
+        this.moreDataLoaded =false;
+        this.errorMessage="That’s all. No results found.";
+    }
 
 }
