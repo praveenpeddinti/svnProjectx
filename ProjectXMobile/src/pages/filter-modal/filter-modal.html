@@ -29,7 +29,7 @@
       </div>-->
      
       <div right *ngFor="let field of displayFieldvalue; let i=index;">
-      <label class="customlabel" style="font-size: 18px; color: #005b80; padding-left: 15px;">{{field.type}}</label>
+      <label class="customlabel{{i}}">{{field.type}}</label>
       <ion-list>
       <ion-row>
       <ion-item *ngFor="let listObj of field.filterValue; let i=index;" style="border-bottom: 1px solid #ccc;"
