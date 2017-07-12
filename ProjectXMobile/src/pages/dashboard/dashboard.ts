@@ -70,8 +70,7 @@ export class DashboardPage {
         this.headerName = "All My Stories/Task";
         this.SelectValue = "All My Stories/Task";
             this.arrayObject = [];
-            localStorage.setItem('headerInfo',JSON.stringify({'title':"My All Stories",'backButton':"hideBackButton",'logo':1,'leftPannel':0,notification:1,profile:1,searchBar:1}));
-
+            localStorage.setItem('headerInfo',JSON.stringify({'title':this.headerName,'backButton':"hideBackButton",'logo':1,'leftPannel':0,notification:1,profile:1,searchBar:1}));
             this.filterList = [];
             var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
             this.userName = userInfo.username;
@@ -331,17 +330,16 @@ export class DashboardPage {
                              console.log("selectvalue" + this.SelectValue);
                              this.headerName = data.label;
                              console.log("header name" + this.headerName);
-                              localStorage.setItem('headerInfo',JSON.stringify({'title':"this.headerName",'backButton':"hideBackButton",'logo':1,'leftPannel':0,'searchBar':1}));
+                             //this.globalService.setTitle( this.headerName);
+                             jQuery("#header_title").find(".toolbar-title").html(this.headerName);
                              this.params.filterOption = data.value;
                              this.params.sortvalue = data.value.type;
                              this.params.offset = 0;
                              this.arrayObject =[]; 
                              this.content.resize();
                              console.log("filtersOption set to"+JSON.stringify(this.params.filterOption));
-                                this.viewCtrl.dismiss();
+                               this.viewCtrl.dismiss();
                                  setTimeout(()=> {
-                                 
-                                 this.loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                                  this.getallTickets();
                              },300);
                              jQuery("#field_title_" + index + " label").text(data.label);
