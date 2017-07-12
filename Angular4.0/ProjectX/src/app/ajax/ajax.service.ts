@@ -26,7 +26,7 @@ AjaxSubscribe(url:string,params:Object,callback)
       params["timeZone"] = jstz.determine_timezone().name();
     }
       //var  options = new RequestOptions({headers: headers});
-      this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(params), headers)
+      this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(params))
       .subscribe(
       (data) => {
         jQuery("#commonSpinner").removeClass("loading"); 
