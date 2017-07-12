@@ -53,7 +53,7 @@ NodeSubscribe(url:string,params:Object,callback)
       params["timeZone"] = jstz.determine_timezone().name();
     }
       //var  options = new RequestOptions({headers: headers});
-      this.http.post(GlobalVariable.NOTIFICATION_URL+url, params, headers)
+      this.http.post(GlobalVariable.NOTIFICATION_URL+url, params) 
       .subscribe(
       (data) => {
         // jQuery("#commonSpinner").removeClass("loading"); 
