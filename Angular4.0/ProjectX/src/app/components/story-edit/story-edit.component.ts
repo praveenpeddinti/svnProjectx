@@ -54,6 +54,7 @@ export class StoryEditComponent implements OnInit
   public defaultTasksShow:boolean=true;
   public checkPlanLevel='';
   public getRows='';
+  public min_row:any=1;
   private childTasks = [];
   private showTotalEstimated=false;   
   private taskFieldsEditable=[]; 
@@ -86,7 +87,7 @@ export class StoryEditComponent implements OnInit
            var subtasks = data.data.ticket_details.Tasks;
             this.taskIds=[];
           for(let st of subtasks)
-           this.taskIds.push(st.TaskType)
+           this.taskIds.push(st.TaskType.toString())
             for (let task of this.taskArray) {
               if(this.taskIds.some(x=>x==task.Id)){
                 task.IsDefault=task.Id;
@@ -127,6 +128,7 @@ export class StoryEditComponent implements OnInit
         this.value = savedValue;
          rows = Math.floor((this.scrollHeight) / 30);
         this.rows = rows;
+        thisObj.min_row=rows;
     })
     .on('input.autoExpand', 'textarea.autoExpand', function(){
        
