@@ -10,7 +10,7 @@ page-global-search-all {
 .globalsearch_content .globalsearch_contentouterdiv .width33per{width:33%;float:left}
 .globalsearch_content .globalsearch_contentouterdiv  .width34per{width:34%;float:left}
 .globalsearch_content .globalsearch_contentouterdiv:after{content:"";clear:both;display:block}
-.globalsearch_content .collabels{font-style: italic;color:#a2a2a2;font-size:10px}
+.globalsearch_content .collabels{font-style: italic;color:#a2a2a2;font-size:12px}
 .globalsearch_content .colresults{font-style: normal;font-size:13px}
 .globalsearch_content .colresultssmall{font-style: normal;font-size: 11px;}
 .globalsearch_footer{padding:7px 10px 5px;position: relative}
@@ -24,7 +24,7 @@ page-global-search-all {
 .ticketid{color: #0199e0;}
 .tickettitle{color: #0199e0;}
 .createdBy{color: #0199e0;}
-.ticketDesc{ font-size:12px; color: #4c4c4c;}
+.ticketDesc{ font-size:14px; color: #4c4c4c;}
 ion-label {
 /*    white-space: nowrap;*/
     white-space: normal;
@@ -57,10 +57,11 @@ item-md.item-block .item-inner {
     margin: 10px 0px 10px 0;
 }
 
-.item-md.item-block .item-inner {padding-right: 0px!important}
+.item-md.item-block .item-inner {padding-right: 0px!important;}
 
 
 .ios [padding] .scroll-content{ padding:0px!important;}
 
+.leftpanelcust .list .item { padding:5px 10px!important;}
 
 }
