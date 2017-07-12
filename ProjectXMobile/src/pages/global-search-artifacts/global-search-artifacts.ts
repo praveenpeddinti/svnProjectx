@@ -36,9 +36,15 @@ export class GlobalSearchArtifacts {
               console.log("ticketCollection artifacts" + JSON.stringify(this.dataArtifacts));
             if (this.dataArtifacts.length == 0) {
                         this.moreDataLoaded = false;
+                         this.errorMessage="No results found.";
+               }
+               else{
+                   this.errorMessage="That’s all. No results found.";
+               
                }
             
           }, (error) => {
+           this.errorMessage="No results found.";
           });
   }
 //  toggle() {
@@ -67,13 +73,36 @@ export class GlobalSearchArtifacts {
               console.log("ticketCollection artifacts" + JSON.stringify(this.dataArtifacts));
             if (this.dataArtifacts.length == 0) {
                         this.moreDataLoaded = false;
+                         this.errorMessage="No results found.";
+               }else{
+                   this.errorMessage="That’s all. No results found.";
+               
                }
             
           }, (error) => {
+           this.errorMessage="No results found.";
           });
     }
   ionViewDidLoad() {
     console.log('ionViewDidLoad GlobalSearchArtifacts');
   }
+  
+  public doInfinite(infiniteScroll) {
+        setTimeout(() => {
+            if (this.moreDataLoaded == true) {
+                this.getAllsearchResults();
+                infiniteScroll.complete();
+            } else {
+                infiniteScroll.complete();
+            }
+        }, 2000);
+
+    }    
+     public errorMessage: string="No results found.";
+    public getAllsearchResults():void{
+        this.moreDataLoaded =false;
+        this.errorMessage="That’s all. No results found.";
+    }
+
 
 }
