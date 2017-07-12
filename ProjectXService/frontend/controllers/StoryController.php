@@ -660,7 +660,7 @@ class StoryController extends Controller
           $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($ticketId, $projectId,'Related', (int)$searchTicketId, $loginUserId,"",$timezone);
           $notifyType="Relate";
           $slug =  new \MongoDB\BSON\ObjectID();
-          ServiceFactory::getStoryServiceInstance()->saveNotifications($storyData, $notifyType,'','',$slug,$searchTicketId);
+          ServiceFactory::getStoryServiceInstance()->saveNotifications($storyData, $notifyType,'','',$slug,'',(int)$searchTicketId);
           $ticketData = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId,$ticketId);
           $responseData=array('ticketData'=>$ticketData,'activityData'=>$activityData);
           $responseBean = new ResponseBean();
@@ -790,7 +790,7 @@ class StoryController extends Controller
             $response['activityData'] = ServiceFactory::getStoryServiceInstance()->unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId,$timezone);
             $notifyType="UnRelate";
             $slug =  new \MongoDB\BSON\ObjectID();
-            ServiceFactory::getStoryServiceInstance()->saveNotifications($ticketData, $notifyType,'','',$slug,$unRelateTicketId);
+            ServiceFactory::getStoryServiceInstance()->saveNotifications($ticketData, $notifyType,'','',$slug,'',$unRelateTicketId);
             $response['ticketInfo'] = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId, $parentTicketId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -1010,6 +1010,16 @@ class StoryController extends Controller
         }
     }
     
+
+    public function actionTestCheck(){
+       $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = "hi";
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+    }
+
      /*
     * @author Ryan Marshal
     * @description This method is used to get the preferences of prechecked tasks in Story Creation.
@@ -1033,7 +1043,7 @@ class StoryController extends Controller
             
         }
     }
-    
+
 }
 
 
