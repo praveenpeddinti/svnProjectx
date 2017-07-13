@@ -175,7 +175,7 @@ class BucketController extends Controller
     public function actionUpdateBucketDetails(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-            $checkbucket=ServiceFactory::getBucketServiceInstance()->checkupdateBucketName($postData->data->title,$postData->data->Id,$postData->projectId);
+            $checkbucket=ServiceFactory::getBucketServiceInstance()->checkupdateBucketName($postData->data->title,$postData->data->Id,$postData->projectId,$postData->data->selectedBucketTypeFilter,$postData->bucketRole);
             if($checkbucket=='failure'){
                 $saveBucketDetails=ServiceFactory::getBucketServiceInstance()->updateBucketDetails($postData);
                 $response='success';

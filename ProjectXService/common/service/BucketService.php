@@ -94,10 +94,10 @@ class BucketService {
     * @return type 
     * @param type $bucketData
      */      
-    public function checkUpdateBucketName($bucketName,$bucketId,$projectId){
+    public function checkUpdateBucketName($bucketName,$bucketId,$projectId,$bType,$bucketRole){
         try{
          $bucketModel = new Bucket();
-         return $bucketModel->checkUpdateBucketName($bucketName,$bucketId,$projectId);
+         return $bucketModel->checkUpdateBucketName($bucketName,$bucketId,$projectId,$bType,$bucketRole);
         } catch (Exception $ex) {
             Yii::log("BucketService:checkUpdateBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
