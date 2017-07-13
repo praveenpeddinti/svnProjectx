@@ -35,8 +35,8 @@ export class BucketComponent{
     description:'',
     startDateVal:new Date(),
     dueDateVal:'',
-    notifyEmail:['1'],
-    sendReminder:['1'],
+    notifyEmail:true,
+    sendReminder:true   ,
     selectedUserFilter:'',
     selectedBucketTypeFilter:''
     };
@@ -190,8 +190,8 @@ export class BucketComponent{
     this.form['description']='';
     this.form['startDateVal']=new Date();
     this.form['dueDateVal']='';
-    this.form['notifyEmail']=['1'];
-    this.form['sendReminder']=['1'];
+    this.form['notifyEmail']=true;
+    this.form['sendReminder']=true;
     this.form['selectedUserFilter']='';
     this.form['selectedBucketTypeFilter']='';
     jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
@@ -305,15 +305,11 @@ editBucketPopup(){
     this.form['selectedUserFilter']=this.editBucketallDetails.ResponsibleUser;
     this.form['selectedBucketTypeFilter']=this.editBucketallDetails.BucketType;
     this.BucketRole=this.editBucketallDetails.BucketRole;
-    (this.editBucketallDetails.EmailNotify==0)?this.form['notifyEmail']=['0']:this.form['notifyEmail']=['1'];
-    (this.editBucketallDetails.EmailReminder==0)?this.form['sendReminder']=['0']:this.form['sendReminder']=['1'];
+     (this.editBucketallDetails.EmailNotify==0)?this.form['notifyEmail']=false:this.form['notifyEmail']=true;
+     (this.editBucketallDetails.EmailReminder==0)?this.form['sendReminder']=false:this.form['sendReminder']=true;
 }    
  
 editBucket(){
-   alert(this.form['notifyEmail'].length+"--NR---"+this.form['sendReminder'].length+"----ara==="+this.form['notifyEmail']+"----"+this.form['sendReminder']);
-   // if(this.form['notifyEmail'].length>1){this.form['notifyEmail']=['1'];}else{this.form['notifyEmail']=['0'];}
-    //if(this.form['sendReminder'].length>1){this.form['sendReminder']=['1'];}else{this.form['sendReminder']=['0']};
-   
     var getBucketTitleVal=this.form['title']; 
     var titlePattern = /^[a-zA-Z0-9\s]+$/;
     if(titlePattern.test(getBucketTitleVal) == false){
@@ -322,6 +318,7 @@ editBucket(){
     var editor=jQuery('#summernote').summernote('code');
     editor=jQuery(editor).text().trim();
     this.form['description']=jQuery('#summernote').summernote('code');
+    alert("---"+this.form['description']);
     if(this.form['dueDateVal']!=undefined){
         if( (new Date(this.form['startDateVal']) > new Date(this.form['dueDateVal']))){
             this.errorBucketLog('addDueDateErrMsg','Start Date is must be greater than Due Date');
@@ -330,7 +327,6 @@ editBucket(){
     if(this.form['selectedUserFilter']==''){
        this.errorBucketLog('responsibleErrMsg','Please select Responsible');
     }
-    alert("----edit b details---"+JSON.stringify(this.form));
     this._service.updateBucket(this.form,this.BucketRole,(response)=>{
     if(response.data=='failure'){
       jQuery('#bucketSuccessMsg').show();
@@ -429,5 +425,14 @@ filterBucketChange(bucketId,event){
         jQuery("#collapse").hide();
       }
  
-   
+    /**
+    * @author:Praveen
+    * @description: This is used to expand the Bucket history div section
+    */
+    public showStoryTaskActivity()
+    {
+      jQuery(".history_div").stop().slideToggle();
+      jQuery("#collapse").show();
+      jQuery("#expand").hide();
+    }  
 }

@@ -29,7 +29,7 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                           <div class="sprint_hed"><a href="">{{bDetails.BucketName}}</a></div>
+                           <div class="sprint_hed"><a href="javascript:void(0)" (click)="showStoryTaskActivity()">{{bDetails.BucketName}}</a></div>
                         </div>
                         <div class="col-md-6">
                             <div class="text-right">
@@ -89,7 +89,7 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
-                    <div class="col-md-12">
+<!--                    <div class="col-md-12">
                         <div class="row">
                             <div class="expand_collapse">
                                 <a type="button" id="expand" (click)="expand()" class="colapse"><span class="glyphicon glyphicon-chevron-up alignright"></span></a>
@@ -97,9 +97,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="history_div" [ngClass]="{ 'hide': hide}">fdfdsfdsfdsfsd</div>
+                    <div class="history_div" [ngClass]="{ 'hide': hide}">fdfdsfdsfdsfsd</div>-->
                 </div>
-                 
+                             
                  
             </div>
                 <div class="clearfix"></div>
@@ -175,8 +175,8 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <p-checkbox name="notifyEmail" [(ngModel)]="form.notifyEmail"  #notifyEmail="ngModel" value="1" label="Notify by E-mail?" ></p-checkbox>
-                        <p-checkbox name="sendReminder" [(ngModel)]="form.sendReminder" #sendReminder="ngModel" value="1" label="Send Reminder?" ></p-checkbox>
+                        <p-checkbox name="notifyEmail" binary="true" [(ngModel)]="form.notifyEmail"  #notifyEmail="ngModel" label="Notify by E-mail?" ></p-checkbox>
+                        <p-checkbox name="sendReminder" binary="true"  [(ngModel)]="form.sendReminder" #sendReminder="ngModel"  label="Send Reminder?" ></p-checkbox>
                     </div>
                 </div>
                 <div class="row">
