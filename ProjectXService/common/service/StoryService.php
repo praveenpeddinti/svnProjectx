@@ -6,7 +6,6 @@ use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketTyp
 use common\models\bean\FieldBean;
 use Yii;
 
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -350,7 +349,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                 array_push($finalData, $details);  
                }
                }*/ 
-            }
+               } 
             
             return $finalData;
         } catch (Exception $ex) {
