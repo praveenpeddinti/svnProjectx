@@ -51,6 +51,12 @@ export class Constants {
    public filterOptions = this.baseUrl+"story/get-filter-options";
    public getallStoryDetails = this.baseUrl+"story/get-all-story-details";
    public globalSearch = this.baseUrl+"site/global-search";
+   
+     //projects by user
+ public getProjectsByUser= this.baseUrl+"site/get-all-projects-by-user";
+ public getProjectsByUserId = this.baseUrl+"site/get-project-name-by-userid";
+
+   
    constructor() {
       console.log('Constants');
    }
