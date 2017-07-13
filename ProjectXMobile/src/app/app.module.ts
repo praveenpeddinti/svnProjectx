@@ -19,6 +19,7 @@ import { FilePath } from '@ionic-native/file-path';
 import { Globalservice } from '../providers/globalservice';
 import { Constants } from '../providers/constants'
 import { DashboardPage } from '../pages/dashboard/dashboard';
+import {DashBoardFilter} from '../pages/dash-board-filter/dash-board-filter';
 import { LoginPage } from '../pages/login/login';
 import { StoryDetailsPage } from '../pages/story-details/story-details';
 import { StoryCreatePage } from '../pages/story-create/story-create';
@@ -51,6 +52,7 @@ declare var socket:any;
   declarations: [
     MyApp,
     DashboardPage,
+    DashBoardFilter,
     CustomModalPage,
     FilterModal,
     GlobalSearch,
@@ -87,6 +89,7 @@ declare var socket:any;
   entryComponents: [
     MyApp,
     DashboardPage,
+    DashBoardFilter,
     CustomModalPage,
     FilterModal,
     GlobalSearch,
