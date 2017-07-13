@@ -9,7 +9,8 @@ use common\models\mongo\{
     TicketComments
 };
 use common\components\{
-    CommonUtility
+    CommonUtility,
+    EventTrait
 };
 use common\models\mysql\{
     WorkFlowFields,
@@ -32,7 +33,6 @@ use yii;
  */
 
 trait NotificationTrait {
-
     public function sampleMethod() {
         echo "sampel emthod";
     }
@@ -229,7 +229,9 @@ trait NotificationTrait {
      */
     public static function saveNotificationsForComment($commentData, $userslist, $notify_type, $slug) {
         try {
-            // error_log("saveNotificationsForComment---".$notify_type."---".$slug);
+             error_log("saveNotificationsForComment---11---".$notify_type."---".$slug);
+            
+             
             $commentOwner = $commentData->Comment->OriginalCommentorId;
             $loggedinUser = $commentData->userInfo->Id;
             $ticketId = (int) $commentData->ticketId;
@@ -248,8 +250,15 @@ trait NotificationTrait {
                 $OldNotfication = NotificationCollection::getNotificationDetail($slug, $ticketId, $projectId);
                 $oldValue = $OldNotfication["NewValue"];
                 // error_log("oldv alue-----------".$oldValue);
-            }
-
+                $displayAction="edited";$actionType="edit";
+            }else if($notify_type=="comment"){
+                  $displayAction="commented";$actionType="comment";
+             }else if($notify_type=="delete"){
+                 $displayAction="deleted";$actionType="delete"; 
+             }else{
+                 $displayAction="replied";$actionType="reply"; 
+             }
+                
             //For Reply....added by Ryan
             if (!empty($userslist)) {
              foreach ($userslist as $user) {
@@ -274,7 +283,6 @@ trait NotificationTrait {
                     if ($result) {
                         $notificationId = $tic->_id;
                         self::sendEmailNotification(array($notificationId), $projectId);
-               
                 }
             }
             $collaboratorIds = array();
@@ -284,7 +292,7 @@ trait NotificationTrait {
                 if ($follower['FollowerId'] != $loggedinUser && $follower['FollowerId'] != $commentOwner && !in_array($follower['FollowerId'], $mentionUserIdlist)) {
                      array_push($collaboratorIds, array("CollaboratorId"=>(int)$follower['FollowerId'] ,"IsRead"=>0));
                     }
-            }
+            }error_log("---------------------------------1");
                     $tic = new NotificationCollection();
                     $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->TicketId = $ticketId;
@@ -329,6 +337,7 @@ trait NotificationTrait {
                     
                     
                 }
+            EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedinUser,array("ActionOn"=> "comment","OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue),array("Slug"=>$slug,"CommentId"=>$tic->_id));
             self::sendEmailNotification($notificationIdsArray, $projectId);
         } catch (Exception $ex) {
             Yii::log("NotificationTrait:saveNotificationsForComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -347,6 +356,8 @@ trait NotificationTrait {
             $newValue = '';
             $oldCollaborator = '';
             $newCollaborator = '';
+            $displayAction="";
+            $actionType="";
             //For Story Detail Page Use Case.....
             $ticketId = isset($notification_data->ticketId) ? (int) $notification_data->ticketId : (int) $notification_data->data->ticketId;
             // $ticketId=$notification_data->TicketId;
@@ -355,7 +366,7 @@ trait NotificationTrait {
             $loggedInUser = $notification_data->userInfo->Id;
             $notify_type = $notifyType; //this will be changed to ActivityOn in the below code....
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
-           // error_log("=+++++++++=save notifications=+++++++");
+           error_log("=+++++++++=save notifications=+++++++____".print_r($notification_data,1));
             $ticketDetails = TicketCollection::getTicketDetails($ticketId, $projectId);
             $followers = $ticketDetails['Followers'];
             $followers = CommonUtility::filterFollowers($followers);
@@ -375,10 +386,14 @@ trait NotificationTrait {
                     $notification_Type = 'changed';
                     $newValue = $activityOn;
                     $activityOn = 'changed';
+                    $displayAction="changed";
+                    $actionType="change";
                 } else {
                     $notification_Type = 'set';
                     $newValue = $activityOn; //added for fixing time log issue
                     $activityOn = 'set';
+                    $displayAction="changed";
+                    $actionType="change";
                 }
             } else if (isset($ticketDetails["Fields"][$notifyType])) {
                 $oldValue = $ticketDetails["Fields"][$notifyType]["value"];
@@ -395,9 +410,13 @@ trait NotificationTrait {
                 }
                 if ($oldValue != '') { //if changed
                     $activityOn = 'changed';
+                    $displayAction="changed";
+                    $actionType="change";
                 } else { //if set new value
                     $activityOn = 'set';
                     $oldValue = '';
+                    $displayAction="set";
+                    $actionType="set";
                 }
                 if ($fieldType == 4) {
                     $validDate = CommonUtility::validateDate($newValue);
@@ -414,9 +433,13 @@ trait NotificationTrait {
                 $newCollaborator = $activityOn; //this is a field value....
                 if ($oldCollaborator != '') { //if changed
                     $activityOn = 'changed';
+                    $displayAction="changed";
+                    $actionType="change";
                 } else { //if set new value
                     $activityOn = 'set';
                     $oldValue = '';
+                    $displayAction="set";
+                    $actionType="set";
                 }
                 error_log("==activity on== newCollaborator==========" . $newCollaborator);
                 $tic = new NotificationCollection();
@@ -441,6 +464,7 @@ trait NotificationTrait {
                     $notificationId = $tic->_id;
                     //  error_log("before sendign assing to notircioant--");
                     self::sendEmailNotification(array($notificationId), $projectId);
+                    EventTrait::saveEvent($projectId,"Ticket",$ticketId,$activityOn,$tic->Notification_Type,$loggedInUser,array("ActionOn"=>$tic->ActivityOn,"OldValue"=>(int)$oldCollaborator,"NewValue"=>(int)$newCollaborator));
                 }
 
                 //self::sendMail($ticketDetails,$loggedInUser, $newCollaborator,$notify_type);   
@@ -449,7 +473,8 @@ trait NotificationTrait {
                 if ($loggedInUser != $activityOn) {
 
                     $notification_Type = ($notifyType == 'add') ? 'added' : 'removed';
-
+                    $actionType=$notifyType;
+                    $displayAction=$notification_Type;
                     $tic = new NotificationCollection();
                     $tic->CommentSlug = $slug;
                     $tic->TicketId = $ticketId;
@@ -471,6 +496,7 @@ trait NotificationTrait {
                     if ($result) {
                         $notificationId = $tic->_id;
                         self::sendEmailNotification(array($notificationId), $projectId);
+                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,array("ActionOn"=>  strtolower($fieldType),"OldValue"=>0,"NewValue"=>(int)$tic->NewValue));
                     }
                 }
             } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog")) { //This is for left hand property changes
@@ -480,9 +506,14 @@ trait NotificationTrait {
                 if ($oldValue != '') { //if changed
                     $activityOn = 'changed';
                     $oldValue = self::getFieldChangeValue($notifyType, $oldFieldId);
+                    $displayAction="changed";
+                    $actionType="change";
                 } else { //if set new value
                     $activityOn = 'set';
                     $oldValue = '';
+                    $displayAction="set";
+                    $actionType="set";
+
                 }
             }
            
@@ -510,6 +541,8 @@ trait NotificationTrait {
 
                 if ($notifyType == "Description" || $notifyType == "Title") {
                     //  error_log("in descrioton--------#$#$");
+                    $displayAction="changed";
+                    $actionType="change";
                     $tic->Notification_Type = $notification_Type;
                     $tic->ActivityOn = $notifyType;
                     $oldValue = CommonUtility::refineDescriptionForEmail($oldValue);
@@ -533,6 +566,8 @@ trait NotificationTrait {
                         } else {
                             $notification_Type = ($notifyType == 'add') ? 'added' : 'removed';
                         }
+                        $displayAction=$notification_Type;
+                        $actionType=$notifyType;
                         $tic->Notification_Type = $notification_Type;
                         $tic->OldValue = "";
                         $tic->NewValue = $activityOn;
@@ -568,6 +603,8 @@ trait NotificationTrait {
                         //  error_log("-----------_SSSSSSSSS------saving type----------");
                         $notificationId = $tic->_id;
                         array_push($notificationIds, $notificationId);
+                        if($tic->ActivityOn!="Create Task" || $tic->ActivityOn!="Relate" || $tic->ActivityOn!="UnRelate")
+                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,array("ActionOn"=>  strtolower($notify_type),"OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue));
                     }
                 }
           //  }
@@ -652,6 +689,7 @@ trait NotificationTrait {
                     array_push($result_msg, $message);
                 }
                 //for child task create...by Ryan
+                
                 else if ($notification['ActivityOn'] == 'Create Task' || $notification['ActivityOn'] == 'Relate' || $notification['ActivityOn'] == 'UnRelate') {
                     $targetTicketData = TicketCollection::getTicketDetails($notification['TargetTicketId'], $projectId);
                     $targetPlanLevel = $targetTicketData["Fields"]["planlevel"]["value"];

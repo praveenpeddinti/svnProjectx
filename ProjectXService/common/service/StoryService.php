@@ -1,7 +1,7 @@
 <?php
 namespace common\service;
 use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
-use common\components\{CommonUtility,NotificationTrait};
+use common\components\{CommonUtility,NotificationTrait,EventTrait};
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects,UserPreferences};
 use common\models\bean\FieldBean;
 use Yii;
@@ -14,7 +14,9 @@ use Yii;
 
 class StoryService {
 
+   // use EventTrait;
     use NotificationTrait;
+    
     /**
      * @author Moin Hussain
      * @param type $ticketId
