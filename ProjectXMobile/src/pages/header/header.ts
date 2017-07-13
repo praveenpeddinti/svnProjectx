@@ -6,6 +6,7 @@ import {NotificationPage} from '../notification/notification';
 import {Globalservice} from '../../providers/globalservice';
 import {GlobalSearch} from '../global-search/global-search';
 import {DashboardPage} from '../dashboard/dashboard';
+import {DashBoardFilter} from '../dash-board-filter/dash-board-filter';
 declare var jQuery: any;
 declare var socket:any;
 /**
@@ -73,7 +74,7 @@ public searchValue : any;
     public backToggled(){
         console.log("backToggled");
         this.toggled = false;
-        this.navCtrl.setRoot(DashboardPage);
+        this.navCtrl.setRoot(DashBoardFilter);
     }
    public clickSearch(){
        console.log("searchValue is" + this.searchValue);
