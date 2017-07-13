@@ -1,0 +1,21 @@
+<page-header></page-header>
+<ion-content>
+    <ion-list class="padding10">
+        <div *ngFor="let item of items; let i = index">
+            <div *ngIf="isEven(i+1)" class="projets_even">
+                <ion-item (click)="openProject(item)">
+                    {{item.ProjectName}}
+                </ion-item>
+            </div>
+            <div *ngIf="!isEven(i+1)" class="projets_odd">
+                <ion-item (click)="openProject(item)">
+                    {{item.ProjectName}}
+                </ion-item>
+            </div>
+        </div>
+    </ion-list>
+    <div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> No more data available. </div>
+<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content *ngIf="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+</ion-content>
