@@ -312,8 +312,8 @@ class Bucket extends ActiveRecord
             
             $notifyEmail=0;
             $sendReminder=0;
-            if(count($bucketDetails->data->notifyEmail)==1){$notifyEmail=1;}
-            if(count($bucketDetails->data->sendReminder)==1){$sendReminder=1;}
+            if($bucketDetails->data->notifyEmail==1){$notifyEmail=1;}
+            if($bucketDetails->data->sendReminder==1){$sendReminder=1;}
             $bucket=Bucket::findOne($bucketDetails->data->Id);
             $bucket->ProjectId = (int)$bucketDetails->projectId;
             $bucket->Name = $bucketDetails->data->title;
