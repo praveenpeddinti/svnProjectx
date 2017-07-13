@@ -177,6 +177,16 @@ public deleteNotification(url:string,params:Object){
       return this.ajaxCall(url,params);
 }
 
+
+
+
+//get all projects List
+
+public getallProjectsList(url,params){
+return this.ajaxCall(url,params);
+}
+
+
 public setActivity(data:any){
     var activity={activityData:data}
     this.latestActivity.emit(activity);
@@ -185,4 +195,5 @@ public setActivity(data:any){
 public getActivity(){
     return this.latestActivity;
 }
+
 }
