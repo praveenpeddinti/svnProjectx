@@ -4,6 +4,7 @@ import {DashboardPage} from '../dashboard/dashboard';
 import {Globalservice} from '../../providers/globalservice';
 import {Constants} from '../../providers/constants';
 import { Storage } from '@ionic/storage';
+import {DashBoardFilter} from '../dash-board-filter/dash-board-filter';
 /*
   Generated class for the Login page.
 */
@@ -32,10 +33,10 @@ export class LoginPage {
                 (result)=>{
                         if (result.status=='200'){
                             localStorage.setItem("userCredentials",JSON.stringify(result.data));
-// alert(localStorage.getItem("userCredentials"));
+                            // alert(localStorage.getItem("userCredentials"));
                             // alert('out-'+ this.login.username);
                              let userCredentials = {username: this.login.username};
-                             this.navCtrl.setRoot(DashboardPage, userCredentials);
+                             this.navCtrl.setRoot(DashBoardFilter, userCredentials);
                              loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
                       } else{
                         loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
