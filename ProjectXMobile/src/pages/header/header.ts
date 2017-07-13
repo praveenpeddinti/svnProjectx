@@ -31,6 +31,7 @@ public profile:any;
 public searchBar:any;
 public searchValue : any;
  public toggled: boolean;
+ public hideElement: boolean=true;
   constructor(private globalService: Globalservice,public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController, private alertController: AlertController) {
   this.toggled = false;
   var headerInfo=JSON.parse(localStorage.getItem("headerInfo"));
@@ -64,6 +65,7 @@ public searchValue : any;
     toggle() {
       console.log("clicked toggle");
        this.toggled = this.toggled ? false : true;
+       this.hideElement=false;
     }
     public cancelSearch(){
        this.toggle(); 
