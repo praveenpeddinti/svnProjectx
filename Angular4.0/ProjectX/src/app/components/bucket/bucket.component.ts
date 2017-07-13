@@ -61,6 +61,7 @@ export class BucketComponent{
     public bucketArray=[];
     public isCurrentBucketExist:number=0;
     public bStatus;
+    public BucketRole:string='';
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     constructor(
         private _router: Router,
@@ -98,7 +99,7 @@ export class BucketComponent{
                         thisObj.BucketFilterOptionToDisplay=this.prepareItemArray(response.data,false,'bucket');
                         thisObj.BucketFilterOption=this.BucketFilterOptionToDisplay[0].filterValue;
                     }); 
-                    this.callshowBuckets(1);
+                    this.callshowBuckets('Current');
                     //this.shared.change(this._router.url,null,'Time Report','Other',thisObj.projectName);
                 }
                 });
@@ -126,6 +127,7 @@ export class BucketComponent{
         this.bStatus=bucketStatus;
         this.load_bucketContents(this.page,this.bStatus,'');
         
+        
     }
     load_bucketContents(page,bucketStatus,scroll) {
         var postData={
@@ -138,22 +140,22 @@ export class BucketComponent{
             this.zone.run(() =>{ 
                 this.bucketDetails= this.prepareBucketData(response.data,this.bucketDetails);
                 var listData=[];
-                if(postData.bucketStatus==1){
+                if(postData.bucketStatus=='Current'){
                    listData = [
-                  {Id:"1",Name:"Set as Completed"},{Id:"2",Name:"Set as Backlog"},{Id:"3",Name:"Edit"},{Id:"4",Name:"Delete"}
+                  {Id:"0",Name:"Current"},{Id:"1",Name:"Set as Completed"},{Id:"2",Name:"Set as Backlog"},{Id:"3",Name:"Edit"},{Id:"4",Name:"Delete"}
                   ];
-                }else if(postData.bucketStatus==2){
+                }else if(postData.bucketStatus=='Closed'){
                   listData = [
-                  {Id:"1",Name:"Re-opened milestone"},{Id:"2",Name:"Delete"}
+                  {Id:"0",Name:"Closed"},{Id:"1",Name:"Re-opened milestone"},{Id:"2",Name:"Delete"}
                 ];
                 }else{
                     if(this.isCurrentBucketExist==1){
                     listData = [
-                    {Id:"1",Name:"Edit"},{Id:"2",Name:"Delete"}
+                    {Id:"0",Name:"Backlog"},{Id:"1",Name:"Edit"},{Id:"2",Name:"Delete"}
                 ];
                 }else{
                    listData = [
-                  {Id:"1",Name:"Set as Current"},{Id:"2",Name:"Edit"},{Id:"3",Name:"Delete"}
+                  {Id:"0",Name:"Backlog"},{Id:"1",Name:"Set as Current"},{Id:"2",Name:"Edit"},{Id:"3",Name:"Delete"}
                 ];
                 }
                 }
@@ -211,7 +213,7 @@ export class BucketComponent{
             }else if(status == "bucket"){
                 listItem.push({label:"Select Bucket Type", value:"",priority:priority,type:status});
             }else{
-                listItem.push({label:"Select Bucket Status", value:"",priority:priority,type:status});
+                listItem.push({label:list[0].Name, value:"",priority:priority,type:status});
            }
            for(var i=0;list.length>i;i++){
               listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
@@ -266,14 +268,14 @@ addBucket(){
       jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
       jQuery("#bucketSuccessMsg").html('Bucket already created');
       jQuery('#bucketSuccessMsg').fadeOut( "slow" );
-      this.callshowBuckets(1);
+      this.callshowBuckets('Current');
     }else if(response.data=='current'){
       jQuery('#bucketSuccessMsg').show();
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
       jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
       jQuery("#bucketSuccessMsg").html('Current Bucket is exist');
       jQuery('#bucketSuccessMsg').fadeOut( "slow" );
-      this.callshowBuckets(1);
+      this.callshowBuckets('Current');
     }else{
         jQuery('#bucketSuccessMsg').show();
         jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
@@ -302,13 +304,16 @@ editBucketPopup(){
     this.form['dueDateVal'] = this.editBucketallDetails.DueDate;
     this.form['selectedUserFilter']=this.editBucketallDetails.ResponsibleUser;
     this.form['selectedBucketTypeFilter']=this.editBucketallDetails.BucketType;
-    //(this.editBucketallDetails.EmailNotify==0)?this.form['notifyEmail']=['0']:this.form['notifyEmail']=['1'];
-    //(this.editBucketallDetails.EmailReminder==0)?this.form['sendReminder']=['0']:this.form['sendReminder']=['1'];
-    }    
+    this.BucketRole=this.editBucketallDetails.BucketRole;
+    (this.editBucketallDetails.EmailNotify==0)?this.form['notifyEmail']=['0']:this.form['notifyEmail']=['1'];
+    (this.editBucketallDetails.EmailReminder==0)?this.form['sendReminder']=['0']:this.form['sendReminder']=['1'];
+}    
  
 editBucket(){
-   if(this.form['notifyEmail'].length>1){this.form['notifyEmail']=['1'];}else{this.form['notifyEmail']=['0'];}
-   if(this.form['sendReminder'].length>1){this.form['sendReminder']=['1'];}else{this.form['sendReminder']=['0']};
+   alert(this.form['notifyEmail'].length+"--NR---"+this.form['sendReminder'].length+"----ara==="+this.form['notifyEmail']+"----"+this.form['sendReminder']);
+   // if(this.form['notifyEmail'].length>1){this.form['notifyEmail']=['1'];}else{this.form['notifyEmail']=['0'];}
+    //if(this.form['sendReminder'].length>1){this.form['sendReminder']=['1'];}else{this.form['sendReminder']=['0']};
+   
     var getBucketTitleVal=this.form['title']; 
     var titlePattern = /^[a-zA-Z0-9\s]+$/;
     if(titlePattern.test(getBucketTitleVal) == false){
@@ -325,7 +330,8 @@ editBucket(){
     if(this.form['selectedUserFilter']==''){
        this.errorBucketLog('responsibleErrMsg','Please select Responsible');
     }
-    this._service.updateBucket(this.form,(response)=>{
+    alert("----edit b details---"+JSON.stringify(this.form));
+    this._service.updateBucket(this.form,this.BucketRole,(response)=>{
     if(response.data=='failure'){
       jQuery('#bucketSuccessMsg').show();
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
@@ -336,16 +342,18 @@ editBucket(){
         jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
         jQuery("#bucketSuccessMsg").html('Bucket updated successfully');
       //jQuery('#bucketSuccessMsg').fadeOut( "slow" );
-      this.callshowBuckets(1);
+      this.callshowBuckets(this.BucketRole);
     }
     });
     }
-      
+/**
+ * @author:Praveen
+ * @description: This is used to Bucket Status
+*/      
 filterBucketChange(bucketId,event){
 
     this.editBucketallDetails = bucketId;
     if(event.text=='Edit'){
-        //this.getBucketTypeFilter(this.projectId,"Edit");
         jQuery("#editBucketButton").click();
     }else{
       
@@ -374,6 +382,11 @@ filterBucketChange(bucketId,event){
     
 } 
 
+    /**
+    * @author:Praveen
+    * @description: This is used to toggle the Bucket discription div section
+    */
+
    toggle_visibility(id,event) {
        var e = document.getElementById(id);
        
@@ -394,6 +407,27 @@ filterBucketChange(bucketId,event){
       }
       }
       
-     
+    /**
+    * @author:Praveen
+    * @description: This is used to expand the Bucket history div section
+    */
+    public expand()
+    {
+      jQuery(".history_div").stop().slideToggle();
+      jQuery("#collapse").show();
+      jQuery("#expand").hide();
+    }
+
+    /**
+    * @author:Praveen
+    * @description : This is used to collapse the Bucket history div section
+    */
+    public collapse()
+    {
+        jQuery(".history_div").stop().slideToggle();
+        jQuery("#expand").show();
+        jQuery("#collapse").hide();
+      }
+ 
    
 }

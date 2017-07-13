@@ -17,13 +17,13 @@
 <div class="tabbable tabs-left row">
     <div class="col-xs-12 col-sm-3 col-md-3 tabpaddingrightzero" id="nosearchdiv" >
         <ul class="nav nav-tabs">
-            <li class="active"><a (click)="callshowBuckets(1)" data-toggle="tab">Current</a></li>
-            <li ><a (click)="callshowBuckets(2)" data-toggle="tab">Closed</a></li>
-            <li ><a (click)="callshowBuckets(0)" data-toggle="tab">Backlog</a></li>
+            <li class="active"><a (click)="callshowBuckets('Current')" data-toggle="tab">Current</a></li>
+            <li ><a (click)="callshowBuckets('Closed')" data-toggle="tab">Closed</a></li>
+            <li ><a (click)="callshowBuckets('Backlog')" data-toggle="tab">Backlog</a></li>
         </ul>
     </div>
     <div id="noseachdivclass" class="col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero">
-        <div id="bucketStatusErrorMsg" class="alert alert-danger" style="display:none"> </div> 
+        <!--<div id="bucketStatusErrorMsg" class="alert alert-danger" style="display:none"> </div>--> 
         <div class="tab-content tab-content_content" >
             <div class="col-md-12 col-sm-12" *ngFor="let bDetails of bucketDetails;let i=index;">
                 <div class="col-md-12">
@@ -58,14 +58,14 @@
                                  </div>
                                 <div class="clearfix">
                                     <div class="probox">
-                                        <div class="text-uppercase green_color">Current</div>
+                                        <div class="text-uppercase green_color">{{bDetails.BucketRole}}</div>
                                     </div>
                                 </div>
                                 <div class="description_hed">Description</div>
                                 <div class="description_content" [innerHTML]="bDetails.ShortDescription" id="bucket_description_short" style="display:block;" ></div>
                                 <div class="description_content" [innerHTML]="bDetails.Description" id="foo" style="display:none;"></div>
 
-                                <button id="example-one" data-text-swap="(- Less)" data-text-original="(+ More)" (click)="toggle_visibility('foo','example-one');" class="viewmore_click">(+ More)</button>
+                                <button *ngIf="bDetails.ShortDescription.length>25" id="example-one" data-text-swap="(- Less)" data-text-original="(+ More)" (click)="toggle_visibility('foo','example-one');" class="viewmore_click">(+ More)</button>
 
                             </div>
                             <div class="col-md-4" *ngIf="bDetails.BucketType !=1">
@@ -89,7 +89,18 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="expand_collapse">
+                                <a type="button" id="expand" (click)="expand()" class="colapse"><span class="glyphicon glyphicon-chevron-up alignright"></span></a>
+                                <a type="button" id="collapse" (click)="collapse()" class="colapse"><span class="glyphicon glyphicon-chevron-down alignright"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="history_div" [ngClass]="{ 'hide': hide}">fdfdsfdsfdsfsd</div>
                 </div>
+                 
+                 
             </div>
                 <div class="clearfix"></div>
         </div>
@@ -164,7 +175,7 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <p-checkbox name="notifyEmail" [(ngModel)]="form.notifyEmail"  #notifyEmail="ngModel"  value="1" label="Notify by E-mail?" ></p-checkbox>
+                        <p-checkbox name="notifyEmail" [(ngModel)]="form.notifyEmail"  #notifyEmail="ngModel" value="1" label="Notify by E-mail?" ></p-checkbox>
                         <p-checkbox name="sendReminder" [(ngModel)]="form.sendReminder" #sendReminder="ngModel" value="1" label="Send Reminder?" ></p-checkbox>
                     </div>
                 </div>
@@ -198,7 +209,7 @@
                 <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
             </div>
             <div *ngIf="Type=='Edit'" class="modal-footer">
-                <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">EDIT</button>
+                <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">UPDATE</button>
                 <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
             </div>
         </form>

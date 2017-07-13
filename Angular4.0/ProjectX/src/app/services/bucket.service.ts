@@ -69,12 +69,13 @@ var post_data={
  
  }
  
- updateBucket(bucketData,updateBucketCallback){ 
+ updateBucket(bucketData,bucketRole,updateBucketCallback){ 
    var projectId=parseInt(localStorage.getItem('ProjectId'));
    var projectName=localStorage.getItem('ProjectName');
 var post_data={
       'projectId':projectId,
       'data':bucketData,
+      'bucketRole':bucketRole,
      
     }
     post_data.data.title = post_data.data.title.trim();
