@@ -79,7 +79,7 @@ export class DashboardPage {
         this.headerName = "All My Stories/Task";
         this.SelectValue = "All My Stories/Task";
             this.arrayObject = [];
-            localStorage.setItem('headerInfo',JSON.stringify({'title':this.projectName,'backButton':"hideBackButton",'logo':1,'leftPannel':0,notification:1,profile:1,searchBar:1}));
+            localStorage.setItem('headerInfo',JSON.stringify({'title':this.projectName,'backButton':"hideBackButton",'logo':0,'leftPannel':0,notification:1,profile:1,searchBar:1}));
             this.filterList = [];
             var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
             this.userName = userInfo.username;
