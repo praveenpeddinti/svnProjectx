@@ -24,6 +24,7 @@ declare var socket:any;
 })
 export class DashboardPage {
     @ViewChild(Content) content: Content;
+    ProjectId:string;
     
     SelectValue : any;
     public static optionsModal;
@@ -35,6 +36,7 @@ export class DashboardPage {
     public items: Array<any>;
     public totalCount: any;
     public headerName : any;
+    public projectName:string;
     public start: number = 10;//no of items showing in each page by default 10
     public offsetIndex: number = 0;//offset Index default value is 0 while pulling the list screen down the value will be incremented
     public arrayObject: Array<{storyOrTask: any, 
@@ -55,7 +57,7 @@ export class DashboardPage {
     userName: any = '';
     searchParam = {};
     filterParam = {"projectId": 1,"timeZone":"Asia/Kolkata", "userInfo": {}, "filterOption": {}};
-    params = {"projectId": 1, "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "desc","filterOption":{"label":"All My Stories/Task","id":"2","type":"general","showChild":"0"},"timeZone":"Asia/Kolkata", "userInfo": {}};
+    params = {"projectId": "", "offset": this.offsetIndex, "pagesize": this.start, "sortvalue": "Id", "sortorder": "desc","filterOption":{"label":"All My Stories/Task","id":"2","type":"general","showChild":"0"},"timeZone":"Asia/Kolkata", "userInfo": {}};
     constructor(public navCtrl: NavController,
     public modalController: ModalController,
         public navParams: NavParams,
@@ -67,10 +69,17 @@ export class DashboardPage {
         public viewCtrl: ViewController,
         private globalService: Globalservice,
         private urlConstants: Constants) {
+
+            this.projectName=this.navParams.get("ProjectName");
+           this. filterParam.projectId=this.navParams.get("ProjectId");
+           this.params.projectId=this.navParams.get("ProjectId");
+           console.log("Project Name in Dashboard  "+this.navParams.get("ProjectName"));
+           console.log("fileter params"+JSON.stringify(this.filterParam));
+           console.log(" params"+JSON.stringify(this.params));
         this.headerName = "All My Stories/Task";
         this.SelectValue = "All My Stories/Task";
             this.arrayObject = [];
-            localStorage.setItem('headerInfo',JSON.stringify({'title':this.headerName,'backButton':"hideBackButton",'logo':0,'leftPannel':0,notification:1,profile:1,searchBar:1}));
+            localStorage.setItem('headerInfo',JSON.stringify({'title':this.projectName,'backButton':"hideBackButton",'logo':1,'leftPannel':0,notification:1,profile:1,searchBar:1}));
             this.filterList = [];
             var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
             this.userName = userInfo.username;
