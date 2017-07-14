@@ -51,8 +51,8 @@ export class DashBoardFilter {
 
 
   public openProject(item): void {
-    var clickedItemId = { "ProjectId": item.PId };
-    this.navCtrl.push(DashboardPage, clickedItemId);
+    var clickedItem = { "ProjectId": item.PId ,"ProjectName":item.ProjectName};
+    this.navCtrl.push(DashboardPage, clickedItem);
     console.log("project Name" + item.ProjectName);
   }
 
