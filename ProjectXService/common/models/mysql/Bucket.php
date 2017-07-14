@@ -56,7 +56,7 @@ class Bucket extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;  
         } catch (Exception $ex) {
-     Yii::log("Bucket:getBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+     Yii::log("Bucket:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
     }
@@ -77,7 +77,7 @@ class Bucket extends ActiveRecord
             return "failure";
         }
         } catch (Exception $ex) {
-     Yii::log("Bucket:getBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+     Yii::log("Bucket:getBackLogBucketId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
     }
@@ -111,40 +111,31 @@ class Bucket extends ActiveRecord
     public function getBucketDetails($bucketData)
     {
         try{
-             //  $pageLength = 10;
-                   $pageLength=Yii::$app->params['pageLength'];
-                    if ($bucketData->page == 1) {
-                        $offset = $bucketData->page - 1;
-                        $limit = $pageLength;   
-                    } else {
-                        $offset = ($bucketData->page - 1) * $pageLength;
-                        $limit = $pageLength;
-                    }
-                    error_log($offset."--page---".$limit);
-                
+            //  $pageLength = 10;
+            $pageLength=Yii::$app->params['pageLength'];
+            if ($bucketData->page == 1) {
+                $offset = $bucketData->page - 1;
+                $limit = $pageLength;   
+            } else {
+                $offset = ($bucketData->page - 1) * $pageLength;
+                $limit = $pageLength;
+            }
+
             if($bucketData->bucketStatus=='Current'){
-              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=2 AND BucketStatus=0 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
-              
+                $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=2 AND BucketStatus=0 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
             }
             if($bucketData->bucketStatus=='Closed'){
-              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=2 AND BucketStatus=1 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
-              
+                $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=2 AND BucketStatus=1 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
             }
             if($bucketData->bucketStatus=='Backlog'){
-              $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=1 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
-              
+                $bucketsQuery = "SELECT * FROM Bucket WHERE BucketType=1 AND Status=1 AND Projectid=$bucketData->projectId limit $offset,$limit"; 
             }
-            error_log($offset."--page-1--".$bucketsQuery);
-            $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
-            return $bucketDetails;
+        $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
+        return $bucketDetails;
         } catch (Exception $ex) {
             Yii::log("Bucket:getBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
-       
     }
-    
-    
-    
     
     /**
      * @author Praveen
@@ -292,11 +283,6 @@ class Bucket extends ActiveRecord
             }
             
             
-            
-            
-            
-            
-            
             return $returnValue;
 
         } catch (Exception $ex) {
@@ -340,11 +326,11 @@ class Bucket extends ActiveRecord
     
     public function getBucketChangeStatus($projectId,$bucketId,$StatusType) {
         try {
-            
             $bucket=Bucket::findOne($bucketId);
             if($StatusType=='Set as Completed')
             {
                 $bucket->BucketStatus = (int)1;
+                $bucket->CloseDate = date("Y-m-d H:i:s");
             }
             if($StatusType=='Set as Backlog') {
                 $bucket->BucketType = (int)1;

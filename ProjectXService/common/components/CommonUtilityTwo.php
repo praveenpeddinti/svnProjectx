@@ -135,6 +135,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     
     public static function prepareBucketDashboardDetails($bucketDetails, $projectId,$timezone,$bType) {
         try {
+            $closeDate='';
+            $nowDate = date('M-d-Y');
+            $milestoneMessage ='';
             if(!empty($bucketDetails["StartDate"])){
             $startDateTime = strtotime($bucketDetails["StartDate"]);
             $startDate = date('M-d-Y',$startDateTime);
@@ -147,6 +150,18 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }else{
               $dueDate = $bucketDetails["DueDate"];
             }
+            if($bType=='Current'){
+            if(strtotime($dueDate) > strtotime($nowDate))
+                $milestoneMessage = "This milestone have passed for due date.";
+            }
+            if($bType=='Closed'){
+                $closeDateTime = strtotime($bucketDetails["CloseDate"]);
+                $closeDate = date('M-d-Y',$closeDateTime);
+                $datediff = (strtotime($closeDate) - strtotime($dueDate));
+                $countOfdays = floor($datediff / (60 * 60 * 24));
+                if($countOfdays>0)
+                $milestoneMessage = "This milestone was closed <span class='title'>$countOfdays</span> days after due date.";
+            }
             $prepareBucketArray = array();
             $prepareBucketArray['BucketType'] = $bucketDetails['BucketType'];
             $prepareBucketArray['BucketId'] = $bucketDetails['Id'];
@@ -156,6 +171,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $prepareBucketArray["UserName"] = $userDetails["UserName"];
             $prepareBucketArray["StartDate"] = $startDate;
             $prepareBucketArray["DueDate"] = $dueDate;
+            $prepareBucketArray["CloseDate"] = $closeDate;
             $shortBucketDesc= CommonUtility::refineActivityDataTimeDesc($bucketDetails["Description"],50);
             $prepareBucketArray["Description"] = $bucketDetails["Description"];
             $prepareBucketArray["ShortDescription"] = $shortBucketDesc;
@@ -165,6 +181,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $prepareBucketArray['EmailReminder'] =$bucketDetails["EmailReminder"];
             $prepareBucketArray['DropDownBucket'] =(int)0;
             $prepareBucketArray['BucketRole'] = $bType;
+            $prepareBucketArray['milestoneMessage'] = $milestoneMessage;
             $checkTicketsinBuckets = TicketCollection::checkTicketsinBuckets($projectId,$bucketDetails['Id']);
             if(count($checkTicketsinBuckets)==0){
                 $prepareBucketArray['AllTasks'] =(int)0;

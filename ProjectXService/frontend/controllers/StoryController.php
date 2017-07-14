@@ -569,7 +569,7 @@ class StoryController extends Controller
             ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId);
             $activitydata =  ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Unfollowed', $post_data->collaboratorId, $post_data->userInfo->Id,"",$post_data->timeZone);
             $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);//added by Ryan
-            ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'remove', $post_data->collaboratorId,"FollowObj");
+            ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'remove', $post_data->collaboratorId,'',"FollowObj",$taskId=0);
                /* notifications end */
             $UnfollowData['collaboratorId']  = $post_data->collaboratorId;
             $UnfollowData['activityData']  = $activitydata;
