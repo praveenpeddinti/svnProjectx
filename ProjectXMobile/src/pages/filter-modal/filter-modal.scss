@@ -28,10 +28,16 @@ page-filter-modal {
         min-height: calc(30px + 15px)!important;
     }
     
-    .scroll-content div label{font-size: 18px; color: #005b80; padding-left: 15px; border-bottom: solid 1px #000!important; width:100%;}
+    .scroll-content div label{font-size: 18px; color: #005b80; padding-left: 15px;  width:100%;line-height: 35px;}
 /*    .scroll-content div label:nth-child(1) { display:none!important;}
     .scroll-content div label:nth-child(2) { display:block!important;}*/
 .customlabel0{ display:none;}
     .scroll-content-ios div:nth-child(2) { margin-top: -30px!important;}
     .scroll-content-md div:nth-child(2) { margin-top:-30px!important;}
+    
+    .scroll-content .list-md{ margin-bottom: 0px!important;}
+    .scroll-content .list-ios{ margin-bottom: 0px!important;}
+    .scroll-content .list-wp{ margin-bottom: 0px!important;}
+    
+    .customlabel1{ margin-top: -30px!important;}
 }

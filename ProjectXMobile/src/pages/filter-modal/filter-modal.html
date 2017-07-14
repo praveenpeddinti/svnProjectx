@@ -31,7 +31,9 @@
       <div right *ngFor="let field of displayFieldvalue; let i=index;">
       <label class="customlabel{{i}}">{{field.type}}</label>
       <ion-list>
+          <div style="border-top: solid 1px #dedede;">
       <ion-row>
+          
       <ion-item *ngFor="let listObj of field.filterValue; let i=index;" style="border-bottom: 1px solid #ccc;"
           id="modelitem_{{listObj.value.id}}" 
           [ngClass]="{'selectedMember': listObj.value.label == activatedFieldValue }"
@@ -41,8 +43,10 @@
          <ion-icon *ngIf="listObj.value.label == activatedFieldValue " name="checkmark"></ion-icon>
          <i class="fa fa-circle{{listObj.value.label}}" aria-hidden="true"></i> 
       </div>
+        
       </ion-item>
       </ion-row>
+                </div>
       </ion-list> 
       
       </div>
