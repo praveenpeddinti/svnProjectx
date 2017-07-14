@@ -21,7 +21,7 @@ trait EventTrait{
             $evtobj->DisplayAction=$displayAction;
             $evtobj->ActionType=$actionType;
             $evtobj->ActionBy=(int)$actionBy;
-            array_push($evtobj->ChangeSummary,$summaryArray);
+            $evtobj->ChangeSummary=$summaryArray;
             $evtobj->Miscellaneous=$miscellaneousData;
             $evtobj->ShowInActivity=$showInActivity;
             $evtobj->Status=$status;

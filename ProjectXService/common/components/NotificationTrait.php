@@ -337,7 +337,7 @@ trait NotificationTrait {
                     
                     
                 }
-            EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedinUser,array("ActionOn"=> "comment","OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue),array("Slug"=>$slug,"CommentId"=>$tic->_id));
+            EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedinUser,[array("ActionOn"=> "comment","OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue)],array("Slug"=>$slug,"CommentId"=>$tic->_id));
             self::sendEmailNotification($notificationIdsArray, $projectId);
         } catch (Exception $ex) {
             Yii::log("NotificationTrait:saveNotificationsForComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -358,6 +358,7 @@ trait NotificationTrait {
             $newCollaborator = '';
             $displayAction="";
             $actionType="";
+            
             //For Story Detail Page Use Case.....
             $ticketId = isset($notification_data->ticketId) ? (int) $notification_data->ticketId : (int) $notification_data->data->ticketId;
             // $ticketId=$notification_data->TicketId;
@@ -366,9 +367,10 @@ trait NotificationTrait {
             $loggedInUser = $notification_data->userInfo->Id;
             $notify_type = $notifyType; //this will be changed to ActivityOn in the below code....
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
-           error_log("=+++++++++=save notifications=+++++++____".print_r($notification_data,1));
+          // error_log("=+++++++++=save notifications=+++++++____".print_r($notification_data,1));
             $ticketDetails = TicketCollection::getTicketDetails($ticketId, $projectId);
             $followers = $ticketDetails['Followers'];
+            $bucket=$ticketDetails["Fields"]["bucket"]["value"];
             $followers = CommonUtility::filterFollowers($followers);
 
             if ($notifyType == "Title" || $notifyType == "Description" || $notifyType == "TotalTimeLog") {
@@ -441,7 +443,7 @@ trait NotificationTrait {
                     $displayAction="set";
                     $actionType="set";
                 }
-                error_log("==activity on== newCollaborator==========" . $newCollaborator);
+               // error_log("==activity on== newCollaborator==========" . $newCollaborator);
                 $tic = new NotificationCollection();
                 $tic->CommentSlug = $slug;
                 $tic->TicketId = $ticketId;
@@ -464,7 +466,8 @@ trait NotificationTrait {
                     $notificationId = $tic->_id;
                     //  error_log("before sendign assing to notircioant--");
                     self::sendEmailNotification(array($notificationId), $projectId);
-                    EventTrait::saveEvent($projectId,"Ticket",$ticketId,$activityOn,$tic->Notification_Type,$loggedInUser,array("ActionOn"=>$tic->ActivityOn,"OldValue"=>(int)$oldCollaborator,"NewValue"=>(int)$newCollaborator));
+                    if($bulkUpdate=='')
+                    EventTrait::saveEvent($projectId,"Ticket",$ticketId,$activityOn,$tic->Notification_Type,$loggedInUser,[array("ActionOn"=>$tic->ActivityOn,"OldValue"=>(int)$oldCollaborator,"NewValue"=>(int)$newCollaborator)],array("BucketId"=>(int)$bucket));
                 }
 
                 //self::sendMail($ticketDetails,$loggedInUser, $newCollaborator,$notify_type);   
@@ -496,7 +499,8 @@ trait NotificationTrait {
                     if ($result) {
                         $notificationId = $tic->_id;
                         self::sendEmailNotification(array($notificationId), $projectId);
-                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,array("ActionOn"=>  strtolower($fieldType),"OldValue"=>0,"NewValue"=>(int)$tic->NewValue));
+                        if($bulkUpdate=='')
+                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($fieldType),"OldValue"=>0,"NewValue"=>(int)$tic->NewValue)],array("BucketId"=>(int)$bucket));
                     }
                 }
             } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog")) { //This is for left hand property changes
@@ -554,6 +558,8 @@ trait NotificationTrait {
                     if ($result) {
                         $notificationId = $tic->_id;
                         array_push($notificationIds, $notificationId);
+                        if($bulkUpdate=='')
+                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($notify_type),"OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue)],array("BucketId"=>(int)$bucket));
                     }
                 } else if ($fieldType == "FollowObj") {
 
@@ -603,8 +609,10 @@ trait NotificationTrait {
                         //  error_log("-----------_SSSSSSSSS------saving type----------");
                         $notificationId = $tic->_id;
                         array_push($notificationIds, $notificationId);
-                        if($tic->ActivityOn!="Create Task" || $tic->ActivityOn!="Relate" || $tic->ActivityOn!="UnRelate")
-                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,array("ActionOn"=>  strtolower($notify_type),"OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue));
+                        if($bulkUpdate==''&& strtolower($notify_type)!="create task" &&  strtolower($notify_type)!="relate" &&  strtolower($notify_type)!="unrelate"){
+                          EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($notify_type),"OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue)],array("BucketId"=>(int)$bucket));  
+                        }
+                        
                     }
                 }
           //  }
