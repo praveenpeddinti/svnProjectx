@@ -426,8 +426,8 @@
 
                 <div class="commedit reply_icn" (click)="replyComment(cmtIdx,comment.ActivityBy.CollaboratorId)"></div> 
                 <div *ngIf="comment.ActivityBy.UserName == getAllData.username" class="commedit edit_icn" (click)="editComment(cmtIdx)"></div> 
-                <div *ngIf="(comment.ActivityBy.UserName == getAllData.username && comment.repliesCount==0)" class="commedit delete_icn" (click)="deleteComment(cmtIdx,comment.Slug.$oid)"></div>
-
+                <div *ngIf="(comment.ActivityBy.UserName == getAllData.username && comment.repliesCount==0)" class="commedit delete_icn" id="commentdel_{{comment.Slug.$oid}}"  (click)="commentdeleteDiv(1,cmtIdx,comment.Slug.$oid)"></div>
+<!--(click)="deleteComment(cmtIdx,comment.Slug.$oid)"-->
                 </div>
                 </div>
                 
@@ -456,8 +456,18 @@
         
 
     </ng-container>
+   
 
     <!--Comment Displa area end-->
+             <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment del" id="delete_comment" style="width:auto">
+            <div class="delete_followersbgtable delete_followersbgtablesinglepop" >  
+                Do you want to delete? 
+                <div class="text-center" style=" padding-top:10px">
+                    <div class="yes" id="remove_yes" (click)="deleteComment()" >YES</div>
+                    <div class="no" (click)="commentdeleteDiv(2,'','')">NO</div>
+        </div>
+            </div>
+        </div>
 </div>
          
         <div>
