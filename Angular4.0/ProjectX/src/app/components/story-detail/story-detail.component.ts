@@ -76,6 +76,8 @@ private showTotalEstimated=false;
   public attachmentsData=[];
   public searchSlug='';
   public relateTicketId='';
+  public commentDelId='';
+  public commentDelSlug='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private projectService:ProjectService,private shared:SharedService) {
@@ -686,7 +688,7 @@ private dateVal = new Date();
 
 //Prepares the Custom Dropdown's Options array.
  public prepareItemArray(list:any,priority:boolean,status:string){
-  var listItem=[];
+   var listItem=[];
     var listMainArray=[];
      if(list.length>0){
        if(status == "Assigned to" || status == "Stake Holder"){
@@ -697,7 +699,7 @@ private dateVal = new Date();
        }
      }
       listMainArray.push({type:"",filterValue:listItem});
-  return listMainArray;
+    return listMainArray;
 }
 
 //----------------------File Upload codes---------------------------------
@@ -1185,20 +1187,22 @@ var thisObj = this;
 
    }
 
-   deleteComment(commentIndex,slug){
-     var editedContent= jQuery("#Activity_content_"+commentIndex).summernote('code');
+   deleteComment(){
+    //  commentIndex=this.commentDelId;
+    //  slug=this.commentDelSlug;
+     var editedContent= jQuery("#Activity_content_"+this.commentDelId).summernote('code');
      var CrudeCDescription=editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,"");
      var reqData;
      var parent;
-    jQuery("#Activity_content_"+commentIndex).summernote('destroy');
-     this.commentorId=this.commentsList[commentIndex].ActivityBy.CollaboratorId ; 
-        if(this.commentsList[commentIndex].Status == 2){
-            parent = parseInt(this.commentsList[commentIndex].ParentIndex);
+    jQuery("#Activity_content_"+this.commentDelId).summernote('destroy');
+     this.commentorId=this.commentsList[this.commentDelId].ActivityBy.CollaboratorId ; 
+        if(this.commentsList[this.commentDelId].Status == 2){
+            parent = parseInt(this.commentsList[this.commentDelId].ParentIndex);
              reqData = {
                   ticketId:this.ticketId,
                   projectId:this.projectId,
                   Comment:{
-                    Slug:slug,
+                    Slug:this.commentDelSlug,
                     ParentIndex:parent,
                     CrudeCDescription:CrudeCDescription
                   },
@@ -1208,7 +1212,7 @@ var thisObj = this;
                 ticketId:this.ticketId,
                 projectId:this.projectId,
                 Comment:{
-                  Slug:slug,
+                  Slug:this.commentDelSlug,
                   CrudeCDescription:CrudeCDescription
                 },
               };
@@ -1216,11 +1220,11 @@ var thisObj = this;
      this._ajaxService.AjaxSubscribe("story/delete-comment",reqData,(result)=>
         { 
           
-          if(this.commentsList[commentIndex].Status == 2){
+          if(this.commentsList[this.commentDelId].Status == 2){
             this.commentsList[parent].repliesCount--;
           }
-          this.commentsList[commentIndex].Status = 0;
-         
+          this.commentsList[this.commentDelId].Status = 0;
+         jQuery('#delete_comment').hide();
         });
 
    }
@@ -1352,6 +1356,23 @@ var thisObj = this;
              jQuery('#delete_relateTask').css({'top':offsetTop,'right':30,'min-width':"auto"});
           }else{
             jQuery("#delete_relateTask").css("display", "none");
+          }
+      }
+      commentdeleteDiv(id,cId,cslug){
+        this.commentDelId=cId;
+        this.commentDelSlug=cslug;
+         if(id==1){
+           jQuery("#delete_comment").css("display", "block");
+            //   jQuery("#delete_comment").css("display", "block");
+               var delbutton_Height=10;
+              var delbutton_Width=jQuery('#commentdel_'+cslug).width()/2;
+              var delete_popup=jQuery('.delete_followersbgtable').width()/2;
+              var offset=jQuery('#commentdel_'+cslug).offset();
+              var offsetTop=offset.top+delbutton_Height-100;
+              var offsetRight=offset.left;
+             jQuery('#delete_comment').css({'top':offsetTop,'right':22,'min-width':"auto"});
+          }else{
+            jQuery("#delete_comment").css("display", "none");
           }
       }
 
