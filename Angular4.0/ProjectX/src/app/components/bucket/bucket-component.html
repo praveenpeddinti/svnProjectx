@@ -55,11 +55,16 @@
                                         Due Date
                                         <div class="sprint_date">{{bDetails.DueDate}}</div>
                                     </div>
+                                    <div *ngIf="bDetails.BucketRole=='Closed'" class="probox">
+                                        Closed Date
+                                        <div class="sprint_date">{{bDetails.CloseDate}}</div>
+                                    </div>
                                  </div>
                                 <div class="clearfix">
-                                    <div class="probox">
-                                        <div class="text-uppercase green_color">{{bDetails.BucketRole}}</div>
-                                    </div>
+                                    
+                                    <div class="{{bDetails.BucketRole}}">{{bDetails.BucketRole}}  <div *ngIf="bDetails.milestoneMessage.length>0" class="ccc" [innerHTML]="bDetails.milestoneMessage"></div></div>
+                                    
+                                    
                                 </div>
                                 <div class="description_hed">Description</div>
                                 <div class="description_content" [innerHTML]="bDetails.ShortDescription" id="bucket_description_short" style="display:block;" ></div>
@@ -141,9 +146,9 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Description </label>
+                        <label class="timereportlabel"> Description </label>{{form.description}}
                         <div class="customformfieldsmarginbottom relativediv ">
-                            <textarea  [(ngModel)]="form.description" id="summernote" name="description"  #description="ngModel"   class="customformfieldstextarea " required></textarea>
+                            <textarea  [(ngModel)]="form.description" id="summernote" name="description"  #description="ngModel" class="customformfieldstextarea " required></textarea>
                             <div *ngIf="submitted && description.errors " class="fielderror">
                                 <div [hidden]="!description.errors.required">Description is required</div>
                             </div>

@@ -66,3 +66,94 @@
 /*.expand_collapse {
     text-align: right;
 }*/
+
+.Current{ background:#f8f8f8; padding:0px 10px; border:solid 1px #fff;  margin-bottom:20px; color:#6d6d6d;font-size:14px;line-height:40px; font-family:'robotoregular'; color:#1acc33; display:block; float:left;}
+ 
+.Current div {
+	position: relative;
+	background: #ffffff;
+border: 4px solid #fff;
+	float:right;
+	height:40px; 
+	 margin-right:-25px;
+	 margin-left:12px;
+	 color:#333333;
+	 line-height:34px;
+	
+}
+.Current div:after, .Current div:before {
+	right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.Current div:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-right-color: #ffffff;
+	border-width: 9px;
+	margin-top: -9px;
+}
+.Current div:before {
+	border-color: rgba(255, 255, 255, 0);
+	border-right-color: #fff;
+	border-width: 11px;
+	margin-top: -11px;
+}
+.Current div span{  color:#ee8c81!important;}
+
+
+
+ .Closed{ color:#ee8c81!important;
+ background:#f8f8f8; padding:0px 10px; border:solid 1px #fff;  margin-bottom:20px; color:#6d6d6d;font-size:14px;line-height:40px; font-family:'robotoregular';display:block; float:left;
+ 
+ } 
+ /* .Current div{ background:#fff; height:40px; float:right; margin-right:-10px; margin-left:20px; padding:0px 10px; color:#333333;position: relative;
+	}*/
+  
+
+.Closed div {
+	position: relative;
+	background: #ffffff;
+border: 4px solid #fff;
+	float:right;
+	height:40px; 
+	 margin-right:-25px;
+	 margin-left:12px;
+	 color:#333333;
+	 line-height:34px;
+	
+}
+.Closed div:after, .Current div:before {
+	right: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.Closed div:after {
+	border-color: rgba(255, 255, 255, 0);
+	border-right-color: #ffffff;
+	border-width: 9px;
+	margin-top: -9px;
+}
+.Closed div:before {
+	border-color: rgba(255, 255, 255, 0);
+	border-right-color: #fff;
+	border-width: 11px;
+	margin-top: -11px;
+}
+
+
+.Closed div span{color:#ee8c81!important;}
+.title{color:#ee8c81!important;}
+  .Backlog{ color:#8f8f8f!important;}
+

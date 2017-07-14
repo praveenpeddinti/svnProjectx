@@ -299,7 +299,8 @@ editBucketPopup(){
     this.Type= 'Edit';
     this.form['Id'] = this.editBucketallDetails.BucketId;
     this.form['title']=this.editBucketallDetails.BucketName;
-    this.form['summernote']= jQuery("#summernote").summernote('code',this.editBucketallDetails.Description);
+    this.form['description']=this.editBucketallDetails.Description;
+    jQuery("#summernote").summernote('code',this.editBucketallDetails.Description);
     this.form['startDateVal'] = this.editBucketallDetails.StartDate;
     this.form['dueDateVal'] = this.editBucketallDetails.DueDate;
     this.form['selectedUserFilter']=this.editBucketallDetails.ResponsibleUser;
@@ -318,7 +319,7 @@ editBucket(){
     var editor=jQuery('#summernote').summernote('code');
     editor=jQuery(editor).text().trim();
     this.form['description']=jQuery('#summernote').summernote('code');
-    alert("---"+this.form['description']);
+    
     if(this.form['dueDateVal']!=undefined){
         if( (new Date(this.form['startDateVal']) > new Date(this.form['dueDateVal']))){
             this.errorBucketLog('addDueDateErrMsg','Start Date is must be greater than Due Date');
