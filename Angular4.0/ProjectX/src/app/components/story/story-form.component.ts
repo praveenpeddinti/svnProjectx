@@ -117,7 +117,7 @@ export class StoryComponent
         { 
             thisObj.route.params.subscribe(params => {
            thisObj.projectName=params['projectName'];
-           this.shared.change(this._router.url,thisObj.projectName,'Dashboard','',thisObj.projectName);
+           this.shared.change(this._router.url,thisObj.projectName,'Dashboard','New',thisObj.projectName);
         });
         });
         /* Code Block End */
