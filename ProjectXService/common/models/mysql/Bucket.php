@@ -227,9 +227,7 @@ class Bucket extends ActiveRecord
             $bucket->EmailReminder = (int)$sendReminder;
             $bucket->Status = (int)1;
             $bucket->save();
-            //if ($bucket->save()) {
-            //    $returnValue = $bucket->Id;
-            //}
+            $returnValue = $bucket->Id;
             return $returnValue;
         } catch (Exception $ex) {
             Yii::log("Bucket:saveBucketDetails::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');

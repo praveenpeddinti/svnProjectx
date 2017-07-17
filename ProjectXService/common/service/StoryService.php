@@ -452,6 +452,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             $ticketCollectionModel = new TicketCollection();
             $ticketDetails = $ticketCollectionModel->getTicketDetails($ticket_data->ticketId, $projectId);
             $oldTitle=$ticketDetails["Title"];
+            $bucketId=$ticketDetails['Fields']['bucket']['value'];
             $oldDescription =$ticketDetails["Description"];
             $oldEsimatedPoints=$ticketDetails['Fields']['estimatedpoints']['value'];
             $oldDueDate=$ticketDetails['Fields']['duedate']['value'];
@@ -547,6 +548,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->$key));
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
+                                $bucketId=$ticket_data->$key;
                                 $bucketDetail =  Bucket::getBucketName($ticket_data->$key,$projectId);
                                 $value["value_name"] = $bucketDetail["Name"];
                                 if (!empty($ticketDetails['Tasks'])){
@@ -675,7 +677,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             $collection->save($ticketDetails);
              if(sizeof($summary)!=0){
-                $this->saveEvent($projectId,"Ticket",$ticket_data->ticketId,"updated","fulledit",$userId,$summary);   
+                $this->saveEvent($projectId,"Ticket",$ticket_data->ticketId,"updated","fulledit",$userId,$summary,array("BucketId"=>(int)$bucketId));   
               }
             self::sendEmailNotification($notificationIds, $projectId,1);
             TicketArtifacts::saveArtifacts($ticket_data->ticketId, $projectId, $refiendData["ArtifactsList"],$userId);

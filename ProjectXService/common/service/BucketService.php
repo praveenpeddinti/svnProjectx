@@ -111,7 +111,12 @@ class BucketService {
     public function updateBucketDetails($bucketData){
         try{
          $bucketModel = new Bucket();
-         return $bucketModel->updateBucketDetails($bucketData);
+         $summary=array();
+         $response = $bucketModel->updateBucketDetails($bucketData);
+          $Oldbucket=Bucket::findOne($bucketData->data->Id);
+          error_log("OLd_bucket_details___".print_r($Oldbucket,1));
+          return $response;
+          
         } catch (Exception $ex) {
             Yii::log("BucketService:updateBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
