@@ -159,7 +159,7 @@ export class HeaderComponent implements OnInit {
         }
         
       }
-      this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:slug}});
+      this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:slug,From:"Notification"}});
     })
     
   }
@@ -186,7 +186,7 @@ export class HeaderComponent implements OnInit {
         
       }
     })
-    this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment}});
+    this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment,From:"Notification"}});
   }
   allRead()
   {
