@@ -79,7 +79,7 @@ export class DashboardPage {
         this.headerName = "All My Stories/Task";
         this.SelectValue = "All My Stories/Task";
             this.arrayObject = [];
-            localStorage.setItem('headerInfo', JSON.stringify({'title': this.headerName,'backButton':"hideBackButton",'logo':1,'leftPannel':0,'FilterPannel':0,notification:1,profile:1,searchBar:1}));
+            localStorage.setItem('headerInfo', JSON.stringify({'title': this.headerName,'backButton':"",'logo':0,'backDash':1,'leftPannel':0,'FilterPannel':0,notification:1,profile:1,searchBar:1}));
             this.filterList = [];
             var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
             this.userName = userInfo.username;
@@ -349,7 +349,7 @@ export class DashboardPage {
                              this.arrayObject =[]; 
                              this.content.resize();
                              console.log("filtersOption set to"+JSON.stringify(this.params.filterOption));
-                               this.viewCtrl.dismiss();
+                               //this.viewCtrl.dismiss();
                                  setTimeout(()=> {
                                  this.getallTickets();
                              },300);

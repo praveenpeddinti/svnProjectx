@@ -25,9 +25,11 @@ public notify_count:any='';
 public title:any;
 public backbutton:any;
 public logo:any;
+public backDash:any;
 public ngZone:any;
 public leftPannel:any
 public notification:any;
+public FilterPannel:any;
 public profile:any;
 public searchBar:any;
 public searchValue : any;
@@ -39,8 +41,10 @@ public searchValue : any;
   this.title=headerInfo.title;
   this.backbutton=headerInfo.backbutton;
   this.logo =headerInfo.logo;
+  this.backDash = headerInfo.backDash;
   this.leftPannel =headerInfo.leftPannel;
   this.notification=headerInfo.notification;
+  this.FilterPannel = headerInfo.FilterPannel;
   this.profile=headerInfo.profile;
   this.searchBar = headerInfo.searchBar;
   var post_data = {};
@@ -74,6 +78,9 @@ public searchValue : any;
     public backToggled(){
         console.log("backToggled");
         this.toggled = false;
+        this.navCtrl.setRoot(DashboardPage);
+    }
+    public backDashbord(){
         this.navCtrl.setRoot(DashBoardFilter);
     }
    public clickSearch(){

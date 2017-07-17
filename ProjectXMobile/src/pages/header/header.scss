@@ -9,7 +9,7 @@ background: linear-gradient(to bottom, #6cbed6 0%,#3b9ec2 100%); /* W3C, IE10+, 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', endColorstr='#3b9ec2',GradientType=0 ); /* IE6-9 */
   
 }
-.toolbar-title-md, .toolbar-title-ios, .toolbar-title-wp{text-align: center;color:#fff;}
+.toolbar-title-md, .toolbar-title-ios, .toolbar-title-wp{text-align: center;color:#fff; line-height: 30px; padding: 0 0px;}
 .bar-button-md[icon-only] i, .bar-button-ios[icon-only] i, .bar-button-wp[icon-only] i{font-size:1.6em;color:#fff}
 .bar-button-default-md, .bar-button-clear-md-default, .bar-button-md-default, .bar-button-default-ios, .bar-button-clear-ios-default, .bar-button-ios-default, .bar-button-default-wp, .bar-button-clear-wp-default, .bar-button-wp-default{color:#fff!important;}
 
@@ -151,5 +151,13 @@ button{ background: none!important;}
   color: #fff!important;
 }
 .toolbar-ios ion-title{top: 10px!important; padding-right: 100px!important;}
+
+.title{ display:inline-block;}
+
+
+
+
+
+
 
 }

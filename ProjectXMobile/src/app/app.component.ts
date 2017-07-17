@@ -27,7 +27,7 @@ export class MyApp {
         if(userInfo == null ||userInfo == undefined){
           this.rootPage = LoginPage;
         }else{
-          this.rootPage = DashboardPage;
+          this.rootPage = DashBoardFilter;
         }
       //});
         
