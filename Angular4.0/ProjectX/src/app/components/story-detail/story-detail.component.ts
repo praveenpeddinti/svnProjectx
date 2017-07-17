@@ -29,6 +29,7 @@ private editableSelect= "";
 public blurTimeout=[];
 @ViewChild('detailEditor')  detail_ckeditor; // reference for editor in view.
   public clickedOutside = false;
+  public newComment:any='';
   public dragTimeout;
   public inlineTimeout;
   public minDate:Date;
@@ -59,6 +60,7 @@ private showTotalEstimated=false;
   public isTimeValidErrorMessage;
   public relatedTaskArray=[];
   public checkPlanLevel='';
+  public bucketId:any;
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
@@ -660,6 +662,7 @@ private dateVal = new Date();
             if(field.readable_value != false){
               data.value = field.readable_value.Name;
               data.valueId = field.readable_value.Id
+              this.bucketId=field.readable_value.Id;
             }
             data.renderType = "select";
             break;
@@ -1275,6 +1278,7 @@ var thisObj = this;
         var relatedTasks={
         projectId:this.projectId,
         'ticketId':this.ticketId,
+        'bucketId':this.bucketId,
         'relatedSearchTicketId':suggestValue.split("#")[1]
          } 
        if(relatedTasks.relatedSearchTicketId==undefined){
@@ -1385,6 +1389,7 @@ var thisObj = this;
                 ticketId:this.ticketId,
                 projectId:this.projectId,
                 unRelateTicketId: this.relateTicketId,
+                bucketId:this.bucketId,
               };
             this._ajaxService.AjaxSubscribe("story/un-relate-task",unRelateTicketData,(data)=>
               { 
@@ -1539,4 +1544,4 @@ submitOnEnter(event) {
   }
 }
 
-    }
+}
