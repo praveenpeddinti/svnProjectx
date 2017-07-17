@@ -78,6 +78,8 @@ private showTotalEstimated=false;
   public attachmentsData=[];
   public searchSlug='';
   public relateTicketId='';
+  public navigatedFrom;//added by Ryan
+
   public commentDelId='';
   public commentDelSlug='';
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
@@ -90,6 +92,7 @@ private showTotalEstimated=false;
       {
             this.searchSlug=params['Slug'];
             console.log(this.searchSlug);
+            this.navigatedFrom=params['From'];//added by Ryan
        })
   
 
@@ -1481,6 +1484,7 @@ public callTicketDetailPage(ticId,projectId){
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
             this.checkPlanLevel=data.data.StoryType.Name;
             console.log("==Plan Level=="+this.checkPlanLevel);
+            this.shared.navigatedFrom(this.navigatedFrom);//added by Ryan
             this.shared.change(this._router.url,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
             this.childTaskData=data.data.Tasks;
              this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
