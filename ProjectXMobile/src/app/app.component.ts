@@ -7,7 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
 import { LoginPage } from '../pages/login/login';
 import { DashboardPage } from '../pages/dashboard/dashboard';
-import { DashBoardFilterPage } from '../pages/DashBoardFilterPage/DashBoardFilterPage';
+import {DashBoardFilter} from '../pages/dash-board-filter/dash-board-filter';
 
 import { Globalservice } from '../providers/globalservice';
 import { Constants } from '../providers/constants';

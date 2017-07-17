@@ -32,12 +32,8 @@
   </ion-refresher>
   <div class="padding10">
       <div style="clear:both;">
- 
-              <div class="col50">
-                  
-                  <label class="customlabel"> Dashboard ({{totalCount}} total)</label>
-                  
-                  
+               <div class="col50">
+                  <label class="customlabel">{{totalCount}} total</label>
                   </div>
            <div class="col50">
                <div class="col50textright"><label class="customlabel " let i=index; (tap)="openOptionsModal(field, i)"><ion-icon ios="ios-options" md="md-options"></ion-icon> &nbsp;Filters</label>
@@ -45,7 +41,7 @@
            </div> 
       </div>
       
-      
+<!--      <div class="col50textright"><label class="customlabel " let i=index; (tap)="openOptionsModal(field, i)"><ion-icon ios="ios-options" md="md-options"></ion-icon> &nbsp;Filters</label>-->
       <ion-list>
           <ion-item-sliding *ngFor="let item of arrayObject" (click)="openDetails(item)" no-padding>
             <ion-item id="{{item.id}}" text-wrap no-padding no-lines class="dashboardouterbox"  >
