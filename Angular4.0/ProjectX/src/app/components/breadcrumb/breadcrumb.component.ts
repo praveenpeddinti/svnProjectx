@@ -50,12 +50,21 @@ export class BreadcrumbComponent implements OnInit {
                     this.items[0].label=this.route_changes.params;
                    }
                 }
+                if(this.route_changes.type=="New" && this.items.length>0)
+                    {
+                      console.log("in new"+this.items.length);
+                      this.items.push({label:this.route_changes.type,url:"/project/"+this.route_changes.params+"/new",queryString:''});
+                      console.log("in new"+this.items.length);
+                    }
           if(this.route_changes.projectName!=''  && this.status!=true && this.project!='') //newly changed
             {
               console.log("==Length=="+this.items.length);
               console.log("==projectName=="+this.route_changes.projectName);
               // this.removeItems(0,false);
-             
+             if(this.id.length==1 && this.items.length==1) //newly added for The Notification Use Case
+             {
+               this.removeItems(0,false);
+             }
                  if(this.route_changes.projectName!=undefined)
                  { 
                   this.items.push({label:this.route_changes.projectName,url:"/project/"+this.route_changes.projectName+"/list",queryString:''});
@@ -94,17 +103,34 @@ export class BreadcrumbComponent implements OnInit {
             /*For Back Logic */
             for (var key in this.items) 
                    {
-                     if((this.items[key].label==this.route_changes.params) || (this.items[key].label=='#'+this.route_changes.params) )
+                     if((this.items[key].label==this.route_changes.params) || (this.items[key].label=='#'+this.route_changes.params || this.route_changes.params==''))
                      {
                        console.log("==Key=="+key);
                        //this.removeItems(key+1,true);
                        for(var i:any=parseInt(key);i<this.items.length;i++)
                         {
                           //this.items[i].remove();
-                          this.items.splice(i+1,this.items.length);
-                          this.id.splice(i,this.items.length);
+                          if(this.route_changes.params=='')
+                          {
+                            this.removeItems(0,false);
+                          }
+                          else
+                          {
+                            this.items.splice(i+1,this.items.length);
+                            this.id.splice(i,this.items.length);
+                          }
                         }
-                     }
+                     }                 
+                   }
+                   for(var key in this.items)
+                   {
+                      if(this.route_changes.type=="New" && this.items.length>0)
+                      {
+                        if(this.items[key].label!=this.route_changes.type)
+                        {
+                          this.items.push({label:this.route_changes.type,url:"/project/"+this.route_changes.params+"/new",queryString:''});
+                        }
+                      }
                    }
             /*Back Logic End */
             
@@ -146,16 +172,26 @@ export class BreadcrumbComponent implements OnInit {
                     }
                 }
                
-                // if(this.count>1 && this.route_changes.page!='TimeReport')
-                // {
-                //   this.removeItems(1,true);
-                // }
               }
           }
           if(this.route_changes.page=='Home')
           {
              this.status=true;        
              this.removeItems(0,false);
+          }
+          if(this.route_changes.navigatedFrom=="Notification") //newly added by Ryan
+          {
+            console.log("navigated from");
+            for (var key in this.items)
+            {
+              // if(this.items[key].label=="Search")  // correct Use Case for Notification,need to verify with Moin
+              //         {
+              //           this.items.splice(parseInt(key),1);
+              //         }
+              this.removeItems(0,false);
+              this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type,queryString:''});
+              this.id.push('#'+this.route_changes.params);
+            }
           }
           this.isLoggedOut=false;
         }
