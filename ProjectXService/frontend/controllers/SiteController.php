@@ -18,6 +18,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use common\components\CommonUtility;
+use common\components\CommonUtilityTwo;
 use common\models\bean\ResponseBean;
 use common\models\mysql\Projects;//testing
 use frontend\service\AccesstokenService;
@@ -414,8 +415,9 @@ class SiteController extends Controller
             $postData = json_decode(file_get_contents("php://input"));
             $searchFlag=!empty($postData->searchFlag)?$postData->searchFlag:""; 
             $projectId=!empty($postData->projectId)?$postData->projectId:"";
+            $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
             $pageLength=Yii::$app->params['pageLength'];
-            $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag,$projectId,$pageLength); 
+            $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag,$projectId,$pageLength,$userId); 
             if(empty($searchData['ticketCollection']) && empty($searchData['ticketComments']) && empty($searchData['ticketArtifacts'])&& empty($searchData['tinyUserData'])){
                 $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::FAILURE;
@@ -480,7 +482,7 @@ class SiteController extends Controller
                 error_log("ssssssssssssssss");
                 $projectId=$savingStatus;
                 $getStatus=ServiceFactory::getCollaboratorServiceInstance()->savingProjectTeamDetails($projectId,$postData->userInfo->Id);
-                $getlastIdDetails= CommonUtility::getLastProjectDetails($projectId,$postData->userInfo->Id);
+                $getlastIdDetails= CommonUtilityTwo::getLastProjectDetails($projectId,$postData->userInfo->Id);
                 // error_log("status-----------".$savingStatus);
             }
              if($getStatus == 'failure' || $savingStatus=='failure'){
@@ -515,13 +517,17 @@ class SiteController extends Controller
             $postData = json_decode(file_get_contents("php://input"));
             $projectFlag=!empty($postData->projectFlag)?$postData->projectFlag:"";
             $limit=!empty($postData->limit)?$postData->limit:"";
-            $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData->userInfo->Id,$postData->page,$limit,$projectFlag);
+            $projectId=!empty($postData->projectId)?$postData->projectId:"";
+            $activityDropdownFlag=!empty($postData->activityDropdownFlag)?$postData->activityDropdownFlag:"";
+            $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData->userInfo->Id,$postData->page,$limit,$projectFlag,$postData->activityPage,$projectId,$activityDropdownFlag);
             $totalProjectCount=ServiceFactory::getCollaboratorServiceInstance()->getTotalProjectCount($postData->userInfo->Id);
-            if(!empty($projectInfo['ProjectwiseInfo'] || empty($projectInfo['ProjectwiseInfo']))){
+           // error_log("---tttt----".print_r($projectInfo,1));
+            if(!empty($projectInfo['ProjectwiseInfo']) || empty($projectInfo['ProjectwiseInfo'])){
                 $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
-                if(!empty($projectInfo['ProjectwiseInfo'])){
+//                error_log("------tttt-------".print_r($projectInfo,1));
+                if(!empty($projectInfo['ProjectwiseInfo']) || !empty($projectInfo['ActivityData'])){
                     $responseBean->data = $projectInfo;
                 }else{
                      $responseBean->data = "No Results Found";
@@ -572,6 +578,16 @@ class SiteController extends Controller
             Yii::log("SiteController:actionGetProjectNameByUserid::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
        } 
     }
+    
+//    public function actionGetActivitiesByProjectid(){
+//        try{
+//             $postData = json_decode(file_get_contents("php://input"));
+//             $projectsInfo=ServiceFactory::getCollaboratorServiceInstance()->getProjectNameByUserId($userId);
+//             
+//        } catch (Exception $ex) {
+//             Yii::log("SiteController:actionGetActivitiesByProjectid::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+//        }
+//    }
            
 }
 ?>
