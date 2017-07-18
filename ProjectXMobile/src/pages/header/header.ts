@@ -81,7 +81,11 @@ public searchValue : any;
         this.navCtrl.setRoot(DashboardPage);
     }
     public backDashbord(){
-        this.navCtrl.setRoot(DashBoardFilter);
+        if(this.toggled == true){
+        this.navCtrl.setRoot(DashboardPage);
+        }else{
+            this.navCtrl.setRoot(DashBoardFilter);
+        }
     }
    public clickSearch(){
        console.log("searchValue is" + this.searchValue);
