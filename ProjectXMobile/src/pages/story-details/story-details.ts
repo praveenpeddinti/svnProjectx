@@ -88,6 +88,7 @@ export class StoryDetailsPage {
     public userId: number;
     private follower_search_results: string[];
     private fList: any = [];
+    public isTask:boolean=false;
     // Ticket #113 ended
     //Work log
     // public workLog = { thours: "", iworkHours: "" };
@@ -170,7 +171,12 @@ export class StoryDetailsPage {
                     var _title = this.items[i].title;
                      if (_title == "Total Estimate Points" && this.taskDetails.type == "Task") {
                      setTimeout(() => {
-                         document.getElementById("item_7").style.display = 'none';
+                         this.isTask=true;
+                          document.getElementById("item_7").style.display = 'none';
+                       //  document.getElementById("item_7").style.display = 'none';
+
+                         
+                         
                      }, 300)
                  }
                      if (_title == "Total Estimate Points" && this.items[i].value == ""){
@@ -238,6 +244,7 @@ export class StoryDetailsPage {
                 loader.dismiss();
             }
         );
+ 
         this.itemsInActivities = [];
         globalService.getTicketActivity(this.constants.getTicketActivity, this.navParams.get("id")).subscribe(
             (result) => {
@@ -266,6 +273,11 @@ export class StoryDetailsPage {
         //     }
         // );
     }
+
+    public isItTask(): boolean {
+    return this.isTask;
+  }
+
     public menuOpened() {
         StoryDetailsPage.isMenuOpen = true;
     }
@@ -425,6 +437,8 @@ export class StoryDetailsPage {
         }
     }
     public openOptionsModal(fieldDetails, index) {
+
+        
         fieldDetails['workflowType'] = this.taskDetails.workflowType;
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
@@ -442,6 +456,8 @@ export class StoryDetailsPage {
                         }
                         this.displayFieldvalue = [];
                     });
+
+                   
                     StoryDetailsPage.optionsModal.present();
                 },
                 (error) => {
