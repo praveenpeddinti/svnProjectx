@@ -79,15 +79,15 @@ export class TimeReportComponent{
                 },
                 {
                     name: 'Hours',
-                    flexGrow: 1.5,
+                    flexGrow: 1,
                     sortby: 'time ',
                     class: 'paddingleft10'
                 },
                 {
                     name: '',
-                    flexGrow: 1.0,
+                    flexGrow: 1.5,
                     sortby: '',
-                    class: 'paddingleft10'
+                    class: 'text-center'
                 }
 
               ];

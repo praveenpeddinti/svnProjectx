@@ -86,6 +86,7 @@
         [offset]="offset"
         [limit]="limit"
         [sortable]= "true"
+        [rowIdentity]="rowIdentity"
         (page)="onPage($event)"
         (sort)="onSort($event)"
         >
@@ -110,7 +111,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
    </div>
       <div id="{{row[i].ticketId}}" style="cursor:default" class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name=='Description'" >
            {{row[i].field_value}}<span *ngIf="row[i].ticketDesc.length>0" (click)="fullTextshow(row[i].ticketId)" >...</span>
-      <div id="fullText_{{row[i].ticketId}}" style="display:none">{{row[i].ticketDesc}}</div>
+      <div id="fullText_{{row[i].ticketId}}" [innerHTML]="row[i].ticketDesc" style="display:none"></div>
    
    </div>
       <div style="cursor:default" *ngIf="row[i].field_name =='action'" class="{{column.class}}" style="position: relative">
