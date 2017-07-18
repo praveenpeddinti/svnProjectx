@@ -29,7 +29,7 @@ private editableSelect= "";
 public blurTimeout=[];
 @ViewChild('detailEditor')  detail_ckeditor; // reference for editor in view.
   public clickedOutside = false;
-  public newComment:any='';
+  public form:any={description:''};
   public dragTimeout;
   public inlineTimeout;
   public minDate:Date;
@@ -191,7 +191,8 @@ var thisObj = this;
      */
     ngAfterViewInit()
     {
-        this.editor.initialize_editor('commentEditor',null,null); //for comment
+      console.log("Comment Editor");
+         this.editor.initialize_editor('commentEditor','keyup',this); //for comment
          console.log("=Plan Level="+this.checkPlanLevel);
       //jQuery('span[id^="check_"]').hide();
 
@@ -310,7 +311,7 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
           if(this.replying == true){
             this.commentsList[this.replyToComment].repliesCount++;
           }
-          
+          this.form.description='';
           this.replying = false;
           var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
           this.getArtifacts(ticketIdObj);
@@ -1175,20 +1176,23 @@ var thisObj = this;
     },
   };
   this._ajaxService.AjaxSubscribe("story/submit-comment",reqData,(result)=>
-        { 
+        {   
+            this.form.description='';
             this.commentsList[commentIndex].CrudeCDescription = result.data.CrudeCDescription;
             this.commentsList[commentIndex].CDescription = result.data.CDescription;
           var code= jQuery("#Activity_content_"+commentIndex).summernote('code',result.data.CDescription);
           jQuery("#Activity_content_"+commentIndex).summernote('destroy');
           jQuery("#Reply_Icons_"+commentIndex).show();
-         
-
+          this.descError='';
+          
 
           jQuery("#Actions_"+commentIndex).hide();
           var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
           this.getArtifacts(ticketIdObj);
           
         });
+     }else{
+         this.descError='Comment can not be empty';
      }
 
    }
@@ -1237,6 +1241,7 @@ var thisObj = this;
 
 
    cancelEdit(commentIndex){
+     this.descError='';
    jQuery("#Activity_content_"+commentIndex).summernote('code',this.commentsList[commentIndex].CDescription);
    jQuery("#Activity_content_"+commentIndex).summernote('destroy');
     jQuery("#Actions_"+commentIndex).hide();

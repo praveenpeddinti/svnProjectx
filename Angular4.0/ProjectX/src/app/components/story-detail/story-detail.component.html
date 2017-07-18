@@ -433,6 +433,8 @@
                 
                 
           </div>
+          <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+          </div>
         </div>
         <div id="Actions_{{cmtIdx}}" [hidden]="true" >
                     <div class="uploadcomponent pull-left" style="background:#f8f8f8;">
@@ -443,7 +445,7 @@
                       <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments',cmtIdx)"  multiple  />
                 </div>
                 <div class="alignright margintop15">
-                  <button class="normal bluebutton bluebuttonmedium" (click)="submitEditedComment(cmtIdx,comment.Slug.$oid)">
+                  <button class="normal bluebutton bluebuttonmedium "  (click)="submitEditedComment(cmtIdx,comment.Slug.$oid)">
                     SUBMIT
                   </button> &nbsp;
                   <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelEdit(cmtIdx)">
@@ -501,7 +503,7 @@
                      </div>
                      <!--<ckeditor #commentEditor [config]="toolbarForDetail" [(ngModel)]="commentDesc" name="commentDesc" required >
                      </ckeditor>-->
-                     <textarea id="commentEditor" name="commentDesc" required></textarea>
+                     <textarea  id="commentEditor" name="commentDesc" [(ngModel)]="form.description"  #commentDesc="ngModel" required></textarea>
                 </div>
                 <!--<div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
                 </div>-->
@@ -511,12 +513,12 @@
                 <div class="uploadcomponent margintop15 pull-left">
                       <div class="uploadbottom">
                         <i class="fa fa-paperclip" aria-hidden="true"></i>
-                        File upload
+                        File upload  
                       </div>
                       <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments','')"  multiple  />
                    </div>
             <div class="buttonarea alignright">
-                  <button class="normal bluebutton bluebuttonmedium" (click)="submitComment()">
+                  <button class="normal bluebutton bluebuttonmedium {{(form.description=='')?'but_unvisible':'but_visible'}}  " [disabled]="(form.description=='')?true:null" (click)="submitComment()">
 
                     SUBMIT
                   </button>

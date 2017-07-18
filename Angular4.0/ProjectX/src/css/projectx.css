@@ -936,3 +936,6 @@ padding-left:0px!important;
 .sprintdetails .totaltasks{ margin-top:40px;}
 .sprint_hed{margin-bottom:0px!important;}
 }
+
+.but_unvisible{ opacity: 0.5;}
+.but_visible{ opacity:1!important;}
