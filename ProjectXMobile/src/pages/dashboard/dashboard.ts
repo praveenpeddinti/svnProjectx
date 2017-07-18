@@ -360,7 +360,7 @@ export class DashboardPage {
     }
     
     public openDetails(item): void {
-        var clickedItemId = {"id": item.id};
+        var clickedItemId = {"id": item.id,"storyOrTask":item.storyOrTask};
         this.navCtrl.push(StoryDetailsPage, clickedItemId);
     }
     public btnCreateTask() {
