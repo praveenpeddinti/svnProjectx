@@ -2,7 +2,7 @@
 <ion-content class="globalsearch_content">
     <div class="leftpanelcust">Search result for <span class="heighlight">{{searchValue}}</span> in ProjectX.0</div>
 <ion-list>
-            <ion-item *ngFor="let item of dataCollection">
+            <ion-item *ngFor="let item of dataCollection" (click)="openDetails(item)">
                     <div class="globalsearch_header">
                         <i class="{{item.planlevel}}"></i> <span class="ticketid">#{{item.TicketId}}</span> <span class="tickettitle">{{item.Title}}</span>
                     </div>

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import { Constants } from '../../providers/constants';
 import { Globalservice } from '../../providers/globalservice';
+import {StoryDetailsPage} from '../../pages/story-details/story-details';
 /**
  * Generated class for the GlobalSearchStorytask page.
  *
@@ -19,7 +20,7 @@ export class GlobalSearchStorytask {
     public dataStoryTask: Array<any>;
     public moreDataLoaded: boolean = true;
      public rootParams: any = {searchValue: "" ,dataCollection:{} };
-  constructor(public navCtrl: NavController, public navParams: NavParams,
+  constructor(protected app: App,public navCtrl: NavController, public navParams: NavParams,
        private http:Http,private constants: Constants,
        public globalService: Globalservice) {
        this.rootParams.searchValue =this.navParams.data.searchValue;
@@ -80,7 +81,11 @@ export class GlobalSearchStorytask {
   ionViewDidLoad() {
     console.log('ionViewDidLoad GlobalSearchStorytask');
   }
-  
+    public openDetails(item): void {
+        var clickedItemId = {"id": item.TicketId};
+        console.log(JSON.stringify("the item id" + JSON.stringify(item)));
+        this.app.getRootNav().push(StoryDetailsPage, clickedItemId);
+    }
   public doInfinite(infiniteScroll) {
         setTimeout(() => {
             if (this.moreDataLoaded == true) {

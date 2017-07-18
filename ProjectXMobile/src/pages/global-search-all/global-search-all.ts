@@ -1,8 +1,10 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import { Constants } from '../../providers/constants';
 import { Globalservice } from '../../providers/globalservice';
+import {StoryDetailsPage} from '../../pages/story-details/story-details';
+import { App } from 'ionic-angular';
 /**
  * Generated class for the GlobalSearchAll page.
  *
@@ -23,9 +25,9 @@ export class GlobalSearchAll {
     public allList: Array<{ id: string, title: string, description: string, planleve: string, reportedby: string, updatedon: string }>;
     public moreDataLoaded: boolean = true;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
+  constructor(protected app: App,public navCtrl: NavController, public navParams: NavParams,
        private http:Http,private constants: Constants,
-       public globalService: Globalservice,private ngZone: NgZone,) {
+       public globalService: Globalservice,private ngZone: NgZone,public viewCtrl: ViewController) {
        
         //this.searchValue = "fd";
         this.searchValue = this.navParams.data.searchValue;
@@ -111,6 +113,11 @@ export class GlobalSearchAll {
             }
         }, 2000);
 
+    }
+    public openDetails(item): void {
+        var clickedItemId = {"id": item.TicketId};
+        console.log(JSON.stringify("the item id" + JSON.stringify(item)));
+        this.app.getRootNav().push(StoryDetailsPage, clickedItemId);
     }    
     
     public getAllsearchResults():void{
