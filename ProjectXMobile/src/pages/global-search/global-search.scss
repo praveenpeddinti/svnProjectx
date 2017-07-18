@@ -219,7 +219,8 @@ color: #fff!important;
 .searchbar-ios .searchbar-clear-icon {top:0px!important;}
 
 .searchbar-clear-icon{ background-image:none!important; top:5px!important; right:5px!important;}
-
+.searchbar-clear-icon-md{ background-image:none!important; top:5px!important; right:8px!important;}
+.searchbar-clear-icon-ios{ background-image:none!important; top:5px!important; right:0px!important;}
 .searchbar-clear-icon:before {
     font-family: FontAwesome!important;
     content: "\f00d"!important;
