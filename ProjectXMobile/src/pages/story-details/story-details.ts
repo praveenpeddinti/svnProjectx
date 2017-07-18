@@ -49,6 +49,7 @@ export class StoryDetailsPage {
     // pageTitle: string;
     //end tabs : - prabhu
     public ticketId: any;
+    public storyOrTask:any;
     public rootParams: any = {ticketId: ""};
     public items: Array<any>;
     public arrayList: Array<{ id: string, title: string, assignTo: string, readOnly: string, fieldType: string, fieldName: string, ticketId: any, readableValue: any }>;
@@ -88,8 +89,7 @@ export class StoryDetailsPage {
     public userId: number;
     private follower_search_results: string[];
     private fList: any = [];
-    public isTask:boolean=false;
-    // Ticket #113 ended
+	public isTask:boolean=false;    // Ticket #113 ended
     //Work log
     // public workLog = { thours: "", iworkHours: "" };
     // public workedLogtime: any = {};
@@ -125,7 +125,12 @@ export class StoryDetailsPage {
         private alertController: AlertController,
         public navCtrl: NavController,
         public autoCompleteProvider: AutoCompleteProvider ) {
-        localStorage.setItem('headerInfo',JSON.stringify({'title':"Story Details",'backButton':"",'logo':0,'leftPannel':1,notification:1,profile:1}));
+             this.ticketId = this.navParams.get("id");
+        this.storyOrTask=this.navParams.get("storyOrTask");
+          var slug= this.navParams.get("slug"); 
+        this.rootParams.ticketId =  this.navParams.get("id");
+        this.rootParams.slug =  this.navParams.get("slug");
+        localStorage.setItem('headerInfo',JSON.stringify({'title':this.storyOrTask+" Details",'backButton':"",'logo':0,'leftPannel':1,notification:1,profile:1}));
            this.navParams = navParams;
            this.StoryDetailsComments = StoryDetailsComments;
            this.StoryDetailsFollowers = StoryDetailsFollowers;
@@ -138,10 +143,8 @@ export class StoryDetailsPage {
         // this.showTitles = navParams.get('titles');
         // this.pageTitle = navParams.get('pageTitle');
         
-        this.ticketId = this.navParams.get("id");
-        var slug= this.navParams.get("slug"); 
-        this.rootParams.ticketId =  this.navParams.get("id");
-        this.rootParams.slug =  this.navParams.get("slug");
+       
+      
         StoryDetailsPage.menuControler = menu;
         this.minDate = new Date().toISOString();
         let loader = this.loadingController.create({ content: "Loading..." });
@@ -170,13 +173,9 @@ export class StoryDetailsPage {
                     var _id = this.items[i].Id;
                     var _title = this.items[i].title;
                      if (_title == "Total Estimate Points" && this.taskDetails.type == "Task") {
+						   this.isTask=true;
                      setTimeout(() => {
-                         this.isTask=true;
-                          document.getElementById("item_7").style.display = 'none';
-                       //  document.getElementById("item_7").style.display = 'none';
-
-                         
-                         
+                         document.getElementById("item_7").style.display = 'none';
                      }, 300)
                  }
                      if (_title == "Total Estimate Points" && this.items[i].value == ""){
@@ -244,7 +243,6 @@ export class StoryDetailsPage {
                 loader.dismiss();
             }
         );
- 
         this.itemsInActivities = [];
         globalService.getTicketActivity(this.constants.getTicketActivity, this.navParams.get("id")).subscribe(
             (result) => {
@@ -273,11 +271,9 @@ export class StoryDetailsPage {
         //     }
         // );
     }
-
-    public isItTask(): boolean {
+  public isItTask(): boolean {
     return this.isTask;
   }
-
     public menuOpened() {
         StoryDetailsPage.isMenuOpen = true;
     }
@@ -437,8 +433,6 @@ export class StoryDetailsPage {
         }
     }
     public openOptionsModal(fieldDetails, index) {
-
-        
         fieldDetails['workflowType'] = this.taskDetails.workflowType;
         if ((fieldDetails.readOnly == 0) && ((fieldDetails.fieldType == "List") || (fieldDetails.fieldType == "Team List") || (fieldDetails.fieldType == "Bucket"))) {
             this.globalService.getFieldItemById(this.constants.fieldDetailsById, fieldDetails).subscribe(
@@ -457,7 +451,7 @@ export class StoryDetailsPage {
                         this.displayFieldvalue = [];
                     });
 
-                   
+
                     StoryDetailsPage.optionsModal.present();
                 },
                 (error) => {
