@@ -937,5 +937,7 @@ padding-left:0px!important;
 .sprint_hed{margin-bottom:0px!important;}
 }
 
+.datatable-row-detail .ngx-datatable .datatable-body{ border-right: 0; border-left: 0}
+
 .but_unvisible{ opacity: 0.5;}
 .but_visible{ opacity:1!important;}
