@@ -15,7 +15,7 @@ import { CustomModalPage } from '../custom-modal/custom-modal';
 declare var cordova: any;
 declare var jQuery: any;
 declare var RE: any;
-declare var socket:any;
+declare var socket: any;
 /**
  * Generated class for the StoryDetailsComments page.
  *
@@ -98,21 +98,21 @@ export class StoryDetailsComments {
         var userInfo = JSON.parse(localStorage.getItem("userCredentials"));
         this.userName = userInfo.username;
         this.ngZone = new NgZone({ enableLongStackTrace: false });
-        var thisObj=this;
+        var thisObj = this;
         this.storyTicketId = this.navParams.data.ticketId;
-        var post_data = {'ticketId': this.storyTicketId}; 
+        var post_data = { 'ticketId': this.storyTicketId };
         console.log("the story details comments ticket id " + JSON.stringify(this.storyTicketId));
         this.itemsInActivities = [];
         this.globalService.SocketSubscribe('getLatestActivities', post_data);
-         socket.on('getLatestActivitiesResponse', function (data) {
-                data = JSON.parse(data);
-                console.log("getLatestActivitiesResponse------Mobile----" + JSON.stringify(data));
-                thisObj.ngZone.run(() => {
-                   thisObj.itemsInActivities=data.activityData.Activities;
-                   // console.log("getLatestActivitiesResponse------Zone" + JSON.stringify(thisObj.itemsInActivities));
-                 });
-              
+        socket.on('getLatestActivitiesResponse', function (data) {
+            data = JSON.parse(data);
+            console.log("getLatestActivitiesResponse------Mobile----" + JSON.stringify(data));
+            thisObj.ngZone.run(() => {
+                thisObj.itemsInActivities = data.activityData.Activities;
+                // console.log("getLatestActivitiesResponse------Zone" + JSON.stringify(thisObj.itemsInActivities));
             });
+
+        });
         globalService.getTicketDetailsById(this.constants.taskDetailsById, this.storyTicketId).subscribe(
             result => {
                 this.taskDetails.ticketId = this.storyTicketId;
@@ -192,7 +192,7 @@ export class StoryDetailsComments {
             (result) => {
                 this.itemsInActivities = result.data.Activities;
             }, (error) => {
-                 loader.dismiss();
+                loader.dismiss();
             }
         );
         this.progressNew = 0;
@@ -231,19 +231,18 @@ export class StoryDetailsComments {
         });
     }
     ionViewDidLoad() {
-        this.globalService.getActivity().subscribe(value=>
-      {
-          console.log("___________________III___________LL____"+JSON.stringify(value));
-           if (value.activityData.referenceKey == -1) {
-                        this.itemsInActivities.push(value.activityData.data);
-                    } else {
-                        this.itemsInActivities[value.activityData.referenceKey]["PropertyChanges"].push(value.activityData.data);
-                    } 
+        this.globalService.getActivity().subscribe(value => {
+            console.log("___________________III___________LL____" + JSON.stringify(value));
+            if (value.activityData.referenceKey == -1) {
+                this.itemsInActivities.push(value.activityData.data);
+            } else {
+                this.itemsInActivities[value.activityData.referenceKey]["PropertyChanges"].push(value.activityData.data);
+            }
 
 
-      })
+        })
         setTimeout(() => {
-            var slug = this.navParams.get("slug"); 
+            var slug = this.navParams.get("slug");
             if (jQuery("." + slug).length > 0) {
                 jQuery("." + slug)[0].scrollIntoView({
                     behavior: "smooth", // or "auto" or "instant"
@@ -475,12 +474,11 @@ export class StoryDetailsComments {
     }
     public submitComment() {
         console.log("submit button clicked1");
-        this.myHTML = jQuery('.comment_editor').html();
+        var commentId = jQuery(".comment_editor");
+        jQuery(commentId).text(jQuery.trim(jQuery(commentId).text()));
+        this.myHTML = jQuery(commentId).html();
         console.log("submit button clicked2" + JSON.stringify(this.myHTML));
-        //var commentText = jQuery(".uploadAndSubmit .textEditor").val();
-        // var commentText = this.commentDesc;
         if (this.myHTML != "" && this.myHTML.trim() != "") {
-            //  this.commentDesc = "";
             console.log("submit button clicked3");
             jQuery("#commentEditorArea").removeClass("replybox");
             var commentedOn = new Date();
@@ -488,7 +486,7 @@ export class StoryDetailsComments {
             var commentData = {
                 TicketId: this.storyTicketId,
                 Comment: {
-                    CrudeCDescription: this.myHTML.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
+                    CrudeCDescription: this.myHTML.trim().replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, ""),//.replace(/(<p>(&nbsp;)*<\/p>)+|(&nbsp;)+/g,""),
                     CommentedOn: formatedDate,
                     ParentIndex: "",
                     Reply: this.replying,
@@ -518,7 +516,12 @@ export class StoryDetailsComments {
         }
     }
     public submitEditedComment(commentId, slug) {
-        var editedContent = jQuery(".comment_edit_editor_" + commentId).html();
+        var editCommentId = jQuery(".comment_edit_editor_" + commentId);
+        //  var val=editCommentId.val();
+        jQuery(editCommentId).text(jQuery.trim(jQuery(editCommentId).text()));
+
+        var editedContent = jQuery(editCommentId).html();
+        console.log("added uday edit comment html" + editedContent);
         if (editedContent != "" && editedContent.trim() != "") {
             var commentedOn = new Date();
             var formatedDate = (commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' + commentedOn.getFullYear();
@@ -709,39 +712,41 @@ export class StoryDetailsComments {
     public atmensions(index) {
 
         var selector;
-        if(index==-1){
-             jQuery('#hideOrShow').show();
-            selector='comment_editor';
-        }else{
-             jQuery('#hideOrShow_'+index).show();
-            selector='comment_edit_editor_'+index;
+        if (index == -1) {
+            jQuery('#hideOrShow').show();
+            selector = 'comment_editor';
+        } else {
+            jQuery('#hideOrShow_' + index).show();
+            selector = 'comment_edit_editor_' + index;
         }
-    this.myHTML = jQuery("."+selector).html();
-    console.log("Comments___"+this.myHTML);
-    var thisObj=this;
-    var reqParam={'search_term':''};
-    var userList;
-    jQuery("."+selector).atwho({
-    at: "@",
-     callbacks:{ remoteFilter: function(query, callback){
-        console.log("==queyr=="+query);
-      if(query.length > 0){
-          reqParam.search_term=query;
-        thisObj.globalService.getCollaborators(thisObj.constants.getCollaboratorsUrl,reqParam).subscribe(
-                (result) => {
-                   userList = jQuery.map(result.data, function(value, i) {
-  return {'id':value.Id, 'name':value.Name,'profilepic':value.ProfilePic};
-});
-callback(userList);
-      
-                }, (error) => {
-                   console.log("user loading error")
-                }
-            );
-     // callback(userList);
-        }else{
-             callback(userList);
-        }
+        this.myHTML = jQuery("." + selector).html();
+        this.myHTML = this.myHTML.trim().replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm, "");
+        console.log("Comments___added by uday" + this.myHTML);
+        var thisObj = this;
+        var reqParam = { 'search_term': '' };
+        var userList;
+        jQuery("." + selector).atwho({
+            at: "@",
+            callbacks: {
+                remoteFilter: function (query, callback) {
+                    console.log("==queyr==" + query);
+                    if (query.length > 0) {
+                        reqParam.search_term = query;
+                        thisObj.globalService.getCollaborators(thisObj.constants.getCollaboratorsUrl, reqParam).subscribe(
+                            (result) => {
+                                userList = jQuery.map(result.data, function (value, i) {
+                                    return { 'id': value.Id, 'name': value.Name, 'profilepic': value.ProfilePic };
+                                });
+                                callback(userList);
+
+                            }, (error) => {
+                                console.log("user loading error")
+                            }
+                        );
+                        // callback(userList);
+                    } else {
+                        callback(userList);
+                    }
                 },
             },
             data: userList,
@@ -758,7 +763,7 @@ callback(userList);
      * Node call for getting the activity
      */
 
-     
-           
+
+
 
 }
