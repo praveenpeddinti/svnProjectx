@@ -198,7 +198,7 @@ toggleExpandRow(row) {
     if(row.$$expanded!=1){jQuery("#collapsediv").click();}
     this.row1=[];
     console.log('Toggled Expand Row!', row[0].field_value);
-    this._service.getSubTasksDetails(1, row[0].field_value, (response) => {
+    this._service.getSubTasksDetails(this.projectId, row[0].field_value, (response) => {
                    let jsonForm = {};
             if (response.statusCode == 200) {
                 this.row1=response.data;
