@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ViewController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import { Constants } from '../../providers/constants';
 import { Globalservice } from '../../providers/globalservice';
@@ -22,7 +22,7 @@ export class GlobalSearchComments {
     
   constructor(protected app: App,public navCtrl: NavController, public navParams: NavParams,
        private http:Http,private constants: Constants,
-       public globalService: Globalservice) {
+       public globalService: Globalservice, public viewCtrl: ViewController) {
        
         this.searchValue = this.navParams.data.searchValue;
         console.log("Search value from story is" + this.searchValue);
@@ -69,11 +69,6 @@ ionViewDidEnter(){
   ionViewDidLoad() {
     console.log('ionViewDidLoad GlobalSearchComments');
   }
-    public openDetails(item): void {
-        var clickedItemId = {"id": item.TicketId};
-        console.log(JSON.stringify("the item id" + JSON.stringify(item)));
-        this.app.getRootNav().push(StoryDetailsPage, clickedItemId);
-    }
    public errorMessage: string="No results found.";
   public doInfinite(infiniteScroll) {
         setTimeout(() => {
@@ -86,7 +81,10 @@ ionViewDidEnter(){
         }, 2000);
 
     }    
-    
+    public openDetails(item): void {
+        var clickedItemId = {"id": item.TicketId.TicketId};
+        this.app.getRootNav().push(StoryDetailsPage, clickedItemId);
+    }
     public getAllsearchResults():void{
         this.moreDataLoaded =false;
         this.errorMessage="That’s all. No results found.";
