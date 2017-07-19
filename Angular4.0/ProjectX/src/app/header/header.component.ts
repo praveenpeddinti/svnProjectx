@@ -18,12 +18,17 @@ declare var jQuery:any;
 export class HeaderComponent implements OnInit {
   public users=JSON.parse(localStorage.getItem('user'));
   public profilePicture=localStorage.getItem('profilePicture');
-  public ProjectName=localStorage.getItem('ProjectName');
   public notification_msg=[];
   public notify_count:any=0;
   public pageNo=1;
   public searchresults;
   public getnotificationTimeout:any=0;
+  public selectedProject:any;
+  private projects=[];
+  private optionTodisplay=[];
+  public homeFlag=false;
+  private ProjectName='';
+  private PName='';
    constructor(
     private _ajaxService: AjaxService,
     public _router: Router,
@@ -34,14 +39,14 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
   /* For Notifications */
-    if(this.users)
+  this.PName=localStorage.getItem('ProjectName');
+ 
+     if(this.users)
     {
      var thisObj = this;
     var post_data={}; 
       thisObj._ajaxService.SocketSubscribe('getAllNotificationsCount',post_data);
-    
-      
-        socket.on('getAllNotificationsCountResponse', function(data) {
+          socket.on('getAllNotificationsCountResponse', function(data) {
        
             data = JSON.parse(data); 
              console.log("getAllNotificationsCountResponse-----------"+data.count);
@@ -56,7 +61,7 @@ export class HeaderComponent implements OnInit {
   
         });
 
-
+       
       
      console.log("==In header=="+this._router.url);
     }
@@ -70,33 +75,50 @@ export class HeaderComponent implements OnInit {
       });
      
     });
-   
-  }
-  logout() { 
-        this._service.logout((data)=>{ 
+    this.getAllProjectNames();
+     }
+      getAllProjectNames(){
+        var sendData={
+           userId:JSON.parse(this.users.Id)
+           }
+         this._ajaxService.AjaxSubscribe('site/get-project-name-by-userid',sendData,(result)=>
+        {
+           this.optionTodisplay=this.projectsArray(result.data);
+           this.projects=this.optionTodisplay[0].filterValue;
+           })
+
+      }
+  logout() {
+         this._service.logout((data)=>{ 
               this._router.navigate(['login']);
               this.shared.change(null,null,'Logout',null,'');  
         });
 
     }
-
+projectsArray(list){
+  var listItem=[];
+ listItem.push({label:"Projects", value:''});
+    var listMainArray=[];
+     if(list.length>0){
+         for(var i=0;list.length>i;i++){
+           listItem.push({label:list[i].ProjectName, value:{'id':list[i].PId,'name':list[i].ProjectName}});
+         } 
+    }     
+      listMainArray.push({type:"",filterValue:listItem});
+      return listMainArray;
+}
   globalSearchNavigate(){
     var searchString=jQuery("#globalsearch").val().trim();
-     //this.searchresults=searchString;
-    //  var searchString=searchString.replace("#","");
-        // if(searchString=='' || searchString=='undefined'){ 
-        //   this.showErrorFunction("searchError","Please Search.")
-        // }else{
-          //var projectname=localStorage.getItem('ProjectName');
-          if(this.ProjectName=='' || this.ProjectName==undefined){
+     if(this._router.url=='/home'){
+  // localStorage.setItem('PName',null);
+      delete this.PName;
+    
+    }
+          if(this.PName=='' || this.PName==undefined){
               this._router.navigate(['search',],{queryParams: {q:searchString}});
           }else{
-             this._router.navigate(['project',this.ProjectName,'search'],{queryParams: {q:searchString}});
-
-          }
-
-          
-        // }
+             this._router.navigate(['project',this.PName,'search'],{queryParams: {q:searchString}});
+       }
       
     }
   showErrorFunction(id,message){
@@ -264,7 +286,16 @@ export class HeaderComponent implements OnInit {
   TimeReport(){
   this._router.navigate(['project',localStorage.getItem('ProjectName'),'time-report']);
 }
+
+ changeProject(){
+       // alert("s__P@@@@@@@@@---"+JSON.stringify(this.selectedProject));
+        localStorage.setItem('ProjectName',this.selectedProject.name);
+        localStorage.setItem('ProjectId',this.selectedProject.id);
+        this._router.navigate(['project',this.selectedProject.name,'list']);
+    }
+
 Bucket(){
   this._router.navigate(['project',localStorage.getItem('ProjectName'),'bucket']);
 }
+
 }
