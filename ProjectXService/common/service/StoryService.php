@@ -1327,7 +1327,7 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
                /* Notifications */
                $notifyType="Create Task";
                $slug =  new \MongoDB\BSON\ObjectID();
-               $this->saveNotifications($postData, $notifyType,'','',$slug,$ticketModel->TicketId);
+               $this->saveNotifications($postData, $notifyType,'','',$slug,'',$ticketModel->TicketId);
                $activityData= $this->saveActivity($postData->ticketId,$postData->projectId,"ChildTask", $ticketNumber,$postData->userInfo->Id,$slug,$timezone);
                $returnStatus=array('Tasks'=>$subTicketDetails,'activityData'=>$activityData);
                /* end Notifications */
