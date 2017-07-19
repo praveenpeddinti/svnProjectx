@@ -34,9 +34,9 @@ header{display: block;margin: 4px;padding: 5px;min-height: 100px;border: 1px sol
 .notbuttonarea{text-align:right;;padding:5px 10px 5px;}
 .notbuttonarea .margin-right5{margin-right:5px}
 .not_date{font-size:12px;color:#a8a8a8}
-.notification.dropdown-menu{right:-150px}
+.notification.dropdown-menu{right:-37px}
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus{background:#237ea7}
-.notification:after { bottom: 100%; left: 221px; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(204, 204, 204, 0); border-bottom-color: #e0e0e0; border-width: 10px; margin-left: -10px;}
+.notification:after { bottom: 100%; right: 50px; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(204, 204, 204, 0); border-bottom-color: #e0e0e0; border-width: 10px; margin-left: -10px;}
 .nonotification{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #005072 } 
 .bluebuttonmedium{font-size: 12px}
 .bgnone{ background: none!important;}
