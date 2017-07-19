@@ -75,6 +75,14 @@ export class HeaderComponent implements OnInit {
       });
      
     });
+
+    // Following Code is the Fix for Editor Mention Hint Popover that was not disappearing before
+    //@author : Ryan
+    if(jQuery("body").find("div").hasClass("note-popover popover in note-hint-popover"))
+    {
+      jQuery("div.note-popover.popover.in.note-hint-popover").css("display","none");
+    }
+    
     this.getAllProjectNames();
      }
       getAllProjectNames(){
