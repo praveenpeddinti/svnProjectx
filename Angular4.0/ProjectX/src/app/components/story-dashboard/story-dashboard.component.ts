@@ -83,6 +83,65 @@ export class StoryDashboardComponent {
                 }
                 
               ];
+               columnsSub = [
+                {
+                    name: 'Id',
+                    flexGrow: 1,
+                    sortby: 'task',
+                    class: 'taskRstory',
+                    type:'task'
+                },
+                {
+                    name: 'Title',
+                    flexGrow: 3,
+                    sortby: 'task',
+                    class: 'titlecolumn',
+                    type:'task'
+                },
+                {
+                    name: 'Assigned to',
+                    flexGrow: 1.5,
+                    sortby: 'task',
+                    class: '',
+                    type:'task'
+                },
+                {
+                    name: 'Priority',
+                    flexGrow: 1,
+                    sortby: 'task',
+                    class: 'prioritycolumn',
+                    type:'task'
+                },
+                {
+                    name: 'State',
+                    flexGrow: 1,
+                    sortby: 'task',
+                    class: 'statusbold',
+                    type:'task'
+                },
+                {
+                    name: 'Bucket',
+                    flexGrow: 1,
+                    sortby: 'task',
+                    class: 'bucket',
+                    type:'task'
+                },
+                {
+                    name: 'Due Date',
+                    flexGrow: 1,
+                    sortby: 'task',
+                    class: 'duedate',
+                    type:'task'
+                },
+                {
+                    name: '',
+                    flexGrow: 0.3,
+                    sortby: 'task',
+                    class: 'arrowClass',
+                    type:'task'
+                }
+                
+              ];
 
 expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
