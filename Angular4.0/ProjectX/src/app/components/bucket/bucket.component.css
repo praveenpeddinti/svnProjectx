@@ -156,4 +156,28 @@ border: 4px solid #fff;
 .Closed div span{color:#ee8c81!important;}
 .title{color:#ee8c81!important;}
   .Backlog{ color:#8f8f8f!important;}
+  
+  
+/*  round-progress start */
+.progress-wrapper {
+  position: relative;
+  margin: 0px auto;
+  font-size: 40px;
+  width: 90px!important; height:90px!important;
+}
 
+.current {
+  position: absolute;
+  color: #bbb;
+  font-weight: 100;
+  line-height: 1;
+  font-size: 24px;
+  color: #646464;
+  position: absolute; left: 25%; top:35%; font-weight: bold;
+}
+round-progress {
+  margin: auto;
+    width:90px!important; height:90px!important;
+}
+
+/*  round-progress End */

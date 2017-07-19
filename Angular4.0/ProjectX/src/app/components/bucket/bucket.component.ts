@@ -10,6 +10,7 @@ import {AuthGuard} from '../../services/auth-guard.service';
 import { ProjectService } from '../../services/project.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
+import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { NgForm } from '@angular/forms';
 
 declare var summernote:any;
@@ -139,6 +140,8 @@ export class BucketComponent{
             if (response.statusCode == 200) {
             this.zone.run(() =>{ 
                 this.bucketDetails= this.prepareBucketData(response.data,this.bucketDetails);
+                console.log("final bdetails===="+JSON.stringify(this.bucketDetails));
+                //var workPercentage =this.bucketDetails.
                 var listData=[];
                 if(postData.bucketStatus=='Current'){
                    listData = [

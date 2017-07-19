@@ -39,6 +39,7 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BucketComponent }  from './components/bucket/bucket.component';
 import {BucketService} from './services/bucket.service';
+import {RoundProgressModule} from 'angular-svg-round-progressbar';
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',component: PageNotFoundComponent },
@@ -135,6 +136,7 @@ const ROUTES=[
    AutoCompleteModule,
    BrowserAnimationsModule,
    RouterModule.forRoot(ROUTES),
+   RoundProgressModule,
   ],
 
   declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent ],

@@ -86,7 +86,25 @@
                                     Open Tasks
                                     <div class="resultcount">{{bDetails.OpenTasks}}</div>
                                 </div>
-                                <div class="workedhors"></div>
+                                <div class="workedhors">
+                                    <div class="progress-wrapper">
+                                        <div class="current">{{bDetails.AllTasks}}%</div>
+                                        <round-progress
+                                        [current]=bDetails.AllTasks
+                                        [max]="100"
+                                        [color]="'#11abe0'"
+                                        [background]="'#e0f0f6'"
+                                        [radius]="125"
+                                        [stroke]="15"
+                                        [semicircle]="false"
+                                        [rounded]="true"
+                                        [clockwise]="true"
+                                        [responsive]="false"
+                                        [duration]="800"
+                                        [animation]="'easeInOutQuart'"
+                                        [animationDelay]="0"></round-progress>
+                                    </div>
+                                </div>
                                 <div class="workedhors">
                                     Worked Hours
                                     <div class="resultcount">{{bDetails.TotalHours}}</div>
