@@ -768,7 +768,7 @@ padding-left:0px!important;
 .ngx-datatable .datatable-body .datatable-body-row > div{display: table-row}
 .customdatatable .datatable-header{ padding: 10px 0!important;}
 .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row, .ngx-datatable .datatable-scroll .datatable-body-row{margin:0}
-.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell{display: table-cell;vertical-align: middle!important;padding-top:5px!important;padding-bottom:5px!important;word-break:break-all}
+.ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell{display: table-cell;vertical-align: middle!important;padding-top:5px!important;padding-bottom:5px!important;word-break:break-word;}
 .datatable-body-cell-label .titlecolumn{cursor: pointer;line-height: 16px;padding-right: 0px;position: relative; white-space: normal;overflow: visible;text-overflow:inherit}
 .ngx-datatable.material .datatable-header .datatable-header-cell{padding-left:0!important;padding-top:0!important;padding-bottom:0!important}
 .titlecolumn{margin:0!important}
