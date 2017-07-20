@@ -266,21 +266,21 @@ addBucket(){
     if(response.data=='failure'){
       jQuery('#bucketSuccessMsg').show();
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
-      jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
+      jQuery('#bucketSuccessMsg').addClass('fielderror');
       jQuery("#bucketSuccessMsg").html('Bucket already created');
       jQuery('#bucketSuccessMsg').fadeOut( "slow" );
       this.callshowBuckets('Current');
     }else if(response.data=='current'){
       jQuery('#bucketSuccessMsg').show();
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
-      jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
+      jQuery('#bucketSuccessMsg').addClass('fielderror');
       jQuery("#bucketSuccessMsg").html('Current Bucket is exist');
       jQuery('#bucketSuccessMsg').fadeOut( "slow" );
       this.callshowBuckets('Current');
     }else{
         jQuery('#bucketSuccessMsg').show();
         jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
-        //jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
+        //jQuery('#bucketSuccessMsg').addClass('fielderror');
         jQuery("#bucketSuccessMsg").html('Bucket added successfully');
       //jQuery('#bucketSuccessMsg').fadeOut( "slow" );
     }
@@ -333,7 +333,7 @@ editBucket(){
     if(response.data=='failure'){
       jQuery('#bucketSuccessMsg').show();
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
-      jQuery('#bucketSuccessMsg').addClass('alert alert-danger');
+      jQuery('#bucketSuccessMsg').addClass('fielderror');
       jQuery("#bucketSuccessMsg").html('Bucket already created');
     }else{
         jQuery('#bucketSuccessMsg').show();
@@ -370,7 +370,7 @@ filterBucketChange(bucketId,event){
       
     }else{
       jQuery('#bucketStatusErrorMsg').show();
-      jQuery('#bucketSuccessMsg').removeClass('alert alert-danger');
+      jQuery('#bucketSuccessMsg').removeClass('fielderror');
       jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
       jQuery("#bucketSuccessMsg").html('Current Bucket is exist');
     }       

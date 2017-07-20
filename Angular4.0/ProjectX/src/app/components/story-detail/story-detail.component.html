@@ -101,7 +101,7 @@
                   </div>
                   <div class="clearfix"></div>
               </div>
-              <div id="timelog" class="alert alert-danger" style="display:none;">
+              <div id="timelog" class="fielderror" style="display:none;">
 
               </div>
                   </div>
@@ -117,7 +117,7 @@
                 </div>
                <!-- <input class="editinput" id="{{ticketData?.data?.TicketId}}_titleInput" type="text" [hidden]="showTitleEdit" (blur)="closeTitleEdit($event.target.value)" value="{{ticketData?.data?.Title}}" />-->
                 <textarea rows={{min_row}} data-min-rows=1  style="resize: none;" class='autoExpand tickettitle_textarea' maxlength="512" id="{{ticketData?.data?.TicketId}}_titleInput"  [hidden]="showTitleEdit"  value="{{ticketData?.data?.Title}}" (blur)="closeTitleEdit($event.target.value)"  ></textarea>
-                <!--<div class="alert alert-danger" [innerHTML]="titleError" [hidden]="titleError == ''">
+                <!--<div class="fielderror" [innerHTML]="titleError" [hidden]="titleError == ''">
                 </div>-->
               </div>
             </div></div>
@@ -143,7 +143,7 @@
                      <textarea id="detailEditor"  name="ticketEditableDesc" required></textarea> <!--For Summernote editor --> 
                 </div>
                 </div>
-                <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+                <div class="fielderror" [innerHTML]="descError" [hidden]="descError == ''">
                 </div>
                 <div class="uploadcomponent margintop15">
                       <div class="uploadbottom">
@@ -269,7 +269,7 @@
    
 
         </div>
-            <div id="subtaskerr" class="alert alert-danger" style="display:none;"></div>
+            <div id="subtaskerr" class="fielderror" style="display:none;"></div>
         <div  *ngFor="let childTasks of childTasksArray;let j=index;">
                 <div class="addtask">
                     <div class="col-md-1">
@@ -321,7 +321,7 @@
    
    <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="saveRelatedTask()">RELATE</button></div>
  </div>
-         <div id="relatedTaskerr_msg" class="alert alert-danger" style="display:none;">
+         <div id="relatedTaskerr_msg" class="fielderror" style="display:none;">
 
               </div>
     <div class="addtask" *ngFor="let relatedTask of relatedTaskArray;">
@@ -433,7 +433,7 @@
                 
                 
           </div>
-          <div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+          <div class="fielderror" [innerHTML]="descError" [hidden]="descError == ''">
           </div>
         </div>
         <div id="Actions_{{cmtIdx}}" [hidden]="true" >
@@ -505,7 +505,7 @@
                      </ckeditor>-->
                      <textarea  id="commentEditor" name="commentDesc" [(ngModel)]="form.description"  #commentDesc="ngModel" required></textarea>
                 </div>
-                <!--<div class="alert alert-danger" [innerHTML]="descError" [hidden]="descError == ''">
+                <!--<div class="fielderror" [innerHTML]="descError" [hidden]="descError == ''">
                 </div>-->
 
             

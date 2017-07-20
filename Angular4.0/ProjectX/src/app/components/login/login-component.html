@@ -8,7 +8,7 @@
         <h2 class="loginheader text-center">SIGN IN</h2>
         <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && login()" novalidate="true">
           <div class="loginform">
-            <div *ngIf="submitted && user_name.errors == null && this.checkData" class="alert alert-danger">
+            <div *ngIf="submitted && user_name.errors == null && this.checkData" class="fielderror">
                     {{errorMsg}}
                </div>
             <div class="row">

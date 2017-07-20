@@ -57,7 +57,7 @@
                         <!--<input id="title" class="editinput" type="text" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" name="title">-->
                          <textarea name="title" rows=1 data-min-rows=1 style='resize:none' id="title"  class='autoExpand tickettitle_textarea' maxlength="512" (keyup)="checkEmpty($event.target.value,'title')" required  [ngModel]="ticketData.Title" ></textarea>
                           
-                               <div id="title_error" [hidden]="true" class="alert alert-danger">Title is Required</div>
+                               <div id="title_error" [hidden]="true" class="fielderror">Title is Required</div>
                     </div> </div> </div>
             <div>
 
@@ -72,7 +72,7 @@
                     <!--<ckeditor  contenteditable="true" #editor [config]="toolbar"  required  [(ngModel)]="description" name="description" >
                 </ckeditor>-->
                 <textarea id="description"  name="description" required></textarea>
-                <div id="desc_error" [hidden]="true" class="alert alert-danger">Description is Required</div>
+                <div id="desc_error" [hidden]="true" class="fielderror">Description is Required</div>
             </div>
             </div>
             <div class="uploadcomponent margintop15">
