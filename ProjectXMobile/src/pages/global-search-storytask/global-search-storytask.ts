@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, AlertController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import { Constants } from '../../providers/constants';
 import { Globalservice } from '../../providers/globalservice';
@@ -22,7 +22,7 @@ export class GlobalSearchStorytask {
      public rootParams: any = {searchValue: "" ,dataCollection:{} };
   constructor(protected app: App,public navCtrl: NavController, public navParams: NavParams,
        private http:Http,private constants: Constants,
-       public globalService: Globalservice) {
+       public globalService: Globalservice, private alertController: AlertController) {
        this.rootParams.searchValue =this.navParams.data.searchValue;
        this.searchValue = this.navParams.data.searchValue;
         console.log("Search value from story is" + this.searchValue);
@@ -79,7 +79,36 @@ export class GlobalSearchStorytask {
       });
   }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad GlobalSearchStorytask');
+       this.globalService.getActivity().subscribe(value=>
+      {
+          console.log("search value from emitted"+JSON.stringify(value.activityData));
+          if (value.activityData == undefined){
+           let alert = this.alertController.create({
+            title: 'Warning!',
+            message: 'Please enter search value!',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    handler: () => { }
+                }
+            ]
+        });
+        alert.present();
+          }else{
+              this.searchValue = value.activityData; 
+               var getglobalParams = { page: 1,searchFlag: 5, searchString:this.searchValue};
+              this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
+                  (result) => {
+                       this.dataStoryTask = result.data.ticketCollection;
+                      console.log("ticketCollection globalall" + JSON.stringify(this.dataStoryTask));
+                      if (this.dataStoryTask.length == 0) {
+                          this.moreDataLoaded = false;
+                      }
+                  }, (error) => {
+                  });
+          }
+      })
   }
     public openDetails(item): void {
              var clickedItemId = {"id": item.TicketId,"storyOrTask":item.planlevel};

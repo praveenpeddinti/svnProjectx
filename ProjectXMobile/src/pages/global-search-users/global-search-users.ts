@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import { Constants } from '../../providers/constants';
 import { Globalservice } from '../../providers/globalservice';
@@ -21,7 +21,7 @@ export class GlobalSearchUsers {
     
   constructor(public navCtrl: NavController, public navParams: NavParams,
        private http:Http,private constants: Constants,
-       public globalService: Globalservice) {
+       public globalService: Globalservice, private alertController: AlertController) {
        
       this.searchValue = this.navParams.data.searchValue;
       console.log("Search value from alluser is" + this.searchValue);
@@ -74,7 +74,36 @@ export class GlobalSearchUsers {
           });
   }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad GlobalSearchUsers');
+         this.globalService.getActivity().subscribe(value=>
+      {
+          console.log("search value from emitted"+JSON.stringify(value.activityData));
+          if (value.activityData == undefined){
+           let alert = this.alertController.create({
+            title: 'Warning!',
+            message: 'Please enter search value!',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    handler: () => { }
+                }
+            ]
+        });
+        alert.present();
+          }else{
+              this.searchValue = value.activityData; 
+               var getglobalParams = {page: 1,searchFlag: 3, searchString: this.searchValue};
+              this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
+                  (result) => {
+                       this.dataAllUser = result.data.tinyUserData;
+                      console.log("ticketCollection globalall" + JSON.stringify(this.dataAllUser));
+                      if (this.dataAllUser.length == 0) {
+                          this.moreDataLoaded = false;
+                      }
+                  }, (error) => {
+                  });
+          }
+      })
   }
   
   public doInfinite(infiniteScroll) {

@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import { Constants } from '../../providers/constants';
 import { Globalservice } from '../../providers/globalservice';
@@ -27,7 +27,7 @@ export class GlobalSearchAll {
 
   constructor(protected app: App,public navCtrl: NavController, public navParams: NavParams,
        private http:Http,private constants: Constants,
-       public globalService: Globalservice,private ngZone: NgZone,public viewCtrl: ViewController) {
+       public globalService: Globalservice,private ngZone: NgZone,public viewCtrl: ViewController, private alertController: AlertController) {
        
         //this.searchValue = "fd";
         this.searchValue = this.navParams.data.searchValue;
@@ -85,22 +85,36 @@ export class GlobalSearchAll {
       return this.getErrorMessage();
   }
   ionViewDidLoad() {
-      this.searchValue = this.navParams.data.searchValue;
-      this.dataValue = this.navParams.data.dataCollection;
-       console.log("ionViewDidLoad dataValue" + JSON.stringify(this.dataValue));
-        console.log("Search value from all is" + this.searchValue);
-        var getglobalParams = {page: 1,searchFlag: 1, searchString: this.searchValue};
-        console.log("this.searchString" + this.searchValue);
-        this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
-            (result) => {
-                this.dataCollection = result.data.ticketCollection;
-                console.log("ticketCollection globalall" + JSON.stringify(this.dataCollection));
-            if (this.dataCollection.length == 0) {
-                        this.moreDataLoaded = false;
-            }
-            }, (error) => {
-            });
-    console.log('ionViewDidLoad GlobalSearchAll');
+      this.globalService.getActivity().subscribe(value=>
+      {
+          console.log("search value from emitted"+JSON.stringify(value.activityData));
+          if (value.activityData == undefined){
+           let alert = this.alertController.create({
+            title: 'Warning!',
+            message: 'Please enter search value!',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    handler: () => { }
+                }
+            ]
+        });
+        alert.present();
+          }else{
+              this.searchValue = value.activityData; 
+              var getglobalParams = {page: 1,searchFlag: 1, searchString: this.searchValue};
+              this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
+                  (result) => {
+                      this.dataCollection = result.data.ticketCollection;
+                      console.log("ticketCollection globalall" + JSON.stringify(this.dataCollection));
+                      if (this.dataCollection.length == 0) {
+                          this.moreDataLoaded = false;
+                      }
+                  }, (error) => {
+                  });
+          }
+      })
   }
   
 //  added uday

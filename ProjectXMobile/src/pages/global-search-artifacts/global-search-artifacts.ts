@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, AlertController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import { Constants } from '../../providers/constants';
 import { Globalservice } from '../../providers/globalservice';
@@ -23,7 +23,7 @@ export class GlobalSearchArtifacts {
     
   constructor(protected app: App,public navCtrl: NavController, public navParams: NavParams,
       private http:Http,private constants: Constants,
-       public globalService: Globalservice) {
+       public globalService: Globalservice, private alertController: AlertController) {
        this.toggled = false;
        
       this.searchValue = this.navParams.data.searchValue;
@@ -85,7 +85,36 @@ export class GlobalSearchArtifacts {
           });
     }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad GlobalSearchArtifacts');
+    this.globalService.getActivity().subscribe(value=>
+      {
+          console.log("search value from emitted"+JSON.stringify(value.activityData));
+          if (value.activityData == undefined){
+           let alert = this.alertController.create({
+            title: 'Warning!',
+            message: 'Please enter search value!',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    handler: () => { }
+                }
+            ]
+        });
+        alert.present();
+          }else{
+              this.searchValue = value.activityData; 
+              var getglobalParams = {page: 1,searchFlag: 4, searchString: this.searchValue};
+              this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
+                  (result) => {
+                      this.dataArtifacts = result.data.ticketArtifacts;
+                      console.log("ticketCollection globalall" + JSON.stringify(this.dataArtifacts));
+                      if (this.dataArtifacts.length == 0) {
+                          this.moreDataLoaded = false;
+                      }
+                  }, (error) => {
+                  });
+          }
+      })
   }
       public openDetails(item): void {
         var clickedItemId = {"id": item.TicketId,"storyOrTask":item.planlevel};

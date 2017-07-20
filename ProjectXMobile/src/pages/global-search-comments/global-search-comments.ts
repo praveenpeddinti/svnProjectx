@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, ViewController, AlertController } from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import { Constants } from '../../providers/constants';
 import { Globalservice } from '../../providers/globalservice';
@@ -22,7 +22,7 @@ export class GlobalSearchComments {
     
   constructor(protected app: App,public navCtrl: NavController, public navParams: NavParams,
        private http:Http,private constants: Constants,
-       public globalService: Globalservice, public viewCtrl: ViewController) {
+       public globalService: Globalservice, public viewCtrl: ViewController, private alertController: AlertController) {
        
         this.searchValue = this.navParams.data.searchValue;
         console.log("Search value from story is" + this.searchValue);
@@ -67,7 +67,36 @@ ionViewDidEnter(){
 }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad GlobalSearchComments');
+        this.globalService.getActivity().subscribe(value=>
+      {
+          console.log("search value from emitted"+JSON.stringify(value.activityData));
+          if (value.activityData == undefined){
+           let alert = this.alertController.create({
+            title: 'Warning!',
+            message: 'Please enter search value!',
+            buttons: [
+                {
+                    text: 'OK',
+                    role: 'cancel',
+                    handler: () => { }
+                }
+            ]
+        });
+        alert.present();
+          }else{
+              this.searchValue = value.activityData; 
+               var getglobalParams = {page: 1,searchFlag: 2, searchString: this.searchValue};
+              this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
+                  (result) => {
+                      this.dataComment = result.data.ticketComments;
+                      console.log("ticketCollection globalall" + JSON.stringify(this.dataComment));
+                      if (this.dataComment.length == 0) {
+                          this.moreDataLoaded = false;
+                      }
+                  }, (error) => {
+                  });
+          }
+      })
   }
    public errorMessage: string="No results found.";
   public doInfinite(infiniteScroll) {

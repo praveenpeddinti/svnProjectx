@@ -57,10 +57,14 @@ export class GlobalSearch {
      // console.log("ionViewWillEnter" + JSON.stringify(this.rootParams.searchValue));
   }
     search(event){
+        var thisObj=this;
         this.rootParams.searchValue = this.searchValue;
        console.log("root param<><><><><<222222222" + JSON.stringify(this.rootParams.searchValue));
          var getglobalParams = { page: 1, searchString:this.searchValue};
-         console.log("this.searchString" + this.searchValue);
+         console.log("this.searchString" + this.searchValue);      
+         if (getglobalParams.searchString!= '') {
+             thisObj.globalService.setActivity(getglobalParams.searchString);
+         }       
         this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
        (result) => {
            this.dataCollection = result.data;
