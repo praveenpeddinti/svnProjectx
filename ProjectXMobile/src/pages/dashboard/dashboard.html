@@ -32,11 +32,11 @@
   </ion-refresher>
   <div class="padding10">
       <div style="clear:both;">
-               <div class="col50">
-                  <label class="customlabel">{{totalCount}} total</label>
+               <div class="col70">
+                  <label class="customlabel">{{totalCount}} total ({{headerName}})</label>
                   </div>
-           <div class="col50">
-               <div class="col50textright"><label class="customlabel " let i=index; (tap)="openOptionsModal(field, i)"><ion-icon ios="ios-options" md="md-options"></ion-icon> &nbsp;Filters</label>
+           <div class="col30">
+               <div class="col30textright"><label class="customlabel " let i=index; (tap)="openOptionsModal(field, i)"><ion-icon ios="ios-options" md="md-options"></ion-icon> &nbsp;Filters</label>
            </div>
            </div> 
       </div>
@@ -71,7 +71,7 @@
           </ion-item-sliding>
       </ion-list>
   </div>
-  <div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> No more data available. </div>
+  <div *ngIf="!moreDataLoaded" class="dashboardbox_footer mart20" style="text-align: center;"> No more data available. </div>
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
       <ion-infinite-scroll-content *ngIf="moreDataLoaded" loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
