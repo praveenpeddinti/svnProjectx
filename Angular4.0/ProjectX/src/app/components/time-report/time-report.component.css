@@ -104,3 +104,5 @@
     height:120px;
 
 }
+.datatable-body-row:hover{ background: #fff!important;}
+.datatable-body-row:focus{ background: #fff!important;}

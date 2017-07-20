@@ -171,7 +171,7 @@ export class TimeReportComponent{
     page(projectId,offset, limit, sortvalue, sortorder,fromDateVal,toDateVal ) {
         this._service.getTimeReportDetails(projectId, offset, limit, sortvalue, sortorder,fromDateVal,toDateVal,(response) => {
             let jsonForm = {};
-            if (response.statusCode == 200) {
+            if (response.statusCode == 200) {console.log("-----timedata---"+JSON.stringify(response));
                 this.rows =[];
                 const start = offset * limit;
                 const end = start + limit;

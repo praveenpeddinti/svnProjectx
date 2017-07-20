@@ -140,8 +140,6 @@ export class BucketComponent{
             if (response.statusCode == 200) {
             this.zone.run(() =>{ 
                 this.bucketDetails= this.prepareBucketData(response.data,this.bucketDetails);
-                console.log("final bdetails===="+JSON.stringify(this.bucketDetails));
-                //var workPercentage =this.bucketDetails.
                 var listData=[];
                 if(postData.bucketStatus=='Current'){
                    listData = [

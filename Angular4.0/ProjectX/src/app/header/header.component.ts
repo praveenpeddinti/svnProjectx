@@ -18,6 +18,7 @@ declare var jQuery:any;
 export class HeaderComponent implements OnInit {
   public users=JSON.parse(localStorage.getItem('user'));
   public profilePicture=localStorage.getItem('profilePicture');
+  public ProjectName=localStorage.getItem('ProjectName');
   public notification_msg=[];
   public notify_count:any=0;
   public pageNo=1;
@@ -27,7 +28,7 @@ export class HeaderComponent implements OnInit {
   private projects=[];
   private optionTodisplay=[];
   public homeFlag=false;
-  private ProjectName='';
+  //private ProjectName='';
   private PName='';
    constructor(
     private _ajaxService: AjaxService,
