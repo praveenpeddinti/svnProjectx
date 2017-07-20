@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit{
 
      ngOnInit(){
      var getAllObj=JSON.parse(localStorage.getItem("user"));
-    if(getAllObj != null){
+    if(getAllObj != null && getAllObj != "failure"){
         this._router.navigate(['home']); 
     }else{
         this._router.navigate(['login']);
