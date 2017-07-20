@@ -36,7 +36,7 @@ export class DashboardPage {
     public items: Array<any>;
     public totalCount: any;
     public headerName : any;
-   // public projectName:string;
+    public projectName:string;
     public start: number = 10;//no of items showing in each page by default 10
     public offsetIndex: number = 0;//offset Index default value is 0 while pulling the list screen down the value will be incremented
     public arrayObject: Array<{storyOrTask: any, 
@@ -70,7 +70,7 @@ export class DashboardPage {
         private globalService: Globalservice,
         private urlConstants: Constants) {
 
-           // this.projectName=this.navParams.get("ProjectName");
+           this.projectName=this.navParams.get("ProjectName");
       //     this. filterParam.projectId=this.navParams.get("ProjectId");
       //     this.params.projectId=this.navParams.get("ProjectId");
            console.log("Project Name in Dashboard  "+this.navParams.get("ProjectName"));
@@ -79,7 +79,7 @@ export class DashboardPage {
         this.headerName = "All My Stories/Task";
         this.SelectValue = "All My Stories/Task";
             this.arrayObject = [];
-            localStorage.setItem('headerInfo', JSON.stringify({'title': this.headerName,'backButton':"",'logo':0,'backDash':1,'leftPannel':0,'FilterPannel':0,notification:1,profile:1,searchBar:1}));
+            localStorage.setItem('headerInfo', JSON.stringify({'title': this.projectName,'backButton':"",'logo':0,'backDash':1,'leftPannel':0,'FilterPannel':0,notification:1,profile:1,searchBar:1}));
             this.filterList = [];
             var userInfo=JSON.parse(localStorage.getItem("userCredentials"));
             this.userName = userInfo.username;
