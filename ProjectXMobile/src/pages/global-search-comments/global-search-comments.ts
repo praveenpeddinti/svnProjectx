@@ -82,7 +82,7 @@ ionViewDidEnter(){
 
     }    
     public openDetails(item): void {
-        var clickedItemId = {"id": item.TicketId.TicketId};
+           var clickedItemId = {"id": item.TicketId,"storyOrTask":item.planlevel};
         this.app.getRootNav().push(StoryDetailsPage, clickedItemId);
     }
     public getAllsearchResults():void{
