@@ -29,7 +29,7 @@ export class DashBoardFilter {
     public loadingController: LoadingController,
     private globalService: Globalservice,
     private urlConstants: Constants) {
-    this.headerName = "DashBoard Filter";
+    this.headerName = "Projects Dashboard";
     localStorage.setItem('headerInfo', JSON.stringify({ 'title': this.headerName, 'backButton': "hideBackButton", 'logo': 1, 'leftPannel': 0, 'searchBar': 1, notification: 1, profile: 1 }));
     var userInfo = JSON.parse(localStorage.getItem("userCredentials"));
     console.log("this.userNameId" + JSON.stringify(userInfo.Id));
