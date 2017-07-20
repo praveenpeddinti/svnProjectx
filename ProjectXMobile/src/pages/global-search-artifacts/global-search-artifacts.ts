@@ -88,7 +88,7 @@ export class GlobalSearchArtifacts {
     console.log('ionViewDidLoad GlobalSearchArtifacts');
   }
       public openDetails(item): void {
-        var clickedItemId = {"id": item.TicketId};
+        var clickedItemId = {"id": item.TicketId,"storyOrTask":item.planlevel};
         console.log(JSON.stringify("the item id" + JSON.stringify(item)));
         this.app.getRootNav().push(StoryDetailsPage, clickedItemId);
     }
