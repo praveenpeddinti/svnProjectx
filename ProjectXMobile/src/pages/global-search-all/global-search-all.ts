@@ -49,6 +49,8 @@ export class GlobalSearchAll {
                 
             this.errorMessage="That’s all. No results found.";
             }
+
+            
                 });
             }, (error) => {
              this.errorMessage="No results found.";
@@ -115,8 +117,9 @@ export class GlobalSearchAll {
 
     }
     public openDetails(item): void {
-        var clickedItemId = {"id": item.TicketId};
-        console.log(JSON.stringify("the item id" + JSON.stringify(item)));
+        var clickedItemId = {"id": item.TicketId,"storyOrTask":item.planlevel};
+         console.log(JSON.stringify("the item id" + JSON.stringify(item)));
+        console.log(JSON.stringify("the item paln level" +item.planlevel));
         this.app.getRootNav().push(StoryDetailsPage, clickedItemId);
     }    
     
