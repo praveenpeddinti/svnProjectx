@@ -342,7 +342,7 @@ export class DashboardPage {
                              this.headerName = data.label;
                              console.log("header name" + this.headerName);
                              //this.globalService.setTitle( this.headerName);
-                             jQuery("#header_title").find(".toolbar-title").html(this.headerName);
+                            // jQuery("#header_title").find(".toolbar-title").html(this.headerName);
                              this.params.filterOption = data.value;
                              this.params.sortvalue = data.value.type;
                              this.params.offset = 0;
