@@ -54,7 +54,7 @@ class TimeReportService {
                   
                     $ticketDesc= '#'.$getTicketDetails['TicketId']." ".$getTicketDetails['Title'];
                     $ticketDesc= CommonUtility::refineActivityData($ticketDesc,200);
-                    $timeDesc= CommonUtility::refineActivityDataTimeDesc($getTicketDetails['Description'],200);
+                    $timeDesc= CommonUtility::refineActivityDataTimeDesc($getTicketDetails['Description'],50);
                     $ticketTask = $getTicketDetails["Fields"]['planlevel']['value']; 
                     $datetime = $eachOne['LoggedOn']->toDateTime();  
                     $datetime->setTimezone(new \DateTimeZone($timezone));

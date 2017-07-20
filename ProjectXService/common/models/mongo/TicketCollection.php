@@ -285,7 +285,7 @@ class TicketCollection extends ActiveRecord
         try {
             $query = new Query();
             $query->from('TicketCollection')
-                     ->where(["ProjectId" => $projectId ,"TicketId" => $storyId]);
+                     ->where(["ProjectId" => (int)$projectId ,"TicketId" => (int)$storyId]);
             $taskDetails = $query->one();
             return $taskDetails;
         } catch (Exception $ex) {
@@ -301,7 +301,7 @@ class TicketCollection extends ActiveRecord
         try {
             $query = new Query();
             $query->from('TicketCollection')
-                  ->where(["ProjectId" => $projectId ,"TicketId" => $subTaskIds]);
+                  ->where(["ProjectId" => (int)$projectId ,"TicketId" => $subTaskIds]);
         $ticketDetails = $query->all();
         return $ticketDetails;  
         } catch (Exception $ex) {
