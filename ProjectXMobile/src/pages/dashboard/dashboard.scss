@@ -53,9 +53,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cbed6', end
     font-size: 1.2em;
     padding-right: 15px;
 }
-.col50{float:left;width:50%;font-size: 18px!important;}
-.col50textright{text-align: right;}
+.col50{float:left;width:50%;font-size: 12px!important;}
+.col50textright{float:right;text-align: right;}
 .col50textright label{ cursor: pointer;}
+
+.col70{float:left;width:70%;font-size: 15px!important;}
+.col30{float:left;width:30%;font-size: 15px!important;}
+.col30textright{float:right;text-align: right;}
+.col30textright label{ cursor: pointer;}
+.mart20{ margin-top: 20px;}
 
 
 }
