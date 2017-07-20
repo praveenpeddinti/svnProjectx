@@ -74,10 +74,10 @@ export class GlobalSearchUsers {
           });
   }
   ionViewDidLoad() {
-         this.globalService.getActivity().subscribe(value=>
+      this.globalService.getSearchvalue().subscribe(value=>
       {
-          console.log("search value from emitted"+JSON.stringify(value.activityData));
-          if (value.activityData == undefined){
+          console.log("search value from emitted"+JSON.stringify(value.searchData));
+          if (value.searchData == undefined){
            let alert = this.alertController.create({
             title: 'Warning!',
             message: 'Please enter search value!',

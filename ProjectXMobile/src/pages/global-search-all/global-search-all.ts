@@ -85,10 +85,10 @@ export class GlobalSearchAll {
       return this.getErrorMessage();
   }
   ionViewDidLoad() {
-      this.globalService.getActivity().subscribe(value=>
+      this.globalService.getSearchvalue().subscribe(value=>
       {
-          console.log("search value from emitted"+JSON.stringify(value.activityData));
-          if (value.activityData == undefined){
+          console.log("search value from emitted"+JSON.stringify(value.searchData));
+          if (value.searchData == undefined){
            let alert = this.alertController.create({
             title: 'Warning!',
             message: 'Please enter search value!',
@@ -102,7 +102,7 @@ export class GlobalSearchAll {
         });
         alert.present();
           }else{
-              this.searchValue = value.activityData; 
+              this.searchValue = value.searchData; 
               var getglobalParams = {page: 1,searchFlag: 1, searchString: this.searchValue};
               this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
                   (result) => {

@@ -63,7 +63,7 @@ export class GlobalSearch {
          var getglobalParams = { page: 1, searchString:this.searchValue};
          console.log("this.searchString" + this.searchValue);      
          if (getglobalParams.searchString!= '') {
-             thisObj.globalService.setActivity(getglobalParams.searchString);
+             thisObj.globalService.setSearchvalue(getglobalParams.searchString);
          }       
         this.globalService.getGlobalSearch(this.constants.globalSearch, getglobalParams).subscribe(
        (result) => {
