@@ -1,0 +1,119 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "angular2-file-drop@^0.2.0",
+        "scope": null,
+        "escapedName": "angular2-file-drop",
+        "name": "angular2-file-drop",
+        "rawSpec": "^0.2.0",
+        "spec": ">=0.2.0 <0.3.0",
+        "type": "range"
+      },
+      "/usr/share/nginx/www/ProjectX"
+    ]
+  ],
+  "_from": "angular2-file-drop@>=0.2.0 <0.3.0",
+  "_id": "angular2-file-drop@0.2.0",
+  "_inCache": true,
+  "_location": "/angular2-file-drop",
+  "_nodeVersion": "6.9.5",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/angular2-file-drop-0.2.0.tgz_1486730073903_0.2897311004344374"
+  },
+  "_npmUser": {
+    "name": "kamilkisiela",
+    "email": "kamil.kisiela@gmail.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "angular2-file-drop@^0.2.0",
+    "scope": null,
+    "escapedName": "angular2-file-drop",
+    "name": "angular2-file-drop",
+    "rawSpec": "^0.2.0",
+    "spec": ">=0.2.0 <0.3.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular2-file-drop/-/angular2-file-drop-0.2.0.tgz",
+  "_shasum": "3cbe6e9bb5791b5cfd59dab0347916d6fcfbeeb4",
+  "_shrinkwrap": null,
+  "_spec": "angular2-file-drop@^0.2.0",
+  "_where": "/usr/share/nginx/www/ProjectX",
+  "author": {
+    "name": "Kamil Kisiela",
+    "email": "kamil.kisiela@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/jellyjs/angular2-file-drop/issues"
+  },
+  "dependencies": {
+    "fileapi": "^2.0.20"
+  },
+  "description": "Angular2 component with Drag and Drop support for files",
+  "devDependencies": {
+    "@angular/common": "^2.4.3",
+    "@angular/compiler": "^2.4.3",
+    "@angular/compiler-cli": "^2.4.3",
+    "@angular/core": "^2.4.3",
+    "@angular/platform-browser": "2.4.3",
+    "@angular/platform-browser-dynamic": "2.4.3",
+    "reflect-metadata": "^0.1.8",
+    "rollup": "^0.38.0",
+    "rollup-plugin-babel": "^2.6.1",
+    "rxjs": "5.0.3",
+    "tslint": "^3.10.2",
+    "typescript": "^2.0.10",
+    "typings": "^1.4.0",
+    "zone.js": "^0.7.2"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "3cbe6e9bb5791b5cfd59dab0347916d6fcfbeeb4",
+    "tarball": "https://registry.npmjs.org/angular2-file-drop/-/angular2-file-drop-0.2.0.tgz"
+  },
+  "gitHead": "7306bdd8d391c98ae0e4ca6972ab5ba80fe6a989",
+  "homepage": "https://github.com/jellyjs/angular2-file-drop#readme",
+  "keywords": [
+    "angular",
+    "angular2",
+    "file",
+    "drag",
+    "drop",
+    "upload"
+  ],
+  "license": "MIT",
+  "main": "build/bundles/index.umd.js",
+  "maintainers": [
+    {
+      "name": "kamilkisiela",
+      "email": "kamil.kisiela@ster-project.pl"
+    }
+  ],
+  "module": "build/index.js",
+  "name": "angular2-file-drop",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jellyjs/angular2-file-drop.git"
+  },
+  "scripts": {
+    "build": "tsc && npm run bundle",
+    "build:aot": "ngc",
+    "bundle": "npm run rollup",
+    "lint": "tslint src/*.ts",
+    "prebuild": "npm run lint",
+    "prepublish": "npm run build && npm run build:aot",
+    "rollup": "rollup -i ./build/index.js -o ./build/bundles/index.umd.js -n ng.file-drop -c rollup.config.js",
+    "test": "npm run build",
+    "watch": "tsc -w"
+  },
+  "typings": "build/index.d.ts",
+  "version": "0.2.0"
+}
