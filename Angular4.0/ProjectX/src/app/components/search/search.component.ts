@@ -100,7 +100,7 @@ export class SearchComponent implements OnInit{
                               console.log("asddddddddddddddqwwwwwwwwww");
                               jQuery('#nosearchdiv').css("display","");
                                jQuery('#searchsection').html('');
-                              jQuery('#searchsection').html("That's All.No Results found");
+                              jQuery('#searchsection').html("That’s all. No results found.");
                           }   
                         }else{
                             if(searchFlag=='' || searchFlag==undefined){
