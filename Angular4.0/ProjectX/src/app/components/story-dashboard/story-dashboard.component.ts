@@ -6,7 +6,7 @@ import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
 import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
-
+import { ChildtaskComponent } from '../childtask/childtask.component';
 declare var jQuery:any;
 
 @Component({
@@ -254,7 +254,11 @@ collapseAll(){
     this.table.rowDetail.collapseAllRows()
 }
 toggleExpandRow(row) { 
-    if(row.$$expanded!=1){jQuery("#collapsediv").click();}
+ console.log('hi--!', row);
+  this.table.rowDetail.toggleExpandRow(row);
+    if(row.$$expanded!=1){
+    //jQuery("#collapsediv").click();
+    }
     this.row1=[];
     console.log('Toggled Expand Row!', row[0].field_value);
     this._service.getSubTasksDetails(this.projectId, row[0].field_value, (response) => {
@@ -262,8 +266,8 @@ toggleExpandRow(row) {
             if (response.statusCode == 200) {
                 this.row1=response.data;
                 //this.row1.push(response.data);
-                this.table.rowDetail.toggleExpandRow(row);
-                //console.log('Toggled Expand Row!', this.row1);
+              //  this.table.rowDetail.toggleExpandRow(row);
+                console.log('Toggled Expand Row!', this.row1);
             } else {
                 console.log("fail---");
             }

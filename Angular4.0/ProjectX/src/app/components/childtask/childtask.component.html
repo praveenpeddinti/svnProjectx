@@ -1,0 +1,28 @@
+ <ngx-datatable
+                    class="material expandable customdatatable"
+                    [rows]="row1"
+                    [columnMode]="'flex'"
+                    [headerHeight]="0"
+                    [footerHeight]="0"
+                    [rowHeight]="'auto'"
+                    [externalPaging]="false"
+                    [externalSorting]="false"
+                    (activate)="onActivate($event)"
+                     [messages]="{emptyMessage: ''}"
+                >
+                <ngx-datatable-column *ngFor="let column of columnsSub;let j=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
+                  [flexGrow]="column.flexGrow" >
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div class="{{column.class}}" (click)="showStoryDetail(row)">
+                      <img *ngIf="row[j].other_data.planlevel==1" src="assets/images/story-icon.png" />
+                      <img *ngIf="row[j].other_data.planlevel==2" src="assets/images/task-icon.png" /> 
+                      <img *ngIf="row[j].field_name=='assignedto' && row[j].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
+                        src="{{row[j].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[j].field_value}}"  /> 
+                       <div class="stateStyle"  *ngIf="row[j].field_name=='workflow'" >{{row[j].other_data}}</div>
+                      {{row[j].field_value}}
+                       
+                      <i *ngIf="row[j].field_name=='priority'" class="fa fa-circle {{row[j].field_value}}" aria-hidden="true"></i>
+                    </div> 
+                  </ng-template>
+                </ngx-datatable-column>
+</ngx-datatable>
