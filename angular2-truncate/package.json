@@ -1,0 +1,106 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "angular2-truncate@^0.1.3",
+        "scope": null,
+        "escapedName": "angular2-truncate",
+        "name": "angular2-truncate",
+        "rawSpec": "^0.1.3",
+        "spec": ">=0.1.3 <0.2.0",
+        "type": "range"
+      },
+      "/usr/share/nginx/www/ProjectX"
+    ]
+  ],
+  "_from": "angular2-truncate@>=0.1.3 <0.2.0",
+  "_id": "angular2-truncate@0.1.3",
+  "_inCache": true,
+  "_location": "/angular2-truncate",
+  "_nodeVersion": "6.7.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/angular2-truncate-0.1.3.tgz_1478769280110_0.4643773599527776"
+  },
+  "_npmUser": {
+    "name": "yllieth",
+    "email": "sylvain.ragot@outlook.fr"
+  },
+  "_npmVersion": "3.10.8",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "angular2-truncate@^0.1.3",
+    "scope": null,
+    "escapedName": "angular2-truncate",
+    "name": "angular2-truncate",
+    "rawSpec": "^0.1.3",
+    "spec": ">=0.1.3 <0.2.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular2-truncate/-/angular2-truncate-0.1.3.tgz",
+  "_shasum": "9a58ec1011253b143532ddbfc3a8dfc9387e87e5",
+  "_shrinkwrap": null,
+  "_spec": "angular2-truncate@^0.1.3",
+  "_where": "/usr/share/nginx/www/ProjectX",
+  "author": {
+    "name": "Sylvain RAGOT",
+    "email": "sylvnimes@hotmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/yllieth/angular2-truncate/issues"
+  },
+  "dependencies": {},
+  "description": "A simple angular2 pipe which truncate strings.",
+  "devDependencies": {
+    "@angular/core": "2.0.0-rc.3",
+    "codelyzer": "^0.0.20",
+    "rxjs": "5.0.0-beta.6",
+    "tslint": "^3.6.0",
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4",
+    "zone.js": "0.6.12"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "9a58ec1011253b143532ddbfc3a8dfc9387e87e5",
+    "tarball": "https://registry.npmjs.org/angular2-truncate/-/angular2-truncate-0.1.3.tgz"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "gitHead": "d7cac9d73217157d81ae928aafd52a64e78467e9",
+  "homepage": "https://github.com/yllieth/angular2-truncate#readme",
+  "keywords": [
+    "angular2",
+    "truncate",
+    "strings"
+  ],
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "maintainers": [
+    {
+      "name": "yllieth",
+      "email": "sylvain.ragot@outlook.fr"
+    }
+  ],
+  "name": "angular2-truncate",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yllieth/angular2-truncate.git"
+  },
+  "scripts": {
+    "lint": "tslint src/**/*.ts",
+    "postinstall": "typings install",
+    "prepublish": "tsc",
+    "test": "tsc && karma start",
+    "tsc": "tsc",
+    "typings": "typings"
+  },
+  "typings": "./dist/index.d.ts",
+  "version": "0.1.3"
+}
