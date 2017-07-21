@@ -12,6 +12,7 @@ declare var socket:any;
 @Injectable()
 export class Globalservice {
      @Output() latestActivity: EventEmitter<any> = new EventEmitter();
+      @Output() searchValue: EventEmitter<any> = new EventEmitter();
     localDate = new Date().toISOString();
     private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
     params: {userInfo?: any, projectId?: any,timeZone?:any} = {};
@@ -188,12 +189,22 @@ return this.ajaxCall(url,params);
 
 
 public setActivity(data:any){
+    console.log("setavtivity fromglobal" + data);
     var activity={activityData:data}
     this.latestActivity.emit(activity);
 }
 
 public getActivity(){
     return this.latestActivity;
+}
+
+public setSearchvalue(data:any){
+        console.log("setSearchvalue fromglobal" + data);
+    var searchvalue={searchData:data}
+    this.searchValue.emit(searchvalue);
+}
+public getSearchvalue(){
+    return this.searchValue;
 }
 
 }
