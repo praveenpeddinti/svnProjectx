@@ -39,8 +39,11 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { BucketComponent }  from './components/bucket/bucket.component';
 import {BucketService} from './services/bucket.service';
+import { ActivitiesComponent } from './components/activities/activities.component';
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { ChildtaskComponent } from './components/childtask/childtask.component';
+import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
+
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',component: PageNotFoundComponent },
@@ -140,7 +143,8 @@ const ROUTES=[
    RoundProgressModule,
   ],
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent ],
+
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent ],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
   ],
