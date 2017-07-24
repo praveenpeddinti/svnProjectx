@@ -117,6 +117,29 @@ class NotificationsController extends Controller
           
          
       }
+      
+      /**
+       * @author Anand
+       * @descrption Get latest activity
+       * @param type $data
+       */
+      
+      public function actionGetLatestActivity($data)
+    {
+        $activityFrom=array();
+        //logic for getting all the notifications for a particular loggedIn user
+        try
+        {
+            $post_data = json_decode($data);
+            $response = ServiceFactory::getStoryServiceInstance()->getTicketActivity($post_data);
+            echo json_encode(array('activityData'=>$response));
+            
+        } catch (Exception $ex) {
+            Yii::log("NotificationsController:actionGetLatestActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
+        
+    }
     
 
 }

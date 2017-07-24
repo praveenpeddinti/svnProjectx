@@ -17,7 +17,7 @@ use common\models\mongo\AccessTokenCollection;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use common\components\CommonUtility;
+use common\components\{CommonUtility,EventTrait};
 use common\components\CommonUtilityTwo;
 use common\models\bean\ResponseBean;
 use common\models\mysql\Projects;//testing
@@ -27,7 +27,6 @@ use common\models\mysql\Collaborators;
 use common\models\mongo\TinyUserCollection;
 use common\models\mysql\ProjectTeam;
 use common\service\CollaboratorService;
-
 
 /**
  * Site controller
@@ -493,6 +492,7 @@ class SiteController extends Controller
                // $responseBean->lastProjectDetails =$getlastIdDetails;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }else{
+                EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
                 $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::SUCCESS;
                 $responseBean->message = "success";

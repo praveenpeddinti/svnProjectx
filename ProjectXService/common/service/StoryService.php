@@ -1840,6 +1840,27 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
             Yii::log("StoryService:getUserPreferences::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+    
+    
+    /**
+     * @author Anand
+     * @param type $ticketId
+     * @param type $projectId
+     * @param type $timeZone
+     * @return type
+     */
+    
+    public function getUpdatedTicketDetails($ticketId,$projectId,$timeZone){
+        
+        try {
+            $getNewTicketData = TicketCollection::getTicketDetails($ticketId,$projectId,[]);  
+            $details = CommonUtility::prepareDashboardDetails($getNewTicketData, $projectId,$timeZone,[5,6,7,3,10],"part",null);
+            return $details; 
+        } catch (Exception $ex) {
+           Yii::log("StoryService:getUpdatedTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
+        }
+       
+    }
 
 }
 

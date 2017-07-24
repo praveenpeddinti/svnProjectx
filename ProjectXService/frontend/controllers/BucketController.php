@@ -14,7 +14,7 @@ use common\models\mongo\ProjectTicketSequence;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use common\components\CommonUtility;
+use common\components\{CommonUtility,EventTrait};
 use common\models\bean\ResponseBean;
 use common\components\ServiceFactory;
 use common\models\mongo\TicketCollection;
@@ -137,7 +137,11 @@ class BucketController extends Controller
             $postData = json_decode(file_get_contents("php://input"));
             $checkbucket=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->data->title,$postData->projectId,$postData->data->selectedBucketTypeFilter);
             if($checkbucket=='failure'){
-                $saveBucketDetails=ServiceFactory::getBucketServiceInstance()->getSaveBucketDetails($postData);
+                $lastBucketId=ServiceFactory::getBucketServiceInstance()->getSaveBucketDetails($postData);
+                if($lastBucketId!='failure'){
+                  EventTrait::saveEvent($postData->projectId,"Bucket",$lastBucketId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$lastBucketId)],array("BucketId"=>(int)$lastBucketId));    
+                }
+               
                 $response='success';
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -178,6 +182,7 @@ class BucketController extends Controller
             $checkbucket=ServiceFactory::getBucketServiceInstance()->checkupdateBucketName($postData->data->title,$postData->data->Id,$postData->projectId,$postData->data->selectedBucketTypeFilter,$postData->bucketRole);
             if($checkbucket=='failure'){
                 $saveBucketDetails=ServiceFactory::getBucketServiceInstance()->updateBucketDetails($postData);
+               // EventTrait::saveEvent($postData->projectId,"Bucket",$postData->data->Id,"updated","update",$postData->userInfo->Id,[array("ActionOn"=>"bucketupdation","OldValue"=>0,"NewValue"=>(int)$lastBucketId)],array("BucketId"=>(int)$lastBucketId));    
                 $response='success';
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;

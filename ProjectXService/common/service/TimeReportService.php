@@ -42,7 +42,7 @@ class TimeReportService {
             $finalData = array();
             $timeReportDetails = TicketTimeLog::getAllTimeReportDetails($StoryData,$projectId);
             $timezone = $StoryData->timeZone;
-
+            $desc_limit = 15;
                      
             $TimeLogDataArray= array();
             if(count($timeReportDetails) > 0){
@@ -51,7 +51,7 @@ class TimeReportService {
                 foreach($timelogs as $eachOne){
                     $ticketCollectionModel = new TicketCollection();
                     $getTicketDetails = $ticketCollectionModel->getTicketDetails($eachOne['TicketId'],$projectId,$selectFields=[]);
-                  
+                    
                     $ticketDesc= '#'.$getTicketDetails['TicketId']." ".$getTicketDetails['Title'];
                     $ticketDesc= CommonUtility::refineActivityData($ticketDesc,200);
                     $timeDesc= CommonUtility::refineActivityDataTimeDesc($getTicketDetails['Description'],50);
@@ -61,11 +61,11 @@ class TimeReportService {
                     $LogDate = $datetime->format('M-d-Y');
                     $readableDate =$datetime->format('Y-m-d H:i:s');
                     $eachOne['Time']=number_format((float)$eachOne['Time'], 1, '.', '');
-                    $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => $ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
-                    $time = array("field_name" => "Date", "value_id" => "", "field_value" => $eachOne['Time'], "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
-                    $date = array("field_name" => "Time", "value_id" => "", "field_value" => $LogDate, "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
-                    $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
-                    $timeDescription = array("field_name" => "Description", "value_id" => "", "field_value" => $timeDesc, "other_data" => "", "ticketDesc" =>$getTicketDetails['Description'],"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate);
+                    $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDesc, "other_data" => $ticketTask, "ticketDesc" => $ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate,'limit'=>$desc_limit);
+                    $time = array("field_name" => "Date", "value_id" => "", "field_value" => $eachOne['Time'], "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate,'limit'=>$desc_limit);
+                    $date = array("field_name" => "Time", "value_id" => "", "field_value" => $LogDate, "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate,'limit'=>$desc_limit);
+                    $action = array("field_name" => "action", "value_id" => "", "field_value" => '', "other_data" => "", "ticketDesc" =>$ticketDesc,"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate,'limit'=>$desc_limit);
+                    $timeDescription = array("field_name" => "Description", "value_id" => "", "field_value" => $timeDesc, "other_data" => "", "ticketDesc" =>strip_tags($getTicketDetails['Description']),"Time"=>$eachOne['Time'],"LogDate"=>$LogDate,"Slug"=>$eachOne['Slug'],"ticketId"=>$getTicketDetails['TicketId'],"description"=>$eachOne['Description'],"readableDate"=>$readableDate,'limit'=>$desc_limit);
                     $forTicketComments[0] = $date;
                     $forTicketComments[1] =  $ticketId;
                     $forTicketComments[2] = $timeDescription;

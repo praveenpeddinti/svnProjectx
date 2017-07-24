@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use Yii;
+use yii\base\ErrorException;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -13,6 +14,7 @@ use common\components\ServiceFactory;
 use common\models\mongo\TinyUserCollection;
 use common\models\mongo\NotificationCollection;
 /**
+ * 
  * Story Controller
  */
 class StoryController extends Controller
@@ -32,9 +34,13 @@ class StoryController extends Controller
      */
     public function actions()
     {
-        return [
-           
-        ];
+       return [
+    'components' => [
+        'errorHandler' => [
+            'maxSourceLines' => 20,
+        ],
+    ],
+];
     }
 
     
@@ -70,9 +76,13 @@ class StoryController extends Controller
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
-        } catch (Exception $ex) {
-     Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+         } catch (ErrorException $th) { 
+                                                  
+             echo $th->getMessage();
+               echo $th->getCode();
+    // Yii::log("StoryController:actionGetTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'error', 'application');
+        } 
+       
     }
     
 
@@ -1046,6 +1056,31 @@ class StoryController extends Controller
             Yii::log("StoryController:actionGetPreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
             
         }
+    }
+    
+    /**
+     * @author Anand
+     * @uses Get updated ticket data
+     * @return type
+     */
+    
+    public function  actionGetUpdatedTicketDetails(){
+       
+    try {
+         $ticketData = json_decode(file_get_contents("php://input"));
+         $ticketId = $ticketData->ticketId;
+         $projectId = $ticketData->projectId;
+         $timeZone = $ticketData->timeZone;
+         $updatedData = ServiceFactory::getStoryServiceInstance()->getUpdatedTicketDetails($ticketId,$projectId,$timeZone);
+         $responseBean = new ResponseBean();
+         $responseBean->statusCode = ResponseBean::SUCCESS;
+         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+         $responseBean->data = $updatedData;
+         $response = CommonUtility::prepareResponse($responseBean, "json");
+         return $response;      
+    } catch (Exception $ex) {
+       Yii::log("StoryController:getUpdatedTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
+    }
     }
 
 }
