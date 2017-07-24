@@ -113,7 +113,7 @@ export class HomeComponent{
                          var thisObj=this;
                          //  alert("--555555555---"+thisObj.flag);
                         //    this.flag=result.data.projectFlag;
-                     alert("@@"+JSON.stringify(result.data));
+                     //alert("@@"+JSON.stringify(result.data));
                         if(result.data !='No Results Found'){
                            this.assignedToDataCount=result.data.AssignedToData;
                            this.followersDetailsCount=result.data.FollowersDetails;
@@ -278,10 +278,13 @@ export class HomeComponent{
         this.activityPage=0;
          this.load_contents(this.page, this.projectFlag,this.limit,this.flag,this.activityPage,this.ProjectId,this.activityDropdownFlag,'unscroll');
     }
-    knowmore(projectId){
- //       alert("knowwww+++++++++"+projectId);
+    knowmore(projectId,projectName){
+    //  alert("knowwww+++++++++"+projectId);
         this.ProjectId=projectId;
         this.page=0;
-        this.load_contents(this.page, this.projectFlag,this.limit,this.flag,this.activityPage,this.ProjectId,this.activityDropdownFlag,'unscroll');
+      //   this._router.navigate(['project',projectId,'project-detail']);
+       // this._router.navigate(['project',projectId]);
+       //  this._router.navigate(['project-detail']);
+       // this.load_contents(this.page, this.projectFlag,this.limit,this.flag,this.activityPage,this.ProjectId,this.activityDropdownFlag,'unscroll');
     }
 }
