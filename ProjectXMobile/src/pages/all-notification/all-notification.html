@@ -19,7 +19,7 @@
                 <ion-item text-wrap no-padding no-lines class="dashboardouterbox">
                     <div class="unread_notifications {{(notify.IsSeen==1)?'read_notifications':''}}">
                         <div class="notificationdiv" id="{{notify.id.$oid}}" *ngIf="notify.status=='changed'">
-                            <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen)">
+                            <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen,notify.PlanLevel)">
                             <span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
                             <span class="notifications_name">{{notify.from}}</span> <span class="notifications_name2">{{notify.type}} {{notify.ActivityOn}} from {{notify.OldValue}} to {{notify.NewValue}} for</span>
                             <i *ngIf="notify.PlanLevel==1" class="Story"></i> <i *ngIf="notify.PlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TicketId}}  {{notify.Title}} </span>
@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="notificationdiv" id="{{notify.id.$oid}}"   *ngIf="notify.type!='changed'  && !notify.status  && notify.object!='mention' && notify.object!='comment' && notify.object!='reply'">
-                            <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen)">
+                            <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen,notify.PlanLevel)">
                             <span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
                             <span class="notifications_name">{{notify.from}}</span> {{notify.type}} <span class="notifications_name2">{{notify.to}}</span> {{notify.OtherMessage}} {{notify.Preposition}} &nbsp;
                             <i *ngIf="notify.PlanLevel==1" class="Story"></i> <i *ngIf="notify.PlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TicketId}} {{notify.Title }}</span>
@@ -41,7 +41,7 @@
                         </div>
                         
                         <div class="notificationdiv" id="{{notify.id.$oid}}"   *ngIf="notify.status=='set' && notify.type!='created' && notify.type!='related' && notify.type!='unrelated'">
-                           <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen)">
+                           <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen,notify.PlanLevel)">
                             <span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
                             <span class="notifications_name">{{notify.from}}</span>  {{notify.type}} {{notify.ActivityOn}} {{notify.Preposition}} {{notify.NewValue}} for <span class="notifications_name2"></span>
                             <i *ngIf="notify.PlanLevel==1" class="Story"></i> <i *ngIf="notify.PlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TicketId}} {{notify.Title }}</span>
@@ -52,7 +52,7 @@
                         </div>
 
                          <div class="notificationdiv" id="{{notify.id.$oid}}"   *ngIf="notify.type=='created' || notify.type=='related' ||  notify.type=='unrelated'">
-                            <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen)">
+                            <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen,notify.PlanLevel)">
                             <span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
                             <span class="notifications_name">{{notify.from}}</span> {{notify.type}} {{notify.ActivityOn}} {{notify.Preposition}} {{notify.NewValue}}  <span class="notifications_name2"></span>
                             <i *ngIf="notify.PlanLevel==1" class="Story"></i> <i *ngIf="notify.PlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TicketId}} {{notify.TargetTicketTitle }} for </span><span class="notifications_name">#{{notify.TicketId}} {{notify.Title }}</span>  <div class="noti_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
@@ -63,7 +63,7 @@
 
                           <div class="notificationdiv" id="{{notify.id.$oid}}"   *ngIf="notify.object=='mention'||notify.object=='comment' ||notify.object=='reply' " >
                             
-                            <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen)"><span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
+                            <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen,notify.PlanLevel)"><span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
                             <span class="notifications_name">{{notify.from}}</span> {{notify.type}} {{notify.ActivityOn}} {{notify.Preposition}} &nbsp;  <span class="notifications_name2"></span>
                             <i *ngIf="notify.PlanLevel==1" class="Story"></i> <i *ngIf="notify.PlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TicketId}} {{notify.Title }}</span>                          <div class="noti_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
                             </div>
@@ -74,7 +74,7 @@
                     </div>
 
                 </ion-item>
-                <ion-item-options side="right" (ionSwipe)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen)"></ion-item-options>
+                <ion-item-options side="right" (ionSwipe)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.IsSeen,notify.PlanLevel)"></ion-item-options>
             </ion-item-sliding>
         </ion-list>
         <div *ngIf="!moreDataLoaded" class="dashboardbox_footer" style="text-align: center;"> No Notifications. </div>
