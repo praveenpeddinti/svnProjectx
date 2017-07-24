@@ -1,0 +1,112 @@
+
+.tabs-left .nav-tabs > li{float:none}
+.tabpaddingleftzero{padding-left:0}
+.tabpaddingrightzero{padding-right:0}
+.tabs-left .nav-tabs > li > a{border-radius:0;font-family: "robotoregular";font-size:16px;color:#7c7c7c;background:#f8f8f8;border-color: #f0f0f0 transparent #f0f0f0 #f0f0f0;border-right:0;margin-right:0;cursor:pointer}
+.tabs-left .nav-tabs > li.active > a, .tabs-left .nav-tabs > li.active > a:hover, .tabs-left .nav-tabs > li.active > a:focus{border-color: #f0f0f0 transparent #f0f0f0 #f0f0f0;color:#0199e0;background: #fff;margin-right:-1px;position:relative;border-radius:0;border-right:0;z-index: 1}
+
+.tab-content_content{border:1px solid #f0f0f0;min-height:221px;padding:50px 20px}
+
+.dashboard_project{ background:#f8f8f8; border:solid 1px #f0f0f0; font-family:'robotoregular'; padding:2px 0px; height:auto; min-height:150px; margin-bottom:30px;}
+.project_name{ font-size:16px; color:#0199e0; padding:5px 5px 9px; line-height:20px; border-bottom:1px solid #fff;}
+.protaskbg{border-bottom:1px solid #fff; width:100%; clear:both; height:auto; min-height:50px;}
+.protask1{ width:50%; border-right:1px solid #fff; padding:1% 0px ; float:left; text-align:center; color:#333333;font-family:'robotoregular'; font-size:14px; height:auto; min-height:50px;}
+.protask2{ width:50%; padding:1% 0px ; float:left; color:#333333;font-family:'robotoregular';font-size:14px;text-align:center;height:auto; min-height:50px;}
+.protaskcount{color:#032632;font-family:'robotoregular'; font-weight:bold; font-size:14px;text-align:center;}
+.teambg{ background:#ededed!important;}
+.createdbgbg{ background:#ededed; height:auto; min-height:50px; clear:both; position:relative; padding-left:50px; color:#333333;font-family:'robotoregular';font-size:14px; color:#333;}
+.creater{color:#0199e0; font-size:16px;}
+.creater_date{color:#a2a2a2; font-size:12px;}
+.createrimg{ width:30px; height:30px; position:absolute; left:10px; top:5px;}
+.createrimg img{width:30px; height:30px; border-radius:100%;}
+.knowemore{font-size:16px; color:#0199e0; line-height:30px; font-family:'robotoregular'; text-align:center; cursor:pointer; padding:7px 0px;}
+.knowemore a{color:#0199e0; text-decoration: none;}
+.knowemore a:hover{color:#0199e0;}
+.add{
+    background: #207fa9 none repeat scroll 0 0;
+    border-radius: 0;
+    cursor: pointer;
+    display: table-cell;
+    float: right;
+    height: 30px;
+    padding: 2px 8px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 30px;
+}
+.add i{
+    color: #fff;
+}
+.profilepic_table {
+    border-radius: 100px;
+    height: 30px;
+    overflow: hidden;
+    vertical-align: middle;
+    width: 30px;
+}
+.dashboard_userbg{ background:#fff; border:solid 1px #f0f0f0; padding-left:120px; position:relative; height:auto; min-height:100px; margin-bottom:30px;}
+.dashboard_userbg .user{ position:absolute; left:20px; top:10px;}
+.dashboard_userbg .user img{ width:80px; height:80px; border-radius:100%;}
+.dashboard_userbg .userinfo{font-size:16px; color:#0199e0; line-height:25px; font-family:'robotoregular'; padding:20px 0px; float:left;}
+.dashboard_userbg .userinfo span{ color:#7c7c7c; clear:both;}
+.dashboard_userbg .tasks{ background:#f8f8f8; border-left:solid 1px #f0f0f0; float:right; height:auto; min-height:100px; padding:10px 20px; text-align:center;color:#7c7c7c; line-height:18px; font-family:'robotoregular'; font-size:16px;}
+.dashboard_userbg .taskscount{ color:#032632; font-size:30px; font-weight:bold; clear:both; line-height:40px;}
+
+.all_activitybg{ width:100%; height:auto; padding:2px 15px; clear:both; float:left; margin-bottom:30px;}
+.all_activity{ border:solid 1px #f0f0f0; float:left; background:#fff; padding:20px; width:92%;margin-bottom: 20px;}
+.activity_date{float:left;background:#f8f8f8;  text-align:center; color:#6d6d6d;font-size:15px;line-height:18px; font-family:'robotoregular'; padding-bottom:5px; width:8%;}
+.activity_date .month{ background:#11abe0; color:#fff; font-size:20px; line-height:35px; display:block; clear:both;}
+.activity_date .date{  color:#333333; font-size:24px; line-height:30px; display:block; clear:both; font-weight:bold;}
+.allactivitydiv{position:relative;background:#fff;border-radius:3px; border-bottom:1px dotted #ccc; padding:0px 40px 5px 40px; font-family:'robotoregular'; margin-bottom:8px;}
+.allactivitydiv .activityusericon{position:absolute;width:30px;height:30px; position:absolute; left:0px; top:0px;}
+.allactivitydiv .activityusericon img{width:30px;height:30px;border-radius:100px;}
+.allactivitydiv .activity_description{}
+.allactivitydiv .activity_description .activity_header{color:#a2a2a2;font-size:12px}
+.allactivitydiv .activity_description .activity_content{color:#7b7b7b;font-size:14px;line-height:16px;cursor: pointer}
+.allactivitydiv .activity_description .activity_content .activity_mention{color:#0199e0}
+.allactivitydiv .activity_description .activity_header .activity_profilename{color:#0199e0;font-size:16px}
+.not_activity_date{font-size:12px;color:#a8a8a8}
+.not_activity_date span{font-size:14px;color:#a2a2a2}
+.story_task_img{ width:16px; height:16px;}
+.widgethedsub{
+    color: #000;
+    font-family: "robotoregular";
+    font-size: 18px;
+}
+.widgetborder{border-bottom:1px dotted #ccc;}
+.all_activity2{ width:100%; clear:both; padding:20px;}
+
+@media screen and (max-width:779px) {
+.all_activitybg{margin-bottom:10px!important;}	
+.all_activity{ width:82%!important;}
+.activity_date{width:18%!important;	}
+.allactivitydiv{ padding-right:0px!important;}
+.all_activity{ padding:10px!important;}
+
+	}
+
+@media screen and (max-width:600px) { 
+.dashboard_userbg{ padding-left:60px;  min-height:60px; margin-bottom:20px;}
+.dashboard_userbg .user{left:10px;}
+.dashboard_userbg .user img{ width:40px; height:40px; }
+.dashboard_userbg .userinfo{font-size:14px; color:#0199e0; line-height:18px; padding:10px 0px;}
+.dashboard_userbg .tasks{ display:inline-block;min-height:60px; font-size:14px; padding:3px 5px; line-height:15px;}
+.dashboard_userbg .taskscount{font-size:20px;  line-height:20px;}
+}
+@media screen and (max-width:420px) {
+	.dashboard_userbg {
+    padding-left: 0px;
+	margin-bottom:10px;
+	}
+	.dashboard_userbg .userinfo{padding-left:60px;}
+	.dashboard_userbg .tasks{ display:inline-block; width:50%; margin-bottom:10px; margin-top:10px; padding-left:0px; border-bottom:solid 1px #f0f0f0;border-right:solid 1px #f0f0f0; border-top:solid 1px #f0f0f0;}
+	 .protask1{ font-size:12px!important;}
+ .protask2{ font-size:12px!important;}
+}
+
+
+@media screen and (min-width:992px) and (max-width:1199px) { 
+ .protask1{ font-size:12px!important;}
+ .protask2{ font-size:12px!important;}
+}
