@@ -1,0 +1,32 @@
+.all_activitybg{ width:100%; height:auto; padding:2px 15px; clear:both; float:left; margin-bottom:30px;}
+.all_activity{ border:solid 1px #f0f0f0; float:left; background:#fff; padding:20px; width:92%;margin-bottom: 20px;}
+.activity_date{float:left;background:#f8f8f8;  text-align:center; color:#6d6d6d;font-size:15px;line-height:18px; font-family:'robotoregular'; padding-bottom:5px; width:8%;}
+.activity_date .month{ background:#11abe0; color:#fff; font-size:20px; line-height:35px; display:block; clear:both;}
+.activity_date .date{  color:#333333; font-size:24px; line-height:30px; display:block; clear:both; font-weight:bold;}
+.allactivitydiv{position:relative;background:#fff;border-radius:3px; border-bottom:1px dotted #ccc; padding:0px 40px 5px 40px; font-family:'robotoregular'; margin-bottom:8px;}
+.allactivitydiv .activityusericon{position:absolute;width:30px;height:30px; position:absolute; left:0px; top:0px;}
+.allactivitydiv .activityusericon img{width:30px;height:30px;border-radius:100px;}
+.allactivitydiv .activity_description{}
+.allactivitydiv .activity_description .activity_header{color:#a2a2a2;font-size:12px}
+.allactivitydiv .activity_description .activity_content{color:#7b7b7b;font-size:14px;line-height:16px;cursor: pointer}
+.allactivitydiv .activity_description .activity_content .activity_mention{color:#0199e0}
+.allactivitydiv .activity_description .activity_header .activity_profilename{color:#0199e0;font-size:16px}
+.not_activity_date{font-size:12px;color:#a8a8a8}
+.not_activity_date span{font-size:14px;color:#a2a2a2}
+.story_task_img{ width:16px; height:16px;}
+.widgethedsub{
+    color: #000;
+    font-family: "robotoregular";
+    font-size: 18px;
+}
+.widgetborder{border-bottom:1px dotted #ccc;}
+.all_activity2{ width:100%; clear:both; padding:20px;}
+
+@media screen and (max-width:779px) {
+.all_activitybg{margin-bottom:10px!important;}	
+.all_activity{ width:82%!important;}
+.activity_date{width:18%!important;	}
+.allactivitydiv{ padding-right:0px!important;}
+.all_activity{ padding:10px!important;}
+
+	}
