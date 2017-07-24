@@ -1,10 +1,171 @@
 <div class="container">
-    <div class="content">
-       <div class="customdropdown customdropdownheader" id="filterDropdown">
-          <p-dropdown [style]="{'width':'220px'}" [(ngModel)]="selectedProject" (onChange)="changeProject()" [displayOptions]="optionTodisplay"   [options]="projects">
-      
-          </p-dropdown>
 
+<div class="row">
+    <div class="col-md-8">
+        <div class="dashboard_userbg">
+            <div class="user"><img alt="" src="{{profilePicture}}" /></div>
+            <div class="userinfo">{{users.username}}
+            <span class="clearfix">{{users.Email}}</span>
+            </div>
+            
+            <div class="tasks">Followed<br/> Tasks
+                   <div class="taskscount" *ngIf="followersDetailsCount">{{followersDetailsCount}}</div>
+                    <div class="taskscount" *ngIf="!followersDetailsCount">0</div>
+            </div>
+            <div class="tasks">Assigned<br/> Tasks
+                   <div class="taskscount" *ngIf="assignedToDataCount">{{assignedToDataCount}}</div>
+                   <div class="taskscount" *ngIf="!assignedToDataCount">0</div>
+            </div>
+            
+            
         </div>
     </div>
+   </div> 
+
+
+         <!-- popup Starts -->
+             <div class="modal fade custommodel"  id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">CREATE PROJECT</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     <form  #projectCreationForm="ngForm" (ngSubmit)="submitted && projectCreationForm.form.valid && saveProjectDetails()" novalidate="true">
+
+      <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                  <label class="timereportlabel"> Project Name </label>
+                  <div class="customformfieldsmarginbottom autoSearchTask">
+  <input type="text" class="customformfields " required  [(ngModel)]="entryForm.projectName" name="projectName"  #projectName="ngModel"  id="projectName"   (blur)="verifyProjectName(entryForm.projectName)"/> 
+       <div *ngIf="submitted && projectName.errors " class="fielderror">
+                <div  [hidden]="!projectName.errors.required">Project Name is required</div>
+            </div>
+            <div id="messageForProject"></div>
+                  </div>
+              </div>
+              
+          </div>
+          <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                  <label class="timereportlabel"> Description </label>
+<div class="customformfieldsmarginbottom relativediv ">
+                  <textarea  [(ngModel)]="entryForm.description" name="description"  #description="ngModel"   class="customformfieldstextarea " id="addTimelogDesc"  required></textarea>
+
+<div *ngIf="submitted && description.errors " class="fielderror">
+                <div [hidden]="!description.errors.required">
+                    Description is required
+                </div>
+               
+            </div>
+          
+              </div> </div>
+            
+          </div>
+
+              </div>
+    
+      <div class="modal-footer">
+        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;resetForm();" >CANCEL</button>
+      </div>
+       </form>
+    </div>
+  </div>
+</div>
+<!-- popup Ends -->
+    <div *ngIf="assignedToDataCount==0 && followersDetailsCount==0">
+    Welcome To ProjectX
+    </div>
+<div *ngIf="assignedToDataCount!=0 || followersDetailsCount!=0">
+        <div class="col-md-12 " id="nosearchdiv" >
+<ul class="nav nav-tabs">
+<li class="active"><a (click)="callprojectsByClick(1)" data-toggle="tab">All Projects</a></li>
+<li ><a (click)="callprojectsByClick(2)" data-toggle="tab">All Activity</a></li>
+</ul>
+ </div> 
+ 
+  <div class="tab-content tab-content_content" >
+
+ <div class="col-md-12"> 
+      <div *ngIf="projectFlag!=2" >
+    <div class="widgethed "> 
+        Projects({{totalProjectCount}})
+     <div class="pull-right">
+        <div  class="add" data-backdrop="false" data-toggle="modal" data-target="#addProjectModel"  ><i  class="fa fa-plus"></i>
+        </div>
+      </div>
+</div>
+</div>
+<div *ngIf="projectFlag==2" >
+     <div class="pull-right">
+      <div class="customdropdownheader projectsDropdown">
+          <p-dropdown [style]="{'width':'220px'}" [(ngModel)]="selectedProject" (onChange)="displayProject()" [displayOptions]="optionTodisplay"   [options]="projects">
+
+          </p-dropdown>
+
+      </div>
+       </div>
+    </div>
+</div>
+<div class="row">
+<div *ngIf="projectFlag!=2 && projectDetails!=''">
+<div *ngFor=" let finalData of projectDetails" > 
+<div class="col-md-3 col-sm-6">
+        <div class="dashboard_project">
+            <div class="project_name">{{finalData.projectName}}</div>
+            <div class="protaskbg">
+                <div class="protask1">
+                    My Active Tasks
+                    <div class="protaskcount"> <a [routerLink]="['/project',finalData.projectName,'list']" >{{finalData.activeTickets}}</a></div>
+                </div>
+                <div class="protask2">
+                    My Assigned Tasks
+                    <div class="protaskcount"> <a [routerLink]="['/project',finalData.projectName,'list']" >{{finalData.assignedtoDetails}}</a></div>
+                </div>
+            </div>
+            <div class="protaskbg">
+                <div class="protask1">
+                    My Followed Tasks
+                    <div class="protaskcount"><a [routerLink]="['/project',finalData.projectName,'list']" >{{finalData.followersDetails}}</a></div>
+                </div>
+                <div class="protask2">
+                    My Closed Tasks
+                    <div class="protaskcount"><a [routerLink]="['/project',finalData.projectName,'list']" >{{finalData.closedTickets}}</a></div>
+                </div>
+            </div>
+            <div class="protaskbg teambg">
+                <div class="protask1">
+                    Team
+                    <div class="protaskcount"><a [routerLink]="['/project',finalData.projectName,'list']" >{{finalData.Team}}</a></div>
+                </div>
+                <div class="protask2">
+                    Current Bucket
+                    <div class="protaskcount"><a [routerLink]="['/project',finalData.projectName,'list']" >{{finalData.currentBucket}}</a></div>
+                </div>
+            </div>
+            <div class="createdbgbg">
+                <div class="createrimg" *ngIf="finalData.ProfilePic"><img src="{{finalData.ProfilePic}}"/></div>
+                <div class="createrimg" *ngIf="!finalData.ProfilePic"><img src="assets/images/user_noimage.png"/></div>
+                <div class="clearfix">by <span class="creater">{{finalData.createdBy}}</span></div>
+                <div class="clearfix">Created On <span class="creater_date">{{finalData.CreatedOn}}</span></div>
+            </div>
+            <div class="knowemore"
+ (click)="knowmore(finalData.ProjectId)"><a>Know More</a></div>
+        </div>
+   </div>
+
+</div>
+</div>
+<div *ngIf="projectFlag==2 && activityDetails!=''" id="mainSearchDiv">
+<app-activities [activityDetails]="activityDetails"></app-activities>
+ </div>
+
+</div>
+<div id="searchsection"></div>
+    </div>
+
 </div>
