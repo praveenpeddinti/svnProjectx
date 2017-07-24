@@ -95,14 +95,23 @@ console.log("Looks like I'm about to leave :(");
  * @uses Navigate to details page from notification page.
  */
 
-  public gotoNotificationDetails(project,ticketId,itemid,slug){ 
+  public gotoNotificationDetails(project,ticketId,itemid,slug,planlevel){ 
+     var storyOrTask = "Story";
+    if (planlevel == 1) {
+      storyOrTask = "Story";
+    } else {
+      storyOrTask = "Task";
+    }
+console.log("story or task from"+storyOrTask+":planlevel"+planlevel)
     var post_data={'projectId':project.PId,'notifyid':itemid,viewAll:this.viewAll,page:1};
     this.globalService.deleteNotification(this.constants.deleteNotificationUrl, post_data).subscribe(
       (result) => {
-        var param = {"id":ticketId,"slug": slug};
+console.log("data from gotoNotificationDetails"+JSON.stringify(result));
+        var param = {"id":ticketId,"slug": slug,"storyOrTask":storyOrTask};
         this.app.getRootNav().push(StoryDetailsPage, param);
       }, (error) => {
-        console.log("error delete notification")
+        
+        console.log("error delete notification from gotoNotificationDetails ")
       }
     )
 
@@ -114,6 +123,7 @@ console.log("Looks like I'm about to leave :(");
  */
 
 public markAsRead(notifyObj){
+  console.log("added uday for markAsRead");
   var post_data={'projectId':notifyObj.Project.PId,'notifyid':notifyObj.id.$oid,viewAll:this.viewAll,page:1};
   this.globalService.deleteNotification(this.constants.deleteNotificationUrl, post_data).subscribe(
       (result) => {
