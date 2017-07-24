@@ -61,6 +61,8 @@ private showTotalEstimated=false;
   public relatedTaskArray=[];
   public checkPlanLevel='';
   public bucketId:any;
+  public commentError:any='';
+  public editCommentError:any='';
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
@@ -312,11 +314,14 @@ var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '
             this.commentsList[this.replyToComment].repliesCount++;
           }
           this.form.description='';
+          this.commentError='';
           this.replying = false;
           var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
           this.getArtifacts(ticketIdObj);
           
         });
+}else{
+          this.commentError = "Comment cannot be empty.";
 }
   
 }
@@ -326,7 +331,8 @@ private replyToComment=-1;
 private replying=false;
 private commentAreaColor="";
 replyComment(commentId,userId){ 
-
+this.commentError='';
+this.editCommentError='';
 this.replyToComment = commentId;
 this.replying = true;
 this.commentAreaColor = jQuery("#commentEditorArea").css("background");
@@ -344,6 +350,8 @@ navigateToParentComment(parentId){
     }, 1000);
 }
 cancelReply(){
+  this.commentError='';
+  this.editCommentError='';
   this.replying = false;
   this.replyToComment = -1;
  jQuery("#commentEditorArea").removeClass("replybox");
@@ -1151,6 +1159,8 @@ var thisObj = this;
     public commentorId:any;
    public editComment(comment)
    {
+    this.commentError='';
+    this.editCommentError='';
     this.commentorId=this.commentsList[comment].ActivityBy.CollaboratorId
     var edit_comment='Activity_content_'+comment;
     /* added for summernote */
@@ -1183,8 +1193,8 @@ var thisObj = this;
           var code= jQuery("#Activity_content_"+commentIndex).summernote('code',result.data.CDescription);
           jQuery("#Activity_content_"+commentIndex).summernote('destroy');
           jQuery("#Reply_Icons_"+commentIndex).show();
-          this.descError='';
-          
+          this.editCommentError='';
+          jQuery("#edit_comment_"+commentIndex).hide();
 
           jQuery("#Actions_"+commentIndex).hide();
           var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
@@ -1192,7 +1202,9 @@ var thisObj = this;
           
         });
      }else{
-         this.descError='Comment can not be empty';
+       jQuery("#edit_comment_"+commentIndex).html('Comment can not be empty');
+       jQuery("#edit_comment_"+commentIndex).show();
+         //this.editCommentError='Comment can not be empty';
      }
 
    }
@@ -1241,7 +1253,8 @@ var thisObj = this;
 
 
    cancelEdit(commentIndex){
-     this.descError='';
+    this.commentError='';
+    this.editCommentError='';
    jQuery("#Activity_content_"+commentIndex).summernote('code',this.commentsList[commentIndex].CDescription);
    jQuery("#Activity_content_"+commentIndex).summernote('destroy');
     jQuery("#Actions_"+commentIndex).hide();

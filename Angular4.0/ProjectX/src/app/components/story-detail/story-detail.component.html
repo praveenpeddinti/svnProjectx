@@ -433,7 +433,8 @@
                 
                 
           </div>
-          <div class="fielderror" [innerHTML]="descError" [hidden]="descError == ''">
+          <div class="alert alert-danger editComment" id="edit_comment_{{cmtIdx}}" style="display:none" >
+
           </div>
         </div>
         <div id="Actions_{{cmtIdx}}" [hidden]="true" >
@@ -505,8 +506,8 @@
                      </ckeditor>-->
                      <textarea  id="commentEditor" name="commentDesc" [(ngModel)]="form.description"  #commentDesc="ngModel" required></textarea>
                 </div>
-                <!--<div class="fielderror" [innerHTML]="descError" [hidden]="descError == ''">
-                </div>-->
+                <div class="alert alert-danger" [innerHTML]="commentError" [hidden]="commentError == ''">
+                </div>
 
             
             </div>
@@ -518,7 +519,7 @@
                       <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments','')"  multiple  />
                    </div>
             <div class="buttonarea alignright">
-                  <button class="normal bluebutton bluebuttonmedium {{(form.description=='')?'but_unvisible':'but_visible'}}  " [disabled]="(form.description=='')?true:null" (click)="submitComment()">
+                  <button class="normal bluebutton bluebuttonmedium   "  (click)="submitComment()">
 
                     SUBMIT
                   </button>
