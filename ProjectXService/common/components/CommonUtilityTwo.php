@@ -6,8 +6,8 @@
  * and open the template in the editor.
  */
 namespace common\components;
-use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts};
-use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields};
+use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts,EventCollection};
+use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields,ProjectTeam,Collaborators};
 use Yii;
 
  /*
@@ -213,7 +213,137 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             Yii::log("CommonUtilityTwo:prepareBucketDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
-    
+
+     /**
+     * @author Padmaja
+     * @description This method is used to get Ticket details for dashboard
+     * @return type $userId
+     * @return type $page
+     * @return type $pageLength
+     * @return type $projectFlag
+     */
+    public static function getTicketDetailsForDashboard($postData){
+        try{
+            
+            $userId = $postData->userInfo->Id;
+            $page=$postData->page;
+            $projectFlag=!empty($postData->projectFlag)?$postData->projectFlag:"";
+            $pageLength=!empty($postData->limit)?$postData->limit:"";
+            $projectId=!empty($postData->ProjectId)?$postData->ProjectId:"";
+            $activityDropdownFlag=!empty($postData->activityDropdownFlag)?$postData->activityDropdownFlag:"";
+            $activityPage=$postData->activityPage;
+            
+            
+                $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+                $assignedtoDetails =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId))));
+                $followersDetails =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId))));
+             if($assignedtoDetails !=0 || $followersDetails != 0){
+                // error_log("=============ascrollllllllll-------");
+                 $activitiesArray=array();
+                 $getActivities=array();
+                 $activityDetails=array();
+                 $projectData=array();
+                 //$projectDetails = ProjectTeam::getProjectTeamDetailsByRole($userId,$options['limit'],$options['skip']);
+               $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$page);
+                if($projectFlag==1){   
+                   $projectData= self::getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId);
+                }elseif($projectFlag==2){
+                     $activityDetails= self::getAllProjectActivities($postData);
+                 }else{
+                  $projectData= self::getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId);
+                }
+             }
+             return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails,'ProjectwiseInfo'=>$projectData,'ActivityData'=>$activityDetails,'projectFlag'=>$projectFlag);  
+        } catch (Exception $ex) {
+                Yii::log("TicketCollection:getTicketDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
+         
+    }
+    /**
+     * @author Padmaja
+     * @description This method is used to get Project details for dashboard
+     * @return type $collection
+     * @return type $projectDetails
+     * @return type $assignedtoDetails 
+     * @return type $followersDetails
+     * @return type $userId
+     */
+    public static function getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId){        
+        try{   
+                $prepareDetails=array();
+                  foreach($projectDetails as $extractDetails){
+                     $projects=Projects::getProjectMiniDetails($extractDetails['ProjectId']);
+                     $userDetails=Collaborators::getCollaboratorById($projects['CreatedBy']);
+                     $projectTeamDetails=Collaborators::getFilteredProjectTeam($extractDetails['ProjectId'],$userDetails['UserName']);
+                     $projectInfo['ProjectId']=$extractDetails['ProjectId'];
+                     $projectInfo['createdBy']=$userDetails['UserName'];
+                      $projectInfo['ProfilePic']=$projectTeamDetails[0]['ProfilePic'];
+                      $projectInfo['projectName']=$projects['ProjectName'];
+                      $projectInfo['CreatedOn'] =$extractDetails['CreatedOn'];
+                      $projecTeam=ProjectTeam::getProjectTeamCount($extractDetails['ProjectId']);
+                      $projectInfo['Team']=$projecTeam['TeamCount'];
+                      $projectInfo['assignedtoDetails'] =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$extractDetails['ProjectId']))));
+                      $projectInfo['followersDetails'] =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId,"ProjectId"=>(int)$extractDetails['ProjectId']))));
+                      $projectInfo['closedTickets'] =TicketCollection::getActiveOrClosedTicketsCount($extractDetails['ProjectId'],$userId,'Fields.state.value',6,array());
+                      $projectInfo['activeTickets'] =TicketCollection::getActiveOrClosedTicketsCount($extractDetails['ProjectId'],$userId,'Fields.state.value',3,array());
+                      $bucketDetails=Bucket::getActiveBucketId($extractDetails['ProjectId']);
+                      if($bucketDetails=='failure'){
+                          $projectInfo['currentBucket'] ='';
+                     }else{
+                      $projectInfo['currentBucket'] =$bucketDetails['Name'];
+                     }
+                      array_push($prepareDetails,$projectInfo);
+                    }
+                    return $prepareDetails;
+             } catch (Exception $ex) {
+                Yii::log("TicketCollection:getProjectDeatils::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+
+        }
+    }
+          /**
+     * @author Padmaja
+     * @description This method is used to get Last Id Project details for dashboard
+     * @return type $projectId
+     *  @return type $userId
+     */
+    public static function getLastProjectDetails($projectId,$userId){
+        try{
+            $projectInfo=array();
+            $prepareDetails=array();
+            $projectDetails=Projects::getProjectMiniDetails($projectId);
+            $projectInfo['projectName']=$projectDetails['ProjectName'];
+            $userDetails=Collaborators::getCollaboratorById($projectDetails['CreatedBy']);
+            $projectInfo['createdBy']=$userDetails['UserName'];
+            $projectInfo['CreatedOn'] =$projectDetails['CreatedOn'];
+            $projectTeamDetails=Collaborators::getFilteredProjectTeam($projectId,$userDetails['UserName']);
+            $projectInfo['ProfilePic']=$projectTeamDetails[0]['ProfilePic'];
+            $projecTeam=ProjectTeam::getProjectTeamCount($projectId);
+            $projectInfo['Team']=$projecTeam['TeamCount'];
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            $projectInfo['assignedtoDetails'] =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$projectId))));
+            $projectInfo['followersDetails'] =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId,"ProjectId"=>(int)$projectId))));
+            $projectInfo['closedTickets'] =TicketCollection::getActiveOrClosedTicketsCount($projectId,$userId,'Fields.state.value',6,array());
+            $projectInfo['activeTickets'] =TicketCollection::getActiveOrClosedTicketsCount($projectId,$userId,'Fields.state.value',3,array());
+            $bucketDetails=Bucket::getActiveBucketId($projectId);
+            if($bucketDetails=='failure'){
+                $projectInfo['currentBucket'] ='';
+            }else{
+               $projectInfo['currentBucket'] =$bucketDetails['Name'];
+            }
+            array_push($prepareDetails,$projectInfo);
+            $assignedtoDetails =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId))));
+            $followersDetails =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId))));
+            $totalProjects=ProjectTeam::getProjectsCountByUserId($userId);
+            $totalProjectCount=count($totalProjects);
+            return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails,'ProjectwiseInfo'=>$prepareDetails,'TotalProjectCount'=>$totalProjectCount);  
+            
+        } catch (Exception $ex) {
+            Yii::log("TicketCollection:getLastProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+        
+    }
+
     /*
      * @Praveen show the short desc in that html tags
      */
@@ -335,4 +465,123 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             Yii::log("CommonUtilityTwo:truncateHtml::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
+            /**
+     * @description This method is used to get all project Activities
+     * @return type $projectId
+     *  @return type $userId
+     */
+  public static function getAllProjectActivities($postData){
+      try{
+                    $activitiesArray=array();
+                    $getActivities=array();
+                    $activityDetails=array();
+                    $getEventDetails= EventCollection::getAllActivities($postData);
+                   foreach($getEventDetails as $extractedEventDetails){
+                      // error_log("eventttttt-tt------------".print_r($extractedEventDetails,1));
+                       foreach($extractedEventDetails['Data'] as $getId){
+                           $getActivities=array();
+                           $activitiesArray= EventCollection::getActivitiesById($getId);
+//                           error_log("------44444444--------".$activitiesArray['OccuredIn']);
+                           $getActivities['ProjectId']=$activitiesArray['ProjectId'];
+                           $projectDetails = Projects::getProjectMiniDetails($activitiesArray['ProjectId']);
+                           $getActivities['ProjectName'] = $projectDetails['ProjectName']; 
+                           $getActivities['OccuredIn']=$activitiesArray['OccuredIn'];
+                           if($getActivities['OccuredIn']=='Ticket'){
+                                $selectFields = ['Title','Fields.planlevel.value_name'];
+                                $getTicketDetails = TicketCollection::getTicketDetails($activitiesArray['ReferringId'],$activitiesArray['ProjectId'],$selectFields);
+                                $getActivities['Title']='#'.$activitiesArray['ReferringId'].' '.$getTicketDetails['Title'];
+                                $getActivities['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
+                            }
+                            else if($getActivities['OccuredIn']=='Bucket'){
+                              //  $getTicketDetails = TicketCollection::checkTicketsinBuckets($activitiesArray['ProjectId'],$activitiesArray['ReferringId']);
+                             $getBucketDetails =Bucket::getBucketName($activitiesArray['ReferringId'],$activitiesArray['ProjectId']);
+                                // error_log("----------------".print_r($getTicketDetails[0]['Fields']['bucket']['value_name'],1));
+                               $getActivities['Title']=!empty($getBucketDetails['Name'])?$getBucketDetails['Name']:'';
+                               $getActivities['planlevel']='';
+                            }
+                            else if($getActivities['OccuredIn']=='Project'){
+                                $getActivities['Title']=!empty($projectDetails['ProjectName'])?$projectDetails['ProjectName']:'';
+                                $getActivities['planlevel']='';
+                            }
+                                
+                           $getActivities['ReferringId']=$activitiesArray['ReferringId'];
+                           $getActivities['DisplayAction']=$activitiesArray['DisplayAction'];
+                           $getActivities['ActionType']=$activitiesArray['ActionType'];
+                           $getActivities['ActionBy']=$activitiesArray['ActionBy'];
+                           $tinyUserDetails=TinyUserCollection::getMiniUserDetails($activitiesArray['ActionBy']);
+                           $getActivities['userName']=$tinyUserDetails['UserName'];
+                           $getActivities['ProfilePicture']=$tinyUserDetails['ProfilePicture'];
+                           $getActivities['Miscellaneous']=$activitiesArray['Miscellaneous'];
+                           $datetime1=$activitiesArray['CreatedOn']->toDateTime();
+                           $timezone="Asia/Kolkata";
+                           $datetime1->setTimezone(new \DateTimeZone($timezone));
+                           $getActivities['createdDate']= $datetime1->format('M-d-Y');
+                           $getActivities['Month']= $datetime1->format('M');
+                           $getActivities['Day']= $datetime1->format('d');
+                           $getActivities['Year']= $datetime1->format('Y');
+                           $getActivities['time']= $datetime1->format('H:i:s');
+                           $getActivities['ChangeSummary'] = array();
+//                           error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
+                           foreach($activitiesArray['ChangeSummary'] as $changeSummary){
+                               $summary = array();
+                              $summary['ActionOn']=!empty($changeSummary['ActionOn'])?$changeSummary['ActionOn']:'';
+                              if(!empty($changeSummary['OldValue'])){
+                                $validDate = CommonUtility::validateDate($changeSummary['OldValue']);
+                                if($validDate){
+                                    $summary['OldValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+                                    $datetime1=$summary['OldValue']->toDateTime();
+                                    $timezone="Asia/Kolkata";
+                                    $datetime1->setTimezone(new \DateTimeZone($timezone));
+                                    $summary['OldValue']= $datetime1->format('M-d-Y');
+                                }else{
+//                               error_log("===Field Name111111==");
+                                   $summary['OldValue'] =trim(html_entity_decode(strip_tags($changeSummary['OldValue']))); 
+                                }
+                              }else{
+                                  $summary['OldValue'] ='';
+                              }
+                              if(!empty($changeSummary['NewValue'])){
+                                $validDate = CommonUtility::validateDate($changeSummary['NewValue']);
+                                if($validDate){
+                                    error_log("=====-============".$validDate);
+                                    $summary['NewValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+                                    $datetime1=$summary['NewValue']->toDateTime();
+                                    $timezone="Asia/Kolkata";
+                                    $datetime1->setTimezone(new \DateTimeZone($timezone));
+                                    $summary['NewValue']= $datetime1->format('M-d-Y');
+                                    
+                                    error_log("summaryyyyyyy=-============".$summary['NewValue']);
+                                }else{
+//                                error_log("===Field Name22222222==");
+                                   $summary['NewValue'] = trim(html_entity_decode(strip_tags($changeSummary['NewValue']))); 
+                                }
+                              }else{
+                                  $summary['NewValue'] ='';
+                              }
+                             // $getActivities['ChangeSummary']['OldValue']=!empty($changeSummary['OldValue'])?$changeSummary['OldValue']:'';
+                             // $getActivities['ChangeSummary']['NewValue']=!empty($changeSummary['NewValue'])?$changeSummary['NewValue']:'';
+                             array_push($getActivities['ChangeSummary'], $summary);  
+                           }
+                           array_push($activityDetails, $getActivities);
+                       }
+                  }
+                    $checkDates=array();
+                    error_log("========864454=============".print_r(array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate')))),1));
+                    $preparedDates['createdDate']= array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate'))));
+                    error_log("========23243=============".print_r($preparedDates['createdDate'],1));
+                    $checkDates = array_fill(0,count($preparedDates['createdDate']), []);
+                    foreach($activityDetails as $extracteData){
+                       $idx = array_search($extracteData['createdDate'], $preparedDates['createdDate']);
+                       if(!is_array($checkDates[$idx])){
+                           $checkDates[$idx]=array();
+                       }
+                       array_push($checkDates[$idx], $extracteData);
+                        
+                    }
+                return  $activityDetails=$checkDates;
+     } catch (Exception $ex) {
+           Yii::log("CommonUtilityTwo:getAllProjectActivities::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+      }
+  
+  }
 }

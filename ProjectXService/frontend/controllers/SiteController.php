@@ -517,10 +517,12 @@ class SiteController extends Controller
             $postData = json_decode(file_get_contents("php://input"));
             $projectFlag=!empty($postData->projectFlag)?$postData->projectFlag:"";
             $limit=!empty($postData->limit)?$postData->limit:"";
-            $projectId=!empty($postData->projectId)?$postData->projectId:"";
+            $projectId=!empty($postData->ProjectId)?$postData->ProjectId:"";
             $activityDropdownFlag=!empty($postData->activityDropdownFlag)?$postData->activityDropdownFlag:"";
-            $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData->userInfo->Id,$postData->page,$limit,$projectFlag,$postData->activityPage,$projectId,$activityDropdownFlag);
+//            $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData->userInfo->Id,$postData->page,$limit,$projectFlag,$postData->activityPage,$projectId,$activityDropdownFlag);
+            $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData);
             $totalProjectCount=ServiceFactory::getCollaboratorServiceInstance()->getTotalProjectCount($postData->userInfo->Id);
+   
            // error_log("---tttt----".print_r($projectInfo,1));
             if(!empty($projectInfo['ProjectwiseInfo']) || empty($projectInfo['ProjectwiseInfo'])){
                 $responseBean = new ResponseBean;

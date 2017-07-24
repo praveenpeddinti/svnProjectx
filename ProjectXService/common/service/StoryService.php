@@ -1,7 +1,7 @@
 <?php
 namespace common\service;
 use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
-use common\components\{CommonUtility,NotificationTrait,EventTrait};
+use common\components\{CommonUtility,CommonUtilityTwo,NotificationTrait,EventTrait};
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects,UserPreferences};
 use common\models\bean\FieldBean;
 use Yii;
@@ -1800,10 +1800,13 @@ Yii::log("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTr
      * @author Padmaja
      * @description This method is used to get all project details for dashboard
      * @return type
+      * 
+      * $userId,$page,$pageLength,$projectFlag,$activityPage,$projectId,$activityDropdownFlag
      */
-       public function getProjectDetailsForDashboard($userId,$page,$pageLength,$projectFlag) {
+       public function getProjectDetailsForDashboard($postData) {
         try {
-            $totalCount = CommonUtility::getTicketDetailsForDashboard($userId,$page,$pageLength,$projectFlag);
+//            $totalCount = CommonUtilityTwo::getTicketDetailsForDashboard($userId,$page,$pageLength,$projectFlag,$activityPage,$projectId,$activityDropdownFlag);
+            $totalCount = CommonUtilityTwo::getTicketDetailsForDashboard($postData);
             return $totalCount;
         } catch (Exception $ex) {
             Yii::log("StoryService:getProjectDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
