@@ -288,8 +288,11 @@ export class StoryDetailsPage {
                     document.getElementById("field_title_" + index).innerHTML = this.datePipe.transform(this.localDate, 'MMM-dd-yyyy');
                     this.enableDataPicker[index] = false;
                     document.getElementById("field_title_" + index).style.display = 'block';
+                     
                     if (result.data.activityData!='') {
-                         thisObj.globalService.setActivity(result.data.activityData);
+                       
+                        thisObj.globalService.setActivity(result.data.activityData);
+                        
                     } 
                 }, 300);
             },
@@ -352,6 +355,8 @@ export class StoryDetailsPage {
                         jQuery("#field_title_" + (index-1) + " div").text(result.data.updatedState.state);
                     }
                     if (result.data.activityData!='') {
+                         console.log("Updated_Ticket___"+JSON.stringify(fieldDetails.ticketId))
+                         thisObj.globalService.setTicketData(fieldDetails.ticketId);
                         thisObj.globalService.setActivity(result.data.activityData);
                     }
                     // if (result.data.activityData.referenceKey == -1) {
