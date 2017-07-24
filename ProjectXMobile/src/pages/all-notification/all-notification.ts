@@ -19,11 +19,11 @@ import { DashboardPage } from '../dashboard/dashboard';
   templateUrl: 'all-notification.html',
 })
 export class AllNotificationPage {
-  NotificationPage:any=NotificationPage;
- moreDataLoaded: boolean = true;
-  unread:boolean=true;
+  NotificationPage: any = NotificationPage;
+  moreDataLoaded: boolean = true;
+  unread: boolean = true;
   page: any = 1;
-  viewAll:any=1;
+  viewAll: any = 1;
   notification_msg: any = [];
   userName: string = '';
   login: { username?: string, password?: string, token?: any } = {};
@@ -37,7 +37,7 @@ export class AllNotificationPage {
     public navParams: NavParams,
 
     public viewCtrl: ViewController) {
-    localStorage.setItem('headerInfo',JSON.stringify({'title':"Notifications",backButton:"",logo:0,leftPannel:0}));
+    localStorage.setItem('headerInfo', JSON.stringify({ 'title': "Notifications", backButton: "", logo: 0, leftPannel: 0 }));
     this.storage.get('userCredentials').then((value) => {
       this.logoutParams.userInfo.Id = value.Id;
       this.logoutParams.userInfo.username = value.username;
@@ -50,10 +50,10 @@ export class AllNotificationPage {
     console.log('ionViewDidLoad AllNotificationPage');
   }
 
-    /**
-      * @author Anand Singh
-      * @uses Get All notifications
-      */
+  /**
+    * @author Anand Singh
+    * @uses Get All notifications
+    */
   public getAllNotification(viewAll, page) {
     var post_data = { viewAll: viewAll, page: page };
     this.globalService.getAllNotification(this.constants.notificationUrl, post_data).subscribe(
@@ -77,7 +77,7 @@ export class AllNotificationPage {
     setTimeout(() => {
       if (this.moreDataLoaded == true) {
         this.page += 1;
-        this.viewAll=1
+        this.viewAll = 1
         this.getAllNotification(this.viewAll, this.page);
         infiniteScroll.complete();
       } else {
@@ -87,41 +87,48 @@ export class AllNotificationPage {
 
   }
 
-/**
- * @author Anand Singh.
- * @uses Navigate to details page from notification page.
- */
+  /**
+   * @author Anand Singh.
+   * @uses Navigate to details page from notification page.
+   */
 
- public gotoNotificationDetails(project,ticketId,itemid,slug,isSeen){ 
-   var param = {"id":ticketId,"slug": slug};
-    var post_data={'projectId':project.PId,'notifyid':itemid,viewAll:this.viewAll,page:1};
-    if(isSeen==0){
-     this.globalService.deleteNotification(this.constants.deleteNotificationUrl, post_data).subscribe(
-      (result) => {
-       this.app.getRootNav().push(StoryDetailsPage, param);
-      }, (error) => {
-        console.log("error delete notification")
-      }
-    )
-    }else{
-       this.app.getRootNav().push(StoryDetailsPage, param);
+  public gotoNotificationDetails(project, ticketId, itemid, slug, isSeen, planLevel) {
+    var storyOrTask = "Story";
+    if (planLevel == 1) {
+      storyOrTask = "Story";
+    } else {
+      storyOrTask = "Task";
+    }
+    var param = { "id": ticketId, "slug": slug, "storyOrTask":storyOrTask};
+    var post_data = { 'projectId': project.PId, 'notifyid': itemid, viewAll: this.viewAll, page: 1 };
+    if (isSeen == 0) {
+      this.globalService.deleteNotification(this.constants.deleteNotificationUrl, post_data).subscribe(
+        (result) => {
+          this.app.getRootNav().push(StoryDetailsPage, param);
+        }, (error) => {
+          console.log("error delete notification")
+        }
+      )
+    } else {
+      this.app.getRootNav().push(StoryDetailsPage, param);
     }
   }
 
-/**
- * @author Anand Singh.
- * @uses Mark as read any particular unread notification.
- */
+  /**
+   * @author Anand Singh.
+   * @uses Mark as read any particular unread notification.
+   */
 
-  public markAsRead(notifyObj){
-  var post_data={'projectId':notifyObj.Project.PId,'notifyid':notifyObj.id.$oid,viewAll:this.viewAll,page:1};
-  this.globalService.deleteNotification(this.constants.deleteNotificationUrl, post_data).subscribe(
+  public markAsRead(notifyObj) {
+    var post_data = { 'projectId': notifyObj.Project.PId, 'notifyid': notifyObj.id.$oid, viewAll: this.viewAll, page: 1 };
+    this.globalService.deleteNotification(this.constants.deleteNotificationUrl, post_data).subscribe(
       (result) => {
-        notifyObj.IsSeen=1;
+        notifyObj.IsSeen = 1;
       }, (error) => {
+        console.log("the error is"+error);
         console.log("error delete notification")
       }
-    )  
-}
+    )
+  }
 
 }
