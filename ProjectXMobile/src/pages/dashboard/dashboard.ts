@@ -1,4 +1,4 @@
-import {Component,ViewChild} from '@angular/core';
+import {Component,ViewChild, NgZone} from '@angular/core';
 import {NavController, NavParams,Content, AlertController, ViewController, LoadingController, PopoverController, ModalController, Platform} from 'ionic-angular';
 import {Storage} from "@ionic/storage";
 import {LogoutPage} from '../logout/logout';
@@ -25,7 +25,7 @@ declare var socket:any;
 export class DashboardPage {
     @ViewChild(Content) content: Content;
     ProjectId:string;
-    
+    public ngZone:any;
     SelectValue : any;
     public static optionsModal;
     public displayFieldvalue : any;
@@ -69,7 +69,8 @@ export class DashboardPage {
         public viewCtrl: ViewController,
         private globalService: Globalservice,
         private urlConstants: Constants) {
-
+        
+        this.ngZone = new NgZone({ enableLongStackTrace: false });
            this.projectName=this.navParams.get("ProjectName");
       //     this. filterParam.projectId=this.navParams.get("ProjectId");
       //     this.params.projectId=this.navParams.get("ProjectId");
@@ -88,7 +89,7 @@ export class DashboardPage {
               //  this.filterParam.filterOption = {id:"3",label:"My Assigned Stories/Task",showChild:"0",type:"general"};
                   this.getallfilterOptions();
                  // this.getAllStoriesList();
-                 this.getallTickets();
+                  this.getallTickets();
                 
                 platform.registerBackButtonAction(() => {
                     if (StoryDetailsPage.optionsModal && StoryDetailsPage.optionsModal.index == 0) {
@@ -124,6 +125,8 @@ export class DashboardPage {
          if(userInfo != null ||userInfo != undefined){
        this.userName = userInfo.username;
            // this.params.userInfo = value;
+            this.arrayObject = [];
+            this.params.offset = 0;
             this.getallTickets();
             if (refresher != 0)
                 refresher.complete();
@@ -140,9 +143,8 @@ export class DashboardPage {
     public getallTickets():void{
         if (this.params.offset == 0) {
             this.params.offset = 0;
-        }
+        }       
         console.log(JSON.stringify(this.params));
-        console.log("after select1");
         this.globalService.getallStoriesList(this.urlConstants.getallStoryDetails, this.params).subscribe(
             data => {
                 if (data.statusCode == '200') {
@@ -203,7 +205,9 @@ export class DashboardPage {
                                 break;
                             }
                         }
-                        this.arrayObject.push({
+                        
+                     this.ngZone.run(() => {
+                     this.arrayObject.push({
                             storyOrTask: _storyOrTask, 
                             storyPointsHeading: _storyPointHeading, 
                             id: _id, 
@@ -218,6 +222,7 @@ export class DashboardPage {
                             duedate: _dudate, 
                             arrow: _arrow
                         });
+                 });
                     }
                     if (this.params.offset == 0) {
                         this.loader.dismiss().catch(() => console.log('ERROR CATCH: LoadingController dismiss'));
@@ -351,7 +356,7 @@ export class DashboardPage {
                              console.log("filtersOption set to"+JSON.stringify(this.params.filterOption));
                                //this.viewCtrl.dismiss();
                                  setTimeout(()=> {
-                                 this.getallTickets();
+                                     this.getallTickets();
                              },300);
                              jQuery("#field_title_" + index + " label").text(data.label);
                         }
