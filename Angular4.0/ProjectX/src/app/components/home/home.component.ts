@@ -8,7 +8,7 @@ import { AjaxService } from '../../ajax/ajax.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
-import {ActivityService} from '../../services/activity.service';
+// import {ActivityService} from '../../services/activity.service';
 declare var jQuery:any;
 
 
@@ -91,7 +91,7 @@ export class HomeComponent{
           private shared:SharedService,
           private _ajaxService: AjaxService,
           private zone:NgZone,
-          private _activityService: ActivityService
+        //   private _activityService: ActivityService
           ) { }
 
 
