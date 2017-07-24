@@ -110,6 +110,7 @@ export class DashboardPage {
             
     }
     ionViewDidLoad() {
+        console.log("ionviewdidload started");
         var thisObj= this;
           this.globalService.getTicketData().subscribe(value => {
             console.log("________________T" + JSON.stringify(value));
@@ -117,12 +118,18 @@ export class DashboardPage {
             thisObj.globalService.geUpdatedTicketDetails(this.urlConstants.getUpdatedTicketDetails,ticketData ).subscribe(
         result => {
           console.log("________________DEtails____" + JSON.stringify(result));
+          this.items = result.data;
         }); 
 
         })
         
     }
-    ionViewWillEnter() {}
+    ionViewWillEnter() {
+        console.log("ionViewWillEnter");
+         this.arrayObject = [];
+         this.params.offset = 0;
+         this.getallTickets();
+    }
     clickSearch(){
         this.navCtrl.setRoot(GlobalSearch);
     }
