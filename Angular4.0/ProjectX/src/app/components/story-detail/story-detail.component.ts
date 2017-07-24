@@ -412,9 +412,9 @@ this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
 //Changes inline editable filed to thier respective edit modes - Left Column fields.
 //Renders data to dropdowns dynamically.
   editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType,where){ 
- var thisObj=this;
-     this.dropList=[];
-
+   this.dropList=[];
+   this.dropDisplayList=[];
+   var thisObj=this;
     var inptFldId = fieldId+"_"+fieldIndex;
     var q =0;
       for(let taskRow of this.taskFieldsEditable){
