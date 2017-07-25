@@ -41,8 +41,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   /* For Notifications */
   this.PName=localStorage.getItem('ProjectName');
- 
-     if(this.users)
+    if(this.users)
     {
      var thisObj = this;
     var post_data={}; 
@@ -85,7 +84,7 @@ export class HeaderComponent implements OnInit {
     }
     
     this.getAllProjectNames();
-     }
+      }
       getAllProjectNames(){
         var sendData={
            userId:JSON.parse(this.users.Id)
@@ -94,7 +93,7 @@ export class HeaderComponent implements OnInit {
         {
            this.optionTodisplay=this.projectsArray(result.data);
            this.projects=this.optionTodisplay[0].filterValue;
-           })
+             })
 
       }
   logout() {

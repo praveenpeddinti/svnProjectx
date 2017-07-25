@@ -41,4 +41,9 @@ header{display: block;margin: 4px;padding: 5px;min-height: 100px;border: 1px sol
 .bluebuttonmedium{font-size: 12px}
 .bgnone{ background: none!important;}
 .bgnone:focus{ background: none!important;}
+.projectsDropdown{ float: left; background: none!important; margin-top: 17px!important;}
+
+.ui-inputtext{ background: none!important;}
+.ui-widget-header .ui-state-default, .ui-widget-content .ui-state-default, .ui-state-default {background: none!important; border:none!important;}
+
 /* end */
