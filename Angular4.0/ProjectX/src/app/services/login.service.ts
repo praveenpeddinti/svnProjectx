@@ -51,6 +51,7 @@ login(user,loginCallback) {
       var userdata = result.data;
       localStorage.setItem("profilePicture",userdata.ProfilePicture);
       delete userdata.ProfilePicture;
+      delete userdata.Email;
       localStorage.setItem("user",JSON.stringify(userdata));
       //this.collaboratorObj.AccessKey=token;//alert(this.collaboratorObj.headers);
       loginCallback(result);
