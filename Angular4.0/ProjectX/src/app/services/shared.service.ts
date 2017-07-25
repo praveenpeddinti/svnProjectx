@@ -3,6 +3,7 @@ import {Component,Input,Output,Injectable,EventEmitter} from '@angular/core';
 @Injectable()
 export class SharedService {
   @Output() route_change: EventEmitter<any> = new EventEmitter();
+   @Output() notification_change: EventEmitter<any> = new EventEmitter();
             public page;
    constructor() {
      console.log('shared service started');
@@ -23,6 +24,13 @@ export class SharedService {
 
    getEmittedValue() {
      return this.route_change;
+   }
+    changeNotificationCount(count) { 
+     this.notification_change.emit(count);
+    
+   }
+   getNotificationCount(){
+     return this.notification_change;
    }
 
 } 
