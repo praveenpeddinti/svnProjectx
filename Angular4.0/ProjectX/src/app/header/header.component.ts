@@ -3,7 +3,6 @@ import { Router} from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { LoginService, Collaborator } from '../services/login.service';
 import { AjaxService } from '../ajax/ajax.service';
-import { GlobalVariable } from '../config';
 import {SharedService} from '../services/shared.service';
 declare var io:any;
 declare var socket:any;
@@ -40,6 +39,9 @@ export class HeaderComponent implements OnInit {
        ) { }
 
   ngOnInit() {
+     if(this._router.url=='/home'){
+      this.ProjectName='';// to remove right side sticky menu.
+    }
  var thisObj = this;
  this.shared.getNotificationCount().subscribe(value=>
       { 
