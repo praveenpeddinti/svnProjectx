@@ -8,7 +8,7 @@
   <li class="notificationlist_all" *ngIf="allNotification.length==0" id="notificationMessage">
      <div class="notificationdiv nonotification">No Notifications</div>
  </li>  
-<li *ngFor="let notify of allNotification "   class="notificationlist_all">
+<li *ngFor="let notify of allNotification; let i = index "   class="notificationlist_all">
 <div class="notificationdiv {{(notify.IsSeen==0)?'unreadnotification':''}} " id="notify_no_{{notify.id.$oid}}">
 <span class="notificationusericon">
 <img src="{{notify.Profile}}"/>
@@ -46,7 +46,7 @@
 <!--<div class="not_date">(Mar-17-2017 06:00)</div>-->
 <!--<div class="not_date">{{notify.date}}</div>-->
 </div>
-<a *ngIf="notify.IsSeen==0" id="mark_{{notify.id.$oid}}" type="button" data-toggle="tooltip" data-placement="top" title="Mark As Read"   (click)="deleteNotification(notify.Project,notify.id.$oid,$event)" class="notificationdelete notiall-delete">
+<a *ngIf="notify.IsSeen==0" id="mark_{{notify.id.$oid}}" type="button" data-toggle="tooltip" data-placement="top" title="Mark As Read"   (click)="deleteNotification(notify.Project,notify.id.$oid,$event,i)" class="notificationdelete notiall-delete">
 <i class="fa fa-times" aria-hidden="true"></i>
 </a>
 </div>

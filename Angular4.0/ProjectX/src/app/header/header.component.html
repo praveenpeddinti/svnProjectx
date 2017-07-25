@@ -43,16 +43,16 @@
                            <li class="dropdown" id="notificationIcon">
                             <a class="customnotheader" (click)="showNotifications()" aria-expanded="false">
                                 <i class="fa fa-bell" aria-hidden="true"></i>
-                                <span  class="badge badge-sm up bg-pink count" id="notificationCount" style="display: none">{{notify_count}}</span>
+                                <span *ngIf="notify_count>0" class="badge badge-sm up bg-pink count" id="notificationCount" >{{notify_count}}</span>
                             </a>
                           <ul id="notifications_list" class="dropdown-menu extended fadeInUp animated notification" tabindex="5002" style="outline: none;">
                               <li style="padding: 5px 10px">
                                                              <div class="notificationdiv nonotification" *ngIf="notify_count==0" id="notificationMessage">No Notifications</div>
    
-                              </li>
+                                 </li>
                             
 <!--Notification Msg start                            -->
-<li  *ngFor="let notify of notification_msg "  class="notificationlist">
+<li  *ngFor="let notify of notification_msg; let i = index "  class="notificationlist">
 <div class="notificationdiv" id="{{notify.id.$oid}}">
 <span class="notificationusericon">
 <img src="{{notify.Profile}}"/>
@@ -98,7 +98,7 @@
 <!--<div class="not_date">(Mar-17-2017 06:00)</div>-->
 <!--<div class="not_date">{{notify.date}}</div>-->
 </div>
-<a type="button" data-toggle="tooltip" data-placement="top" title="Mark As Read"   (click)="deleteNotification(notify.Project,notify.id.$oid,$event)" class="notificationdelete">
+<a type="button" data-toggle="tooltip" data-placement="top" title="Mark As Read"   (click)="deleteNotification(notify.Project,notify.id.$oid,$event,i)" class="notificationdelete">
 <i class="fa fa-times" aria-hidden="true"></i>
 </a>
 </div>

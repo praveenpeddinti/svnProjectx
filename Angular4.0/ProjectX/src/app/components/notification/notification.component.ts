@@ -1,6 +1,5 @@
 import { Component,OnInit,HostListener } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
-import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
 import { AjaxService } from '../../ajax/ajax.service';
 import {SharedService} from '../../services/shared.service';
@@ -60,10 +59,10 @@ export class NotificationComponent implements OnInit{
       });
     }
 
-    deleteNotification(project,notify_id,event) 
+    deleteNotification(project,notify_id,event,domPosition) 
   {
-    jQuery("#notifications_list").hide();
-    event.stopPropagation();
+    // jQuery("#notifications_list").hide();
+    // event.stopPropagation();
     //ajax call for delete notificatin
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
@@ -71,9 +70,9 @@ export class NotificationComponent implements OnInit{
       if(data)
       {
           this.notify_count=data.totalCount;
-       if(data.data.notify_result != "nodata"){
-        jQuery('#mark_'+notify_id).remove(); 
-        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
+          this.shared.changeNotificationCount(data.totalCount);
+       if(data.data.notify_result != "nodata"){ 
+         this.allNotification[domPosition].IsSeen = 1;
        }
        
       }
@@ -89,26 +88,22 @@ export class NotificationComponent implements OnInit{
     {
       if(data)
       {
-       // do something
-      jQuery('#mark_'+notify_id).remove(); 
-      jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
+       this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment}});
+
       }
-     this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment}});
     })
     
   }
   goToComment(project,ticketid,comment,notify_id)
   {
-    alert("==Sllug=="+comment);
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
     {
       if(data)
       {
-        jQuery('#mark_'+notify_id).remove(); 
-        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
-      }
       this._router.navigate(['project',project.ProjectName,ticketid,'details',{queryParams: {Slug:comment}}]);
+ 
+      }
     })
      
   }
@@ -120,18 +115,16 @@ export class NotificationComponent implements OnInit{
       if(data)
       {
         this.notify_count=0;
-        
-       jQuery(".notificationdelete").remove();
-       jQuery('.notificationdiv').removeClass('unreadnotification'); 
-        // jQuery("#notificationMessage").show();
-       
-       
+       this.allNotification.forEach(function (value) {
+        value.IsSeen = 1;
+      });
+
       }
     })
   }
 
  @HostListener('window:scroll', ['$event']) 
-    doSomething(event) {
+    loadNotificationsOnScroll(event) {
      // console.debug("Scroll Event", window.pageYOffset );
       if (this.allNotification.length > 0 && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
 

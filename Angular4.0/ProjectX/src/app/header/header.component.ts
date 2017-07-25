@@ -30,6 +30,7 @@ export class HeaderComponent implements OnInit {
   public homeFlag=false;
   //private ProjectName='';
   private PName='';
+ 
    constructor(
     private _ajaxService: AjaxService,
     public _router: Router,
@@ -39,6 +40,14 @@ export class HeaderComponent implements OnInit {
        ) { }
 
   ngOnInit() {
+ var thisObj = this;
+ this.shared.getNotificationCount().subscribe(value=>
+      { 
+        thisObj.notify_count = value;
+        thisObj.notification_msg = [];
+      });
+
+
   /* For Notifications */
   this.PName=localStorage.getItem('ProjectName');
     if(this.users)
@@ -52,18 +61,11 @@ export class HeaderComponent implements OnInit {
              console.log("getAllNotificationsCountResponse-----------"+data.count);
             thisObj.notify_count=data.count;
             if(data.count == 0){
-            jQuery("#notificationCount").hide();
-             jQuery(".notificationlist").remove();
-            }else{
-            jQuery("#notificationCount").show();
-            jQuery("#notificationCount").html(data.count);
+                 thisObj.notification_msg = [];
             }
   
         });
 
-       
-      
-     console.log("==In header=="+this._router.url);
     }
     
      jQuery(document).ready(function(){
@@ -135,7 +137,7 @@ projectsArray(list){
           jQuery("#"+id).fadeOut(4000);
   }
 
-  deleteNotification(project,notify_id,event)
+  deleteNotification(project,notify_id,event,domIndex)
   {
     event.stopPropagation();
     //ajax call for delete notificatin
@@ -146,20 +148,10 @@ projectsArray(list){
       if(data)
       {
         this.notify_count = data.totalCount;
-        jQuery('#notificationCount').text(this.notify_count);
-        jQuery('#'+notify_id).remove();
-        // for view all notification page
-        jQuery('#mark_'+notify_id).remove(); 
-        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
       if(data.data.notify_result != "nodata"){
-    
-       for(var i=0;i<data.data.notify_result.length;i++)
-        {
-         
-            this.notification_msg.push(data.data.notify_result[i]);
-          
-        }
-}
+        this.notification_msg = data.data.notify_result;
+      
+      }
        
       }
     })
@@ -174,19 +166,7 @@ projectsArray(list){
     {
       if(data)
       {
-       if(this.notify_count >0){
-       this.notify_count--;
-      }
-        jQuery('#'+notify_id).remove();
-         // for view all notification page
-        jQuery('#mark_'+notify_id).remove(); 
-        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
-        if(this.notify_count==0)
-        {
-        jQuery("#notificationMessage").hide();
-        
-          jQuery(".readAll").show();
-        }
+         this.notify_count = data.totalCount;
         
       }
       this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:slug,From:"Notification"}});
@@ -200,19 +180,7 @@ projectsArray(list){
     {
       if(data)
       {
-        if(this.notify_count >0){
-       this.notify_count--;
-      }
-        jQuery('#'+notify_id).remove();
-         // for view all notification page
-        jQuery('#mark_'+notify_id).remove(); 
-        jQuery('#notify_no_'+notify_id).removeClass('unreadnotification'); 
-        if(this.notify_count==0)
-        {
-         jQuery("#notificationMessage").hide();
-        
-          jQuery(".readAll").show();
-        }
+          this.notify_count = data.totalCount;
         
       }
     })
@@ -226,12 +194,7 @@ projectsArray(list){
       if(data)
       {
         this.notify_count=0;
-        jQuery('#notificationCount').text(this.notify_count);
-         jQuery(".notificationlist").remove();
-         jQuery(".notificationdelete").remove();
-         jQuery('.notificationdiv').removeClass('unreadnotification'); 
-        // jQuery("#notificationMessage").show();
-       
+        this.notification_msg=[];
        
       }
     })
@@ -242,7 +205,7 @@ projectsArray(list){
   if(jQuery("#notifications_list").is(":visible")){
     jQuery("#notifications_list").hide();
    }else{
-     
+     jQuery("#notifications_list").show();
    if(this.notify_count>0){
     console.log("show notify");
   var post_data={viewAll:0,page:1};
@@ -253,29 +216,16 @@ projectsArray(list){
  this.getnotificationTimeout = setTimeout(()=>{
       this._ajaxService.NodeSubscribe('/getAllNotifications',post_data,(data)=>
       {
-      console.log("--leing-------"+data.notify_result.length);
        this.notification_msg=[];
       if(data.notify_result.length >0){
-      
-  jQuery("#notifications_list").show();
-  jQuery("#notificationMessage").hide();
-    
-        for(var i=0;i<data.notify_result.length;i++)
-        {
-         
-            this.notification_msg.push(data.notify_result[i]);
-          
-        }
-        }else{
-          jQuery("#notificationMessage").show();
+      this.notify_count = data.notify_result.length;
+      this.notification_msg = data.notify_result;
+     
         }
      
       });
-},500);
+},100);
   
-    }else{
-      jQuery("#notifications_list").show();
-  jQuery("#notificationMessage").show();
     }
 
     }
