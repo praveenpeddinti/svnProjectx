@@ -116,7 +116,7 @@
 <div *ngFor=" let finalData of projectDetails" > 
 <div class="col-md-3 col-sm-6">
         <div class="dashboard_project">
-            <div class="project_name">{{finalData.projectName}}</div>
+            <div class="project_name"><a [routerLink]="['/project',finalData.projectName,'list']" >{{finalData.projectName}}</a></div>
             <div class="protaskbg">
                 <div class="protask1">
                     My Active Tasks
@@ -154,7 +154,7 @@
                 <div class="clearfix">Created On <span class="creater_date">{{finalData.CreatedOn}}</span></div>
             </div>
             <div class="knowemore"
- (click)="knowmore(finalData.ProjectId)"><a>Know More</a></div>
+ (click)="knowmore(finalData.ProjectId,finalData.projectName)"><a>Know More</a></div>
         </div>
    </div>
 
