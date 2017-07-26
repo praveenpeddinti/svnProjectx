@@ -129,7 +129,7 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
      * @param type $projectId,$search_query
      * @return type
      */
-    public function getFilteredProjectTeam($projectId,$search_query)
+    public static function getFilteredProjectTeam($projectId,$search_query)
     {
         try{
          $qry = "select C.Id,C.UserName as Name,C.Email,concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and C.UserName like '$search_query%'";
