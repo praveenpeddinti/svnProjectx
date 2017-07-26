@@ -2,6 +2,7 @@ import {Injectable,Input,Output,EventEmitter} from '@angular/core';
 import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Storage} from '@ionic/storage';
+import { ToastController } from 'ionic-angular';
 declare var socket:any;
 /*
   Generated class for the Globalservice provider.
@@ -17,7 +18,7 @@ export class Globalservice {
     localDate = new Date().toISOString();
     private headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
     params: {userInfo?: any, projectId?: any,timeZone?:any} = {};
-    constructor(public http: Http, public storage: Storage) {
+    constructor(public http: Http, public storage: Storage, private toastCtrl: ToastController) {
         console.log('Globalservice');
     }
     public ajaxCall(url,data){
@@ -27,7 +28,22 @@ export class Globalservice {
         data["timeZone"] = "Asia/Kolkata";
         data["projectId"] = 1;
         var response = this.http.post(url, JSON.stringify(data), {headers: this.headers}).map(
-            res => res.json()
+           data => {
+            var res =  data.json();
+            if(res.statusCode != 200 && res.statusCode != ""){
+                let toast = this.toastCtrl.create({
+                    message: res.message,//'Something went wrong!',
+                    duration: 3000,
+                    position: 'top'
+                });
+                toast.onDidDismiss(() => {
+                    console.log('Dismissed toast');
+                });
+                toast.present();
+            }
+            console.log("AJAX____________DATA_____"+JSON.stringify(res));
+            return res;
+           }
         );
         return response;
     }
