@@ -7,6 +7,8 @@ import { Http, Headers } from '@angular/http';
 import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
 import { ChildtaskComponent } from '../childtask/childtask.component';
+
+
 declare var jQuery:any;
 
 @Component({
