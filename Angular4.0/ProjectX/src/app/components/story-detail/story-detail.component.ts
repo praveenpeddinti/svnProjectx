@@ -84,6 +84,7 @@ private showTotalEstimated=false;
 
   public commentDelId='';
   public commentDelSlug='';
+  public childTaskmodel={};
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,
     public _router: Router,private mention:MentionService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private projectService:ProjectService,private shared:SharedService) {
@@ -920,15 +921,14 @@ var thisObj = this;
      */
    public savechiledTask()
     {
-       var title= jQuery('#childtitle').val().trim();
-
+      var title= this.childTaskmodel['childtitle'].trim();
        if(title=='' || title=='undefined'){
           this.commonErrorFunction("subtaskerr","Please enter title.")
        }else{
         var postTaskData={
             ticketId:this.ticketId,
             projectId:this.projectId,
-            title:jQuery('#childtitle').val()
+            title:title
           };
         this._ajaxService.AjaxSubscribe("story/create-child-task",postTaskData,(result)=>
         {
@@ -943,7 +943,7 @@ var thisObj = this;
         this.commentsList[result.data.activityData.referenceKey]["PropertyChanges"].push(result.data.activityData.data);
      }  
           });
-       jQuery('#childtitle').val("");
+       this.childTaskmodel['childtitle']=[];
        }  
         
        

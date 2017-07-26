@@ -388,13 +388,13 @@ export class TimeReportComponent{
     
     inputKeyDown(id){
         if(id==1){
-            var initVal = jQuery("#addTimelogTime").val();
+            var initVal =this.entryForm['hours'];
             var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
             if (initVal != outputVal) {
                 jQuery("#addTimelogTime").val(outputVal);
              }
         }else{
-            var initVal = jQuery("#editTimelogTime").val();
+            var initVal = this.extractFields['Time'];
             var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
             if (initVal != outputVal) {
                 jQuery("#editTimelogTime").val(outputVal);
