@@ -6,6 +6,7 @@ use common\service\StoryService;
 use common\service\CollaboratorService;
 use common\service\TimeReportService;
 use common\service\BucketService;
+use yii\base\ErrorException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -29,8 +30,9 @@ class ServiceFactory {
                 self::$inst_story_service = new StoryService();
             }
             return self::$inst_story_service;
-        } catch (Exception $ex) {
-            Yii::log("ServiceFactory:getStoryServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $ex) {
+            Yii::error("ServiceFactory:getStoryServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -40,8 +42,9 @@ class ServiceFactory {
                 self::$inst_collaborator_service = new CollaboratorService();
             }
             return self::$inst_collaborator_service;
-        } catch (Exception $ex) {
-            Yii::log("ServiceFactory:getCollaboratorServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("ServiceFactory:getCollaboratorServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -51,8 +54,9 @@ class ServiceFactory {
                 self::$inst_timereport_service = new TimeReportService();
             }
             return self::$inst_timereport_service;
-        } catch (Exception $ex) {
-            Yii::log("ServiceFactory:getTimeReportServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("ServiceFactory:getTimeReportServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -62,8 +66,9 @@ class ServiceFactory {
                 self::$inst_bucket_service = new BucketService();
             }
             return self::$inst_bucket_service;
-        } catch (Exception $ex) {
-            Yii::log("ServiceFactory:getBucketServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("ServiceFactory:getBucketServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 

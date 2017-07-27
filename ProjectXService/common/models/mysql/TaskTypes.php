@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class TaskTypes extends ActiveRecord 
 {
@@ -36,9 +37,9 @@ class TaskTypes extends ActiveRecord
         $query = "select * from TaskTypes where IsDefault = 1";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;  
-        } catch (Exception $ex) {
-Yii::log("TaskType:getTaskTypes::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("TaskTypes:getTaskTypes::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 

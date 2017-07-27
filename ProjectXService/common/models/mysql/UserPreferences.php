@@ -8,6 +8,7 @@ namespace common\models\mysql;
 
 use Yii;
 use yii\base\NotSupportedException;
+use yii\base\ErrorException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -61,8 +62,9 @@ class UserPreferences extends ActiveRecord
                 $preference->PreferenceItems=$prefered_list;
                 $preference->save();
              }
-        } catch (Exception $ex) {
-            Yii::log("UserPreferences:savePreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("UserPreferences:savePreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     
@@ -78,8 +80,9 @@ class UserPreferences extends ActiveRecord
             $query = "select PreferenceItems from UserPreferences where CollaboratorId=3";
             $data = Yii::$app->db->createCommand($query)->queryOne();
             return $data;    
-        } catch (Exception $ex) {
-            Yii::log("UserPreferences:getPreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("UserPreferences:getPreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
 }

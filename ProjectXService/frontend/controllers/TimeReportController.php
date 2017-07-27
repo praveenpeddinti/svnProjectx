@@ -89,9 +89,15 @@ class TimeReportController extends Controller
             $responseBean->totalCount = $totalCount;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("TimeReportController:actionGetTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("TimeReportController:actionGetTimeReportDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
 
     
@@ -111,9 +117,15 @@ class TimeReportController extends Controller
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
             
-        } catch (Exception $ex) {
-             Yii::log("TimeReportController:actionUpdateTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("TimeReportController:actionUpdateTimelog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
 
     }
     /**
@@ -144,9 +156,15 @@ class TimeReportController extends Controller
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
                 }
         return $response;
-         } catch (Exception $ex) {
-             Yii::log("TimeReportController:actionGetStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+         } catch (\Throwable $th) { 
+             Yii::error("TimeReportController:actionGetStoryDetailsForTimelog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
     /**
     * @author Padmaja
@@ -163,9 +181,15 @@ class TimeReportController extends Controller
             $responseBean->data = $getTimelogData;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response; 
-        } catch (Exception $ex) {
-             Yii::log("TimeReportController:actionAddTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("TimeReportController:actionAddTimelog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
 
     }
     /**
@@ -184,18 +208,30 @@ class TimeReportController extends Controller
              $response = CommonUtility::prepareResponse($responseBean, "json");
              return $response;
 
-        } catch (Exception $ex) {
-             Yii::log("TimeReportController:actionRemoveTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("TimeReportController:actionRemoveTimelog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
 
     }
     public function actionGetTimelogDetailsBySlug(){
       try{ 
          $timelogData = json_decode(file_get_contents("php://input"));
         $timelogDetails=  TicketTimeLog::getTimeLogRecordsBySlug($timelogData->projectId,$timelogData->ticketId,$timelogData->slug);
-     }catch (Exception $ex) {
-         Yii::log("TimeReportController:actionGetTimelogDetailsBySlug::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-     } 
+     }catch (\Throwable $th) { 
+             Yii::error("TimeReportController:actionGetTimelogDetailsBySlug::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
 }
 

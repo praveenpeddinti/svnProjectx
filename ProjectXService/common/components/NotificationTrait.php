@@ -25,6 +25,8 @@ use common\models\mysql\{
     Projects
 };
 use yii;
+use yii\base\ErrorException;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -67,8 +69,9 @@ trait NotificationTrait {
                 $tickettypeValue = $tickettypeDetails['Name'];
                 return $tickettypeValue;
             }
-        } catch (Exception $ex) {
-            Yii::log("NotificationTrait:getFieldChangeValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:getFieldChangeValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -81,7 +84,8 @@ trait NotificationTrait {
      * @param type $activityUserId
      */
     public function saveActivity($ticketId, $projectId, $actionfieldName, $newValue, $activityUserId, $slug = "", $timezone) {
-        $oldValue = "";
+        try {
+            $oldValue = "";
         $action = "";
         $returnValue = "noupdate";
         if (empty($slug))
@@ -173,6 +177,11 @@ trait NotificationTrait {
             }
         }
         return $returnValue;
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:saveActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
+        
         //error_log("response-------".$v);
     }
 
@@ -216,8 +225,9 @@ trait NotificationTrait {
                         self::sendEmailNotification(array($notificationId), $projectId);
                     }
             }
-        } catch (Exception $ex) {
-            Yii::log("NotificationTrait:saveNotificationsWithMention::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:saveNotificationsToMentionOnly::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -339,8 +349,9 @@ trait NotificationTrait {
                 }
             EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedinUser,[array("ActionOn"=> "comment","OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue)],array("Slug"=>$slug,"CommentId"=>$tic->_id));
             self::sendEmailNotification($notificationIdsArray, $projectId);
-        } catch (Exception $ex) {
-            Yii::log("NotificationTrait:saveNotificationsForComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:saveNotificationsForComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -622,8 +633,9 @@ trait NotificationTrait {
             } else {
                 self::sendEmailNotification($notificationIds, $projectId);
             }
-        } catch (Exception $ex) {
-            Yii::log("NotificationTrait:saveNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:saveNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -855,8 +867,9 @@ trait NotificationTrait {
             // error_log("==Result Msg==".print_r($result_msg,1));
             // return $notifications;
             return $result_msg;
-        } catch (Exception $ex) {
-            Yii::log("NotificationTrait:getNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:getNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -877,8 +890,9 @@ trait NotificationTrait {
 
             shell_exec("touch $path/email_notifications.log");
             echo shell_exec("php /usr/share/nginx/www/ProjectXService/yii notifications/fork-email-notification-process '$notificationIds' '$projectId' '$bulkUpdate' >> $path/email_notifications.log &");
-        } catch (Exception $ex) {
-            Yii::log("NotificationTrait:sendEmailNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:sendEmailNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -1167,8 +1181,9 @@ EOD;
                 
                 
             }
-        } catch (Exception $ex) {
-            Yii::log("NotificationTrait:sendEmailNotificationFromBackground::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:sendEmailNotificationFromBackground::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -1339,8 +1354,9 @@ EOD;
                 $text_message = $project_logo . $user_message . $ticket_message . $activity . $msg . $view_ticket_message;
                 CommonUtility::sendEmail($mailingName, $resUser, $text_message, $subject);
         }
-            } catch (Exception $ex) {
-            Yii::log("NotificationTrait:sendEmailNotificationFromBackground::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:sendBulkEmailNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 

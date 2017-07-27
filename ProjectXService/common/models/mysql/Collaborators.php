@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class Collaborators extends ActiveRecord 
 {
@@ -38,18 +39,24 @@ class Collaborators extends ActiveRecord
          $qry = "select C.Id,C.UserName as Name,C.Email from ProjectTeam PT join Collaborators C on PT.CollaboratorId = C.Id where PT.ProjectId = $projectId";
          $data = Yii::$app->db->createCommand($qry)->queryAll();
          return $data;    
-        } catch (Exception $ex) {
-Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
        
     }
 
     public static function findByUsername($userData)
     {
-         
-        $qry = "select * from Collaborators where Email='".$userData->username."' And Password='".$userData->password."'";
-        $data = Yii::$app->db->createCommand($qry)->queryAll();
-        return $data;
+        try {
+           $qry = "select * from Collaborators where Email='".$userData->username."' And Password='".$userData->password."'";
+           $data = Yii::$app->db->createCommand($qry)->queryAll();
+           return $data; 
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:findByUsername::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
+        
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
@@ -70,31 +77,44 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
             }
             return $returnValue;
 
-        } catch (Exception $ex) {
-             Yii::log("Collabarator:getCollaboratorDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getCollaboratorDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
       
     }
      public static function getCollboratorByFieldType($fieldName,$value)
     {
        // error_log("==Value==".$value);
+       try {
         $value=(int)$value;
         $qry = "select * from Collaborators where `". $fieldName."`=$value";
         $data = Yii::$app->db->createCommand($qry)->queryOne();
         return $data;
+       } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getCollboratorByFieldType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
+       
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     public static function getCollabrators()
     {
+        try {
         $qry = "select * from Collaborators";
         $data = Yii::$app->db->createCommand($qry)->queryAll();
-        return $data;
+        return $data; 
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getCollabrators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
+       
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     public static function insertCollabrators($noofrecords)
     {   
-        
-         $comma=  ",";
+        try {
+           $comma=  ",";
         $qry = "INSERT INTO `Techo2_ProjectX`.`Collaborators`
             (
             `FirstName`,
@@ -121,7 +141,12 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
             }
         $final_query=$qry.$values;
         $data = Yii::$app->db->createCommand($final_query)->execute();
-        return $data;
+        return $data; 
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:insertCollabrators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
+         
     }
     
     /**
@@ -136,8 +161,9 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
          $data = Yii::$app->db->createCommand($qry)->queryAll();
          return $data;
             
-        } catch (Exception $ex) {
-            Yii::log("Collaborators:getFilteredProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getFilteredProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
        
     }
@@ -184,8 +210,9 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
                 return $user;
             }
             
-        } catch (Exception $ex) {
-
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:checkMatchedUsers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -206,8 +233,9 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
             $qry = "select C.Id,C.UserName as Name,C.Email,concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and ".$condition." C.UserName like '$searchValue%'";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
-        } catch (Exception $ex) {
-            Yii::log("Collaborators:getCollaboratorsForFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getCollaboratorsForFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -225,9 +253,9 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
             error_log("==query==".$qry);
             $data = Yii::$app->db->createCommand($qry)->queryOne();
             return $data;
-        }catch(Exception $ex)
-        {
-            Yii::log("Collaborators:getCollaboratorById::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $ex) {
+            Yii::error("Collaborators:getCollaboratorById::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -243,8 +271,9 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
             $data = Yii::$app->db->createCommand($qry)->queryOne();   
             return $data;
             
-        } catch (Exception $ex) {
-            Yii::log("Collaborators:getCollaboratorWithProfile::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getCollaboratorWithProfile::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     public static function getCollaboratorId($user)
@@ -254,8 +283,9 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
             $data = Yii::$app->db->createCommand($qry)->queryOne();   
             return $data;
             
-        } catch (Exception $ex) {
-            Yii::log("Collaborators:getCollaboratorWithProfile::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getCollaboratorId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -271,8 +301,9 @@ Yii::log("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getT
          $data = Yii::$app->db->createCommand($qry)->queryAll();
          return $data;
             
-        } catch (Exception $ex) {
-            Yii::log("Collaborators:getResponsibleProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getResponsibleProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
        
     }

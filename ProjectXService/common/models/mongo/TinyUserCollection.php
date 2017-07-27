@@ -12,7 +12,7 @@ namespace common\models\mongo;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-//use yii\db\ActiveRecord;
+use yii\base\ErrorException;
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
@@ -76,8 +76,9 @@ class TinyUserCollection extends ActiveRecord
         $userObj->insert();  
         unset($userObj);
         }
-        } catch (Exception $exc) {
-           error_log("error occured in model" . $exc->getMessage());
+        } catch (\Throwable $ex) {
+            Yii::error("TinyUserCollection:createUsers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -88,8 +89,9 @@ class TinyUserCollection extends ActiveRecord
                     ->where(['CollaboratorId' => (int) $follower]);
             $profile_pic = $query->one();
             return $profile_pic["ProfilePicture"];
-        } catch (Exception $ex) {
-            error_log("Error in Profile");
+        } catch (\Throwable $ex) {
+            Yii::error("TinyUserCollection:getProfileOfFollower::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 

@@ -17,6 +17,7 @@ use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
 use yii\web\IdentityInterface;
 use common\models\mongo\TicketCollection;
+use yii\base\ErrorException;
 
 class TicketArtifacts extends ActiveRecord {
 
@@ -58,8 +59,9 @@ class TicketArtifacts extends ActiveRecord {
               $collection->findAndModify(array("TicketId" => (int)$ticketNumber,"ProjectId"=>(int)$projectId), $newdata,array('new' => 1,"upsert"=>1));              
           }
             
-        } catch (Exception $ex) {
-        Yii::log("TicketArtifacts:createArtifactsRecord::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');    
+        } catch (\Throwable $ex) {
+            Yii::error("TicketArtifactsCollection:createArtifactsRecord::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 /**
@@ -77,8 +79,9 @@ class TicketArtifacts extends ActiveRecord {
         $ticketArtifactsDetails = $query->one();
 
         return $ticketArtifactsDetails;   
-        } catch (Exception $ex) {
-Yii::log("TicketArtifacts:getTicketArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');    
+        } catch (\Throwable $ex) {
+            Yii::error("TicketArtifactsCollection:getTicketArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
         
     }
@@ -99,9 +102,9 @@ Yii::log("TicketArtifacts:getTicketArtifacts::" . $ex->getMessage() . "--" . $ex
                     $res = $collection->update(array("TicketId" => (int) $ticketNumber, "ProjectId" => (int) $projectId), $newdata, array('new' => 1, "upsert" => 1));
                 }
             }
-        } catch (Exception $ex) {
-        Yii::log("TicketArtifacts:saveArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');    
-    
+        } catch (\Throwable $ex) {
+            Yii::error("TicketArtifactsCollection:saveArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 

@@ -11,6 +11,8 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
+
 
 class TicketType extends ActiveRecord 
 {
@@ -37,9 +39,9 @@ class TicketType extends ActiveRecord
         $query = "select Id,Name from TicketType where Id=".$id;
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
-        } catch (Exception $ex) {
-Yii::log("TicketType:getTicketType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("TicketType:getTicketType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
         
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -53,8 +55,9 @@ Yii::log("TicketType:getTicketType::" . $ex->getMessage() . "--" . $ex->getTrace
             $qry = "select * from TicketType";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
-        } catch (Exception $exc) {
-            Yii::log("StoryService:getTicketTypeList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("TicketType:getTicketTypeList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     

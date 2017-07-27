@@ -14,6 +14,7 @@ use Yii;
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use common\models\mysql\Collaborators;
+use yii\base\ErrorException;
 
 class NotificationCollection extends ActiveRecord 
 {
@@ -65,9 +66,9 @@ class NotificationCollection extends ActiveRecord
             ->where(["_id" => array('$in'=>$notificationIds)]);
             $notifications = $query->all();
             return $notifications;  
-        } catch (Exception $ex) {
-            Yii::log("NotificationCollection:getNotificationDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationCollection:getNotificationDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
      public static function getNotificationsCount($user)
@@ -79,9 +80,9 @@ class NotificationCollection extends ActiveRecord
             ->andWhere(['!=','ActivityFrom', (int)$user]);
             $notificationsCount=$query->count();
             return $notificationsCount;
-         } catch (Exception $ex) {
-            Yii::log("NotificationCollection:getNotificationsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+         } catch (\Throwable $ex) {
+            Yii::error("NotificationCollection:getNotificationsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
      }
     
@@ -101,9 +102,9 @@ class NotificationCollection extends ActiveRecord
             ->limit($limit);
             $notifications=$query->all();
             return $notifications;
-          } catch (Exception $ex) {
-            Yii::log("NotificationCollection:getNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+          } catch (\Throwable $ex) {
+            Yii::error("NotificationCollection:getNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
      }
     
@@ -123,9 +124,9 @@ class NotificationCollection extends ActiveRecord
             $notifications=NotificationCollection::getCollection();
             $notifications->update(array('_id'=>$notifyid,'NotifiedCollaborators.CollaboratorId'=>(int)$user), array('$set'=>array('NotifiedCollaborators.$.IsRead'=>1)));
             return;
-        }catch(Exception $ex)
-        {
-            Yii::log("NotificationCollection:deleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $ex) {
+            Yii::error("NotificationCollection:deleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -146,9 +147,9 @@ class NotificationCollection extends ActiveRecord
                 $notification->update(array('NotifiedCollaborators.CollaboratorId'=>(int)$user), array('$set'=>array('NotifiedCollaborators.$.IsRead'=>1)));
             }
             return;
-        }catch(Exception $ex)
-        {
-            Yii::log("NotificationCollection:deleteAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $ex) {
+            Yii::error("NotificationCollection:deleteAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     /**
@@ -167,9 +168,9 @@ class NotificationCollection extends ActiveRecord
            //  ->where(["ProjectId" => (int)$projectId]);
             $notification = $query->one();
             return $notification;  
-        } catch (Exception $ex) {
-            Yii::log("NotificationCollection:getNotificationDetail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationCollection:getNotificationDetail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
         }

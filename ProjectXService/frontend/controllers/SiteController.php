@@ -137,9 +137,15 @@ class SiteController extends Controller
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"xml");
         return $response;   
-        } catch (Exception $ex) {
-         Yii::log("SiteController:actionSampleResponse::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("SiteController:actionSampleResponse::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
        
     
     }
@@ -192,6 +198,7 @@ class SiteController extends Controller
                     $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::SUCCESS;
+                    $responseBean->statusCode = ResponseBean::SUCCESS;
                     $responseBean->message = "success";
                     $responseBean->data =    $collabaratorArr;
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
@@ -201,6 +208,7 @@ class SiteController extends Controller
                     $accesstoken="response";
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::SUCCESS;
+                    $responseBean->statusCode = ResponseBean::SUCCESS;
                     $responseBean->message = "success";
                     $responseBean->data =    $collabaratorArr;
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
@@ -211,6 +219,7 @@ class SiteController extends Controller
                     $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::SUCCESS;
+                    $responseBean->statusCode = ResponseBean::SUCCESS;
                     $responseBean->message = "success";
                     $responseBean->data =    $collabaratorArr;
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
@@ -220,15 +229,22 @@ class SiteController extends Controller
                     $response='failure';
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::FAILURE;
+                    $responseBean->statusCode = ResponseBean::SUCCESS;
                     $responseBean->message = "FAILURE";
                     $responseBean->data =    $response;
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
            }
        
             
-        } catch (Exception $ex) {
-            Yii::log("SiteController:UserAuthentication::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        }  catch (\Throwable $th) { 
+             Yii::error("SiteController:actionUserAuthentication::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
  
     /**
@@ -255,13 +271,19 @@ class SiteController extends Controller
             $collabaratorToken=$collabaratorJson->userInfo->token;
             $updateStatus  = ServiceFactory::getCollaboratorServiceInstance()->updateStatusCollabarator($collabaratorToken);
             $responseBean     = new ResponseBean;
-            $responseBean->status = ResponseBean::SUCCESS;
+            $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = "success";
             $responseBean->data =    $updateStatus;
             return  $response = CommonUtility::prepareResponse($responseBean,"json");
-        } catch (Exception $ex) {
-             Yii::log("SiteController:UpdateCollabaratorStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        }  catch (\Throwable $th) { 
+             Yii::error("SiteController:actionUpdateCollabaratorStatus::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
        
         
     } 
@@ -380,28 +402,40 @@ class SiteController extends Controller
         $collaborators = $coll->getCollabrators();
         $response=  TinyUserCollection::createUsers($collaborators);
         $responseBean = new ResponseBean;
-        $responseBean->status = ResponseBean::SUCCESS;
+        $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = "success";
         $responseBean->data = $collaborators;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;   
-        } catch (Exception $ex) {
-         Yii::log("SiteController:actionCollaborators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        }  catch (\Throwable $th) { 
+             Yii::error("SiteController:actionCollaborators::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
     
     public function actionInsertCollaborators(){
           try{
         $collaborators = User::insertCollabrators(10000);
         $responseBean = new ResponseBean;
-        $responseBean->status = ResponseBean::SUCCESS;
+        $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = "success";
         $responseBean->data = $collaborators;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;   
-        } catch (Exception $ex) {
-         Yii::log("SiteController:actionCollaborators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        }  catch (\Throwable $th) { 
+             Yii::error("SiteController:actionInsertCollaborators::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
       /**
      * @author Padmaja
@@ -419,22 +453,28 @@ class SiteController extends Controller
             $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag,$projectId,$pageLength,$userId); 
             if(empty($searchData['ticketCollection']) && empty($searchData['ticketComments']) && empty($searchData['ticketArtifacts'])&& empty($searchData['tinyUserData'])){
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::FAILURE;
-                $responseBean->message = "failure";
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "no result found";
                 $responseBean->data = $searchData;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
            
             }else{
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $searchData;
                 $response = CommonUtility::prepareResponse($responseBean,"json");
             }
             return $response;
-        } catch (Exception $ex) {
-              Yii::log("SiteController:actionGlobalSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("SiteController:actionGlobalSearch::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
    /**
     * @author Padmaja
@@ -450,22 +490,28 @@ class SiteController extends Controller
             error_log("prjectctcccccc".print_r($getProjectDetails,1));
             if(!empty($getProjectDetails)){
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $getProjectDetails;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }else{
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->statusCode = ResponseBean::FAILURE;
                 $responseBean->message = "failure";
                 $responseBean->data = $getProjectDetails;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }
             return $response;
             error_log("resonse------------".print_r($response,1));
-        } catch (Exception $ex) {
-             Yii::log("SiteController:actionVerifyingProjectName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("SiteController:actionVerifyingProjectName::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
      /**
     * @author Padmaja
@@ -486,7 +532,7 @@ class SiteController extends Controller
             }
              if($getStatus == 'failure' || $savingStatus=='failure'){
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->statusCode = ResponseBean::FAILURE;
                 $responseBean->message = "failure";
                 $responseBean->data = $getlastIdDetails;
                // $responseBean->lastProjectDetails =$getlastIdDetails;
@@ -494,7 +540,7 @@ class SiteController extends Controller
             }else{
                 EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $getlastIdDetails;
                // $responseBean->lastProjectDetails =$getlastIdDetails;
@@ -502,9 +548,15 @@ class SiteController extends Controller
          
             }
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("SiteController:actionsaveProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("SiteController:actionSaveProjectDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
         /**
     * @author Padmaja
@@ -526,7 +578,7 @@ class SiteController extends Controller
            // error_log("---tttt----".print_r($projectInfo,1));
             if(!empty($projectInfo['ProjectwiseInfo']) || empty($projectInfo['ProjectwiseInfo'])){
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
 //                error_log("------tttt-------".print_r($projectInfo,1));
                 if(!empty($projectInfo['ProjectwiseInfo']) || !empty($projectInfo['ActivityData'])){
@@ -538,7 +590,7 @@ class SiteController extends Controller
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }else{
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->statusCode = ResponseBean::FAILURE;
                 $responseBean->message = "failure";
                 $responseBean->data = $projectInfo;
                 $responseBean->totalProjectCount = $totalProjectCount;
@@ -546,9 +598,15 @@ class SiteController extends Controller
             }
             return $response;
             
-        } catch (Exception $ex) {
-            Yii::log("SiteController:actionScrollProjectsByUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("SiteController:actionGetAllProjectsByUser::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
         
     }
          /**
@@ -564,21 +622,27 @@ class SiteController extends Controller
             $projectsInfo=ServiceFactory::getCollaboratorServiceInstance()->getProjectNameByUserId($userId);
               if(!empty($projectsInfo)){
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::SUCCESS;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $projectsInfo;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }else{
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->statusCode = ResponseBean::FAILURE;
                 $responseBean->message = "failure";
                 $responseBean->data = $projectsInfo;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }
             return $response;
-       } catch (Exception $ex) {
-            Yii::log("SiteController:actionGetProjectNameByUserid::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-       } 
+       } catch (\Throwable $th) {
+            Yii::error("SiteController:actionGetProjectNameByUserid::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
     }
     
 //    public function actionGetActivitiesByProjectid(){

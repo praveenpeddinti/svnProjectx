@@ -9,6 +9,7 @@ use common\models\mysql\BucketType;
 use common\models\mysql\BucketStatus;
 use common\models\mongo\AccessTokenCollection;
 use Yii;
+use yii\base\ErrorException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -36,8 +37,9 @@ class BucketService {
                 //break;
             } 
             return $finalData;
-        } catch (Exception $ex) {
-            Yii::log("BucketService:getBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:getBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -53,8 +55,9 @@ class BucketService {
         try{
          $bucketModel = new Bucket();
          return $bucketModel->getBucketTypeFilter($projectId,$type);
-        } catch (Exception $ex) {
-            Yii::log("BucketService:getBucketTypeFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:getBucketTypeFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -68,8 +71,9 @@ class BucketService {
         try{
          $bucketModel = new Bucket();
          return $bucketModel->checkBucketName($bucketName,$projectId,$btype);
-        } catch (Exception $ex) {
-            Yii::log("BucketService:checkBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:checkBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     /**
@@ -82,8 +86,9 @@ class BucketService {
         try{
          $bucketModel = new Bucket();
          return $bucketModel->saveBucketDetails($bucketData);
-        } catch (Exception $ex) {
-            Yii::log("BucketService:getSaveBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:getSaveBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -98,8 +103,9 @@ class BucketService {
         try{
          $bucketModel = new Bucket();
          return $bucketModel->checkUpdateBucketName($bucketName,$bucketId,$projectId,$bType,$bucketRole);
-        } catch (Exception $ex) {
-            Yii::log("BucketService:checkUpdateBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:checkUpdateBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     /**
@@ -117,8 +123,9 @@ class BucketService {
           error_log("OLd_bucket_details___".print_r($Oldbucket,1));
           return $response;
           
-        } catch (Exception $ex) {
-            Yii::log("BucketService:updateBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:updateBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     /**
@@ -131,8 +138,9 @@ class BucketService {
         try{
          $bucketModel = new Bucket();
          return $bucketModel->getBucketChangeStatus($projectId,$bucketId,$StatusType);
-        } catch (Exception $ex) {
-            Yii::log("BucketService:getBucketChangeStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:getBucketChangeStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     

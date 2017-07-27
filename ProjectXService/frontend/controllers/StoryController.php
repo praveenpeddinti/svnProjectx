@@ -76,11 +76,14 @@ class StoryController extends Controller
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
-         } catch (ErrorException $th) { 
-                                                  
-             echo $th->getMessage();
-               echo $th->getCode();
-    // Yii::log("StoryController:actionGetTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'error', 'application');
+         } catch (\Throwable $th) { 
+             Yii::error("StoryController:actionGetTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         } 
        
     }
@@ -106,8 +109,14 @@ class StoryController extends Controller
             $responseBean->totalCount = $totalCount;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetAllStoryDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetAllStoryDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode =ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage() ;//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
@@ -134,8 +143,14 @@ class StoryController extends Controller
             $responseBean->data = $data;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetSubTaskDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     /**
@@ -164,8 +179,14 @@ class StoryController extends Controller
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
-        } catch (Exception $ex) {
-     Yii::log("StoryController:actionEditTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionEditTicket::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -206,9 +227,14 @@ class StoryController extends Controller
             $responseBean->data = "success";
             $response = CommonUtility::prepareResponse($responseBean,"json");
             return $response;
-        } catch (Exception $ex) {
-            error_log("the save ticket error " . ($ex->getMessage()));
-            Yii::log("StoryController:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:saveTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
@@ -266,8 +292,14 @@ class StoryController extends Controller
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;   
        
-        } catch (Exception $ex) {
-         Yii::log("StoryController:actionNewStoryTemplate::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionNewStoryTemplate::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
@@ -285,8 +317,14 @@ class StoryController extends Controller
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
-        } catch (Exception $ex) {
-     Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetMyTickets::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     /*
@@ -302,30 +340,36 @@ class StoryController extends Controller
           //  $responseData['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldDataById(5);
             if($postFieldData->fieldId == 5 || $postFieldData->fieldId == 11){
             // get all assigned to details,stakeholeders
-                $responseData['getFieldDetails'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postFieldData->projectId);//$projectId
+                $responseData = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postFieldData->projectId);//$projectId
             }else if($postFieldData->fieldId == 3){
                 // get all Bucket details
-                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($postFieldData->projectId);//$projectId
+                $responseData = ServiceFactory::getStoryServiceInstance()->getBucketsList($postFieldData->projectId);//$projectId
             }else if($postFieldData->fieldId == 4){
             //get all planlevel details
-                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
+                $responseData = ServiceFactory::getStoryServiceInstance()->getPlanLevelList();
             }else if($postFieldData->fieldId == 7){
             //get all status details
-                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList($postFieldData->workflowType,$postFieldData->statusId);
+                $responseData = ServiceFactory::getStoryServiceInstance()->getStoryWorkFlowList($postFieldData->workflowType,$postFieldData->statusId);
             }else if($postFieldData->fieldId == 6){
             //get all priority details
-                $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getPriorityList();
+                $responseData = ServiceFactory::getStoryServiceInstance()->getPriorityList();
             }else if($postFieldData->fieldId == 12){
             //get all ticket type details
-             $responseData['getFieldDetails'] = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();       
+             $responseData = ServiceFactory::getStoryServiceInstance()->getTicketTypeList();       
             }
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $responseData;
-            $response = CommonUtility::prepareResponse($responseData,"json");
+            $response = CommonUtility::prepareResponse($responseBean,"json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetAssignedCollabarators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetFieldDetailsByFieldId::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
    /**
@@ -364,8 +408,14 @@ class StoryController extends Controller
             $responseBean->data = "success";
             $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
-        } catch (Exception $ex) {
-        Yii::log("StoryController:actionUpdateTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionUpdateTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -376,7 +426,7 @@ class StoryController extends Controller
      */
     public function actionUpdateStoryFieldInline(){
         try{
-            $fieldData = json_decode(file_get_contents("php://input"));
+            $fieldData = json_decode(file_get_contents1("php://input"));
             $getUpdateStatus = ServiceFactory::getStoryServiceInstance()->updateStoryFieldInline($fieldData);
             if($getUpdateStatus !='failure'){
                 $responseBean = new ResponseBean();
@@ -393,8 +443,14 @@ class StoryController extends Controller
                 $response = CommonUtility::prepareResponse($responseBean,"json");
             }        
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionUpdateStoryFieldInline::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionUpdateStoryFieldInline::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message =  ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
 
         
@@ -429,9 +485,14 @@ class StoryController extends Controller
             $responseBean->totalCount = $totalCount;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetMyTicketsDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        }catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetMyTicketsDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
 
     }
@@ -456,8 +517,14 @@ class StoryController extends Controller
             $responseBean->data = $team;
             $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
-        } catch (Exception $ex) {
-             Yii::log("StoryController:actionGetCollaborators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetCollaborators::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
 
     }
@@ -483,15 +550,23 @@ class StoryController extends Controller
             $responseBean->data = $followerlist;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetCollaboratorsforFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetCollaboratorsforFollow::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
 
    public function actionSubmitComment(){
-       $comment_post_data=json_decode(file_get_contents("php://input"));
-       error_log(print_r($comment_post_data,1));
+       
+       try {
+          $comment_post_data=json_decode(file_get_contents("php://input"));
+          error_log(print_r($comment_post_data,1));
        
                 if(isset($comment_post_data->Comment->OrigianalCommentorId)){
                 $comment_post_data->Comment->OriginalCommentorId=$comment_post_data->Comment->OrigianalCommentorId;
@@ -502,10 +577,22 @@ class StoryController extends Controller
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $returnData;
             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response; 
+       } catch (\Throwable $th) {
+            Yii::error("StoryController:actionSubmitComment::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
+        }
+       
    }
    
    public function actionDeleteComment(){
+       
+       try {
        $comment_post_data=json_decode(file_get_contents("php://input"));
        error_log(print_r($comment_post_data,1));
        $returnData = ServiceFactory::getStoryServiceInstance()->removeComment($comment_post_data);
@@ -514,7 +601,17 @@ class StoryController extends Controller
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = "success";
             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response; 
+       } catch (\Throwable $th) {
+            Yii::error("StoryController:actionDeleteComment::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
+        }
+      
    }
     /**
      * @author Moin Hussain
@@ -530,8 +627,14 @@ class StoryController extends Controller
             $responseBean->data = $data;
             $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
-        } catch (Exception $ex) {
- Yii::log("StoryController:actionGetTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetTicketActivity::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
@@ -567,8 +670,14 @@ class StoryController extends Controller
             $responseBean->data = $followerData;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionAddFollower::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionFollowTicket::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
@@ -589,8 +698,14 @@ class StoryController extends Controller
             $responseBean->data = $UnfollowData;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionAddFollower::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionUnfollowTicket::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -618,8 +733,14 @@ class StoryController extends Controller
                 $response = CommonUtility::prepareResponse($responseBean,"json");
             } 
              return $response;
-        } catch (Exception $ex) {
-             Yii::log("StoryController:actionCreateChildTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $th) {
+            Yii::error("StoryController:actionCreateChildTask::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
@@ -649,8 +770,14 @@ class StoryController extends Controller
            // $responseBean->totalCount = $totalCount;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetAllTicketDetailsForSearch::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
       /**
@@ -681,8 +808,14 @@ class StoryController extends Controller
             $responseBean->data = $responseData;
             $response = CommonUtility::prepareResponse($responseBean, "json");
              return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionUpdateRelatedTasks::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionUpdateRelatedTasks::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
 
     }
@@ -708,8 +841,14 @@ class StoryController extends Controller
             $responseBean->data = $response;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionInsertTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionInsertTimeLog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
@@ -732,8 +871,14 @@ class StoryController extends Controller
             $responseBean->data = $getTimelog;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetWorkLog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -778,8 +923,14 @@ class StoryController extends Controller
             $responseBean->data = $Artifacts;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetMyTicketAttachments::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetMyTicketAttachments::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -812,8 +963,14 @@ class StoryController extends Controller
             $responseBean->data = $response;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionUnRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionUnRelateTask::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
        /**
@@ -833,8 +990,14 @@ class StoryController extends Controller
             $responseBean->data = $relatedTicketsInfo;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetAllRelatedTasks::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetAllRelatedTasks::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 
@@ -859,8 +1022,14 @@ class StoryController extends Controller
             $responseBean->data = $preparedFilters;
             $response = CommonUtility::prepareResponse($responseBean, "json");
       return $response;  
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetFilterOptions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetFilterOptions::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
         
     }
@@ -875,10 +1044,11 @@ class StoryController extends Controller
      */
     public function actionDeleteNotification()
     {
-        $notifyData=json_decode(file_get_contents("php://input"));
+       
         
         try
         {
+            $notifyData=json_decode(file_get_contents("php://input"));
             NotificationCollection::deleteNotification($notifyData);
             
             $projectId=$notifyData->projectId;
@@ -907,8 +1077,14 @@ class StoryController extends Controller
             $responseBean->data = $responseData ;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionDeleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionDeleteNotification::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -919,10 +1095,9 @@ class StoryController extends Controller
      */
     public function actionDeleteNotifications()
     {
-        $notifyData=json_decode(file_get_contents("php://input"));
-        
         try
         {
+            $notifyData=json_decode(file_get_contents("php://input"));
             NotificationCollection::deleteAllNotifications($notifyData);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -930,8 +1105,14 @@ class StoryController extends Controller
             $responseBean->data = true;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionDeleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionDeleteAllNotifications::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -970,9 +1151,14 @@ class StoryController extends Controller
                 $data_array['statusMessage'] = 'No image uploaded';
             }
             return json_encode($data_array);
-        } catch (Exception $ex) {
-            error_log("catch".$ex->getMessage(). "--" . $ex->getTraceAsString());
-            Yii::log("StoryController:actionUploadCommentArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionUploadCommentArtifacts::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
 //    Ticket #91 ended
@@ -984,6 +1170,7 @@ class StoryController extends Controller
      */
       public function actionGetProjectDetails(){
         try{
+           
         $project_data = json_decode(file_get_contents("php://input"));
         $data = ServiceFactory::getStoryServiceInstance()->getProjectDetailsByName($project_data->projectName);
             $responseBean = new ResponseBean();
@@ -997,8 +1184,14 @@ class StoryController extends Controller
         $responseBean->data = $data;
         $response = CommonUtility::prepareResponse($responseBean,"json");
         return $response;
-        } catch (Exception $ex) {
-     Yii::log("StoryController:actionGetProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetProjectDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -1019,8 +1212,14 @@ class StoryController extends Controller
             $responseBean->data = $followerlist;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetTicketFollowersList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetTicketFollowersList::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -1052,9 +1251,14 @@ class StoryController extends Controller
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
             
-        } catch (Exception $ex) {
-            Yii::log("StoryController:actionGetPreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-            
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetPreference::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
         }
     }
     
@@ -1078,9 +1282,15 @@ class StoryController extends Controller
          $responseBean->data = $updatedData;
          $response = CommonUtility::prepareResponse($responseBean, "json");
          return $response;      
-    } catch (Exception $ex) {
-       Yii::log("StoryController:getUpdatedTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
-    }
+    } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetUpdatedTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
     }
 
 }

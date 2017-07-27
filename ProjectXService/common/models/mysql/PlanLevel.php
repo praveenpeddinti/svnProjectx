@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class PlanLevel extends ActiveRecord 
 {
@@ -37,9 +38,10 @@ class PlanLevel extends ActiveRecord
          $query = "select * from PlanLevel where Id=".$priorityId;
          $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
-         } catch (Exception $ex) {
-    Yii::log("PlanLevel:getPlanLevelDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-         }
+         } catch (\Throwable $ex) {
+            Yii::error("PlanLevel:getPlanLevelDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
        
     }
       /**
@@ -51,8 +53,9 @@ class PlanLevel extends ActiveRecord
             $qry = "select * from PlanLevel";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
-        } catch (Exception $exc) {
-            Yii::log("PlanLevel:getPlanLevel::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("PlanLevel:getPlanLevelList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     

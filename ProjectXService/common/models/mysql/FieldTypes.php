@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class FieldTypes extends ActiveRecord 
 {
@@ -38,8 +39,9 @@ class FieldTypes extends ActiveRecord
         $query = "select Name from FieldTypes where Id=".$fieldId;
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
-        } catch (Exception $ex) {
-     Yii::log("StoryFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("FieldType:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
        
     }

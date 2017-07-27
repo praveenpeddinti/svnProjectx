@@ -17,6 +17,7 @@ use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 
 
@@ -78,8 +79,9 @@ class AccessTokenCollection extends ActiveRecord
                 ->limit(1);
             $models = $query->all();
             return $models;
-        } catch (Exception $ex) {
-             Yii::log("AccessTokenCollection:checkCollabaratorStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("AccessTokenCollection:checkCollabaratorStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
         
 
@@ -105,8 +107,9 @@ class AccessTokenCollection extends ActiveRecord
                 $returnValue = $ActiveUsersObj->_id;
             }
             return $returnValue; 
-        } catch (Exception $ex) {
-            Yii::log("AccessTokenCollection:saveAccesstokenData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("AccessTokenCollection:saveAccesstokenData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
          
     }
@@ -122,8 +125,9 @@ class AccessTokenCollection extends ActiveRecord
             $updateSatus= AccessTokenCollection::getCollection();
             $returnStatus = $updateSatus->update( array("Accesstoken"=> $collabaratortoken ), array('Status' => (int)0,'UpdatedBy'=>(String)'User'));
             return $returnStatus;
-        } catch (Exception $ex) {
-             Yii::log("AccessTokenCollection:updateStatusByToken::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("AccessTokenCollection:updateStatusByToken::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
 
     }

@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class StoryCustomFields extends ActiveRecord 
 {
@@ -39,8 +40,9 @@ class StoryCustomFields extends ActiveRecord
         error_log($query);
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
-        } catch (Exception $ex) {
-     Yii::log("StoryCustomFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("StoryCustomFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
     }

@@ -4,6 +4,7 @@ namespace common\components;
 use yii;
 use common\models\mongo\EventCollection;
 use common\models\bean\EventBean;
+use yii\base\ErrorException;
 
 trait EventTrait{
       /**
@@ -26,8 +27,9 @@ trait EventTrait{
             $evtobj->ShowInActivity=$showInActivity;
             $evtobj->Status=$status;
             EventCollection::saveEvent($evtobj);
-        } catch (Exception $ex) {
-            Yii::log("EventTrait:saveEvent::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("EventTrait:saveEvent::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
        
       } 

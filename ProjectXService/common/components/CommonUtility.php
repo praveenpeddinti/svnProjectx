@@ -4,7 +4,7 @@ namespace common\components;
 use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts,EventCollection};
 use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields,ProjectTeam,Collaborators};
 use Yii;
-
+use yii\base\ErrorException;
 use common\components\ApiClient; //only for testing purpose
 use common\components\Email; //only for testing purpose
 include_once 'ElasticEmailClient.php';
@@ -47,8 +47,9 @@ class CommonUtility {
             $ext = substr($str, $i + 1, $l);
             //$ext .= '_'.$_SESSION['user']->id;
             return $ext;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:getExtension::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:getExtension::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -76,8 +77,9 @@ class CommonUtility {
             } else {
                 return $time_object->format('d-m-Y H:i:s');
             }
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:convert_time_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:convert_time_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 static function validateDateFormat($date, $format = 'M-d-Y')
@@ -130,8 +132,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             } else {
                 return $time_object->format('M-d-Y');
             }
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:convert_date_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:convert_date_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -303,8 +306,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 }
             }
             return $truncate;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:truncateHtml::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:truncateHtml::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -451,8 +455,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $ticketDetails["Title"] = htmlspecialchars_decode($ticketDetails["Title"]); 
             
             return $ticketDetails;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:prepareTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -580,8 +585,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
            
 
             return $ticketDetails;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:prepareTicketEditDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -673,9 +679,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
               } 
               $returnData = array("description"=>$description,"ArtifactsList"=>$artifactsList,"UsersList"=>$userlist);//modified by Ryan,added UsersList as key
               return $returnData;
-      } catch (Exception $ex) {
-Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-      }
+      } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
   }
   
   /**
@@ -712,9 +719,10 @@ Yii::log("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->g
 
               } 
               return $description;
-      } catch (Exception $ex) {
-Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-      }
+      } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
   }
   
   
@@ -739,8 +747,9 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                 "Extension" => $extension
             );
             return $artifactData;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:getArtifact::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:getArtifact::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -924,8 +933,9 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
            
            // error_log("----final data ---".print_r($ticketDetails[0],1));
             return $ticketDetails;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -949,8 +959,9 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                     CommonUtility::prepareActivityProperty($property,$projectId,$timezone,$poppedFromChild);
                 }
             }
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:prepareActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -1112,8 +1123,9 @@ Yii::log("CommonUtility:refineDescriptionForEmail::" . $ex->getMessage() . "--" 
                 $property["NewValue"] = "-none-";
             }
             return $property;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareActivityProperty::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:prepareActivityProperty::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 
@@ -1174,10 +1186,9 @@ $text_message=$html . $text_message .
             // error_log("in send mail");
 //        echo("5. In CommonUtiltiy sendEmail completed..\n");
 //        echo("6. Sending email background job has completed\n");
-        }catch(Exception $ex){
-           echo("Exception:In CommonUtiltiy sendEmail failed..".$ex->getMessage()."\n");
-           Yii::log("CommonUtility:sendEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        }catch (\Throwable $ex) {
+            Yii::error("CommonUtility:sendEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
    /**
@@ -1718,8 +1729,9 @@ $text_message=$html . $text_message .
          
             return $getCollectionData;
  
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:getAllDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:getAllDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -1750,8 +1762,9 @@ $text_message=$html . $text_message .
              $temp=array('type'=>'','filterValue'=>array());
            }
            return $refinedFilter;
-        }catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareFilterOption::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $ex) {
+            Yii::error("CommonUtility:prepareFilterOption::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
  
 }
@@ -1768,10 +1781,10 @@ public static function filterFollowers($followers){
                 }
              );
              return $followers;
-    } catch (Exception $ex) {
-         Yii::log("CommonUtility:filterFollowers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
-    }
+    } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:filterFollowers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
 }
 public static function getUniqueArrayObjects($arrayOfObjects){
     try{
@@ -1787,10 +1800,10 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                 }
              );
              return $uniqueArrayObjects;
-    } catch (Exception $ex) {
-         Yii::log("CommonUtility:getUniqueArrayObjects::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
-    }
+    } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:getUniqueArrayObjects::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
 }
 
     /**
@@ -1816,8 +1829,9 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             unset($ticketDetails["CreatedOn"]);
             unset($ticketDetails["UpdatedOn"]);
             return $ticketDetails["Followers"];
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareFollowerDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:prepareFollowerDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -1916,8 +1930,9 @@ public static function getUniqueArrayObjects($arrayOfObjects){
         }
         //  error_log("----final data---".print_r($finalData,1));     
             return $finalData;
-        } catch (Exception $ex) {
-            Yii::log("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:prepareDashboardDetailsTemp::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     /**
@@ -1987,9 +2002,9 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                 }
              }
              return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails,'ProjectwiseInfo'=>$prepareDetails);  
-        } catch (Exception $ex) {
-                Yii::log("TicketCollection:getTicketDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        }catch (\Throwable $ex) {
+            Yii::error("CommonUtility:getTicketDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
          
     }
@@ -2025,9 +2040,9 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                       array_push($prepareDetails,$projectInfo);
                     }
                     return $prepareDetails;
-             } catch (Exception $ex) {
-                Yii::log("TicketCollection:getProjectDeatils::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+             } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:getAllProjectDetailsByUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
       /**
@@ -2066,8 +2081,9 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             $totalProjectCount=count($totalProjects);
             return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails,'ProjectwiseInfo'=>$prepareDetails,'TotalProjectCount'=>$totalProjectCount);  
             
-        } catch (Exception $ex) {
-            Yii::log("TicketCollection:getLastProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtility:getLastProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
         
     }

@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class MapListCustomStoryFields extends ActiveRecord 
 {
@@ -38,8 +39,9 @@ class MapListCustomStoryFields extends ActiveRecord
         $query = "select Id,ListOption from MapListCustomStoryFields where Id=".$valueId." and StoryFieldId=".$customFieldId;
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
-        } catch (Exception $ex) {
-     Yii::log("MapListCustomStoryFields:getListValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("MapListCustomerStoryFields:getListValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
        
     }

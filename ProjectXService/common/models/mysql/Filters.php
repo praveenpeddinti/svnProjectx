@@ -12,6 +12,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 
 class Filters extends ActiveRecord 
@@ -39,8 +40,9 @@ class Filters extends ActiveRecord
         $query = "select Id,Name,Type,ShowChild from Filters where Status = 1 Order by Position asc";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;  
-        } catch (Exception $ex) {
-     Yii::log("Bucket:getAllActiveFilters::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("Filters:getAllActiveFilters::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
        
     }

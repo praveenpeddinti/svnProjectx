@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class Priority extends ActiveRecord 
 {
@@ -37,9 +38,10 @@ class Priority extends ActiveRecord
          $query = "select * from Priority where Id=".$priorityId;
          $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
-         } catch (Exception $ex) {
-    Yii::log("Priority:getPriorityDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-         }
+         } catch (\Throwable $ex) {
+            Yii::error("Priority:getPriorityDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
        
     }
      /**
@@ -51,8 +53,9 @@ class Priority extends ActiveRecord
             $qry = "select * from Priority";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
-        } catch (Exception $exc) {
-            Yii::log("Priority:getPriorityList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $ex) {
+            Yii::error("Priority:getPriorityList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     

@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class Projects extends ActiveRecord 
 {
@@ -37,11 +38,11 @@ class Projects extends ActiveRecord
         $query = "select PId,ProjectName,CreatedBy,CreatedOn from Projects where PId=".$projectId;
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;   
-        } catch (Exception $ex) {
-Yii::log("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
     /**
@@ -55,11 +56,11 @@ Yii::log("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->ge
         $query = "select PId,ProjectName from Projects where ProjectName='$projectName';";
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;   
-        } catch (Exception $ex) {
-Yii::log("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+             throw new ErrorException('Something went wrong'); 
+             Yii::error("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
         }
        
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
         /**
      * @author Padmaja

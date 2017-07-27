@@ -81,9 +81,15 @@ class BucketController extends Controller
             $responseBean->data = $bucketDetails;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
-        } catch (Exception $ex) {
-            Yii::log("BucketController:actionGetAllBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("BucketController:actionGetAllBucketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
     
     /**
@@ -101,9 +107,15 @@ class BucketController extends Controller
             $responseBean->data = $bucketCreationTeam;
             $response = CommonUtility::prepareResponse($responseBean,"json");
       return $response;  
-        } catch (Exception $ex) {
-            Yii::log("BucketController:actionGetFilterOptions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("BucketController:actionGetResponsibleCollaborators::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
     
     /**
@@ -122,9 +134,15 @@ class BucketController extends Controller
             $responseBean->totalCount = 'New';
             $response = CommonUtility::prepareResponse($responseBean,"json");
       return $response;  
-        } catch (Exception $ex) {
-            Yii::log("BucketController:actionGetFilterOptions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("BucketController:actionGetBucketFilters::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
     
     /**
@@ -165,9 +183,15 @@ class BucketController extends Controller
             }
            
         //    error_log(count($postData->data->notifyEmail)."==save bucket details ------".count($postData->data->sendReminder));
-        } catch (Exception $ex){
-           Yii::log("BucketController:actionSaveBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("BucketController:actionSaveBucketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
     
     
@@ -206,9 +230,15 @@ class BucketController extends Controller
             }
            
         //    error_log(count($postData->data->notifyEmail)."==save bucket details ------".count($postData->data->sendReminder));
-        } catch (Exception $ex){
-           Yii::log("BucketController:actionSaveBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application'); 
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("BucketController:actionUpdateBucketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
     
     /**
@@ -235,9 +265,15 @@ class BucketController extends Controller
             }
         
       return $response;  
-        } catch (Exception $ex) {
-            Yii::log("BucketController:actionGetBucketChangeStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        } catch (\Throwable $th) { 
+             Yii::error("BucketController:actionGetBucketChangeStatus::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
 }
 

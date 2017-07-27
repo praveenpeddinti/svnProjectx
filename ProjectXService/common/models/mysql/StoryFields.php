@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
 
 class StoryFields extends ActiveRecord 
 {
@@ -38,8 +39,9 @@ class StoryFields extends ActiveRecord
         $query = "select sf.*,ft.Name from StoryFields sf join FieldTypes ft on sf.Type=ft.Id  where sf.".$col."='".$fieldId."'";
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
-        } catch (Exception $ex) {
-     Yii::log("StoryFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("StoryFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
        
     }
@@ -57,8 +59,9 @@ class StoryFields extends ActiveRecord
             $qry = "select sf.*,ft.Name from StoryFields sf join FieldTypes ft on sf.Type=ft.Id";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
-        } catch (Exception $exc) {
-            Yii::log("StoryFields:getStoryFieldList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("StoryFields:getStoryFieldList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     /**
@@ -71,8 +74,9 @@ class StoryFields extends ActiveRecord
             $qry = "select sf.*,ft.`Name` from StoryFields sf join FieldTypes ft on sf.Type=ft.Id where sf.Id in (4,6)";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
-        } catch (Exception $exc) {
-            Yii::log("StoryFields:getNewTicketStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("StoryFields:getNewTicketStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     

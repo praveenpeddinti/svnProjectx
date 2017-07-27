@@ -12,6 +12,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\data\ActiveDataProvider;
+use yii\base\ErrorException;
 
 class ProjectTeam extends ActiveRecord 
 {
@@ -56,8 +57,9 @@ class ProjectTeam extends ActiveRecord
             $query="select count(CollaboratorId) as TeamCount from ProjectTeam where ProjectId=".$projectId;
             $count = Yii::$app->db->createCommand($query)->queryOne();
             return $count;  
-        } catch (Exception $ex) {
-             Yii::log("ProjectTeam:getProjectTeamCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("ProjectTeam:getProjectTeamCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
           /**
@@ -77,8 +79,9 @@ class ProjectTeam extends ActiveRecord
                $returnValue = 'success';   
             }
            return $returnValue ;
-        } catch (Exception $ex) {
-            Yii::log("ProjectTeam:savingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("ProjectTeam:saveProjectTeamDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
        
    }
@@ -92,9 +95,10 @@ class ProjectTeam extends ActiveRecord
            $query = "select * from ProjectTeam where CollaboratorId=$collabaratorId";
            $projectcount = Yii::$app->db->createCommand($query)->queryAll();
            return $projectcount;  
-       } catch (Exception $ex) {
-            Yii::log("ProjectTeam:getProjectsCountByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-       }
+       } catch (\Throwable $ex) {
+            Yii::error("ProjectTeam:getProjectsCountByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
    }
     /**
      * @author Padmaja
@@ -116,9 +120,10 @@ class ProjectTeam extends ActiveRecord
     ]);
         return  $Model= $DataProvider->getModels();
 
-       } catch (Exception $ex) {
-            Yii::log("ProjectTeam:getProjectsCountByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-       }
+       } catch (\Throwable $ex) {
+            Yii::error("ProjectTeam:getAllProjects::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
+        }
    } 
 }
 

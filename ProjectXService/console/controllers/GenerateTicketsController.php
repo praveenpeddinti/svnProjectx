@@ -171,8 +171,9 @@ class GenerateTicketsController extends Controller
 //         echo "\n";
 //         echo print_r($Team,1);
          echo "---------------Completed-----------------\n";
-        }catch(yii\console\Exception $ex){
-            Yii::log("GenerateTicketsController:actionIndex::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            echo "Exception in GeneratesTicketController::actionIndex ".$ex->getMessage();
+            Yii::error("GeneratesTicketController:actionIndex::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     

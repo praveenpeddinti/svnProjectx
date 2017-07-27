@@ -36,7 +36,6 @@ class NotificationsController extends Controller
             $offset = 0;
             $limit = 5;
             $notification_data = json_decode($data);
-            error_log("Post__DATA___from___MObile".print_r($notification_data,1));
             $page=$notification_data->page;
             $viewAll=$notification_data->viewAll;
             if($viewAll==1) {
@@ -55,9 +54,9 @@ class NotificationsController extends Controller
             
             echo json_encode(array('notify_result'=>$result_data));
             
-        } catch (Exception $ex) {
-            Yii::log("NotificationsController:actionGetAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            echo "Exception in NotificationsController::actionGetAllNotifications ".$ex->getMessage();
+            Yii::error("NotificationsController:actionGetAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
         
     }
@@ -81,9 +80,9 @@ class NotificationsController extends Controller
             $result_count=NotificationCollection::getNotificationsCount($notified_userid);
             echo json_encode(array('count'=>$result_count));
             
-        } catch (Exception $ex) {
-            Yii::log("NotificationsController:actionGetAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            echo "Exception in NotificationsController::actionGetAllNotificationsCount ".$ex->getMessage();
+            Yii::error("NotificationsController:actionGetAllNotificationsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
         
     }/**
@@ -111,9 +110,10 @@ class NotificationsController extends Controller
               echo ("!!!@@@@@@@@@~!!!!!!!!!!!!!!1__SIZE".  sizeof($notificationArray));
             $result_data = ServiceFactory::getStoryServiceInstance()->sendEmailNotificationFromBackground($notificationArray,$projectId);
           }
-          } catch (Exception $ex) {
- Yii::log("NotificationsController:actionForkEmailNotificationProcess::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-          }
+          } catch (\Throwable $ex) {
+            echo "Exception in NotificationsController::actionForkEmailNotificationProcess ".$ex->getMessage();
+            Yii::error("NotificationsController:actionForkEmailNotificationProcess::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
           
          
       }
@@ -134,9 +134,9 @@ class NotificationsController extends Controller
             $response = ServiceFactory::getStoryServiceInstance()->getTicketActivity($post_data);
             echo json_encode(array('activityData'=>$response));
             
-        } catch (Exception $ex) {
-            Yii::log("NotificationsController:actionGetLatestActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            echo "Exception in NotificationsController::actionGetLatestActivity ".$ex->getMessage();
+            Yii::error("NotificationsController:actionGetLatestActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
         
     }

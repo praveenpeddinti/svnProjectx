@@ -5,6 +5,7 @@ use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketTyp
 use common\models\bean\FieldBean;
 use Yii;
 use common\components\{CommonUtility,NotificationTrait};
+use yii\base\ErrorException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -26,8 +27,9 @@ class TimeReportService {
         try {
             $arrayTimelog = TicketTimeLog::getTimeReportCountAndWorkLog($StoryData, $projectId);
             return $arrayTimelog;
-        } catch (Exception $ex) {
-            Yii::log("TimeReportService:getTimeReportCountAndWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("TimeReportService:getTimeReportCountAndWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -77,8 +79,9 @@ class TimeReportService {
                }
             
             return $TimeLogDataArray;
-        } catch (Exception $ex) {
-            Yii::log("TimeReportService:getAllTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("TimeReportService:getAllTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -94,8 +97,9 @@ class TimeReportService {
             $workLogHours = TicketTimeLog::getTotalWorkLogHours($StoryData, $projectId);
 
             return $workLogHours;
-        } catch (Exception $ex) {
-            Yii::log("TimeReportService:getTotalWorkLogHours::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("TimeReportService:getTotalWorkLogHours::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -106,8 +110,9 @@ class TimeReportService {
                 $value["Title"] = htmlspecialchars_decode($value["Title"]);
             }
             return $ticketDetails;
-        } catch (Exception $ex) {
-            Yii::log("TimeReportService:getAllStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("TimeReportService:getAllStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
         
     }
@@ -148,8 +153,9 @@ class TimeReportService {
 
                 return $activityData;
             }
-        } catch (Exception $ex) {
-             Yii::log("TimeReportService:RemoveTimelogs::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("TimeReportService:RemoveTimelogs::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
         
     }
@@ -243,8 +249,9 @@ class TimeReportService {
                 return $slug;
 
             }
-        } catch (Exception $ex) {
-            Yii::log("TimeReportService:updateTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("TimeReportService:updateTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
 }

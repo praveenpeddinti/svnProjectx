@@ -11,6 +11,8 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\base\ErrorException;
+
 
 class WorkFlowFields extends ActiveRecord 
 {
@@ -37,9 +39,9 @@ class WorkFlowFields extends ActiveRecord
         $query = "select wf.Id,wf.Name,ws.Name as State , ws.Id as StateId from WorkFlowFields wf join WorkFlowState ws on wf.State=ws.Id where wf.Id=".$workFlowId;
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;   
-        } catch (Exception $ex) {
-Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     
@@ -49,9 +51,9 @@ Yii::log("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex-
  join WorkFlowMapping wm on wf.Id=wm.MappedWorkFlowId join WorkFlowState ws on wf.State=ws.Id where wm.WorkFlowType=$workflowType and wm.WorkFlowId=$workflowId order by wm.Position asc ;";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;   
-        } catch (Exception $ex) {
-Yii::log("WorkFlowFields:getStoryWorkFlowList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        } catch (\Throwable $ex) {
+            throw new ErrorException($ex->getMessage()); 
+            Yii::error("WorkFlowFields:getStoryWorkFlowList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
         }
     }
     

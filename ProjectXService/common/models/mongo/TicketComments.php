@@ -8,7 +8,7 @@ namespace common\models\mongo;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-//use yii\db\ActiveRecord;
+use yii\base\ErrorException;
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
@@ -61,9 +61,9 @@ class TicketComments extends ActiveRecord
            $ticketCommentDetails = $query->one();
             }
             
-        }catch(Exception $ex){
-            Yii::log("TicketComments:createCommentsRecord::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-       
+        }catch (\Throwable $ex) {
+            Yii::error("TicketCommentsCollection:createCommentsRecord::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -76,10 +76,9 @@ class TicketComments extends ActiveRecord
          
            $ticketCommentDetails = $query->one();
            return $ticketCommentDetails;
-         }catch(Exception $ex){
-             
-       Yii::log("TicketComments:getTicketComments::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-     
+         }catch (\Throwable $ex) {
+            Yii::error("TicketCommentsCollection:getTicketComments::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -95,8 +94,9 @@ class TicketComments extends ActiveRecord
             }
 
             }
-        }catch(Exception $ex){
-       Yii::log("TicketComments:saveComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }catch (\Throwable $ex) {
+            Yii::error("TicketCommentsCollection:saveComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -114,8 +114,9 @@ class TicketComments extends ActiveRecord
                      ->where(["ProjectId" => (int)$projectId ,"TicketId" => (int)$ticketId]);
           $ticketActivity = $query->one();
             return $ticketActivity;
-        } catch (Exception $ex) {
-Yii::log("TicketComments:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+            Yii::error("TicketCommentsCollection:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
     }
     
@@ -129,11 +130,12 @@ Yii::log("TicketComments:getTicketActivity::" . $ex->getMessage() . "--" . $ex->
           $res = $collection->update(array("TicketId" => (int)$commentData->ticketId,"ProjectId"=>(int)$commentData->projectId), $newdata);
               
         }
-        } catch (Exception $ex) {
-Yii::log("TicketComments:removeComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-
+        return $res;
+        } catch (\Throwable $ex) {
+            Yii::error("TicketCommentsCollection:removeComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException('Something went wrong');
         }
-       return $res;
+       
     }
 }
 ?>
