@@ -114,7 +114,7 @@ export class NotificationComponent implements OnInit{
     {
       if(data)
       {
-        this.notify_count=0;
+        this.shared.changeNotificationCount(0);
        this.allNotification.forEach(function (value) {
         value.IsSeen = 1;
       });
