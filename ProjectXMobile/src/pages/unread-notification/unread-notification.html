@@ -26,7 +26,7 @@
                         <div class="notificationdiv" id="{{notify.id.$oid}}"   *ngIf="notify.type!='changed'  && !notify.status  && notify.object!='mention' && notify.object!='comment' && notify.object!='reply'">
                             <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.PlanLevel)">
                             <span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
-                            <span class="notifications_name">{{notify.from}}</span> {{notify.type}} <span class="notifications_name2">{{notify.to}}</span> {{notify.OtherMessage}} {{notify.Preposition}} &nbsp;
+                            <span class="notifications_name">{{notify.from}}</span> {{notify.type}} <span class="notifications_name">{{notify.to}}</span> {{notify.OtherMessage}} {{notify.Preposition}} &nbsp;
                             <i *ngIf="notify.PlanLevel==1" class="Story"></i> <i *ngIf="notify.PlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TicketId}} {{notify.Title }}</span>
                             <div class="noti_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
                             </div>
@@ -37,8 +37,8 @@
                         <div class="notificationdiv" id="{{notify.id.$oid}}"   *ngIf="notify.status=='set' && notify.type!='created' && notify.type!='related' && notify.type!='unrelated'">
                             <div (click)="gotoNotificationDetails(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid,notify.PlanLevel)">
                             <span class="notificationusericon"><img src="{{notify.Profile}}"/></span>
-                            <span class="notifications_name">{{notify.from}}</span>  {{notify.type}} {{notify.ActivityOn}} {{notify.Preposition}} {{notify.NewValue}} for <span class="notifications_name2"></span>
-                            <i *ngIf="notify.PlanLevel==1" class="Story"></i> <i *ngIf="notify.PlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TicketId}} {{notify.Title }}</span>
+                            <span class="notifications_name">{{notify.from}}</span>  {{notify.type}} {{notify.ActivityOn}} {{notify.Preposition}} {{notify.NewValue}} <span class="notifications_name2"></span>
+                           <i *ngIf="notify.TargetPlanLevel==1" class="Story"></i> <i *ngIf="notify.TargetPlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TargetTicketId}} {{notify.TargetTicketTitle }}</span> <span>for</span> <i *ngIf="notify.PlanLevel==1" class="Story"></i> <i *ngIf="notify.PlanLevel==2" class="Task"></i><span class="notifications_name">#{{notify.TicketId}} {{notify.Title }}</span>
                             <div class="noti_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
                             </div>
                             <div (click)="markAsRead(notify)" class="not_close" *ngIf="notify.IsSeen==0" ><i class="fa fa-times" aria-hidden="true"></i>
