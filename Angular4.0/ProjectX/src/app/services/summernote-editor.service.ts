@@ -46,7 +46,7 @@ export class SummerNoteEditorService
                                 var getAllData=  JSON.parse(localStorage.getItem('user'));
                                 if(getAllData != null){
                                     params["userInfo"] = getAllData;
-                                    params["projectId"] = localStorage.getItem('ProjectId');
+                                    params["projectId"] = parseInt(localStorage.getItem('ProjectId'));
                                     params["timeZone"] = jstz.determine_timezone().name();
                                     }
                                 var url=GlobalVariable.BASE_API_URL+"story/get-collaborators";
