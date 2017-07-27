@@ -426,7 +426,7 @@ class StoryController extends Controller
      */
     public function actionUpdateStoryFieldInline(){
         try{
-            $fieldData = json_decode(file_get_contents1("php://input"));
+            $fieldData = json_decode(file_get_contents("php://input"));
             $getUpdateStatus = ServiceFactory::getStoryServiceInstance()->updateStoryFieldInline($fieldData);
             if($getUpdateStatus !='failure'){
                 $responseBean = new ResponseBean();
@@ -521,7 +521,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionGetCollaborators::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =  ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
