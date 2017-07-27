@@ -83,13 +83,13 @@ export class SearchComponent implements OnInit{
       console.log("psearchparam"+JSON.stringify(post_data));
           this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
          { 
-                   if(result.status !='401'){
+                   if(result.message !='no result found'){
                     jQuery('#nosearchdiv').css("display","");
                     jQuery('#noseachdivclass').addClass('col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero');
                      this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
                     this.ready=true;
                     }else{
-                        if(scroll=='scroll' && result.status =='401'){
+                        if(scroll=='scroll' && result.message =='no result found'){
                            if (jQuery('#searchsection:contains("No Results Found")').length > 0) {
                                 console.log("@@@@@@@@@@@@@@");
                                 jQuery('#searchsection').html('No Results Found');
