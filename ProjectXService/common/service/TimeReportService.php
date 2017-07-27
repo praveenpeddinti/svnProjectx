@@ -53,7 +53,7 @@ class TimeReportService {
                 foreach($timelogs as $eachOne){
                     $ticketCollectionModel = new TicketCollection();
                     $getTicketDetails = $ticketCollectionModel->getTicketDetails($eachOne['TicketId'],$projectId,$selectFields=[]);
-                    
+                    $desc_limit=50;
                     $ticketDesc= '#'.$getTicketDetails['TicketId']." ".$getTicketDetails['Title'];
                     $ticketDesc= CommonUtility::refineActivityData($ticketDesc,200);
                     $timeDesc= CommonUtility::refineActivityDataTimeDesc($getTicketDetails['Description'],50);
