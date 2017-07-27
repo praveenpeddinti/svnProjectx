@@ -1,10 +1,8 @@
-import { StoryComponent } from '../story/story-form.component';
 import { Component, Directive,ViewChild,ViewEncapsulation } from '@angular/core';
 import { StoryService } from '../../services/story.service';
 import { Router,ActivatedRoute } from '@angular/router';
-import { GlobalVariable } from '../../config';
 import { Http, Headers } from '@angular/http';
-import {SharedService} from '../../services/shared.service';
+import { SharedService } from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
 import { ChildtaskComponent } from '../childtask/childtask.component';
 
@@ -84,65 +82,7 @@ export class StoryDashboardComponent {
                 }
                 
               ];
-               columnsSub = [
-                {
-                    name: 'Id',
-                    flexGrow: 1,
-                    sortby: 'task',
-                    class: 'taskRstory',
-                    type:'task'
-                },
-                {
-                    name: 'Title',
-                    flexGrow: 3,
-                    sortby: 'task',
-                    class: 'titlecolumn',
-                    type:'task'
-                },
-                {
-                    name: 'Assigned to',
-                    flexGrow: 1.5,
-                    sortby: 'task',
-                    class: '',
-                    type:'task'
-                },
-                {
-                    name: 'Priority',
-                    flexGrow: 1,
-                    sortby: 'task',
-                    class: 'prioritycolumn',
-                    type:'task'
-                },
-                {
-                    name: 'State',
-                    flexGrow: 1,
-                    sortby: 'task',
-                    class: 'statusbold',
-                    type:'task'
-                },
-                {
-                    name: 'Bucket',
-                    flexGrow: 1,
-                    sortby: 'task',
-                    class: 'bucket',
-                    type:'task'
-                },
-                {
-                    name: 'Due Date',
-                    flexGrow: 1,
-                    sortby: 'task',
-                    class: 'duedate',
-                    type:'task'
-                },
-                {
-                    name: '',
-                    flexGrow: 0.3,
-                    sortby: 'task',
-                    class: 'arrowClass',
-                    type:'task'
-                }
-                
-              ];
+              
 
 expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -198,11 +138,7 @@ expanded: any = {};
            })
  
 }
-    // ngAfterViewInit()
-    // {
-    //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.general:eq(0)').before('<label>Filter</label>');
-    //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.bucket:eq(0)').before('<label>Bucket</label>');
-    // }
+    
         /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: StoryComponent/Task list Rendering
@@ -214,18 +150,9 @@ expanded: any = {};
            
             let jsonForm = {};
             if (response.statusCode == 200) {
-                /*const start = offset * limit;
-                const end = start + limit;
-                let rows = [...this.rows];
-                for (let i = 0; i < response.data.length; i++) {
-                    rows[i + start] = response.data[i];
-                }*/
                 this.rows = response.data;
-             
-               // this.getRowClass(this.rows);
-                //console.log("ROWS___"+JSON.stringify(this.rows));
                 this.count = response.totalCount;
-                //this.count = response.data.length;
+                
             } else {
                 console.log("fail---");
             }
@@ -253,29 +180,7 @@ collapseAll(){
     this.table.rowDetail.collapseAllRows()
 }
 toggleExpandRow(row) { 
- console.log('hi--!', row);
   this.table.rowDetail.toggleExpandRow(row);
-    if(row.$$expanded!=1){
-    //jQuery("#collapsediv").click();
-    }
-    this.row1=[];
-    console.log('Toggled Expand Row!', row[0].field_value);
-    this._service.getSubTasksDetails(this.projectId, row[0].field_value, (response) => {
-                   let jsonForm = {};
-            if (response.statusCode == 200) {
-                this.row1=response.data;
-                //this.row1.push(response.data);
-              //  this.table.rowDetail.toggleExpandRow(row);
-                console.log('Toggled Expand Row!', this.row1);
-            } else {
-                console.log("fail---");
-            }
-        });
-       
-    //console.log('Toggled Expand Row2!', row);
-
-   
-   
     
 }
 
