@@ -26,7 +26,8 @@
         "../node_modules/@swimlane/ngx-datatable/release/assets/icons.css",
         "../node_modules/primeng/resources/themes/omega/theme.css",
         "../node_modules/primeng/resources/primeng.min.css",
-        "./css/jquery.atwho.css"
+        "./css/jquery.atwho.css",
+        "../node_modules/angular2-toaster/toaster.css"
 
       ],
       "scripts": [

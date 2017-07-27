@@ -110,8 +110,8 @@ Row classes are also dynamically. These classes are pass to service layer-->
    
    </div>
       <div  id="short_{{row[i].ticketId}}"  style="cursor:default" class="{{column.class}} " *ngIf="row[i].field_name!='action' && row[i].field_name=='Description'" >
-            <span> {{row[i].ticketDesc | truncate : row[i].limit}}</span><span style="color:#337ab7" *ngIf="row[i].ticketDesc.length > 15 && row[i].limit != row[i].ticketDesc.length" (click)="row[i].limit = row[i].ticketDesc.length;" >more</span>
-          <span style="color:#337ab7" *ngIf="row[i].limit == row[i].ticketDesc.length" (click)="row[i].limit = 15;" >less</span>
+            <span> {{row[i].ticketDesc | truncate : row[i].limit}}</span><span style="color:#337ab7" *ngIf="row[i].ticketDesc.length > 50 && row[i].limit != row[i].ticketDesc.length" (click)="row[i].limit = row[i].ticketDesc.length;" >more</span>
+          <span style="color:#337ab7" *ngIf="row[i].limit == row[i].ticketDesc.length" (click)="row[i].limit = 50;" >less</span>
       <div id="fullText_{{row[i].ticketId}}" [innerHTML]="row[i].ticketDesc" style="display:none"></div>
    </div>
       <div style="cursor:default" *ngIf="row[i].field_name =='action'" class="{{column.class}}" style="position: relative">

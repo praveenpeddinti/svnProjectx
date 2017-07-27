@@ -8,7 +8,6 @@ import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
 import { ChildtaskComponent } from '../childtask/childtask.component';
 
-
 declare var jQuery:any;
 
 @Component({
@@ -24,7 +23,7 @@ export class StoryDashboardComponent {
     public FilterOptionToDisplay=[];
      public selectedFilter=null;  
      public projectName; 
-     public projectId;               
+     public projectId;  
     @ViewChild('myTable') table: any;
     rows = [];
     row1 = [];
@@ -149,7 +148,6 @@ expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
 
     constructor(
-
         private _router: Router,
         private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService) { console.log("in constructor"); }
        
@@ -162,7 +160,7 @@ expanded: any = {};
            thisObj.projectName=params['projectName'];
            this.shared.change(this._router.url,thisObj.projectName,'Dashboard','',thisObj.projectName); //added by Ryan for breadcrumb purpose
             thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
-                if(data.statusCode!=404) {
+                if(data.statusCode ==200) {
                 thisObj.projectId=data.data.PId;  
                 /*
                 @params    :  projectId
@@ -191,8 +189,7 @@ expanded: any = {};
             }
             });
        }else{
-
-       this._router.navigate(['project',this.projectName,'error']); 
+      // this._router.navigate(['project',this.projectName,'error']); 
        }
                 
         });

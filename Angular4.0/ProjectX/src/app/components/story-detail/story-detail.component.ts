@@ -457,7 +457,7 @@ this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
             { 
                 var listData = {
-                  list:data.getFieldDetails
+                  list:data.data
                 };
                  var priority=(fieldTitle=="Priority"?true:false);
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);

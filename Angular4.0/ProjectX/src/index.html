@@ -8,7 +8,6 @@
   <link rel="stylesheeet" href="assets/js/ckeditor/contents.css">
   <!--<script>var CKEDITOR_BASEPATH = 'assets/js/ckeditor/';</script>-->
   <!--<script src="assets/js/ckeditor/ckeditor.js"></script> CKEDITOR-->
-  
 <!--  <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>-->
   <script src="assets/js/jquery-1.11.2.min.js"></script>
   <script src="assets/js/jquery.caret.js"></script> 
@@ -18,7 +17,7 @@
   <!--<script src='assets/js/jquery.tinymce.min.js'></script>  Tiny MCE--> 
   <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
-  <script src="http://10.10.73.33:4201/socket.io/socket.io.js"></script>
+  <script src="http://10.10.73.9:4201/socket.io/socket.io.js"></script>
 
   <!--<script src="assets/js/tinymce.min.js"></script>-->
   <!-- <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.js"></script>-->
@@ -31,19 +30,17 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 }) 
 
-var socket = io.connect('http://10.10.73.33:4201');
+var socket = io.connect('http://10.10.73.9:4201');
  
 
 </script>
 </head>
 <body>
-  <div id="commonSpinner" class="unloading">
-    <img src="/assets/images/loading.svg"/>
-  </div>
-  <app-root>
-    <div class="loading">
-    <img src="/assets/images/loading.svg"/>
-   </div>
+ <div style="position:relative;">
+
+  <app-root>  
   </app-root>
+  </div>
+
 </body>
 </html>

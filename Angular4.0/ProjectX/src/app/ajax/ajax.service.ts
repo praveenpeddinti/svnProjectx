@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 //import { Headers,RequestOptions, Http } from '@angular/http';
 import { GlobalVariable } from '../../app/config';
+import {SharedService} from '../services/shared.service';
+
 declare var jstz:any;
 declare var io:any;
 declare var socket:any;
@@ -13,10 +15,12 @@ declare var jQuery:any;
 @Injectable()
 export class AjaxService {
   constructor(
-    private http: Http) { }
+   private sharedServece:SharedService,
+   private http: Http) { }
 
 AjaxSubscribe(url:string,params:Object,callback)
 {   console.log("params____"+JSON.stringify(params));
+   this.sharedServece.setLoader(true);
    jQuery("#commonSpinner").removeClass("unloading"); 
    jQuery("#commonSpinner").addClass("loading"); 
    var getAllData=  JSON.parse(localStorage.getItem('user'));
@@ -32,6 +36,10 @@ AjaxSubscribe(url:string,params:Object,callback)
         jQuery("#commonSpinner").removeClass("loading"); 
         jQuery("#commonSpinner").addClass("unloading"); 
         var res = data.json();//For Success Response
+        this.sharedServece.setLoader(false);
+        if(res.statusCode!=200){
+           this.sharedServece.setToasterValue(res.message);
+        }
           callback(res);
       },
       err => { console.error("ERRR_____________________" + err) } //For Error Response

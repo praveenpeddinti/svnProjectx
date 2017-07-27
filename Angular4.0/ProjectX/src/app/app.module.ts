@@ -43,7 +43,8 @@ import { ActivitiesComponent } from './components/activities/activities.componen
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { ChildtaskComponent } from './components/childtask/childtask.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
-
+import {ToasterModule, ToasterService} from 'angular2-toaster';
+import { SpinnerComponentModule } from 'ng2-component-spinner';
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',component: PageNotFoundComponent },
@@ -141,6 +142,8 @@ const ROUTES=[
    BrowserAnimationsModule,
    RouterModule.forRoot(ROUTES),
    RoundProgressModule,
+   ToasterModule,
+   SpinnerComponentModule
   ],
 
 

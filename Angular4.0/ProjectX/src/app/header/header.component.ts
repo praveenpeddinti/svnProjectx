@@ -4,6 +4,8 @@ import { Headers, Http } from '@angular/http';
 import { LoginService, Collaborator } from '../services/login.service';
 import { AjaxService } from '../ajax/ajax.service';
 import {SharedService} from '../services/shared.service';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToasterContainerComponent, ToasterService, ToasterConfig} from 'angular2-toaster';
 declare var io:any;
 declare var socket:any;
 declare var jQuery:any;
@@ -11,10 +13,18 @@ declare var jQuery:any;
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  providers: [LoginService]
+  providers: [LoginService,ToasterService]
 })
 
 export class HeaderComponent implements OnInit {
+
+  public toasterconfig : ToasterConfig = 
+        new ToasterConfig({
+            showCloseButton: false, 
+            tapToDismiss: false, 
+            timeout: 5000,
+            positionClass: "toast-bottom-right",
+        }); 
   public users=JSON.parse(localStorage.getItem('user'));
   public profilePicture=localStorage.getItem('profilePicture');
   public ProjectName=localStorage.getItem('ProjectName');
@@ -27,6 +37,7 @@ export class HeaderComponent implements OnInit {
   private projects=[];
   private optionTodisplay=[];
   public homeFlag=false;
+  public showLoader:Boolean=true;
   //private ProjectName='';
   private PName='';
  
@@ -35,7 +46,8 @@ export class HeaderComponent implements OnInit {
     public _router: Router,
     private http: Http,
     private _service: LoginService,
-    private shared:SharedService
+    private shared:SharedService,
+    private toasterService: ToasterService,
        ) { }
 
   ngOnInit() {
@@ -49,7 +61,14 @@ export class HeaderComponent implements OnInit {
         thisObj.notification_msg = [];
       });
 
-
+ this.shared.getToasterValue().subscribe(value=>
+      { 
+       thisObj.toasterService.pop('error','Server Error!!!',value);
+      });
+       this.shared.getLoader().subscribe(value=>
+      { 
+       thisObj.showLoader=value;
+      });
   /* For Notifications */
   this.PName=localStorage.getItem('ProjectName');
     if(this.users)

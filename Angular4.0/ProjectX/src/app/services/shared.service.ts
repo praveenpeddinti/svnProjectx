@@ -3,7 +3,10 @@ import {Component,Input,Output,Injectable,EventEmitter} from '@angular/core';
 @Injectable()
 export class SharedService {
   @Output() route_change: EventEmitter<any> = new EventEmitter();
-   @Output() notification_change: EventEmitter<any> = new EventEmitter();
+  @Output() notification_change: EventEmitter<any> = new EventEmitter();
+  @Output() toasterValue: EventEmitter<any> = new EventEmitter();  
+  @Output() loaderValue: EventEmitter<Boolean> = new EventEmitter();  
+   
             public page;
    constructor() {
      console.log('shared service started');
@@ -31,6 +34,19 @@ export class SharedService {
    }
    getNotificationCount(){
      return this.notification_change;
+   }
+
+   setToasterValue(val){
+     this.toasterValue.emit(val);
+   }
+   getToasterValue(){
+     return this.toasterValue;
+   }
+    setLoader(val){
+     this.loaderValue.emit(val);
+   }
+   getLoader(){
+     return this.loaderValue;
    }
 
 } 
