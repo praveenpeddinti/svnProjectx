@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
             tapToDismiss: false, 
             timeout: 5000,
             positionClass: "toast-bottom-right",
+            preventDuplicates: true,
         }); 
   public users=JSON.parse(localStorage.getItem('user'));
   public profilePicture=localStorage.getItem('profilePicture');
