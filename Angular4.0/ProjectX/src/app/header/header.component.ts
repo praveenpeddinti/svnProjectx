@@ -24,7 +24,6 @@ export class HeaderComponent implements OnInit {
             tapToDismiss: false, 
             timeout: 5000,
             positionClass: "toast-bottom-right",
-            preventDuplicates: true,
         }); 
   public users=JSON.parse(localStorage.getItem('user'));
   public profilePicture=localStorage.getItem('profilePicture');
@@ -39,6 +38,7 @@ export class HeaderComponent implements OnInit {
   private optionTodisplay=[];
   public homeFlag=false;
   public showLoader:Boolean=true;
+  public toast:any;
   //private ProjectName='';
   private PName='';
  
@@ -63,8 +63,11 @@ export class HeaderComponent implements OnInit {
       });
 
  this.shared.getToasterValue().subscribe(value=>
-      { 
-       thisObj.toasterService.pop('error','Server Error!!!',value);
+      {
+        if(thisObj.toast)
+      thisObj.toasterService.clear(thisObj.toast.toastId, thisObj.toast.toastContainerId); 
+      thisObj.toast = thisObj.toasterService.pop('error','Server Error!!!',value);
+      
       });
        this.shared.getLoader().subscribe(value=>
       { 

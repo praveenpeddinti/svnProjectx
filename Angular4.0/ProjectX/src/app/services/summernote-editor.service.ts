@@ -2,6 +2,7 @@ import {Injectable,Inject} from '@angular/core';
 import { AjaxService } from '../ajax/ajax.service';
 import {Headers,Http} from '@angular/http';
 import { GlobalVariable } from '../../app/config';
+import {SharedService} from '../services/shared.service';
 declare var jQuery:any;
 declare var jstz:any;
 /**
@@ -15,7 +16,7 @@ export class SummerNoteEditorService
    
     // this_obj:AjaxService;
     mention:any=[];
-    constructor(@Inject(AjaxService) this_obj:AjaxService)
+    constructor(@Inject(AjaxService) this_obj:AjaxService,private sharedService:SharedService)
     {
     //    this.this_obj=this_obj;
     }
@@ -23,6 +24,7 @@ export class SummerNoteEditorService
     initialize_editor(element,options,obj)
     {
         var mention_data;
+        var thisObj= this;
         if(options=='keyup' && obj!=null)
         {
             console.log("first if");
@@ -56,6 +58,9 @@ export class SummerNoteEditorService
                                         async:true
                                     }).done(function(data)
                                         {
+                                            if(data.statusCode!=200){
+                                            thisObj.sharedService.setToasterValue(data.message);
+                                            }
                                             console.log("==Data=="+JSON.stringify(data));
                                             var mention_list=[];
                                             for(let i in data.data)
@@ -146,6 +151,9 @@ export class SummerNoteEditorService
                                         async:true
                                     }).done(function(data)
                                         {
+                                             if(data.statusCode!=200){
+                                            thisObj.sharedService.setToasterValue(data.message);
+                                            }
                                             console.log("==Data=="+JSON.stringify(data));
                                             var mention_list=[];
                                             for(let i in data.data)
