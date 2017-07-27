@@ -40,9 +40,9 @@ class WorkFlowFields extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;   
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
             Yii::error("WorkFlowFields:getWorkFlowDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+            throw new ErrorException($ex->getMessage()); 
+       }
     }
     
       public static function getStoryWorkFlowList($workflowType,$workflowId){
@@ -52,8 +52,8 @@ class WorkFlowFields extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;   
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
-            Yii::error("WorkFlowFields:getStoryWorkFlowList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        Yii::error("WorkFlowFields:getStoryWorkFlowList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+       throw new ErrorException($ex->getMessage()); 
         }
     }
     

@@ -40,9 +40,9 @@ class TicketType extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
             Yii::error("TicketType:getTicketType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        throw new ErrorException($ex->getMessage()); 
+         }
         
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
@@ -55,10 +55,9 @@ class TicketType extends ActiveRecord
             $qry = "select * from TicketType";
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
-        } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
+        } catch (\Throwable $ex) { 
             Yii::error("TicketType:getTicketTypeList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+            throw new ErrorException($ex->getMessage());}
     }
     
 }

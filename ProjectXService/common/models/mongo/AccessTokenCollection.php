@@ -81,7 +81,7 @@ class AccessTokenCollection extends ActiveRecord
             return $models;
         } catch (\Throwable $ex) {
             Yii::error("AccessTokenCollection:checkCollabaratorStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
 
@@ -109,7 +109,7 @@ class AccessTokenCollection extends ActiveRecord
             return $returnValue; 
         } catch (\Throwable $ex) {
             Yii::error("AccessTokenCollection:saveAccesstokenData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
          
     }
@@ -127,7 +127,7 @@ class AccessTokenCollection extends ActiveRecord
             return $returnStatus;
         } catch (\Throwable $ex) {
             Yii::error("AccessTokenCollection:updateStatusByToken::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
 
     }

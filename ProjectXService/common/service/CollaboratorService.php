@@ -33,7 +33,7 @@ class CollaboratorService {
          return $collaboratorModel->getProjectTeam($projectId);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
      /**
@@ -48,7 +48,7 @@ class CollaboratorService {
             return $remembermeStatus;
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getCollabaratorAccesstoken::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
       /**
@@ -63,7 +63,7 @@ class CollaboratorService {
             return $tokenData= $model->saveAccesstokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:saveCollabaratortokenData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
           /**
@@ -78,7 +78,7 @@ class CollaboratorService {
             return $tokenData= $model->updateStatusByToken($collabaratortoken);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:updateStatusCollabarator::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -94,7 +94,7 @@ class CollaboratorService {
          return $collaboratorModel->getFilteredProjectTeam($projectId,$search_query);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getFilteredProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -112,7 +112,7 @@ class CollaboratorService {
             
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getMatchedCollaborator::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -143,7 +143,7 @@ class CollaboratorService {
             return $collaboratorModel->getCollaboratorsForFollow($dafaultUserList,$searchValue, $projectId);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getCollaboratorsForFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -163,7 +163,7 @@ class CollaboratorService {
             return $details;
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getTicketFollowersList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
        /**
@@ -181,7 +181,7 @@ class CollaboratorService {
          return $ProjectTeamModel->getProjectTeamDetailsByRole($projectId);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getProjectTeamDetailsByRole::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -197,7 +197,7 @@ class CollaboratorService {
          return $collaboratorModel->getResponsibleProjectTeam($projectId,$role);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getResponsibleProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -216,7 +216,7 @@ class CollaboratorService {
          return $ProjectModel->verifyingProjectName($projectName);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:verifyProjectName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
      /**
@@ -232,7 +232,7 @@ class CollaboratorService {
             
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:savingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
      /**
@@ -249,7 +249,7 @@ class CollaboratorService {
             
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:savingProjectTeamDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
      /**
@@ -265,7 +265,7 @@ class CollaboratorService {
             return count($total);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getTotalProjectCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
      /**
@@ -280,7 +280,7 @@ class CollaboratorService {
             return $ProjectModel->getProjectNameByUserId($userId);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getProjectNameByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 

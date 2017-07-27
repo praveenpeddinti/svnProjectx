@@ -59,7 +59,7 @@ class ProjectTeam extends ActiveRecord
             return $count;  
         } catch (\Throwable $ex) {
             Yii::error("ProjectTeam:getProjectTeamCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
           /**
@@ -81,7 +81,7 @@ class ProjectTeam extends ActiveRecord
            return $returnValue ;
         } catch (\Throwable $ex) {
             Yii::error("ProjectTeam:saveProjectTeamDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
    }
@@ -97,7 +97,7 @@ class ProjectTeam extends ActiveRecord
            return $projectcount;  
        } catch (\Throwable $ex) {
             Yii::error("ProjectTeam:getProjectsCountByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
    }
     /**
@@ -122,7 +122,7 @@ class ProjectTeam extends ActiveRecord
 
        } catch (\Throwable $ex) {
             Yii::error("ProjectTeam:getAllProjects::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
    } 
 }

@@ -40,7 +40,7 @@ class Priority extends ActiveRecord
         return $data;  
          } catch (\Throwable $ex) {
             Yii::error("Priority:getPriorityDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -55,7 +55,7 @@ class Priority extends ActiveRecord
             return $data;
         }catch (\Throwable $ex) {
             Yii::error("Priority:getPriorityList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     

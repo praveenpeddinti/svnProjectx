@@ -41,7 +41,7 @@ class FieldTypes extends ActiveRecord
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("FieldType:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }

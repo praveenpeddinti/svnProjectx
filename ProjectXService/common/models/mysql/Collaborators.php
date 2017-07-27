@@ -41,7 +41,7 @@ class Collaborators extends ActiveRecord
          return $data;    
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -54,7 +54,7 @@ class Collaborators extends ActiveRecord
            return $data; 
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:findByUsername::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -79,7 +79,7 @@ class Collaborators extends ActiveRecord
 
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getCollaboratorDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
       
     }
@@ -93,7 +93,7 @@ class Collaborators extends ActiveRecord
         return $data;
        } catch (\Throwable $ex) {
             Yii::error("Collaborators:getCollboratorByFieldType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -106,7 +106,7 @@ class Collaborators extends ActiveRecord
         return $data; 
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getCollabrators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -144,7 +144,7 @@ class Collaborators extends ActiveRecord
         return $data; 
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:insertCollabrators::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
          
     }
@@ -163,7 +163,7 @@ class Collaborators extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getFilteredProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -212,7 +212,7 @@ class Collaborators extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:checkMatchedUsers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -235,7 +235,7 @@ class Collaborators extends ActiveRecord
             return $data;
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getCollaboratorsForFollow::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -255,7 +255,7 @@ class Collaborators extends ActiveRecord
             return $data;
         }catch (\Throwable $ex) {
             Yii::error("Collaborators:getCollaboratorById::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -273,7 +273,7 @@ class Collaborators extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getCollaboratorWithProfile::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     public static function getCollaboratorId($user)
@@ -285,7 +285,7 @@ class Collaborators extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getCollaboratorId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -303,7 +303,7 @@ class Collaborators extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getResponsibleProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }

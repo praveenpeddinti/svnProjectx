@@ -78,7 +78,7 @@ class TinyUserCollection extends ActiveRecord
         }
         } catch (\Throwable $ex) {
             Yii::error("TinyUserCollection:createUsers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -91,7 +91,7 @@ class TinyUserCollection extends ActiveRecord
             return $profile_pic["ProfilePicture"];
         } catch (\Throwable $ex) {
             Yii::error("TinyUserCollection:getProfileOfFollower::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 

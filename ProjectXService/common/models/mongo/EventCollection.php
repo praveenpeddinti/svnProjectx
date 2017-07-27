@@ -75,7 +75,7 @@ class EventCollection extends ActiveRecord
               
         } catch (\Throwable $ex) {
             Yii::error("EventCollection:saveEvent::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
          
     }
@@ -223,7 +223,7 @@ class EventCollection extends ActiveRecord
                 
        } catch (\Throwable $ex) {
             Yii::error("EventCollection:getAllActivities::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
        /**
@@ -244,7 +244,7 @@ class EventCollection extends ActiveRecord
            return $ticketDetails;  
         } catch (\Throwable $ex) {
             Yii::error("EventCollection:getActivitiesById::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
        /**
@@ -278,7 +278,7 @@ class EventCollection extends ActiveRecord
 
         } catch (\Throwable $ex) {
             Yii::error("EventCollection:getActivitiesByProjectName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
     }

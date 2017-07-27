@@ -40,7 +40,7 @@ class StoryService {
          return $details;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
       }
@@ -59,7 +59,7 @@ class StoryService {
          return $editDetails;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getTicketEditDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
       } 
@@ -88,7 +88,7 @@ class StoryService {
         
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -101,7 +101,7 @@ class StoryService {
            return StoryFields::getNewTicketStoryFields();
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getNewTicketStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -114,7 +114,7 @@ class StoryService {
            return Priority::getPriorityList();
             } catch (\Throwable $ex) {
             Yii::error("StoryService:getPriorityList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         }
 
@@ -127,7 +127,7 @@ class StoryService {
            return PlanLevel::getPlanLevelList();
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getPlanLevelList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -140,7 +140,7 @@ class StoryService {
             return TicketType::getTicketTypeList();
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getTicketTypeList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     /**
@@ -153,7 +153,7 @@ class StoryService {
            return WorkFlowFields::getStoryWorkFlowList($workflowType,$workflowId);
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getStoryWorkFlowList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     /**
@@ -165,7 +165,7 @@ class StoryService {
            return Bucket::getBucketsList($projectId);
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 /**
@@ -324,7 +324,7 @@ class StoryService {
          
         } catch (\Throwable $ex) {
             Yii::error("StoryService:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
       }
@@ -381,7 +381,7 @@ class StoryService {
             return $totalCount;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getMyTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
        public function getAllStoriesCount($StoryData,$projectId) {
@@ -391,7 +391,7 @@ class StoryService {
             return $totalCount;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getAllStoriesCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
             
@@ -406,7 +406,7 @@ class StoryService {
             return $finalData;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getSubTaskIds::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -427,7 +427,7 @@ class StoryService {
             return $finalData;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getSubTaskDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     /**
@@ -442,7 +442,7 @@ class StoryService {
           //return $priorityModel->updateTicketField();
             } catch (\Throwable $ex) {
             Yii::error("StoryService:getMyTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         }
 
@@ -699,7 +699,7 @@ class StoryService {
             
         } catch (\Throwable $ex) {
             Yii::error("StoryService:updateTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
       }
@@ -973,7 +973,7 @@ class StoryService {
 
         } catch (\Throwable $ex) {
             Yii::error("StoryService:updateStoryFieldInline::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
 
     }
@@ -987,7 +987,7 @@ class StoryService {
 
         } catch (\Throwable $ex) {
             Yii::error("StoryService:removeComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
      
     }
@@ -1059,7 +1059,7 @@ class StoryService {
             }
         }catch (\Throwable $ex) {
             Yii::error("StoryService:saveComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
         
         
@@ -1099,7 +1099,7 @@ class StoryService {
           
         } catch (\Throwable $ex) {
             Yii::error("StoryService:followTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
     /**
@@ -1123,7 +1123,7 @@ class StoryService {
            
         } catch (\Throwable $ex) {
             Yii::error("StoryService:unfollowTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     } 
     /**
@@ -1151,7 +1151,7 @@ class StoryService {
             return $finalData;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getAllMyTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
 /**
@@ -1175,7 +1175,7 @@ class StoryService {
             
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
    
@@ -1192,7 +1192,7 @@ class StoryService {
             $ticketDetails = TicketCollection::updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketObjArray);
         } catch (\Throwable $ex) {
             Yii::error("StoryService:updateParentTicketTaskField::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
 
@@ -1215,7 +1215,7 @@ class StoryService {
            return $followers;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getTicketFollowers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
     
@@ -1231,7 +1231,7 @@ class StoryService {
             return $follower;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getFollower::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }    
         /*
@@ -1366,7 +1366,7 @@ class StoryService {
              return $returnStatus;
          } catch (\Throwable $ex) {
             Yii::error("StoryService:createChildTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
 
@@ -1402,7 +1402,7 @@ class StoryService {
             return $finalData;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getAllStoryDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
 
@@ -1416,7 +1416,7 @@ class StoryService {
             TicketCollection::updateRelateTicket($projectId,$ticketId,$searchTicketId); 
         } catch (\Throwable $ex) {
             Yii::error("StoryService:updateRelatedTaskId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
     
@@ -1456,7 +1456,7 @@ class StoryService {
             }
         } catch (\Throwable $ex) {
             Yii::error("StoryService:insertTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
 
@@ -1489,7 +1489,7 @@ class StoryService {
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
 
@@ -1503,7 +1503,7 @@ class StoryService {
             return $artifacts;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getTicketAttachments::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
 
@@ -1525,7 +1525,7 @@ class StoryService {
             return $finalData;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getAllRelateStory::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
 
@@ -1541,7 +1541,7 @@ class StoryService {
         return $activityData;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
      /**
@@ -1556,7 +1556,7 @@ class StoryService {
            
         } catch (\Throwable $ex) {
             Yii::error("StoryService:updateFollowersForSubTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
           
     }
@@ -1571,7 +1571,7 @@ class StoryService {
            return $taskTypes;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getTaskTypes::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }    
     }
     
@@ -1732,7 +1732,7 @@ class StoryService {
             }
         }catch (\Throwable $ex) {
             Yii::error("StoryService:updateWorkflowAndSendNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
     
@@ -1749,7 +1749,7 @@ class StoryService {
            return $filters;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getFilterOptions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }  
     }
     
@@ -1775,7 +1775,7 @@ class StoryService {
             }
         }catch (\Throwable $ex) {
             Yii::error("StoryService:getAssignedToUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
     
@@ -1792,7 +1792,7 @@ class StoryService {
             return $projectDetails;
         }catch (\Throwable $ex) {
             Yii::error("StoryService:getProjectDetailsByName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -1837,7 +1837,7 @@ class StoryService {
             return $finalData;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getAllStoryDetailsNew::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
      /**
@@ -1854,7 +1854,7 @@ class StoryService {
             return $totalCount;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getProjectDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
      /**
@@ -1869,7 +1869,7 @@ class StoryService {
             UserPreferences::savePreference($userid,$tasks);
         } catch (\Throwable $ex) {
             Yii::error("StoryService:saveUserPreferences::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
     
@@ -1886,7 +1886,7 @@ class StoryService {
            return $preference_items;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getUserPreferences::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
     
@@ -1907,7 +1907,7 @@ class StoryService {
             return $details; 
         } catch (\Throwable $ex) {
             Yii::error("StoryService:getUpdatedTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
        
     }

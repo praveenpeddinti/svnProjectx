@@ -41,7 +41,7 @@ class Bucket extends ActiveRecord
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -59,7 +59,7 @@ class Bucket extends ActiveRecord
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -81,7 +81,7 @@ class Bucket extends ActiveRecord
         }
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBackLogBucketId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -103,7 +103,7 @@ class Bucket extends ActiveRecord
         }
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getActiveBucketId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -139,7 +139,7 @@ class Bucket extends ActiveRecord
         return $bucketDetails;
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -169,7 +169,7 @@ class Bucket extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketTypeFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -209,7 +209,7 @@ class Bucket extends ActiveRecord
 
         } catch (\Throwable $ex) {
             Yii::error("Bucket:checkBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
       
     }
@@ -239,7 +239,7 @@ class Bucket extends ActiveRecord
             return $returnValue;
         } catch (\Throwable $ex) {
             Yii::error("Bucket:saveBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -293,7 +293,7 @@ class Bucket extends ActiveRecord
 
         } catch (\Throwable $ex) {
             Yii::error("Bucket:checkUpdateBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
       
     }
@@ -327,7 +327,7 @@ class Bucket extends ActiveRecord
             return $result;
         } catch (\Throwable $ex) {
             Yii::error("Bucket:updateBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -365,7 +365,7 @@ class Bucket extends ActiveRecord
             return $result;
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketChangeStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
  

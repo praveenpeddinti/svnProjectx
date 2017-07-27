@@ -61,7 +61,7 @@ class TicketArtifacts extends ActiveRecord {
             
         } catch (\Throwable $ex) {
             Yii::error("TicketArtifactsCollection:createArtifactsRecord::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 /**
@@ -81,7 +81,7 @@ class TicketArtifacts extends ActiveRecord {
         return $ticketArtifactsDetails;   
         } catch (\Throwable $ex) {
             Yii::error("TicketArtifactsCollection:getTicketArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
     }
@@ -104,7 +104,7 @@ class TicketArtifacts extends ActiveRecord {
             }
         } catch (\Throwable $ex) {
             Yii::error("TicketArtifactsCollection:saveArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 

@@ -39,9 +39,9 @@ class Projects extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;   
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
-            Yii::error("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+       Yii::error("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+       throw new ErrorException($ex->getMessage()); 
+            }
        
     }
     
@@ -57,8 +57,9 @@ class Projects extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;   
         } catch (\Throwable $ex) {
-             throw new ErrorException('Something went wrong'); 
-             Yii::error("Projects:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+             Yii::error("Projects:getProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+             throw new ErrorException($ex->getMessage());
+            
         }
        
     }
@@ -80,8 +81,10 @@ class Projects extends ActiveRecord
                $returnValue = $projects->PId;   
             }
            return $returnValue ;
-        } catch (Exception $ex) {
-            Yii::log("Projects:savingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+             Yii::error("Projects:savingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+             throw new ErrorException($ex->getMessage());
+            
         }
        
    }
@@ -96,8 +99,10 @@ class Projects extends ActiveRecord
             $query = "select * from Projects where ProjectName='$projectName'";
             $data = Yii::$app->db->createCommand($query)->queryOne();
             return $data;   
-        } catch (Exception $ex) {
-             Yii::log("Projects:verifyingProjectName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+             Yii::error("Projects:verifyingProjectName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+             throw new ErrorException($ex->getMessage());
+            
         }
     }
     /**
@@ -112,8 +117,10 @@ class Projects extends ActiveRecord
            // $query = "select PId,ProjectName,CreatedBy from Projects where CreatedBy=$userId";
             $data = Yii::$app->db->createCommand($query)->queryAll();
            return $data;   
-        } catch (Exception $ex) {
-Yii::log("Projects:getProjectNameByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        } catch (\Throwable $ex) {
+             Yii::error("Projects:getProjectNameByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+             throw new ErrorException($ex->getMessage());
+            
         }
        
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);

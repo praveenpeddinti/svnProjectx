@@ -81,7 +81,7 @@ class TicketCollection extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:saveTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
       }
@@ -106,7 +106,7 @@ class TicketCollection extends ActiveRecord
            return $ticketDetails;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -132,7 +132,7 @@ class TicketCollection extends ActiveRecord
            return $mergedChatUsers;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getMyAssignedTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
      
@@ -156,7 +156,7 @@ class TicketCollection extends ActiveRecord
            return "";  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:updateTicketField::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
      
@@ -225,7 +225,7 @@ class TicketCollection extends ActiveRecord
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -275,7 +275,7 @@ class TicketCollection extends ActiveRecord
             return $totalCount;
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getAllStoriesCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -293,7 +293,7 @@ class TicketCollection extends ActiveRecord
             return $taskDetails;
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getSubTaskIds::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     /**
@@ -310,7 +310,7 @@ class TicketCollection extends ActiveRecord
         return $ticketDetails;  
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getSubTaskDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     /**
@@ -327,7 +327,7 @@ class TicketCollection extends ActiveRecord
            return $cursor;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getMyTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
      
@@ -368,7 +368,7 @@ class TicketCollection extends ActiveRecord
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getMyTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -387,7 +387,7 @@ class TicketCollection extends ActiveRecord
             $collection->update(array("TicketId" => (int)$parentTicNumber,"ProjectId"=>(int)$projectId), $tasksNew);
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:updateParentTicketTaskField::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
            /**
@@ -404,7 +404,7 @@ class TicketCollection extends ActiveRecord
             
        } catch (\Throwable $ex) {
             Yii::error("TicketCollection:updateChildTaskObject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
       
 
@@ -422,7 +422,7 @@ class TicketCollection extends ActiveRecord
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getAllTicketDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
       /**
@@ -440,7 +440,7 @@ class TicketCollection extends ActiveRecord
             //}
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:updateTotalTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -456,7 +456,7 @@ class TicketCollection extends ActiveRecord
             $collection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int)$projectId), $newdata);
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:updateRelateTicket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -474,7 +474,7 @@ class TicketCollection extends ActiveRecord
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getAllRelateStory::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -490,7 +490,7 @@ class TicketCollection extends ActiveRecord
             $collection->update(array("TicketId" => (int) $parentTicketId, "ProjectId" => (int)$projectId), $newdata);
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:unRelateTask::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
         /**
@@ -507,7 +507,7 @@ class TicketCollection extends ActiveRecord
           
         }catch (\Throwable $ex) {
             Yii::error("TicketCollection:updateTotalEstimatedPoints::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -528,7 +528,7 @@ class TicketCollection extends ActiveRecord
             return $ticketDetails;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getTicketDetailsByUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
            /**
@@ -544,7 +544,7 @@ class TicketCollection extends ActiveRecord
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getAllStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
                /**
@@ -560,7 +560,7 @@ class TicketCollection extends ActiveRecord
             return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails);  
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getTicketDetailsForDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
          
     }
@@ -584,7 +584,7 @@ class TicketCollection extends ActiveRecord
            return $ticketDetails;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getClosedTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         } 
     }
            /**
@@ -607,7 +607,7 @@ class TicketCollection extends ActiveRecord
            return $ticketDetails;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getActiveOrClosedTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -630,7 +630,7 @@ class TicketCollection extends ActiveRecord
           return $ticketDetails;  
      }catch (\Throwable $ex) {
             Yii::error("TicketCollection:getAllTicketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
  
    }
@@ -652,7 +652,7 @@ class TicketCollection extends ActiveRecord
            
      } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getTotalWorkHoursForBucket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
    }
    
@@ -674,7 +674,7 @@ class TicketCollection extends ActiveRecord
            return $models;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:checkTicketsinBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
      

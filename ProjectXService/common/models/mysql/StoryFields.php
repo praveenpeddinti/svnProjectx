@@ -40,9 +40,9 @@ class StoryFields extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
             Yii::error("StoryFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+            throw new ErrorException($ex->getMessage());
+         }
        
     }
     
@@ -60,9 +60,9 @@ class StoryFields extends ActiveRecord
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
         }catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
             Yii::error("StoryFields:getStoryFieldList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+       throw new ErrorException($ex->getMessage()); 
+       }
     }
     /**
      * @description This method is to get storyfields to be shown in new ticket creation
@@ -75,9 +75,9 @@ class StoryFields extends ActiveRecord
             $data = Yii::$app->db->createCommand($qry)->queryAll();
             return $data;
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
             Yii::error("StoryFields:getNewTicketStoryFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+            throw new ErrorException($ex->getMessage());
+       }
     }
     
         }

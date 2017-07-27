@@ -63,8 +63,9 @@ class UserPreferences extends ActiveRecord
                 $preference->save();
              }
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
             Yii::error("UserPreferences:savePreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+         throw new ErrorException($ex->getMessage()); 
+            
         }
     }
     
@@ -81,8 +82,9 @@ class UserPreferences extends ActiveRecord
             $data = Yii::$app->db->createCommand($query)->queryOne();
             return $data;    
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
+           
             Yii::error("UserPreferences:getPreference::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-        }
+        throw new ErrorException($ex->getMessage()); 
+            }
     }
 }

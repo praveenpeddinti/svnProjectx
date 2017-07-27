@@ -38,8 +38,8 @@ class TaskTypes extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;  
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
             Yii::error("TaskTypes:getTaskTypes::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+            throw new ErrorException($ex->getMessage());
         }
     }
 

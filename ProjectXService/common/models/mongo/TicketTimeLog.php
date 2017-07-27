@@ -76,7 +76,7 @@ class TicketTimeLog extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:saveTimeLogData1::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
         
@@ -111,7 +111,7 @@ class TicketTimeLog extends ActiveRecord
             
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:saveTimeLogData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
         
@@ -144,7 +144,7 @@ class TicketTimeLog extends ActiveRecord
             return $Arraytimelog;
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:getTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -183,7 +183,7 @@ class TicketTimeLog extends ActiveRecord
             return $timeReportDetails;
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:getAllTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -218,7 +218,7 @@ class TicketTimeLog extends ActiveRecord
             return $Arraytimelog;
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:getTimeReportCountAndWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -266,7 +266,7 @@ class TicketTimeLog extends ActiveRecord
             return $returnValue;
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:updateTimeLogRecords::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -287,7 +287,7 @@ class TicketTimeLog extends ActiveRecord
        
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:removeTimelogData::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
     }

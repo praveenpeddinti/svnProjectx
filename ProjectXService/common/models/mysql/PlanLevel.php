@@ -40,7 +40,7 @@ class PlanLevel extends ActiveRecord
         return $data;  
          } catch (\Throwable $ex) {
             Yii::error("PlanLevel:getPlanLevelDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }
@@ -55,7 +55,7 @@ class PlanLevel extends ActiveRecord
             return $data;
         } catch (\Throwable $ex) {
             Yii::error("PlanLevel:getPlanLevelList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     

@@ -29,7 +29,7 @@ class TimeReportService {
             return $arrayTimelog;
         } catch (\Throwable $ex) {
             Yii::error("TimeReportService:getTimeReportCountAndWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -81,7 +81,7 @@ class TimeReportService {
             return $TimeLogDataArray;
         } catch (\Throwable $ex) {
             Yii::error("TimeReportService:getAllTimeReportDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -99,7 +99,7 @@ class TimeReportService {
             return $workLogHours;
         } catch (\Throwable $ex) {
             Yii::error("TimeReportService:getTotalWorkLogHours::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -112,7 +112,7 @@ class TimeReportService {
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("TimeReportService:getAllStoryDetailsForTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
     }
@@ -155,7 +155,7 @@ class TimeReportService {
             }
         } catch (\Throwable $ex) {
             Yii::error("TimeReportService:RemoveTimelogs::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
         
     }
@@ -251,7 +251,7 @@ class TimeReportService {
             }
         } catch (\Throwable $ex) {
             Yii::error("TimeReportService:updateTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 }

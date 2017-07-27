@@ -29,7 +29,7 @@ trait EventTrait{
             EventCollection::saveEvent($evtobj);
         } catch (\Throwable $ex) {
             Yii::error("EventTrait:saveEvent::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
       } 

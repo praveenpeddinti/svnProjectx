@@ -63,7 +63,7 @@ class TicketComments extends ActiveRecord
             
         }catch (\Throwable $ex) {
             Yii::error("TicketCommentsCollection:createCommentsRecord::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -78,7 +78,7 @@ class TicketComments extends ActiveRecord
            return $ticketCommentDetails;
          }catch (\Throwable $ex) {
             Yii::error("TicketCommentsCollection:getTicketComments::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -96,7 +96,7 @@ class TicketComments extends ActiveRecord
             }
         }catch (\Throwable $ex) {
             Yii::error("TicketCommentsCollection:saveComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -116,7 +116,7 @@ class TicketComments extends ActiveRecord
             return $ticketActivity;
         } catch (\Throwable $ex) {
             Yii::error("TicketCommentsCollection:getTicketActivity::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -133,7 +133,7 @@ class TicketComments extends ActiveRecord
         return $res;
         } catch (\Throwable $ex) {
             Yii::error("TicketCommentsCollection:removeComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }

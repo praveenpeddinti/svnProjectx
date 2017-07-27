@@ -42,7 +42,7 @@ class Filters extends ActiveRecord
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("Filters:getAllActiveFilters::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }

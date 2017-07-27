@@ -41,8 +41,8 @@ class StoryCustomFields extends ActiveRecord
         $data = Yii::$app->db->createCommand($query)->queryOne();
         return $data;  
         } catch (\Throwable $ex) {
-            throw new ErrorException($ex->getMessage()); 
             Yii::error("StoryCustomFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+             throw new ErrorException($ex->getMessage()); 
         }
        
     }

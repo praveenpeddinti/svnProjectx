@@ -41,7 +41,7 @@ class MapListCustomStoryFields extends ActiveRecord
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("MapListCustomerStoryFields:getListValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
        
     }

@@ -32,7 +32,7 @@ class ServiceFactory {
             return self::$inst_story_service;
         }catch (\Throwable $ex) {
             Yii::error("ServiceFactory:getStoryServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -44,7 +44,7 @@ class ServiceFactory {
             return self::$inst_collaborator_service;
         } catch (\Throwable $ex) {
             Yii::error("ServiceFactory:getCollaboratorServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
@@ -56,7 +56,7 @@ class ServiceFactory {
             return self::$inst_timereport_service;
         } catch (\Throwable $ex) {
             Yii::error("ServiceFactory:getTimeReportServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
     
@@ -68,7 +68,7 @@ class ServiceFactory {
             return self::$inst_bucket_service;
         } catch (\Throwable $ex) {
             Yii::error("ServiceFactory:getBucketServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException('Something went wrong');
+            throw new ErrorException($ex->getMessage());
         }
     }
 
