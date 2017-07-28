@@ -27,9 +27,7 @@ export class LoginService {
   logout(logoutCallback) {
    socket.emit("clearInterval");
       this._ajaxService.AjaxSubscribe("site/update-collabarator-status",{},function(result){
-       localStorage.removeItem("user");
-       localStorage.removeItem("projectId");
-       localStorage.removeItem("projectName");
+       localStorage.clear();
        logoutCallback(result);
     }); 
   }

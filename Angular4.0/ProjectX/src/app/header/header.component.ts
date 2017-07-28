@@ -125,12 +125,8 @@ export class HeaderComponent implements OnInit {
       }
   logout() {
          this._service.logout((data)=>{ 
-              localStorage.setItem('ProjectName','');
-              localStorage.setItem('ProjectId',''); 
-              localStorage.setItem('user','');
               this._router.navigate(['login']);
               this.shared.change(null,null,'Logout',null,''); 
-              
         });
 
     }

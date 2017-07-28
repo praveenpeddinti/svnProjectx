@@ -385,7 +385,7 @@
    <span *ngIf="property.SpecialActivity=='1'"> 
        <span *ngIf="property.type=='follower'"><span class="bold">{{(comment.ActivityBy.UserName == property.ActionFieldTitle.Name)?'You':property.ActionFieldTitle.Name}}</span> {{property.Action}}&nbsp; <span class="bold" >{{ property.NewValue}}</span> </span> 
       <span *ngIf="property.type=='childtask' || property.type=='related' || property.type=='unrelated'">
-        <a class="bold" [routerLink]="['/project',projectName,property.NewValue.Id,'details']" >#{{property.NewValue.Id}}&nbsp;{{ property.NewValue.Name | truncate:30}}</a>&nbsp;<span class="bold"> {{property.Action}}</span>
+       <span class="bold" style="text-transform: capitalize;"> {{property.Action}}</span>&nbsp;the&nbsp; <span *ngIf="property.NewValue.PlanLevel==1">story&nbsp; <img src="assets/images/story-icon.png"/></span> <span *ngIf="property.NewValue.PlanLevel==2">task&nbsp;<img src="assets/images/task-icon.png"/></span><a class="bold" [routerLink]="['/project',projectName,property.NewValue.Id,'details']" >&nbsp;#{{property.NewValue.Id}}&nbsp;{{ property.NewValue.Name | truncate:30}}</a>
       </span> 
      
 </span>

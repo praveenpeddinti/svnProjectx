@@ -48,7 +48,7 @@
 <div [style]="{cursor:pointer}" (click)="goToComment(notify.Project,notify.TicketId,notify.Slug.$oid,notify.id.$oid)"  *ngIf="notify.object=='mention'||notify.object=='comment' ||notify.object=='reply' " class="not_content">
 <span  class="not_mention">
 {{notify.from}}
-</span> {{notify.type}} {{notify.ActivityOn}} {{notify.Preposition}}&nbsp;<img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/> <img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title }} </span>
+</span> {{notify.type}} <span  class="not_mention">{{notify.ActivityOn}} </span> {{notify.Preposition}}&nbsp;<img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/> <img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title }} </span>
 <div class="not_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
 </div>
 
