@@ -153,7 +153,7 @@ export class StoryEditComponent implements OnInit
 
   ngAfterViewInit() 
   {
-      this.editor.initialize_editor('description',null,null);      
+      this.editor.initialize_editor('description',null,this);      
   }
   inputKeyDown(event,eleId){
         if (event.shiftKey == true) {

@@ -129,7 +129,7 @@ expanded: any = {};
             }
             });
        }else{
-      // this._router.navigate(['project',this.projectName,'error']); 
+       this._router.navigate(['project',this.projectName,'error']); 
        }
                 
         });

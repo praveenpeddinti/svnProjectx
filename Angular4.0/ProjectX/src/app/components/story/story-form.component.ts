@@ -9,7 +9,7 @@ import { MentionService } from '../../services/mention.service';
 import { AjaxService } from '../../ajax/ajax.service';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 import {SharedService} from '../../services/shared.service'; //added by Ryan
-
+import { ProjectService } from '../../services/project.service';
 declare var jQuery:any;    //Reference to Jquery
 //declare const CKEDITOR;
 //declare var tinymce:any;
@@ -19,7 +19,7 @@ declare var summernote:any;
     selector: 'story-form',
     templateUrl: 'story-form.html',
     styleUrls: ['story-form.css'],
-    providers: [FileUploadService, StoryService]     
+    providers: [FileUploadService, StoryService,ProjectService]     
 
 })
 
@@ -45,19 +45,28 @@ export class StoryComponent
     editorData:string='';
     public fileUploadStatus:boolean = false;
     public projectName;
-
-    constructor(private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService,private editor:SummerNoteEditorService,private shared:SharedService,private route:ActivatedRoute) {
+    public projectId:any;
+    constructor(private projectService:ProjectService,private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService,private editor:SummerNoteEditorService,private shared:SharedService,private route:ActivatedRoute) {
         this.filesToUpload = [];
     }
 
   
     ngOnInit() 
-    {
-        let jsonForm={};//added by Ryan
-        this._service.getStoryFields(1,(response)=>
+    {    
+        var thisObj = this;
+  thisObj.route.queryParams.subscribe(
+      params => 
+      { 
+      thisObj.route.params.subscribe(params => {
+           thisObj.projectName=params['projectName'];
+           thisObj.shared.change(this._router.url,thisObj.projectName,'Dashboard','New',thisObj.projectName);            thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
+                if(data.statusCode ==200) {
+                thisObj.projectId=data.data.PId;  
+                 let jsonForm={};//added by Ryan
+        thisObj._service.getStoryFields(thisObj.projectId,(response)=>
         {
             
-            this.taskArray=response.data.task_types;
+            thisObj.taskArray=response.data.task_types;
               
               let DefaultValue;
                jsonForm['title'] ='';
@@ -78,9 +87,9 @@ export class StoryComponent
                     jsonForm[item] = element.DefaultValue;
                     var priority=(element.Title=="Priority"?true:false);
                     var listItemArray: any;
-                     listItemArray=this.prepareItemArray(DefaultValue,priority,element.Title);
+                     listItemArray=thisObj.prepareItemArray(DefaultValue,priority,element.Title);
                  //   alert(JSON.stringify(listItemArray[0].filterValue));
-                    this.storyFormData.push(
+                    thisObj.storyFormData.push(
                        {'lable':element.Title,'model':element.Field_Name,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray[0].filterValue,"labels":listItemArray}
                        )
                   });
@@ -110,17 +119,18 @@ export class StoryComponent
     })
         this.form = jsonForm;//shifted by Ryan from above
 
-        /* Code Block added for fixing Refresh issue in breadcrumb for story form */
-        var thisObj = this;
-        thisObj.route.queryParams.subscribe(
-        params => 
-        { 
-            thisObj.route.params.subscribe(params => {
-           thisObj.projectName=params['projectName'];
-           this.shared.change(this._router.url,thisObj.projectName,'Dashboard','New',thisObj.projectName);
+      
+               
+       }else{
+       this._router.navigate(['project',this.projectName,'error']); 
+       }
+                
         });
         });
-        /* Code Block End */
+       
+           })
+ 
+       
     }
 
     /**
@@ -256,7 +266,7 @@ export class StoryComponent
 
     */
     saveStory(){
-    
+        var thisObj = this;
         var editor=jQuery('#summernote').summernote('code');
         editor=jQuery(editor).text().trim();
         this.form['description']=jQuery('#summernote').summernote('code'); //for summernote editor
@@ -271,7 +281,10 @@ export class StoryComponent
                  };
                }  
               delete this.form['tasks']; 
-            this._service.saveStory(this.form,(response)=>{
+            this._service.saveStory(thisObj.projectId,thisObj.form,(response)=>{
+                if(response.statusCode == 200){
+                     thisObj._router.navigate(['project',thisObj.projectName,'list']);
+                }
                     });
        }
        

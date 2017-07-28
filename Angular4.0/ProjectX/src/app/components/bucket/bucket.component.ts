@@ -262,7 +262,8 @@ addBucket(){
     if(this.form['selectedUserFilter']==''){
        this.errorBucketLog('responsibleErrMsg','Please select Responsible');
     }
-    this._service.saveBucket(this.form,(response)=>{
+    this._service.saveBucket(this.projectId,this.form,(response)=>{
+    this._router.navigate(['project',this.projectName,'bucket']);
     if(response.data=='failure'){
       jQuery('#bucketSuccessMsg').show();
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');
@@ -329,7 +330,8 @@ editBucket(){
     if(this.form['selectedUserFilter']==''){
        this.errorBucketLog('responsibleErrMsg','Please select Responsible');
     }
-    this._service.updateBucket(this.form,this.BucketRole,(response)=>{
+    this._service.updateBucket(this.projectId,this.form,this.BucketRole,(response)=>{
+        this._router.navigate(['project',this.projectName,'bucket']);
     if(response.data=='failure'){
       jQuery('#bucketSuccessMsg').show();
       jQuery('#bucketSuccessMsg').removeClass('timelogSuccessMsg');

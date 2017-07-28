@@ -48,9 +48,7 @@ getResponsibleFilter(projectId,role,getResponsibleDetailsCallback) {
     });
   }
   
-  saveBucket(bucketData,saveBucketCallback){ 
-   var projectId=parseInt(localStorage.getItem('ProjectId'));
-   var projectName=localStorage.getItem('ProjectName');
+  saveBucket(projectId,bucketData,saveBucketCallback){ 
 var post_data={
       'projectId':projectId,
       'data':bucketData,
@@ -60,7 +58,7 @@ var post_data={
     if(post_data.data.title!='' && post_data.data.description !='' ){
        this._ajaxService.AjaxSubscribe("bucket/save-bucket-details",post_data,(data)=>
     { 
-         this._router.navigate(['project',projectName,'bucket']);
+         
          saveBucketCallback(data);
 
     });
@@ -69,9 +67,7 @@ var post_data={
  
  }
  
- updateBucket(bucketData,bucketRole,updateBucketCallback){ 
-   var projectId=parseInt(localStorage.getItem('ProjectId'));
-   var projectName=localStorage.getItem('ProjectName');
+ updateBucket(projectId,bucketData,bucketRole,updateBucketCallback){ 
 var post_data={
       'projectId':projectId,
       'data':bucketData,
@@ -82,7 +78,7 @@ var post_data={
     if(post_data.data.title!='' && post_data.data.description !='' ){
        this._ajaxService.AjaxSubscribe("bucket/update-bucket-details",post_data,(data)=>
     { 
-         this._router.navigate(['project',projectName,'bucket']);
+         
          updateBucketCallback(data);
 
     });

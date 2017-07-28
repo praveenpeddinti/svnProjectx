@@ -28,6 +28,8 @@ export class LoginService {
    socket.emit("clearInterval");
       this._ajaxService.AjaxSubscribe("site/update-collabarator-status",{},function(result){
        localStorage.removeItem("user");
+       localStorage.removeItem("projectId");
+       localStorage.removeItem("projectName");
        logoutCallback(result);
     }); 
   }

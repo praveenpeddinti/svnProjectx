@@ -220,7 +220,7 @@ getArtifacts(obj){
     
     
     //added by Ryan for summernote
-    this.editor.initialize_editor('detailEditor',null,null);
+    this.editor.initialize_editor('detailEditor',null,this);
      jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
     //  alert("here");
     //  jQuery("#detailEditor").summernote('code',jQuery("#detailEditor").html());
@@ -1164,7 +1164,7 @@ var thisObj = this;
     this.commentorId=this.commentsList[comment].ActivityBy.CollaboratorId
     var edit_comment='Activity_content_'+comment;
     /* added for summernote */
-      this.editor.initialize_editor(edit_comment,null,null);
+      this.editor.initialize_editor(edit_comment,null,this);
       jQuery("#Activity_content_"+comment).summernote('code',this.commentsList[comment].CrudeCDescription);
       jQuery("#Reply_Icons_"+comment).hide();
     jQuery("#Actions_"+comment).show();//show submit and cancel button on editor replace at the bottom
