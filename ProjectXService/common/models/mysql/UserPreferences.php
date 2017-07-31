@@ -78,7 +78,7 @@ class UserPreferences extends ActiveRecord
     {
         $userid=(int)$userid;
         try{
-            $query = "select PreferenceItems from UserPreferences where CollaboratorId=3";
+            $query = "select PreferenceItems from UserPreferences where CollaboratorId=$userid";
             $data = Yii::$app->db->createCommand($query)->queryOne();
             return $data;    
         } catch (\Throwable $ex) {
