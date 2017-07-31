@@ -311,7 +311,7 @@ export class StoryEditComponent implements OnInit
     }
     if(error == 0)
     {
-      edit_data.description= jQuery("#description").summernote('code');
+      edit_data.description= desc;
       edit_data.default_task=[];
       if(this.defaultTasksShow){
       var selectedTask=[];

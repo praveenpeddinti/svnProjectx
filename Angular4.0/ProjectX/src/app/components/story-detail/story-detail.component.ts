@@ -246,14 +246,14 @@ getArtifacts(obj){
         var postEditedText={
           isLeftColumn:0,
           id:'Description',
-          value:editorData,
+          value:editorDesc,
           ticketId:this.ticketId,
           projectId:this.projectId,
           editedId:'desc'
         };
         this.postDataToAjax(postEditedText);
         this.showDescEditor = true;
-        this.ticketCrudeDesc = editorData;//this.ticketEditableDesc;
+        this.ticketCrudeDesc = editorDesc;//this.ticketEditableDesc;
         }else{
           this.descError = "Description cannot be empty.";
         }
