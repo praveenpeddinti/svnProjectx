@@ -379,7 +379,7 @@
  <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-zero-' || property.NewValue=='-none-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-zero-' || property.NewValue=='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
                 </span>
     <span *ngIf="property.type!='user'"> 
-        <span *ngIf="property.PreviousValue!=0" class="bold" [innerText]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!=''">to</span> <span class="bold" [innerText]= "property.NewValue"></span> 
+        <span *ngIf="property.PreviousValue!=0" class="bold" [innerText]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!='' && property.PreviousValue!=0">to</span> <span class="bold" [innerText]= "property.NewValue"></span> 
                 </span>
   </span>              
    <span *ngIf="property.SpecialActivity=='1'"> 
