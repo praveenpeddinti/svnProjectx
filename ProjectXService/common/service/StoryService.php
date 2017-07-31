@@ -1355,9 +1355,10 @@ class StoryService {
                $subTicketDetails = $ticketCollectionModel->getTicketDetails($ticketNumber,$postData->projectId,$selectFields);
                //$returnStatus=$subTicketDetails;
                /* Notifications */
-               $notifyType="Create Task";
+               $activityOn="ChildTask";
+               $notify_type ='created';
                $slug =  new \MongoDB\BSON\ObjectID();
-               $this->saveNotifications($postData, $notifyType,'','',$slug,'',$ticketModel->TicketId);
+               $this->saveNotifications($postData,$notify_type,$activityOn,'',$slug,'',$ticketModel->TicketId);
                $activityData= $this->saveActivity($postData->ticketId,$postData->projectId,"ChildTask", $ticketNumber,$postData->userInfo->Id,$slug,$timezone);
                $returnStatus=array('Tasks'=>$subTicketDetails,'activityData'=>$activityData);
                /* end Notifications */

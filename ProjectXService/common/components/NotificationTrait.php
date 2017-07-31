@@ -102,11 +102,11 @@ trait NotificationTrait {
                     break;
                 case 'Unfollowed':$action = "removed from";
                     break;
-                case 'Related':$action = "has related";
+                case 'Related':$action = "related";
                     break;
                 case 'ChildTask':$action = "created";
                     break;
-                case 'Unrelated':$action = "has unrelated";
+                case 'Unrelated':$action = "unrelated";
                     break;
             }
         } else {
@@ -514,7 +514,7 @@ trait NotificationTrait {
                         EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($fieldType),"OldValue"=>0,"NewValue"=>(int)$tic->NewValue)],array("BucketId"=>(int)$bucket));
                     }
                 }
-            } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog")) { //This is for left hand property changes
+            } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog") && ($activityOn!=="ChildTask" && $activityOn!="TicketRelation") && ($fieldType == "FollowObj")) { //This is for left hand property changes
                 $oldFieldId = $oldValue;
                 $newFieldId = $activityOn;
                 $newValue = self::getFieldChangeValue($notifyType, $newFieldId);
@@ -531,7 +531,7 @@ trait NotificationTrait {
 
                 }
             }
-           
+           error_log("========111111111111111111111111111111=Field__Type___=" . $fieldType);
             /* notification for all followers and the stakeholders */
             $notificationIds = array();
             $collaboratorUser=array();
@@ -544,6 +544,7 @@ trait NotificationTrait {
                 }
             array_push($collaboratorUser,array('CollaboratorId'=>$follower['FollowerId'],'IsRead'=>0));
             }
+             error_log("======2222222222222222222222222222=Field__Type___=" . $fieldType);
                 $tic = new NotificationCollection();
                 $tic->CommentSlug = $slug;
                 $tic->NotifiedCollaborators = $collaboratorUser;
@@ -553,7 +554,7 @@ trait NotificationTrait {
                 $tic->ActivityOn = $notify_type; // new use case "ActivityOn" will be Field Name
                 $tic->ActivityFrom = (int) $loggedInUser;
                 $tic->NotificationDate = $currentDate;
-
+ error_log("===============Folloewrr+===111111111111=====iiiiiiiiiiiiiii==" . $fieldType);
                 if ($notifyType == "Description" || $notifyType == "Title") {
                     //  error_log("in descrioton--------#$#$");
                     $displayAction="changed";
@@ -574,9 +575,9 @@ trait NotificationTrait {
                     }
                 } else if ($fieldType == "FollowObj") {
 
-                    //error_log("===============Folloewrr+===111111111111==========" . $fieldType);
+                    error_log("===============Folloewrr+===111111111111=====ddd=====" . $fieldType);
 
-                    if ($follower['FollowerId'] != $activityOn) {
+                    
                         $tic->ActivityOn = $fieldType;
                         if ($loggedInUser == $activityOn) {
                             $notification_Type = ($notifyType == 'add') ? 'followed' : 'unfollowed';
@@ -595,7 +596,7 @@ trait NotificationTrait {
                             $notificationId = $tic->_id;
                             array_push($notificationIds, $notificationId);
                         }
-                    }
+                    
                 } else if ($fieldType == 6) {
 
                     if ($follower['FollowerId'] != $newCollaborator) { //previous case it was $activityOn which was collaborator_name
@@ -609,7 +610,19 @@ trait NotificationTrait {
                             array_push($notificationIds, $notificationId);
                         }
                     }
-                } else {    
+                } else if($activityOn == "ChildTask" || $activityOn == "TicketRelation") {
+                $tic->ActivityOn = $activityOn; 
+                $tic->ActivityFrom = (int) $loggedInUser;
+                $tic->NotificationDate = $currentDate;
+                $tic->Notification_Type = $notifyType;
+                $tic->OldValue = '';
+                $tic->NewValue = (int)$taskId;
+                $result = $tic->save(); 
+                if ($result) {
+                        $notificationId = $tic->_id;
+                        array_push($notificationIds, $notificationId);
+                    }
+            }else {    
                     $tic->Notification_Type = $activityOn;
                    // $tic->Status = 0;
                     $oldValue = ($fieldType == 4) ? $oldValue : (string) $oldValue;
@@ -620,7 +633,7 @@ trait NotificationTrait {
                         //  error_log("-----------_SSSSSSSSS------saving type----------");
                         $notificationId = $tic->_id;
                         array_push($notificationIds, $notificationId);
-                        if($bulkUpdate==''&& strtolower($notify_type)!="create task" &&  strtolower($notify_type)!="relate" &&  strtolower($notify_type)!="unrelate"){
+                        if($bulkUpdate==''&& strtolower($notify_type)!="childtask" &&  strtolower($notify_type)!="relate" &&  strtolower($notify_type)!="unrelate"){
                           EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($notify_type),"OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue)],array("BucketId"=>(int)$bucket));  
                         }
                         
@@ -708,20 +721,12 @@ trait NotificationTrait {
                     $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
                     array_push($result_msg, $message);
                 }
-                //for child task create...by Ryan
+               
                 
-                else if ($notification['ActivityOn'] == 'Create Task' || $notification['ActivityOn'] == 'Relate' || $notification['ActivityOn'] == 'UnRelate') {
+                else if ($notification['ActivityOn'] == 'ChildTask' || $notification['ActivityOn'] == 'TicketRelation') {
                     $targetTicketData = TicketCollection::getTicketDetails($notification['TargetTicketId'], $projectId);
                     $targetPlanLevel = $targetTicketData["Fields"]["planlevel"]["value"];
-                    if ($notification['ActivityOn'] == 'Create Task') {
-                        $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "task", 'type' => 'has created', 'id' => $notification['_id'], 'Title' => $ticket_data['Title'], 'TicketId' => $ticket_data['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'TargetPlanLevel' => $targetPlanLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'TargetTicketId' => $targetTicketData['TicketId'], 'TargetTicketTitle' => $targetTicketData['Title']);
-                    } else {
-                        if ($notification['ActivityOn'] == 'Relate') {
-                            $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "task", 'type' => 'has related', 'id' => $notification['_id'], 'Title' => $ticket_data['Title'], 'TicketId' => $ticket_data['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'TargetPlanLevel' => $targetPlanLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'TargetTicketId' => $targetTicketData['TicketId'], 'TargetTicketTitle' => $targetTicketData['Title']);
-                        } else {
-                            $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "task", 'type' => 'has unrelated', 'id' => $notification['_id'], 'Title' => $ticket_data['Title'], 'TicketId' => $ticket_data['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'TargetPlanLevel' => $targetPlanLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'TargetTicketId' => $targetTicketData['TicketId'], 'TargetTicketTitle' => $targetTicketData['Title']);
-                        }
-                    }
+                    $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "task", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'Title' => $ticket_data['Title'], 'TicketId' => $ticket_data['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'TargetPlanLevel' => $targetPlanLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'TargetTicketId' => $targetTicketData['TicketId'], 'TargetTicketTitle' => $targetTicketData['Title']);
                     array_push($result_msg, $message);
                 } else if ($notification['ActivityOn'] == 'TotalTimeLog') {
                     $notification['OldValue'] = number_format((float) $notification['OldValue'], 1, '.', '');
@@ -801,6 +806,7 @@ trait NotificationTrait {
                     $Date = $datetime->format('M-d-Y H:i:s');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
+                    $preposition = "on";
                     if ($notification['Notification_Type'] == 'mention') {
 
                         if ($notification['NotifiedUser'] == $user) {
@@ -808,7 +814,7 @@ trait NotificationTrait {
                             //     moin.hussain mentioned you in a reply
                             //     moin.hussain mentined you on Ticket #33
                             $notification['NotifiedUser'] = 'you';
-                            $message = array('Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "mention", 'type' => Yii::$app->params['mention'], 'id' => $notification['_id'], 'Slug' => $notification['CommentSlug'], 'ActivityOn' => $notification['NotifiedUser'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture']);
+                            $message = array('Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "mention", 'type' => Yii::$app->params['mention'], 'id' => $notification['_id'], 'Slug' => $notification['CommentSlug'], 'ActivityOn' => $notification['NotifiedUser'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'],"Preposition" => $preposition);
                             array_push($result_msg, $message);
                         }
                     }

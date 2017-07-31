@@ -22,7 +22,10 @@ return [
     "assignedto" => "",
     "stakeholder"=>"as Stake Holder",
     "followed" => "is following",
-    "unfollowed" => "is unfollowed"
+    "unfollowed" => "is unfollowed",
+    "created" => "has created",
+    "related" => "has related",
+    "unrelated" => "has unrelated",
   
     
     

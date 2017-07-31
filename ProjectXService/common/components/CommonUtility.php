@@ -1019,22 +1019,22 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                              $property["ActionFieldTitle"]=$action;
                              $property["NewValue"] = self::refineActivityData($newVal);break;
               case 'Related':$newVal="realted";
-                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title"]);
-                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title']);
+                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title","Fields"]);
+                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title'],'PlanLevel'=>$ticketDetails['Fields']['planlevel']['value']);
                              $newVal="Story/Task";
                              $property["type"]='related';
                              $property["ActionFieldTitle"]=$newVal;
                              $property["NewValue"] = $action;break; 
                case 'Unrelated':$newVal="unrealted";
-                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title"]);
-                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title']);
+                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title","Fields"]);
+                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title'],'PlanLevel'=>$ticketDetails['Fields']['planlevel']['value']);
                              $newVal="Story/Task";
                              $property["type"]='unrelated';
                              $property["ActionFieldTitle"]=$newVal;
                              $property["NewValue"] = $action;break;            
               case 'ChildTask':
-                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title"]);
-                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title']);
+                             $ticketDetails = TicketCollection::getTicketDetails((int)$property["NewValue"], $projectId,["TicketId","Title","Fields"]);
+                             $action=array("Id"=>$ticketDetails['TicketId'],"Name"=>$ticketDetails['Title'],'PlanLevel'=>$ticketDetails['Fields']['planlevel']['value']);
                              $newVal="Child task";
                              $property["type"]='childtask';
                              $property["ActionFieldTitle"]=$newVal;

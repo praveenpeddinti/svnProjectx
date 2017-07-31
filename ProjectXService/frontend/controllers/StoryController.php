@@ -521,7 +521,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionGetCollaborators::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =  ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =  $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -674,7 +674,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionFollowTicket::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = $th->getMessage() ;// ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -688,7 +688,7 @@ class StoryController extends Controller
             ServiceFactory::getStoryServiceInstance()->unfollowTicket($post_data->collaboratorId, $post_data->ticketId, $post_data->projectId);
             $activitydata =  ServiceFactory::getStoryServiceInstance()->saveActivity($post_data->ticketId, $post_data->projectId, 'Unfollowed', $post_data->collaboratorId, $post_data->userInfo->Id,"",$post_data->timeZone);
             $collaboratorData =  TinyUserCollection::getMiniUserDetails($post_data->collaboratorId);//added by Ryan
-            ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'remove', $post_data->collaboratorId,'',"FollowObj",$taskId=0);
+            ServiceFactory::getStoryServiceInstance()->saveNotifications($post_data, 'remove', $post_data->collaboratorId,"FollowObj",'',$taskId=0);
                /* notifications end */
             $UnfollowData['collaboratorId']  = $post_data->collaboratorId;
             $UnfollowData['activityData']  = $activitydata;
@@ -737,7 +737,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionCreateChildTask::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =  $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -796,9 +796,10 @@ class StoryController extends Controller
           $bucketId = $storyData->bucketId;
           $pdateRelateTask = ServiceFactory::getStoryServiceInstance()->updateRelatedTaskId($projectId,$ticketId,$searchTicketId,$loginUserId);
           $activityData= ServiceFactory::getStoryServiceInstance()->saveActivity($ticketId, $projectId,'Related', (int)$searchTicketId, $loginUserId,"",$timezone);
-          $notifyType="Relate";
           $slug =  new \MongoDB\BSON\ObjectID();
-          ServiceFactory::getStoryServiceInstance()->saveNotifications($storyData, $notifyType,'','',$slug,'',(int)$searchTicketId);
+          $activityOn="TicketRelation";
+          $notify_type ='related';
+          ServiceFactory::getStoryServiceInstance()->saveNotifications($storyData, $notify_type,$activityOn,'',$slug,'',(int)$searchTicketId);
           ServiceFactory::getStoryServiceInstance()->saveEvent($projectId,"Ticket",$ticketId,"related",'relate',$loginUserId,array("ActionOn"=>  strtolower("relatetask"),"OldValue"=>0,"NewValue"=>(int)$searchTicketId),array("BucketId"=>(int)$bucketId));
           $ticketData = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId,$ticketId);
           $responseData=array('ticketData'=>$ticketData,'activityData'=>$activityData);
@@ -952,9 +953,10 @@ class StoryController extends Controller
             $timezone=$ticketData->timeZone;
             $bucketId=$ticketData->bucketId;
             $response['activityData'] = ServiceFactory::getStoryServiceInstance()->unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId,$timezone);
-            $notifyType="UnRelate";
+            $notifyType="unrelated";
+            $activityOn="TicketRelation";
             $slug =  new \MongoDB\BSON\ObjectID();
-            ServiceFactory::getStoryServiceInstance()->saveNotifications($ticketData, $notifyType,'','',$slug,'',$unRelateTicketId);
+            ServiceFactory::getStoryServiceInstance()->saveNotifications($ticketData, $notifyType,$activityOn,'',$slug,'',$unRelateTicketId);
             ServiceFactory::getStoryServiceInstance()->saveEvent($projectId,"Ticket",$parentTicketId,"unrelated",'unrelate',$loginUserId,array("ActionOn"=>  strtolower("unrelatetask"),"OldValue"=>0,"NewValue"=>(int)$unRelateTicketId),array("BucketId"=>(int)$bucketId));
             $response['ticketInfo'] = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId, $parentTicketId);
             $responseBean = new ResponseBean();
