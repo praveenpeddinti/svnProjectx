@@ -519,6 +519,9 @@ trait NotificationTrait {
                 $oldFieldId = $oldValue;
                 $newFieldId = $activityOn;
                 $newValue = self::getFieldChangeValue($notifyType, $newFieldId);
+                if ($oldValue == $activityOn) {
+                    return;
+                }
                 if ($oldValue != '') { //if changed
                     $activityOn = 'changed';
                     $oldValue = self::getFieldChangeValue($notifyType, $oldFieldId);
