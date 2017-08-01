@@ -14,6 +14,7 @@ declare var jQuery:any;    //Reference to Jquery
 //declare const CKEDITOR;
 //declare var tinymce:any;
 declare var summernote:any;
+let jsonForm={};//added by Ryan
 
  @Component({
     selector: 'story-form',
@@ -45,6 +46,7 @@ export class StoryComponent
     editorData:string='';
     public fileUploadStatus:boolean = false;
     public projectName;
+    public checkvalue:boolean=false;
     public projectId:any;
     constructor(private projectService:ProjectService,private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService,private editor:SummerNoteEditorService,private shared:SharedService,private route:ActivatedRoute) {
         this.filesToUpload = [];
@@ -62,7 +64,7 @@ export class StoryComponent
            thisObj.shared.change(this._router.url,thisObj.projectName,'Dashboard','New',thisObj.projectName);            thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode ==200) {
                 thisObj.projectId=data.data.PId;  
-                 let jsonForm={};//added by Ryan
+                 //let jsonForm={};//added by Ryan
         thisObj._service.getStoryFields(thisObj.projectId,(response)=>
         {
             
@@ -108,15 +110,27 @@ export class StoryComponent
     /* Added By Ryan */ 
     this._service.getPreferences((response)=>
     {
-        var preferences=response.data.PreferenceItems;
-        var preferences_array=preferences.split(',');
-        for(let item of preferences_array)
-        {
-            
-            this.selectedTickets.push(item.trim());
-        }
-        jsonForm['tasks']=this.selectedTickets;//shifted by Ryan from above
-    })
+        this.checkvalue=false;
+        this.selectedTickets=[];
+        if(response.statusCode == 200){
+            var preferences=response.data.PreferenceItems;
+            console.log("==Prefernce data=="+JSON.stringify(preferences));
+            if(preferences!=""){
+                var preferences_array=preferences.split(',');
+                for(let item of preferences_array)
+                {
+                        this.selectedTickets.push(item.trim());                
+                }
+                if(this.selectedTickets.length==this.taskArray.length)
+                {
+                    this.checkvalue=true;
+                }
+               
+                jsonForm['tasks']=this.selectedTickets;//shifted by Ryan from above
+                
+            }
+        }else{console.log("==User Preferences has some issue==");}
+    });
         this.form = jsonForm;//shifted by Ryan from above
 
       
@@ -303,6 +317,48 @@ export class StoryComponent
                 this.defaultTasksShow = false;
               }
 
+        }
+    }
+
+    /**
+     * @author:Ryan Marshal
+     * @description:This is used for selecting/deselecting all Tasks
+     */
+    selectDeselectAll(checked:boolean)
+    {
+        console.log("==Status=="+checked);
+        if(checked==true)
+        {
+            jsonForm['tasks']='';
+            this.selectedTickets=[];
+            for(let task of this.taskArray)
+            {
+                this.selectedTickets.push(task.Id);
+            }
+            
+        }
+        else
+        {
+            this.selectedTickets=[];
+        }
+        jsonForm['tasks']=this.selectedTickets;
+    }
+
+     /**
+     * @author:Ryan Marshal
+     * @description:This is used for checking Tasks Length and check/uncheck "All Tasks"
+     */
+    checkTasks(checked:boolean)
+    {
+        console.log("in check tasks"+JSON.stringify(jsonForm['tasks']));
+        if(jsonForm['tasks'].length<this.taskArray.length && jsonForm['tasks']!=[])
+        {
+            console.log("in if"+this.checkvalue);
+            this.checkvalue=false;
+        }
+        else
+        {
+            this.checkvalue=true;
         }
     }
 
