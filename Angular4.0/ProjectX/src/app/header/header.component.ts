@@ -1,10 +1,11 @@
 import { Component, OnInit,AfterViewChecked,OnDestroy,Input} from '@angular/core';
-import { Router} from '@angular/router';
+import { Router,ActivatedRoute} from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { LoginService, Collaborator } from '../services/login.service';
 import { AjaxService } from '../ajax/ajax.service';
 import {SharedService} from '../services/shared.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ProjectService } from '../services/project.service'
 import {ToasterContainerComponent, ToasterService, ToasterConfig} from 'angular2-toaster';
 declare var io:any;
 declare var socket:any;
@@ -13,7 +14,7 @@ declare var jQuery:any;
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  providers: [LoginService,ToasterService]
+  providers: [LoginService,ToasterService,ProjectService]
 })
 
 export class HeaderComponent implements OnInit {
@@ -41,7 +42,8 @@ export class HeaderComponent implements OnInit {
   public toast:any;
   //private ProjectName='';
   private PName='';
- 
+  private projectId;
+  public projectName;
    constructor(
     private _ajaxService: AjaxService,
     public _router: Router,
@@ -49,12 +51,30 @@ export class HeaderComponent implements OnInit {
     private _service: LoginService,
     private shared:SharedService,
     private toasterService: ToasterService,
+    private projectService:ProjectService,private route:ActivatedRoute
        ) { }
 
   ngOnInit() {
+
      if(this._router.url=='/home'){
       this.ProjectName='';// to remove right side sticky menu.
+    }else{
+  var thisObj = this;
+  thisObj.route.queryParams.subscribe(
+      params => 
+      { 
+      thisObj.route.params.subscribe(params => {
+           thisObj.projectName=params['projectName'];
+           thisObj.shared.change(this._router.url,thisObj.projectName,'Dashboard','New',thisObj.projectName);            thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
+                if(data.statusCode ==200) {
+                thisObj.projectId=data.data.PId;   
+               }
+                
+        });
+        });
+           });
     }
+    
  var thisObj = this;
  this.shared.getNotificationCount().subscribe(value=>
       { 
@@ -111,6 +131,8 @@ export class HeaderComponent implements OnInit {
     }
     
     this.getAllProjectNames();
+  
+        //  alert("#########"+thisObj.projectName);
       }
 
       ngAfterViewChecked(){
@@ -159,10 +181,10 @@ projectsArray(list){
       delete this.PName;
     
     }
-          if(this.PName=='' || this.PName==undefined){
+          if(this.projectName=='' || this.projectName==undefined){
               this._router.navigate(['search',],{queryParams: {q:searchString}});
           }else{
-             this._router.navigate(['project',this.PName,'search'],{queryParams: {q:searchString}});
+             this._router.navigate(['project',this.projectName,'search'],{queryParams: {q:searchString}});
        }
       
     }
@@ -277,7 +299,7 @@ projectsArray(list){
   }
   
   TimeReport(){
-  this._router.navigate(['project',localStorage.getItem('ProjectName'),'time-report']);
+  this._router.navigate(['project',this.projectName,'time-report']);
 }
 
  changeProject(){
@@ -288,7 +310,7 @@ projectsArray(list){
     }
 
 Bucket(){
-  this._router.navigate(['project',localStorage.getItem('ProjectName'),'bucket']);
+  this._router.navigate(['project',this.projectName,'bucket']);
 }
 
 }
