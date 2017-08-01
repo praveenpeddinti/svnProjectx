@@ -514,7 +514,8 @@ trait NotificationTrait {
                         EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($fieldType),"OldValue"=>0,"NewValue"=>(int)$tic->NewValue)],array("BucketId"=>(int)$bucket));
                     }
                 }
-            } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog") && ($activityOn!=="ChildTask" && $activityOn!="TicketRelation") && ($fieldType == "FollowObj")) { //This is for left hand property changes
+            } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog") && ($activityOn!=="ChildTask" && $activityOn!="TicketRelation") || ($fieldType == "FollowObj")) { //This is for left hand property changes
+              
                 $oldFieldId = $oldValue;
                 $newFieldId = $activityOn;
                 $newValue = self::getFieldChangeValue($notifyType, $newFieldId);
