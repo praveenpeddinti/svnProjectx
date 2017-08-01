@@ -82,9 +82,13 @@
         </div>
 
             <div *ngIf="defaultTasksShow == true "  >
-                <div style="font-size:16px; font-weight:bold; margin:20px 0px 10px 0px;">Tasks</div>
+                <label style="font-size: 12px!important;
+    vertical-align: top!important;
+    line-height: 25px!important;
+    color: #6d6d6d!important; font-weight:700;">Select All Tasks</label>&nbsp;&nbsp;
+                <p-checkbox name="all" #all="ngModel" (onChange)="selectDeselectAll($event)"  [(ngModel)]="checkvalue" binary="true" ></p-checkbox>
                 <div class="ui-g">
-                    <div class="cbx" *ngFor="let task of taskArray" ><p-checkbox name="{{task.Name}}" [(ngModel)]="form.tasks" value="{{task.Id}}" label="{{task.Name}}" ></p-checkbox></div>
+                    <div class="cbx" *ngFor="let task of taskArray" ><label>{{task.Name}}</label>&nbsp;&nbsp;<p-checkbox (onChange)="checkTasks($event)" name="{{task.Name}}" [(ngModel)]="form.tasks" value="{{task.Id}}" ></p-checkbox></div>
                      </div>
             </div>
             
