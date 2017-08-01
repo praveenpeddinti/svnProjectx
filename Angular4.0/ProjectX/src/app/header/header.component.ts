@@ -1,4 +1,4 @@
-import { Component, OnInit,Input} from '@angular/core';
+import { Component, OnInit,AfterViewChecked,OnDestroy,Input} from '@angular/core';
 import { Router} from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { LoginService, Collaborator } from '../services/login.service';
@@ -112,6 +112,16 @@ export class HeaderComponent implements OnInit {
     
     this.getAllProjectNames();
       }
+
+      ngAfterViewChecked(){
+        console.log("---ngAfterViewChecked---");
+      }
+     ngOnDestroy(){
+        var thisObj = this;
+        console.log("---ngOnDestroy---");
+        socket.off('getAllNotificationsCountResponse');
+      }
+  
       getAllProjectNames(){
         var sendData={
            userId:JSON.parse(this.users.Id)
