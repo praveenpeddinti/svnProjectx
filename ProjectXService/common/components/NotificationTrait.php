@@ -239,7 +239,7 @@ trait NotificationTrait {
      */
     public static function saveNotificationsForComment($commentData, $userslist, $notify_type, $slug) {
         try {
-             error_log("saveNotificationsForComment---11---".$notify_type."---".$slug);
+            // error_log("saveNotificationsForComment---11---".$notify_type."---".$slug);
             
              
             $commentOwner = $commentData->Comment->OriginalCommentorId;
@@ -300,9 +300,9 @@ trait NotificationTrait {
             if (!empty($followers)) {
             foreach ($followers as $follower) {
                 if ($follower['FollowerId'] != $loggedinUser && $follower['FollowerId'] != $commentOwner && !in_array($follower['FollowerId'], $mentionUserIdlist)) {
-                     array_push($collaboratorIds, array("CollaboratorId"=>(int)$follower['FollowerId'] ,"IsRead"=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$follower['FollowerId'] ,"IsRead"=>0));
                     }
-            }error_log("---------------------------------1");
+            }
                     $tic = new NotificationCollection();
                     $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->TicketId = $ticketId;
@@ -323,7 +323,7 @@ trait NotificationTrait {
                     
                    // seprate record for comment owner
                     $collaboratorIds = array();
-                    if($commentOwner !=''){
+                    if($commentOwner !='' && $commentOwner != $loggedinUser){
                     array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsRead"=>0));
                     $tic = new NotificationCollection();
                     $tic->NotifiedCollaborators = $collaboratorIds;
