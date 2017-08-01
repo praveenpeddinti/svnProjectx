@@ -3,7 +3,7 @@
     <div class="widgethedsub">Time Report</div>
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-6 ">
-            
+            <ngx-flash-messages></ngx-flash-messages>
            <div class="row">
         <div class="col-xs-12 col-sm-4 col-md-4 errorshow ">
             <label class="timereportlabel">From</label>
@@ -60,6 +60,13 @@
       <div class="col-xs-12 col-sm-6 col-md-6 ">
           <div class="widgethedsub">Time Tracking</div>
       </div>
+      <!--<div class="app-container">-->
+  <!-- This is where your flash messages will be displayed -->
+  
+  <!--<div class="alert-warning"></div>-->
+
+<!--</div>-->
+      <div class="alertssssssssss"></div>
     <div class="col-xs-12 col-sm-6 col-md-6 ">
         <div class="pull-right">
            
@@ -129,7 +136,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
 <!-- Column Template -->
 
 </ngx-datatable>
-      <div  class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment" id="delete_timelog" style="width:auto">
+      <div [style.display]="(deletePopUp == false) ? 'none' : 'block' " class="dropdown-menu customdropdown-menutable customdropdown-menutablealignment" id="delete_timelog" style="width:auto">
             <div class="delete_followersbgtable" >  
                 Do you want to remove this Time log? 
                 <div class="text-center" style=" padding-top:10px">
@@ -138,6 +145,8 @@ Row classes are also dynamically. These classes are pass to service layer-->
         </div>
             </div>
         </div>
+ 
+             <div *ngIf="addPopUp">
               <div class="modal fade custommodel"  id="addTimelogModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -151,7 +160,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
      <form   #timeLogForm="ngForm" (ngSubmit)="submitted && timeLogForm.form.valid && addTimeLog()" novalidate="true">
 
       <div class="modal-body">
-          <div class="timelogSuccessMsg"> Time log added successfully</div>
+          <div class="timelogSuccessMsg" [style.display]="(addSuccessMsg ==false) ? 'none':'inherit'"> Time log added successfully</div>
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
@@ -162,7 +171,12 @@ Row classes are also dynamically. These classes are pass to service layer-->
                 <div  [hidden]="!task.errors.required">Story/task is required</div>
                 
             </div>
-              <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
+                                <div *ngIf="titleErrMsg" class="fielderror">
+                <div [hidden]="!titleErrMsg">
+                   Please select valid story/task
+                </div>
+            </div>
+              <!--<div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>-->
                   </div>
               </div>
               
@@ -193,7 +207,12 @@ Row classes are also dynamically. These classes are pass to service layer-->
                     Hours is required
                 </div>
                 </div>
-                 <div id="addHoursErrMsg" class="fielderror" style="display:none;"></div>
+                           <div *ngIf="hourErr" class="fielderror">
+                <div [hidden]="!hourErr">
+                    Invalid Time
+                </div>
+            </div>
+                 <!--<div id="addHoursErrMsg" class="fielderror" style="display:none;"></div>-->
               </div>
                
               </div>
@@ -219,6 +238,9 @@ Row classes are also dynamically. These classes are pass to service layer-->
     </div>
   </div>
 </div>
+</div>
+
+ <div *ngIf="editPopUp">
            <div class="modal fade custommodel"  id="editTimelogModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -231,8 +253,8 @@ Row classes are also dynamically. These classes are pass to service layer-->
      
      <form   #timeLogEditForm="ngForm" (ngSubmit)="esubmitted && timeLogEditForm.form.valid && editTimeLog()" novalidate="true">
       <div class="modal-body">
-          
- <div class="timelogSuccessMsg" > Time log updated successfully</div>
+     <div class="timelogSuccessMsg" [style.display]="(editSuccessMsg ==false) ? 'none':'inherit'"> Time log updated successfully</div>     
+ <!--<div class="timelogSuccessMsg" > Time log updated successfully</div>-->
           <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                   <label class="timereportlabel"> Story/Task </label>
@@ -245,7 +267,12 @@ Row classes are also dynamically. These classes are pass to service layer-->
                 </div>
 
             </div>
-            <div id="editTitleErrMsg" class="fielderror" style="display:none;"></div>
+            <!--<div id="editTitleErrMsg" class="fielderror" style="display:none;"></div>-->
+                                   <div *ngIf="titleErrMsg" class="fielderror">
+                <div [hidden]="!titleErrMsg">
+                   Please select valid story/task
+                </div>
+            </div>
                   </div>
               </div>
               
@@ -276,7 +303,14 @@ Row classes are also dynamically. These classes are pass to service layer-->
                     Hours is required
                 </div>
             </div>
-                         <div id="editHoursErrMsg" class="fielderror" style="display:none;"></div>
+                         <div *ngIf="hourErr" class="fielderror">
+                <div [hidden]="!hourErr">
+                    Invalid Time
+                </div>
+            </div>
+            <!--<span  ng-show="hourErr">Invalid pattern</span>-->
+             <div class="alert-success"></div>
+                         <!--<div id="editHoursErrMsg" class="fielderror" style="display:none;"></div>-->
               </div>
                
               </div>
@@ -294,7 +328,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
           </div>
            </div>
           <div class="modal-footer">
-        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="esubmitted=true;">UPDATE</button>
+        <button type="submit" class="normal bluebutton bluebuttonmedium "  (click)="esubmitted=true;" >UPDATE</button>
         <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="esubmitted=false;resetForm();">CANCEL</button>
       </div>
       
@@ -303,6 +337,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
       
     </div>
   </div>
+</div>
 </div>
  
 

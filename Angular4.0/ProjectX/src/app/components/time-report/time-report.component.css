@@ -8,10 +8,10 @@
 #delete_timelog{
     display:none;
 }
-.timelogSuccessMsg{
+/*.timelogSuccessMsg{
    display:none;
 
-}
+}*/
 #descriptionerr_msg{
     display:none;
 }
@@ -106,3 +106,21 @@
 }
 .datatable-body-row:hover{ background: #fff!important;}
 .datatable-body-row:focus{ background: #fff!important;}
+#grayOutDiv
+{
+    background-color: #333;
+    opacity: 0.7;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    z-index: 9999;
+}
+ 
+.flash-message
+{
+    z-index: 10000;
+    position: relative;
+}

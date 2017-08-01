@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit,NgZone } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
@@ -21,7 +21,9 @@ export class SearchComponent implements OnInit{
     public ready=true;
     public searchFlag;
     public projectName; 
-    public projectId; 
+    public projectId;
+    public noSearchDivClass='';
+    public searchDivTabs:any; 
     ngOnInit(){
    var thisObj = this;
      this.route.queryParams.subscribe(
@@ -82,38 +84,40 @@ export class SearchComponent implements OnInit{
       }
       console.log("psearchparam"+JSON.stringify(post_data));
           this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
-         { 
+         {
+             this.zone.run(() => { 
                    if(result.message !='no result found'){
-                    jQuery('#nosearchdiv').css("display","");
-                    jQuery('#noseachdivclass').addClass('col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero');
-                     this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
+                   // document.getElementById("nosearchdiv").style.display = 'block';
+                   this.searchDivTabs=true;
+                    this.noSearchDivClass='col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero';
+                    this.searchArray= this.searchDataBuilder(result.data,this.searchArray);
                     this.ready=true;
                     }else{
                         if(scroll=='scroll' && result.message =='no result found'){
-                           if (jQuery('#searchsection:contains("No Results Found")').length > 0) {
-                                console.log("@@@@@@@@@@@@@@");
-                                jQuery('#searchsection').html('No Results Found');
-                                
-                          }else{
-                               jQuery('#noseachdivclass').removeClass();
-                            jQuery('#noseachdivclass').addClass('col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero');
-                              console.log("asddddddddddddddqwwwwwwwwww");
-                              jQuery('#nosearchdiv').css("display","");
-                               jQuery('#searchsection').html('');
-                              jQuery('#searchsection').html("That’s all. No results found.");
-                          }   
+                               if (document.getElementById('searchsection').innerHTML.indexOf("No Results Found") != -1) {
+                                  document.getElementById('searchsection').innerHTML='No Results Found';
+                            }else{
+                                this.noSearchDivClass=' ';
+                                this.noSearchDivClass='col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero';
+                                document.getElementById("nosearchdiv").style.display = 'block';
+                                document.getElementById('searchsection').innerHTML=' '; 
+                                document.getElementById('searchsection').innerHTML="That’s all. No results found."; 
+                           }   
                         }else{
                             if(searchFlag=='' || searchFlag==undefined){
-                            jQuery('#noseachdivclass').removeClass();
-                            jQuery('#noseachdivclass').addClass('col-xs-12 col-sm-12 col-md-12 tabpaddingleftzero');
-                            jQuery('#nosearchdiv').css("display","none");
+                                this.noSearchDivClass='';
+                                this.noSearchDivClass='col-xs-12 col-sm-12 col-md-12 tabpaddingleftzero';
+                             //   document.getElementById("nosearchdiv").style.display ='';
+                              //  document.getElementById("nosearchdiv").style.display = 'none'; 
+                               this.searchDivTabs=false;
                             }
-                            jQuery('#searchsection').html('');
-                            jQuery('#searchsection').html('No Results Found');
-                        }
+                                document.getElementById('searchsection').innerHTML=' ';
+                                document.getElementById('searchsection').innerHTML='No Results Found';
+                          }
                  
                 }
            });
+            });
          
     }
     constructor(
@@ -123,7 +127,8 @@ export class SearchComponent implements OnInit{
         private _ajaxService: AjaxService,
         private shared:SharedService,
         private projectService:ProjectService,
-        private http: Http
+        private http: Http,
+        private zone:NgZone
         ) {
 
          }
@@ -147,7 +152,7 @@ export class SearchComponent implements OnInit{
         this.searchFlag=searchFlag;
         this.page=1;
         // alert("loading12333"+this.projectId);
-         jQuery('#searchsection').html('');
+        document.getElementById('searchsection').innerHTML=' ';
         this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'');
         
      }

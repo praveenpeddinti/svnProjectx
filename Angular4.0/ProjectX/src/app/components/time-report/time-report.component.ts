@@ -58,6 +58,13 @@ export class TimeReportComponent{
     errors: string='';
     adderrors: string='';
     oldWorkLogHour: number = 0;
+    public hourErr=false;
+    public titleErrMsg=false;
+    public addPopUp=true;
+   public editPopUp=true;
+   public deletePopUp=true;
+   public editSuccessMsg:any;
+   public addSuccessMsg:any;
     columns = [
                 {
                     name: 'Date',
@@ -105,12 +112,14 @@ export class TimeReportComponent{
             };
         }
     ngOnInit() {
-        jQuery(document).click(function(e){
-                if(jQuery(e.target).closest(".deletebutton").length == 0 ) {
-                    jQuery("#delete_timelog").css("display", "none");
-                }
-
-      });
+        var thisObj=this;
+         this.deletePopUp=false;
+    //    jQuery(document).click(function(e){
+    //            if(jQuery(e.target).closest(".deletebutton").length == 0 ) {
+    //                // jQuery("#delete_timelog").css("display", "none");
+    //                this.deletePopUp=false;
+    //             }
+    //   });
         var thisObj = this;
         this.date4 = (this.calendarVal.getMonth() + 1) + '-' + this.calendarVal.getDate() + '-' + this.calendarVal.getFullYear(); 
         var maxDate = new Date();//set current date to datepicker as min date
@@ -134,7 +143,9 @@ export class TimeReportComponent{
                 }
                 });
             });
+ 
         });
+         
     }
 
     selectFromDate(event){
@@ -155,13 +166,13 @@ export class TimeReportComponent{
         }
     }
     clearDateTimeEntry(){
+        this.addPopUp=true;
+        this.entryForm['text']='';
         this.entryForm={};
         this.entryForm={'dateVal':new Date()};
-        jQuery('#addHoursErrMsg').hide();
-        jQuery('#editHoursErrMsg').hide();
-        jQuery('#addTitleErrMsg').hide();
-        jQuery('#editHoursErrMsg').hide();
-        jQuery('#editTitleErrMsg').hide();
+        this.hourErr=false;
+        this.titleErrMsg=false;
+        this.addSuccessMsg=false;
        
     }
     /*
@@ -214,16 +225,18 @@ export class TimeReportComponent{
     renderStoryForm() {
         this._router.navigate(['story-form']);
     }
-    editTimeReport(){
-          document.getElementById("editTimeReport").style.display='block';
-    }
+    // editTimeReport(){
+    //       document.getElementById("editTimeReport").style.display='block';
+    // }
     resetForm(){
        // alert("asdddddddddddd");
         this.extractFields=[];
-        
+        this.hourErr=false;
+        this.titleErrMsg=false;
     }
     searchTask(event) {
         console.log("##########"+event.query);
+        this.titleErrMsg=false;
         var searchStrg=event.query;
         var modifiedString=event.query.replace("#","");
         var post_data={
@@ -271,6 +284,7 @@ export class TimeReportComponent{
     }
     editTimeLog(){
         this.selectedValForDate = null;
+        this.hourErr=false;
         var editableDate=  new Date(this.extractFields['readableDate']);
         if(this.extractFields['ticketDesc'].includes("#")){
             var post_data={
@@ -290,27 +304,29 @@ export class TimeReportComponent{
                     { 
                         if (response.statusCode == 200) {
                             this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
-                            jQuery('.timelogSuccessMsg').css('display','block');
-                            jQuery('.timelogSuccessMsg').fadeOut( "slow" );;
+                             this.editSuccessMsg=true;
                             setTimeout(() => {
-                                jQuery('#editTimelogModel').modal('hide');
-                            }, 500);
-                        } else {
+                                this.editPopUp=false;
+                           }, 500);
+                          this.editPopUp=true;
+                         } else {
                             console.log("fail---");
                         }
                     });
             }else{
-                    this.errorTimeLog('editHoursErrMsg','Invalid Time');
-            }
+                this.hourErr=true;
+              }
         }else{
-                    this.errorTimeLog('editTitleErrMsg','Please select valid story/task');
-            }
+            this.titleErrMsg=true;
+     }
     }
     
     addTimeLog(){ 
         var getTaskVal=this.entryForm['text']; 
         var thisObj = this;
         var finalDate= this.entryForm['dateVal'].toString();
+         this.hourErr=false;
+         this.titleErrMsg=false;
         if(getTaskVal.includes("#")){
             var ticketSpilt = getTaskVal.split("#")[1];
             var ticket_Id = ticketSpilt.split(" ")[0];
@@ -324,36 +340,31 @@ export class TimeReportComponent{
             }
         
             if(this.entryForm['hours']!=0){
+                this.hourErr=false;
                 this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
                 { 
                     if (response.statusCode == 200) {
                         this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
-                        jQuery('.timelogSuccessMsg').css('display','block');
-                        jQuery('.timelogSuccessMsg').fadeOut( "slow" );
+                        this.addSuccessMsg=true;
                         setTimeout(() => {
                             this.submitted=false;
-                            jQuery('#addTimelogModel').modal('hide');
-                        }, 500);
+                            this.addPopUp=false;
+                       }, 500);
+                        this.addPopUp=true;
                     } else {
                     // this.errorMsg = 'dsasdasd';
                     }
                 });
             }else{
-                this.errorTimeLog('addHoursErrMsg','Invalid Time');
+                 this.hourErr=true;
             }
     }else{
-              this.errorTimeLog('addTitleErrMsg','Please select valid story/task');
-        }
+        this.titleErrMsg=true;
+       }
     }
-     public  errorTimeLog(id,msg){
-            jQuery("#"+id).html(msg);
-            jQuery("#"+id).show();
-            jQuery("#"+id).fadeOut(4000);
-         
-        }
  
     showdeleteDiv(delObj,slug,e){
-         jQuery("#delete_timelog").css("display", "block");
+        this.deletePopUp=true;
         var delbutton_Height=25;
         var delbutton_Width=jQuery('#del_'+slug).width()/2;
         var delete_popup=jQuery('.delete_followersbgtable').width()/2;
@@ -377,16 +388,21 @@ export class TimeReportComponent{
         }
             this._ajaxService.AjaxSubscribe("time-report/remove-timelog",postObj,(response)=>
         { 
-            jQuery('#delete_timelog').hide();
+           setTimeout(() => {
+                this.deletePopUp=false;
+                        }, 250);
+
+          this.deletePopUp=true;
             this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
         });            
     }
     
     blockDeleteDiv(){
-             jQuery("#delete_timelog").css("display", "none");
+        this.deletePopUp=false;
     }
     
     inputKeyDown(id){
+        this.hourErr=false;
         if(id==1){
             var initVal =this.entryForm['hours'];
             var  outputVal = initVal.replace(/[^0-9\.]/g,'');       
@@ -407,7 +423,9 @@ export class TimeReportComponent{
      }
 
     editTimeEntry(row){
-           var copy = Object.assign({}, row);
+          this.editPopUp=true;
+          this.editSuccessMsg=false;
+          var copy = Object.assign({}, row);
           this.extractFields=copy;
           this.oldWorkLogHour=this.extractFields['Time'];
           this.oldticketDesc=this.extractFields['ticketDesc'];
