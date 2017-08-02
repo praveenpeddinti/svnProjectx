@@ -765,9 +765,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         try {
             $newArray = array();
             $arr2ordered = array();
-            $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDetails["TicketId"], "other_data" => "");
+            $ticketId = array("field_name" => "Id", "value_id" => "", "field_value" => $ticketDetails["TicketId"], "other_data" => "","field_type" => "","render_type" => "","field_id" =>"");
             $ticketDetails["Title"]= self::refineActivityData($ticketDetails["Title"],200);
-            $ticketTitle = array("field_name" => "Title", "value_id" => "", "field_value" => $ticketDetails["Title"], "other_data" => "");
+            $ticketTitle = array("field_name" => "Title", "value_id" => "", "field_value" => $ticketDetails["Title"], "other_data" => "","field_type" => "text","render_type" => "text","field_id" =>"");
             array_push($arr2ordered, $ticketId);
             array_push($arr2ordered, $ticketTitle);
             $arr2ordered[1]["other_data"] = sizeof($ticketDetails["Tasks"]); 
@@ -809,16 +809,18 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     if (isset($value["custom_field_id"])) {
                         $storyFieldDetails = StoryCustomFields::getFieldDetails($value["Id"]);
                         if ($storyFieldDetails["Name"] == "List") {
-
                             $listDetails = MapListCustomStoryFields::getListValue($value["Id"], $value["value"]);
                             $value["readable_value"] = $listDetails;
+                            $value["render_type"] = "select";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     } else {
                         $storyFieldDetails = StoryFields::getFieldDetails($value["Id"]);
                     }
-                    $value["title"] = $storyFieldDetails["Title"];
-
+                    $value["title"] = $storyFieldDetails["Title"];                  
                     $value["field_name"] = $storyFieldDetails["Field_Name"];
+                    $value["field_type"] = $storyFieldDetails["Name"];
+                    $value["field_id"] = $storyFieldDetails["Id"];
                     if ($storyFieldDetails["Type"] == 4 || $storyFieldDetails["Type"] == 5) {
                         if ($value["value"] != "") {
                             $datetime = $value["value"]->toDateTime();
@@ -830,71 +832,109 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                 $readableDate = $datetime->format('M-d-Y H:i:s');
                             }
                             $value["readable_value"] = $readableDate;
+                            $value["render_type"] = "date";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         } else {
                             $value["readable_value"] = "";
+                            $value["render_type"] = "date";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
                     if ($storyFieldDetails["Type"] == 6) {
                         $value["readable_value"] = "";
+                        $value["render_type"] = "select";
+                        $value["field_id"] = $storyFieldDetails["Id"];
                         if ($value["value"] != "") {
                             $assignedToDetails = TinyUserCollection::getMiniUserDetails($value["value"]);
                             $assignedToDetails["ProfilePicture"] = $assignedToDetails["ProfilePicture"];
                             $value["readable_value"] = $assignedToDetails;
+                            $value["render_type"] = "select";  
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
                     if ($storyFieldDetails["Type"] == 10) {
                         $value["readable_value"] = "";
+                        $value["render_type"] = "select";
+                        $value["field_id"] = $storyFieldDetails["Id"];
                         if ($value["value"] != "") {
                             $bucketName = Bucket::getBucketName($value["value"], $ticketDetails["ProjectId"]);
                             $value["readable_value"] = $bucketName;
+                            $value["render_type"] = "select";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "priority") {
                         $value["readable_value"] = "";
+                        $value["render_type"] = "select";
+                        $value["field_id"] = $storyFieldDetails["Id"];
                         if ($value["value"] != "") {
                             $priorityDetails = Priority::getPriorityDetails($value["value"]);
                             $value["readable_value"] = $priorityDetails;
+                            $value["render_type"] = "select";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "planlevel") {
                         $value["readable_value"] = "";
+                        $value["render_type"] = "select";
+                        $value["field_id"] = $storyFieldDetails["Id"];
                         if ($value["value"] != "") {
                             $planlevelDetails = PlanLevel::getPlanLevelDetails($value["value"]);
                             $value["readable_value"] = $planlevelDetails;
                             $ticketDetails["StoryType"] = $planlevelDetails;
+                            $value["render_type"] = "select";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "workflow") {
-
                         $value["readable_value"] = "";
+                        $value["render_type"] = "select";
+                        $value["field_id"] = $storyFieldDetails["Id"];
                         if ($value["value"] != "") {
                             $workFlowDetails = WorkFlowFields::getWorkFlowDetails($value["value"]);
                             $value["readable_value"] = $workFlowDetails;
+                            $value["render_type"] = "select";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "tickettype") {
                         $value["readable_value"] = "";
+                        $value["render_type"] = "select";
+                        $value["field_id"] = $storyFieldDetails["Id"];
                         if ($value["value"] != "") {
                             $ticketTypeDetails = TicketType::getTicketType($value["value"]);
                             $value["readable_value"] = $ticketTypeDetails;
+                            $value["render_type"] = "select";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "dod") {
                         $value["readable_value"] = "";
+                        $value["render_type"] = "text";
+                        $value["field_id"] = $storyFieldDetails["Id"];
                         if ($value["value"] != "") {
                             $value["readable_value"] = $value["value"];
+                            $value["render_type"] = "text";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
                     if ($storyFieldDetails["Field_Name"] == "estimatedpoints") {
                         $value["readable_value"] = "";
+                        $value["render_type"] = "text";
+                        $value["field_id"] = $storyFieldDetails["Id"];
                         if ($value["value"] != "") {
                             $value["readable_value"] = $value["value"];
+                            $value["render_type"] = "text";
+                            $value["field_id"] = $storyFieldDetails["Id"];
                         }
                     }
 
-                    $tempArray = array("field_name" => "", "value_id" => "", "field_value" => "", "other_data" => "");
+                    $tempArray = array("field_name" => "", "value_id" => "", "field_value" => "", "other_data" => "","field_type" => "","render_type" => "","field_id" =>"");
                     $tempArray["field_name"] = $value["field_name"];
+                    $tempArray["field_type"] = $value["field_type"];
+                    $tempArray["render_type"] = $value["render_type"];
                     $tempArray["value_id"] = $value["value"];
+                    $tempArray["field_id"] = $value["field_id"];
                     if (isset($value["readable_value"]["UserName"])) {
                         $tempArray["field_value"] = $value["readable_value"]["UserName"];
                         $tempArray["other_data"] = $value["readable_value"]["ProfilePicture"];
@@ -912,7 +952,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             foreach ($fieldsOrderArray as $key) {
                array_push($arr2ordered, $newArray[$key]);
             }
-              $arrow = array("field_name" => "arrow", "value_id" => "", "field_value" => "", "other_data" => "");
+              $arrow = array("field_name" => "arrow", "value_id" => "", "field_value" => "", "other_data" => "","field_type" => "","render_type" => "","field_id" =>"");
              if($filter != null){
                 $showChild = $filter->showChild ;
                $filterType = $filter->type ;
