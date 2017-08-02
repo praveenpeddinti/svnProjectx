@@ -13,15 +13,32 @@
                 <ngx-datatable-column *ngFor="let column of columnsSub;let j=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
                   [flexGrow]="column.flexGrow" >
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    <div class="{{column.class}}" (click)="showStoryDetail(row)">
+                    <div class="{{column.class}}">
                       <img *ngIf="row[j].other_data.planlevel==1" src="assets/images/story-icon.png" />
                       <img *ngIf="row[j].other_data.planlevel==2" src="assets/images/task-icon.png" /> 
-                      <img *ngIf="row[j].field_name=='assignedto' && row[j].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
+                      <img id="{{j+'-'+row.$$index+'_assignedto_child'}}" *ngIf="row[j].field_name=='assignedto' && row[j].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
                         src="{{row[j].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[j].field_value}}"  /> 
-                       <div class="stateStyle"  *ngIf="row[j].field_name=='workflow'" >{{row[j].other_data}}</div>
-                      {{row[j].field_value}}
+                       <div class="stateStyle" id="{{j+'-'+row.$$index+'_workflow_child'}}" *ngIf="row[j].field_name=='workflow'" >{{row[j].other_data}}</div>
+                      <div [ngSwitch]="row[j].render_type" >
+         <span  
+              (click)="(row[j].field_name=='Id') ? showStoryDetail(row):''"
+              title="Double click to edit"  id="{{row[j].field_name}}_{{row[0].field_value}}_span"
+              (dblclick)="editThisField($event,j,row[j].field_id,row[j].field_name,row[j].render_type,j +'-'+row.$$index+'_child',row)" [hidden]="editing[j +'-'+row.$$index+'_child']" >
+<i *ngIf="row[j].field_name=='priority'" class="fa fa-circle {{row[j].field_value}}" aria-hidden="true"></i>
+              {{(row[j].field_value === "") ? 'select': row[j].field_value}}
+ </span>                     
+            <input [hidden]="!editing[j +'-'+row.$$index+'_child']" *ngSwitchCase="'text'" class="editinput" (blur)="closeTitleEdit($event.target.value,row[j].field_name+'_'+row[0].field_value+'_span',j,row[j].render_type,row[j].field_id,j +'-'+row.$$index+'_child',row)" id='{{row[j].field_name}}_{{j}}' type="{{row[j].render_type}}" value="{{row[j].field_value}}" />
+           
+            <p-calendar [hidden]="!editing[j +'-'+row.$$index+'_child']" *ngSwitchCase="'date'" [(ngModel)]="dateVal" (onSelect)="restoreField($event,row[j].field_name+'_'+row[0].field_value+'_span',j,row[j].render_type,row[j].field_id,j +'-'+row.$$index+'_child',row)" class="primeDateComponent" name="date_{{j}}"   id='{{row[j].field_name}}_{{j}}' [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" >
+                        </p-calendar>
+                        <div [hidden]="!editing[j +'-'+row.$$index+'_child']" class="customdropdown">
+                            <p-dropdown *ngSwitchCase="'select'" [style]="{'width':'100%'}" [ngModel]="row[j].field_value"   name="dropdownContainer_{{j}}"  id="{{row[j].field_name}}_{{row[0].field_value}}_drop" (onBlur)="selectBlurField($event,i)" (onChange)="restoreField($event,row[j].field_name+'_'+row[0].field_value+'_span',j,row[j].render_type,row[j].field_id,j +'-'+row.$$index+'_child',row)"  [displayOptions]="dropDisplayList" [options]="dropList" >
+                            </p-dropdown>
+                            <input *ngSwitchCase="'select'" type="hidden" id="{{row[j].field_name}}_{{row[0].field_value}}_currentSelected">
+                        </div> 
+                      </div>
                        
-                      <i *ngIf="row[j].field_name=='priority'" class="fa fa-circle {{row[j].field_value}}" aria-hidden="true"></i>
+                      
                     </div> 
                   </ng-template>
                 </ngx-datatable-column>

@@ -5,7 +5,7 @@ import { Http, Headers } from '@angular/http';
 import { SharedService } from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
 import { ChildtaskComponent } from '../childtask/childtask.component';
-
+import { AjaxService } from '../../ajax/ajax.service';
 declare var jQuery:any;
 
 @Component({
@@ -21,7 +21,18 @@ export class StoryDashboardComponent {
     public FilterOptionToDisplay=[];
      public selectedFilter=null;  
      public projectName; 
-     public projectId;  
+     private projectId;
+     public statusId=''; 
+     private dropList=[];
+     private ticketData;
+     private showMyEditableField =[];
+     private dropDisplayList=[]
+     private ticketId;
+     public inlineTimeout;
+     public editing = {};
+     private dateVal = new Date();
+    //private projectId;              
+     //public projectId;  
     @ViewChild('myTable') table: any;
     rows = [];
     row1 = [];
@@ -89,7 +100,7 @@ expanded: any = {};
 
     constructor(
         private _router: Router,
-        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService) { console.log("in constructor"); }
+        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService,private _ajaxService: AjaxService) { console.log("in constructor"); }
        
     ngOnInit() {
  var thisObj = this;
@@ -106,6 +117,8 @@ expanded: any = {};
                 @params    :  projectId
                 @Description: get bucket details
                 */  
+                localStorage.setItem('ProjectName',thisObj.projectName);
+                localStorage.setItem('ProjectId',thisObj.projectId);
                 thisObj._service.getFilterOptions(thisObj.projectId,(response) => { 
                 thisObj.FilterOption=response.data[0].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
@@ -138,7 +151,12 @@ expanded: any = {};
            })
  
 }
-    
+
+    // ngAfterViewInit()
+    // {
+    //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.general:eq(0)').before('<label>Filter</label>');
+    //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.bucket:eq(0)').before('<label>Bucket</label>');
+    // }
         /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: StoryComponent/Task list Rendering
@@ -150,8 +168,20 @@ expanded: any = {};
            
             let jsonForm = {};
             if (response.statusCode == 200) {
+
+                this.rows = response.data;        
+                
+               // this.getRowClass(this.rows);
+                //console.log("ROWS___"+JSON.stringify(this.rows));
+
                 this.rows = response.data;
+
                 this.count = response.totalCount;
+                for(var i in this.editing){
+    //    for(var j in this.editing){   
+          this.editing[i] = false;
+    //   }
+      }
                 
             } else {
                 console.log("fail---");
@@ -238,5 +268,208 @@ if(row[0].other_data.planlevel==2){
 }
  
   }
+
+editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row){ 
+    //alert("fieldId---"+fieldId+"---fieldDataId---"+fieldDataId+"---fieldTitle---"+fieldTitle+"---renderType--"+renderType); 
+     this.dropList=[];
+    var inptFldId = fieldId;
+      for(var i in this.editing){
+          this.editing[i] = false;
+      }
+      this.editing[restoreFieldId]=true;
+     
+
+    if(renderType == "select"){
+        var reqData = {
+          fieldId:fieldDataId,
+          projectId:this.projectId,
+          ticketId:row[0].field_value,
+          workflowType:1,
+          statusId:1,
+        };
+       // alert(JSON.stringify(reqData));
+        //Fetches the field list data for current dropdown in edit mode.
+        this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
+            { 
+                var listData = {
+                  list:data.data
+                };
+               // alert(JSON.stringify(data.data));
+                var priority=(fieldTitle=="Priority"?true:false);
+                this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
+                this.dropList=this.dropDisplayList[0].filterValue;
+                //sets the dropdown prefocused
+                jQuery("#"+inptFldId+" div").click();
+                
+            });
+    }else if(renderType == "date"){
+      //sets the datepicker prefocused
+      this.dateVal = row[6].field_value;
+      setTimeout(()=>{
+        jQuery("#"+inptFldId+" span input").focus();
+      },150);    
+    }
+
+ 
+    
+  }
+
+  //Prepares the Custom Dropdown's Options array.
+ public prepareItemArray(list:any,priority:boolean,status:string){
+   var listItem=[];
+    var listMainArray=[];
+     if(list.length>0){
+       if(status == "Assigned to" || status == "Stake Holder"){
+       listItem.push({label:"--Select a Member--", value:"",priority:priority,type:status});
+       }
+         for(var i=0;list.length>i;i++){
+           listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
+       }
+     }
+      listMainArray.push({type:"",filterValue:listItem});
+    return listMainArray;
+}
+ 
+//Restores the editable field to static mode.
+//Also prepares the data to be sent to service to save the changes.
+//This is common to left Column fields.
+   restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
+            //alert("---restoreFieldId---"+restoreFieldId+"---fieldIndex--"+fieldIndex+"--renderType--"+renderType+"---fieldId--"+fieldId);
+    var intRegex = /^\d+$/;
+    var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
+      var postEditedText={
+                        projectId:this.projectId,
+                        isLeftColumn:1,
+                        id:fieldId,
+                        value:"",
+                        ticketId:row[0].field_value,
+                        editedId:restoreFieldId.split("_")[0]
+                      };                  
+          switch(renderType){
+            case "input":
+            case "textarea":
+            editedObj=editedObj.trim();
+            if(restoreFieldId == this.ticketId+"_dod".trim())
+            jQuery("textarea#"+restoreFieldId+"_"+fieldIndex).val(editedObj);
+            document.getElementById(restoreFieldId).innerText = (editedObj == "") ? "--":editedObj;
+            postEditedText.value = editedObj;
+            break;
+            
+            case "select":
+            var appendHtml = (restoreFieldId.split("_")[0] == "priority")?"&nbsp; <i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
+            document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;            
+            postEditedText.value = editedObj.value;
+            break;
+
+            case "date":
+            var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
+            date = date.replace(/(\b\d{1}\b)/g, "0$1");
+            document.getElementById(restoreFieldId).innerHTML = (date == "") ? "--":date;
+            postEditedText.value = this.dateVal.toString();
+            var rightNow = new Date();
+            break;
+
+          }
+       
+       this.postDataToAjax(postEditedText,isChildActivity,showField);
+       this.editing[showField] = false;
+  }
+    inputKeyDown(event,eleId){
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
+
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || 
+            (event.keyCode >= 96 && event.keyCode <= 105) || 
+            event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+            event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+        } else {
+            event.preventDefault();
+        }
+
+        if(jQuery("#"+eleId).val().indexOf('.') !== -1 && event.keyCode == 190)
+            event.preventDefault(); 
+  }
+  closeCalendar(fieldIndex){
+
+    this.showMyEditableField[fieldIndex] = true;
+  }
+   
+closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
+    //alert(alert("editedObj----"+editedText+"---restoreFieldId---"+restoreFieldId+"---fieldIndex--"+fieldIndex+"--renderType--"+renderType+"---fieldId--"+fieldId);
+        if(editedText.trim() !=""){
+          // alert("if");
+          // this.titleError="";
+          document.getElementById(restoreFieldId).innerText= editedText;
+          //alert("editedObj----"+editedText);
+      // Added by Padmaja for Inline Edit
+          var postEditedText={
+            isLeftColumn:0,
+            id:'Title',
+            value:editedText,
+            ticketId:row[0].field_value,
+            projectId:this.projectId,
+            editedId:'title'
+          };
+          this.postDataToAjax(postEditedText,isChildActivity,showField);
+          this.editing[showField] = false;
+      }else{
+        
+        jQuery("#"+restoreFieldId).val(document.getElementById(restoreFieldId).innerText) ;
+
+      }
+}
+  // Added by Padmaja for Inline Edit
+//Common Ajax method to save the changes.
+    public postDataToAjax(postEditedText,isChildActivity=0,showField){
+     clearTimeout(this.inlineTimeout);
+    this.inlineTimeout =  setTimeout(() => { 
+       this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
+        {
+          if(result.statusCode== 200){ 
+          if(postEditedText.editedId == "title" || postEditedText.editedId == "desc"){
+                     if(postEditedText.editedId == "title"){
+                        document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerText=result.data.updatedFieldData;
+                      }else if(postEditedText.editedId == "desc"){
+                      document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerHTML=result.data.updatedFieldData;
+                       var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
+                      //this.getArtifacts(ticketIdObj);                     
+                   }
+               
+          }
+    
+             else if(postEditedText.editedId == "estimatedpoints"){ 
+                 jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
+               }
+          
+             else if(result.data.updatedState!=''){ 
+                 document.getElementById(showField+"_workflow").innerText=result.data.updatedState.state;
+                //this.statusId = result.data.updatedFieldData;
+           }
+            else if(result.data.activityData.data.ActionFieldName =='assignedto'){ 
+                if(result.data.activityData.data.NewValue.ProfilePicture !=''){
+                    var imgObj = <HTMLImageElement>document.getElementById(showField+"_assignedto")
+                 imgObj.src=result.data.activityData.data.NewValue.ProfilePicture;
+                //this.statusId = result.data.updatedFieldData;
+           }
+            }
+        /**
+        * @author:Praveen P
+        * @description : This is used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list 
+        */
+
+
+
+
+               
+
+ }
+        });
+
+      
+        },500)
+    }
+
     }
 
