@@ -43,8 +43,11 @@ import { ActivitiesComponent } from './components/activities/activities.componen
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
 import { ChildtaskComponent } from './components/childtask/childtask.component';
 import { ProjectDetailComponent } from './components/project-detail/project-detail.component';
+//import {Ng2DropdownModule} from 'ng2-material-dropdown';
 import {ToasterModule, ToasterService} from 'angular2-toaster';
 import { SpinnerComponentModule } from 'ng2-component-spinner';
+import { CreateUserComponent } from './components/create-user/create-user.component';
+import { ProjectDashboardComponent } from './components/project-dashboard/project-dashboard.component';
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',component: PageNotFoundComponent },
@@ -124,6 +127,16 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/create-user',children:[
+                { path: '' , component: CreateUserComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/project-dashboard',children:[
+                { path: '' , component: ProjectDashboardComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
                { path: '**', component: PageNotFoundComponent }
              ];
 
@@ -143,11 +156,12 @@ const ROUTES=[
    RouterModule.forRoot(ROUTES),
    RoundProgressModule,
    ToasterModule,
-   SpinnerComponentModule
+   SpinnerComponentModule,
+   //Ng2DropdownModule
   ],
 
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, CreateUserComponent, ProjectDashboardComponent ],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
   ],
