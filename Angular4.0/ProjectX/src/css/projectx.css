@@ -1344,3 +1344,29 @@ button.toast-close-button {
   background-color: rgba(255,255,255,0.3)!important;
   z-index: 9999!important;
 }
+.ngx-datatable .datatable-body .datatable-scroll {
+    vertical-align: top;
+}
+.inlineblock{ display:inline-block!important;}
+.primeDateComponent button{ left:80%!important;}
+.datatable-row-detail{ padding: 0px!important;}
+.ui-dropdown-panel .ui-dropdown-items-wrapper {
+    width: 150px;
+    
+}
+ .ddcs{} 
+
+  .fdatatable-row-center {
+      overflow-x: visible !important;
+      overflow-y: visible !important;
+    }
+ .subcal{}
+
+       .subcal .ui-datepicker {
+    width: 17em;
+    padding: .2em;
+    display: none;
+    position: absolute;
+    top:0px; right: 0px;
+      z-index: 9999!important;
+}
