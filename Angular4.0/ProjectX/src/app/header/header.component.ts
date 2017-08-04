@@ -65,7 +65,7 @@ export class HeaderComponent implements OnInit {
       { 
       thisObj.route.params.subscribe(params => {
            thisObj.projectName=params['projectName'];
-           thisObj.shared.change(this._router.url,thisObj.projectName,'Dashboard','New',thisObj.projectName);            thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
+           thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode ==200) {
                 thisObj.projectId=data.data.PId;   
                }
@@ -275,7 +275,7 @@ projectsArray(list){
       {
        this.notification_msg=[];
       if(data.notify_result.length >0){
-      this.notify_count = data.notify_result.length;
+     // this.notify_count = data.notify_result.length;
       this.notification_msg = data.notify_result;
      
         }
