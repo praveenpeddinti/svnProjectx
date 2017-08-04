@@ -1,10 +1,11 @@
 import { Component, Directive,ViewChild,ViewEncapsulation } from '@angular/core';
 import { StoryService } from '../../services/story.service';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router,ActivatedRoute,NavigationExtras } from '@angular/router';
 import { Http, Headers } from '@angular/http';
 import { SharedService } from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
 import { ChildtaskComponent } from '../childtask/childtask.component';
+import {Location} from '@angular/common';
 import { AjaxService } from '../../ajax/ajax.service';
 declare var jQuery:any;
 
@@ -97,16 +98,31 @@ export class StoryDashboardComponent {
 
 expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    pageNo:number=0; //added by Ryan
+    filterValue=null;//added by Ryan
 
     constructor(
         private _router: Router,
-        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService,private _ajaxService: AjaxService) { console.log("in constructor"); }
-       
+        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService,private _ajaxService: AjaxService,private location:Location) { console.log("in constructor"); }
+
     ngOnInit() {
  var thisObj = this;
   thisObj.route.queryParams.subscribe(
       params => 
       { 
+          /* Section To Remember the State of Pages while user navigation */
+          if(params['page']!=undefined) //added by Ryan
+          {
+            this.pageNo=params['page'];//added by Ryan
+            this.sortorder=params['sort'];//added by Ryan
+            this.sortvalue=params['col'];
+            if(params['filter']!=undefined){this.filterValue=params['filter'];}
+            thisObj.offset=this.pageNo-1;//added by Ryan
+            this.rememberState(this.pageNo,this.sortorder,this.sortvalue,this.filterValue);
+    
+          }
+           /* =========Section End==========================================*/ 
+
       thisObj.route.params.subscribe(params => {
            thisObj.projectName=params['projectName'];
            this.shared.change(this._router.url,thisObj.projectName,'Dashboard','',thisObj.projectName); //added by Ryan for breadcrumb purpose
@@ -122,8 +138,14 @@ expanded: any = {};
                 thisObj._service.getFilterOptions(thisObj.projectId,(response) => { 
                 thisObj.FilterOption=response.data[0].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
-                });
-
+            });
+             
+            if(localStorage.getItem('filterArray')!=null){
+            var filterArray=JSON.parse(localStorage.getItem('filterArray'));
+            thisObj.selectedFilter=filterArray;
+            }
+            
+             
    /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: Default routing
@@ -162,7 +184,13 @@ expanded: any = {};
         @Description: StoryComponent/Task list Rendering
         */
         
-    page(projectId,offset, limit, sortvalue, sortorder,selectedOption ) {
+    page(projectId,offset, limit, sortvalue, sortorder,selectedOption ) { 
+        if(selectedOption!=null) //added by Ryan
+        {
+            this.filterValue=selectedOption.id;
+            localStorage.setItem('filterArray',JSON.stringify(selectedOption));
+        }
+       
          this.rows =[];
         this._service.getAllStoryDetails(projectId, offset, limit, sortvalue, sortorder,selectedOption,(response) => {
            
@@ -183,6 +211,16 @@ expanded: any = {};
     //   }
       }
                 
+                /* Section To Remember the State of Pages and to replace the Url with required params while user navigation */
+                this.pageNo=offset+1;//added by Ryan
+                this.sortorder=sortorder;//added by Ryan
+                this.sortvalue=sortvalue;//added by Ryan
+                this.offset=this.pageNo-1;//added by Ryan
+                this.rememberState(this.pageNo,this.sortorder,this.sortvalue,this.filterValue);
+                var url='/project/'+this.projectName+'/list?page='+(offset+1)+'&sort='+sortorder+'&col='+sortvalue+'&filter='+this.filterValue;
+                this.location.replaceState(url);
+                /* =========Section End==========================================*/ 
+
             } else {
                 console.log("fail---");
             }
@@ -268,6 +306,19 @@ if(row[0].other_data.planlevel==2){
 }
  
   }
+
+
+  /**
+    * @author:Ryan Marshal
+    * @description:This is used for remembering the state where the user left off
+    */
+  rememberState(page,sortorder,sortcol,selectedfilter)
+  {
+    var pagination_state={page:'Dashboard',count:this.pageNo,sort:this.sortorder,col:this.sortvalue,filter:this.filterValue};
+    var page_state=JSON.stringify(pagination_state);
+    localStorage.setItem('pageState',page_state);
+  }
+
 
 editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row){ 
     //alert("fieldId---"+fieldId+"---fieldDataId---"+fieldDataId+"---fieldTitle---"+fieldTitle+"---renderType--"+renderType); 
