@@ -363,6 +363,7 @@ trait NotificationTrait {
      */
     public static function saveNotifications($notification_data, $notifyType, $activityOn, $fieldType = "", $slug = '', $bulkUpdate = '', $taskId = 0) {
         try {
+            error_log("saveNotifications---".$notifyType."---".$activityOn."---".$fieldType);
             $oldValue = '';
             $newValue = '';
             $oldCollaborator = '';
@@ -441,80 +442,84 @@ trait NotificationTrait {
                         $oldValue = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
                     }
                 }
-            } else if ($fieldType == 6) {
+            } 
+            else if ($fieldType == 6) {
                 $oldCollaborator = $oldValue;
                 $newCollaborator = $activityOn; //this is a field value....
+               
                 if ($oldCollaborator != '') { //if changed
-                    $activityOn = 'changed';
+                    $notification_Type = 'changed';
                     $displayAction="changed";
                     $actionType="change";
                 } else { //if set new value
-                    $activityOn = 'set';
+                    $notification_Type = 'set';
                     $oldValue = '';
                     $displayAction="set";
                     $actionType="set";
                 }
-               // error_log("==activity on== newCollaborator==========" . $newCollaborator);
-                $tic = new NotificationCollection();
-                $tic->CommentSlug = $slug;
-                $tic->TicketId = $ticketId;
-                $tic->ProjectId = $projectId;
-                $tic->NotifiedCollaborators =array(array('CollaboratorId'=>(int) $newCollaborator,'IsRead'=>0)) ; //new use case "setting newly assigned mem
-                $tic->ActivityFrom = (int) $loggedInUser;
-                $tic->Notification_Type = $activityOn;
-                $tic->ActivityOn = $notify_type;
-                $tic->NotificationDate = $currentDate;
-                $tic->OldValue = $oldCollaborator;
-                $tic->NewValue = $newCollaborator;
-               // $tic->Status = 0;
-
-                //$tic->Notification_Type=$notify_type; //previous use case
-                //new use case 'set' or 'changed'
-                //$tic->ActivityOn= $activityOn; //previous use case
-                //new use case eg: assignedTo,stakeholder,priority,etc...
-                $result = $tic->save();
-                if ($result) {
-                    $notificationId = $tic->_id;
-                    //  error_log("before sendign assing to notircioant--");
-                    self::sendEmailNotification(array($notificationId), $projectId);
-                    if($bulkUpdate=='')
-                    EventTrait::saveEvent($projectId,"Ticket",$ticketId,$activityOn,$tic->Notification_Type,$loggedInUser,[array("ActionOn"=>$tic->ActivityOn,"OldValue"=>(int)$oldCollaborator,"NewValue"=>(int)$newCollaborator)],array("BucketId"=>(int)$bucket));
-                }
+//               // error_log("==activity on== newCollaborator==========" . $newCollaborator);
+//                $tic = new NotificationCollection();
+//                $tic->CommentSlug = $slug;
+//                $tic->TicketId = $ticketId;
+//                $tic->ProjectId = $projectId;
+//                $tic->NotifiedCollaborators =array(array('CollaboratorId'=>(int) $newCollaborator,'IsRead'=>0)) ; //new use case "setting newly assigned mem
+//                $tic->ActivityFrom = (int) $loggedInUser;
+//                $tic->Notification_Type = $activityOn;
+//                $tic->ActivityOn = $notify_type;
+//                $tic->NotificationDate = $currentDate;
+//                $tic->OldValue = $oldCollaborator;
+//                $tic->NewValue = $newCollaborator;
+//               // $tic->Status = 0;
+//
+//                //$tic->Notification_Type=$notify_type; //previous use case
+//                //new use case 'set' or 'changed'
+//                //$tic->ActivityOn= $activityOn; //previous use case
+//                //new use case eg: assignedTo,stakeholder,priority,etc...
+//                $result = $tic->save();
+//                if ($result) {
+//                    $notificationId = $tic->_id;
+//                    //  error_log("before sendign assing to notircioant--");
+//                    self::sendEmailNotification(array($notificationId), $projectId);
+//                    if($bulkUpdate=='')
+//                    EventTrait::saveEvent($projectId,"Ticket",$ticketId,$activityOn,$tic->Notification_Type,$loggedInUser,[array("ActionOn"=>$tic->ActivityOn,"OldValue"=>(int)$oldCollaborator,"NewValue"=>(int)$newCollaborator)],array("BucketId"=>(int)$bucket));
+//                }
 
                 //self::sendMail($ticketDetails,$loggedInUser, $newCollaborator,$notify_type);   
                 //}
-            } else if ($fieldType == "FollowObj") {
+            }
+            else if ($fieldType == "FollowObj") {
                 if ($loggedInUser != $activityOn) {
-
+                    error_log("follow object firsrt case((((((((((((***");
                     $notification_Type = ($notifyType == 'add') ? 'added' : 'removed';
                     $actionType=$notifyType;
                     $displayAction=$notification_Type;
-                    $tic = new NotificationCollection();
-                    $tic->CommentSlug = $slug;
-                    $tic->TicketId = $ticketId;
-                    $tic->ProjectId = $projectId;
-                    $tic->NotifiedCollaborators = array(array('CollaboratorId'=>(int) $activityOn,'IsRead'=>0) ); //new use case "setting newly assigned mem
-                    $tic->ActivityFrom = (int) $loggedInUser;
-                    $tic->Notification_Type = $notification_Type;
-                    $tic->ActivityOn = $fieldType;
-                    $tic->NotificationDate = $currentDate;
-                    $tic->OldValue = "";
-                    $tic->NewValue = $activityOn;
+//                    $tic = new NotificationCollection();
+//                    $tic->CommentSlug = $slug;
+//                    $tic->TicketId = $ticketId;
+//                    $tic->ProjectId = $projectId;
+//                    $tic->NotifiedCollaborators = array(array('CollaboratorId'=>(int) $activityOn,'IsRead'=>0) ); //new use case "setting newly assigned mem
+//                    $tic->ActivityFrom = (int) $loggedInUser;
+//                    $tic->Notification_Type = $notification_Type;
+//                    $tic->ActivityOn = $fieldType;
+//                    $tic->NotificationDate = $currentDate;
+//                    $tic->OldValue = "";
+//                    $tic->NewValue = $activityOn;
                     //$tic->Status = 0;
 
                     //$tic->Notification_Type=$notify_type; //previous use case
                     //new use case 'set' or 'changed'
                     //$tic->ActivityOn= $activityOn; //previous use case
                     //new use case eg: assignedTo,stakeholder,priority,etc...
-                    $result = $tic->save();
-                    if ($result) {
-                        $notificationId = $tic->_id;
-                        self::sendEmailNotification(array($notificationId), $projectId);
-                        if($bulkUpdate=='')
-                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($fieldType),"OldValue"=>0,"NewValue"=>(int)$tic->NewValue)],array("BucketId"=>(int)$bucket));
-                    }
+//                    $result = $tic->save();
+//                    if ($result) {
+//                        $notificationId = $tic->_id;
+//                        self::sendEmailNotification(array($notificationId), $projectId);
+//                        if($bulkUpdate=='')
+//                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($fieldType),"OldValue"=>0,"NewValue"=>(int)$tic->NewValue)],array("BucketId"=>(int)$bucket));
+//                    }
                 }
-            } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog") && ($activityOn!=="ChildTask" && $activityOn!="TicketRelation") || ($fieldType == "FollowObj")) { //This is for left hand property changes
+            } 
+            else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog") && ($activityOn!=="ChildTask" && $activityOn!="TicketRelation") ) { //This is for left hand property changes
               
                 $oldFieldId = $oldValue;
                 $newFieldId = $activityOn;
@@ -546,6 +551,7 @@ trait NotificationTrait {
                 if ($follower['FollowerId'] == $loggedInUser) {
                     continue;
                 }
+                 
             array_push($collaboratorUser,array('CollaboratorId'=>$follower['FollowerId'],'IsRead'=>0));
             }
              error_log("======2222222222222222222222222222=Field__Type___=" . $fieldType);
@@ -602,9 +608,11 @@ trait NotificationTrait {
                         }
                     
                 } else if ($fieldType == 6) {
-
-                    if ($follower['FollowerId'] != $newCollaborator) { //previous case it was $activityOn which was collaborator_name
-                        $tic->Notification_Type = $activityOn;
+                    
+                    error_log("hey---------------------**");
+                   // if ($follower['FollowerId'] != $newCollaborator) { //previous case it was $activityOn which was collaborator_name
+                          error_log("hey---------------------**1233");
+                        $tic->Notification_Type = $notification_Type;
                        // $tic->Status = 0;
                         $tic->OldValue = $oldCollaborator;
                         $tic->NewValue = $newCollaborator;
@@ -613,7 +621,7 @@ trait NotificationTrait {
                             $notificationId = $tic->_id;
                             array_push($notificationIds, $notificationId);
                         }
-                    }
+                    //}
                 } else if($activityOn == "ChildTask" || $activityOn == "TicketRelation") {
                 $tic->ActivityOn = $activityOn; 
                 $tic->ActivityFrom = (int) $loggedInUser;
