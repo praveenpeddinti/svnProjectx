@@ -1,6 +1,10 @@
 <p>
  User Dashboard   
 </p>
+   <div class="pull-right">
+        <div (click)="creationProject()" class="add" data-backdrop="false" data-toggle="modal" data-target="#addProjectModel"  ><i  class="fa fa-plus"></i>
+        </div>
+      </div>
 Projects({{dashboardData.projects.length}})<br>
 CURRENT WEEK TIME LOG : {{dashboardData.weeklyTimeLog}}<br>
 <div *ngFor="let pdetail of dashboardData.projects;let i=index;">
@@ -19,3 +23,81 @@ CURRENT WEEK TIME LOG : {{dashboardData.weeklyTimeLog}}<br>
 <div *ngFor="let pactivity of dashboardData.activities;let i=index;">
       <span>{{pactivity.Slug}}</span><br>
 </div>
+    <!-- popup Starts -->
+    <div *ngIf="creationPopUp">
+             <div class="modal fade custommodel"  id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">CREATE PROJECT</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     <form  #projectCreationForm="ngForm" (ngSubmit)="submitted && projectCreationForm.form.valid && saveProjectDetails()" novalidate="true">
+
+      <div class="modal-body">
+            
+             <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                   <!--<textarea name="projectLogo" id="summernote" [(ngModel)]="entryForm.projectLogo"  #projectLogo="ngModel"></textarea>-->
+               <div class="row">
+                <div class="col-md-8">
+                     <div class="dashboard_userbg">
+                          <div class="user">
+                                <div class="uploadcomponent margintop15">
+                              <img  alt="" src="assets/images/homelogo.png" name="projectLogo" id="projectlogo"   (click)="CallFileupload()" /></div>
+                         <input  type="file" id="my_file" style="display: none;" (change)="fileUploadEvent($event, 'fileChange')"  multiple />
+                        </div>
+                         </div>
+                </div>
+                </div>
+                <!--<div class="uploadcomponent margintop15">
+                            <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
+                            <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  />
+                        </div>-->
+              </div>
+              
+          </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                  <label class="timereportlabel"> Project Name </label>
+                  <div class="customformfieldsmarginbottom autoSearchTask">
+  <input type="text" class="customformfields " required  [(ngModel)]="form.projectName" name="projectName"  #projectName="ngModel"  id="projectName"   (blur)="verifyProjectName(form.projectName)" (keyup)="veryInputByspinner()"/> 
+       <div *ngIf="submitted && projectName.errors " class="fielderror">
+                <div  [hidden]="!projectName.errors.required">Project Name is required</div>
+            </div>
+            <div id="messageForProject"></div>
+            <div *ngIf="verifyByspinner==1" class="txtbox_spinner"><img  alt="" src="assets/images/storyicon.png"  /></div>
+             <div *ngIf="verifyByspinner==3"  class="txtbox_spinner"><img  alt="" src="assets/images/comment-close.png"  /></div>
+             <div *ngIf="verifyByspinner==2" class="txtbox_spinner"><img  alt="" src="assets/images/green_spinner.gif"  /></div>
+                  </div>
+              </div>
+              
+          </div>
+             <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> Description </label>
+                        <div class="customformfieldsmarginbottom relativediv ">
+                            <textarea  [(ngModel)]="form.description" id="summernote"  name="description"  #description="ngModel" class="customformfieldstextarea " required></textarea>
+                            <div *ngIf="submitted && description.errors " class="fielderror">
+                                <div [hidden]="!description.errors.required">Description is required</div>
+                            </div>
+                             <div [hidden]="!summernoteLength">Description cannot be more than 500 characters long.</div>
+                        </div>
+                    </div>
+                </div>
+
+              </div>
+    
+      <div class="modal-footer">
+        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;resetForm();" >CANCEL</button>
+      </div>
+       </form>
+    </div>
+  </div>
+</div>
+</div>
+<!-- popup Ends -->
+
