@@ -225,13 +225,29 @@ class CollaboratorService {
      * @param type $projectId
      * @return type
      */
-    public function savingProjectDetails($projectName,$description,$userId){
+    public function savingProjectDetails($projectName,$description,$userId,$projectLogo){
         try{
             $ProjectModel = new Projects();
-            return $ProjectModel->savingProjectDetails($projectName,$description,$userId);
+            $projectId=$ProjectModel->savingProjectDetails($projectName,$description,$userId,$projectLogo);
+            return $projectId;
             
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:savingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+      /**
+     * @authorPadmaja
+     * @description This method to updateProjectlogo
+     * @param type $projectId
+     * @return type
+     */
+    public function updateProjectlogo($projectId,$logo){
+        try{
+            $ProjectModel = new Projects();
+            $projectId=$ProjectModel->updatingProjectLog($projectId,$logo);
+        }catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:updateProjectlogo::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
@@ -283,6 +299,39 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
+     /**
+     * @authorPadmaja
+     * @description This method to   save projectlog
+     * @param type $userId
+     * @return type
+     */
+    public function saveProjectLogo($logoName){
+        try{
+                $firstArray =  explode("/", $logoName);
+                $secondArray = explode("|", $firstArray[1]);
+                $tempFileName = $secondArray[0];
+                $originalFileName = $secondArray[1];
+                $originalFileName = str_replace("]]", "", $originalFileName);
+                $projectLogoPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['projectLogo'] ;
+                if(!is_dir($projectLogoPath)){
+                             if(!mkdir($projectLogoPath, 0775,true)){
+                                 Yii::log("CollaboratorService:saveProjectLog::Unable to create folder--" . $ex->getTraceAsString(), 'error', 'application');
+                             }
+                }
+                $newPath = Yii::$app->params['ServerURL'].Yii::$app->params['projectLogo']."/".$tempFileName."-".$originalFileName;
+                if (file_exists("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName")) {
+                        rename("/usr/share/nginx/www/ProjectXService/node/uploads/$tempFileName",Yii::$app->params['ProjectRoot']. Yii::$app->params['projectLogo']."/".$tempFileName."-".$originalFileName);
+                    }
+               
+                $description= Yii::$app->params['ServerURL'].Yii::$app->params['projectLogo']."/". $tempFileName ."-".$originalFileName;
+                return $description;
+                } catch (\Throwable $ex) {
+                    Yii::error("CollaboratorService:saveProjectLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+                    throw new ErrorException($ex->getMessage());
+            }
+    }
+        
+    
 
     /**
      * 
@@ -312,4 +361,4 @@ class CollaboratorService {
     }
 }
 
-  
+

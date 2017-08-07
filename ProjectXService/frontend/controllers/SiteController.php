@@ -474,7 +474,7 @@ class SiteController extends Controller
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
-        } 
+        }
     }
    /**
     * @author Padmaja
@@ -485,9 +485,7 @@ class SiteController extends Controller
     public function actionVerifyingProjectName(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-            error_log("prjectctcccccc@@@@@@@@@@@@-------".$postData->projectName);
             $getProjectDetails=ServiceFactory::getCollaboratorServiceInstance()->verifyProjectName($postData->projectName);
-            error_log("prjectctcccccc".print_r($getProjectDetails,1));
             if(!empty($getProjectDetails)){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -502,8 +500,7 @@ class SiteController extends Controller
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }
             return $response;
-            error_log("resonse------------".print_r($response,1));
-        } catch (\Throwable $th) { 
+         } catch (\Throwable $th) { 
              Yii::error("SiteController:actionVerifyingProjectName::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
@@ -521,21 +518,33 @@ class SiteController extends Controller
     */
     public function actionSaveProjectDetails(){
         try{
-            $postData = json_decode(file_get_contents("php://input"));
-            $savingStatus=ServiceFactory::getCollaboratorServiceInstance()->savingProjectDetails($postData->projectName,$postData->description,$postData->userInfo->Id);
-            if($savingStatus!='failure'){
-                error_log("ssssssssssssssss");
-                $projectId=$savingStatus;
+            $postData = json_decode(file_get_contents("php://input")); 
+            $fileExt=!empty($postData->fileExtention)?$postData->fileExtention:"";
+            $returnId=ServiceFactory::getCollaboratorServiceInstance()->savingProjectDetails($postData->projectName,$postData->description,$postData->userInfo->Id,$postData->projectLogo);
+            if($returnId!='failure'){
+                $projectId=$returnId;
+                if (strpos($postData->projectLogo,'assets') !== false) {
+                  $logo=$postData->projectLogo;
+                } else {
+                   $extractUrl= explode('projectlogo/',$postData->projectLogo);
+                   $projectLogoPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['projectLogo'] ;
+                    if (file_exists($projectLogoPath."/".$extractUrl[1])) {
+                        rename($projectLogoPath . "/" . $extractUrl[1],$projectLogoPath . "/" . $postData->projectName."_".$returnId);
+                        $logo=$postData->projectName."_".$returnId.".$fileExt";
+                    } else {
+                        error_log("not existeddddddddd");
+                    }
+                
+                }
+                ServiceFactory::getCollaboratorServiceInstance()->updateProjectlogo($projectId,$logo);
                 $getStatus=ServiceFactory::getCollaboratorServiceInstance()->savingProjectTeamDetails($projectId,$postData->userInfo->Id);
                 $getlastIdDetails= CommonUtilityTwo::getLastProjectDetails($projectId,$postData->userInfo->Id);
-                // error_log("status-----------".$savingStatus);
-            }
-             if($getStatus == 'failure' || $savingStatus=='failure'){
+             }
+             if($getStatus == 'failure' || $returnId=='failure'){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::FAILURE;
                 $responseBean->message = "failure";
                 $responseBean->data = $getlastIdDetails;
-               // $responseBean->lastProjectDetails =$getlastIdDetails;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }else{
                 EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
@@ -543,7 +552,6 @@ class SiteController extends Controller
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $getlastIdDetails;
-               // $responseBean->lastProjectDetails =$getlastIdDetails;
                 $response = CommonUtility::prepareResponse($responseBean,"json");
          
             }
@@ -556,7 +564,7 @@ class SiteController extends Controller
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
-        } 
+        }
     }
         /**
     * @author Padmaja
@@ -644,16 +652,43 @@ class SiteController extends Controller
              return $response;
         }
     }
-    
-//    public function actionGetActivitiesByProjectid(){
-//        try{
-//             $postData = json_decode(file_get_contents("php://input"));
-//             $projectsInfo=ServiceFactory::getCollaboratorServiceInstance()->getProjectNameByUserId($userId);
-//             
-//        } catch (Exception $ex) {
-//             Yii::log("SiteController:actionGetActivitiesByProjectid::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-//        }
-//    }
+             /**
+    * @author Padmaja
+   * @description This is used for appending image 
+    * @param type 
+    * @return array
+    */
+    public function actionGetProjectImage(){
+       try{
+            $postData = json_decode(file_get_contents("php://input"));
+            if(!empty($postData->logoName)){
+            $projectsInfo=ServiceFactory::getCollaboratorServiceInstance()->saveProjectLogo($postData->logoName);    
+            }
+              if(!empty($projectsInfo)){
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $projectsInfo;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $projectsInfo;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }
+            return $response;
+            
+       } catch (\Throwable $th) {
+            Yii::error("SiteController:actionGetProjectImage::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    } 
            
 }
 ?>

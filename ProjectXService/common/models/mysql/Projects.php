@@ -68,7 +68,7 @@ class Projects extends ActiveRecord
      * @param type $projectId
      * @return type
      */
-    public static function savingProjectDetails($projectName,$description,$userId)
+    public static function savingProjectDetails($projectName,$description,$userId,$projectLogo)
     {
         try{
             $returnValue = 'failure';
@@ -78,8 +78,8 @@ class Projects extends ActiveRecord
             $projects->CreatedBy = $userId;
             if($projects->save()){
                error_log("-------Id--------".$projects->PId);
-               $returnValue = $projects->PId;   
-            }
+               $returnValue = $projects->PId;
+          }
            return $returnValue ;
         } catch (\Throwable $ex) {
              Yii::error("Projects:savingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -87,6 +87,23 @@ class Projects extends ActiveRecord
             
         }
        
+   }
+       /**
+     * @author Padmaja
+     * @param type $projectId
+     * @param type $logo
+     * @return type
+     */
+   public static function updatingProjectLog($projectId,$logo)
+   {
+       try{
+            $query="update Projects set ProjectLogo='$logo' where PId=$projectId";
+            $data = Yii::$app->db->createCommand($query)->execute();
+       } catch (\Throwable $ex) {
+             Yii::error("Projects:updatingProjectLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+             throw new ErrorException($ex->getMessage());
+            
+        }
    }
    /**
      * @author Padmaja

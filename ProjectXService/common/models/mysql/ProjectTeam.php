@@ -65,6 +65,7 @@ class ProjectTeam extends ActiveRecord
           /**
      * @author Padmaja
      * @param type $projectId
+    * @param type $userId
      * @return type
      */
     public static function saveProjectTeamDetails($projectId,$userId)
