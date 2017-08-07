@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit{
      ngOnInit(){
       var getAllObj=JSON.parse(localStorage.getItem("user"));
     if(getAllObj != null && getAllObj != "failure"){
-        this._router.navigate(['home']); 
+        this._router.navigate(['user-dashboard']); 
     }else{
         this._router.navigate(['login']);
     }        
@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit{
               }
            
            }else{
-             this._router.navigate(['home']); 
+             this._router.navigate(['user-dashboard']); 
              this.shared.change(null,null,'LogIn',null,'');  //newly changed
              }
             }else{
