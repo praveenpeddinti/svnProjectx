@@ -7,10 +7,10 @@
  */
 namespace common\components;
 use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts,EventCollection};
-use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields,ProjectTeam,Collaborators};
+use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields,ProjectTeam,Collaborators,Filters};
 use Yii;
 use yii\base\ErrorException;
-
+use common\components\ServiceFactory;
 
  /*
  * @author Moin Hussain
@@ -252,11 +252,11 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                  //$projectDetails = ProjectTeam::getProjectTeamDetailsByRole($userId,$options['limit'],$options['skip']);
                $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$page);
                 if($projectFlag==1){   
-                   $projectData= self::getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId);
+                   $projectData= self::prepareProjectDetails($collection,$projectDetails,$userId);
                 }elseif($projectFlag==2){
                      $activityDetails= self::getAllProjectActivities($postData);
                  }else{
-                  $projectData= self::getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId);
+                  $projectData= self::prepareProjectDetails($collection,$projectDetails,$userId);
                 }
              }
              return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails,'ProjectwiseInfo'=>$projectData,'ActivityData'=>$activityDetails,'projectFlag'=>$projectFlag);  
@@ -268,42 +268,45 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     }
     /**
      * @author Padmaja
-     * @description This method is used to get Project details for dashboard
+     * @description This method is used to prepare Project details for dashboard
      * @return type $collection
      * @return type $projectDetails
      * @return type $assignedtoDetails 
      * @return type $followersDetails
      * @return type $userId
+     * @modifiedBy Anand
      */
-    public static function getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId){        
+    public static function prepareProjectDetails($projectDetails,$userId){        
         try{   
                 $prepareDetails=array();
+                $topTicketsArray= array();
+                $topTickets='';
                   foreach($projectDetails as $extractDetails){
+                     $topTickets='';
                      $projects=Projects::getProjectMiniDetails($extractDetails['ProjectId']);
                      $userDetails=Collaborators::getCollaboratorById($projects['CreatedBy']);
                      $projectTeamDetails=Collaborators::getFilteredProjectTeam($extractDetails['ProjectId'],$userDetails['UserName']);
-                     $projectInfo['ProjectId']=$extractDetails['ProjectId'];
+                     $projectInfo['projectId']=$extractDetails['ProjectId'];
                      $projectInfo['createdBy']=$userDetails['UserName'];
-                      $projectInfo['ProfilePic']=$projectTeamDetails[0]['ProfilePic'];
-                      $projectInfo['projectName']=$projects['ProjectName'];
-                      $projectInfo['CreatedOn'] =$extractDetails['CreatedOn'];
-                      $projecTeam=ProjectTeam::getProjectTeamCount($extractDetails['ProjectId']);
-                      $projectInfo['Team']=$projecTeam['TeamCount'];
-                      $projectInfo['assignedtoDetails'] =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId,"ProjectId"=>(int)$extractDetails['ProjectId']))));
-                      $projectInfo['followersDetails'] =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId,"ProjectId"=>(int)$extractDetails['ProjectId']))));
-                      $projectInfo['closedTickets'] =TicketCollection::getActiveOrClosedTicketsCount($extractDetails['ProjectId'],$userId,'Fields.state.value',6,array());
-                      $projectInfo['activeTickets'] =TicketCollection::getActiveOrClosedTicketsCount($extractDetails['ProjectId'],$userId,'Fields.state.value',3,array());
-                      $bucketDetails=Bucket::getActiveBucketId($extractDetails['ProjectId']);
+                     $projectInfo['profilePic']=$projectTeamDetails[0]['ProfilePic'];
+                     $projectInfo['projectName']=$projects['ProjectName'];
+                     $projectInfo['createdOn'] =$extractDetails['CreatedOn'];
+                     $projecTeam=ProjectTeam::getProjectTeamCount($extractDetails['ProjectId']);
+                     $projectInfo['team']=$projecTeam['TeamCount'];
+                     $projectInfo['topTickets'] = self::getTopTicketsStats($extractDetails['ProjectId'],$userId);
+                     $projectInfo['weeklyProjectTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId,$extractDetails['ProjectId']);
+                     $bucketDetails=Bucket::getProjectBucketByAttributes($extractDetails['ProjectId'],0,2);
                       if($bucketDetails=='failure'){
                           $projectInfo['currentBucket'] ='';
                      }else{
-                      $projectInfo['currentBucket'] =$bucketDetails['Name'];
+                      $projectInfo['currentBucket'] =$bucketDetails;
                      }
+                     
                       array_push($prepareDetails,$projectInfo);
                     }
                     return $prepareDetails;
              } catch (\Throwable $ex) {
-            Yii::error("CommonUtilityTwo:getAllProjectDetailsByUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            Yii::error("CommonUtilityTwo:prepareProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
@@ -593,4 +596,47 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         }
   
   }
+  
+  /**
+   * @author Anand Singh
+   * @uses  Get top tickets statics based on project id,userid or bucket id,
+   * @param type $userId
+   * @param type $projectId
+   * @param type $bucketId
+   * @throws ErrorException
+   */
+  public static function getTopTicketsStats($projectId,$userId='',$bucketId=''){
+      
+      try { 
+          $topTicketsArray= array();
+          $filters=Filters::getAllActiveFilters();
+          $conditions=array('ProjectId'=>(int)$projectId);
+          $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+          if($bucketId!='')$conditions['Fields.bucket.value']=(int)$bucketId;
+          foreach ($filters as $filter) {
+                        $topTickets = '';
+                        switch((int)$filter['Id']){
+                            case 4:
+                                $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
+                                $conditions['Fields.state.value']=(int)3;
+                                $total = $collection->count($conditions);
+                                unset($conditions['$or']);
+                                $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId]];
+                                $assigned = $collection->count($conditions);
+                                $followed = (int)$total - (int)$assigned;
+                                $topTickets =  array("id"=>$filter['Id'],"name"=>$filter['Name'],'total'=>$total,'assigned'=>$assigned,'followed'=>$followed);
+                                break;
+                                }
+                        ($topTickets!='')?array_push($topTicketsArray,$topTickets):$topTickets='';       
+                      }  
+      return $topTicketsArray;
+          }
+    catch (\Throwable $ex) {
+            Yii::error("CommonUtilityTwo:getTopTicketsStats::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    
+  
+}
+
 }

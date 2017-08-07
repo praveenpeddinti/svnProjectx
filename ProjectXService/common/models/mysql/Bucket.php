@@ -368,6 +368,32 @@ class Bucket extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+    /**
+     * @author Anand Singh
+     * @param type $projectId
+     * @param type $status
+     * @param type $type
+     * @return string
+     * @throws ErrorException
+     */
+    
+     public static function getProjectBucketByAttributes($projectId,$status=0,$type=2)
+    {
+        try{
+        $query = "select Id,Name,BucketType,BucketStatus from Bucket where BucketStatus= $status and BucketType = $type and ProjectId=".$projectId;
+        $data = Yii::$app->db->createCommand($query)->queryAll();
+        if(is_array($data)){
+            return $data;
+        }else{
+            return "failure";
+        }
+        } catch (\Throwable $ex) {
+            Yii::error("Bucket:getProjectBucketByAttributes::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+       
+    }
  
 }
 

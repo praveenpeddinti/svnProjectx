@@ -484,7 +484,6 @@ class StoryService {
             
             $ticket_data->description = str_replace('&nbsp;', ' ', $ticket_data->description);
             $description = $ticket_data->description;
-            
             $ticketDetails["CrudeDescription"] = $description;
             $refiendData = CommonUtility::refineDescription($description);
             $ticketDetails["Description"] = $refiendData["description"];

@@ -291,6 +291,45 @@ class TicketTimeLog extends ActiveRecord
         }
         
     }
+    
+    /**
+     * @authr   Anand Singh
+     * @uses  Get current week worklog for any particular user.
+     * @param type $userId
+     * @param type $projectId
+     * @return type
+     * @throws ErrorException
+     */
+    public static function getCurrentWeekTimeLog($userId,$projectId=''){
+   
+        try {
+            
+                $weekFirstDay = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime("last monday"))); 
+                $toDate = date("Y-m-d H:i:s");
+                $matchArray = array('TimeLog.CollaboratorId' => (int)$userId, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
+                if($projectId=='')unset($matchArray['ProjectId']);
+                $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
+                $pipeline = array(
+                array('$unwind' => '$TimeLog'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                        '_id' => '$TimeLog.CollaboratorId',
+                        "count" => array('$sum' => 1),
+                        "totalHours" => array('$sum' => '$TimeLog.Time'),
+                    ),
+                ),
+            );
+            $Arraytimelog = $query->aggregate($pipeline);
+            return $Arraytimelog;  
+        } catch (\Throwable $ex) {
+            Yii::error("TicketTimeLogCollection:getCurrentWeekTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+        
+     
+      
+    }
 
     }
 ?>

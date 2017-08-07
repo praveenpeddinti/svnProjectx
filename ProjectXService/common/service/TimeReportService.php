@@ -254,6 +254,21 @@ class TimeReportService {
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+    public function getCurrentWeekTimelog($userId,$projectId=''){
+        try{
+            $totalWorkLogHours = 0;
+            $arrayTimelog = TicketTimeLog::getCurrentWeekTimeLog($userId,$projectId);
+            if(count($arrayTimelog)>0){
+              $totalWorkLogHours =  number_format(round($arrayTimelog[0]["totalHours"],2),2);
+           }
+            return $totalWorkLogHours;
+        } catch (\Throwable $ex) {
+            Yii::error("TimeReportService:getCurrentWeekTimelog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+        
+    } 
 }
 
   

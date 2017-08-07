@@ -664,7 +664,7 @@ trait NotificationTrait {
         }
     }
 
-    public static function getNotifications($user, $projectId, $offset = 0, $limit = 5, $viewAll = 0) {
+    public static function getNotifications($user, $projectId=0, $offset = 0, $limit = 5, $viewAll = 0) {
         error_log("==in get notifications---" . $user . "---" . $projectId . "---" . $offset . "---" . $limit);
         $msg = '';
         $message = array();
@@ -676,7 +676,7 @@ trait NotificationTrait {
             $notifications = NotificationCollection::getNotifications($user, $offset, $limit, $viewAll);
             //constucting the notifications for the user
             foreach ($notifications as $notification) {
-
+                $projectId=$notification['ProjectId'];
                 if($viewAll == 0){
                    $notification['Status'] = 0;
                    $notification['NotifiedUser']= $user;  

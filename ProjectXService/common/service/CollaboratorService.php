@@ -1,7 +1,7 @@
 <?php
 namespace common\service;
 use common\models\mongo\TicketCollection;
-use common\components\CommonUtility;
+use common\components\{CommonUtility,CommonUtilityTwo,ServiceFactory};
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
 use common\models\mongo\AccessTokenCollection;
@@ -284,6 +284,32 @@ class CollaboratorService {
         }
     }
 
+    /**
+     * 
+     * @param type $params
+     * @return type
+     * @throws ErrorException
+     * @author  Anand Singh
+     * @uses Get user dashboard details.
+     */
+    public function getUserDashboardDetails($params){
+        try{
+            $preparedDahboard=array();
+            $userId=$params->userInfo->Id;
+            $pageLength=$params->projectLimit;
+            $pageNo=$params->projectOffset;
+            $activityOffset=$params->activityOffset;
+            $activityLimit=$params->activityLimit;
+            $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$pageNo);
+            $preparedDahboard['weeklyTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId);
+            $preparedDahboard['projects'] = CommonUtilityTwo::prepareProjectDetails($projectDetails,$userId);
+            $preparedDahboard['activities']= ServiceFactory::getStoryServiceInstance()->getNotifications($userId,0,$activityOffset,$activityLimit,1);
+            return $preparedDahboard;
+        } catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:getUserDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
 }
 
   
