@@ -46,6 +46,8 @@ import { ProjectDetailComponent } from './components/project-detail/project-deta
 //import {Ng2DropdownModule} from 'ng2-material-dropdown';
 import {ToasterModule, ToasterService} from 'angular2-toaster';
 import { SpinnerComponentModule } from 'ng2-component-spinner';
+import { UserDashboardComponent } from './components/user-dashboard/user-dashboard.component';
+import { TopTicketStatsComponent } from './components/top-ticket-stats/top-ticket-stats.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { ProjectDashboardComponent } from './components/project-dashboard/project-dashboard.component';
 const ROUTES=[
@@ -127,6 +129,11 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
+               {path: 'user-dashboard',children:[
+                { path: '' , component: UserDashboardComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
                {path: 'project/:projectName/create-user',children:[
                 { path: '' , component: CreateUserComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
@@ -161,7 +168,7 @@ const ROUTES=[
   ],
 
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, CreateUserComponent, ProjectDashboardComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent ],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
   ],

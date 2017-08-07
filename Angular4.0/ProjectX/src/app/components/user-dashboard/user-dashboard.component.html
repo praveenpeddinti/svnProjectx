@@ -1,0 +1,21 @@
+<p>
+ User Dashboard   
+</p>
+Projects({{dashboardData.projects.length}})<br>
+CURRENT WEEK TIME LOG : {{dashboardData.weeklyTimeLog}}<br>
+<div *ngFor="let pdetail of dashboardData.projects;let i=index;">
+    <p>============================================================</p><br>
+  <span [routerLink]="['/project',pdetail.projectName,'list']">{{pdetail.projectName}}</span>
+  <p> ----------------------------------------------------------</p><br>
+   Current Bucket : 
+  <div *ngFor="let bucket of pdetail.currentBucket;let j=index;" >
+   <span>{{bucket.Name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </div>
+   <p> ----------------------------------------------------------</p><br>
+  <top-ticket-stats [statsData]="pdetail.topTickets"></top-ticket-stats><br>
+  Current Week Time Log : {{pdetail.weeklyProjectTimeLog}}
+</div>
+  <p> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</p><br>
+<div *ngFor="let pactivity of dashboardData.activities;let i=index;">
+      <span>{{pactivity.Slug}}</span><br>
+</div>

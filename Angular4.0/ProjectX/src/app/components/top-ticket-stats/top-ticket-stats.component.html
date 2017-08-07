@@ -1,0 +1,10 @@
+
+ <p>Task                                Assigned                             Followed</p>
+
+
+<div *ngFor="let topTick of statsData;let k=index;" >
+  <span>{{topTick.name}}({{topTick.total}})</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <span>{{topTick.assigned}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+   <span>{{topTick.followed}}</span><br>
+  
+</div> 
