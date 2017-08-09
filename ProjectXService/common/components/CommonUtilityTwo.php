@@ -252,11 +252,11 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                  //$projectDetails = ProjectTeam::getProjectTeamDetailsByRole($userId,$options['limit'],$options['skip']);
                $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$page);
                 if($projectFlag==1){   
-                   $projectData= self::prepareProjectDetails($collection,$projectDetails,$userId);
+                   $projectData= self::prepareProjectsForUserDashboard($collection,$projectDetails,$userId);
                 }elseif($projectFlag==2){
                      $activityDetails= self::getAllProjectActivities($postData);
                  }else{
-                  $projectData= self::prepareProjectDetails($collection,$projectDetails,$userId);
+                  $projectData= self::prepareProjectsForUserDashboard($collection,$projectDetails,$userId);
                 }
              }
              return array('AssignedToData'=>$assignedtoDetails,'FollowersDetails'=>$followersDetails,'ProjectwiseInfo'=>$projectData,'ActivityData'=>$activityDetails,'projectFlag'=>$projectFlag);  
@@ -276,7 +276,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @return type $userId
      * @modifiedBy Anand
      */
-    public static function prepareProjectDetails($projectDetails,$userId){        
+    public static function prepareProjectsForUserDashboard($projectDetails,$userId){        
         try{   
                 $prepareDetails=array();
                 $topTicketsArray= array();
@@ -301,7 +301,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                      }else{
                       $projectInfo['currentBucket'] =$bucketDetails;
                      }
-                     
+                     $projectInfo['storyPoints']=  self::getTotalStoryPoints($extractDetails['ProjectId'],$userId);
                       array_push($prepareDetails,$projectInfo);
                     }
                     return $prepareDetails;
@@ -623,7 +623,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                 unset($conditions['$or']);
                                 $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId]];
                                 $assigned = $collection->count($conditions);
-                                $followed = (int)$total - (int)$assigned;
+                                $followed = (int)$total ;
                                 $topTickets =  array("id"=>$filter['Id'],"name"=>$filter['Name'],'total'=>$total,'assigned'=>$assigned,'followed'=>$followed);
                                 break;
                                 }
@@ -638,5 +638,65 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     
   
 }
+
+/**
+ * @author  Anand Singh
+ * @param type $activities
+ * @return array
+ * @throws ErrorException
+ */
+
+public static function prepareUserDashboardActivities($activities) {
+
+        try {
+            $preparedActivities = array();
+            $finalActivity = array('activityDate' => '', 'activityData' => array());
+            $tempActivity = array();
+            foreach ($activities as $item) {
+
+                $tempActivity[$item['onlyDate']][] = $item;
+            }
+            foreach ($tempActivity as $key => $value) {
+                $finalActivity = array('activityDate' => '', 'activityData' => array());
+                $finalActivity = array('activityDate' => $key, 'activityData' => $value);
+                array_push($preparedActivities, $finalActivity);
+            }
+
+            return $preparedActivities;
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtilityTwo:getTopTicketsStats::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    
+    public static function getTotalStoryPoints($projectId,$userId){
+        try {
+           $totalStoryPoints=0;
+           $matchArray = array("ProjectId" => (int) $projectId,'$or'=>array(array('Fields.assignedto.value'=>(int)$userId)));
+            $query = Yii::$app->mongodb->getCollection('TicketCollection');
+            $pipeline = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.assignedto.value',
+                        "count" => array('$sum' => 1),
+                        "totalPoints" => array('$sum' => '$Fields.totalestimatepoints.value'),
+                    ),
+                ),
+            );
+            $ArrayStoryPoints = $query->aggregate($pipeline);
+            if(count($ArrayStoryPoints)>0){
+             $totalCount =  $ArrayStoryPoints[0]["count"];
+             $totalStoryPoints =  number_format(round($ArrayStoryPoints[0]["totalPoints"],2),2);
+          }
+            return $totalStoryPoints;
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtilityTwo:getTotalStoryPoints::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
 
 }

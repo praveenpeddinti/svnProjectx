@@ -40,7 +40,7 @@ class NotificationsController extends Controller
             $viewAll=$notification_data->viewAll;
             if($viewAll==1) {
               $limit=15; 
-              $offset=($page-1) * $limit;
+              $offset= $page-1;
             }else if(isset ($notification_data->clientType) && $notification_data->clientType=='mobile'){
                $limit = 10; 
                $offset=($page-1) * $limit;

@@ -15,6 +15,7 @@ use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use common\models\mysql\Collaborators;
 use yii\base\ErrorException;
+use yii\data\ActiveDataProvider;
 
 class NotificationCollection extends ActiveRecord 
 {
@@ -87,20 +88,31 @@ class NotificationCollection extends ActiveRecord
      }
     
       public static function getNotifications($user,$offset=0,$limit=5,$viewAll=0)
-    { 
+      { 
            try{
           $cond=["NotifiedCollaborators" =>["CollaboratorId" =>(int) $user,"IsRead" =>(int)0]] ; 
           if($viewAll==1){
             $cond=["NotifiedCollaborators.CollaboratorId" =>(int) $user] ; 
           }
-         $query=new Query();
-            $query->from('NotificationCollection')
-            ->where($cond)
-            ->andWhere(['!=','ActivityFrom', (int)$user])
-            ->orderBy(["_id"=>SORT_DESC])
-             ->offset($offset)      
-            ->limit($limit);
-            $notifications=$query->all();
+        $query=new Query();
+        $query->from('NotificationCollection')->where($cond)
+        ->andWhere(['!=','ActivityFrom', (int)$user])
+        ->orderBy(["_id"=>SORT_DESC]);
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+            'pageSize' => $limit,
+            'page'=>(int)$offset
+            ]
+        ]);
+        $notifications = $provider->getModels();
+//            $query->from('NotificationCollection')
+//            ->where($cond)
+//            ->andWhere(['!=','ActivityFrom', (int)$user])
+//            ->orderBy(["_id"=>SORT_DESC])
+//             ->offset($offset)      
+//            ->limit($limit);
+//            $notifications=$query->all();
             return $notifications;
           } catch (\Throwable $ex) {
             Yii::error("NotificationCollection:getNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

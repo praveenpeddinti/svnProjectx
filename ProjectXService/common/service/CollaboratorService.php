@@ -351,8 +351,9 @@ class CollaboratorService {
             $activityLimit=$params->activityLimit;
             $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$pageNo);
             $preparedDahboard['weeklyTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId);
-            $preparedDahboard['projects'] = CommonUtilityTwo::prepareProjectDetails($projectDetails,$userId);
-            $preparedDahboard['activities']= ServiceFactory::getStoryServiceInstance()->getNotifications($userId,0,$activityOffset,$activityLimit,1);
+            $preparedDahboard['projects'] = CommonUtilityTwo::prepareProjectsForUserDashboard($projectDetails,$userId);
+            $activities = ServiceFactory::getStoryServiceInstance()->getNotifications($userId,0,$activityOffset,$activityLimit,1);
+            $preparedDahboard['activities']= CommonUtilityTwo::prepareUserDashboardActivities($activities);
             return $preparedDahboard;
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getUserDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

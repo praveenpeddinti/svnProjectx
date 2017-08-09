@@ -304,7 +304,7 @@ class TicketTimeLog extends ActiveRecord
    
         try {
             
-                $weekFirstDay = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime("last monday"))); 
+                $weekFirstDay = date("Y-m-d H:i:s", strtotime('last monday', strtotime('tomorrow'))); 
                 $toDate = date("Y-m-d H:i:s");
                 $matchArray = array('TimeLog.CollaboratorId' => (int)$userId, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
                 if($projectId=='')unset($matchArray['ProjectId']);

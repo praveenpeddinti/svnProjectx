@@ -692,6 +692,7 @@ trait NotificationTrait {
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                 $Date = $datetime->format('M-d-Y H:i:s');
+                $dateOnly =$datetime->format('M-d-Y');
                 $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
@@ -725,12 +726,12 @@ trait NotificationTrait {
                         $to = $action_user['UserName'];
                     }
                     $preposition = "to";
-                    $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "user", 'type' => Yii::$app->params['assigned'], 'to' => $to, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "OtherMessage" => Yii::$app->params[$activityOn], "Preposition" => $preposition);
+                    $message = array('onlyDate'=>$dateOnly,'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "user", 'type' => Yii::$app->params['assigned'], 'to' => $to, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "OtherMessage" => Yii::$app->params[$activityOn], "Preposition" => $preposition);
                     array_push($result_msg, $message);
                 } else if ($notification['ActivityOn'] == 'Description' || $notification['ActivityOn'] == 'Title') {
                     $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
                     $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
-                    $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
+                    $message = array('onlyDate'=>$dateOnly,'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
                     array_push($result_msg, $message);
                 }
                
@@ -738,12 +739,12 @@ trait NotificationTrait {
                 else if ($notification['ActivityOn'] == 'ChildTask' || $notification['ActivityOn'] == 'TicketRelation') {
                     $targetTicketData = TicketCollection::getTicketDetails($notification['TargetTicketId'], $projectId);
                     $targetPlanLevel = $targetTicketData["Fields"]["planlevel"]["value"];
-                    $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "task", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'Title' => $ticket_data['Title'], 'TicketId' => $ticket_data['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'TargetPlanLevel' => $targetPlanLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'TargetTicketId' => $targetTicketData['TicketId'], 'TargetTicketTitle' => $targetTicketData['Title']);
+                    $message = array('onlyDate'=>$dateOnly,'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "task", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'Title' => $ticket_data['Title'], 'TicketId' => $ticket_data['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'TargetPlanLevel' => $targetPlanLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'TargetTicketId' => $targetTicketData['TicketId'], 'TargetTicketTitle' => $targetTicketData['Title']);
                     array_push($result_msg, $message);
                 } else if ($notification['ActivityOn'] == 'TotalTimeLog') {
                     $notification['OldValue'] = number_format((float) $notification['OldValue'], 1, '.', '');
                     $notification['NewValue'] = number_format((float) $notification['NewValue'], 1, '.', '');
-                    $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "work log", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => "Total Time Log", 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue'], 'Preposition' => 'to');
+                    $message = array('onlyDate'=>$dateOnly,'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "work log", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => "Total Time Log", 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue'], 'Preposition' => 'to');
                     array_push($result_msg, $message);
                 }
 
@@ -774,7 +775,7 @@ trait NotificationTrait {
                         $otherMessage = Yii::$app->params['follower'];
                         $preposition = $notification['Notification_Type'] == "added" ? "to" : "from";
                     }
-                    $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "follower", 'type' => Yii::$app->params[$notification['Notification_Type']], 'to' => $to, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "OtherMessage" => $otherMessage, "Preposition" => $preposition);
+                    $message = array('onlyDate'=>$dateOnly,'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "follower", 'type' => Yii::$app->params[$notification['Notification_Type']], 'to' => $to, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "OtherMessage" => $otherMessage, "Preposition" => $preposition);
                     array_push($result_msg, $message);
                 }
 
@@ -810,7 +811,7 @@ trait NotificationTrait {
                         $object = "delete";
                         $type = Yii::$app->params['delete'];
                     }
-                    $message = array('Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => $object, 'type' => $type, 'Slug' => $notification['CommentSlug'], 'date' => $Date, 'id' => $notification['_id'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
+                    $message = array('onlyDate'=>$dateOnly,'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => $object, 'type' => $type, 'Slug' => $notification['CommentSlug'], 'date' => $Date, 'id' => $notification['_id'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                     array_push($result_msg, $message);
                 } else if ($notification['Notification_Type'] == "mention") {
                     $datetime = $notification['NotificationDate']->toDateTime();
@@ -826,7 +827,7 @@ trait NotificationTrait {
                             //     moin.hussain mentioned you in a reply
                             //     moin.hussain mentined you on Ticket #33
                             $notification['NotifiedUser'] = 'you';
-                            $message = array('Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "mention", 'type' => Yii::$app->params['mention'], 'id' => $notification['_id'], 'Slug' => $notification['CommentSlug'], 'ActivityOn' => $notification['NotifiedUser'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'],"Preposition" => $preposition);
+                            $message = array('onlyDate'=>$dateOnly,'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "mention", 'type' => Yii::$app->params['mention'], 'id' => $notification['_id'], 'Slug' => $notification['CommentSlug'], 'ActivityOn' => $notification['NotifiedUser'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'],"Preposition" => $preposition);
                             array_push($result_msg, $message);
                         }
                     }
@@ -856,7 +857,7 @@ trait NotificationTrait {
                         }
 
                         $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
-                        $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
+                        $message = array('onlyDate'=>$dateOnly,'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                         array_push($result_msg, $message);
                     } else if ($storyField['Type'] != 6) {
                         if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
@@ -865,7 +866,7 @@ trait NotificationTrait {
                         }
 
                         $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
-                        $message = array('Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
+                        $message = array('onlyDate'=>$dateOnly,'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                         array_push($result_msg, $message);
                     }
                 }
