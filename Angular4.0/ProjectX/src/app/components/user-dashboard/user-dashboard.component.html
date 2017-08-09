@@ -33,7 +33,7 @@
     <div class="project" *ngFor="let pdetail of dashboardData.projects;let i=index;">
       <div class="row">
         <div class="col-md-12">
-          <div class="heading2">{{pdetail.projectName}}</div>
+          <div class="heading2" [routerLink]="['/project',pdetail.projectName,'list']">{{pdetail.projectName}}</div>
         </div>
 
       </div>
