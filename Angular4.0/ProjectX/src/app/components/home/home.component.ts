@@ -287,4 +287,53 @@ export class HomeComponent{
        //  this._router.navigate(['project-detail']);
        // this.load_contents(this.page, this.projectFlag,this.limit,this.flag,this.activityPage,this.ProjectId,this.activityDropdownFlag,'unscroll');
     }
+    public repo=[];
+    createProject(){alert("----1----");
+    var sendData={
+           userId:JSON.parse(this.users.Id),
+           repName:'ProjectXaq'
+           }
+           alert("----1----"+JSON.stringify(sendData));
+         this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
+        {  jQuery('#createProjectDiv').show();
+           jQuery('#showLogDiv').hide();
+           jQuery('#createUserDiv').hide();
+           console.log("----repodata----"+JSON.stringify(result));
+           this.repo=result.data;
+           })
+    }
+    
+    createUser(){alert("----1----");
+    var sendData={
+           userId:JSON.parse(this.users.Id),
+           userName:'Sreeni1',
+           password:'minimum8'
+           }
+           alert("----1----"+JSON.stringify(sendData));
+         this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
+        {
+           jQuery('#createProjectDiv').hide();
+           jQuery('#showLogDiv').hide();
+           jQuery('#createUserDiv').show();
+           console.log("----repodata----"+JSON.stringify(result));
+           this.repo=result.data;
+           })
+    }
+    
+    showLog(){alert("----log----");
+    var sendData={
+           userId:JSON.parse(this.users.Id),
+           repName:'ProjectX'
+           }
+           alert("----1----"+JSON.stringify(sendData));
+         this._ajaxService.AjaxSubscribe('site/show-svnlog',sendData,(result)=>
+        {
+           jQuery('#createProjectDiv').hide();
+           jQuery('#createUserDiv').hide();
+           jQuery('#showLogDiv').show();
+           
+           console.log("----repodata----"+JSON.stringify(result));
+           this.repo=result.data;
+           })
+    }
 }

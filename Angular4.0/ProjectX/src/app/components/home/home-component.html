@@ -85,9 +85,14 @@
 <ul class="nav nav-tabs">
 <li class="active"><a (click)="callprojectsByClick(1)" data-toggle="tab">All Projects</a></li>
 <li ><a (click)="callprojectsByClick(2)" data-toggle="tab">All Activity</a></li>
+<li class="active"><a (click)="createProject()" data-toggle="tab">Create Repository</a></li>
+<li class="active"><a (click)="createUser()" data-toggle="tab">Create User</a></li>
+<li class="active"><a (click)="showLog()" data-toggle="tab">Svn Log</a></li>
 </ul>
  </div> 
- 
+    <div id="createProjectDiv">{{this.repo}}</div>
+    <div id="createUserDiv">{{this.repo}}</div>
+    <div id="showLogDiv">{{this.repo}}</div>
   <div class="tab-content tab-content_content" >
 
  <div class="col-md-12"> 
