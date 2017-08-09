@@ -1,10 +1,33 @@
+ <div id="no-more-tables">
+   <table border="0" cellspacing="0" cellpadding="0" align="center">
+  <thead>
+<tr>
+    <th width="55%"></th>
+    <th width="15%" >Total</th>
+    <th width="15%" >Assigned </th>
+    <th width="15%" >Followed</th>
+  </tr>
+</thead>
+<tbody>
+  <tr *ngFor="let topTick of statsData;let k=index;">
+    <td style="text-align:left;">{{topTick.name}}</td>
+     <td data-title="Total"><span class="but"><a href="">{{topTick.total}}</a></span></td>
+    <td data-title="Assigned" class="tdclr">{{topTick.assigned}}</td>
+    <td data-title="Followed" class="tdclr">{{topTick.followed}}</td>
+  </tr>
+   <tr>
+    <td style="text-align:left;">Over due stories/tasks</td>
+    <td data-title="Total"><span class="but"><a href="">40</a></span></td>
+    <td data-title="Assigned" class="tdclr">20</td>
+    <td data-title="Followed" class="tdclr">20</td>
+  </tr>
+    <tr>
+    <td style="text-align:left;">Due stories/tasks for current week</td>
+     <td data-title="Total"><span class="but"><a href="">40</a></span></td>
+    <td data-title="Assigned" class="tdclr">20</td>
+    <td data-title="Followed" class="tdclr">20</td>
+  </tr>
 
- <p>Task                                Assigned                             Followed</p>
-
-
-<div *ngFor="let topTick of statsData;let k=index;" >
-  <span>{{topTick.name}}({{topTick.total}})</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-   <span>{{topTick.assigned}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-   <span>{{topTick.followed}}</span><br>
-  
-</div> 
+  </tbody>
+  </table>
+  </div>

@@ -1,7 +1,7 @@
 import { LoginService } from '../../services/login.service';
 import {AuthGuard} from '../../services/auth-guard.service';
 import { NgForm } from '@angular/forms';
-import { Component, OnInit,ViewChild,Input,NgZone } from '@angular/core';
+import { Component, OnInit,ViewChild,Input,NgZone,HostListener } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { Headers, Http, Response } from '@angular/http';
 import { AjaxService } from '../../ajax/ajax.service';
@@ -75,9 +75,18 @@ export class UserDashboardComponent implements OnInit {
 loadUserDashboard(req_params){
   var thisObj=this;
   this._ajaxService.AjaxSubscribe('collaborator/get-user-dashboard-details',req_params,(result)=>{
-   thisObj.dashboardData = result.data;
+   if(thisObj.projectOffset ==0 && thisObj.activityOffset==0){
+     thisObj.dashboardData = result.data;
+   }else{
+     console.log("Projects___"+result.data.projects);
+     console.log("PActivity___"+JSON.stringify(result.data.activities));
+    // thisObj.dashboardData.projects.push(result.data.projects);
+     thisObj.dashboardData.activities.push(result.data.activities[0]);
+   }
+   
   });
 }
+
   CallFileupload(){
        jQuery("input[id='my_file']").click(); 
       this.fileuploadClick=true;
