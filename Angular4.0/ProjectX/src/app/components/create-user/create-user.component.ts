@@ -70,22 +70,18 @@ export class CreateUserComponent implements OnInit {
         this._ajaxService.AjaxSubscribe("collaborator/save-user",invite_obj,(result)=>
         {
           if(result.statusCode==200)
-          {
-            if(result.data>1){
+          { 
+              var user={'Id':result.data.Id,'username':result.data.UserName,'token':''};
+              localStorage.setItem('profilePicture',result.data.ProfilePic);
+              localStorage.setItem('ProjectName',this.projectName);
+              localStorage.setItem('user',JSON.stringify(user));
               var email_obj={projectId:this.projectId,email:this.form['email']};
-              this._ajaxService.AjaxSubscribe("story/invalidate-invitation",email_obj,(status)=>
+              this._ajaxService.AjaxSubscribe("collaborator/invalidate-invitation",email_obj,(status)=>
               {
                 if(status.statusCode==200){
-                  
-                    var user={'Id':status.data.Id,'username':status.data.UserName,'token':''};
-                    localStorage.setItem('profilePicture',status.data.ProfilePic);
-                    localStorage.setItem('ProjectName',this.projectName);
-                    localStorage.setItem('user',JSON.stringify(user));
                     this._router.navigate(['user-dashboard']);//navigate to User Dashboard....
                 }
               });
-              
-            }
           }
         })   
         
