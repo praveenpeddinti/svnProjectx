@@ -8,7 +8,7 @@ import { LoginComponent }  from './components/login/login.component';
 import { HomeComponent }  from './components/home/home.component';
 import { StoryDashboardComponent }  from './components/story-dashboard/story-dashboard.component';
 import {StoryService} from './services/story.service';
-import {DropdownModule,CalendarModule,AutoCompleteModule,CheckboxModule,BreadcrumbModule,MenuItem} from 'primeng/primeng'; 
+import {DropdownModule,CalendarModule,AutoCompleteModule,CheckboxModule,BreadcrumbModule,MenuItem,ChipsModule} from 'primeng/primeng'; 
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService, Collaborator} from './services/login.service';
@@ -50,6 +50,9 @@ import { UserDashboardComponent } from './components/user-dashboard/user-dashboa
 import { TopTicketStatsComponent } from './components/top-ticket-stats/top-ticket-stats.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { ProjectDashboardComponent } from './components/project-dashboard/project-dashboard.component';
+import { EmailInviteComponent } from './components/email-invite/email-invite.component';
+import { InviteComponent } from './components/invite/invite.component';
+
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',component: PageNotFoundComponent },
@@ -134,16 +137,13 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-               {path: 'project/:projectName/create-user',children:[
-                { path: '' , component: CreateUserComponent},
-                { path: '' , component: HeaderComponent,outlet:'header'},
-                { path: '' , component: FooterComponent,outlet:'footer'}
-               ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/create-user',component:CreateUserComponent},
                {path: 'project/:projectName/project-dashboard',children:[
                 { path: '' , component: ProjectDashboardComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
+               {path: 'project/:projectName/Invitation',component:InviteComponent},
                { path: '**', component: PageNotFoundComponent }
              ];
 
@@ -164,11 +164,13 @@ const ROUTES=[
    RoundProgressModule,
    ToasterModule,
    SpinnerComponentModule,
-   //Ng2DropdownModule
+   //Ng2DropdownModule,
+   ChipsModule
   ],
 
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent ],
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,EmailInviteComponent, InviteComponent ],
+
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
   ],
