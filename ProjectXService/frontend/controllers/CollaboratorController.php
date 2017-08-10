@@ -195,6 +195,61 @@ class CollaboratorController extends Controller
         }
     }
     
+    /*
+     * @author Ryan
+     * Used for verfiying invitation code
+     */
+    public function actionVerifyInvitationCode(){
+        try{
+            $inviteData = json_decode(file_get_contents("php://input"));
+            $invite_code=$inviteData->inviteCode;
+            $projectId=$inviteData->projectId;
+            $userData=ServiceFactory::getCollaboratorServiceInstance()->verifyCode($invite_code,$projectId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $userData;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+         return $response;      
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionVerifyInvitationCode::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+        
+    }
+    
+    /*
+     * @author Ryan
+     * Used for Invalidating Invitation Code
+     */
+    public function actionInvalidateInvitation(){
+        try{
+             $inviteData = json_decode(file_get_contents("php://input"));
+             $invite_email=$inviteData->email;
+             $projectId=$inviteData->projectId;
+             $status=ServiceFactory::getCollaboratorServiceInstance()->invalidateInvite($invite_email,$projectId);
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SUCCESS;
+             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+             $responseBean->data = $status;
+             $response = CommonUtility::prepareResponse($responseBean, "json");
+         return $response;      
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionInvalidateInvitation::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
     
 }  
     ?>
