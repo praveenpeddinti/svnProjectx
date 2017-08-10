@@ -81,5 +81,95 @@ class CollaboratorController extends Controller
         }
     }
     
+    /*
+     * @author Ryan
+     * Saves a New User in the System
+     */
+    public function actionSaveUser(){
+        try{
+            $userData = json_decode(file_get_contents("php://input"));
+            $projectId=$userData->projectId;
+            $user=$userData->user;
+            $profilepic=$userData->profile;
+            $userid=ServiceFactory::getCollaboratorServiceInstance()->saveNewUser($projectId,$user,$profilepic);
+            $userDetails=ServiceFactory::getCollaboratorServiceInstance()->getUserDetails($userid);
+            error_log("==User Details==".print_r($userDetails,1));
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $userDetails;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+            return $response; 
+            
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionSaveUser::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage() ;// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+    /*
+     * @author Ryan
+     * Gets Users Not yet Invited in Project
+     */
+    public function  actionGetInviteUsers(){
+       
+    try {
+         $searchData = json_decode(file_get_contents("php://input"));
+         $searchTerm=$searchData->query;
+         $projectId=$searchData->projectId;
+         $userData = ServiceFactory::getCollaboratorServiceInstance()->getUsersToInvite($searchTerm,$projectId);
+         $responseBean = new ResponseBean();
+         $responseBean->statusCode = ResponseBean::SUCCESS;
+         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+         $responseBean->data = $userData;
+         $response = CommonUtility::prepareResponse($responseBean, "json");
+         return $response;      
+    } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetUpdatedTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+    /*
+     * @author Ryan
+     * Sends Mail Invitation
+     */
+    public function  actionSendInvite(){
+       
+    try {
+         $inviteData = json_decode(file_get_contents("php://input"));
+         $invited_users=$inviteData->recepients;
+         $projectName=$inviteData->projectName;
+         $userid=$inviteData->userInfo->Id;
+         $email_status = ServiceFactory::getCollaboratorServiceInstance()->sendMailInvitation($invited_users,$projectName,$userid);
+         $responseBean = new ResponseBean();
+         $responseBean->statusCode = ResponseBean::SUCCESS;
+         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+         $responseBean->data = $email_status;
+         $response = CommonUtility::prepareResponse($responseBean, "json");
+         return $response;      
+    } catch (\Throwable $th) {
+            Yii::error("StoryController:actionSendInvite::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+    
+    
 }  
     ?>
