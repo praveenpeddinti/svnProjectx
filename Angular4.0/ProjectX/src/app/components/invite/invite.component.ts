@@ -20,7 +20,7 @@ export class InviteComponent implements OnInit {
   
    }
 
-  ngOnInit() { alert("in invite");
+  ngOnInit() { 
       var thisObj=this;
     thisObj.route.queryParams.subscribe(
       params => 
@@ -30,7 +30,7 @@ export class InviteComponent implements OnInit {
               thisObj.projectName=params['projectName'];
               this.projectService.getProjectDetails(thisObj.projectName,(data)=>{ 
                   if(data.data!=false){
-                    thisObj.projectId=data.data.PId;alert("==Project Id=="+thisObj.projectId);
+                    thisObj.projectId=data.data.PId;
                     console.log(thisObj.projectId);
                     thisObj.verifyInvitation(thisObj.inviteCode);
                   }
@@ -40,29 +40,48 @@ export class InviteComponent implements OnInit {
       })
   }
 
-  verifyInvitation(code){
+  verifyInvitation(code){ 
   
-   var userid=parseInt(this._cookieService.get('user'));
+   var userid_from_cookie=parseInt(this._cookieService.get('user'));
    var id_from_code=parseInt(code.substring(10));
-   alert("==Id from Cookie=="+userid);
-   alert("==Id from Code=="+id_from_code);
    var invite_obj={inviteCode:code,projectId:this.projectId};
-  //  this._ajaxService.AjaxSubscribe("story/verify-invitation-code",invite_obj,(result)=>
-  //   { 
-  //     if(result.statusCode==200)
-  //     { 
-  //       if(result.data.IsValid=='1'){
-  //         if(parseInt(result.data.UserId)!=0){
-  //           this._router.navigate(['user-dashboard']);
-  //         }else{
-  //           this._router.navigate(['project',this.projectName,'create-user'],{queryParams: {email:result.data.Email}});
-  //         }
-  //       }else{
-  //         this._router.navigate(['login']);
-  //       }
-  //     }
-  //   })   
+   this._ajaxService.AjaxSubscribe("collaborator/verify-invitation-code",invite_obj,(result)=>
+    { 
+      if(result.statusCode==200)
+      { 
+        if(result.data.IsValid=='1'){
+          if(parseInt(result.data.UserId)!=0){  //for existing user...
+            if((userid_from_cookie==id_from_code)){ //auto-login if user exists in cookie....
+              var email_obj={projectId:this.projectId,email:result.data.Email};
+              this.invalidateInvite(email_obj,id_from_code);
+            }else{
+              this._router.navigate(['login']); // if cookie doesn't exist for user.....
+            }
+          }else{ //for new user.....
+            this._router.navigate(['project',this.projectName,'create-user'],{queryParams: {email:result.data.Email}});
+          }
+        }else{
+          this._router.navigate(['login']);
+        }
+      }
+    })   
 
+  }
+
+  invalidateInvite(email_obj,id_from_code){ //make existing user invite invalid and add to team
+
+    this._ajaxService.AjaxSubscribe("collaborator/invalidate-invitation",email_obj,(status)=>
+              {
+                if(status.statusCode==200){
+                    var user_obj={projectId:this.projectId,userid:id_from_code};
+                    this._ajaxService.AjaxSubscribe("collaborator/add-to-team",user_obj,(result)=>{
+                      if(result.statusCode==200){
+                        this._router.navigate(['user-dashboard']);//navigate to User Dashboard....
+                      }
+                    });
+                    
+                }
+              });
   }
 
 }
