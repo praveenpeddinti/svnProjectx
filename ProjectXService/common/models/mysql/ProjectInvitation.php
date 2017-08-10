@@ -43,7 +43,7 @@ class ProjectInvitation extends ActiveRecord
                 $invitation->InviteFrom=$invited_by;
                 $invitation->SentDate=date("Y-m-d H:i:s");
                 $invitation->save();
-            
+                return $invite_code;
         } catch (\Throwable $ex) {
             Yii::error("ProjectInvitation:insertInviteCode::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -69,7 +69,7 @@ class ProjectInvitation extends ActiveRecord
             if(!isset($recipient_id)){$invite_code=$invite_code.$recipient_id['Id'];}
             $qry = "update ProjectInvitation set InvitationCode='$invite_code' where Email='$recipient_email' and ProjectId=$projectId";
             Yii::$app->db->createCommand($qry)->execute();
-            return true;
+            return $invite_code;
         } catch (\Throwable $ex) {
             Yii::error("ProjectInvitation:updateInviteCode::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
