@@ -482,12 +482,6 @@ class CollaboratorService {
 
     }
     
-    /**
-     * @author Ryan
-     * @param type $invite_code
-     * @param type $projectId
-     * @return type
-     */
     public function verifyCode($invite_code,$projectId)
     {
         try{
@@ -498,6 +492,16 @@ class CollaboratorService {
             return $invite_data;
         } catch (\Throwable $ex) {
                 Yii::error("StoryService:verifyCode::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+                throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    public function invalidateInvite($invite_email,$projectId){
+        try{
+            ProjectInvitation::disableInvite($invite_email,$projectId);
+            return true;
+        } catch (\Throwable $ex) {
+                Yii::error("StoryService:invalidateInvite::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
                 throw new ErrorException($ex->getMessage());
         }
     }
