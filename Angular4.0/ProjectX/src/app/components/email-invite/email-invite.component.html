@@ -11,6 +11,11 @@
         </button>
       </div>
       <div class="modal-body">
+        <div class="alert alert-success fade in" [hidden]="!isSuccess">
+          <a href="#" class="close" data-dismiss="alert">&times;</a>
+          <strong>Invitation sent successfully.</strong>
+        </div>
+
             <div class="usrcomponent">
               <p-autoComplete  [(ngModel)]="selectedUsers" [minLength]="1" placeholder="Search ...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email  (keyup.enter)="validateEmail(email.value)"   (completeMethod)="searchUsersToInvite($event)" ></p-autoComplete>
             </div>
