@@ -24,7 +24,7 @@ class Collaborators extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            //TimestampBehavior::className(),
         ];
     }
     
@@ -306,6 +306,79 @@ class Collaborators extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
        
+    }
+    
+     /**
+     * @author Ryan
+     * @param type $email
+     * @return type array
+     */
+    public static function getCollaboratorByEmail($email)
+    {
+        try{
+            $qry = "select Id from Collaborators where Email='$email'";
+            $data = Yii::$app->db->createCommand($qry)->queryOne();   
+            return $data;
+            
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getCollaboratorByEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    /**
+     * @author Ryan
+     * @param type $projectId,$user
+     * @return type int 
+     */
+    public static function createUser($projectId,$user){
+        try{error_log("in create user");
+            $collaborator=new Collaborators();
+            $collaborator->FirstName=$user->firstName;
+            $collaborator->LastName=$user->lastName;
+            $collaborator->UserName=$user->email;
+            $collaborator->Email=$user->email;
+            $collaborator->Password=md5($user->password);
+            $collaborator->OrganizationId=1;
+            $collaborator->save();
+            error_log("==primary key==".print_r($collaborator->primaryKey(),1));
+            return  $collaborator->primaryKey;
+            
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:createUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    /**
+     * @author Ryan
+     * @param type $projectId,$userid
+     * @return type boolean 
+     */
+    public static function addToTeam($projectId,$userid){
+        try{
+            $team = new ProjectTeam();
+            $team->ProjectId=$projectId;
+            $team->CollaboratorId=$userid;
+            $team->CreatedBy=$userid;
+            $team->Role=2;
+            $team->Status=1;
+            $team->save();
+            return true;
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:addToTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    public static function saveProfilePic($userid,$profilepic){
+        try{
+            $qry="insert into CollaboratorProfile(`CollaboratorId`,`ProfilePic`) values($userid,'$profilepic');";
+            Yii::$app->db->createCommand($qry)->execute();
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:saveProfilePic::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
     }
 
 }
