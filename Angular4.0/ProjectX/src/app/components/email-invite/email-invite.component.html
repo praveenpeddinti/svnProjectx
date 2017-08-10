@@ -1,0 +1,30 @@
+   <div class="createbut pull-right" data-backdrop="false" data-toggle="modal" data-target="#addProjectModel">Invite User <i class="fa fa-user-plus ifontsize" aria-hidden="true"></i></div>
+
+      <!--Invite popup Starts -->
+             <div class="modal fade custommodel" id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">Invite
+        <!--<h5 class="modal-title">Invite</h5>-->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <div class="usrcomponent">
+              <p-autoComplete  [(ngModel)]="selectedUsers" [minLength]="1" placeholder="Search ...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email  (keyup.enter)="validateEmail(email.value)"   (completeMethod)="searchUsersToInvite($event)" ></p-autoComplete>
+            </div>
+            <span class="fielderror" [hidden]="!isEmailValid">Email Invalid </span>
+            <span class="fielderror" [hidden]="!isEmpty">Please select atleast one user to invite</span>
+            <div [hidden]="selectedUser.length==0"><p-chips value="" [(ngModel)]="selectedUser" [styleClass]="invitesearch" [allowDuplicates]="false" ></p-chips></div>
+      </div>
+    
+      <div class="modal-footer">
+        <button class="model_submit butnbor" (click)="sendInvitation()">Invite</button>
+            <button class="model_cancel butnbor" (click)="cancelInvitation()">Cancel</button>
+      </div>
+       
+    </div>
+  </div>
+</div>
+<!-- popup Ends -->
