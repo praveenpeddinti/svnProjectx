@@ -125,7 +125,34 @@ class ProjectTeam extends ActiveRecord
             Yii::error("ProjectTeam:getAllProjects::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
-   } 
+   }
+   
+   /**
+     * @author Ryan
+     * @param type $search,$projectId
+     * @return type
+     */
+   public static function getActiveUsersForAllProjects($search,$projectId)
+   {
+       try{
+           $userTeam=array();
+           $query="select CollaboratorId from ProjectTeam where ProjectId=$projectId";
+           $project_users=Yii::$app->db->createCommand($query)->queryAll();
+           foreach($project_users as $project_user)
+           {
+               array_push($userTeam,$project_user['CollaboratorId']);
+           }
+          
+           $team=implode(',',$userTeam);
+           //$query = "select distinct C.UserName,C.Email from Collaborators C join ProjectTeam PT on PT.CollaboratorId=C.Id where C.UserName like '$search%' and C.Status=1";
+           $query = "select distinct C.UserName,C.Email from Collaborators C join ProjectTeam PT on PT.CollaboratorId=C.Id where C.UserName like '$search%' and C.Status=1 and C.Id not in($team)";
+           $users = Yii::$app->db->createCommand($query)->queryAll();
+           return $users;
+       } catch (\Throwable $ex) {
+            Yii::error("ProjectTeam:getActiveUsersForAllProjects::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+   }
 }
 
 
