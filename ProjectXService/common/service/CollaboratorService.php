@@ -7,6 +7,7 @@ use common\models\mysql\Collaborators;
 use common\models\mongo\AccessTokenCollection;
 use common\models\mysql\ProjectTeam;
 use common\models\mysql\Projects;
+use common\models\mysql\ProjectInvitation;
 use Yii;
 use yii\base\ErrorException;
 
@@ -358,6 +359,146 @@ class CollaboratorService {
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getUserDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    /**
+     * @author Ryan
+     * @param type $projectId
+     * @param type $user
+     * @param type $profilepic
+     * @return type int
+     */
+    public function saveNewUser($projectId,$user,$profilepic){
+        try{
+            $userid=Collaborators::createUser($projectId,$user);
+            if($userid>0){
+                $status=$this->addUserToTeam($projectId,$userid);
+                Collaborators::saveProfilePic($userid,$profilepic);
+            }
+            return $userid;
+        } catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:saveNewUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    public function addUserToTeam($projectId,$userid)
+    {
+        try{
+            Collaborators::addToTeam($projectId,$userid);
+            return true;
+        } catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:addUserToTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    public function getUserDetails($userid){
+        try{
+            $user=Collaborators::getCollaboratorById($userid);
+            $userDetails=Collaborators::getCollaboratorWithProfile($user['UserName']);
+            return $userDetails;
+        } catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:getUserDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    /**
+     * @author Ryan
+     * @param type $search
+     * @param type $projectId
+     * @return type
+     */
+    public function getUsersToInvite($search,$projectId)
+    {
+        try{
+            $userData=ProjectTeam::getActiveUsersForAllProjects($search,$projectId);
+            return $userData;
+        } catch (\Throwable $ex) {
+            Yii::error("StoryService:getUsersToInvite::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    /**
+     * @author Ryan
+     * @param type $invited_users
+     * @param type $projectName
+     * @param type $invited_by
+     * @return type
+     */
+    public function sendMailInvitation($invited_users,$projectName,$invited_by)
+    {
+        try{
+            $invite_list=array();
+            $status=false;
+            $isInviteSent=array();
+            $project=Projects::getProjectDetails($projectName);
+            foreach($invited_users as $recipient_email){
+                $recipient_id=Collaborators::getCollaboratorByEmail($recipient_email); // check if user exist in system
+                if(isset($recipient_id)){ //if user exist in system
+                    $isInviteSent=ProjectInvitation::checkInviteSent($recipient_email,$project['PId']); //check whether invite already sent for a project
+                }
+                $invite_code=$this->generateInvitation();
+                if(empty($isInviteSent)){error_log("in insert invite code");
+                    ProjectInvitation::insertInviteCode($recipient_id,$recipient_email,$invite_code,$project['PId'],$invited_by);
+                }
+                else{ //if invite already sent
+                    $status=ProjectInvitation::updateInviteCode($recipient_id,$invite_code,$recipient_email,$project['PId']);
+                }
+                $text_message="You have been Invited to ".$projectName ."<br/> <a href=".Yii::$app->params['InviteUrl'].$projectName.'/Invitation?code='.''.$invite_code.">Click to Accept</a>";
+                $subject = "ProjectX | " . $projectName;
+                $mailingName="ProjectX";
+                array_push($invite_list,$recipient_email);
+                CommonUtility::sendEmail($mailingName,$invite_list,$text_message,$subject);       
+            }
+            return true;
+        } catch (\Throwable $ex) {
+            Yii::error("StoryService:sendMailInvitation::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+     /**
+     * @author Ryan
+     * @return type string
+     */
+    public function generateInvitation()
+    {
+            try{
+                $length = 10;
+                $inviteCode = "";
+                $characters = "0123456789abcdefghijklmnopqrstuvwxyz";
+                for ($p = 0; $p < $length; $p++) {
+                    $inviteCode .= $characters[mt_rand(0, strlen($characters)-1)];
+                }
+                return $inviteCode;
+            } catch (\Throwable $ex) {
+                Yii::error("StoryService:generateInvitation::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+                throw new ErrorException($ex->getMessage());
+        }
+
+    }
+    
+    /**
+     * @author Ryan
+     * @param type $invite_code
+     * @param type $projectId
+     * @return type
+     */
+    public function verifyCode($invite_code,$projectId)
+    {
+        try{
+            $invite_data=ProjectInvitation::verifyCode($invite_code,$projectId);
+            if(empty($invite_data)){
+                $invite_data='';
+            }
+            return $invite_data;
+        } catch (\Throwable $ex) {
+                Yii::error("StoryService:verifyCode::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+                throw new ErrorException($ex->getMessage());
         }
     }
 }
