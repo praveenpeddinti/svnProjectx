@@ -90,9 +90,12 @@ export class UserDashboardComponent implements OnInit {
           }
           if (result.data.activities.length > 0) {
             if (thisObj.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
-              thisObj.dashboardData.activities[curActLength - 1].activityData = thisObj.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
+               thisObj.dashboardData.activities[curActLength - 1].activityData = thisObj.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
+               result.data.activities .splice(0, 1);
+               thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
             } else {
-              thisObj.dashboardData.activities.push(result.data.activities);
+              thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
+              console.log("Final___Activity"+JSON.stringify(thisObj.dashboardData.activities));
             }
           } else {
             thisObj.noMoreActivities = true;
