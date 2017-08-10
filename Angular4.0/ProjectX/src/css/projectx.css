@@ -1344,6 +1344,120 @@ button.toast-close-button {
   background-color: rgba(255,255,255,0.3)!important;
   z-index: 9999!important;
 }
+
+
+/*CSS for new Angular 2 dropdown for Notifications to be used in future */
+
+    .ng2-dropdown-button {background:transparent!important; position: relative;
+    margin-top:12px;
+    }
+
+    .notibadge{ position: absolute!important; right:0px!important; top:0px!important;
+     background: #ff0000!important;}
+
+  .ng2-dropdown-button i {
+    font-size: 24px;
+    color: #fff!important;}
+
+  .ng2-dropdown-menu{border-radius: 3px;
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    background: #ebebeb!important;
+    /*min-width: 400px;
+    max-width: 400px;*/
+    border: 1px solid #e3e3e3;
+    
+    overflow: inherit!important;
+    height:auto!important;
+    min-height:100px!important;
+    max-height: 600px!important;
+  
+    
+    } 
+
+    
+.ng2-menu-item{
+        position: relative;
+    padding: 10px 5px!important;
+    background: #fff;
+    border-radius: 3px;
+    margin:10px;
+    white-space:normal!important;
+    height: auto!important;
+    min-height:50px!important;
+    line-height: 0px!important;
+}
+
+    .ng2-dropdown-menu:after {
+    bottom: 100%;
+    right: 50px;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    left:57%;
+    pointer-events: none;
+    border-color: rgba(204, 204, 204, 0);
+    border-bottom-color: #e0e0e0;
+    border-width: 10px;
+    margin-left: -10px; 
+    }
+
+/*.notificationusericon{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+}
+
+.notificationusericon img{
+    width: 30px;
+    height: 30px;
+    border-radius: 100px;
+}*/
+/*.ng2-menu-item--selected{ background: none!important;
+    padding: 0.3em 1.25rem;
+}*/
+.ng2-menu-item--selected{
+    background:#fff!important;
+    outline: 0;
+    border: none;
+    outline: none;
+    padding: 10px 0px 0px 0px;
+}
+
+
+.notification{border-radius:3px;list-style:none;padding:5px 0;margin:0;background:#ebebeb;min-width:400px;max-width:400px;border:1px solid #e3e3e3}
+/*.notificationlist{padding:5px 10px 5px;}*/
+.notificationdiv{position:relative;background:#fff;border-radius:3px}
+.notificationdiv .notificationusericon{position:absolute;width:30px;height:30px;max-width:30px;max-height:30px;left: 0px!important;
+    top:0px!important;}
+.notificationdiv .notificationusericon img{width:30px; height:30px;border-radius:100px;}
+.notificationdiv .not_description{padding:0px 40px 0px 40px}
+.notificationdiv .not_description .not_header{color:#a2a2a2;font-size:12px}
+.notificationdiv .not_description .not_content{color:#7b7b7b;font-size:14px;line-height:16px;cursor: pointer}
+.notificationdiv .not_description .not_content .not_mention{color:#0199e0}
+.notificationdiv .not_description .not_header .not_profilename{color:#0199e0;font-size:16px}
+.notificationdelete{position:absolute;width:23px!important;height:23px!important;border-radius:100px;background:#eeeeee;background:-moz-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:-webkit-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:linear-gradient(to bottom,#eeeeee 0%,#eeeeee 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee',endColorstr='#eeeeee',GradientType=0);text-align:center;padding-top:10px!important;right:0px!important;top:0px!important;}
+.notificationdelete{border:1px solid #e8e8e8;cursor: pointer}
+.notificationdelete:hover{border:1px solid #ccc}
+.notificationdelete i{font-size:15px!important;color:#4c4c4c;line-height: 0}
+.notificationdelete:hover i{color:#7f7f7f}
+.notbuttonarea{text-align:right;;padding:5px 10px 5px;}
+.notbuttonarea .margin-right5{margin-right:5px}
+.not_date{font-size:12px;color:#a8a8a8}
+.notification.dropdown-menu{right:-37px;}
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus{background:#237ea7}
+.notification:after { bottom: 100%; right: 50px; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(204, 204, 204, 0); border-bottom-color: #e0e0e0; border-width: 10px; margin-left: -10px;}
+.nonotification{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #005072 } 
+.bluebuttonmedium{font-size: 12px}
+
+/*Css for new dropdown end */
+
+
 .ngx-datatable .datatable-body .datatable-scroll {
     vertical-align: top;
 }
@@ -1370,3 +1484,37 @@ button.toast-close-button {
     top:0px; right: 0px;
       z-index: 9999!important;
 }
+
+/*InviteUser*/
+.usrcomponent .ui-autocomplete-panel{ padding: 0px!important;}
+.ui-autocomplete-panel .ui-autocomplete-list {padding: 0px!important; border-radius:0px!important;}
+.usrcomponent .ui-autocomplete-panel .ui-autocomplete-list-item{  border-bottom:solid 1px #e6e8eb; color:#637282; font:normal 13px/24px 'open_sansregular'; padding: 3px 10px;}
+.usrcomponent .ui-autocomplete-panel .ui-autocomplete-list-item:hover{ color: #695ea5!important;background:#f7f9fa!important;}
+.ui-chips-token{ display:block!important;}
+.ui-chips ul li .ui-chips-input-token{ display:block!important; float: left!important; width: 100%!important; clear: both!important;}
+.ui-state-highlight {
+    border-bottom: solid 1px #e6e8eb!important;
+    background: #f7f9fa!important;
+    color: #637282!important;
+}
+.ui-state-highlight:nth-last-child() {border-bottom:none!important;}
+.ui-inputtext:focus {
+    box-shadow: 0px 0px 5px #695ea5;
+}
+.usrcomponent .ui-shadow{ box-shadow: none!important;}
+.usrcomponent .ui-corner-all {
+    border-radius: 0px!important;
+}
+.usrcomponent .usrcomponent{ border:solid 1px #e6e8eb; border-bottom:none!important;}
+.ui-chips>ul.ui-inputtext{ padding:0px!important;}
+.ui-chips-token{padding: 0px!important; margin-right: 0px!important;}
+.ui-chips-token .ui-chips-token-label { padding:7px 10px;}
+.ui-chips-token .ui-chips-token-icon {color: #695ea5!important; right:15px!important;}
+.ui-chips .ui-chips-input-token{ display: none!important;}
+.ui-chips ul li.ui-state-highlight:nth-last-child() {border-bottom:none!important;}
+ .ui-chips ul{   min-height: 36px!important;
+    max-height: 150px!important;
+    overflow: auto!important;
+    }
+
+/*InvteUser complete*/
