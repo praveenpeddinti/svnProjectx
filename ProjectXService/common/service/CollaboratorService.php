@@ -443,12 +443,12 @@ class CollaboratorService {
                 }
                 $invite_code=$this->generateInvitation();
                 if(empty($isInviteSent)){error_log("in insert invite code");
-                    ProjectInvitation::insertInviteCode($recipient_id,$recipient_email,$invite_code,$project['PId'],$invited_by);
+                    $new_invite_code=ProjectInvitation::insertInviteCode($recipient_id,$recipient_email,$invite_code,$project['PId'],$invited_by);
                 }
                 else{ //if invite already sent
-                    $status=ProjectInvitation::updateInviteCode($recipient_id,$invite_code,$recipient_email,$project['PId']);
+                    $new_invite_code=ProjectInvitation::updateInviteCode($recipient_id,$invite_code,$recipient_email,$project['PId']);
                 }
-                $text_message="You have been Invited to ".$projectName ."<br/> <a href=".Yii::$app->params['InviteUrl'].$projectName.'/Invitation?code='.''.$invite_code.">Click to Accept</a>";
+                $text_message="You have been Invited to ".$projectName ."<br/> <a href=".Yii::$app->params['InviteUrl'].$projectName.'/Invitation?code='.''.$new_invite_code.">Click to Accept</a>";
                 $subject = "ProjectX | " . $projectName;
                 $mailingName="ProjectX";
                 array_push($invite_list,$recipient_email);
