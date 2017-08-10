@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit{
     public submitted = false;
     public checkData=false;
     public tURl;
-    returnUrl: string;
+     returnUrl: string;
     /*
     * Added by Padmaja
     * if the user object is set then we redirecting to dashboard page and if it is not set then redirecting to login
@@ -83,6 +83,8 @@ export class LoginComponent implements OnInit{
            }else{
              this._router.navigate(['user-dashboard']); 
              this.shared.change(null,null,'LogIn',null,'');  //newly changed
+             var userInfo=JSON.parse(localStorage.getItem("user"));
+             this._cookieService.put('user',userInfo.Id);
              }
             }else{
                 this.checkData=true;
