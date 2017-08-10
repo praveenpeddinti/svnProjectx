@@ -23,6 +23,7 @@ export class EmailInviteComponent implements OnInit {
   public isEmailValid:boolean=false;
   public isEmpty:boolean=false;
   public emailList:any[]=[];
+  public isSuccess:boolean=false;
 
   constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService) { }
 
@@ -114,6 +115,7 @@ export class EmailInviteComponent implements OnInit {
                 console.log("Email Sent");
                 this.selectedUser=[];
                 this.selectedUsers=undefined;
+                this.isSuccess=true;
               }
             })
       }
