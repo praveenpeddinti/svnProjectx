@@ -40,7 +40,7 @@
       <div class="row devider1"></div>
       <div class="row">
         <div class="col-md-12">
-          Current Bucket <span class="but martb5 marr5 cursor_pointer" *ngFor="let bucket of pdetail.currentBucket;let j=index;">{{bucket.Name}}</span>
+          Current Buckets <span class="but martb5 marr5 cursor_pointer" *ngFor="let bucket of pdetail.currentBucket;let j=index;">{{bucket.Name}}</span>
         </div>
       </div>
       <div class="row devider1"></div>
@@ -55,8 +55,8 @@
         </div>
       </div>
     </div>
-     <span *ngIf="!dashboardData.projects && !noMoreProjects">No projects found</span>
-    <span *ngIf="noMoreProjects">No more projects</span>
+     <span class="nonotification" *ngIf="!dashboardData.projects && !noMoreProjects">No projects found</span>
+    <span class="nonotification" *ngIf="noMoreProjects">No more projects</span>
   </div>
 
   <div class="col-md-4">
@@ -121,8 +121,8 @@
         </div>
       </div>
     </div>
-     <span *ngIf="!dashboardData.activities && !noMoreActivities">No activities found</span>
-    <span *ngIf="noMoreActivities">No more activities</span>
+     <span class="nonotification" *ngIf="!dashboardData.activities && !noMoreActivities">No activities found</span>
+    <span class="nonotification" *ngIf="noMoreActivities">No more activities</span>
   </div>
 </div>
 <!-- popup Starts -->
