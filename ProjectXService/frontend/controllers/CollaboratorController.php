@@ -93,7 +93,6 @@ class CollaboratorController extends Controller
             $profilepic=$userData->profile;
             $userid=ServiceFactory::getCollaboratorServiceInstance()->saveNewUser($projectId,$user,$profilepic);
             $userDetails=ServiceFactory::getCollaboratorServiceInstance()->getUserDetails($userid);
-            error_log("==User Details==".print_r($userDetails,1));
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -169,6 +168,32 @@ class CollaboratorController extends Controller
         }
     }
     
+    /*
+     * @author Ryan
+     * Used for adding existing user to Team
+     */
+    public function actionAddToTeam(){
+        try{
+             $userData = json_decode(file_get_contents("php://input"));
+             $projectId=$userData->projectId;
+             $userid=$userData->userid;
+             $status=ServiceFactory::getCollaboratorServiceInstance()->addUserToTeam($projectId,$userid);
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SUCCESS;
+             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+             $responseBean->data = $status;
+             $response = CommonUtility::prepareResponse($responseBean, "json");
+         return $response;  
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionAddToTeam::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
     
     
 }  
