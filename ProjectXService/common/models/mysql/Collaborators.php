@@ -267,7 +267,7 @@ class Collaborators extends ActiveRecord
     public static function getCollaboratorWithProfile($user)
     {
         try{
-            $qry = "select concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic,C.UserName from CollaboratorProfile CP join Collaborators C on CP.CollaboratorId=C.Id where C.UserName='$user'";
+            $qry = "select concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic,C.UserName,C.Id from CollaboratorProfile CP join Collaborators C on CP.CollaboratorId=C.Id where C.UserName='$user'";
             $data = Yii::$app->db->createCommand($qry)->queryOne();   
             return $data;
             
