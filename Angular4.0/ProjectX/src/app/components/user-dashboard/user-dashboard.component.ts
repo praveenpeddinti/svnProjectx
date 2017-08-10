@@ -41,6 +41,8 @@ export class UserDashboardComponent implements OnInit {
   public verified =0;
   public submitted=false;
   public creationPopUp=true;
+  public noMoreActivities:boolean = false;
+  public noMoreProjects:boolean = false;
   constructor(
           private _router: Router,
           private _service: LoginService,
@@ -65,6 +67,7 @@ export class UserDashboardComponent implements OnInit {
          var formobj=this;
         this.editor.initialize_editor('summernote','keyup',formobj);
          },3000);
+          this.shared.change('','','','','');
    }
     ngAfterViewInit() {
         //  setTimeout(() => {
@@ -72,20 +75,35 @@ export class UserDashboardComponent implements OnInit {
         // this.editor.initialize_editor('summernote','keyup',formobj);
         //  },2000);
     }
-loadUserDashboard(req_params){
-  var thisObj=this;
-  this._ajaxService.AjaxSubscribe('collaborator/get-user-dashboard-details',req_params,(result)=>{
-   if(thisObj.projectOffset ==0 && thisObj.activityOffset==0){
-     thisObj.dashboardData = result.data;
-   }else{
-     console.log("Projects___"+result.data.projects);
-     console.log("PActivity___"+JSON.stringify(result.data.activities));
-    // thisObj.dashboardData.projects.push(result.data.projects);
-     thisObj.dashboardData.activities.push(result.data.activities[0]);
-   }
-   
-  });
-}
+  loadUserDashboard(req_params) {
+    var thisObj = this;
+    this._ajaxService.AjaxSubscribe('collaborator/get-user-dashboard-details', req_params, (result) => {
+      if (result.statusCode == 200) {
+        if (thisObj.projectOffset == 0 && thisObj.activityOffset == 0) {
+          thisObj.dashboardData = result.data;
+        } else {
+          var curActLength = thisObj.dashboardData.activities.length;
+          if (result.data.projects.length > 0) {
+            thisObj.dashboardData.projects.push(result.data.projects);
+          } else {
+            thisObj.noMoreProjects = true;
+          }
+          if (result.data.activities.length > 0) {
+            if (thisObj.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
+              thisObj.dashboardData.activities[curActLength - 1].activityData = thisObj.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
+            } else {
+              thisObj.dashboardData.activities.push(result.data.activities);
+            }
+          } else {
+            thisObj.noMoreActivities = true;
+          }
+        }
+
+      }
+
+
+    });
+  }
 
   CallFileupload(){
        jQuery("input[id='my_file']").click(); 
@@ -206,4 +224,32 @@ loadUserDashboard(req_params){
        this.summernoteLength=0;
        this.verifyByspinner='';
     }
+
+    @HostListener('window:scroll', ['$event']) 
+    loadNotificationsOnScroll(event) {
+     // console.debug("Scroll Event", window.pageYOffset );
+      if ((!this.noMoreActivities || !this.noMoreProjects ) && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
+          var thisObj = this;
+          this.projectOffset= this.projectOffset+1;
+          this.activityOffset = this.activityOffset +1;
+          var req_params={
+            projectOffset:this.projectOffset,
+            projectLimit:this.projectLimit,
+            activityOffset:this.activityOffset,
+            activityLimit:this.activityLimit
+          }
+          thisObj.loadUserDashboard(req_params);   
+      }
+    }
+
+  goToTicket(project,ticketid,notify_id,comment)
+  {
+    this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment}});
+  }
+
+  globalSearch(){
+    var searchString=jQuery("#userglobalsearch").val().trim();
+     this._router.navigate(['search',],{queryParams: {q:searchString}});
+  }
+ 
 }

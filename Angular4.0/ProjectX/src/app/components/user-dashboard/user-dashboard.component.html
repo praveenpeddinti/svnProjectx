@@ -1,13 +1,13 @@
-
-<div class="clearfix"  *ngIf="dashboardData">
+<div class="clearfix" *ngIf="dashboardData">
 
   <div class="col-md-8">
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
           <div class="icon-addon ">
-            <input type="text" placeholder="Search" class="form-control user_searchbox" id="email">
+            <input type="text" placeholder="Search" class="form-control user_searchbox" id="userglobalsearch"  (keyup.enter)="globalSearch()">
             <!--  <label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="email"></label>-->
+          <i class="fa fa-search user_searchboxi" aria-hidden="true"></i>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="heading">Projects ({{dashboardData.projects.length}})</div>
       </div>
       <div class="col-md-3">
-        <div class="createbut pull-right">Create project <i class="fa fa-plus ifontsize" aria-hidden="true"></i>
+        <div class="createbut pull-right">Create Project <i class="fa fa-plus ifontsize" aria-hidden="true"></i>
         </div>
       </div>
 
@@ -33,19 +33,19 @@
     <div class="project" *ngFor="let pdetail of dashboardData.projects;let i=index;">
       <div class="row">
         <div class="col-md-12">
-          <div class="heading2" [routerLink]="['/project',pdetail.projectName,'list']">{{pdetail.projectName}}</div>
+          <div class="heading2 cursor_pointer" [routerLink]="['/project',pdetail.projectName,'list']">{{pdetail.projectName}}</div>
         </div>
 
       </div>
       <div class="row devider1"></div>
       <div class="row">
         <div class="col-md-12">
-          Current Bucket <span class="but martb5 marr5" *ngFor="let bucket of pdetail.currentBucket;let j=index;"><a href="">{{bucket.Name}}</a></span>
+          Current Bucket <span class="but martb5 marr5 cursor_pointer" *ngFor="let bucket of pdetail.currentBucket;let j=index;">{{bucket.Name}}</span>
         </div>
       </div>
       <div class="row devider1"></div>
       <div class="boxbg">
-        <top-ticket-stats [statsData]="pdetail.topTickets"></top-ticket-stats>
+        <top-ticket-stats [projectName]="pdetail.projectName" [statsData]="pdetail.topTickets"></top-ticket-stats>
         <div class="row devider1"></div>
         <div class="clearfix">
           <div class="col-md-6"> Current week worked hours <span class="tdclr"> {{pdetail.weeklyProjectTimeLog}}</span></div>
@@ -55,108 +55,153 @@
         </div>
       </div>
     </div>
-
-
-
-
-
-
-
-
-
+     <span *ngIf="!dashboardData.projects && !noMoreProjects">No projects found</span>
+    <span *ngIf="noMoreProjects">No more projects</span>
   </div>
 
   <div class="col-md-4">
     <div class="activity_hed">Activity</div>
-     <div class="devider1 martb5"></div>
+    <div class="devider1 martb5"></div>
     <div *ngFor="let activity of dashboardData.activities;let i=index;">
-    <div class="activity_datebg">
-      <div class="datemonth"><span>{{activity.activityDate| date:'MMM' }}</span> {{activity.activityDate| date:'dd' }}</div>
-      <div class="Year">{{activity.activityDate| date:'y' }}</div>
+      <div class="activity_datebg">
+        <div class="datemonth"><span>{{activity.activityDate| date:'MMM' }}</span> {{activity.activityDate| date:'dd' }}</div>
+        <div class="Year">{{activity.activityDate| date:'y' }}</div>
+      </div>
+      <div class="activities_bg" *ngFor="let activitydata of activity.activityData ;let j=index;">
+        <div class="user"><img src="{{activitydata.Profile}}" /></div>
+
+        <div (click)="goToTicket(activitydata.Project,activitydata.TicketId,activitydata.id.$oid,activitydata.Slug.$oid)" *ngIf="activitydata.status=='changed'"
+          class="activitycon">
+          <span class="not_mention">
+{{activitydata.from}}
+</span> {{activitydata.type}} {{activitydata.ActivityOn}} from {{activitydata.OldValue}} to {{activitydata.NewValue}}
+          for <span class="not_mention"><img *ngIf="activitydata.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="activitydata.PlanLevel==2" src="assets/images/task-icon.png"/> #{{activitydata.TicketId}}  {{activitydata.Title  }} </span>
+          <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
+        </div>
+
+        <div [style]="{cursor:pointer}" (click)="goToTicket(activitydata.Project,activitydata.TicketId,activitydata.id.$oid,activitydata.Slug.$oid)"
+          *ngIf="activitydata.type!='changed'  && !activitydata.status  && activitydata.object!='mention' && activitydata.object!='comment' && activitydata.object!='reply'"
+          class="activitycon">
+          <span class="not_mention">
+{{activitydata.from}}
+    </span> {{activitydata.type}} <span class="not_mention">{{activitydata.to}}</span> {{activitydata.OtherMessage}}
+          {{activitydata.Preposition}} &nbsp;<img *ngIf="activitydata.PlanLevel==1" src="assets/images/story-icon.png" /><img
+            *ngIf="activitydata.PlanLevel==2" src="assets/images/task-icon.png" /> <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
+          <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
+        </div>
+
+        <div [style]="{cursor:pointer}" (click)="goToTicket(activitydata.Project,activitydata.TicketId,activitydata.id.$oid,activitydata.Slug.$oid)"
+          *ngIf="activitydata.status=='set' && activitydata.object!='task'" class="activitycon">
+          <span class="not_mention">
+{{activitydata.from}}
+</span> {{activitydata.type}} {{activitydata.ActivityOn}} {{activitydata.Preposition}} {{activitydata.NewValue}}
+          for <img *ngIf="activitydata.PlanLevel==1" src="assets/images/story-icon.png" /><img *ngIf="activitydata.PlanLevel==2"
+            src="assets/images/task-icon.png" /> <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
+          <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
+        </div>
+
+        <div [style]="{cursor:pointer}" (click)="goToTicket(activitydata.Project,activitydata.TicketId,activitydata.id.$oid,activitydata.Slug.$oid)"
+          *ngIf="activitydata.object=='task' " class="activitycon">
+          <span class="not_mention">
+{{activitydata.from}}
+</span> {{activitydata.type}} {{activitydata.ActivityOn}} {{activitydata.Preposition}} {{activitydata.NewValue}}
+          <img *ngIf="activitydata.TargetPlanLevel==1" src="assets/images/story-icon.png" /> <img *ngIf="activitydata.TargetPlanLevel==2"
+            src="assets/images/task-icon.png" /> <span class="not_mention">#{{activitydata.TargetTicketId}} {{activitydata.TargetTicketTitle }} </span>          for <span class="not_mention"> <img src="assets/images/story-icon.png" /> #{{activitydata.TicketId}} {{activitydata.Title }} </span>
+          <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
+        </div>
+
+        <div [style]="{cursor:pointer}" (click)="goToTicket(activitydata.Project,activitydata.TicketId,activitydata.Slug.$oid,activitydata.id.$oid)"
+          *ngIf="activitydata.object=='mention'||activitydata.object=='comment' ||activitydata.object=='reply' " class="activitycon">
+          <span class="not_mention">
+{{activitydata.from}}
+</span> {{activitydata.type}} <span class="not_mention">{{activitydata.ActivityOn}} </span> {{activitydata.Preposition}}&nbsp;<img
+            *ngIf="activitydata.PlanLevel==1" src="assets/images/story-icon.png" /> <img *ngIf="activitydata.PlanLevel==2"
+            src="assets/images/task-icon.png" /> <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
+          <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
+        </div>
+      </div>
     </div>
-     <div class="activities_bg" *ngFor="let activitydata of activity.activityData ;let j=index;">
-      <div class="user"><img src="{{activitydata.Profile}}" /></div>
-      <div class="activitycon">anand6396 has changed Total Time Log from 10.0 to 665.0 for #285 testdfsdf </div>
-      <div class="activitypro">{{activitydata.date | date:'mediumTime'}} -ProjectX.0</div>
-    </div>
-  </div>
+     <span *ngIf="!dashboardData.activities && !noMoreActivities">No activities found</span>
+    <span *ngIf="noMoreActivities">No more activities</span>
   </div>
 </div>
-    <!-- popup Starts -->
-    <div *ngIf="creationPopUp">
-             <div class="modal fade custommodel"  id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">CREATE PROJECT</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<!-- popup Starts -->
+<div *ngIf="creationPopUp">
+  <div class="modal fade custommodel" id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">CREATE PROJECT</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-     <form  #projectCreationForm="ngForm" (ngSubmit)="submitted && projectCreationForm.form.valid && saveProjectDetails()" novalidate="true">
+        </div>
+        <form #projectCreationForm="ngForm" (ngSubmit)="submitted && projectCreationForm.form.valid && saveProjectDetails()" novalidate="true">
 
-      <div class="modal-body">
-            
-             <div class="row">
+          <div class="modal-body">
+
+            <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
-                   <!--<textarea name="projectLogo" id="summernote" [(ngModel)]="entryForm.projectLogo"  #projectLogo="ngModel"></textarea>-->
-               <div class="row">
-                <div class="col-md-8">
-                     <div class="dashboard_userbg">
-                          <div class="user">
-                                <div class="uploadcomponent margintop15">
-                              <img  alt="" src="assets/images/homelogo.png" name="projectLogo" id="projectlogo"   (click)="CallFileupload()" /></div>
-                         <input  type="file" id="my_file" style="display: none;" (change)="fileUploadEvent($event, 'fileChange')"  multiple />
-                        </div>
-                         </div>
-                </div>
+                <!--<textarea name="projectLogo" id="summernote" [(ngModel)]="entryForm.projectLogo"  #projectLogo="ngModel"></textarea>-->
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="dashboard_userbg">
+                      <div class="user">
+                        <div class="uploadcomponent margintop15">
+                          <img alt="" src="assets/images/homelogo.png" name="projectLogo" id="projectlogo" (click)="CallFileupload()" /></div>
+                        <input type="file" id="my_file" style="display: none;" (change)="fileUploadEvent($event, 'fileChange')" multiple />
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <!--<div class="uploadcomponent margintop15">
                             <div class="uploadbottom"><i class="fa fa-paperclip" aria-hidden="true"></i> File upload</div>
                             <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange')"  multiple  />
                         </div>-->
               </div>
-              
-          </div>
+
+            </div>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
-                  <label class="timereportlabel"> Project Name </label>
-                  <div class="customformfieldsmarginbottom autoSearchTask">
-  <input type="text" class="customformfields " required  [(ngModel)]="form.projectName" name="projectName"  #projectName="ngModel"  id="projectName"   (blur)="verifyProjectName(form.projectName)" (keyup)="veryInputByspinner()"/> 
-       <div *ngIf="submitted && projectName.errors " class="fielderror">
-                <div  [hidden]="!projectName.errors.required">Project Name is required</div>
-            </div>
-            <div id="messageForProject"></div>
-            <div *ngIf="verifyByspinner==1" class="txtbox_spinner"><img  alt="" src="assets/images/storyicon.png"  /></div>
-             <div *ngIf="verifyByspinner==3"  class="txtbox_spinner"><img  alt="" src="assets/images/comment-close.png"  /></div>
-             <div *ngIf="verifyByspinner==2" class="txtbox_spinner"><img  alt="" src="assets/images/green_spinner.gif"  /></div>
+                <label class="timereportlabel"> Project Name </label>
+                <div class="customformfieldsmarginbottom autoSearchTask">
+                  <input type="text" class="customformfields " required [(ngModel)]="form.projectName" name="projectName" #projectName="ngModel"
+                    id="projectName" (blur)="verifyProjectName(form.projectName)" (keyup)="veryInputByspinner()" />
+                  <div *ngIf="submitted && projectName.errors " class="fielderror">
+                    <div [hidden]="!projectName.errors.required">Project Name is required</div>
                   </div>
-              </div>
-              
-          </div>
-             <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Description </label>
-                        <div class="customformfieldsmarginbottom relativediv ">
-                            <textarea  [(ngModel)]="form.description" id="summernote"  name="description"  #description="ngModel" class="customformfieldstextarea " required></textarea>
-                            <div *ngIf="submitted && description.errors " class="fielderror">
-                                <div [hidden]="!description.errors.required">Description is required</div>
-                            </div>
-                             <div [hidden]="!summernoteLength">Description cannot be more than 500 characters long.</div>
-                        </div>
-                    </div>
+                  <div id="messageForProject"></div>
+                  <div *ngIf="verifyByspinner==1" class="txtbox_spinner"><img alt="" src="assets/images/storyicon.png" /></div>
+                  <div *ngIf="verifyByspinner==3" class="txtbox_spinner"><img alt="" src="assets/images/comment-close.png" /></div>
+                  <div *ngIf="verifyByspinner==2" class="txtbox_spinner"><img alt="" src="assets/images/green_spinner.gif" /></div>
                 </div>
-
               </div>
-    
-      <div class="modal-footer">
-        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
-        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;resetForm();" >CANCEL</button>
+
+            </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                <label class="timereportlabel"> Description </label>
+                <div class="customformfieldsmarginbottom relativediv ">
+                  <textarea [(ngModel)]="form.description" id="summernote" name="description" #description="ngModel" class="customformfieldstextarea "
+                    required></textarea>
+                  <div *ngIf="submitted && description.errors " class="fielderror">
+                    <div [hidden]="!description.errors.required">Description is required</div>
+                  </div>
+                  <div [hidden]="!summernoteLength">Description cannot be more than 500 characters long.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
+            <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;resetForm();">CANCEL</button>
+          </div>
+        </form>
       </div>
-       </form>
     </div>
   </div>
 </div>
-</div>
 <!-- popup Ends -->
-

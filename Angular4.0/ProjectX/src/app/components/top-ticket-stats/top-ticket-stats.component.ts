@@ -7,6 +7,7 @@ import { Component, OnInit,Input } from '@angular/core';
 })
 export class TopTicketStatsComponent implements OnInit {
 @Input() statsData: any;
+@Input() projectName: any;
   constructor() { }
 
   ngOnInit() {

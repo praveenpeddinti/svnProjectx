@@ -49,7 +49,10 @@ body{ color:#637282;font:normal 14px/20px 'open_sansregular';}
     height: 35px;
 	position:relative;
 }
-.user_searchbox::before{ position:absolute; left:0px; top:0px; content:"\f002 "; font-family: 'FontAwesome'; font-size:18px; color:#637282;}
+
+.user_searchboxi{ position:absolute;     left: 25px;
+    top: 9px;font-family: 'FontAwesome'; font-size:18px; color:#637282;}
+/*.user_searchbox:before{ position:absolute; left:0px; top:0px; content: "\f0fc"; font-family: 'FontAwesome'; font-size:18px; color:#637282;}*/
 
 .headerbg{ background:#695ea5;}
 .breadcrumb{ background:#fff; border-bottom:solid 1px #c1c7cd;}

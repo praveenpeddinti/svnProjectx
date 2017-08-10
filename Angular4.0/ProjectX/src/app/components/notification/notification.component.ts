@@ -101,7 +101,7 @@ export class NotificationComponent implements OnInit{
     {
       if(data)
       {
-      this._router.navigate(['project',project.ProjectName,ticketid,'details',{queryParams: {Slug:comment}}]);
+      this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment}});
  
       }
     })

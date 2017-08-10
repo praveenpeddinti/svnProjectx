@@ -1485,6 +1485,7 @@ button.toast-close-button {
       z-index: 9999!important;
 }
 
+.cursor_pointer{ cursor: pointer;}
 /*InviteUser*/
 .usrcomponent .ui-autocomplete-panel{ padding: 0px!important;}
 .ui-autocomplete-panel .ui-autocomplete-list {padding: 0px!important; border-radius:0px!important;}

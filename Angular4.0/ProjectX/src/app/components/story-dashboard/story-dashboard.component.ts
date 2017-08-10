@@ -139,7 +139,6 @@ expanded: any = {};
                 thisObj.FilterOption=response.data[0].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
             });
-             
             if(localStorage.getItem('filterArray')!=null){
             var filterArray=JSON.parse(localStorage.getItem('filterArray'));
             thisObj.selectedFilter=filterArray;
