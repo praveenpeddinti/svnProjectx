@@ -1,4 +1,8 @@
-<form   #newUserForm="ngForm" (ngSubmit)="submitted && newUserForm.form.valid && saveStory()" novalidate="true">
+<form   #newUserForm="ngForm" (ngSubmit)="submitted && newUserForm.form.valid && saveUser()" novalidate="true">
+  <div class="uploadcomponent margintop15">
+            <img  alt="" src="/assets/images/homelogo.png" name="projectLogo" id="projectlogo"   (click)="CallFileupload()" /></div>
+            <input  type="file" id="my_file" style="display: none;" (change)="fileUpload($event, 'fileChange')"/>
+  
   <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 ">
           <label class="loginformlabel"> First Name </label>
@@ -34,22 +38,8 @@
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-12">        
             <label class="loginformlabel" for="email">Email</label>
-            <input [(ngModel)]="form.email" id="email" type="email" class="form-control customfield" required minlength="10" maxlength="50"
-                      (blur)="validateEmail(form.email)" (keyup)="validateEmail(form.email)" name="email" #email="ngModel">
-            <div *ngIf="submitted && email.errors " class="fielderror">
-                <div [hidden]="!email.errors.required">
-                      Email is required
-                </div>
-              <div [hidden]="!email.errors.minlength">
-                    Email must be at least 10 characters long.
-                </div>
-              <div [hidden]="!email.errors.maxlength">
-                  Email cannot be more than 50 characters long.
-                </div>
-            </div>
-              <div *ngIf="submitted && email.errors == null && !isEmailValid" class="fielderror">
-                  Email invalid.
-              </div>
+            <input [(ngModel)]="form.email" disabled="disabled" id="email" type="text" class="form-control customfield" 
+                        name="email" #email="ngModel">        
         </div>                          
     </div>
 
@@ -66,7 +56,7 @@
                      Password must be at least 1 characters long.
                     </div>
                     <div [hidden]="!password.errors.maxlength">
-                     Password cannot be more than 15 characters long.
+                     Password cannot be more than 50 characters long.
                     </div>
                   </div>
               </div>
@@ -85,10 +75,13 @@
                       Confirm Password must be at least 1 characters long.
                     </div>
                     <div [hidden]="!confirmpassword.errors.maxlength">
-                     Confirm Password cannot be more than 15 characters long.
+                     Confirm Password cannot be more than 50 characters long.
                     </div>
                   </div>
-                  <div id="mismatch_error" [hidden]="!isPasswordMatch"></div>
+                  <div id="mismatch_error" class="fielderror" [hidden]="isPasswordMatch">
+                      Password Mismatch
+                    </div>
+                  
               </div>
     </div>
      <div class="buttonarea alignright">
