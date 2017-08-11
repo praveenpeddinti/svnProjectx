@@ -209,7 +209,7 @@ trait NotificationTrait {
                 foreach ($userslist as $user) {
                     //error_log("====Notification with mention==" . $user);
                     $user = Collaborators::getCollaboratorId($user);
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsReadNNN"=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsRead"=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
                 }
                     $tic = new NotificationCollection();
                     $tic->TicketId = $ticketId;
@@ -343,7 +343,7 @@ trait NotificationTrait {
                    // seprate record for comment owner
                     $collaboratorIds = array();
                     if($commentOwner !='' && $commentOwner != $loggedinUser){
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsReadpppp"=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsRead"=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
                     $tic = new NotificationCollection();
                     $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->TicketId = $ticketId;
@@ -564,6 +564,7 @@ trait NotificationTrait {
             /* notification for all followers and the stakeholders */
             $notificationIds = array();
             $collaboratorUser=array();
+            $CollaboratorNotifications =array();
             $system='';
             //@Lakshmi
             //making collaboratorsUser array to save the followers ids in array
@@ -571,7 +572,11 @@ trait NotificationTrait {
                 if ($follower['FollowerId'] == $loggedInUser) {
                    continue;
                 }
-            $CollaboratorNotifications = Settings::getNotificationSettingsStatus($fieldType,$follower['FollowerId']);
+                if($activityOn=="ChildTask" || $activityOn=="TicketRelation"){
+                   $CollaboratorNotifications = Settings::getNotificationSettingsStatus($activityOn,$follower['FollowerId']);
+                }else{
+                  $CollaboratorNotifications = Settings::getNotificationSettingsStatus($fieldType,$follower['FollowerId']);
+                }
           if(count($CollaboratorNotifications)>0){
                     $system_notification=$CollaboratorNotifications[0]['SystemNotification'];
                      $email_notification=$CollaboratorNotifications[0]['EmailNotification'];
