@@ -1047,7 +1047,7 @@ class StoryService {
                 $commentDataArray["ActivityBy"] = $userProfile;
                 $datetime = $commentDataArray["ActivityOn"]->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone($timezone));
-                $readableDate = $datetime->format('M-d-Y H:i:s');
+                $readableDate = $datetime->format('M-d-Y h:i:s A');
                 $commentDataArray["ActivityOn"] = $readableDate;
                 $mentionArray = $refinedData['UsersList'];
                 $notify_type = "comment";
