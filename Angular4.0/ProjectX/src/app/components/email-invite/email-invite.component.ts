@@ -92,7 +92,7 @@ export class EmailInviteComponent implements OnInit {
       }
     }
 
-    sendInvitation(){ alert(this.selectedUser.length);alert(this.selectedUsers);
+    sendInvitation(){ 
       if(this.selectedUser.length==0 && (this.selectedUsers==undefined || this.selectedUsers=='')){
         this.isEmpty=true;
       }else{
