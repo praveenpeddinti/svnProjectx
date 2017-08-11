@@ -33,7 +33,7 @@ class Settings extends ActiveRecord
      * @params $userId
      * @return $data
      */
-    public function getAllNotificationTypes($userId){
+    public static function getAllNotificationTypes($userId){
         $query="select * from CollaboratorNotificationsSettings cns join
                 Notifications ns on ns.Id=cns.ActivityId where cns.CollaboratorId=$userId";
         $data = Yii::$app->db->createCommand($query)->queryAll();
@@ -45,7 +45,7 @@ class Settings extends ActiveRecord
      * @params $userId
      * @return $data
      */
-    public function getAllNotificationsStatus($userId){
+    public static function getAllNotificationsStatus($userId){
 //        $query="select * from CollaboratorNotificationsSettings cns join
 //                Notifications ns on ns.Id=cns.ActivityId where CollaboratorId=$userId";
 $query="select * from CollaboratorNotificationsSettings where where CollaboratorId=$userId";                
@@ -59,7 +59,7 @@ $query="select * from CollaboratorNotificationsSettings where where Collaborator
      * @params $userId,$status,$type,$activityId
      * @return $data
      */
-        public function notificationsSetttingsStatusUpdate($userId,$status,$type,$activityId){
+        public static function notificationsSetttingsStatusUpdate($userId,$status,$type,$activityId){
             if($status==0){
               $query="update CollaboratorNotificationsSettings set $type=1 where CollaboratorId=$userId and ActivityId=$activityId"; 
             }else{
@@ -68,7 +68,7 @@ $query="select * from CollaboratorNotificationsSettings where where Collaborator
         $data = Yii::$app->db->createCommand($query)->execute();
         return $data; 
     }
-            public function getNotificationSettingsStatus($fieldName,$userId){
+            public static function getNotificationSettingsStatus($fieldName,$userId){
            $query="select * from Notifications ns join CollaboratorNotificationsSettings cns 
                     on ns.ActivityOn='$fieldName' and cns.CollaboratorId=$userId and ns.Id=cns.ActivityId"; 
            error_log("%%%%%%%%%%%%%%%%".$query);

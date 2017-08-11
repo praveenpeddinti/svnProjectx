@@ -60,6 +60,7 @@ class SettingsController extends Controller
      * @return type
      */
     public function actionEmailPreferences(){
+          try{
         $details=array();
         $postData = json_decode(file_get_contents("php://input"));
         $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
@@ -70,6 +71,15 @@ class SettingsController extends Controller
          $responseBean->data = $details;
          $response = CommonUtility::prepareResponse($responseBean,"json");
          return $response;
+          }  catch (\Throwable $th)  {
+                Yii::error("SiteController:actionEmailPreferences::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
        // return $details;
     }
 //    public function actionNotificationsStatus(){
