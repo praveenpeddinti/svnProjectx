@@ -15,7 +15,7 @@ table th, table td{
 border:1px dotted #ccc; line-height:22px;
 padding:12px 10px;
 text-align:center;
-color:#fff;
+color:#000;
 font-size:15px;
 font-family: 'robotoregular';vertical-align:middle; background:#edf2fb;
 font-weight:normal;
@@ -94,9 +94,11 @@ $(document).ready(function(){
 </thead>
 <tbody *ngFor="let nTypes of NotificationTypesToDisplay;let i=index;">
   <tr>
-    <td class="blue-bg2" style="text-align:left;">{{nTypes.ActivityTitle}}<a href="#" data-placement="right" data-toggle="tooltip" title="You will receive notification whenever a new 
+    <td class="blue-bg2" style="text-align:left;">{{nTypes.ActivityTitle}}
+<!--        <a href="#" data-placement="right" data-toggle="tooltip" title="You will receive notification whenever a new 
 Follower is added/Removed from Story/Task." class="pull-right"><i class="fa fa-info-circle isize" aria-hidden="true"></i>
-</a></td>
+</a>-->
+    </td>
 	<td data-title="System Notifications"><input type="checkbox"  [checked]="nTypes.SystemNotification==1"  (click)="checked(nTypes.Id,'SystemNotification',nTypes.SystemNotification)"></td>
     <td data-title="Email Notifications"><input type="checkbox" [checked]="nTypes.EmailNotification==1" (click)="checked(nTypes.Id,'EmailNotification',nTypes.EmailNotification)"></td>
     <td data-title="Push Notifications"><input type="checkbox" [checked]="nTypes.PushNotification==1" (click)="checked(nTypes.Id,'PushNotification',nTypes.PushNotification)"></td>
