@@ -162,6 +162,9 @@ export class HeaderComponent implements OnInit {
         });
 
     }
+    NotificationSettings(){
+     this._router.navigate(['NotificationSettings']);
+    }
 projectsArray(list){
   var listItem=[];
  listItem.push({label:"Projects", value:''});
