@@ -11,6 +11,7 @@ import { ProjectService } from '../../services/project.service';
 import { GlobalVariable } from '../../config';
 import { FileUploadService } from '../../services/file-upload.service';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
+import { DatePipe } from '@angular/common';
 declare var jQuery:any;
 @Component({
   selector: 'app-user-dashboard',
@@ -27,7 +28,9 @@ export class UserDashboardComponent implements OnInit {
   public dashboardData:any;
   public projects:any;
   public activities:any;
-  public form={};
+  public form={
+    description:""
+  };
   public filesToUpload: Array<File>;
   public hasBaseDropZoneOver:boolean = false;
   public hasFileDroped:boolean = false;
@@ -36,13 +39,20 @@ export class UserDashboardComponent implements OnInit {
   public projectImage:any;
   public fileExtention:any;
   public verifyByspinner:any;
-  public summernoteLength=0;
+ // public summernoteLength=false;
   public fileuploadClick=false;
   public verified =0;
   public submitted=false;
   public creationPopUp=true;
+
+  public clearImgsrc=true;
+  public checkImage:any;
+  public fileuploadMessage=0; 
+  public verifyProjectMess=false;
+
   public noMoreActivities:boolean = false;
   public noMoreProjects:boolean = false;
+
   constructor(
           private _router: Router,
           private _service: LoginService,
@@ -54,6 +64,10 @@ export class UserDashboardComponent implements OnInit {
           private editor:SummerNoteEditorService
   ) {this.filesToUpload = []; }
 
+   ngAfterViewInit() { 
+        var formobj=this;
+        this.editor.initialize_editor('summernote','keyup',formobj);
+    }
   ngOnInit() {
     var thisObj = this;
     var req_params={
@@ -62,19 +76,12 @@ export class UserDashboardComponent implements OnInit {
       activityOffset:this.activityOffset,
       activityLimit:this.activityLimit
     }
-    thisObj.loadUserDashboard(req_params);
-      setTimeout(() => {
-         var formobj=this;
-        this.editor.initialize_editor('summernote','keyup',formobj);
-         },3000);
+   thisObj.loadUserDashboard(req_params);
+   //  var formobj=this;;
+    //    this.editor.initialize_editor('summernote','keyup',formobj);
           this.shared.change('','','','','');
    }
-    ngAfterViewInit() {
-        //  setTimeout(() => {
-        //  var formobj=this;
-        // this.editor.initialize_editor('summernote','keyup',formobj);
-        //  },2000);
-    }
+
   loadUserDashboard(req_params) {
     var thisObj = this;
     this._ajaxService.AjaxSubscribe('collaborator/get-user-dashboard-details', req_params, (result) => {
@@ -109,7 +116,7 @@ export class UserDashboardComponent implements OnInit {
   }
 
   CallFileupload(){
-       jQuery("input[id='my_file']").click(); 
+       jQuery("input[id='inputFile']").click(); 
       this.fileuploadClick=true;
     }
         /*
@@ -119,7 +126,7 @@ export class UserDashboardComponent implements OnInit {
     */
     public fileUploadEvent(fileInput: any, comeFrom: string):void 
     {
-       if(comeFrom == 'fileChange') {
+        if(comeFrom == 'fileChange') {
             this.filesToUpload = <Array<File>> fileInput.target.files;
        } else if(comeFrom == 'fileDrop') {
             this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
@@ -136,19 +143,21 @@ export class UserDashboardComponent implements OnInit {
                    result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
                     var uploadedFileExtension = (result[i].originalname).split('.').pop();
                      if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                      this.fileuploadMessage=0; 
                        var postData={
                               logoName:"[[image:" +result[i].path + "|" + result[i].originalname + "]]"
                             }
                           this._ajaxService.AjaxSubscribe("site/get-project-image",postData,(result)=>
                             {
                                 if(result.data){
-                                    jQuery("#projectlogo").attr("src",result.data);
+                                    jQuery(".projectlogo").attr("src",result.data);
                                     this.fileExtention=uploadedFileExtension;
                                }
-                               this.projectImage=jQuery("#projectlogo").attr("src");
+                               this.projectImage=jQuery(".projectlogo").attr("src");
                             
                     });
                      } else{
+                        this.fileuploadMessage=1; 
                    }
                 }
                 this.fileUploadStatus = false;
@@ -158,75 +167,112 @@ export class UserDashboardComponent implements OnInit {
             });
     }
       verifyProjectName(value){
-         
+        // alert("@@@---");
          var postData={
                       projectName:value
                   } ;
                   if(value=='' || value == undefined){
                       console.log("sssssssssss");
                   }else{
+                    //setTimeout(() => {
                         this.verifyByspinner=2;
+                       //  },2000);
+                      //  alert(this.verifyByspinner);
                        setTimeout(() => {
+                         
                           this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
                         { 
-                           
-                            if (result.statusCode == 200) {
+                           //alert("@@@---"+JSON.stringify(result.statusCode));
+                            if (result.data != false) {
                                this.verified=0;
                                this.verifyByspinner=3;
+                               this.verifyProjectMess=true;
+                              // alert(this.verifyProjectMess);
                              }else{
                               this.verified=1;
                               this.verifyByspinner=1;
                             }
                                     
                         })
-                         }, 3000);
+                         },3000);
                        
                   }
     }
    veryInputByspinner(){
         this.verifyByspinner='';
+        this.verifyProjectMess=false;
     }
+    public editorDesc="";
       saveProjectDetails(){
-        if(this.verified==1){
-
-           this.projectImage=jQuery('#projectlogo').attr("src");
-             var editor=jQuery('#summernote').summernote('code');
-            editor=jQuery(editor).text().trim();
-            if(editor.length>500){
-                this.summernoteLength=1;
-            }else{
+        if(this.verified==1 && this.fileuploadMessage==0){
+           this.projectImage=jQuery('.projectlogo').attr("src");
+           var editor=jQuery('#summernote').summernote('code');
+            this.editorDesc =jQuery(editor).text().trim();
+           // editor=jQuery(editor).text().trim();
+            // if(editor.length>500){
+            //     this.summernoteLength=true;
+            // }else{
              var postData={
                       projectName:this.form['projectName'].trim(),
                       description:this.form['description'].trim(),
                       projectLogo:this.projectImage,
                       fileExtention:this.fileExtention
                   } ;
+                
               this._ajaxService.AjaxSubscribe("site/save-project-details",postData,(result)=>
               {
                     if (result.statusCode == 200) {
                        setTimeout(() => {
                           this.submitted=false;
-                          this.form=[];
+                          this.form={
+                                  description:""
+                          };
                             this.creationPopUp=false;
                          }, 1000);
                          this.creationPopUp=true;
+                         this._router.navigate(['project',this.form['projectName']]);
                       }else{
                  }
                 }) 
-            }
+          //  }
        }else{
 
        }
     }
  
     resetForm(){
-         this.form=[];
-        }
+       this.submitted=false;
+         this.form={
+                 description:""
+            };
+        jQuery("#summernote").summernote('code','');
+        this.verifyProjectMess=false; 
+  }
     creationProject(){
+       //jQuery("#summernote").summernote();
+        this.form={
+                 description:""
+            };
        this.creationPopUp=true;
-       this.summernoteLength=0;
+      // this.summernoteLength=false;
        this.verifyByspinner='';
+       this.fileuploadMessage=0; 
+       this.checkImage=jQuery('.projectlogo').attr("src");
+       if(this.checkImage=='assets/images/logo.jpg'){
+         this.clearImgsrc=true; 
+       }else{
+           this.clearImgsrc=false;
+          // this.checkImage='assets/images/logo.jpg'; alert("555"+this.clearImgsrc);
+       }
+      // alert("@@--"+this.clearImgsrc);
+        this.verifyProjectMess=false; 
     }
+
+    // clearlengthMessage(){
+    //     this.summernoteLength=false; 
+    // alert("alererer"+this.summernoteLength) ;   
+    // }
+
 
     @HostListener('window:scroll', ['$event']) 
     loadNotificationsOnScroll(event) {
@@ -254,5 +300,5 @@ export class UserDashboardComponent implements OnInit {
     var searchString=jQuery("#userglobalsearch").val().trim();
      this._router.navigate(['search',],{queryParams: {q:searchString}});
   }
- 
+
 }

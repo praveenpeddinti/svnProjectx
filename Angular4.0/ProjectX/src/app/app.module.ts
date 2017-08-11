@@ -144,13 +144,18 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
                {path: 'project/:projectName/create-user',component:CreateUserComponent},
-               {path: 'project/:projectName/project-dashboard',children:[
+               {path: 'project/:projectName',children:[
                 { path: '' , component: ProjectDashboardComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-               {path: 'project/:projectName/Invitation',component:InviteComponent},
-               { path: '**', component: PageNotFoundComponent }
+                {path: 'project/:projectName/project-detail',children:[
+                { path: '' , component: ProjectDetailComponent},
+                { path: '' , component: HeaderComponent,outlet:'header'},
+                { path: '' , component: FooterComponent,outlet:'footer'}
+               ],canActivate:[AuthGuard]},
+                {path: 'project/:projectName/Invitation',component:InviteComponent},
+                { path: '**', component: PageNotFoundComponent }
              ];
 
 @NgModule({
@@ -172,7 +177,7 @@ const ROUTES=[
    SpinnerComponentModule,
    //Ng2DropdownModule,
    ChipsModule
-  ],
+    ],
 
 
   declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent ],

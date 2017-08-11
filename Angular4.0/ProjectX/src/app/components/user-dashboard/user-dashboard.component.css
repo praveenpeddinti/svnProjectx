@@ -33,7 +33,7 @@ body{ color:#637282;font:normal 14px/20px 'open_sansregular';}
 .model_submit{ background:#695ea5;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase;}
 .model_cancel{ background:#a7b4d3;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase;}
 
-.modal_label{ color:#637282; font:normal 14px/22px 'open_sansregular';}
+.modal_label{ color:#637282; font:normal 14px/22px 'open_sansregular'; font-weight:normal!important;}
 .modal_txtbox{ background:#fff; border:solid 1px #e6e8eb;}
 
 .user_searchbox{
@@ -68,8 +68,6 @@ body{ color:#637282;font:normal 14px/20px 'open_sansregular';}
 .marr5{ margin-right:5px;}
 
 
-
-
  @media only screen and (max-width:767px){	
 		thead tr{position:absolute;top:-9999px;left:-9999px}
 		table tr{border:1px dotted #032632;border-bottom:none !important}
@@ -88,4 +86,13 @@ body{ color:#637282;font:normal 14px/20px 'open_sansregular';}
 		
  }
 #projectName{position: relative; padding-right:50px;}
-.txtbox_spinner{ width:50px; height: 50px; position: absolute; right: 0px; top: 0px; }
+.txtbox_spinner{ height: 30px;
+    position: absolute;
+    right: 10px;
+    top: 32px;
+    width: 30px;}
+.model_proimg{ width:90px; height:90px; border-radius:100%; background:#f7f9fa; position:relative;}
+.model_proimg img{ border-radius:100%; width:90px; height:90px;}
+.model_proimgedit{ width:20px; height:20px; background:#776dad; border-radius:100%; text-align:center; vertical-align:middle; position:absolute; right:5px; top:5px; cursor:pointer;}
+.model_proimgedit i{ font-size:12px; color:#fff;}
+
