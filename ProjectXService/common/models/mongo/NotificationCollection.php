@@ -76,9 +76,10 @@ class NotificationCollection extends ActiveRecord
     { 
          try{
           $query=new Query();
-          $cond["NotifiedCollaborators.CollaboratorId"]=(int) $user;
-          $cond["NotifiedCollaborators.IsRead"]=(int)0;
-          $cond["NotifiedCollaborators.SystemNotification"]=(int)1;
+          $cond=array("NotifiedCollaborators"=>array('$elemMatch'=>array('CollaboratorId'=>(int) $user,'IsRead'=>(int)0,'SystemNotification'=>(int)1)));
+//          $cond["NotifiedCollaborators.CollaboratorId"]=(int) $user;
+//          $cond["NotifiedCollaborators.IsRead"]=(int)0;
+//          $cond["NotifiedCollaborators.SystemNotification"]=(int)1;
           $query->from('NotificationCollection')
             ->where($cond)
             ->andWhere(['!=','ActivityFrom', (int)$user]);
@@ -93,13 +94,16 @@ class NotificationCollection extends ActiveRecord
       public static function getNotifications($user,$offset=0,$limit=5,$viewAll=0,$asActivity=false)
       { 
            try{
-          $cond["NotifiedCollaborators.CollaboratorId"]=(int) $user;
-          $cond["NotifiedCollaborators.IsRead"]=(int)0;
-          if(!$asActivity)
-          $cond["NotifiedCollaborators.SystemNotification"]=(int)1;
+           $cond=array();    
+            
           if($viewAll==1){
-          $cond["NotifiedCollaborators.CollaboratorId"]=(int) $user;
-          }
+          if(!$asActivity)
+          $cond=array("NotifiedCollaborators"=>array('$elemMatch'=>array('CollaboratorId'=>(int) $user,'SystemNotification'=>(int)1)));
+          else 
+          $cond=array("NotifiedCollaborators"=>array('$elemMatch'=>array('CollaboratorId'=>(int) $user)));   
+          }else{
+          $cond=array("NotifiedCollaborators"=>array('$elemMatch'=>array('CollaboratorId'=>(int) $user,'IsRead'=>(int)0,'SystemNotification'=>(int)1)));
+           }
         $query=new Query();
         $query->from('NotificationCollection')->where($cond)
         ->andWhere(['!=','ActivityFrom', (int)$user])
