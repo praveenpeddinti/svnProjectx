@@ -24,7 +24,7 @@
 
 }
 
-body{font-family: 'robotoregular'!important; font-size: 14px;}
+body{font-family: 'robotoregular'!important; font-size: 14px;color: #637282;}
 
 
 
@@ -1441,7 +1441,7 @@ button.toast-close-button {
 .notificationdiv .not_description .not_content{color:#7b7b7b;font-size:14px;line-height:16px;cursor: pointer}
 .notificationdiv .not_description .not_content .not_mention{color:#0199e0}
 .notificationdiv .not_description .not_header .not_profilename{color:#0199e0;font-size:16px}
-.notificationdelete{position:absolute;width:23px!important;height:23px!important;border-radius:100px;background:#eeeeee;background:-moz-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:-webkit-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:linear-gradient(to bottom,#eeeeee 0%,#eeeeee 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee',endColorstr='#eeeeee',GradientType=0);text-align:center;padding-top:10px!important;right:0px!important;top:0px!important;}
+.notificationdelete{position:absolute;width:23px!important;height:23px!important;border-radius:100px;background:#eeeeee;background:-moz-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:-webkit-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:linear-gradient(to bottom,#eeeeee 0%,#eeeeee 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee',endColorstr='#eeeeee',GradientType=0);text-align:center;right:0px!important;top:0px!important;}
 .notificationdelete{border:1px solid #e8e8e8;cursor: pointer}
 .notificationdelete:hover{border:1px solid #ccc}
 .notificationdelete i{font-size:15px!important;color:#4c4c4c;line-height: 0}
@@ -1452,8 +1452,7 @@ button.toast-close-button {
 .notification.dropdown-menu{right:-37px;}
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus{background:#237ea7}
 .notification:after { bottom: 100%; right: 50px; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(204, 204, 204, 0); border-bottom-color: #e0e0e0; border-width: 10px; margin-left: -10px;}
-.nonotification{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #005072 } 
-.bluebuttonmedium{font-size: 12px}
+.nonotification{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #005072 }.bluebuttonmedium{font-size: 12px}
 
 /*Css for new dropdown end */
 

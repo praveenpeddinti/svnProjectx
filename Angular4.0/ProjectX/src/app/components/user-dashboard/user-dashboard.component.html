@@ -50,7 +50,7 @@
         <top-ticket-stats [projectName]="pdetail.projectName" [statsData]="pdetail.topTickets"></top-ticket-stats>
         <div class="row devider1"></div>
         <div class="clearfix">
-          <div class="col-md-6"> Current week worked hours <span class="tdclr"> {{pdetail.weeklyProjectTimeLog}}</span></div>
+          <div class="col-md-6"> Current week worked hours <span class="tdclr"> {{(pdetail.weeklyProjectTimeLog!=0)?pdetail.weeklyProjectTimeLog:'00:00'}}</span></div>
           <div class="col-md-6">
             <div class="float_right">Story Points <span class="tdclr"> {{pdetail.storyPoints}}</span></div>
           </div>
@@ -78,7 +78,7 @@
           <span class="not_mention">
 {{activitydata.from}}
 </span> {{activitydata.type}} {{activitydata.ActivityOn}} from {{activitydata.OldValue}} to {{activitydata.NewValue}}
-          for <span class="not_mention"><img *ngIf="activitydata.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="activitydata.PlanLevel==2" src="assets/images/task-icon.png"/> #{{activitydata.TicketId}}  {{activitydata.Title  }} </span>
+          for <span class="not_mention"> #{{activitydata.TicketId}}  {{activitydata.Title  }} </span>
           <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
 
@@ -88,8 +88,7 @@
           <span class="not_mention">
 {{activitydata.from}}
     </span> {{activitydata.type}} <span class="not_mention">{{activitydata.to}}</span> {{activitydata.OtherMessage}}
-          {{activitydata.Preposition}} &nbsp;<img *ngIf="activitydata.PlanLevel==1" src="assets/images/story-icon.png" /><img
-            *ngIf="activitydata.PlanLevel==2" src="assets/images/task-icon.png" /> <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
+          {{activitydata.Preposition}} &nbsp; <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
           <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
 
@@ -98,8 +97,7 @@
           <span class="not_mention">
 {{activitydata.from}}
 </span> {{activitydata.type}} {{activitydata.ActivityOn}} {{activitydata.Preposition}} {{activitydata.NewValue}}
-          for <img *ngIf="activitydata.PlanLevel==1" src="assets/images/story-icon.png" /><img *ngIf="activitydata.PlanLevel==2"
-            src="assets/images/task-icon.png" /> <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
+          for <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
           <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
         <div [style]="{cursor:pointer}" (click)="goToTicket(activitydata.Project,activitydata.TicketId,activitydata.id.$oid,activitydata.Slug.$oid)"
@@ -107,8 +105,7 @@
           <span class="not_mention">
 {{activitydata.from}}
 </span> {{activitydata.type}} {{activitydata.ActivityOn}} {{activitydata.Preposition}} {{activitydata.NewValue}}
-          <img *ngIf="activitydata.TargetPlanLevel==1" src="assets/images/story-icon.png" /> <img *ngIf="activitydata.TargetPlanLevel==2"
-            src="assets/images/task-icon.png" /> <span class="not_mention">#{{activitydata.TargetTicketId}} {{activitydata.TargetTicketTitle }} </span>          for <span class="not_mention"> <img src="assets/images/story-icon.png" /> #{{activitydata.TicketId}} {{activitydata.Title }} </span>
+          <span class="not_mention">#{{activitydata.TargetTicketId}} {{activitydata.TargetTicketTitle }} </span>for <span class="not_mention"> #{{activitydata.TicketId}} {{activitydata.Title }} </span>
           <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
 
@@ -116,9 +113,7 @@
           *ngIf="activitydata.object=='mention'||activitydata.object=='comment' ||activitydata.object=='reply' " class="activitycon">
           <span class="not_mention">
 {{activitydata.from}}
-</span> {{activitydata.type}} <span class="not_mention">{{activitydata.ActivityOn}} </span> {{activitydata.Preposition}}&nbsp;<img
-            *ngIf="activitydata.PlanLevel==1" src="assets/images/story-icon.png" /> <img *ngIf="activitydata.PlanLevel==2"
-            src="assets/images/task-icon.png" /> <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
+</span> {{activitydata.type}} <span class="not_mention">{{activitydata.ActivityOn}} </span> {{activitydata.Preposition}}&nbsp;<span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title }} </span>
           <div class="not_date">{{activitydata.date | date:'mediumTime'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
       </div>

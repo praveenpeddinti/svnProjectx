@@ -1,4 +1,4 @@
-body{ color:#637282;font:normal 14px/20px 'open_sansregular';}
+body{ color:#637282; font:normal 14px/20px 'open_sansregular';}
 .createbut{ background:#695ea5; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px 40px 5px 5px; display:inline-block; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; position:relative;}
 .createbut i{ color:#fff; position:absolute; right:7px; top:7px;}
 .ifontsize{ font-size:18px;}
