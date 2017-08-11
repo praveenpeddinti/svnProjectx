@@ -1044,12 +1044,85 @@ class StoryController extends Controller
      * @uses Deleting Specific Notification
      * @return type
      */
-    public function actionDeleteNotification()
+    public function actionReadNotification()
     {
        
         
         try
         {
+            $notifyData=json_decode(file_get_contents("php://input"));
+            NotificationCollection::readNotification($notifyData);
+            
+            $projectId=$notifyData->projectId;
+            $notified_userid=$notifyData->userInfo->Id;
+            $notified_username=$notifyData->userInfo->username;
+            $viewAll=$notifyData->viewAll;
+            $page=$notifyData->page;
+            $limit=5;
+            if($viewAll==0){
+             
+          
+            //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
+            $result_data=ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,0,$limit);
+
+            $count = NotificationCollection::getNotificationsCount($notified_userid,$projectId);
+            $result =  count($result_data)>0 ? $result_data : "nodata";
+            $responseData = $result;
+            }else{
+            $count = 0;
+            $responseData = "";
+              }
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+             $responseBean->totalCount = $count;
+            $responseBean->data = $responseData ;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionReadNotification::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+     /**
+     * @author Ryan
+     * @uses Deleting all Notifications
+     * @return type
+     */
+    public function actionReadNotifications()
+    {
+        try
+        {
+            $notifyData=json_decode(file_get_contents("php://input"));
+            NotificationCollection::readAllNotifications($notifyData);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = true;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionReadNotifications::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+    public function actionDeleteNotification() {
+        
+        try
+        {
+            error_log("actionDeleteNotification----");
             $notifyData=json_decode(file_get_contents("php://input"));
             NotificationCollection::deleteNotification($notifyData);
             
@@ -1090,33 +1163,7 @@ class StoryController extends Controller
         }
     }
     
-     /**
-     * @author Ryan
-     * @uses Deleting all Notifications
-     * @return type
-     */
-    public function actionDeleteNotifications()
-    {
-        try
-        {
-            $notifyData=json_decode(file_get_contents("php://input"));
-            NotificationCollection::deleteAllNotifications($notifyData);
-            $responseBean = new ResponseBean();
-            $responseBean->statusCode = ResponseBean::SUCCESS;
-            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = true;
-            $response = CommonUtility::prepareResponse($responseBean, "json");
-            return $response;
-        } catch (\Throwable $th) {
-            Yii::error("StoryController:actionDeleteAllNotifications::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
-             $responseBean = new ResponseBean();
-             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
-             $responseBean->data = [];
-             $response = CommonUtility::prepareResponse($responseBean,"json");
-             return $response;
-        }
-    }
+    
     
 //    Ticket #91
     /**
@@ -1294,7 +1341,7 @@ class StoryController extends Controller
              return $response;
         }
     }
-
+     
 }
 
 

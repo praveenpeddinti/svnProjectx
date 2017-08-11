@@ -134,7 +134,7 @@ class NotificationCollection extends ActiveRecord
      * @return type 
      * @description  Used for deleting the notification 
      */
-    public static function deleteNotification($notify)
+    public static function readNotification($notify)
     {
         $user=$notify->userInfo->Id;
         $notifyid=$notify->notifyid;
@@ -144,10 +144,26 @@ class NotificationCollection extends ActiveRecord
             $notifications->update(array('_id'=>$notifyid,'NotifiedCollaborators.CollaboratorId'=>(int)$user), array('$set'=>array('NotifiedCollaborators.$.IsRead'=>1)));
             return;
         }catch (\Throwable $ex) {
+            Yii::error("NotificationCollection:readNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+        public static function deleteNotification($notify){
+        $user=$notify->userInfo->Id;
+        $notifyid=$notify->notifyid;
+        try
+        {
+            error_log("id----".$user."---notif-".$notifyid);
+            $notifications=NotificationCollection::getCollection();
+            $notifications->update(array('_id'=>$notifyid), array('$pull'=>array("NotifiedCollaborators" => array('CollaboratorId'=>(int)$user))));
+            return;
+        }catch (\Throwable $ex) {
             Yii::error("NotificationCollection:deleteNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
+    
     
     /**
      * @author Ryan Marshal
@@ -155,7 +171,7 @@ class NotificationCollection extends ActiveRecord
      * @return type 
      * @description  Used for deleting all notifications of the user 
      */
-    public static function deleteAllNotifications($notify)
+    public static function readAllNotifications($notify)
     {
         $user=$notify->userInfo->Id;
         try
@@ -167,7 +183,7 @@ class NotificationCollection extends ActiveRecord
             }
             return;
         }catch (\Throwable $ex) {
-            Yii::error("NotificationCollection:deleteAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            Yii::error("NotificationCollection:readAllNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
