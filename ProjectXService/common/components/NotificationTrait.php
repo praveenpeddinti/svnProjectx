@@ -22,7 +22,8 @@ use common\models\mysql\{
     Collaborators,
     TaskTypes,
     Filters,
-    Projects
+    Projects,
+    Settings
 };
 use yii;
 use yii\base\ErrorException;
@@ -208,7 +209,7 @@ trait NotificationTrait {
                 foreach ($userslist as $user) {
                     //error_log("====Notification with mention==" . $user);
                     $user = Collaborators::getCollaboratorId($user);
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsRead"=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsReadNNN"=>0));
                 }
                     $tic = new NotificationCollection();
                     $tic->TicketId = $ticketId;
@@ -273,7 +274,16 @@ trait NotificationTrait {
             if (!empty($userslist)) {
              foreach ($userslist as $user) {
               $user = Collaborators::getCollaboratorId($user);
-              array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsRead"=>0));
+                     $CollaboratorNotifications = Settings::getNotificationSettingsStatus("comment",$user['Id']);
+                     if(count($CollaboratorNotifications)>0){
+                     $system_notification=$CollaboratorNotifications[0]['SystemNotification'];
+                     $email_notification=$CollaboratorNotifications[0]['EmailNotification'];
+                     $push_notification=$CollaboratorNotifications[0]['PushNotification'];
+                     array_push($collaboratorIds,array('CollaboratorId'=>(int)$user['Id'],'IsRead'=>0,'SystemNotification'=>(int)$system_notification,'EmailNotification'=>(int)$email_notification,'PushNotification'=>(int)$push_notification));
+                     }else{
+                      array_push($collaboratorIds,array('CollaboratorId'=>(int)$user['Id'],'IsRead'=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
+                    }
+            //  array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsReadsss"=>0));
               array_push($mentionUserIdlist, $user['Id']);
              }
                     $tic = new NotificationCollection();
@@ -300,8 +310,17 @@ trait NotificationTrait {
             if (!empty($followers)) {
             foreach ($followers as $follower) {
                 if ($follower['FollowerId'] != $loggedinUser && $follower['FollowerId'] != $commentOwner && !in_array($follower['FollowerId'], $mentionUserIdlist)) {
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$follower['FollowerId'] ,"IsRead"=>0));
+                     $CollaboratorNotifications = Settings::getNotificationSettingsStatus("comment",$follower['FollowerId']);
+                     if(count($CollaboratorNotifications)>0){
+                     $system_notification=$CollaboratorNotifications[0]['SystemNotification'];
+                     $email_notification=$CollaboratorNotifications[0]['EmailNotification'];
+                     $push_notification=$CollaboratorNotifications[0]['PushNotification'];
+                     array_push($collaboratorIds,array('CollaboratorId'=>(int)$follower['FollowerId'],'IsRead'=>0,'SystemNotification'=>(int)$system_notification,'EmailNotification'=>(int)$email_notification,'PushNotification'=>(int)$push_notification));
+                     }else{
+                      array_push($collaboratorIds,array('CollaboratorId'=>(int)$follower['FollowerId'],'IsRead'=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
                     }
+                  //  array_push($collaboratorIds, array("CollaboratorId"=>(int)$follower['FollowerId'] ,"IsReadkkk"=>0));
+                  }
             }
                     $tic = new NotificationCollection();
                     $tic->NotifiedCollaborators = $collaboratorIds;
@@ -324,7 +343,7 @@ trait NotificationTrait {
                    // seprate record for comment owner
                     $collaboratorIds = array();
                     if($commentOwner !='' && $commentOwner != $loggedinUser){
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsRead"=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsReadpppp"=>0));
                     $tic = new NotificationCollection();
                     $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->TicketId = $ticketId;
@@ -348,6 +367,7 @@ trait NotificationTrait {
                     
                 }
             EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedinUser,[array("ActionOn"=> "comment","OldValue"=>$tic->OldValue,"NewValue"=>$tic->NewValue)],array("Slug"=>$slug,"CommentId"=>$tic->_id));
+            
             self::sendEmailNotification($notificationIdsArray, $projectId);
         } catch (\Throwable $ex) {
             Yii::error("NotificationTrait:saveNotificationsForComment::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -361,7 +381,7 @@ trait NotificationTrait {
      * @return type
      * @description  Used for saving the notifications for assignedTo,Add/Remove Followers,stakeholder and left panel property changes  
      */
-    public static function saveNotifications($notification_data, $notifyType, $activityOn, $fieldType = "", $slug = '', $bulkUpdate = '', $taskId = 0) {
+    public static function saveNotifications($notification_data, $notifyType, $activityOn, $fieldType = "", $slug = '',$bulkUpdate = '', $taskId = 0) {
         try {
             error_log("saveNotifications---".$notifyType."---".$activityOn."---".$fieldType);
             $oldValue = '';
@@ -544,15 +564,22 @@ trait NotificationTrait {
             /* notification for all followers and the stakeholders */
             $notificationIds = array();
             $collaboratorUser=array();
-           
+            $system='';
             //@Lakshmi
             //making collaboratorsUser array to save the followers ids in array
             foreach ($followers as $follower) {
                 if ($follower['FollowerId'] == $loggedInUser) {
-                    continue;
+                   continue;
                 }
-                 
-            array_push($collaboratorUser,array('CollaboratorId'=>$follower['FollowerId'],'IsRead'=>0));
+            $CollaboratorNotifications = Settings::getNotificationSettingsStatus($fieldType,$follower['FollowerId']);
+          if(count($CollaboratorNotifications)>0){
+                    $system_notification=$CollaboratorNotifications[0]['SystemNotification'];
+                     $email_notification=$CollaboratorNotifications[0]['EmailNotification'];
+                     $push_notification=$CollaboratorNotifications[0]['PushNotification'];
+            array_push($collaboratorUser,array('CollaboratorId'=>$follower['FollowerId'],'IsRead'=>0,'SystemNotification'=>(int)$system_notification,'EmailNotification'=>(int)$email_notification,'PushNotification'=>(int)$push_notification));
+          }else{
+            array_push($collaboratorUser,array('CollaboratorId'=>$follower['FollowerId'],'IsRead'=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
+          }
             }
              error_log("======2222222222222222222222222222=Field__Type___=" . $fieldType);
                 $tic = new NotificationCollection();
@@ -564,7 +591,6 @@ trait NotificationTrait {
                 $tic->ActivityOn = $notify_type; // new use case "ActivityOn" will be Field Name
                 $tic->ActivityFrom = (int) $loggedInUser;
                 $tic->NotificationDate = $currentDate;
- error_log("===============Folloewrr+===111111111111=====iiiiiiiiiiiiiii==" . $fieldType);
                 if ($notifyType == "Description" || $notifyType == "Title") {
                     //  error_log("in descrioton--------#$#$");
                     $displayAction="changed";
@@ -1162,7 +1188,9 @@ EOD;
                  }
                 foreach($notification['NotifiedCollaborators'] as $notifyuser){
                    $notification['NotifiedUser'] = $notifyuser['CollaboratorId'];
-                    $collaboratorData = TinyUserCollection::getMiniUserDetails($notification['NotifiedUser']);
+                   if($notifyuser['EmailNotification']==1){
+                       $collaboratorData = TinyUserCollection::getMiniUserDetails($notification['NotifiedUser']);
+                    
                     $recipient_list = array($collaboratorData['Email']);
                     $notified_user = $collaboratorData['UserName'];
                     $display_name = $collaboratorData['FirstName'] . " " . $collaboratorData['LastName'];
@@ -1196,6 +1224,8 @@ EOD;
                 $text_newmessage = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
                 CommonUtility::sendEmail($mailingName, $recipient_list, $text_newmessage, $subject);
                 echo ("4. sending email comppleted ...");  
+                   }
+                    
             }
                 
                 
