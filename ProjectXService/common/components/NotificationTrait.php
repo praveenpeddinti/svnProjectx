@@ -572,7 +572,7 @@ trait NotificationTrait {
                    continue;
                 }
                //error_log($notifyType."======333333******************3333333__else iffffffff_=" . $fieldType);
-                if($activityOn!=="ChildTask" && $activityOn!="TicketRelation"){
+                if($activityOn!=="ChildTask" && $activityOn!=="TicketRelation"){
                     $CollaboratorNotifications = Settings::getNotificationSettingsStatus($notifyType,$follower['FollowerId']);
                 }
 //                else if($notifyType=="bucket" || $notifyType=="tickettype" || $notifyType=="stakeholder" || $notifyType=="stakeholder" || $notifyType=="priority" || $notifyType=="estimatedpoints" || $notifyType=="workflow" || $notifyType=="assignedto" || $notifyType=="duedate" || $notifyType==" dod" || $notifyType=="TotalTimeLog"){
