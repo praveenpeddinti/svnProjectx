@@ -95,4 +95,5 @@ body{ color:#637282; font:normal 14px/20px 'open_sansregular';}
 .model_proimg img{ border-radius:100%; width:90px; height:90px;}
 .model_proimgedit{ width:20px; height:20px; background:#776dad; border-radius:100%; text-align:center; vertical-align:middle; position:absolute; right:5px; top:5px; cursor:pointer;}
 .model_proimgedit i{ font-size:12px; color:#fff;}
+.label{font-weight:normal !important;}
 
