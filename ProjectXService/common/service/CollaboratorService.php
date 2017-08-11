@@ -245,8 +245,9 @@ class CollaboratorService {
      */
     public function updateProjectlogo($projectId,$logo){
         try{
+            $projectLogo= Yii::$app->params['projectLogo'].'/'.$logo;
             $ProjectModel = new Projects();
-            $projectId=$ProjectModel->updatingProjectLog($projectId,$logo);
+            $projectId=$ProjectModel->updatingProjectLog($projectId,$projectLogo);
         }catch (\Throwable $ex) {
             Yii::error("CollaboratorService:updateProjectlogo::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -313,6 +314,7 @@ class CollaboratorService {
                 $tempFileName = $secondArray[0];
                 $originalFileName = $secondArray[1];
                 $originalFileName = str_replace("]]", "", $originalFileName);
+                error_log("log--------".$originalFileName);
                 $projectLogoPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['projectLogo'] ;
                 if(!is_dir($projectLogoPath)){
                              if(!mkdir($projectLogoPath, 0775,true)){
@@ -325,6 +327,7 @@ class CollaboratorService {
                     }
                
                 $description= Yii::$app->params['ServerURL'].Yii::$app->params['projectLogo']."/". $tempFileName ."-".$originalFileName;
+                error_log("log---333333333-----".$description);
                 return $description;
                 } catch (\Throwable $ex) {
                     Yii::error("CollaboratorService:saveProjectLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -361,7 +364,7 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+
     /**
      * @author Ryan
      * @param type $projectId
@@ -505,6 +508,64 @@ class CollaboratorService {
                 throw new ErrorException($ex->getMessage());
         }
     }
+    
+   /**
+     * @author Padmaja
+     * @param type $projectId
+     * @param type $userId
+    
+     */
+    public function updatingProjectDetails($projectName,$description,$fileExt,$projectLogo,$projectId){
+        try{
+                if (strpos($projectLogo,'assets') !== false) {
+                  $logo=$projectLogo;
+                } else {
+                   $extractUrl= explode('projectlogo/',$projectLogo);
+                   $projectLogoPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['projectLogo'] ;
+                   error_log("eee-------".$extractUrl[1]);
+                    if (file_exists($projectLogoPath."/".$extractUrl[1])) {
+                        error_log("eee-----aaaaaa--".$fileExt);
+                        if(empty($fileExt) || $fileExt==''){
+                            error_log("aaaaaa-------------".$extractUrl[1]);
+                            rename($projectLogoPath . "/" . $extractUrl[1],$projectLogoPath . "/" .$extractUrl[1]);
+                            $logo= Yii::$app->params['projectLogo'].'/'.$extractUrl[1];
+                        }else{
+                              error_log("aaaa6666666666aa-----------".$extractUrl[1]);
+                            rename($projectLogoPath . "/" . $extractUrl[1],$projectLogoPath . "/" .$projectName."_".$projectId.".$fileExt");
+                            $logo=Yii::$app->params['projectLogo'].'/'.$projectName."_".$projectId.".$fileExt";
+                        }
+                    } else {
+                        error_log("not existeddddddddd----");
+                    }
+                }
+                  error_log("not existeddddddddd@@@@@@@@@@@@@--------".$logo);
+                $ProjectModel = new Projects();
+                $updateStatus=$ProjectModel->updateProjectDetails($projectName,$description,$fileExt,$logo,$projectId);
+                return $updateStatus;
+        }catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:updatingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    /**
+     * @author Padmaja
+     * @param type $projectId
+     * @param type $userId
+    
+     */
+    public function getProjectDashboardDetails($projectName,$projectId,$userId){
+        try{
+            error_log("not existeddddddddd@@@@@@@@@@@@@--------");
+            return  $projectDetails = CommonUtilityTwo::getProjectDetailsForProjectDashboard($projectId,$userId);
+        
+        }catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:getProjectDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+
+    
+
 }
 
 

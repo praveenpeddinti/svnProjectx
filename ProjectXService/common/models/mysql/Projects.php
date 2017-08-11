@@ -53,8 +53,11 @@ class Projects extends ActiveRecord
      public static function getProjectDetails($projectName)
     {
         try{
-        $query = "select PId,ProjectName from Projects where ProjectName='$projectName';";
+        $query = "select PId,ProjectName,Description,ProjectLogo from Projects where ProjectName='$projectName';";
         $data = Yii::$app->db->createCommand($query)->queryOne();
+        error_log("@@-----".print_r($data,1));
+        $data["ProjectLogo"] = Yii::$app->params['ServerURL'].$data["ProjectLogo"];
+        error_log("loggg------".$data["ProjectLogo"]);
         return $data;   
         } catch (\Throwable $ex) {
              Yii::error("Projects:getProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -94,10 +97,11 @@ class Projects extends ActiveRecord
      * @param type $logo
      * @return type
      */
-   public static function updatingProjectLog($projectId,$logo)
+   public static function updatingProjectLog($projectId,$projectLogo)
    {
        try{
-            $query="update Projects set ProjectLogo='$logo' where PId=$projectId";
+           error_log("2222---------".$projectLogo);
+            $query="update Projects set ProjectLogo='$projectLogo' where PId=$projectId";
             $data = Yii::$app->db->createCommand($query)->execute();
        } catch (\Throwable $ex) {
              Yii::error("Projects:updatingProjectLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -141,6 +145,33 @@ class Projects extends ActiveRecord
         }
        
 //        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+    /*
+     * 
+     */
+    public static function updateProjectDetails($projectName,$description,$fileExt,$logo,$projectId)
+    {
+        try{
+              error_log("status-------".$projectName."desc".$description."file--".$fileExt."logo------".$logo."project---".$projectId);
+            $projects=Projects::findOne($projectId);
+            $projects->ProjectName=$projectName;
+            $projects->Description=$description;
+            $projects->ProjectLogo=$logo;
+            $projects->update();
+            if ($projects->update() !== false) {
+                $result = "success";
+            } else {
+                $result = "failure";
+            }
+             error_log("status-------".$result);
+            return $result;
+           
+        }catch (\Throwable $ex) {
+             Yii::error("Projects:updateProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+             throw new ErrorException($ex->getMessage());
+            
+        }
+        
     }
 }
 
