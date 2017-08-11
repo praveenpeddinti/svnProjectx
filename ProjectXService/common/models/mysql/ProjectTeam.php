@@ -93,8 +93,8 @@ class ProjectTeam extends ActiveRecord
      */
    public static function getProjectsCountByUserId($collabaratorId){
        try{
-           $query = "select * from ProjectTeam where CollaboratorId=$collabaratorId";
-           $projectcount = Yii::$app->db->createCommand($query)->queryAll();
+           $query = "select count(Id) as count from ProjectTeam where CollaboratorId=$collabaratorId";
+           $projectcount = Yii::$app->db->createCommand($query)->queryOne();
            return $projectcount;  
        } catch (\Throwable $ex) {
             Yii::error("ProjectTeam:getProjectsCountByUserId::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
