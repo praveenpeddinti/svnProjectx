@@ -55,9 +55,7 @@ class Projects extends ActiveRecord
         try{
         $query = "select PId,ProjectName,Description,ProjectLogo from Projects where ProjectName='$projectName';";
         $data = Yii::$app->db->createCommand($query)->queryOne();
-        error_log("@@-----".print_r($data,1));
         $data["ProjectLogo"] = Yii::$app->params['ServerURL'].$data["ProjectLogo"];
-        error_log("loggg------".$data["ProjectLogo"]);
         return $data;   
         } catch (\Throwable $ex) {
              Yii::error("Projects:getProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
