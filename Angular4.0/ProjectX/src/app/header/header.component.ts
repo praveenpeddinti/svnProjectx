@@ -78,7 +78,12 @@ export class HeaderComponent implements OnInit {
  var thisObj = this;
  this.shared.getNotificationCount().subscribe(value=>
       { 
-        thisObj.notify_count = value;
+        if(value == -1){ //decement by 1
+          thisObj.notify_count = thisObj.notify_count - 1;
+        }else{
+          thisObj.notify_count = value;
+        }
+       
         thisObj.notification_msg = [];
       });
 
@@ -136,11 +141,11 @@ export class HeaderComponent implements OnInit {
       }
 
       ngAfterViewChecked(){
-        console.log("---ngAfterViewChecked---");
+       // console.log("---ngAfterViewChecked---");
       }
      ngOnDestroy(){
         var thisObj = this;
-        console.log("---ngOnDestroy---");
+       // console.log("---ngOnDestroy---");
         socket.off('getAllNotificationsCountResponse');
       }
   
@@ -197,19 +202,19 @@ projectsArray(list){
           jQuery("#"+id).fadeOut(4000);
   }
 
-  deleteNotification(project,notify_id,event,domIndex)
+  readNotification(project,notify_id,event,domIndex)
   {
     event.stopPropagation();
     //ajax call for delete notificatin
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:0,page:this.pageNo};
-    this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
+    this._ajaxService.AjaxSubscribe('story/read-notification',post_data,(data)=>
     {
     this.notification_msg=[];
       if(data)
       {
         this.notify_count = data.totalCount;
-      if(data.data.notify_result != "nodata"){
-        this.notification_msg = data.data.notify_result;
+      if(data.data != "nodata"){
+        this.notification_msg = data.data;
       
       }
        
@@ -222,7 +227,7 @@ projectsArray(list){
   goToTicket(project,ticketid,notify_id,slug)
   {
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:0,page:this.pageNo};
-    this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
+    this._ajaxService.AjaxSubscribe('story/read-notification',post_data,(data)=>
     {
       if(data)
       {
@@ -236,7 +241,7 @@ projectsArray(list){
   goToComment(project,ticketid,comment,notify_id)
   {
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:0,page:this.pageNo};
-    this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
+    this._ajaxService.AjaxSubscribe('story/read-notification',post_data,(data)=>
     {
       if(data)
       {
@@ -249,7 +254,7 @@ projectsArray(list){
   allRead()
   {
     var post_data={};
-    this._ajaxService.AjaxSubscribe('story/delete-notifications',post_data,(data)=>
+    this._ajaxService.AjaxSubscribe('story/read-notifications',post_data,(data)=>
     {
       if(data)
       {

@@ -28,7 +28,7 @@
 <span  class="not_mention">
 {{notify.from}}
     </span> {{notify.type}} <span  class="not_mention">{{notify.to}}</span> {{notify.OtherMessage}} {{notify.Preposition}} &nbsp;<img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/><img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title }} </span>
-<div class="not_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
+<div class="not_date">{{notify.date}} - {{notify.Project.ProjectName}}</div>
 </div>
 
 <div [style]="{cursor:pointer}" (click)="goToTicket(notify.Project,notify.TicketId,notify.id.$oid,notify.Slug.$oid)"  *ngIf="notify.status=='set' && notify.object!='task'" class="not_content">
@@ -49,15 +49,19 @@
 <span  class="not_mention">
 {{notify.from}}
 </span> {{notify.type}} <span  class="not_mention">{{notify.ActivityOn}} </span> {{notify.Preposition}}&nbsp;<img *ngIf="notify.PlanLevel==1" src="assets/images/story-icon.png"/> <img *ngIf="notify.PlanLevel==2" src="assets/images/task-icon.png"/> <span class="not_mention">#{{notify.TicketId}} {{notify.Title }} </span>
-<div class="not_date">{{notify.date}} -{{notify.Project.ProjectName}}</div>
+<div class="not_date">{{notify.date}} - {{notify.Project.ProjectName}}</div>
 </div>
 
 <!--<div class="not_date">(Mar-17-2017 06:00)</div>-->
 <!--<div class="not_date">{{notify.date}}</div>-->
 </div>
-<a *ngIf="notify.IsSeen==0" id="mark_{{notify.id.$oid}}" type="button" data-toggle="tooltip" data-placement="top" title="Mark As Read"   (click)="deleteNotification(notify.Project,notify.id.$oid,$event,i)" class="notificationdelete notiall-delete">
+<a *ngIf="notify.IsSeen==0" id="mark_{{notify.id.$oid}}" type="button" data-toggle="tooltip" data-placement="top" title="Mark As Read"   (click)="readNotification(notify.Project,notify.id.$oid,$event,i)" class="notificationread notiall-delete">
 <i class="fa fa-times" aria-hidden="true"></i>
 </a>
+<a   type="button" data-toggle="tooltip" data-placement="top" title="Delete"   (click)="promptConfirmationBox(i)" class="notificationdelete notiall-delete">
+<i class="fa fa-times" aria-hidden="true"></i>
+</a>
+<app-confirmation-box [boxId]="i" [cancelAction]="'closeConfirmationBox'" [okAction]="'emitDeleteNotification'" (callBackToParent)="deleteNotification(notify.Project,notify.id.$oid,$event,i)" >  </app-confirmation-box>
 </div>
 </li>
 <li class="notificationlist_all" *ngIf="nomorenotifications" id="notificationMessage">

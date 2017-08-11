@@ -50,6 +50,9 @@ import { UserDashboardComponent } from './components/user-dashboard/user-dashboa
 import { TopTicketStatsComponent } from './components/top-ticket-stats/top-ticket-stats.component';
 import { CreateUserComponent } from './components/create-user/create-user.component';
 import { ProjectDashboardComponent } from './components/project-dashboard/project-dashboard.component';
+
+import { ConfirmationBoxComponent } from './components/utility/confirmation-box/confirmation-box.component';
+
 import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 import { EmailInviteComponent } from './components/email-invite/email-invite.component';
 import { InviteComponent } from './components/invite/invite.component';
@@ -180,7 +183,8 @@ const ROUTES=[
     ],
 
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent ],
+
+  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent ],
 
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
