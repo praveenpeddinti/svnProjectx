@@ -269,6 +269,18 @@ class TimeReportService {
         }
         
     } 
+    public function getTotalTimeLogByProject($projectId=''){
+        try{
+             $totalWorkLogHours = 0;
+            $arrayTimelog = TicketTimeLog::getTotalTimeLogByProject($projectId);
+            if(count($arrayTimelog)>0){
+              $totalWorkLogHours =  number_format(round($arrayTimelog[0]["totalHours"],2),2);
+           }
+            return $totalWorkLogHours;
+        } catch (Exception $ex) {
+
+        }
+    }
 }
 
   

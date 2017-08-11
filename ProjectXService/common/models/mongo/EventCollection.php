@@ -226,6 +226,15 @@ class EventCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
+    public static function getEventAttribute() {
+        try{
+             return $collectionData=    EventCollection::attributes();
+        } catch (\Throwable $ex) {
+            Yii::error("EventCollection:getEventAttribute::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+       
+    }
        /**
      * @author Padmaja
      * @description This method is used to get Ticket details for dashboard
@@ -281,6 +290,38 @@ class EventCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
         
+    }
+       /**
+     * @author Padmaja
+     * @description This method is used to get current week users
+     * @return type $userId
+    */
+    public static function getCurrentWeekActiveUsers($projectId){
+        try{
+            error_log("############---333-----");
+              $weekFirstDay = date("Y-m-d H:i:s", strtotime('last monday', strtotime('tomorrow'))); 
+              $toDate = date("Y-m-d H:i:s");
+              $matchArray = array("ProjectId" => (int) $projectId,'CreatedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
+                $pipeline = array(
+                       // array('$unwind' => '$TimeLog'),
+                        array('$match' => $matchArray),
+                        array(
+                            '$group' => array(
+                                '_id' => 'null',
+                              // "count" => array('$sum' => 1),
+                              //  "totalHours" => array('$sum' => '$TimeLog.Time')
+                                 "data" => array('$push' => '$ActionBy'),
+                             ),
+                        ),
+                    );
+                  $query = Yii::$app->mongodb->getCollection('EventCollection');
+                  $ArraycurrentUserId = $query->aggregate($pipeline);
+                 // error_log("@@@@@444442342@@@@---".print_r(array_unique($Arraytimelog)));
+                  return $ArraycurrentUserId;
+        } catch (\Throwable $ex) {
+            Yii::error("EventCollection:getCurrentWeekActiveUsers::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
     }
 }
 
