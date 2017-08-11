@@ -47,6 +47,7 @@ export class ProjectDashboardComponent implements OnInit {
             this.projectService.getProjectDetails(this.projectName,(data)=>{ 
               if(data.data!=false){
                 thisObj.projectId=data.data.PId;
+                   alert("------------"+JSON.stringify(thisObj.form['projectId']));
                  thisObj.description=data.data.Description;
                   thisObj.projectLogo=data.data.ProjectLogo;
                 //  alert("------------"+JSON.stringify(thisObj.projectLogo));
@@ -57,12 +58,13 @@ export class ProjectDashboardComponent implements OnInit {
         });
         });
            });
+         //   alert("------33------"+JSON.stringify(thisObj.form['projectId']));
  //alert("@@@@@@@@@2"+JSON.stringify(this.projectLogo));
           this.form['projectName']=this.projectName;
           this.form['projectId']=this.projectId;
           this.form['projectLogo']=this.projectLogo;
           this.form['description']=this.description;
-        //  alert("qqqqqqqqqqq------------"+JSON.stringify(this.form['projectLogo']));
+        //alert("qqqqqqqqqqq------------"+JSON.stringify( this.form['projectId']));
           // this.form.projectName=params['projectName'];
           this.currentProjectDetails();
   }
@@ -136,7 +138,6 @@ export class ProjectDashboardComponent implements OnInit {
             });
     }
       verifyProjectName(value){
-        value
          var postData={
                       projectName:value
                   } ;
