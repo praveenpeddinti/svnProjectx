@@ -77,9 +77,6 @@ class NotificationCollection extends ActiveRecord
          try{
           $query=new Query();
           $cond=array("NotifiedCollaborators"=>array('$elemMatch'=>array('CollaboratorId'=>(int) $user,'IsRead'=>(int)0,'SystemNotification'=>(int)1)));
-//          $cond["NotifiedCollaborators.CollaboratorId"]=(int) $user;
-//          $cond["NotifiedCollaborators.IsRead"]=(int)0;
-//          $cond["NotifiedCollaborators.SystemNotification"]=(int)1;
           $query->from('NotificationCollection')
             ->where($cond)
             ->andWhere(['!=','ActivityFrom', (int)$user]);
