@@ -209,7 +209,7 @@ trait NotificationTrait {
                 foreach ($userslist as $user) {
                     //error_log("====Notification with mention==" . $user);
                     $user = Collaborators::getCollaboratorId($user);
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsRead"=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsReadNNN"=>0));
                 }
                     $tic = new NotificationCollection();
                     $tic->TicketId = $ticketId;
@@ -343,7 +343,7 @@ trait NotificationTrait {
                    // seprate record for comment owner
                     $collaboratorIds = array();
                     if($commentOwner !='' && $commentOwner != $loggedinUser){
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsRead"=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsReadpppp"=>0));
                     $tic = new NotificationCollection();
                     $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->TicketId = $ticketId;
@@ -560,11 +560,10 @@ trait NotificationTrait {
 
                 }
             }
-           error_log("========111111111111111111111111111111=Field__Type___=" . $fieldType);
             /* notification for all followers and the stakeholders */
             $notificationIds = array();
             $collaboratorUser=array();
-            $CollaboratorNotifications =array();
+            $CollaboratorNotifications=array();
             $system='';
             //@Lakshmi
             //making collaboratorsUser array to save the followers ids in array
@@ -572,10 +571,15 @@ trait NotificationTrait {
                 if ($follower['FollowerId'] == $loggedInUser) {
                    continue;
                 }
-                if($activityOn=="ChildTask" || $activityOn=="TicketRelation"){
-                   $CollaboratorNotifications = Settings::getNotificationSettingsStatus($activityOn,$follower['FollowerId']);
-                }else{
-                  $CollaboratorNotifications = Settings::getNotificationSettingsStatus($fieldType,$follower['FollowerId']);
+               //error_log($notifyType."======333333******************3333333__else iffffffff_=" . $fieldType);
+                if($activityOn!=="ChildTask" && $activityOn!="TicketRelation"){
+                    $CollaboratorNotifications = Settings::getNotificationSettingsStatus($notifyType,$follower['FollowerId']);
+                }
+//                else if($notifyType=="bucket" || $notifyType=="tickettype" || $notifyType=="stakeholder" || $notifyType=="stakeholder" || $notifyType=="priority" || $notifyType=="estimatedpoints" || $notifyType=="workflow" || $notifyType=="assignedto" || $notifyType=="duedate" || $notifyType==" dod" || $notifyType=="TotalTimeLog"){
+//                 $CollaboratorNotifications = Settings::getNotificationSettingsStatus($notifyType,$follower['FollowerId']);
+//                }
+                else if($activityOn=="ChildTask" || $activityOn=="TicketRelation"){
+                    $CollaboratorNotifications = Settings::getNotificationSettingsStatus($activityOn,$follower['FollowerId']);
                 }
           if(count($CollaboratorNotifications)>0){
                     $system_notification=$CollaboratorNotifications[0]['SystemNotification'];
@@ -695,7 +699,7 @@ trait NotificationTrait {
         }
     }
 
-    public static function getNotifications($user, $projectId=0, $offset = 0, $limit = 5, $viewAll = 0,$asActivity=false) {
+    public static function getNotifications($user, $projectId=0, $offset = 0, $limit = 5, $viewAll = 0) {
         error_log("==in get notifications---" . $user . "---" . $projectId . "---" . $offset . "---" . $limit);
         $msg = '';
         $message = array();
@@ -704,7 +708,7 @@ trait NotificationTrait {
         $status='';
         try {
             $projectObj = new Projects();
-            $notifications = NotificationCollection::getNotifications($user, $offset, $limit, $viewAll,$asActivity);
+            $notifications = NotificationCollection::getNotifications($user, $offset, $limit, $viewAll);
             //constucting the notifications for the user
             foreach ($notifications as $notification) {
                 $projectId=$notification['ProjectId'];
