@@ -33,6 +33,7 @@ export class ProjectDashboardComponent implements OnInit {
   public submitted=false;
   public creationPopUp=true;
   public projectDetails=[];
+  public verifyProjectMess=false;
    constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,   private fileUploadService: FileUploadService,
           private editor:SummerNoteEditorService, private _ajaxService: AjaxService) {this.filesToUpload = []; }
 
@@ -47,26 +48,31 @@ export class ProjectDashboardComponent implements OnInit {
             this.projectService.getProjectDetails(this.projectName,(data)=>{ 
               if(data.data!=false){
                 thisObj.projectId=data.data.PId;
-                   alert("------------"+JSON.stringify(thisObj.form['projectId']));
+                  // alert("------------"+JSON.stringify(thisObj.projectId));
                  thisObj.description=data.data.Description;
                   thisObj.projectLogo=data.data.ProjectLogo;
                 //  alert("------------"+JSON.stringify(thisObj.projectLogo));
+                
                 }else{
                this._router.navigate(['pagenotfound']);  
               }
-                
+                thisObj.form['projectId']=thisObj.projectId; 
+                thisObj.form['projectName']=thisObj.projectName; 
+                thisObj.form['projectLogo']=thisObj.projectLogo;
+                thisObj.form['description']=thisObj.description;
+                 thisObj.currentProjectDetails();
         });
         });
            });
          //   alert("------33------"+JSON.stringify(thisObj.form['projectId']));
  //alert("@@@@@@@@@2"+JSON.stringify(this.projectLogo));
-          this.form['projectName']=this.projectName;
-          this.form['projectId']=this.projectId;
-          this.form['projectLogo']=this.projectLogo;
-          this.form['description']=this.description;
-        //alert("qqqqqqqqqqq------------"+JSON.stringify( this.form['projectId']));
+          // this.form['projectName']=this.projectName;
+        
+          // this.form['projectLogo']=this.projectLogo;
+          // this.form['description']=this.description;
+     //  alert("qqqqqqqqqqq------------"+JSON.stringify( this.form['projectId'])+"77--"+this.projectId);
           // this.form.projectName=params['projectName'];
-          this.currentProjectDetails();
+         
   }
    ngAfterViewInit() {
        //  setTimeout(() => {
@@ -81,7 +87,7 @@ export class ProjectDashboardComponent implements OnInit {
                     projectId: this.form['projectId'],
                     projectName:  this.form['projectName']
                    }
-                 //  alert("33333444444444-----")
+                 // alert("33333444444444-----"+JSON.stringify(postData));
       this._ajaxService.AjaxSubscribe("site/get-project-dashboard-details",postData,(result)=>
                             {
                             //      alert("67868--"+JSON.stringify(result.data.ProjectDetails[0].closedTickets));
@@ -137,37 +143,56 @@ export class ProjectDashboardComponent implements OnInit {
                 this.fileUploadStatus = false;
             });
     }
+  public spinnerSettings={
+      color:"",
+      class:""
+    };
       verifyProjectName(value){
+        // alert("@@@---");
+        //  this.spinnerSettings.color='';
+       // this.spinnerSettings.class ='';
          var postData={
-                      projectName:value
+                      projectName:value.trim()
                   } ;
-                 //  var copy = Object.assign({}, value);
-                   //this.form['projectName']=copy;
-                 // this.extractFields=copy;
-               //  alert("@@@@"+value+"----"+this.form['projectName']);
-                   if(value=='' || value == undefined){
-                      console.log("sssssssssss");
+                  if(value.trim()=='' || value.trim() == undefined){
+                    // alert("sssssssssss");
+                     this.spinnerSettings.color='';
+                     this.spinnerSettings.class ='';
+                     this.verifyProjectMess=false;
                   }else{
                         this.verifyByspinner=2;
+                        this.spinnerSettings.color="blue";
+                        this.spinnerSettings.class = "fa fa-spinner fa-spin";
+
                        setTimeout(() => {
                           this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
                         { 
-                           
-                            if (result.statusCode == 200) {
+                           //alert("@@@---"+JSON.stringify(result.statusCode));
+                            if (result.data != false) {
                                this.verified=0;
                                this.verifyByspinner=3;
+                              this.spinnerSettings.color="red";
+                              this.spinnerSettings.class = "fa fa-times";
+                               this.verifyProjectMess=true;
+                              // alert(this.verifyProjectMess);
                              }else{
                               this.verified=1;
                               this.verifyByspinner=1;
+                              this.spinnerSettings.color="green";
+                              this.spinnerSettings.class = "fa fa-check";
                             }
                                     
                         })
-                         }, 3000);
+                         },3000);
                        
                   }
+      
     }
-   veryInputByspinner(){
-        this.verifyByspinner='';
+ veryInputByspinner(){
+        //this.verifyByspinner='';
+        this.spinnerSettings.color='';
+        this.spinnerSettings.class ='';
+        this.verifyProjectMess=false;
     }
   editProjectDetails(){
           // if(this.verified==1){
