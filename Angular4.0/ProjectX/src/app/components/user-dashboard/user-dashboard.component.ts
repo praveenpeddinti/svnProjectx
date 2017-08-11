@@ -166,40 +166,66 @@ export class UserDashboardComponent implements OnInit {
                 this.fileUploadStatus = false;
             });
     }
+    public spinnerSettings={
+      color:"",
+      class:""
+    };
+    public makeAjax(){
+      
+    }
+  
+    public makeAjaxVar = function(postData){
+       
+    }
+    public timer=undefined;
       verifyProjectName(value){
         // alert("@@@---");
+        //  this.spinnerSettings.color='';
+       // this.spinnerSettings.class ='';
+       
+       clearTimeout(this.timer);
          var postData={
-                      projectName:value
+                      projectName:value.trim()
                   } ;
-                  if(value=='' || value == undefined){
-                      console.log("sssssssssss");
+                   console.log("sssssssssss---------"+value.trim());
+                  if(value.trim()=='' || value.trim() == undefined){
+                  // alert("sssssssssss");
+                     this.spinnerSettings.color='';
+                     this.spinnerSettings.class ='';
+                     this.verifyProjectMess=false;
                   }else{
-                    //setTimeout(() => {
                         this.verifyByspinner=2;
-                       //  },2000);
-                      //  alert(this.verifyByspinner);
-                       setTimeout(() => {
-                         
-                          this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
+                        this.spinnerSettings.color="blue";
+                        this.spinnerSettings.class = "fa fa-spinner fa-spin";
+                        // alert(this.timer);
+                       this.timer = setTimeout(()=>{
+                         this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
                         { 
                            //alert("@@@---"+JSON.stringify(result.statusCode));
                             if (result.data != false) {
                                this.verified=0;
                                this.verifyByspinner=3;
+                              this.spinnerSettings.color="red";
+                              this.spinnerSettings.class = "fa fa-times";
                                this.verifyProjectMess=true;
                               // alert(this.verifyProjectMess);
                              }else{
                               this.verified=1;
                               this.verifyByspinner=1;
+                              this.spinnerSettings.color="green";
+                              this.spinnerSettings.class = "fa fa-check";
                             }
                                     
                         })
-                         },3000);
+                       },3000);
                        
                   }
+      
     }
    veryInputByspinner(){
-        this.verifyByspinner='';
+        //this.verifyByspinner='';
+        this.spinnerSettings.color='';
+        this.spinnerSettings.class ='';
         this.verifyProjectMess=false;
     }
     public editorDesc="";
@@ -208,13 +234,14 @@ export class UserDashboardComponent implements OnInit {
            this.projectImage=jQuery('.projectlogo').attr("src");
            var editor=jQuery('#summernote').summernote('code');
             this.editorDesc =jQuery(editor).text().trim();
+            this.form['description']=this.editorDesc;
            // editor=jQuery(editor).text().trim();
             // if(editor.length>500){
             //     this.summernoteLength=true;
             // }else{
              var postData={
                       projectName:this.form['projectName'].trim(),
-                      description:this.form['description'].trim(),
+                      description:this.form['description'],
                       projectLogo:this.projectImage,
                       fileExtention:this.fileExtention
                   } ;
@@ -266,6 +293,8 @@ export class UserDashboardComponent implements OnInit {
        }
       // alert("@@--"+this.clearImgsrc);
         this.verifyProjectMess=false; 
+         this.spinnerSettings.color='';
+         this.spinnerSettings.class ='';
     }
 
     // clearlengthMessage(){
