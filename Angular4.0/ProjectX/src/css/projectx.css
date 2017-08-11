@@ -777,8 +777,8 @@ padding-left:0px!important;
 .titlecolumn img{vertical-align: text-bottom}
 /*custom model*/
 .custommodel .modal-dialog{width:400px;}
-.custommodel .modal-content{border-radius:0;background: #e2e2e2;border:0}
-.custommodel .modal-header{background: #237ea7;text-align: center;color:#fff;padding:8px 15px;}
+.custommodel .modal-content{background:#fff;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+.custommodel .modal-header{background:#f7f9fa; border-bottom:solid 1px #e6e8eb; color:#695ea5; font:normal 16px/24px 'open_sansregular';}
 .custommodel .modal-footer {border-top: 0px solid #e5e5e5;padding: 0px 15px 15px;text-align: right;}
 .custommodel .modal-header .close{position: absolute;right:0;top:0;display:none}
 .custommodel .modal-title{font-size:18px;text-transform: uppercase}
@@ -1342,7 +1342,7 @@ button.toast-close-button {
 }
 .sc-background{
   background-color: rgba(255,255,255,0.3)!important;
-  z-index: 9999!important;
+ /* z-index: 9999!important;*/
 }
 
 
@@ -1483,9 +1483,18 @@ button.toast-close-button {
     position: absolute;
     top:0px; right: 0px;
       z-index: 9999!important;
+
 }
 
+.modal-content{background:#fff;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+.modal-header{background:#f7f9fa; border-bottom:solid 1px #e6e8eb; color:#695ea5; font:normal 16px/24px 'open_sansregular';}
+.model_submit{ background:#695ea5;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase;}
+.invitesearch{ background:#fff; border:solid 1px #e6e8eb; width:100%; height:35px;}
+.model_label{font:normal 14px/20px 'open_sansregular'; color: #637282; font-weight:normal!important;}
+.butnbor{ border:none!important; outline: none!important;}
+
 .cursor_pointer{ cursor: pointer;}
+
 /*InviteUser*/
 .usrcomponent .ui-autocomplete-panel{ padding: 0px!important;}
 .ui-autocomplete-panel .ui-autocomplete-list {padding: 0px!important; border-radius:0px!important;}
