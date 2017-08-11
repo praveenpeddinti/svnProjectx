@@ -690,7 +690,7 @@ public static function prepareUserDashboardActivities($activities) {
             $ArrayStoryPoints = $query->aggregate($pipeline);
             if(count($ArrayStoryPoints)>0){
              $totalCount =  $ArrayStoryPoints[0]["count"];
-             $totalStoryPoints =  number_format(round($ArrayStoryPoints[0]["totalPoints"],2),2);
+             $totalStoryPoints =  number_format(round($ArrayStoryPoints[0]["totalPoints"]));
           }
             return $totalStoryPoints;
         } catch (\Throwable $ex) {
