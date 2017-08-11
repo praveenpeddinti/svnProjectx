@@ -353,7 +353,7 @@ class CollaboratorService {
             $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$pageNo);
             $preparedDahboard['weeklyTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId);
             $preparedDahboard['projects'] = CommonUtilityTwo::prepareProjectsForUserDashboard($projectDetails,$userId);
-            $activities = ServiceFactory::getStoryServiceInstance()->getNotifications($userId,0,$activityOffset,$activityLimit,1);
+            $activities = ServiceFactory::getStoryServiceInstance()->getNotifications($userId,0,$activityOffset,$activityLimit,1,true);
             $preparedDahboard['activities']= CommonUtilityTwo::prepareUserDashboardActivities($activities);
             return $preparedDahboard;
         } catch (\Throwable $ex) {
