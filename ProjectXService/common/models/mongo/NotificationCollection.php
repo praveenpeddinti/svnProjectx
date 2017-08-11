@@ -76,8 +76,11 @@ class NotificationCollection extends ActiveRecord
     { 
          try{
           $query=new Query();
-            $query->from('NotificationCollection')
-            ->where(["NotifiedCollaborators" =>["CollaboratorId" =>(int) $user,"IsRead" =>(int)0]])
+          $cond["NotifiedCollaborators.CollaboratorId"]=(int) $user;
+          $cond["NotifiedCollaborators.IsRead"]=(int)0;
+          $cond["NotifiedCollaborators.SystemNotification"]=(int)1;
+          $query->from('NotificationCollection')
+            ->where($cond)
             ->andWhere(['!=','ActivityFrom', (int)$user]);
             $notificationsCount=$query->count();
             return $notificationsCount;
@@ -90,9 +93,12 @@ class NotificationCollection extends ActiveRecord
       public static function getNotifications($user,$offset=0,$limit=5,$viewAll=0)
       { 
            try{
-          $cond=["NotifiedCollaborators" =>["CollaboratorId" =>(int) $user,"IsRead" =>(int)0]] ; 
+          $cond["NotifiedCollaborators.CollaboratorId"]=(int) $user;
+          $cond["NotifiedCollaborators.IsRead"]=(int)0;
+          $cond["NotifiedCollaborators.SystemNotification"]=(int)1;; 
           if($viewAll==1){
-            $cond=["NotifiedCollaborators.CollaboratorId" =>(int) $user] ; 
+          $cond["NotifiedCollaborators.CollaboratorId"]=(int) $user;
+          $cond["NotifiedCollaborators.SystemNotification"]=(int)1;
           }
         $query=new Query();
         $query->from('NotificationCollection')->where($cond)
@@ -182,6 +188,29 @@ class NotificationCollection extends ActiveRecord
             return $notification;  
         } catch (\Throwable $ex) {
             Yii::error("NotificationCollection:getNotificationDetail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    public static function getNotificationStatus($activityOn,$userId){
+         try{
+            echo("=============+FFFFFFFFFFFFFFFF=============".$userId);
+            $matchArray = array('NotifiedCollaborators.CollaboratorId' => (int)$userId, "ActivityOn"=>$activityOn);
+            $query = Yii::$app->mongodb->getCollection('NotificationCollection');
+            $pipeline = array(
+                array('$unwind' => '$NotifiedCollaborators'),
+                array('$match' => $matchArray),
+                array('$limit' => 1),
+//                array(
+//                    '$group' => array(
+//                        '_id' => '$NotifiedCollaborators.CollaboratorId',
+//                         "data" => array('$push' => '$NotifiedCollaborators'),
+//                    )),
+                );
+            $notifications = $query->aggregate($pipeline);
+            echo ("=========================+************************8".print_r($notifications,1)."===========");exit;
+            return $notifications;  
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationCollection:getNotificationDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
