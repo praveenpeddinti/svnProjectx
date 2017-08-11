@@ -209,7 +209,7 @@ trait NotificationTrait {
                 foreach ($userslist as $user) {
                     //error_log("====Notification with mention==" . $user);
                     $user = Collaborators::getCollaboratorId($user);
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsReadNNN"=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$user['Id'] ,"IsRead"=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
                 }
                     $tic = new NotificationCollection();
                     $tic->TicketId = $ticketId;
@@ -343,7 +343,7 @@ trait NotificationTrait {
                    // seprate record for comment owner
                     $collaboratorIds = array();
                     if($commentOwner !='' && $commentOwner != $loggedinUser){
-                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsReadpppp"=>0));
+                    array_push($collaboratorIds, array("CollaboratorId"=>(int)$commentOwner ,"IsRead"=>0,'SystemNotification'=>0,'EmailNotification'=>0,'PushNotification'=>0));
                     $tic = new NotificationCollection();
                     $tic->NotifiedCollaborators = $collaboratorIds;
                     $tic->TicketId = $ticketId;
