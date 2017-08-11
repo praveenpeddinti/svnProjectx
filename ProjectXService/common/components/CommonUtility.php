@@ -2,7 +2,7 @@
 
 namespace common\components;
 use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts,EventCollection};
-use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields,ProjectTeam,Collaborators};
+use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields,ProjectTeam,Collaborators,Settings};
 use Yii;
 use yii\base\ErrorException;
 use common\components\ApiClient; //only for testing purpose
@@ -1190,7 +1190,7 @@ $html="<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://ww
 <body>
 <table width='600' border='0' align='center' cellpadding='0' cellspacing='0'>";          
 $text_message=$html . $text_message . 
-        "<tr><td align='center' style='border:1px solid #f0f0f0; padding:5px;font-family:Arial; font-size:12px;line-height:40px;color:#333333; text-align:center;' >Update Your <a href=".''.Yii::$app->params['AppURL'].'/home'." style='color:#0199e0; text-decoration:none;'>Email Alert Preferences</a></td></tr>
+        "<tr><td align='center' style='border:1px solid #f0f0f0; padding:5px;font-family:Arial; font-size:12px;line-height:40px;color:#333333; text-align:center;' >Update Your <a href=".''.Yii::$app->params['AppURL'].'/NotificationSettings'." style='color:#0199e0; text-decoration:none;'>Email Alert Preferences</a></td></tr>
         <tr><td bgcolor='#787878' align='left' valign='top' height='35'>
         <table width='600'border='0' align='left' cellpadding='0' cellspacing='0' height:'35'>
   <tr>
@@ -2126,6 +2126,23 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             throw new ErrorException($ex->getMessage());
         }
         
+    }
+    public static function getAllNotificationTypes($userId){
+        $notification_types=array();
+        $notification_types=Settings::getAllNotificationTypes($userId);
+        return $notification_types;
+    }
+    public static function getAllNotificationsStatus($userId){
+       $notification_status=array();
+        $notification_status=Settings::getAllNotificationsStatus($userId);
+        error_log("======+++++++=============".print_r($notification_status,1));
+        return $notification_status;
+    }
+        public static function notificationsSetttingsStatusUpdate($userId,$status,$type,$activityId){
+       $notification_status=array();
+        $notification_status=Settings::NotificationsSetttingsStatusUpdate($userId,$status,$type,$activityId);
+        error_log("======+++++++=============".print_r($notification_status,1));
+        return $notification_status;
     }
 }
 
