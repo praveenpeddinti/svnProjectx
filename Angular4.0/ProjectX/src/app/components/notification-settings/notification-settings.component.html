@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<meta charset='UTF-8'>
+	
+	<title>Responsive Table</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	 <style>
+table {margin:20px auto; width:100%; }
+
+table th, table td{
+border:1px dotted #ccc; line-height:22px;
+padding:12px 10px;
+text-align:center;
+color:#fff;
+font-size:15px;
+font-family: 'robotoregular';vertical-align:middle; background:#edf2fb;
+font-weight:normal;
+}
+
+.blue-bg {
+   /* background: #11abe0;*/
+   background: #237ea7;
+	font-family: 'robotoregular';
+	font-size:15px;
+}
+
+.blue-bg2{
+   /* background: #11abe0;*/
+   background: #e1e6ee;
+	font-family: 'robotoregular';
+	font-size:15px;
+	color:#000;
+}
+
+ .tooltip.in{filter:alpha(opacity=90);opacity:1}
+ .tooltip.top{padding:5px 0;margin-top:-3px}
+ .tooltip.right{padding:0 5px;margin-left:3px}
+ .tooltip.bottom{padding:5px 0;margin-top:3px}
+ .tooltip.left{padding:0 5px;margin-left:-3px}
+ .tooltip-inner{max-width:200px;padding:3px 8px;color:#000;text-align:center;background-color:#fff;border-radius:4px;}
+ .tooltip-arrow{position:absolute;width:0;height:0;border-color:transparent;border-style:solid}
+ .tooltip.top .tooltip-arrow{bottom:0;left:50%;margin-left:-5px;border-width:5px 5px 0;border-top-color:#fff;}
+ .tooltip.top-left .tooltip-arrow{right:5px;bottom:0;margin-bottom:-5px;border-width:5px 5px 0;border-top-color:#fff;}
+ .tooltip.top-right .tooltip-arrow{bottom:0;left:5px;margin-bottom:-5px;border-width:5px 5px 0;border-top-color:#fff;}
+ .tooltip.right .tooltip-arrow{top:50%;left:0;margin-top:-5px;border-width:5px 5px 5px 0;border-right-color:#fff;}
+ .tooltip.left .tooltip-arrow{top:50%;right:0;margin-top:-5px;border-width:5px 0 5px 5px;border-left-color:#fff;}
+ .tooltip.bottom .tooltip-arrow{top:0;left:50%;margin-left:-5px;border-width:0 5px 5px;border-bottom-color:#fff;}
+ .tooltip.bottom-left .tooltip-arrow{top:0;right:5px;margin-top:-5px;border-width:0 5px 5px;border-bottom-color:#fff;}
+ .tooltip.bottom-right .tooltip-arrow{top:0;left:5px;margin-top:-5px;border-width:0 5px 5px;border-bottom-color:#fff;}
+ .isize{ color:#66696e; font-size:18px;}
+
+ @media only screen and (max-width:767px){	
+		thead tr{position:absolute;top:-9999px;left:-9999px}
+		table tr{border:1px dotted #ccc;border-bottom:none !important}
+		table td{border:1px dotted #ccc;position:relative;padding-left:50%;white-space:normal}
+		table td:before{position:absolute;top:6px;left:6px;width:50%;white-space:nowrap}
+		table td:before{content:attr(data-title);border-right:1px dotted #ccc;color:#7b7b7b;}
+		tabe{left:0px}
+		#no-more-tables table,#no-more-tables thead,#no-more-tables tbody,#no-more-tables th,#no-more-tables td,#no-more-tables tr{display:block}
+		#no-more-tables thead tr{top:-9999px;left:-9999px}
+		#no-more-tables tr{border:1px dotted #ccc;border-bottom:none !important}
+		#no-more-tables td{border:none;border-bottom:1px dotted #ccc;position:relative;padding:12px 10%;white-space:normal}
+		#no-more-tables td br{display:none}
+		#no-more-tables td:before{position:absolute;top:0;left:6px;width:45%;white-space:nowrap;font-family: 'robotoregular';line-height:50px}
+		#no-more-tables td:before{content:attr(data-title)}
+ }
+ 
+</style>
+	<!--<![endif]-->
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
+</head>
+
+<body>
+<div class="container">
+   <div class="row">
+	 <div id="no-more-tables">
+        <div class="title1 text-center"> </div>   
+       <table border="0" cellspacing="0" cellpadding="0" align="center">
+  <thead>
+<tr>
+    <th width="25%"></th>
+    <th width="25%" class="blue-bg">System Notifications</th>
+    <th width="25%" class="blue-bg">Email Notifications</th>
+    <th width="25%" class="blue-bg">Push Notifications</th>
+  </tr>
+</thead>
+<tbody *ngFor="let nTypes of NotificationTypesToDisplay;let i=index;">
+  <tr>
+    <td class="blue-bg2" style="text-align:left;">{{nTypes.ActivityTitle}}<a href="#" data-placement="right" data-toggle="tooltip" title="You will receive notification whenever a new 
+Follower is added/Removed from Story/Task." class="pull-right"><i class="fa fa-info-circle isize" aria-hidden="true"></i>
+</a></td>
+	<td data-title="System Notifications"><input type="checkbox"  [checked]="nTypes.SystemNotification==1"  (click)="checked(nTypes.Id,'SystemNotification',nTypes.SystemNotification)"></td>
+    <td data-title="Email Notifications"><input type="checkbox" [checked]="nTypes.EmailNotification==1" (click)="checked(nTypes.Id,'EmailNotification',nTypes.EmailNotification)"></td>
+    <td data-title="Push Notifications"><input type="checkbox" [checked]="nTypes.PushNotification==1" (click)="checked(nTypes.Id,'PushNotification',nTypes.PushNotification)"></td>
+  </tr>
+  </tbody>
+  
+</table>
+ </div>
+
+</div>
+</div>
+</body>
+
+</html>
