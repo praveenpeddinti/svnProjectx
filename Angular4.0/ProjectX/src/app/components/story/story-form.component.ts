@@ -73,7 +73,7 @@ export class StoryComponent
               let DefaultValue;
                jsonForm['title'] ='';
                jsonForm['description'] ='';
-               //jsonForm['tasks']=this.selectedTickets;--> removed
+               jsonForm['tasks']=this.selectedTickets;
                jsonForm['default_task']=[];
               if(response.statusCode==200)
               {
@@ -284,9 +284,9 @@ export class StoryComponent
         var editor=jQuery('#summernote').summernote('code');
         editor=jQuery(editor).text().trim();
         this.form['description']=jQuery('#summernote').summernote('code'); //for summernote editor
-      
+        
        if(editor!='')
-       {
+       { 
              this.form['default_task']=[];
                 for (let task of this.form['tasks']) {
                 for(let tsk of this.taskArray) {
