@@ -73,9 +73,9 @@ class CommonUtility {
             $time_object = new \DateTime($date_time, new \DateTimeZone($from_tz));
             $time_object->setTimezone(new \DateTimeZone($to_tz));
             if ($type == "sec") {
-                return strtotime($time_object->format('m-d-Y H:i:s'));
+                return strtotime($time_object->format('m-d-Y h:i:s A'));
             } else {
-                return $time_object->format('d-m-Y H:i:s');
+                return $time_object->format('d-m-Y h:i:s A');
             }
         } catch (\Throwable $ex) {
             Yii::error("CommonUtility:convert_time_zone::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -349,7 +349,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                             $readableDate = $datetime->format('M-d-Y');
                         } else {
                             $datetime->setTimezone(new \DateTimeZone($timezone));
-                            $readableDate = $datetime->format('M-d-Y H:i:s');
+                            $readableDate = $datetime->format('M-d-Y h:i:s A');
                         }
                         $value["readable_value"] = $readableDate;
                     } else {
@@ -500,7 +500,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                             $readableDate = $datetime->format('M-d-Y');
                         } else {
                             $datetime->setTimezone(new \DateTimeZone($timezone));
-                            $readableDate = $datetime->format('M-d-Y H:i:s');
+                            $readableDate = $datetime->format('M-d-Y h:i:s A');
                         }
                         $value["readable_value"] = $readableDate;
                     } else {
@@ -990,7 +990,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $value["ActivityBy"] = $userProfile;
             $datetime = $value["ActivityOn"]->toDateTime();
             $datetime->setTimezone(new \DateTimeZone($timezone));
-            $readableDate = $datetime->format('M-d-Y H:i:s');
+            $readableDate = $datetime->format('M-d-Y h:i:s A');
             $value["ActivityOn"] = $readableDate;
             $propertyChanges = $value["PropertyChanges"];
             $poppedFromChild = $value["PoppedFromChild"];
@@ -1147,7 +1147,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }
             $datetime = $property["CreatedOn"]->toDateTime();
             $datetime->setTimezone(new \DateTimeZone($timezone));
-            $readableDate = $datetime->format('M-d-Y H:i:s');
+            $readableDate = $datetime->format('M-d-Y h:i:s A');
             $property["ActivityOn"] = $readableDate;
              if(gettype($property["PreviousValue"]) == 'double'){
                 $property["PreviousValue"]= number_format((float)$property["PreviousValue"], 1, '.', '');
@@ -1321,7 +1321,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $extractCollection['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                         $projectDetails = Projects::getProjectMiniDetails($extractCollection["ProjectId"]);
@@ -1371,7 +1371,7 @@ $text_message=$html . $text_message .
                             $UpdatedOn = $getTicketDetails['UpdatedOn'];
                             if(isset($UpdatedOn)){
                                 $datetime = $UpdatedOn->toDateTime();
-                                $readableDate = $datetime->format('M-d-Y H:i:s');
+                                $readableDate = $datetime->format('M-d-Y h:i:s A');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1402,7 +1402,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $getTicketDetails['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
                         $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1422,7 +1422,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forUsercollection['UpdatedOn'] = $readableDate; 
                           }
                          array_push($TinyUserFinalArray, $forUsercollection);
@@ -1472,7 +1472,7 @@ $text_message=$html . $text_message .
                             $UpdatedOn = $getTicketDetails['UpdatedOn'];
                             if(isset($UpdatedOn)){
                                 $datetime = $UpdatedOn->toDateTime();
-                                $readableDate = $datetime->format('M-d-Y H:i:s');
+                                $readableDate = $datetime->format('M-d-Y h:i:s A');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1491,7 +1491,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forUsercollection['UpdatedOn'] = $readableDate; 
                           }
                          array_push($TinyUserFinalArray, $forUsercollection);
@@ -1524,7 +1524,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $getTicketDetails['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
                         $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1583,7 +1583,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $extractCollection['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                         $projectDetails = Projects::getProjectMiniDetails($extractCollection["ProjectId"]);
@@ -1645,7 +1645,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $extractCollection['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                         $projectDetails = Projects::getProjectMiniDetails($extractCollection["ProjectId"]);
@@ -1701,7 +1701,7 @@ $text_message=$html . $text_message .
                             $UpdatedOn = $getTicketDetails['UpdatedOn'];
                             if(isset($UpdatedOn)){
                                 $datetime = $UpdatedOn->toDateTime();
-                                $readableDate = $datetime->format('M-d-Y H:i:s');
+                                $readableDate = $datetime->format('M-d-Y h:i:s A');
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1736,7 +1736,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn = $getTicketDetails['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forTicketArtifacts['UpdatedOn'] = $readableDate;
                          }
                         $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
@@ -1756,7 +1756,7 @@ $text_message=$html . $text_message .
                         $UpdatedOn=  $extractUserData['UpdatedOn'];
                         if(isset($UpdatedOn)){
                             $datetime = $UpdatedOn->toDateTime();
-                            $readableDate =$datetime->format('M-d-Y H:i:s');
+                            $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forUsercollection['UpdatedOn'] = $readableDate; 
                           }
                          array_push($TinyUserFinalArray, $forUsercollection);

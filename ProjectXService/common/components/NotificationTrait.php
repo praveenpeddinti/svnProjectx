@@ -726,7 +726,7 @@ trait NotificationTrait {
                 }
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $Date = $datetime->format('M-d-Y H:i:s');
+                $Date = $datetime->format('M-d-Y h:i:s A');
                 $dateOnly =$datetime->format('M-d-Y');
                 $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
@@ -823,7 +823,7 @@ trait NotificationTrait {
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $Date = $datetime->format('M-d-Y H:i:s');
+                    $Date = $datetime->format('M-d-Y h:i:s A');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                     if ($notification['Notification_Type'] == 'comment') {
@@ -851,7 +851,7 @@ trait NotificationTrait {
                 } else if ($notification['Notification_Type'] == "mention") {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $Date = $datetime->format('M-d-Y H:i:s');
+                    $Date = $datetime->format('M-d-Y h:i:s A');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                     $preposition = "on";
