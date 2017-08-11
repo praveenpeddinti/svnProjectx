@@ -34,7 +34,7 @@
     <div class="project" *ngFor="let pdetail of dashboardData.projects;let i=index;">
       <div class="row">
         <div class="col-md-12">
-          <div class="heading2 cursor_pointer" [routerLink]="['/project',pdetail.projectName,'list']">{{pdetail.projectName}}</div>
+          <div class="heading2 cursor_pointer" [routerLink]="['/project',pdetail.projectName]">{{pdetail.projectName}}</div>
         </div>
 
       </div>
@@ -199,9 +199,9 @@
                    Description can be more than 3 characters long.
                 </div>-->
             </div>
-            <div [hidden]="form.description.length > 3">
+            <!--<div [hidden]="form.description.length > 3">
                    Description can be more than 3 characters long.
-                </div>
+                </div>-->
                              <!--<div *ngIf="summernoteLength==true"></div>-->
                         </div>
                     </div>
