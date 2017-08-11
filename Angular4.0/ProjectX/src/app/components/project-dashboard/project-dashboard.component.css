@@ -1,0 +1,11 @@
+#projectName{position: relative; padding-right:50px;}
+.txtbox_spinner{ height: 30px;
+    position: absolute;
+    right: 10px;
+    top: 32px;
+    width: 30px;}
+.model_proimg{ width:90px; height:90px; border-radius:100%; background:#f7f9fa; position:relative;}
+.model_proimg img{ border-radius:100%; width:90px; height:90px;}
+.model_proimgedit{ width:20px; height:20px; background:#776dad; border-radius:100%; text-align:center; vertical-align:middle; position:absolute; right:5px; top:5px; cursor:pointer;}
+.model_proimgedit i{ font-size:12px; color:#fff;}
+.label{font-weight:normal !important;}
