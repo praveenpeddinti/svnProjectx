@@ -1,1 +1,116 @@
+
+<div (click)="loadFollowersWidget($event)" id="follwersAdd" class="add"><i id="follwersAddI" class="fa fa-plus" aria-hidden="true"></i>
+    
+     <!-- Search Follower list start -->
+    <div id="followerdiv" style="display:none" class="addfollowers_overlap">
+    <div class="add_followersbg ">
+        <div class="padd10"><input id='followerId' type="text" placeholder="Search" class="addfollower_search" value="" (keyup)="getUsersForFollow($event.target.value)"/> </div>
+        <div (click)="checkFollower(flist.id)" id="{{flist.id}}" *ngFor="let flist of follower_search_results">
+            <div class="addfollower_userbg">
+                <div class="row">
+                   <div class="col-md-2 col-sm-2 col-xs-2">
+                      <div class="addfollower_user">
+                          <img data-toggle="tooltip" data-placement="top" class="profilepic_table" src="{{flist.ProfilePic}}" />
+                      </div>
+                   </div>
+                   <div class="col-md-8 col-sm-8 col-xs-8">
+                       <div class="addfollower_username">{{flist.Name}}</div>
+                   </div>
+                   <div class="col-md-2 col-sm-2 col-xs-2">
+                       <span  id="check_{{flist.id}}"  style="font-size:18px;color:#53c808"></span>  
+                   </div>
+                </div>
+            </div> 
+                  
+        </div>
+   </div>
+   </div>
+   <!-- Search follower list end -->
+    
+    
+    </div>
+  <!--  {{projectName}}
+    {{description}}
+      <div class="pull-right">
+        <div  class="add" data-backdrop="false" data-toggle="modal" data-target="#addProjectModel" (click)="clearEditedDetails(form)" >Edit
+        </div>
+      </div>
+      <div *ngIf="creationPopUp">
+         <div class="modal fade custommodel"  id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit PROJECT</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+     <form  #projectEditForm="ngForm" (ngSubmit)="submitted && projectEditForm.form.valid && editProjectDetails()" novalidate="true">
+
+      <div class="modal-body">
+            
+             <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+               <div class="row">
+                <div class="col-md-8">
+                     <div class="dashboard_userbg">
+                          <div class="user">
+                                <div class="uploadcomponent margintop15">
+                              <img  alt="" src="{{form.projectLogo}}" name="projectLogo" id="projectlogo"   (click)="CallFileupload()" /></div>
+                         <input  type="file" id="inputFile" style="display: none;" (change)="fileUploadEvent($event, 'fileChange')"  multiple />
+                        </div>
+                         </div>
+                </div>
+                </div>
+
+              </div>
+              
+          </div>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 ">
+                  <label class="timereportlabel"> Project Name </label>
+                  <div class="customformfieldsmarginbottom autoSearchTask">
+  <input type="text" class="customformfields " required  [(ngModel)]="form.projectName" name="projectName"  #projectName="ngModel"  id="projectName"   (blur)="verifyProjectName(form.projectName)" (keyup)="veryInputByspinner()"/> 
+       <div *ngIf="submitted && projectName.errors " class="fielderror">
+                <div  [hidden]="!projectName.errors.required">Project Name is required</div>
+            </div>
+            <div id="messageForProject"></div>
+            <div *ngIf="verifyByspinner==1" class="txtbox_spinner"><img  alt="" src="assets/images/storyicon.png"  /></div>
+             <div *ngIf="verifyByspinner==3"  class="txtbox_spinner"><img  alt="" src="assets/images/comment-close.png"  /></div>
+             <div *ngIf="verifyByspinner==2" class="txtbox_spinner"><img  alt="" src="assets/images/green_spinner.gif"  /></div>
+                  </div>
+              </div>
+              
+          </div>
+
+             <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> Description </label>
+                        <div class="customformfieldsmarginbottom relativediv ">
+                            <textarea  [(ngModel)]="form.description"   name="description"  #description="ngModel" class="customformfieldstextarea " required id="summernote"></textarea>
+                            <div *ngIf="submitted && description.errors " class="fielderror">
+                                <div [hidden]="!description.errors.required">Description is required</div>
+                            </div>
+                             <div [hidden]="!summernoteLength">Description cannot be more than 500 characters long.</div>
+                        </div>
+                    </div>
+                </div>
+
+              </div>
+    
+      <div class="modal-footer">
+        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">Update</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;resetForm();" >CANCEL</button>
+      </div>
+       </form>
+    </div>
+  </div>
+</div>
+</div>-->
 <app-email-invite></app-email-invite>
+    closed  {{projectDetails.closedTickets}}
+    InProgress  {{projectDetails.InProgress}}
+    New  {{projectDetails.New}}
+    current week {{projectDetails.closedTickets}}
+    Total hours {{projectDetails.weeklyProjectTimeLog}}
+   
