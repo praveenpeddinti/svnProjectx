@@ -1,12 +1,33 @@
+
+<div class="row">
+        <div class="col-md-6 col-xs-offset-3">
+
+     <div class="modal-content">
+<div class="modal-header text-center text-uppercase">Create User</div>
+<div class="text-center" style="color: #637282;padding-bottom:8px;padding-top:8px;border-bottom:#f8f8f8 solid 1px; "> You are invited to {{projectName}} </div>
+<div class="modal-body">
 <form   #newUserForm="ngForm" (ngSubmit)="submitted && newUserForm.form.valid && saveUser()" novalidate="true">
-  <div class="uploadcomponent margintop15">
-            <img  alt="" src="/assets/images/homelogo.png" name="projectLogo" id="projectlogo"   (click)="CallFileupload()" /></div>
-            <input  type="file" id="my_file" style="display: none;" (change)="fileUpload($event, 'fileChange')"/>
   
-  <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 ">
+  <!--<div class="model_proimg pull-right
+<img src="/assets/images/homelogo.png"/>
+<div class="model_proimgedit"><i class="fa fa-pencil" aria-hidden="true"></i>
+</div>
+</div>-->
+  
+  
+  
+  <div class="pull-right">
+  <div class="model_proimg">
+            <img  alt="" src="/assets/images/user-icon.jpg" name="projectLogo" id="projectlogo" />
+            <div (click)="CallFileupload()" class="model_proimgedit"><i class="fa fa-pencil" aria-hidden="true"></i>
+            </div>
+            <input  type="file" id="my_file" style="display: none;" (change)="fileUpload($event, 'fileChange')"/>
+            </div>
+  </div>
+         <div style="clear: both;">
           <label class="loginformlabel"> First Name </label>
-              <input type="text" pInputText [(ngModel)]="form.firstName" name="firstName"  #firstName="ngModel" placeholder="First Name" minlength="3" required/>
+          
+              <input class="invitesearch borderradius_none" type="text" pInputText [(ngModel)]="form.firstName" name="firstName"  #firstName="ngModel" placeholder="First Name" minlength="3" required/>
                   <div *ngIf="submitted && firstName.errors " class="fielderror">
                       <div [hidden]="!firstName.errors.required">
                           First Name is required
@@ -16,13 +37,11 @@
                       </div>
                     </div>
                   <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
-        </div>
-    </div>
+       
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 ">
+    
           <label class="loginformlabel"> Last Name </label>
-              <input type="text" pInputText [(ngModel)]="form.lastName" name="lastName"  #lastName="ngModel" placeholder="Last Name" minlength="3" required/>
+              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.lastName" name="lastName"  #lastName="ngModel" placeholder="Last Name" minlength="3" required/>
                   <div *ngIf="submitted && lastName.errors " class="fielderror">
                       <div [hidden]="!lastName.errors.required">
                           Last Name is required
@@ -32,21 +51,17 @@
                       </div>
                     </div>
                   <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
-        </div>
-    </div>
+       
 
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12">        
+           
             <label class="loginformlabel" for="email">Email</label>
             <input [(ngModel)]="form.email" disabled="disabled" id="email" type="text" class="form-control customfield" 
                         name="email" #email="ngModel">        
-        </div>                          
-    </div>
+        
 
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12">
+    
                   <label class="loginformlabel" for="password">Password</label>
-                  <input [(ngModel)]="form.password" id="password" type="password" id="pass" class="form-control customfield" required minlength="1"
+                  <input class="invitesearch" [(ngModel)]="form.password" id="password" type="password" id="pass" class="form-control customfield" required minlength="1"
                     maxlength="50" name="password" #password="ngModel">
                   <div *ngIf=" submitted && password.errors" class="fielderror">
                     <div [hidden]="!password.errors.required">
@@ -59,13 +74,11 @@
                      Password cannot be more than 50 characters long.
                     </div>
                   </div>
-              </div>
-    </div>
+             
 
-    <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-12">
+    
                   <label class="loginformlabel" for="password">Confirm Password</label>
-                  <input [(ngModel)]="form.confirmpassword" id="confirmpassword" type="password" id="confirmpass" class="form-control customfield" required minlength="1"
+                  <input class="invitesearch" [(ngModel)]="form.confirmpassword" id="confirmpassword" type="password" id="confirmpass" class="form-control customfield" required minlength="1"
                     maxlength="50" name="confirmpassword" #confirmpassword="ngModel">
                   <div *ngIf=" submitted && confirmpassword.errors" class="fielderror">
                     <div [hidden]="!confirmpassword.errors.required">
@@ -81,11 +94,16 @@
                   <div id="mismatch_error" class="fielderror" [hidden]="isPasswordMatch">
                       Password Mismatch
                     </div>
-                  
-              </div>
-    </div>
+                  </div>
+        
      <div class="buttonarea alignright">
-            <button type="submit" (click)="submitted = true;" class="normal bluebutton bluebuttonmedium">SUBMIT</button>
+            <button type="submit" (click)="submitted = true;" class="model_submit butnbor">Accept & Continue</button>
         </div>
    
   </form>
+     </div>
+
+     </div>
+  </div>
+  </div>
+  
