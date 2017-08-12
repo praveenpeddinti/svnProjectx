@@ -52,7 +52,8 @@ export class UserDashboardComponent implements OnInit {
 
   public noMoreActivities:boolean = false;
   public noMoreProjects:boolean = false;
-
+  public noProjectsFound:boolean = false;
+  public noActivitiesFound:boolean = false;
   constructor(
           private _router: Router,
           private _service: LoginService,
@@ -88,10 +89,18 @@ export class UserDashboardComponent implements OnInit {
       if (result.statusCode == 200) {
         if (thisObj.projectOffset == 0 && thisObj.activityOffset == 0) {
           thisObj.dashboardData = result.data;
+            thisObj.noMoreProjects = false;
+            thisObj.noMoreActivities = false;
+          if(thisObj.dashboardData.projects.length==0){
+            thisObj.noProjectsFound=true;
+          }
+          if(thisObj.dashboardData.activities.length==0){
+            thisObj.noActivitiesFound=true;
+          }
         } else {
           var curActLength = thisObj.dashboardData.activities.length;
           if (result.data.projects.length > 0) {
-            thisObj.dashboardData.projects.push(result.data.projects);
+            thisObj.dashboardData.projects =thisObj.dashboardData.projects.concat(result.data.projects);
           } else {
             thisObj.noMoreProjects = true;
           }
@@ -102,7 +111,6 @@ export class UserDashboardComponent implements OnInit {
                thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
             } else {
               thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
-              console.log("Final___Activity"+JSON.stringify(thisObj.dashboardData.activities));
             }
           } else {
             thisObj.noMoreActivities = true;

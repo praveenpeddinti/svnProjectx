@@ -56,6 +56,7 @@ import { ConfirmationBoxComponent } from './components/utility/confirmation-box/
 import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 import { EmailInviteComponent } from './components/email-invite/email-invite.component';
 import { InviteComponent } from './components/invite/invite.component';
+import { DateFormat } from './pipes/dateFormat.pipe';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -184,7 +185,7 @@ const ROUTES=[
 
 
 
-  declarations: [ AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent ],
+  declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent ],
 
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService,{provide:UrlSerializer,useClass:CustomUrlSerializer}
