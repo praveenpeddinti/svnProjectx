@@ -655,38 +655,76 @@ static function validateDateFormat($date, $format = 'M-d-Y')
    * @param type $bucketId
    * @throws ErrorException
    */
-  public static function getTopTicketsStats($projectId,$userId='',$bucketId=''){
-      
-      try { 
-          $topTicketsArray= array();
-          $filters=Filters::getAllActiveFilters();
-          $conditions=array('ProjectId'=>(int)$projectId);
-          $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-          if($bucketId!='')$conditions['Fields.bucket.value']=(int)$bucketId;
-          foreach ($filters as $filter) {
-                        $topTickets = '';
-                        switch((int)$filter['Id']){
-                            case 4:
-                                $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
-                                $conditions['Fields.state.value']=(int)3;
-                                $total = $collection->count($conditions);
-                                unset($conditions['$or']);
-                                $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId]];
-                                $assigned = $collection->count($conditions);
-                                $followed = (int)$total ;
-                                $topTickets =  array("id"=>$filter['Id'],"name"=>$filter['Name'],'total'=>$total,'assigned'=>$assigned,'followed'=>$followed);
-                                break;
-//                             case 1:
-//                                 $total = $collection->count($conditions);
-//                                 error_log("collection---------".print_r($total,1));
-//                                 $topTickets =  array("id"=>$filter['Id'],"name"=>$filter['Name'],'total'=>$total);
- //                                break; 
-                                }
-                        ($topTickets!='')?array_push($topTicketsArray,$topTickets):$topTickets='';       
-                      }  
-      return $topTicketsArray;
-          }
-    catch (\Throwable $ex) {
+  public static function getTopTicketsStats($projectId, $userId = '', $bucketId = '') {
+
+        try {
+            $topTicketsArray = array();
+            $filters = Filters::getAllActiveFilters();
+            $conditions = array('ProjectId' => (int) $projectId);
+            $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+            if ($bucketId != '')
+                $conditions['Fields.bucket.value'] = (int) $bucketId;
+            $conditions['Followers.FollowerId'] = (int) $userId;
+            $conditions['Fields.state.value'] = (int) 3;
+            $total = $collection->count($conditions);
+            unset($conditions['Followers.FollowerId']);
+            $conditions['Fields.assignedto.value'] = (int) $userId;
+            $assigned = $collection->count($conditions);
+            $followed = (int) $total;
+            $topTickets = array("id" => 1, "name" => 'My active stories/task', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
+            array_push($topTicketsArray, $topTickets);
+            $topTickets = '';
+
+            // Over due stories/tasks
+            $total = $assigned = $followed = '';
+            $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+            unset($conditions['Fields.state.value']);
+            $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000));
+            $assigned = $collection->count($conditions);
+            unset($conditions['Fields.assignedto.value']);
+            $conditions['Followers.FollowerId'] = (int) $userId;
+            $followed = $collection->count($conditions);
+            $topTickets = array("id" => 2, "name" => 'Over due stories/tasks', 'total' => $followed, 'assigned' => $assigned, 'followed' => $followed);
+            array_push($topTicketsArray, $topTickets);
+            $topTickets = '';
+
+            //  Due stories/tasks for current week
+            $total = $assigned = $followed = '';
+            $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+            $todayDate = date("Y-m-d H:i:s");
+            $conditions['Fields.duedate.value'] = array('$gte' => new \MongoDB\BSON\UTCDateTime(strtotime($todayDate) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
+            $conditions['Fields.assignedto.value'] = (int) $userId;
+            $assigned = $collection->count($conditions);
+            unset($conditions['Fields.assignedto.value']);
+            $conditions['Followers.FollowerId'] = (int) $userId;
+            $followed = $collection->count($conditions);
+            $topTickets = array("id" => 3, "name" => 'Due stories/tasks for current week', 'total' => $followed, 'assigned' => $assigned, 'followed' => $followed);
+            array_push($topTicketsArray, $topTickets);
+            $topTickets = '';
+//          foreach ($filters as $filter) {
+//                        $topTickets = '';
+//                        switch((int)$filter['Id']){
+//                            case 4:
+//                                $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
+//                                $conditions['Fields.state.value']=(int)3;
+//                                $total = $collection->count($conditions);
+//                                unset($conditions['$or']);
+//                                $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId]];
+//                                $assigned = $collection->count($conditions);
+//                                $followed = (int)$total ;
+//                                $topTickets =  array("id"=>$filter['Id'],"name"=>$filter['Name'],'total'=>$total,'assigned'=>$assigned,'followed'=>$followed);
+//                                break;
+////                             case 1:
+////                                 $total = $collection->count($conditions);
+////                                 error_log("collection---------".print_r($total,1));
+////                                 $topTickets =  array("id"=>$filter['Id'],"name"=>$filter['Name'],'total'=>$total);
+// //                                break; 
+//                                }
+//                        ($topTickets!='')?array_push($topTicketsArray,$topTickets):$topTickets='';       
+//                      } 
+
+            return $topTicketsArray;
+        } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:getTopTicketsStats::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
@@ -724,7 +762,13 @@ public static function prepareUserDashboardActivities($activities) {
         }
     }
     
-    
+    /**
+     * @author Anand Singh
+     * @param type $projectId
+     * @param type $userId
+     * @return type
+     * @throws ErrorException
+     */
     public static function getTotalStoryPoints($projectId,$userId){
         try {
            $totalStoryPoints=0;

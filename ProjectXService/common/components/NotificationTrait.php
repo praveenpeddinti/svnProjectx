@@ -699,7 +699,7 @@ trait NotificationTrait {
         }
     }
 
-    public static function getNotifications($user, $projectId=0, $offset = 0, $limit = 5, $viewAll = 0) {
+    public static function getNotifications($user, $projectId=0, $offset = 0, $limit = 5, $viewAll = 0,$asActivity=false,$timeZone="Asia/Kolkata") {
         error_log("==in get notifications---" . $user . "---" . $projectId . "---" . $offset . "---" . $limit);
         $msg = '';
         $message = array();
@@ -708,7 +708,7 @@ trait NotificationTrait {
         $status='';
         try {
             $projectObj = new Projects();
-            $notifications = NotificationCollection::getNotifications($user, $offset, $limit, $viewAll);
+            $notifications = NotificationCollection::getNotifications($user, $offset, $limit, $viewAll,$asActivity);
             //constucting the notifications for the user
             foreach ($notifications as $notification) {
                 $projectId=$notification['ProjectId'];
@@ -725,9 +725,9 @@ trait NotificationTrait {
                  }  
                 }
                 $datetime = $notification['NotificationDate']->toDateTime();
-                $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $Date = $datetime->format('M-d-Y h:i:s A');
-                $dateOnly =$datetime->format('M-d-Y');
+                $datetime->setTimezone(new \DateTimeZone($timeZone));
+                $Date = $datetime->format('Y-m-d H:i:s');
+                $dateOnly =$datetime->format('Y-m-d');
                 $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
@@ -823,7 +823,7 @@ trait NotificationTrait {
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $Date = $datetime->format('M-d-Y h:i:s A');
+                    $Date = $datetime->format('Y-m-d H:i:s');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                     if ($notification['Notification_Type'] == 'comment') {
@@ -851,7 +851,7 @@ trait NotificationTrait {
                 } else if ($notification['Notification_Type'] == "mention") {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $Date = $datetime->format('M-d-Y h:i:s A');
+                    $Date = $datetime->format('Y-m-d H:i:s');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                     $preposition = "on";
@@ -968,7 +968,7 @@ trait NotificationTrait {
                 $recipient_list = array();
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $Date = $datetime->format('M-d-Y H:i:s');
+                $Date = $datetime->format('Y-m-d H:i:s');
                 $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
@@ -1085,7 +1085,7 @@ EOD;
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $Date = $datetime->format('M-d-Y H:i:s');
+                    $Date = $datetime->format('Y-m-d H:i:s');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                     $link .= "?Slug=" . $notification['CommentSlug'];
@@ -1138,7 +1138,7 @@ EOD;
                 }   else if ($notification['Notification_Type'] == "mention") {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                    $Date = $datetime->format('M-d-Y H:i:s');
+                    $Date = $datetime->format('Y-m-d H:i:s');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
 
@@ -1270,7 +1270,7 @@ EOD;
                 // echo(count($notificationIds)."-------uniaqu----------".count($uniqueNotifications));
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
-                $Date = $datetime->format('M-d-Y H:i:s');
+                $Date = $datetime->format('Y-m-d H:i:s');
                 $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
                 $activityOn = $notification['ActivityOn'];
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);

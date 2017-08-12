@@ -303,12 +303,12 @@ class TicketTimeLog extends ActiveRecord
     public static function getCurrentWeekTimeLog($userId='',$projectId=''){
    
         try {
-            $projectId=1;
+            
                 $weekFirstDay = date("Y-m-d H:i:s", strtotime('last monday', strtotime('tomorrow'))); 
                 $toDate = date("Y-m-d H:i:s");
-                if($userId){
-                    error_log("her33333333333-------");
-                    $matchArray = array('TimeLog.CollaboratorId' => (int)$userId, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
+                $matchArray = array('TimeLog.CollaboratorId' => (int)$userId, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
+                if($projectId=='')unset($matchArray['ProjectId']);
+                $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
                         $pipeline = array(
                         array('$unwind' => '$TimeLog'),
                         array('$match' => $matchArray),
@@ -316,82 +316,17 @@ class TicketTimeLog extends ActiveRecord
                             '$group' => array(
                                 '_id' => '$TimeLog.CollaboratorId',
                                "count" => array('$sum' => 1),
-                                "totalHours" => array('$sum' => '$TimeLog.Time')
-                             ),
-                        ),
-                    );
-                    
-                }else{
-                     error_log("4444444444-------");
-                  $matchArray = array( "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));  
-                   $pipeline = array(
-                array('$unwind' => '$TimeLog'),
-                array('$match' => $matchArray),
-                array(
-                    '$group' => array(
-                        '_id' => 'null',
-                       "count" => array('$sum' => 1),
                         "totalHours" => array('$sum' => '$TimeLog.Time'),
                     ),
                 ),
             );
-                  
-                }
-               // $matchArray = array( "ProjectId" => (int) $projectId);
-                if($projectId=='')unset($matchArray['ProjectId']);
-                $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
-//                $pipeline = array(
-//                array('$unwind' => '$TimeLog'),
-//                array('$match' => $matchArray),
-//                array(
-//                    '$group' => array(
-//                        '_id' => '$TimeLog.CollaboratorId',
-//                       "count" => array('$sum' => 1),
-//                        "totalHours" => array('$sum' => '$TimeLog.Time'),
-//                  //      "data" => array('$push' => '$TimeLog.CollaboratorId'),
-//                    ),
-//                ),
-//            );
             $Arraytimelog = $query->aggregate($pipeline);
-            error_log("log------".print_r($Arraytimelog,1));
             return $Arraytimelog;  
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:getCurrentWeekTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
-   }
-     /**
-     * @authr   Padmaja
-     * @uses  Get Total worklog for Project.
-     * @param type $projectId
-     * @return type
-     * @throws ErrorException
-     */
-    public static function getTotalTimeLogByProject($projectId=''){
    
-        try {
-            $projectId=1;
-            $matchArray = array( "ProjectId" => (int) $projectId);  
-            if($projectId=='')unset($matchArray['ProjectId']);
-                $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
-                $pipeline = array(
-                array('$unwind' => '$TimeLog'),
-                array('$match' => $matchArray),
-                array(
-                    '$group' => array(
-                        '_id' => 'null',
-                       "count" => array('$sum' => 1),
-                        "totalHours" => array('$sum' => '$TimeLog.Time'),
-                    ),
-                ),
-            );
-            $Arraytimelog = $query->aggregate($pipeline);
-            //error_log("=====------".print_r($Arraytimelog,1));
-            return $Arraytimelog;  
-        } catch (\Throwable $ex) {
-            Yii::error("TicketTimeLogCollection:getTotalTimeLogByProject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException($ex->getMessage());
-        }
        
     }
 
