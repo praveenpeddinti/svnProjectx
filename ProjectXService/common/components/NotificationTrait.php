@@ -1260,13 +1260,17 @@ EOD;
             $user_message = '';
             $ticket_message = '';
             $view_ticket_message = '';
-            $msg = <<<EOD
-EOD;
+//            $msg = <<<EOD
+//EOD;
             $recipient_list = array();
            // echo ("============notifications ids--------11111111------".print_r($notificationIds,1));
             $notifications = NotificationCollection::getNotificationDetails($notificationIds);
             $uniqueNotifications = CommonUtility::getUniqueArrayObjects($notifications);
+            $finalUserMessageArray = array();
+            
             foreach ($uniqueNotifications as $notification) {
+                            $msg = <<<EOD
+EOD;
                 // echo(count($notificationIds)."-------uniaqu----------".count($uniqueNotifications));
                 $datetime = $notification['NotificationDate']->toDateTime();
                 $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -1397,21 +1401,57 @@ EOD;
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
             $activity = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333; padding-bottom:10px;padding-top:10px;' width='570'>Activity by {$fromUser}:";
          
+            
+           $notifiedCollaborators = $notification['NotifiedCollaborators'];
+            foreach($notifiedCollaborators as $collaborator){
+               $collaboratorId =  $collaborator["CollaboratorId"];
+               $emailNotification = $collaborator["EmailNotification"];
+               if($emailNotification == 1){
+                   if(isset($finalUserMessageArray[$collaboratorId])){
+                       $finalUserMessageArray[$collaboratorId] =  $finalUserMessageArray[$collaboratorId]."<br/>". $msg; 
+                   }else{
+                       $finalUserMessageArray[$collaboratorId] = $msg;
+                   }
+               }
             }
             
-            $notificationUsers = array();
-           // $notificationUsers = array_column($notifications, 'NotifiedCollaborators');
-            foreach ($notifications[0]['NotifiedCollaborators'] as &$value) {
+            }
+            
+            
+                 foreach ($finalUserMessageArray as $key=>$message) {
                 $resUser=array();
-                $collaborator = TinyUserCollection::getMiniUserDetails($value['CollaboratorId']);
+                $collaborator = TinyUserCollection::getMiniUserDetails($key);
                 array_push($resUser,$collaborator['Email']);
                 $value = $collaborator['Email'];
                 $notified_user = $collaborator['UserName'];
                 $display_name = $collaborator['FirstName'] . " " . $collaborator['LastName'];
                 $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
-                $text_message = $project_logo . $user_message . $ticket_message . $activity . $msg . $view_ticket_message;
+                $text_message = $project_logo . $user_message . $ticket_message . $activity . $message . $view_ticket_message;
                 CommonUtility::sendEmail($mailingName, $resUser, $text_message, $subject);
         }
+            
+            
+            
+            
+            
+            
+//            $notificationUsers = array();
+//           // $notificationUsers = array_column($notifications, 'NotifiedCollaborators');
+//            foreach ($notifications[0]['NotifiedCollaborators'] as &$value) {
+//                $resUser=array();
+//                $collaborator = TinyUserCollection::getMiniUserDetails($value['CollaboratorId']);
+//                array_push($resUser,$collaborator['Email']);
+//                $value = $collaborator['Email'];
+//                $notified_user = $collaborator['UserName'];
+//                $display_name = $collaborator['FirstName'] . " " . $collaborator['LastName'];
+//                $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have a new activity alert.</span></td></tr>";
+//                $text_message = $project_logo . $user_message . $ticket_message . $activity . $msg . $view_ticket_message;
+//                CommonUtility::sendEmail($mailingName, $resUser, $text_message, $subject);
+//        }
+        
+        
+        
+        
             } catch (\Throwable $ex) {
             Yii::error("NotificationTrait:sendBulkEmailNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
