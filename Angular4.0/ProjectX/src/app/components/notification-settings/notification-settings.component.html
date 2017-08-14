@@ -87,9 +87,9 @@ $(document).ready(function(){
   <thead>
 <tr>
     <th width="25%"></th>
-    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll?true:false" (click)="isCheckedAll('SystemNotification',$event)">System Notifications </th>
-    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll?true:false" (click)="isCheckedAll('EmailNotification',$event)">Email Notifications</th>
-    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll?true:false" (click)="isCheckedAll('PushNotification',$event)">Push Notifications</th>
+    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll_SN?true:false" (click)="isCheckedAll('SystemNotification',$event)">System Notifications </th>
+    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll_EN?true:false" (click)="isCheckedAll('EmailNotification',$event)">Email Notifications</th>
+    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll_PN?true:false" (click)="isCheckedAll('PushNotification',$event)">Push Notifications</th>
   </tr>
 </thead>
 <tbody *ngFor="let nTypes of NotificationTypesToDisplay;let i=index;">

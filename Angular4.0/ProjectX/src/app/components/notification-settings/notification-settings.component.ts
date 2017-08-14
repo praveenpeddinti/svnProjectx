@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Pipe,Component, OnInit } from '@angular/core';
 import { AjaxService } from '../../ajax/ajax.service';
 import { Directive,NgZone } from '@angular/core';
 import { Http} from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import {SharedService} from '../../services/shared.service';
+import {AccordionModule,DropdownModule,SelectItem,CalendarModule,CheckboxModule} from 'primeng/primeng';
+
 declare var jQuery:any;
 
 @Component({
@@ -13,8 +15,12 @@ declare var jQuery:any;
 })
 export class NotificationSettingsComponent implements OnInit {
 checkBox:boolean=false;
-public isSelectedAll=false;
-public isCheckAll=false;
+public isSelectedAll_SN=false;
+public isSelectedAll_EN=false;
+public isSelectedAll_PN=false;
+public SN_count=0;
+public EN_count=0;
+public PN_count=0;
 public NotificationTypes=[];
 public NotificationTypesToDisplay=[];
 public NotificationStatusToDisplay=[];
@@ -22,24 +28,24 @@ public NotificationStatusToDisplay=[];
 
   ngOnInit() {
 this.emailPrefernces();
-// var request={};
-// this._ajaxService.AjaxSubscribe("settings/notifications-status",request,(response) => {
-//     if (response.statusCode == 200) {
-//             this.zone.run(() =>{ 
-//    //  this.NotificationStatusToDisplay= this.prepareNotificationData(response.data,this.NotificationTypes);
-//      })
-//    }
-//  });
 }
 public emailPrefernces(){
 var data={};
-this._ajaxService.AjaxSubscribe("settings/email-preferences",data,(response) => {
+this._ajaxService.AjaxSubscribe("settings/notification-preferences",data,(response) => {
     if (response.statusCode == 200) {
             this.zone.run(() =>{ 
      this.NotificationTypesToDisplay= this.prepareNotificationData(response.data,this.NotificationTypes);
     // this.ready=true;
     this.NotificationTypes=this.prepareItemArray(response.data,false,'notificationSettings');
-//alert((response.data).length);
+if((response.data).length==this.SN_count){
+ this.isSelectedAll_SN=true;
+}
+if((response.data).length==this.EN_count){
+ this.isSelectedAll_EN=true;
+}
+if((response.data).length==this.PN_count){
+ this.isSelectedAll_PN=true;
+}
  })
  }
 });
@@ -58,15 +64,24 @@ this._ajaxService.AjaxSubscribe("settings/email-preferences",data,(response) => 
             // }
            for(var i=0;list.length>i;i++){
               listItem.push({title:list[i].ActivityTitle,desc:list[i].ActivityDescription, value:list[i].Id,priority:priority,type:status});
-           }
+              if(list[i].SystemNotification==1){
+               this.SN_count=this.SN_count+1;
+              }
+              if(list[i].EmailNotification==1){
+               this.EN_count=this.EN_count+1;
+              }
+              if(list[i].PushNotification==1){
+               this.PN_count=this.PN_count+1;
+              }
+         }
         }
         listMainArray.push({type:"",filterValue:listItem});
         return listMainArray;
     }
 
-     prepareNotificationData(bucketData,prepareData){
-         for(let bucketArray in bucketData){
-        prepareData.push(bucketData[bucketArray]);
+     prepareNotificationData(notificationsData,prepareData){
+         for(let notificationArray in notificationsData){
+        prepareData.push(notificationsData[notificationArray]);
        }
        return prepareData;
     }
@@ -74,24 +89,15 @@ this._ajaxService.AjaxSubscribe("settings/email-preferences",data,(response) => 
         var isChecked=e.target.checked;
         var post_data={id:Id,type:type,status:status,isChecked:isChecked};
         this._ajaxService.AjaxSubscribe("settings/notifications-settings-status-update",post_data,(response) => {
-    if (response.statusCode == 200) {
-            this.zone.run(() =>{ 
-  //   this.NotificationStatusToDisplay= this.prepareNotificationData(response.data,this.NotificationTypes);
-    })
-   }
  });
 }
     isCheckedAll(type,e){
      var isChecked=e.target.checked; 
-    //  if(isChecked=="true")
-    //         this.isCheckAll=true;
-    //  else   
-    //         this.isCheckAll=false;
     var post_data={isChecked:isChecked,NotificationType:type};
     this._ajaxService.AjaxSubscribe("settings/notifications-settings-status-update-all",post_data,(response) => {
     if (response.statusCode == 200) {
             this.zone.run(() =>{  
-              this.emailPrefernces();
+            this.emailPrefernces();
     })
    }
  });
