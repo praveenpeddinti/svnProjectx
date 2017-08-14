@@ -64,9 +64,10 @@ export class CreateUserComponent implements OnInit {
       if(this.isPasswordMatch)
       {
         // Make an ajax to save the User
-        this.projectImage=jQuery('#projectlogo').attr("src");
-        
-        var invite_obj={projectId:this.projectId,user:this.form,profile:this.projectImage};
+        this.projectImage=jQuery('#projectlogo').attr("src")
+        var URL = this.projectImage;
+        var imageURL = URL.replace (/^[a-z]{4}\:\/{2}[a-z]{1,}\:[0-9]{1,4}.(.*)/, '$1');
+        var invite_obj={projectId:this.projectId,user:this.form,profile:'/'+imageURL};
         this._ajaxService.AjaxSubscribe("collaborator/save-user",invite_obj,(result)=>
         {
           if(result.statusCode==200)
