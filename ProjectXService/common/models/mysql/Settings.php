@@ -60,7 +60,7 @@ $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$us
      * @params $userId,$status,$type,$activityId
      * @return $data
      */
-        public static function notificationsSetttingsStatusUpdate($userId,$status,$type,$activityId,$isChecked){
+        public static function notificationsSetttingsStatusUpdate($userId,$type,$activityId,$isChecked){
             
             if($isChecked==1){
               $query="update CollaboratorNotificationsSettings set $type=1 where CollaboratorId=$userId and ActivityId=$activityId"; 
