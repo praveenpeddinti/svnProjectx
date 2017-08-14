@@ -94,9 +94,8 @@ class SettingsController extends Controller
         $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
         $type=$postData->type;
         $activityId=$postData->id;
-        $status=$postData->status;
         $isChecked=$postData->isChecked;
-        $details = ServiceFactory::getCollaboratorServiceInstance()->NotificationsSetttingsStatusUpdate($userId,$status,$type,$activityId,$isChecked);
+        $details = ServiceFactory::getCollaboratorServiceInstance()->NotificationsSetttingsStatusUpdate($userId,$type,$activityId,$isChecked);
          $responseBean = new ResponseBean();
          $responseBean->statusCode = ResponseBean::SUCCESS;
          $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
