@@ -48,9 +48,10 @@ class Settings extends ActiveRecord
     public static function getAllNotificationsStatus($userId){
 //        $query="select * from CollaboratorNotificationsSettings cns join
 //                Notifications ns on ns.Id=cns.ActivityId where CollaboratorId=$userId";
-$query="select * from CollaboratorNotificationsSettings where where CollaboratorId=$userId";                
-       //error_log("++++++++++++++++++++++".$query);     
+$query="select * from CollaboratorNotificationsSettings where CollaboratorId=$userId";                
         $data = Yii::$app->db->createCommand($query)->queryAll();
+               error_log("++++++++++++++++++++++".sizeof($data)."======KKKKKKKKKKkkk=======".print_r($data,1));     
+
         return $data; 
     }
      
@@ -59,8 +60,9 @@ $query="select * from CollaboratorNotificationsSettings where where Collaborator
      * @params $userId,$status,$type,$activityId
      * @return $data
      */
-        public static function notificationsSetttingsStatusUpdate($userId,$status,$type,$activityId){
-            if($status==0){
+        public static function notificationsSetttingsStatusUpdate($userId,$status,$type,$activityId,$isChecked){
+            
+            if($isChecked==1){
               $query="update CollaboratorNotificationsSettings set $type=1 where CollaboratorId=$userId and ActivityId=$activityId"; 
             }else{
              $query="update CollaboratorNotificationsSettings set $type=0 where CollaboratorId=$userId and ActivityId=$activityId";    
@@ -68,6 +70,7 @@ $query="select * from CollaboratorNotificationsSettings where where Collaborator
         $data = Yii::$app->db->createCommand($query)->execute();
         return $data; 
     }
+    
             public static function getNotificationSettingsStatus($fieldName,$userId){
            $query="select * from Notifications ns join CollaboratorNotificationsSettings cns 
                     on ns.ActivityOn='$fieldName' and cns.CollaboratorId=$userId and ns.Id=cns.ActivityId"; 
@@ -76,6 +79,19 @@ $query="select * from CollaboratorNotificationsSettings where where Collaborator
              $data = Yii::$app->db->createCommand($query)->queryAll();
          //    $status="(".$data[0]['SystemNotification'].','.$data[0]['EmailNotification'].','.$data[0]['PushNotification'].")";
              return $data; 
+    }
+         public static function notificationsSetttingsStatusUpdateAll($userId,$type,$isChecked){
+            
+            if($isChecked==1){
+              $query="update CollaboratorNotificationsSettings set $type=1 where CollaboratorId=$userId and $type=0"; 
+            }else{
+             $query="update CollaboratorNotificationsSettings set $type=0 where CollaboratorId=$userId and $type=1";    
+            }
+
+        $data = Yii::$app->db->createCommand($query)->execute();
+                   error_log("======+++++++=======111111======".$data);
+
+        return $data; 
     }
 }
 
