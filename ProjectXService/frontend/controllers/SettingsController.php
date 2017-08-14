@@ -8,9 +8,8 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\components\CommonUtility;
 use common\models\bean\ResponseBean;
-use common\components\ServiceFactory;
+use common\components\{CommonUtility,ServiceFactory};
 use common\models\mongo\TinyUserCollection;
 use common\models\mongo\NotificationCollection;
 /**
@@ -54,17 +53,18 @@ class SettingsController extends Controller
     $this->enableCsrfValidation = false;
     return parent::beforeAction($action);
     }
+    
     /**
      * @author Lakshmi
      * @params none
-     * @return type
+     * @return $response
      */
-    public function actionEmailPreferences(){
+    public function actionNotificationPreferences(){
           try{
         $details=array();
         $postData = json_decode(file_get_contents("php://input"));
         $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
-        $details = CommonUtility::getAllNotificationTypes($userId);
+        $details = ServiceFactory::getCollaboratorServiceInstance()->getAllNotificationTypes($userId);
         $responseBean = new ResponseBean();
          $responseBean->statusCode = ResponseBean::SUCCESS;
          $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -82,17 +82,12 @@ class SettingsController extends Controller
         }
        // return $details;
     }
-    public function actionNotificationsStatus(){
-       $postData = json_decode(file_get_contents("php://input"));
-        $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
-        $details = CommonUtility::getAllNotificationsStatus($userId);
-         $responseBean = new ResponseBean();
-         $responseBean->statusCode = ResponseBean::SUCCESS;
-         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-         $responseBean->data = $details;
-         $response = CommonUtility::prepareResponse($responseBean,"json");
-         return $response;
-    }
+    
+    /**
+     * @author Lakshmi
+     * @params none
+     * @return $response
+     */
     public function actionNotificationsSettingsStatusUpdate(){
         try{
          $postData = json_decode(file_get_contents("php://input"));
@@ -101,8 +96,7 @@ class SettingsController extends Controller
         $activityId=$postData->id;
         $status=$postData->status;
         $isChecked=$postData->isChecked;
-        error_log("=====.".$status."=========".$userId."=======".$type."============".$activityId."=======".$isChecked);
-        $details = CommonUtility::NotificationsSetttingsStatusUpdate($userId,$status,$type,$activityId,$isChecked);
+        $details = ServiceFactory::getCollaboratorServiceInstance()->NotificationsSetttingsStatusUpdate($userId,$status,$type,$activityId,$isChecked);
          $responseBean = new ResponseBean();
          $responseBean->statusCode = ResponseBean::SUCCESS;
          $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -120,13 +114,18 @@ class SettingsController extends Controller
         }
       
     }
+     /**
+     * @author Lakshmi
+     * @params none
+     * @return $response
+     */
         public function actionNotificationsSettingsStatusUpdateAll(){
         try{
          $postData = json_decode(file_get_contents("php://input"));
         $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
         $type=$postData->NotificationType;
         $isChecked=$postData->isChecked;
-        $details = CommonUtility::NotificationsSetttingsStatusUpdateAll($userId,$type,$isChecked);
+        $details =ServiceFactory::getCollaboratorServiceInstance()->NotificationsSetttingsStatusUpdateAll($userId,$type,$isChecked);
          $responseBean = new ResponseBean();
          $responseBean->statusCode = ResponseBean::SUCCESS;
          $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
