@@ -329,6 +329,42 @@ class TicketTimeLog extends ActiveRecord
    
        
     }
+        /**
+     * @authr   Padmaja
+     * @uses  Get Total worklog for Project.
+     * @param type $projectId
+     * @return type
+     * @throws ErrorException
+     */
+    public static function getTotalTimeLogByProject($projectId=''){
+   
+        try {
+            $projectId=1;
+            $matchArray = array( "ProjectId" => (int) $projectId);  
+            if($projectId=='')unset($matchArray['ProjectId']);
+                $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
+                $pipeline = array(
+                array('$unwind' => '$TimeLog'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                        '_id' => 'null',
+                       "count" => array('$sum' => 1),
+                        "totalHours" => array('$sum' => '$TimeLog.Time'),
+                    ),
+                ),
+            );
+            $Arraytimelog = $query->aggregate($pipeline);
+            error_log("log------".print_r($Arraytimelog,1));
+            return $Arraytimelog;  
+        } catch (\Throwable $ex) {
+            Yii::error("TicketTimeLogCollection:getTotalTimeLogByProject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+        
+     
+      
+    }
 
     }
 ?>
