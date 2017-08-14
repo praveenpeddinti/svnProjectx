@@ -274,7 +274,7 @@ trait NotificationTrait {
             if (!empty($userslist)) {
              foreach ($userslist as $user) {
               $user = Collaborators::getCollaboratorId($user);
-                     $CollaboratorNotifications = Settings::getNotificationSettingsStatus("comment",$user['Id']);
+                     $CollaboratorNotifications = Settings::getNotificationSettingsStatus("mention",$user['Id']);
                      if(count($CollaboratorNotifications)>0){
                      $system_notification=$CollaboratorNotifications[0]['SystemNotification'];
                      $email_notification=$CollaboratorNotifications[0]['EmailNotification'];
@@ -571,8 +571,7 @@ trait NotificationTrait {
                 if ($follower['FollowerId'] == $loggedInUser) {
                    continue;
                 }
-               //error_log($notifyType."======333333******************3333333__else iffffffff_=" . $fieldType);
-                if($activityOn!=="ChildTask" && $activityOn!=="TicketRelation"){
+                if($activityOn!=="ChildTask" && $activityOn!=="TicketRelation" && $fieldType!=="FollowObj"){
                     $CollaboratorNotifications = Settings::getNotificationSettingsStatus($notifyType,$follower['FollowerId']);
                 }
 //                else if($notifyType=="bucket" || $notifyType=="tickettype" || $notifyType=="stakeholder" || $notifyType=="stakeholder" || $notifyType=="priority" || $notifyType=="estimatedpoints" || $notifyType=="workflow" || $notifyType=="assignedto" || $notifyType=="duedate" || $notifyType==" dod" || $notifyType=="TotalTimeLog"){
@@ -580,6 +579,8 @@ trait NotificationTrait {
 //                }
                 else if($activityOn=="ChildTask" || $activityOn=="TicketRelation"){
                     $CollaboratorNotifications = Settings::getNotificationSettingsStatus($activityOn,$follower['FollowerId']);
+                }else if($fieldType=="FollowObj"){
+                  $CollaboratorNotifications = Settings::getNotificationSettingsStatus($fieldType,$follower['FollowerId']);
                 }
           if(count($CollaboratorNotifications)>0){
                     $system_notification=$CollaboratorNotifications[0]['SystemNotification'];
@@ -1291,6 +1292,8 @@ EOD;
                 $projectName = $projectDetails["ProjectName"];
                 $link = Yii::$app->params['AppURL'] . "/project/$projectName/" . $ticketId . "/details";
                 $redirectToHome = Yii::$app->params['AppURL'] . "/home";
+              // echo $notification['EmailNotification']."===============GGGGGGGGGGGGGGGGG====================".$notification['ActivityOn'];
+
                 if ($activityOn == "Title") {
                     $description_message = $notification['OldValue'] . " => " . $notification['NewValue'];
                     $text_message = <<<EOD
@@ -1416,8 +1419,6 @@ EOD;
             }
             
             }
-            
-            
                  foreach ($finalUserMessageArray as $key=>$message) {
                 $resUser=array();
                 $collaborator = TinyUserCollection::getMiniUserDetails($key);

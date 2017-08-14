@@ -2135,13 +2135,19 @@ public static function getUniqueArrayObjects($arrayOfObjects){
     public static function getAllNotificationsStatus($userId){
        $notification_status=array();
         $notification_status=Settings::getAllNotificationsStatus($userId);
-        error_log("======+++++++=============".print_r($notification_status,1));
+      //  error_log("======+++++++=============".print_r($notification_status,1));
         return $notification_status;
     }
-        public static function notificationsSetttingsStatusUpdate($userId,$status,$type,$activityId){
+        public static function notificationsSetttingsStatusUpdate($userId,$status,$type,$activityId,$isChecked){
        $notification_status=array();
-        $notification_status=Settings::NotificationsSetttingsStatusUpdate($userId,$status,$type,$activityId);
-        error_log("======+++++++=============".print_r($notification_status,1));
+        //  error_log("======+++++++=============".$isChecked);
+        $notification_status=Settings::NotificationsSetttingsStatusUpdate($userId,$status,$type,$activityId,$isChecked);
+        return $notification_status;
+    }
+           public static function notificationsSetttingsStatusUpdateAll($userId,$type,$isChecked){
+       $notification_status=array();
+          error_log("======+++++++=============".$isChecked);
+        $notification_status=Settings::NotificationsSetttingsStatusUpdateAll($userId,$type,$isChecked);
         return $notification_status;
     }
 }
