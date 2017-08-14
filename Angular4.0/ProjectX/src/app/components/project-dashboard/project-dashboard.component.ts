@@ -18,7 +18,7 @@ export class ProjectDashboardComponent implements OnInit {
   public projectName;
   public description;
   public projectLogo;
-  public form={};
+   public form={};
   public filesToUpload: Array<File>;
   public hasBaseDropZoneOver:boolean = false;
   public hasFileDroped:boolean = false;
