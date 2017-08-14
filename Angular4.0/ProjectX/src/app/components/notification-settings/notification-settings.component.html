@@ -95,6 +95,7 @@ $(document).ready(function(){
 <tbody *ngFor="let nTypes of NotificationTypesToDisplay;let i=index;">
   <tr>
     <td class="blue-bg2" style="text-align:left;">{{nTypes.ActivityTitle}}
+	({{nTypes.ActivityDescription}})
     </td>
 	<td data-title="System Notifications"><input type="checkbox" [ngModel]="nTypes.SystemNotification==1?true:false"  (click)="isChecked(nTypes.Id,'SystemNotification',nTypes.SystemNotification,$event)"></td>
     <td data-title="Email Notifications"><input type="checkbox" [ngModel]="nTypes.EmailNotification==1?true:false" (click)="isChecked(nTypes.Id,'EmailNotification',nTypes.EmailNotification,$event)"></td>
