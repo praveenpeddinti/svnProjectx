@@ -40,7 +40,6 @@ this._ajaxService.AjaxSubscribe("settings/email-preferences",data,(response) => 
     // this.ready=true;
     this.NotificationTypes=this.prepareItemArray(response.data,false,'notificationSettings');
 //alert((response.data).length);
-jQuery()
  })
  }
 });
@@ -58,7 +57,7 @@ jQuery()
             //     listItem.push({label:"Select Responsible ", value:"",priority:priority,type:status});
             // }
            for(var i=0;list.length>i;i++){
-              listItem.push({label:list[i].ActivityTitle, value:list[i].Id,priority:priority,type:status});
+              listItem.push({title:list[i].ActivityTitle,desc:list[i].ActivityDescription, value:list[i].Id,priority:priority,type:status});
            }
         }
         listMainArray.push({type:"",filterValue:listItem});
