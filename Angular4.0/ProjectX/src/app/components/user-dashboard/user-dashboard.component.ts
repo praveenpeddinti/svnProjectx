@@ -64,8 +64,8 @@ export class UserDashboardComponent implements OnInit {
   ) {this.filesToUpload = []; }
 
    ngAfterViewInit() { 
-        var formobj=this;
-        this.editor.initialize_editor('summernote','keyup',formobj);
+       // var formobj=this;
+        //this.editor.initialize_editor('summernote','keyup',formobj);
     }
   ngOnInit() {
      window.scrollTo(0,0);
@@ -280,11 +280,13 @@ export class UserDashboardComponent implements OnInit {
          this.form={
                  description:""
             };
-        jQuery("#summernote").summernote('code','');
+        jQuery("#summernote").summernote('destroy');
         this.verifyProjectMess=false; 
   }
     creationProject(){
        //jQuery("#summernote").summernote();
+        var formobj=this;
+        this.editor.initialize_editor('summernote','keyup',formobj);
         this.form={
                  description:""
             };
