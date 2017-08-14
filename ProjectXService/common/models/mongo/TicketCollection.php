@@ -611,6 +611,7 @@ class TicketCollection extends ActiveRecord
         }
     }
 
+
     public static function getAllTicketsCount($projectId,$value,$FieldBucket,$FieldState,$taskFlag){
      try{
             $query = new Query();
@@ -678,6 +679,32 @@ class TicketCollection extends ActiveRecord
         }
         
      
+    }
+               /**
+     * @author Padmaja
+     * @param type $FieldName
+     * @param type $projectId
+     * @return type
+     */
+    public static function getTicketsCountByStatus($projectId,$FieldName,$value){
+        try{
+             if($value!="New"){
+                  error_log("666666666--------------");
+             $where=   [$FieldName => (int)$value,"ProjectId" =>(int)$projectId];
+            }else{
+                error_log("new333333333--------------");
+                $where=   [$FieldName =>$value,"ProjectId" =>(int)$projectId]; 
+            }
+             $query = new Query();
+             $query->from('TicketCollection')
+             ->where($where);
+              $ticketDetails = $query->count();
+           return $ticketDetails;  
+                    
+        } catch (Exception $ex) {
+
+        }
+        
     }
 
 }  
