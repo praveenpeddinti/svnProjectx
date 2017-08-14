@@ -306,15 +306,20 @@ class TicketTimeLog extends ActiveRecord
             
                 $weekFirstDay = date("Y-m-d H:i:s", strtotime('last monday', strtotime('tomorrow'))); 
                 $toDate = date("Y-m-d H:i:s");
+                $_id='$TimeLog.CollaboratorId';
                 $matchArray = array('TimeLog.CollaboratorId' => (int)$userId, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
                 if($projectId=='')unset($matchArray['ProjectId']);
+                if($userId==''){
+                unset($matchArray['TimeLog.CollaboratorId']);
+                $_id='null';
+                }
                 $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
                         $pipeline = array(
                         array('$unwind' => '$TimeLog'),
                         array('$match' => $matchArray),
                         array(
                             '$group' => array(
-                                '_id' => '$TimeLog.CollaboratorId',
+                                '_id' => $_id,
                                "count" => array('$sum' => 1),
                         "totalHours" => array('$sum' => '$TimeLog.Time'),
                     ),
@@ -339,7 +344,8 @@ class TicketTimeLog extends ActiveRecord
     public static function getTotalTimeLogByProject($projectId=''){
    
         try {
-            $projectId=1;
+           // $projectId=1;
+             error_log("log--ggggggggggggg----".$projectId);
             $matchArray = array( "ProjectId" => (int) $projectId);  
             if($projectId=='')unset($matchArray['ProjectId']);
                 $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
@@ -355,7 +361,7 @@ class TicketTimeLog extends ActiveRecord
                 ),
             );
             $Arraytimelog = $query->aggregate($pipeline);
-            error_log("log------".print_r($Arraytimelog,1));
+            error_log("log--ggggggggggggg----".print_r($Arraytimelog,1));
             return $Arraytimelog;  
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:getTotalTimeLogByProject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

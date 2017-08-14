@@ -361,37 +361,43 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      */
     public static function getProjectDetailsForProjectDashboard($projectId,$userId){
         try{
-             error_log("-----------###################-------------");
-            $projectId=1;
+             error_log("-----------###################-------------".$projectId."hk--".$userId);
             $projectInfo=array();
             $prepareDetails=array();
             $userInfo=array();
             $extractUserInfo=array();
             $projectDetails=Projects::getProjectMiniDetails($projectId);
             $projectInfo['projectName']=$projectDetails['ProjectName'];
+            
             $projecTeam=ProjectTeam::getProjectTeamCount($projectId);
             $projectInfo['Team']=$projecTeam['TeamCount'];
             $projectInfo['closedTickets'] =TicketCollection::getTicketsCountByStatus($projectId,'Fields.state.value',6);
             $projectInfo['InProgress'] =TicketCollection::getTicketsCountByStatus($projectId,'Fields.state.value',3);
             $projectInfo['New'] =TicketCollection::getTicketsCountByStatus($projectId,'Fields.state.value',"New");
-           // $projectInfo['weeklyProjectTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId,$projectId);
+          //  $projectInfo['weeklyProjectTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId,$projectId);
             $projectInfo['weeklyProjectTimeLog']    =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog('',$projectId);
             $projectInfo['totalProjectTimeLog']     =  ServiceFactory::getTimeReportServiceInstance()->getTotalTimeLogByProject($projectId);
             // error_log("@@@@@-------------");
-            $projectInfo['topTickets'] = self::getTopTicketsStats($projectId,$userId);
+             error_log("---tttttttttttttttt--".print_r($projectInfo,1));
+           // $projectInfo['topTickets'] = self::getTopTicketsStats($projectId,$userId);
             $currentActiveUsers      =  EventCollection::getCurrentWeekActiveUsers($projectId);
-           // error_log("@@@@@-------------".print_r($projectInfo['currentActiveUsers'][0]['data'],1));
-            $userIdArray= array_unique($currentActiveUsers[0]['data']);
-           // error_log("#----------".print_r($userIdArray,1));
-            foreach($userIdArray as $collabaratorId){
-              //  error_log("%%%%%%%%%%".$collabaratorId);
-                  $userDetails=TinyUserCollection::getMiniUserDetails($collabaratorId);
-                  $extractUserInfo['ProfilePicture']=$userDetails['ProfilePicture'];
-                  $extractUserInfo['UserName']=$userDetails['UserName'];
-                  array_push($userInfo,$extractUserInfo); 
-            }
+           //` error_log("@@@@@-----kkkkkkkkkkkkkkkkkkkkkk--------".print_r($projectInfo['currentActiveUsers'][0]['data'],1));
+            if(!empty($currentActiveUsers)){
+                $userIdArray= array_unique($currentActiveUsers[0]['data']);
+               // error_log("#----------".print_r($userIdArray,1));
+                foreach($userIdArray as $collabaratorId){
+                  //  error_log("%%%%%%%%%%".$collabaratorId);
+                      $userDetails=TinyUserCollection::getMiniUserDetails($collabaratorId);
+                      $extractUserInfo['ProfilePicture']=$userDetails['ProfilePicture'];
+                      $extractUserInfo['UserName']=$userDetails['UserName'];
+                      array_push($userInfo,$extractUserInfo); 
+                }
             $projectInfo['userInfo']=$userInfo;
-           error_log("----5656565----".print_r($projectInfo,1));
+            
+            }else{
+               $projectInfo['userInfo']=array();  
+            }
+           error_log("----555555555555----".print_r($projectInfo,1));
             array_push($prepareDetails,$projectInfo);
           
             return array('ProjectDetails'=>$prepareDetails);  
