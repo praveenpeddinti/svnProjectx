@@ -54,7 +54,7 @@ export class EmailInviteComponent implements OnInit {
     var user_data=[];
     this._ajaxService.AjaxSubscribe("collaborator/get-invite-users",search_obj,(result)=>
     {
-      if(result.status=200)
+      if(result.statusCode==200)
       {
         for(let user of result.data)
         {
@@ -78,8 +78,8 @@ export class EmailInviteComponent implements OnInit {
   }
 
   validateEmail(object){ 
-//  email = email["inputEL"];
- var email =  object["inputEL"]["nativeElement"]["value"];
+      //  email = email["inputEL"];
+      var email =  object["inputEL"]["nativeElement"]["value"];
       this.isEmpty=false;
       var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       this.isEmailValid = pattern.test(email);
