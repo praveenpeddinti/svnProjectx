@@ -3,7 +3,8 @@ import { AjaxService } from '../../ajax/ajax.service';
 import { Directive,NgZone } from '@angular/core';
 import { Http} from '@angular/http';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import {SharedService} from '../../services/shared.service';
+declare var jQuery:any;
 
 @Component({
   selector: 'app-notification-settings',
@@ -11,32 +12,39 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./notification-settings.component.css']
 })
 export class NotificationSettingsComponent implements OnInit {
-public ready=true;
+checkBox:boolean=false;
+public isSelectedAll=false;
+public isCheckAll=false;
 public NotificationTypes=[];
 public NotificationTypesToDisplay=[];
 public NotificationStatusToDisplay=[];
   constructor(private _ajaxService: AjaxService,private zone: NgZone,private http: Http, private route: ActivatedRoute) { }
 
   ngOnInit() {
+this.emailPrefernces();
+// var request={};
+// this._ajaxService.AjaxSubscribe("settings/notifications-status",request,(response) => {
+//     if (response.statusCode == 200) {
+//             this.zone.run(() =>{ 
+//    //  this.NotificationStatusToDisplay= this.prepareNotificationData(response.data,this.NotificationTypes);
+//      })
+//    }
+//  });
+}
+public emailPrefernces(){
 var data={};
 this._ajaxService.AjaxSubscribe("settings/email-preferences",data,(response) => {
     if (response.statusCode == 200) {
             this.zone.run(() =>{ 
      this.NotificationTypesToDisplay= this.prepareNotificationData(response.data,this.NotificationTypes);
-     
-     this.ready=true;
+    // this.ready=true;
     this.NotificationTypes=this.prepareItemArray(response.data,false,'notificationSettings');
+//alert((response.data).length);
+jQuery()
  })
  }
 });
-// this._ajaxService.AjaxSubscribe("settings/notifications-status",data,(response) => {
-//     if (response.statusCode == 200) {
-//             this.zone.run(() =>{ 
-//      this.NotificationStatusToDisplay= this.prepareNotificationData(response.data,this.NotificationTypes);
-//      })
-//    }
-//  });
-}
+    }
  /*
     @params    :  list,priority,status
     @ParamType :  any,boolean,string
@@ -56,21 +64,37 @@ this._ajaxService.AjaxSubscribe("settings/email-preferences",data,(response) => 
         listMainArray.push({type:"",filterValue:listItem});
         return listMainArray;
     }
+
      prepareNotificationData(bucketData,prepareData){
          for(let bucketArray in bucketData){
         prepareData.push(bucketData[bucketArray]);
        }
        return prepareData;
     }
-    checked(Id,type,status){
-        var post_data={id:Id,type:type,status:status};
+    isChecked(Id,type,status,e){
+        var isChecked=e.target.checked;
+        var post_data={id:Id,type:type,status:status,isChecked:isChecked};
         this._ajaxService.AjaxSubscribe("settings/notifications-settings-status-update",post_data,(response) => {
     if (response.statusCode == 200) {
             this.zone.run(() =>{ 
-     this.NotificationStatusToDisplay= this.prepareNotificationData(response.data,this.NotificationTypes);
-     })
+  //   this.NotificationStatusToDisplay= this.prepareNotificationData(response.data,this.NotificationTypes);
+    })
    }
  });
-
+}
+    isCheckedAll(type,e){
+     var isChecked=e.target.checked; 
+    //  if(isChecked=="true")
+    //         this.isCheckAll=true;
+    //  else   
+    //         this.isCheckAll=false;
+    var post_data={isChecked:isChecked,NotificationType:type};
+    this._ajaxService.AjaxSubscribe("settings/notifications-settings-status-update-all",post_data,(response) => {
+    if (response.statusCode == 200) {
+            this.zone.run(() =>{  
+              this.emailPrefernces();
+    })
+   }
+ });
     }
 }

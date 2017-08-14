@@ -87,21 +87,18 @@ $(document).ready(function(){
   <thead>
 <tr>
     <th width="25%"></th>
-    <th width="25%" class="blue-bg">System Notifications</th>
-    <th width="25%" class="blue-bg">Email Notifications</th>
-    <th width="25%" class="blue-bg">Push Notifications</th>
+    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll?true:false" (click)="isCheckedAll('SystemNotification',$event)">System Notifications </th>
+    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll?true:false" (click)="isCheckedAll('EmailNotification',$event)">Email Notifications</th>
+    <th width="25%" class="blue-bg"><input type="checkbox" [ngModel]="isSelectedAll?true:false" (click)="isCheckedAll('PushNotification',$event)">Push Notifications</th>
   </tr>
 </thead>
 <tbody *ngFor="let nTypes of NotificationTypesToDisplay;let i=index;">
   <tr>
     <td class="blue-bg2" style="text-align:left;">{{nTypes.ActivityTitle}}
-<!--        <a href="#" data-placement="right" data-toggle="tooltip" title="You will receive notification whenever a new 
-Follower is added/Removed from Story/Task." class="pull-right"><i class="fa fa-info-circle isize" aria-hidden="true"></i>
-</a>-->
     </td>
-	<td data-title="System Notifications"><input type="checkbox"  [checked]="nTypes.SystemNotification==1"  (click)="checked(nTypes.Id,'SystemNotification',nTypes.SystemNotification)"></td>
-    <td data-title="Email Notifications"><input type="checkbox" [checked]="nTypes.EmailNotification==1" (click)="checked(nTypes.Id,'EmailNotification',nTypes.EmailNotification)"></td>
-    <td data-title="Push Notifications"><input type="checkbox" [checked]="nTypes.PushNotification==1" (click)="checked(nTypes.Id,'PushNotification',nTypes.PushNotification)"></td>
+	<td data-title="System Notifications"><input type="checkbox" [ngModel]="nTypes.SystemNotification==1?true:false"  (click)="isChecked(nTypes.Id,'SystemNotification',nTypes.SystemNotification,$event)"></td>
+    <td data-title="Email Notifications"><input type="checkbox" [ngModel]="nTypes.EmailNotification==1?true:false" (click)="isChecked(nTypes.Id,'EmailNotification',nTypes.EmailNotification,$event)"></td>
+    <td data-title="Push Notifications"><input type="checkbox" [ngModel]="nTypes.PushNotification==1?true:false"  (click)="isChecked(nTypes.Id,'PushNotification',nTypes.PushNotification,$event)"></td>
   </tr>
   </tbody>
   
