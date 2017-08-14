@@ -122,7 +122,7 @@ export class EmailInviteComponent implements OnInit {
 
     cancelInvitation(){
       this.selectedUser=[];
-      jQuery("#addProjectModel").modal('hide');
+      jQuery("#inviteModel").modal('hide');
       this.isEmpty=false;
     }
 
