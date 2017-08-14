@@ -602,10 +602,10 @@ class CollaboratorService {
      * @param type $isChecked
      */
     
-    public function notificationsSetttingsStatusUpdate($userId, $status, $type, $activityId, $isChecked) {
+    public function notificationsSetttingsStatusUpdate($userId, $type, $activityId,$isChecked) {
         try {
             $notification_status = array();
-            $notification_status = Settings::NotificationsSetttingsStatusUpdate($userId, $status, $type, $activityId, $isChecked);
+            $notification_status = Settings::NotificationsSetttingsStatusUpdate($userId,$type,$activityId,$isChecked);
             return $notification_status;
         } catch (Exception $ex) {
             Yii::error("CollaboratorService:notificationsSetttingsStatusUpdate::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
