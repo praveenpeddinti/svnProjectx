@@ -26,8 +26,6 @@ export class UserDashboardComponent implements OnInit {
   public activityOffset=0;
   public activityLimit=10;
   public dashboardData:any;
-  public projects:any;
-  public activities:any;
   public form={
     description:""
   };
@@ -70,6 +68,10 @@ export class UserDashboardComponent implements OnInit {
         this.editor.initialize_editor('summernote','keyup',formobj);
     }
   ngOnInit() {
+     window.scrollTo(0,0);
+    this.activityOffset=0;
+    this.projectOffset =0;
+    this.dashboardData ='';
     var thisObj = this;
     var req_params={
       projectOffset:this.projectOffset,
@@ -78,9 +80,7 @@ export class UserDashboardComponent implements OnInit {
       activityLimit:this.activityLimit
     }
    thisObj.loadUserDashboard(req_params);
-   //  var formobj=this;;
-    //    this.editor.initialize_editor('summernote','keyup',formobj);
-          this.shared.change('','','','','');
+   this.shared.change('','','','','');
    }
 
   loadUserDashboard(req_params) {

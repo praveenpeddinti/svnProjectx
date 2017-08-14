@@ -65,6 +65,7 @@
   <div class="col-md-4">
     <div class="activity_hed">Activity</div>
     <div class="devider1 martb5"></div>
+    <div *ngIf="dashboardData.activities!=''">
     <div *ngFor="let activity of dashboardData.activities;let i=index;">
       <div class="activity_datebg">
         <div class="datemonth"><span>{{activity.activityDate | dateFormat:'MMM' }}</span> {{activity.activityDate | dateFormat:'DD' }}</div>
@@ -116,6 +117,7 @@
           <div class="not_date">{{activitydata.date | dateFormat:'hh:mm:ss A'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
       </div>
+    </div>
     </div>
      <span class="no_record_found" *ngIf="noActivitiesFound">No activity</span>
     <span class="no_record_found" *ngIf="!noActivitiesFound && noMoreActivities">No more activities</span>
