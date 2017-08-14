@@ -25,6 +25,7 @@ export class ProjectDashboardComponent implements OnInit {
   editorData:string='';
   public fileUploadStatus:boolean = false;
   public projectImage:any;
+  public fileuploadMessage=0; 
   public fileExtention:any;
   public verifyByspinner:any;
   public summernoteLength=0;
@@ -34,6 +35,10 @@ export class ProjectDashboardComponent implements OnInit {
   public creationPopUp=true;
   public projectDetails=[];
   public verifyProjectMess=false;
+  public copyProjectname:any;
+  public copydescription:any;
+  public clearImgsrc=true;
+  public checkImage:any;
    constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,   private fileUploadService: FileUploadService,
           private editor:SummerNoteEditorService, private _ajaxService: AjaxService) {this.filesToUpload = []; }
 
@@ -60,34 +65,30 @@ export class ProjectDashboardComponent implements OnInit {
                 thisObj.form['projectName']=thisObj.projectName; 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
+              //  alert("------33------"+JSON.stringify(thisObj.form['projectLogo']));
+                 jQuery("#summernote").summernote('code',thisObj.form['description']);
+                 thisObj.copyProjectname=thisObj.form['projectName'];
+                  thisObj.copydescription=thisObj.form['description'];
                  thisObj.currentProjectDetails();
         });
         });
            });
-         //   alert("------33------"+JSON.stringify(thisObj.form['projectId']));
- //alert("@@@@@@@@@2"+JSON.stringify(this.projectLogo));
-          // this.form['projectName']=this.projectName;
-        
-          // this.form['projectLogo']=this.projectLogo;
-          // this.form['description']=this.description;
-     //  alert("qqqqqqqqqqq------------"+JSON.stringify( this.form['projectId'])+"77--"+this.projectId);
-          // this.form.projectName=params['projectName'];
-         
   }
    ngAfterViewInit() {
        //  setTimeout(() => {
-         var formobj=this;
+        //alert("12");
+        var formobj=this;
         this.editor.initialize_editor('summernote','keyup',formobj);
        //  },2000);
         this.editor.initialize_editor('summernote',null,this);
-     jQuery("#summernote").summernote('code',this.form['description']);
+  
     }
     currentProjectDetails(){
       var postData={
                     projectId: this.form['projectId'],
                     projectName:  this.form['projectName']
                    }
-                 // alert("33333444444444-----"+JSON.stringify(postData));
+            //   alert("33333444444444-----"+JSON.stringify(postData));
       this._ajaxService.AjaxSubscribe("site/get-project-dashboard-details",postData,(result)=>
                             {
                             //      alert("67868--"+JSON.stringify(result.data.ProjectDetails[0].closedTickets));
@@ -98,14 +99,14 @@ export class ProjectDashboardComponent implements OnInit {
        jQuery("input[id='inputFile']").click(); 
       this.fileuploadClick=true;
     }
-        /*
+      /*
     @params       : fileInput,comeFrom
     @ParamType    :  any,string
     @Description  : Uploading File
     */
     public fileUploadEvent(fileInput: any, comeFrom: string):void 
     {
-       if(comeFrom == 'fileChange') {
+        if(comeFrom == 'fileChange') {
             this.filesToUpload = <Array<File>> fileInput.target.files;
        } else if(comeFrom == 'fileDrop') {
             this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
@@ -122,19 +123,21 @@ export class ProjectDashboardComponent implements OnInit {
                    result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
                     var uploadedFileExtension = (result[i].originalname).split('.').pop();
                      if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                      this.fileuploadMessage=0; 
                        var postData={
                               logoName:"[[image:" +result[i].path + "|" + result[i].originalname + "]]"
                             }
                           this._ajaxService.AjaxSubscribe("site/get-project-image",postData,(result)=>
                             {
                                 if(result.data){
-                                    jQuery("#projectlogo").attr("src",result.data);
+                                    jQuery(".projectlogo").attr("src",result.data);
                                     this.fileExtention=uploadedFileExtension;
                                }
-                               this.projectImage=jQuery("#projectlogo").attr("src");
+                               this.projectImage=jQuery(".projectlogo").attr("src");
                             
                     });
                      } else{
+                        this.fileuploadMessage=1; 
                    }
                 }
                 this.fileUploadStatus = false;
@@ -147,15 +150,26 @@ export class ProjectDashboardComponent implements OnInit {
       color:"",
       class:""
     };
+    public makeAjax(){
+      
+    }
+  
+    public makeAjaxVar = function(postData){
+       
+    }
+    public timer=undefined;
+    
       verifyProjectName(value){
-        // alert("@@@---");
-        //  this.spinnerSettings.color='';
-       // this.spinnerSettings.class ='';
-         var postData={
+        clearTimeout(this.timer);
+        if(this.copyProjectname.trim()===value.trim()){
+           console.log("yes");
+         }else{
+            var postData={
                       projectName:value.trim()
                   } ;
+                   console.log("sssssssssss---------"+value.trim());
                   if(value.trim()=='' || value.trim() == undefined){
-                    // alert("sssssssssss");
+                  // alert("sssssssssss");
                      this.spinnerSettings.color='';
                      this.spinnerSettings.class ='';
                      this.verifyProjectMess=false;
@@ -163,9 +177,9 @@ export class ProjectDashboardComponent implements OnInit {
                         this.verifyByspinner=2;
                         this.spinnerSettings.color="blue";
                         this.spinnerSettings.class = "fa fa-spinner fa-spin";
-
-                       setTimeout(() => {
-                          this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
+                        // alert(this.timer);
+                       this.timer = setTimeout(()=>{
+                         this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
                         { 
                            //alert("@@@---"+JSON.stringify(result.statusCode));
                             if (result.data != false) {
@@ -183,12 +197,12 @@ export class ProjectDashboardComponent implements OnInit {
                             }
                                     
                         })
-                         },3000);
+                       },3000);
                        
                   }
-      
+         }
     }
- veryInputByspinner(){
+   veryInputByspinner(){
         //this.verifyByspinner='';
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
@@ -196,21 +210,23 @@ export class ProjectDashboardComponent implements OnInit {
     }
   editProjectDetails(){
           // if(this.verified==1){
-           this.projectImage=jQuery('#projectlogo').attr("src");
+           this.projectImage=jQuery('.projectlogo').attr("src");
             var editor=jQuery('#summernote').summernote('code');
             editor=jQuery(editor).text().trim();
+            this.form['description']=jQuery('#summernote').summernote('code');
+            
+          // alert("3543543535");
             if(editor.length>500){
                 this.summernoteLength=1;
             }else{
              var postData={
                       projectName:this.form['projectName'].trim(),
-                      description:this.form['description'].trim(),
+                      description:this.form['description'],
                       projectId:this.form['projectId'],
                       projectLogo:this.projectImage,  
                       fileExtention:this.fileExtention
                   } ;
-               //   alert("jsonnn---------"+JSON.stringify(this.fileExtention));
-               //   alert("jsonnn"+JSON.stringify(postData));
+             //  alert("jsonnn---------"+JSON.stringify(postData));
               this._ajaxService.AjaxSubscribe("site/update-project-details",postData,(result)=>
               {
                     if (result.statusCode == 200) {
@@ -231,11 +247,22 @@ export class ProjectDashboardComponent implements OnInit {
       //  }
   }
   clearEditedDetails(form){
-    this.creationPopUp=true;
-    this.submitted=false;
-   // alert("6666666666------------"+JSON.stringify(form));
-      var formobj=this;
+     this.fileuploadMessage=0; 
+     this.creationPopUp=true;
+     this.submitted=false;
+     var formobj=this;
      this.editor.initialize_editor('summernote','keyup',formobj);
+     this.verifyProjectMess=false; 
+     this.spinnerSettings.color='';
+     this.spinnerSettings.class ='';
+     this.form['projectName']=this.copyProjectname;
+     //jQuery("#summernote").summernote('code',this.copydescription);;
+     this.checkImage=jQuery('.projectlogo').attr("src");
+     if(this.checkImage=='assets/images/logo.jpg'){
+        this.clearImgsrc=true; 
+     }else{
+        this.clearImgsrc=false;
+      }
   }
 
 }
