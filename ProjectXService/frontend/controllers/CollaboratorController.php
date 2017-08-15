@@ -203,8 +203,8 @@ class CollaboratorController extends Controller
         try{
             $inviteData = json_decode(file_get_contents("php://input"));
             $invite_code=$inviteData->inviteCode;
-            $projectId=$inviteData->projectId;
-            $userData=ServiceFactory::getCollaboratorServiceInstance()->verifyCode($invite_code,$projectId);
+           // $projectId=$inviteData->projectId;
+            $userData=ServiceFactory::getCollaboratorServiceInstance()->verifyCode($invite_code);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -231,8 +231,8 @@ class CollaboratorController extends Controller
         try{
              $inviteData = json_decode(file_get_contents("php://input"));
              $invite_email=$inviteData->email;
-             $projectId=$inviteData->projectId;
-             $status=ServiceFactory::getCollaboratorServiceInstance()->invalidateInvite($invite_email,$projectId);
+             $invite_code=$inviteData->inviteCode;
+             $status=ServiceFactory::getCollaboratorServiceInstance()->invalidateInvite($invite_email,$invite_code);
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SUCCESS;
              $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
