@@ -30,7 +30,7 @@ export class CreateUserComponent implements OnInit {
   public fileUploadStatus:boolean = false;
 
   @Output() myevent=new EventEmitter();
-
+public inviteCode;
   constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService,private fileUploadService: FileUploadService,) { }
 
   ngOnInit() {
@@ -39,6 +39,7 @@ export class CreateUserComponent implements OnInit {
       params => 
       { 
         this.form['email']=params['email'];
+         thisObj.inviteCode=params['code'];
         //this.form['email']=localStorage.getItem('email');
         thisObj.route.params.subscribe(params => {
               thisObj.projectName=params['projectName'];
@@ -76,7 +77,7 @@ export class CreateUserComponent implements OnInit {
               localStorage.setItem('profilePicture',result.data.ProfilePic);
               localStorage.setItem('ProjectName',this.projectName);
               localStorage.setItem('user',JSON.stringify(user));
-              var email_obj={projectId:this.projectId,email:this.form['email']};
+              var email_obj={projectId:this.projectId,email:this.form['email'],inviteCode:this.inviteCode};
               this._ajaxService.AjaxSubscribe("collaborator/invalidate-invitation",email_obj,(status)=>
               {
                 if(status.statusCode==200){
@@ -94,7 +95,7 @@ export class CreateUserComponent implements OnInit {
       }
     }
 
-    // fileUpload(fileInput: any, comeFrom: string){ alert("in file upload");
+    // fileUpload(fileInput: any, comeFrom: string){ 
     //  // this.userComponent.fileUploadEvent(fileInput,comeFrom);
     //  this.myevent.emit(fileInput,comeFrom);
     // }
