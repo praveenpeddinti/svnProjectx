@@ -158,8 +158,8 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-                {path: 'project/:projectName/Invitation',component:InviteComponent},
-                { path: '**', component: PageNotFoundComponent }
+                {path: 'Invitation',component:InviteComponent},
+                { path: '', component: PageNotFoundComponent }
              ];
 
 @NgModule({
@@ -179,7 +179,7 @@ const ROUTES=[
    RoundProgressModule,
    ToasterModule,
    SpinnerComponentModule,
-   //Ng2DropdownModule,
+  // Ng2DropdownModule,
    ChipsModule
     ],
 
