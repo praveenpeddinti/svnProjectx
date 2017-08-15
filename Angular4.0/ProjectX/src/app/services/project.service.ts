@@ -28,6 +28,21 @@ getProjectDetails(projectName,getProjectCallback) {
       err => { console.error("ERRR_____________________" + err) } //For Error Response
       );
   }
- 
 
+  getUserDetails(code,getUserCallback){
+    var url ='collaborator/get-user-email';
+    var post_data={
+      'code':code,
+      'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
+    }
+    this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(post_data))
+      .subscribe(
+        (data)=>{
+          var res=data.json();
+          getUserCallback(res);
+        },
+        err=>{console.error("err")}
+      )
+  }
+ 
 }
