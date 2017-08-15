@@ -91,7 +91,8 @@ class CollaboratorController extends Controller
             $projectId=$userData->projectId;
             $user=$userData->user;
             $profilepic=$userData->profile;
-            $userid=ServiceFactory::getCollaboratorServiceInstance()->saveNewUser($projectId,$user,$profilepic);
+            $code=$userData->code;
+            $userid=ServiceFactory::getCollaboratorServiceInstance()->saveNewUser($projectId,$user,$profilepic,$code);
             $userDetails=ServiceFactory::getCollaboratorServiceInstance()->getUserDetails($userid);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -250,6 +251,27 @@ class CollaboratorController extends Controller
         }
     }
     
+    public function actionGetUserEmail(){
+        try{
+            $userData = json_decode(file_get_contents("php://input"));
+            $invite_code=$userData->code;
+            $email=ServiceFactory::getCollaboratorServiceInstance()->getEmailFromCode($invite_code);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $email;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+            return $response;
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionInvalidateInvitation::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
     
 }  
     ?>
