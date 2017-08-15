@@ -403,7 +403,7 @@ class CollaboratorService {
     public function getUserDetails($userid) {
         try {
             $user = Collaborators::getCollaboratorById($userid);
-            $userDetails = Collaborators::getCollaboratorWithProfile($user['UserName']);
+            $userDetails = Collaborators::getCollaboratorWithProfile($user['Email']);
             return $userDetails;
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getUserDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -452,7 +452,7 @@ class CollaboratorService {
                 } else { //if invite already sent
                     $new_invite_code = ProjectInvitation::updateInviteCode($recipient_id, $invite_code, $recipient_email, $project['PId']);
                 }
-                $text_message = "You have been Invited to " . $projectName . "<br/> <a href=" . Yii::$app->params['InviteUrl'] . $projectName . '/Invitation?code=' . '' . $new_invite_code . ">Click to Accept</a>";
+                $text_message = "You have been Invited to " . $projectName . "<br/> <a href=" . Yii::$app->params['InviteUrl']  . '/Invitation?code=' . '' . $new_invite_code . ">Click to Accept</a>";
                 $subject = "ProjectX | " . $projectName;
                 $mailingName="ProjectX";
                 //array_push($invite_list,$recipient_email);
@@ -486,9 +486,9 @@ class CollaboratorService {
         }
     }
 
-    public function verifyCode($invite_code, $projectId) {
+    public function verifyCode($invite_code) {
         try {
-            $invite_data = ProjectInvitation::verifyCode($invite_code, $projectId);
+            $invite_data = ProjectInvitation::verifyCode($invite_code);
             if (empty($invite_data)) {
                 $invite_data = '';
             }
@@ -499,9 +499,9 @@ class CollaboratorService {
         }
     }
 
-    public function invalidateInvite($invite_email, $projectId) {
+    public function invalidateInvite($invite_email, $invite_code) {
         try {
-            ProjectInvitation::disableInvite($invite_email, $projectId);
+            ProjectInvitation::disableInvite($invite_email, $invite_code);
             return true;
         } catch (\Throwable $ex) {
             Yii::error("StoryService:invalidateInvite::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
