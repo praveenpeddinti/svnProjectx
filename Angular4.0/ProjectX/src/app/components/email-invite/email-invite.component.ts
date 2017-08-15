@@ -88,14 +88,12 @@ export class EmailInviteComponent implements OnInit {
       if(this.isEmailValid)
       {
         this.isEmailValid=false;
-        //this.zone.run(()=>{ this.selectedUsers=undefined;});
-       // jQuery("#invite_search").attr("value","");//jquery was used since model binding was not getting updated....
-        
         if(!(this.selectedUser.indexOf(email)>-1)) /*added newly for change in email logic */
         {
           this.selectedUser.push(email);
           this.isEmpty=false;
         }
+        object["inputEL"]["nativeElement"]["value"]="";
       }
       else{
         this.isEmailValid=true;
