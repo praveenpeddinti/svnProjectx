@@ -1,4 +1,4 @@
-import { Component,OnInit,NgZone } from '@angular/core';
+import { Component,OnInit,NgZone,HostListener } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import { GlobalVariable } from '../../config';
 import {AuthGuard} from '../../services/auth-guard.service';
@@ -60,9 +60,15 @@ export class SearchComponent implements OnInit{
            }  
            })
         // this.load_contents(this.page);
+     this.loadsearchContent();
+        
+        this.shared.change(this._router.url,this.searchString,'Search','Other',this.projectName); //added By Ryan for breadcrumb purpose
+    }
+       @HostListener('window:scroll', ['$event']) 
+        loadsearchContent(){
              var thisObj=this; 
-             jQuery(document).ready(function(){
-           jQuery(window).scroll(function() {
+           //  jQuery(document).ready(function(){
+         //  jQuery(window).scroll(function() {
                 if (thisObj.ready && jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height())) {
                     thisObj.ready=false;
                     thisObj.page++;
@@ -71,10 +77,9 @@ export class SearchComponent implements OnInit{
                     
                 }
               
-                });
-        });
-        this.shared.change(this._router.url,this.searchString,'Search','Other',this.projectName); //added By Ryan for breadcrumb purpose
-    }
+              //  });
+      //  });
+        }
    public  load_contents(page,searchString,searchFlag,projectId,scroll){
         var post_data={
         'projectId':projectId,
