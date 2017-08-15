@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import {AuthGuard} from '../../services/auth-guard.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
@@ -49,7 +49,8 @@ export class ProjectDashboardComponent implements OnInit {
       { 
          this.route.params.subscribe(params => {
           //  this.projectId = params['id'];
-           this.projectName=params['projectName'];
+          var projectName=decodeURIComponent(params['projectName']);
+           this.projectName=projectName;
             this.projectService.getProjectDetails(this.projectName,(data)=>{ 
               if(data.data!=false){
                 thisObj.projectId=data.data.PId;
