@@ -98,5 +98,16 @@ class ProjectInvitation extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
    }
+   
+   public static function getNewUserEmail($code){
+        try{
+            $qry="select Email from ProjectInvitation where InvitationCode='$code'";
+            $email = Yii::$app->db->createCommand($qry)->queryOne();
+            return $email;
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getNewUserEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
     
 }
