@@ -376,12 +376,15 @@ class CollaboratorService {
      * @param type $profilepic
      * @return type int
      */
-    public function saveNewUser($projectId, $user, $profilepic) {
+    public function saveNewUser($projectId, $user, $profilepic,$code) {
         try {
+            $usermail=$user->email;
+            $invite_code=$code;
             $userid = Collaborators::createUser($projectId, $user);
             if ($userid > 0) {
                 $status = $this->addUserToTeam($projectId, $userid);
                 Collaborators::saveProfilePic($userid, $profilepic);
+                $this->invalidateInvite($usermail, $invite_code);
             }
             return $userid;
         } catch (\Throwable $ex) {
@@ -391,7 +394,7 @@ class CollaboratorService {
     }
 
     public function addUserToTeam($projectId, $userid) {
-        try {
+        try { error_log("in team==".$projectId."==".$userid);
             Collaborators::addToTeam($projectId, $userid);
             return true;
         } catch (\Throwable $ex) {
@@ -486,13 +489,29 @@ class CollaboratorService {
         }
     }
 
+    /**
+     * @author Ryan
+     * @description Used for Verifying Invitation Code
+     * @param type $invite_code
+     * @return type array
+     */
     public function verifyCode($invite_code) {
         try {
+            $usertype="";
             $invite_data = ProjectInvitation::verifyCode($invite_code);
-            if (empty($invite_data)) {
-                $invite_data = '';
+            error_log("==Invite Userrrrrrrr==".$invite_data['UserId']);
+            if (empty($invite_data) || $invite_data['IsValid']==0) { //either empty or invalid code
+               $usertype=null;
+            }else{ 
+                if($invite_data['UserId']>0){
+                    $usertype="Existing";
+                    $add_status=$this->addUserToTeam($invite_data['ProjectId'],$invite_data['UserId'] );
+                    $this->invalidateInvite($invite_data['Email'], $invite_code);
+                }else{
+                    $usertype="New";
+                }
             }
-            return $invite_data;
+            return array('UserType'=>$usertype,'PName'=>$invite_data['ProjectName']);
         } catch (\Throwable $ex) {
             Yii::error("StoryService:verifyCode::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -643,6 +662,16 @@ class CollaboratorService {
             return $notification_status;
         } catch (Exception $ex) {
             Yii::error("CollaboratorService:notificationsSetttingsStatusUpdateAll::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    public function getEmailFromCode($code){
+        try{
+            $email=ProjectInvitation::getNewUserEmail($code);
+            return $email;
+        } catch (Exception $ex) {
+            Yii::error("CollaboratorService:getEmailFromCode::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
