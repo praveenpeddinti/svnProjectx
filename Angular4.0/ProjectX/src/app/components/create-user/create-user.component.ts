@@ -38,9 +38,7 @@ public inviteCode;
     thisObj.route.queryParams.subscribe(
       params => 
       { 
-        this.form['email']=params['email'];
          thisObj.inviteCode=params['code'];
-        //this.form['email']=localStorage.getItem('email');
         thisObj.route.params.subscribe(params => {
               thisObj.projectName=params['projectName'];
               this.projectService.getProjectDetails(thisObj.projectName,(data)=>{ 
@@ -48,6 +46,11 @@ public inviteCode;
                     thisObj.projectId=data.data.PId;
                   }
             })
+        });
+        this.projectService.getUserDetails( thisObj.inviteCode,(data)=>{
+          if(data.statusCode==200){
+            this.form['email']=data.data.Email;
+          }
         })
       })
   }
@@ -65,10 +68,12 @@ public inviteCode;
       if(this.isPasswordMatch)
       {
         // Make an ajax to save the User
-        this.projectImage=jQuery('#projectlogo').attr("src")
+        this.projectImage=jQuery('#projectlogo').attr("src");
         var URL = this.projectImage;
-        var imageURL = URL.replace (/^[a-z]{4}\:\/{2}[a-z]{1,}\:[0-9]{1,4}.(.*)/, '$1');
-        var invite_obj={projectId:this.projectId,user:this.form,profile:'/'+imageURL};
+        //var imageURL = URL.replace (/^[a-z]{4}\:\/{2}[a-z]{1,}\:[0-9]{1,4}.(.*)/, '$1');
+        var link = document.createElement('a');
+        link.setAttribute('href', URL);
+        var invite_obj={projectId:this.projectId,user:this.form,profile:'/'+link.pathname,code:this.inviteCode};
         this._ajaxService.AjaxSubscribe("collaborator/save-user",invite_obj,(result)=>
         {
           if(result.statusCode==200)
@@ -77,13 +82,7 @@ public inviteCode;
               localStorage.setItem('profilePicture',result.data.ProfilePic);
               localStorage.setItem('ProjectName',this.projectName);
               localStorage.setItem('user',JSON.stringify(user));
-              var email_obj={projectId:this.projectId,email:this.form['email'],inviteCode:this.inviteCode};
-              this._ajaxService.AjaxSubscribe("collaborator/invalidate-invitation",email_obj,(status)=>
-              {
-                if(status.statusCode==200){
-                    this._router.navigate(['user-dashboard']);//navigate to User Dashboard....
-                }
-              });
+              this._router.navigate(['user-dashboard']);    
           }
         })   
         
