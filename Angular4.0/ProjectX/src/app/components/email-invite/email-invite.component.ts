@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit,ViewChild,NgZone } from '@angular/core';
 import { AjaxService } from '../../ajax/ajax.service';
 import {Router,ActivatedRoute} from '@angular/router';
 import { ProjectService } from '../../services/project.service';
@@ -25,7 +25,7 @@ export class EmailInviteComponent implements OnInit {
   public emailList:any[]=[];
   public isSuccess:boolean=false;
 
-  constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService) { }
+  constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService,private zone:NgZone) { }
 
   ngOnInit() {
 
@@ -62,7 +62,7 @@ export class EmailInviteComponent implements OnInit {
           user_data.push(user_info); 
         }
          this.inviteUsers=user_data;
-         this.selectedUsers="";
+         this.selectedUsers=null;
       }
     })   
   }
@@ -86,13 +86,14 @@ export class EmailInviteComponent implements OnInit {
       if(this.isEmailValid)
       {
         this.isEmailValid=false;
-       // this.selectedUser.push(email);
+        //this.zone.run(()=>{ this.selectedUsers=undefined;});
+       // jQuery("#invite_search").attr("value","");//jquery was used since model binding was not getting updated....
+        
         if(!(this.selectedUser.indexOf(email)>-1)) /*added newly for change in email logic */
         {
           this.selectedUser.push(email);
           this.isEmpty=false;
         }
-        this.selectedUsers=undefined;
       }
       else{
         this.isEmailValid=true;
@@ -118,10 +119,15 @@ export class EmailInviteComponent implements OnInit {
             {
               if(result.statusCode==200)
               {
+                if(result.data=='success'){
                 console.log("Email Sent");
                 this.selectedUser=[];
                 this.selectedUsers=undefined;
                 this.isSuccess=true;
+                this.emailList=[];
+                }else{
+                  console.log("Email Not Sent");
+                }
               }
             })
       }
@@ -131,6 +137,8 @@ export class EmailInviteComponent implements OnInit {
       this.selectedUser=[];
       jQuery("#inviteModel").modal('hide');
       this.isEmpty=false;
+      //this.zone.run(()=>{this.selectedUsers=undefined;})
+      jQuery("#invite_search").attr("value",""); //jquery was used since model binding was not getting updated....
     }
 
   
