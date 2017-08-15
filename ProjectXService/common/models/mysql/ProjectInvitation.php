@@ -76,10 +76,10 @@ class ProjectInvitation extends ActiveRecord
         }
     }
     
-    public static function verifyCode($invite_code,$projectId)
+    public static function verifyCode($invite_code)
     {
         try{
-            $qry="select * from ProjectInvitation where InvitationCode='$invite_code' and ProjectId=$projectId";
+            $qry="select PI.ProjectId,PI.Email,PI.IsValid,PI.UserId,P.ProjectName from ProjectInvitation PI join Projects P on PI.ProjectId = P.PId where InvitationCode='$invite_code'";
             $invite_data = Yii::$app->db->createCommand($qry)->queryOne();
             return $invite_data;
         } catch (\Throwable $ex) {
@@ -88,10 +88,10 @@ class ProjectInvitation extends ActiveRecord
         }
     }
     
-   public static function disableInvite($invite_email,$projectId)
+   public static function disableInvite($invite_email,$invite_code)
    {
        try{
-           $qry="update ProjectInvitation set IsValid=0 where ProjectId=$projectId and Email='$invite_email'";
+           $qry="update ProjectInvitation set IsValid=0 where InvitationCode='$invite_code' and Email='$invite_email'";
            Yii::$app->db->createCommand($qry)->execute();
        } catch (\Throwable $ex) {
             Yii::error("ProjectInvitation:disableInvite::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
