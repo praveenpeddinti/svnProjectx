@@ -141,5 +141,21 @@ class NotificationsController extends Controller
         
     }
     
-
+     /**
+       * @author Ryan
+       * @descrption send email for Invitation
+       * @param type $mailingName
+       * @param type $invite_list
+       * @param type $text_message
+       * @param type $subject
+       */
+    public function actionForkSingleEmailProcess($mailingName,$invite_list,$text_message,$subject){
+        try{
+            ServiceFactory::getCollaboratorServiceInstance()->sendSingleMailToInvite($mailingName,$invite_list,$text_message,$subject);
+        } catch (\Throwable $ex) {
+            echo "Exception in NotificationsController::actionForkSingleEmailProcess ".$ex->getMessage();
+            Yii::error("NotificationsController:actionForkSingleEmailProcess::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+        }
+    }
+    
 }
