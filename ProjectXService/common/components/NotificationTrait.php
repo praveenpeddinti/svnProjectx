@@ -1458,5 +1458,28 @@ EOD;
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+     /**
+     * @author Ryan
+     * @param type $mailingName
+     * @param type $invite_list
+     * @param type $text_message
+     * @param type $subject
+     */
+    public static function processSingleEmail($mailingName,$invite_list,$text_message,$subject) {
+        try {
+              error_log("singleEmailprocess____==============");
+            $path = "/data/logs/ProjectX";
+            if (!file_exists($path)) {
+                mkdir($path, 0755, true);
+            }
+
+            shell_exec("touch $path/single_email_notifications.log");
+            echo shell_exec("php /usr/share/nginx/www/ProjectXService/yii notifications/fork-single-email-process '$mailingName' '$invite_list' '$text_message' '$subject' >> $path/email_notifications.log &");
+        } catch (\Throwable $ex) {
+            Yii::error("NotificationTrait:sendEmailNotification::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
 
 }
