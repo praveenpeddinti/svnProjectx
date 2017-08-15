@@ -3,11 +3,7 @@
 namespace common\service;
 
 use common\models\mongo\TicketCollection;
-use common\components\{
-    CommonUtility,
-    CommonUtilityTwo,
-    ServiceFactory
-};
+use common\components\{CommonUtility,CommonUtilityTwo,ServiceFactory,NotificationTrait};
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
 use common\models\mongo\AccessTokenCollection;
@@ -25,6 +21,7 @@ use yii\base\ErrorException;
  */
 
 class CollaboratorService {
+    use NotificationTrait;
 
     /**
      * @author Moin Hussain
@@ -457,14 +454,16 @@ class CollaboratorService {
                 }
                 $text_message = "You have been Invited to " . $projectName . "<br/> <a href=" . Yii::$app->params['InviteUrl'] . $projectName . '/Invitation?code=' . '' . $new_invite_code . ">Click to Accept</a>";
                 $subject = "ProjectX | " . $projectName;
-                $mailingName = "ProjectX";
-                array_push($invite_list, $recipient_email);
-                CommonUtility::sendEmail($mailingName, $invite_list, $text_message, $subject);
+                $mailingName="ProjectX";
+                //array_push($invite_list,$recipient_email);
+                //CommonUtility::sendEmail($mailingName,$invite_list,$text_message,$subject);
+                NotificationTrait::processSingleEmail($mailingName,$recipient_email,$text_message,$subject);
             }
-            return true;
+            return 'success';
         } catch (\Throwable $ex) {
             Yii::error("StoryService:sendMailInvitation::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
+            return 'failure';
         }
     }
 
@@ -592,7 +591,25 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+
+    /**
+     * @author Ryan
+     * @param type $mailingName
+     * @param type $invite_list
+     * @param type $text_message
+     * @param type$subject
+     */
+    public function sendSingleMailToInvite($mailingName,$invite_list,$text_message,$subject){
+        try{
+            $recipient=array();
+            array_push($recipient,$invite_list);
+            CommonUtility::sendEmail($mailingName,$recipient,$text_message,$subject);
+        } catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:sendSingleMailToInvite::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }   
+    }
+
     /**
      * @author Lakshmi
      * @param type $userId
