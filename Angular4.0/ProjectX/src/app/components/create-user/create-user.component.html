@@ -95,11 +95,11 @@
                       Password Mismatch
                     </div>
                   </div>
-        <input [hidden]="true" [(ngModel)]="form.userProfileImage" type="text" />
+        <input [hidden]="true" [(ngModel)]="form.userProfileImage" type="text" name="userProfileImage"/>
      <div class="buttonarea alignright">
             <button type="submit" (click)="submitted = true;" class="model_submit butnbor">Accept & Continue</button>
         </div>
-   <a [routerLink]="['/login']">login</a>
+ 
  
   </form>
      </div>
