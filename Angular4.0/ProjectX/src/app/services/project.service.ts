@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Headers, Http } from '@angular/http';
 import { GlobalVariable } from '../../app/config';
-
+import { AjaxService } from '../ajax/ajax.service';
 import 'rxjs/add/operator/toPromise';
 var headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
 
@@ -10,39 +10,33 @@ var headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
 export class ProjectService {
   constructor(
     public _router: Router,
-    private http: Http) { }
+    private _ajaxService: AjaxService) { }
 
 
 getProjectDetails(projectName,getProjectCallback) {
-   var url ='story/get-project-details';
    var post_data={
       'projectName':projectName,
       'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
     }
-     this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(post_data))
-      .subscribe(
-      (data) => {
-        var res = data.json();//For Success Response
-          getProjectCallback(res);
-      },
-      err => { console.error("ERRR_____________________" + err) } //For Error Response
-      );
+
+ this._ajaxService.AjaxSubscribe("story/get-project-details",post_data,(data)=>
+    { 
+         getProjectCallback(data);
+    });
+
   }
 
   getUserDetails(code,getUserCallback){
-    var url ='collaborator/get-user-email';
+   
     var post_data={
       'code':code,
       'AccessKey': '3fd31d9a7ae286b9c6da983b35359915'
     }
-    this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(post_data))
-      .subscribe(
-        (data)=>{
-          var res=data.json();
-          getUserCallback(res);
-        },
-        err=>{console.error("err")}
-      )
+ this._ajaxService.AjaxSubscribe("collaborator/get-user-email",post_data,(data)=>
+    { 
+         getUserCallback(data);
+    });
+
   }
  
 }
