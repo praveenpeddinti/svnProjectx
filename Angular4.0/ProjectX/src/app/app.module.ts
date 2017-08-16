@@ -159,7 +159,7 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
                 {path: 'Invitation',component:InviteComponent},
-                { path: '', component: PageNotFoundComponent }
+                { path: '**', component: PageNotFoundComponent }
              ];
 
 @NgModule({
