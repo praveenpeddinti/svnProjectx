@@ -295,7 +295,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                      $projectInfo['team']=$projecTeam['TeamCount'];
                      $projectInfo['topTickets'] = self::getTopTicketsStats($extractDetails['ProjectId'],$userId);
                      $projectInfo['weeklyProjectTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId,$extractDetails['ProjectId']);
-                     $bucketDetails=Bucket::getProjectBucketByAttributes($extractDetails['ProjectId'],0,2);
+                     $bucketDetails=Bucket::getProjectBucketByAttributes($extractDetails['ProjectId'],2);
                       if($bucketDetails=='failure'){
                           $projectInfo['currentBucket'] ='';
                      }else{
@@ -670,7 +670,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         }
   
   }
-  
+
   /**
    * @author Anand Singh
    * @uses  Get top tickets statics based on project id,userid or bucket id,
@@ -821,5 +821,5 @@ public static function prepareUserDashboardActivities($activities) {
             throw new ErrorException($ex->getMessage());
         }
     }
-
+    
 }
