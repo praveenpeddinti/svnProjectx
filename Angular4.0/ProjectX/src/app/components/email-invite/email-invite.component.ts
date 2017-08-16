@@ -24,6 +24,7 @@ export class EmailInviteComponent implements OnInit {
   public isEmpty:boolean=false;
   public emailList:any[]=[];
   public isSuccess:boolean=false;
+  public checkAutoComplete:boolean=false;
 
   constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService,private zone:NgZone) { }
 
@@ -69,7 +70,7 @@ export class EmailInviteComponent implements OnInit {
     })   
   }
 
-  selectedValue(value){ 
+  selectedValue(value){ this.checkAutoComplete=true; //This is used to avoid conflict between (keyup.enter) and default enter of component
     if(!(this.selectedUser.indexOf(value)>-1))
     {
       this.selectedUser.push(value);
@@ -81,23 +82,26 @@ export class EmailInviteComponent implements OnInit {
 
   validateEmail(object){ 
       //  email = email["inputEL"];
-      var email =  object["inputEL"]["nativeElement"]["value"];
-      this.isEmpty=false;
-      var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      this.isEmailValid = pattern.test(email);
-      if(this.isEmailValid)
-      {
-        this.isEmailValid=false;
-        if(!(this.selectedUser.indexOf(email)>-1)) /*added newly for change in email logic */
-        {
-          this.selectedUser.push(email);
+      if(!this.checkAutoComplete){
+          var email =  object["inputEL"]["nativeElement"]["value"];
           this.isEmpty=false;
+          var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          this.isEmailValid = pattern.test(email);
+          if(this.isEmailValid)
+          {
+            this.isEmailValid=false;
+            if(!(this.selectedUser.indexOf(email)>-1)) /*added newly for change in email logic */
+            {
+              this.selectedUser.push(email);
+              this.isEmpty=false;
+            }
+            object["inputEL"]["nativeElement"]["value"]="";
+          }
+          else{
+            this.isEmailValid=true;
+          }
         }
-        object["inputEL"]["nativeElement"]["value"]="";
-      }
-      else{
-        this.isEmailValid=true;
-      }
+      this.checkAutoComplete=false;
     }
 
     sendInvitation(){ 
