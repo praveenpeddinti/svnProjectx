@@ -147,7 +147,7 @@ const ROUTES=[
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
-               {path: 'project/:projectName/create-user',component:CreateUserComponent},
+               {path: 'create-user',component:CreateUserComponent},
                {path: 'project/:projectName',children:[
                 { path: '' , component: ProjectDashboardComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
