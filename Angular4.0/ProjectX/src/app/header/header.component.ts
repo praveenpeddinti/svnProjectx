@@ -65,12 +65,15 @@ export class HeaderComponent implements OnInit {
       { 
       thisObj.route.params.subscribe(params => {
            thisObj.projectName=params['projectName'];
-           thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
+           if(typeof thisObj.projectName != "undefined"){
+             thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode ==200) {
                 thisObj.projectId=data.data.PId;   
                }
                 
         });
+           }
+          
         });
            });
     }
@@ -135,7 +138,7 @@ export class HeaderComponent implements OnInit {
       jQuery("div.note-popover.popover.in.note-hint-popover").css("display","none");
     }
     
-    this.getAllProjectNames();
+   // this.getAllProjectNames();
   
         //  alert("#########"+thisObj.projectName);
       }
@@ -149,17 +152,17 @@ export class HeaderComponent implements OnInit {
         socket.off('getAllNotificationsCountResponse');
       }
   
-      getAllProjectNames(){
-        var sendData={
-           userId:JSON.parse(this.users.Id)
-           }
-         this._ajaxService.AjaxSubscribe('site/get-project-name-by-userid',sendData,(result)=>
-        {
-           this.optionTodisplay=this.projectsArray(result.data);
-           this.projects=this.optionTodisplay[0].filterValue;
-             })
+      // getAllProjectNames(){
+      //   var sendData={
+      //      userId:JSON.parse(this.users.Id)
+      //      }
+      //    this._ajaxService.AjaxSubscribe('site/get-project-name-by-userid',sendData,(result)=>
+      //   {
+      //      this.optionTodisplay=this.projectsArray(result.data);
+      //      this.projects=this.optionTodisplay[0].filterValue;
+      //        })
 
-      }
+      // }
   logout() {
          this._service.logout((data)=>{ 
               this._router.navigate(['login']);
