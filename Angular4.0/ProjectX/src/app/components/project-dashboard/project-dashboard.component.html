@@ -1,41 +1,111 @@
+ 
+ <div class="col-md-8">
 
-<div (click)="loadFollowersWidget($event)" id="follwersAdd" class="add"><i id="follwersAddI" class="fa fa-plus" aria-hidden="true"></i>
-    
-     <!-- Search Follower list start -->
-    <div id="followerdiv" style="display:none" class="addfollowers_overlap">
-    <div class="add_followersbg ">
-        <div class="padd10"><input id='followerId' type="text" placeholder="Search" class="addfollower_search" value="" (keyup)="getUsersForFollow($event.target.value)"/> </div>
-        <div (click)="checkFollower(flist.id)" id="{{flist.id}}" *ngFor="let flist of follower_search_results">
-            <div class="addfollower_userbg">
-                <div class="row">
-                   <div class="col-md-2 col-sm-2 col-xs-2">
-                      <div class="addfollower_user">
-                          <img data-toggle="tooltip" data-placement="top" class="profilepic_table" src="{{flist.ProfilePic}}" />
+ <div class="dashboard_probg marb20">
+               <div class="clearfix">
+                  <div class="col-md-9">
+                      <div  class="project_heading">
+                         <img  src="assets/images/logo.jpg" class="project_logo"/> 
+                        {{projectName}}</div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="user_more pull-right" data-backdrop="false" data-toggle="modal" data-target="#addProjectModel" (click)="clearEditedDetails(form)" >
+                       Edit 
+                        </div>
+                  </div>
+                  </div>
+                  <div class="devider1 clearfix"></div>
+                  <div class="col-md-12" id="projectDesc">{{description}}</div>
+                  
+                  <div class="clearfix"></div>
+                  
+            </div>
+
+
+   <div class="state_bg marb20">
+                <div class="clearfix">
+                   <div class="col-md-3 col-xs-12">
+                      <div class="marb10">
+                     All Stories/ Tasks<span class="but">{{projectDetails.allTickets}}</span>
                       </div>
                    </div>
-                   <div class="col-md-8 col-sm-8 col-xs-8">
-                       <div class="addfollower_username">{{flist.Name}}</div>
+                   <div class="col-md-3 col-xs-12">
+                       <div class="marb10">New <span class="but">{{projectDetails.New}}</span></div>
                    </div>
-                   <div class="col-md-2 col-sm-2 col-xs-2">
-                       <span  id="check_{{flist.id}}"  style="font-size:18px;color:#53c808"></span>  
+                   <div class="col-md-3 col-xs-12">
+                       <div class="marb10">Inprogress <span class="but">{{projectDetails.InProgress}}</span></div>
+                   </div>
+                   <div class="col-md-3 col-xs-12">
+                      <div class="marb10">Closed <span class="but">{{projectDetails.closedTickets}}</span></div>
                    </div>
                 </div>
-            </div> 
-                  
-        </div>
+            </div>
+
+    <div class="row">
+                <div class="col-md-6">
+                    <div class="all_storytask marb20">
+                        <div *ngFor="let extracttopTickets  of projectDetails.topTickets;let j=index;">
+                      <!--<div *ngIf="extracttopTickets.id!=1">-->
+                         <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">{{extracttopTickets.name}}</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right but"> {{extracttopTickets.total}}</div>
+                           </div>
+                        </div>
+                      
+                        <!--</div>-->
+                      </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="all_storytask marb20">
+                        <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">Current week worked hours</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right but">{{projectDetails.weeklyProjectTimeLog}}</div>
+                           </div>
+                        </div>
+                        
+                         <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">Total worked hours</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right but"> {{projectDetails.totalProjectTimeLog}}</div>
+                           </div>
+                        </div>
+                     </div>
+                </div>
+             </div> 
+       <div class="project">
+            <div class="row">
+               <div class="col-md-9">
+                   <div class="heading2">Team <span class="but"><a href="">{{projectDetails.Team}}</a></span></div>
+               </div>
+               <div class="col-md-3">
+                 <app-email-invite></app-email-invite>
+                 </div>
+            </div>
+            <div class="row devider1"></div> 
+              Active Users 
+              <div class="row">
+              <div class="col-md-12">
+                <div *ngIf="projectDetails.userInfo">
+                  <div *ngFor="let extractUserInfo of projectDetails.userInfo| slice:0:10;let j=index;">
+                        <img alt="" src="{{extractUserInfo.ProfilePicture}}" class="active_userimg useractive">
+                    </div>
+                </div>
+               <!-- <img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/> - -->
+               
+               <span  id="demo" class="collapse"><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/></span>
+            </div>
+            <div *ngIf="userInfoLength>10">
+                <div class="col-md-12">
+                    <div class="user_more pull-right" data-toggle="collapse" data-target="#demo">More..</div>
+                </div> 
+            </div>     
    </div>
    </div>
-   <!-- Search follower list end -->
-    
-    
-    </div>
- {{projectName}}
-    {{description}}
-      <div class="pull-right">
-        <div  class="add" data-backdrop="false" data-toggle="modal" data-target="#addProjectModel" (click)="clearEditedDetails(form)" >Edit
-        </div>
-      </div>
-      <div *ngIf="creationPopUp">
+   <div *ngIf="creationPopUp">
          <div class="modal fade custommodel"  id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -48,24 +118,7 @@
      <form  #projectEditForm="ngForm" (ngSubmit)="submitted && projectEditForm.form.valid && editProjectDetails()" novalidate="true">
 
       <div class="modal-body">
-            
-             <!--<div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 ">
-               <div class="row">
-                <div class="col-md-8">
-                     <div class="dashboard_userbg">
-                          <div class="user">
-                                <div class="uploadcomponent margintop15">
-                              <img  alt="" src="{{form.projectLogo}}" name="projectLogo" id="projectlogo"   (click)="CallFileupload()" /></div>
-                         <input  type="file" id="inputFile" style="display: none;" (change)="fileUploadEvent($event, 'fileChange')"  multiple />
-                        </div>
-                         </div>
-                </div>
-                </div>
-
-              </div>
-              
-          </div>-->
+       
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                    <!--<textarea name="projectLogo" id="summernote" [(ngModel)]="entryForm.projectLogo"  #projectLogo="ngModel"></textarea>-->
@@ -84,22 +137,7 @@
               </div>
 
             </div>
-            <!--<div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 ">
-                  <label class="timereportlabel"> Project Name </label>
-                  <div class="customformfieldsmarginbottom autoSearchTask">
-  <input type="text" class="customformfields " required  [(ngModel)]="form.projectName" name="projectName"  #projectName="ngModel"  id="projectName"   (blur)="verifyProjectName(form.projectName)" (keyup)="veryInputByspinner()"/> 
-       <div *ngIf="submitted && projectName.errors " class="fielderror">
-                <div  [hidden]="!projectName.errors.required">Project Name is required</div>
-            </div>
-            <div id="messageForProject"></div>
-            <div *ngIf="verifyByspinner==1" class="txtbox_spinner"><img  alt="" src="assets/images/storyicon.png"  /></div>
-             <div *ngIf="verifyByspinner==3"  class="txtbox_spinner"><img  alt="" src="assets/images/comment-close.png"  /></div>
-             <div *ngIf="verifyByspinner==2" class="txtbox_spinner"><img  alt="" src="assets/images/green_spinner.gif"  /></div>
-                  </div>
-              </div>
-              
-          </div>-->
+  
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                 <label class="model_label"> Project Name </label>
@@ -114,10 +152,7 @@
          <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
                 </div>
               </div>
-
-
-                 <!--<div [hidden]="!verifyProjectMess" > Project name you have entered is already exists in the system!</div>-->
-           
+  
             </div>
 
              <div class="row">
@@ -137,7 +172,7 @@
     
       <div class="modal-footer">
         <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">Update</button>
-        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;resetForm();" >CANCEL</button>
       </div>
        </form>
     </div>
@@ -145,19 +180,8 @@
 </div>
  
 </div>
-<app-email-invite></app-email-invite>
-    closed  {{projectDetails.closedTickets}}
-    InProgress  {{projectDetails.InProgress}}
-    New  {{projectDetails.New}}
-    current week {{projectDetails.weeklyProjectTimeLog}}
-    Total hours {{projectDetails.totalProjectTimeLog}}
-    <br>
-    <div *ngIf="projectDetails.userInfo">
-      <div *ngFor="let extractUserInfo of projectDetails.userInfo;let j=index;">
-         <!--<div class="allactivitydiv">               
-          <div class="activityusericon">-->
-            <img alt="" src="{{extractUserInfo.ProfilePicture}}" class="img-circle profile-img thumb-sm">
-           <!--</div>
-        </div>-->
-      </div>
+</div>
+<div class="col-md-4">
+        <app-activities [dashboardData]="dashboardData"></app-activities>
+        </div>
    
