@@ -18,7 +18,7 @@
   
   <div class="pull-right">
   <div class="model_proimg">
-            <img  alt="" src="/assets/images/user-icon.jpg" name="projectLogo" id="projectlogo" />
+            <img  alt="" [src]="userProfileImage" name="projectLogo" id="projectlogo" />
             <div (click)="CallFileupload()" class="model_proimgedit"><i class="fa fa-pencil" aria-hidden="true"></i>
             </div>
             <input  type="file" id="my_file" style="display: none;" (change)="fileUpload($event, 'fileChange')"/>
@@ -95,11 +95,12 @@
                       Password Mismatch
                     </div>
                   </div>
-        
+        <input [hidden]="true" [(ngModel)]="form.userProfileImage" type="text" />
      <div class="buttonarea alignright">
             <button type="submit" (click)="submitted = true;" class="model_submit butnbor">Accept & Continue</button>
         </div>
-   
+   <a [routerLink]="['/login']">login</a>
+ 
   </form>
      </div>
 

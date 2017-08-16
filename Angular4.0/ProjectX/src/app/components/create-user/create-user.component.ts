@@ -28,28 +28,34 @@ export class CreateUserComponent implements OnInit {
   public projectImage:any;
   public fileExtention:any;
   public fileUploadStatus:boolean = false;
-
+ public userProfileImage:string;
   @Output() myevent=new EventEmitter();
 public inviteCode;
   constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService,private fileUploadService: FileUploadService,) { }
 
   ngOnInit() {
-     var thisObj=this;
+
+     var thisObj =this;
+     
+     this.userProfileImage = GlobalVariable.BASE_API_URL+"files/user/user_noimage.png";
+     this.form["userProfileImage"] = "/files/user/user_noimage.png"; 
     thisObj.route.queryParams.subscribe(
       params => 
       { 
          thisObj.inviteCode=params['code'];
-        thisObj.route.params.subscribe(params => {
-              thisObj.projectName=params['projectName'];
-              this.projectService.getProjectDetails(thisObj.projectName,(data)=>{ 
-                  if(data.data!=false){
-                    thisObj.projectId=data.data.PId;
-                  }
-            })
-        });
+     
         this.projectService.getUserDetails( thisObj.inviteCode,(data)=>{
           if(data.statusCode==200){
-            this.form['email']=data.data.Email;
+            if(data.data == "invalidCode"){
+              setTimeout(function(){
+                  thisObj._router.navigate(['login']);
+              },5000)
+            
+            }else{
+              this.form['email']=data.data.Email;
+              thisObj.projectId=data.data.ProjectId;
+            }
+           
           }
         })
       })
@@ -68,12 +74,12 @@ public inviteCode;
       if(this.isPasswordMatch)
       {
         // Make an ajax to save the User
-        this.projectImage=jQuery('#projectlogo').attr("src");
-        var URL = this.projectImage;
+        //this.projectImage=jQuery('#projectlogo').attr("src");
+       // var URL = this.projectImage;
         //var imageURL = URL.replace (/^[a-z]{4}\:\/{2}[a-z]{1,}\:[0-9]{1,4}.(.*)/, '$1');
-        var link = document.createElement('a');
-        link.setAttribute('href', URL);
-        var invite_obj={projectId:this.projectId,user:this.form,profile:'/'+link.pathname,code:this.inviteCode};
+        //var link = document.createElement('a');
+       // link.setAttribute('href', URL);
+        var invite_obj={projectId:this.projectId,user:this.form,code:this.inviteCode};
         this._ajaxService.AjaxSubscribe("collaborator/save-user",invite_obj,(result)=>
         {
           if(result.statusCode==200)
@@ -113,30 +119,32 @@ public inviteCode;
        } else {
             this.filesToUpload = <Array<File>> fileInput.target.files;
        }
-            
             this.hasBaseDropZoneOver = false;
             this.fileUploadStatus = true;
-            this.fileUploadService.makeFileRequest(GlobalVariable.FILE_UPLOAD_URL, [], this.filesToUpload).then(
+            this.fileUploadService.makeFileRequest(GlobalVariable.IMAGE_UPLOAD_URL, [], this.filesToUpload).then(
                 (result :Array<any>) => {
     
                 for(var i = 0; i<result.length; i++){
-                   result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
-                    var uploadedFileExtension = (result[i].originalname).split('.').pop();
-                     if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                       var postData={
-                              logoName:"[[image:" +result[i].path + "|" + result[i].originalname + "]]"
-                            }
-                          this._ajaxService.AjaxSubscribe("site/get-project-image",postData,(result)=>
-                            {
-                                if(result.data){
-                                    jQuery("#projectlogo").attr("src",result.data);
-                                    this.fileExtention=uploadedFileExtension;
-                               }
-                               this.projectImage=jQuery("#projectlogo").attr("src");
+                  this.form["userProfileImage"] = "/"+result[i].path;
+                  this.userProfileImage = GlobalVariable.BASE_API_URL + result[i].path;
+                  //  result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
+                  //   var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                  //    if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
+                  //      var postData={
+                  //             logoName:"[[image:" +result[i].path + "|" + result[i].originalname + "]]"
+                  //           }
+                  //         this._ajaxService.AjaxSubscribe("site/get-project-image",postData,(result)=>
+                  //           {
+                  //               if(result.data){
+                  //                  this.userProfile = result.data;
+                  //                  // jQuery("#projectlogo").attr("src",result.data);
+                  //                   this.fileExtention=uploadedFileExtension;
+                  //              }
+                  //              this.projectImage=jQuery("#projectlogo").attr("src");
                             
-                    });
-                     } else{
-                   }
+                  //   });
+                  //    } else{
+                  //  }
                 }
                 this.fileUploadStatus = false;
             }, (error) => {
