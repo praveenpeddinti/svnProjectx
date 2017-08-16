@@ -701,9 +701,30 @@ class TicketCollection extends ActiveRecord
               $ticketDetails = $query->count();
            return $ticketDetails;  
                     
-        } catch (Exception $ex) {
-
+        } catch (\Throwable $ex) {
+            Yii::error("TicketCollection:getTicketsCountByStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
         }
+        
+    }
+               /**
+     * @author Padmaja
+     * @param type $FieldName
+     * @param type $projectId
+     * @return type
+     */
+    public static function getAllTicketsCountByProject($projectId){
+        try{
+            $where=   ["ProjectId" =>(int)$projectId];
+            $query = new Query();
+             $query->from('TicketCollection')
+             ->where($where);
+            return  $ticketDetails = $query->count();
+        }  catch (\Throwable $ex) {
+            Yii::error("TicketCollection:getAllTicketsCountByProject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+       
         
     }
 

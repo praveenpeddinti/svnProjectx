@@ -4,7 +4,7 @@ use Yii;
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use yii\base\ErrorException;
-
+use yii\data\ActiveDataProvider;
 
 class EventCollection extends ActiveRecord 
 {
@@ -89,28 +89,28 @@ class EventCollection extends ActiveRecord
         * $occuredIn=['Bucket','Project','Ticket']
      */
 //    public function getAllActivities($page,$pageLength,$projectId="",$occuredIn=[],$referringId=""){
-    public function getAllActivities($postData){
+    public static function getAllActivities($page){
          try{
-             
-             $userId = $postData->userInfo->Id;
-            $page=$postData->page;
-            $projectFlag=!empty($postData->projectFlag)?$postData->projectFlag:"";
-            $pageLength=!empty($postData->limit)?$postData->limit:"";
-            $projectId=!empty($postData->ProjectId)?$postData->ProjectId:"";
-            $activityDropdownFlag=!empty($postData->activityDropdownFlag)?$postData->activityDropdownFlag:"";
-            $activityPage=$postData->activityPage;
-            
+//            $userId = $postData->userInfo->Id;
+//            $page=$postData->page;
+//            $projectFlag=!empty($postData->projectFlag)?$postData->projectFlag:"";
+//            $pageLength=!empty($postData->limit)?$postData->limit:"";
+//            $projectId=!empty($postData->ProjectId)?$postData->ProjectId:"";
+//            $activityDropdownFlag=!empty($postData->activityDropdownFlag)?$postData->activityDropdownFlag:"";
+//            $activityPage=$postData->activityPage;
             $where = ['Status'=>(int)1];//,'ProjectId'=>(int)$projectId,'OccuredIn'=>$occuredIn,'ReferringId'=>(int)$referringId];
             $matchArray = ['Status'=>(int)1];
-            $attributes = EventCollection::attributes();
-            foreach ($attributes as $attribute){
-                if(property_exists($postData, $attribute)){
-                    if($postData->$attribute != null && $postData->$attribute != ""){
-                        $where[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->$attribute:$postData->$attribute;
-                        $matchArray[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->$attribute:$postData->$attribute;
-                    }
-                }
-            }
+          
+            $attributes = self::getEventAttribute();
+           // error_log("$$$$$$$$$".print_r($attributes,1));
+//            foreach ($attributes as $attribute){
+//                if(property_exists($postData, $attribute)){
+//                    if($postData->$attribute != null && $postData->$attribute != ""){
+//                        $where[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->$attribute:$postData->$attribute;
+//                        $matchArray[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->$attribute:$postData->$attribute;
+//                    }
+//                }
+//            }
              error_log("******************".$page);
              $pL = 3 ;
              $days = $page * $pL; 
@@ -179,33 +179,10 @@ class EventCollection extends ActiveRecord
              //
 //                      $matchArray = array('Status'=>(int)1,'CreatedOn' => array('$lt'=>new \MongoDB\BSON\UTCDateTime(strtotime($ltD)*1000),'$gt'=>new \MongoDB\BSON\UTCDateTime(strtotime($gtD)*1000)),'ProjectId'=>(int)$projectId,'OccuredIn'=>$occuredIn);
                       $matchArray['CreatedOn']= array('$lt'=>new \MongoDB\BSON\UTCDateTime(strtotime($ltD)*1000),'$gt'=>new \MongoDB\BSON\UTCDateTime(strtotime($gtD)*1000));//,'ProjectId'=>(int)$projectId,'OccuredIn'=>$occuredIn);
-//                      if($projectId == ""){
-//                         unset($matchArray['ProjectId'] );
-//                      }
-//                      switch(count($occuredIn) ){
-//                        case 0: unset($matchArray['OccuredIn'] );
-//                                unset($matchArray['ReferringId'] );
-//                            break;
-//                        case 1:
-//                            if($occuredIn[0] == 'Bucket' && $referringId !=""){
-//                               unset($matchArray['OccuredIn'] );
-//                               unset($matchArray['ReferringId'] );
-//                               $matchArray['Miscellaneous.BucketId'] =$referringId;
-//                            }
-//                            break;
-//                        default:
-//                            unset($matchArray['ReferringId'] );
-//                            break;
-//
-//                       }
-//                       error_log("+++++++++++asdsdsafdsfdfdfsd========sdzxf=".print_r($matchArray,1));
                     $query = Yii::$app->mongodb->getCollection('EventCollection');
                     $pipeline = array(
                          array('$match' => $matchArray),
-//                         array('$lt' => array('CreatedOn'=>new \MongoDB\BSON\UTCDateTime(strtotime($lessThan)*1000))),
-//                         array('$gt' => array('CreatedOn'=>new \MongoDB\BSON\UTCDateTime(strtotime($greaterThan)*1000))),
-                         array('$sort' => array('CreatedOn'=>-1)),
-//                        array('$limit' => $limit),array('$skip' =>$offset),
+                        array('$sort' => array('CreatedOn'=>-1)),
                          array(
                             '$group' => array( 
                                 '_id' =>  array('CreatedOn'=>'$CreatedOn'),
@@ -226,15 +203,44 @@ class EventCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-    public static function getEventAttribute() {
+     public static function getEventAttribute() {
         try{
-             return $collectionData=    EventCollection::attributes();
+             error_log("$$$$$$$$$-----------");
+             $eventCollection = new EventCollection();
+             return $collectionData=    $eventCollection->attributes();
         } catch (\Throwable $ex) {
             Yii::error("EventCollection:getEventAttribute::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
        
     }
+    /**
+     * @author Padmaja
+     * @description This method is used to get activities
+     * @param type $projectId
+     * @param type $page
+  
+     */
+    public static function getAllActivitiesByProject($page,$projectId){
+         try{
+            $where = ['ProjectId'=>(int)$projectId];
+             $query=new Query();
+            $query->from('EventCollection')->where($where)
+            ->orderBy(["_id"=>SORT_DESC]);
+            $provider = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                'pageSize' => 10,
+                'page'=>(int)$page
+                ]
+            ]);
+           return  $eventCollectionData = $provider->getModels();
+          } catch (\Throwable $ex) {
+            Yii::error("EventCollection:getAllActivitiesByProject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+   
        /**
      * @author Padmaja
      * @description This method is used to get Ticket details for dashboard
@@ -243,7 +249,7 @@ class EventCollection extends ActiveRecord
      * @return type $pageLength
      * @return type $projectFlag
      */
-     public function getActivitiesById($getId){
+     public static function getActivitiesById($getId){
         try{
             $query = new Query();
             $query->from('EventCollection')

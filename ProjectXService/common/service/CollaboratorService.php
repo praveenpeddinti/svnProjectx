@@ -574,10 +574,10 @@ class CollaboratorService {
      * @param type $userId
 
      */
-    public function getProjectDashboardDetails($projectName, $projectId, $userId) {
+    public function getProjectDashboardDetails($projectName, $projectId, $userId,$page) {
         try {
-            error_log("not existeddddddddd@@@@@@@@@@@@@--------");
-            return $projectDetails = CommonUtilityTwo::getProjectDetailsForProjectDashboard($projectId, $userId);
+            error_log("not existeddddddddd@@@@@@@@@@@@@--------".$page);
+            return $projectDetails = CommonUtilityTwo::getProjectDetailsForProjectDashboard($projectId, $userId,$page);
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getProjectDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -666,6 +666,7 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
+
     
     public function getEmailFromCode($code){
         try{
@@ -681,5 +682,18 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
+     /*
+     * @autor Padmaja
+     *  @param type $page
+     */
+    public function getAllActivities($page,$projectId){
+        try{
+            return $activities=CommonUtilityTwo::getAllProjectActivities($page,$projectId);
+        } catch (Exception $ex) {
+            Yii::error("CollaboratorService:getAllActivities::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+
 
 }

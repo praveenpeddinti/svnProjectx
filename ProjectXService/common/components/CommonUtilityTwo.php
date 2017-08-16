@@ -355,11 +355,11 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     }
            /**
      * @author Padmaja
-     * @description This method is used to get Last Id Project details for dashboard
+     * @description This method is used to get Last Id Project details for project dashboard
      * @return type $projectId
      *  @return type $userId
      */
-    public static function getProjectDetailsForProjectDashboard($projectId,$userId){
+    public static function getProjectDetailsForProjectDashboard($projectId,$userId,$page){
         try{
              error_log("-----------###################-------------".$projectId."hk--".$userId);
             $projectInfo=array();
@@ -377,9 +377,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
           //  $projectInfo['weeklyProjectTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId,$projectId);
             $projectInfo['weeklyProjectTimeLog']    =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog('',$projectId);
             $projectInfo['totalProjectTimeLog']     =  ServiceFactory::getTimeReportServiceInstance()->getTotalTimeLogByProject($projectId);
-            // error_log("@@@@@-------------");
-             error_log("---tttttttttttttttt--".print_r($projectInfo,1));
-           // $projectInfo['topTickets'] = self::getTopTicketsStats($projectId,$userId);
+            $projectInfo['topTickets'] = self::getTopTicketsStats($projectId,$userId);
+            $projectInfo['allTickets'] =TicketCollection::getAllTicketsCountByProject($projectId);
             $currentActiveUsers      =  EventCollection::getCurrentWeekActiveUsers($projectId);
            //` error_log("@@@@@-----kkkkkkkkkkkkkkkkkkkkkk--------".print_r($projectInfo['currentActiveUsers'][0]['data'],1));
             if(!empty($currentActiveUsers)){
@@ -397,7 +396,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }else{
                $projectInfo['userInfo']=array();  
             }
-           error_log("----555555555555----".print_r($projectInfo,1));
+         //  error_log("----555555555555----".print_r($projectInfo,1));
             array_push($prepareDetails,$projectInfo);
           
             return array('ProjectDetails'=>$prepareDetails);  
@@ -532,22 +531,24 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             throw new ErrorException($ex->getMessage());
         }
     }
-            /**
+    /**
      * @description This method is used to get all project Activities
      * @return type $projectId
      *  @return type $userId
      */
-  public static function getAllProjectActivities($postData){
+  public static function getAllProjectActivities($page,$projectId){
       try{
                     $activitiesArray=array();
                     $getActivities=array();
                     $activityDetails=array();
-                    $getEventDetails= EventCollection::getAllActivities($postData);
+                   // $getEventDetails= EventCollection::getAllActivities($postData);
+                    $getEventDetails= EventCollection::getAllActivitiesByProject($page,$projectId);
+                    //error_log("@@@@---event-----".print_r($getEventDetails,1));die;
                    foreach($getEventDetails as $extractedEventDetails){
-                      // error_log("eventttttt-tt------------".print_r($extractedEventDetails,1));
-                       foreach($extractedEventDetails['Data'] as $getId){
+                     // error_log("eventttttt-tt------------".print_r($extractedEventDetails,1));
+                    //   foreach($extractedEventDetails['Data'] as $getId){
                            $getActivities=array();
-                           $activitiesArray= EventCollection::getActivitiesById($getId);
+                           $activitiesArray= EventCollection::getActivitiesById($extractedEventDetails['_id']);
 //                           error_log("------44444444--------".$activitiesArray['OccuredIn']);
                            $getActivities['ProjectId']=$activitiesArray['ProjectId'];
                            $projectDetails = Projects::getProjectMiniDetails($activitiesArray['ProjectId']);
@@ -583,10 +584,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                            $timezone="Asia/Kolkata";
                            $datetime1->setTimezone(new \DateTimeZone($timezone));
                            $getActivities['createdDate']= $datetime1->format('M-d-Y');
-                           $getActivities['Month']= $datetime1->format('M');
-                           $getActivities['Day']= $datetime1->format('d');
-                           $getActivities['Year']= $datetime1->format('Y');
-                           $getActivities['time']= $datetime1->format('H:i:s');
+                           $Date = $datetime1->format('Y-m-d H:i:s');
+                           $getActivities['dateOnly'] =$datetime1->format('Y-m-d');
                            $getActivities['ChangeSummary'] = array();
 //                           error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
@@ -595,14 +594,16 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                               if(!empty($changeSummary['OldValue'])){
                                 $validDate = CommonUtility::validateDate($changeSummary['OldValue']);
                                 if($validDate){
-                                    $summary['OldValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+                                   // $summary['OldValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
                                     $datetime1=$summary['OldValue']->toDateTime();
                                     $timezone="Asia/Kolkata";
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
-                                    $summary['OldValue']= $datetime1->format('M-d-Y');
+                                    $summary['OldValue']= $datetime1->format('Y-m-d H:i:s');
                                 }else{
 //                               error_log("===Field Name111111==");
                                    $summary['OldValue'] =trim(html_entity_decode(strip_tags($changeSummary['OldValue']))); 
+                                
+                                     error_log("oldvalueeee=-============".$summary['OldValue']);
                                 }
                               }else{
                                   $summary['OldValue'] ='';
@@ -610,14 +611,14 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                               if(!empty($changeSummary['NewValue'])){
                                 $validDate = CommonUtility::validateDate($changeSummary['NewValue']);
                                 if($validDate){
-                                    error_log("=====-============".$validDate);
+                                   // error_log("=====-============".$validDate);
                                     $summary['NewValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
                                     $datetime1=$summary['NewValue']->toDateTime();
                                     $timezone="Asia/Kolkata";
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
                                     $summary['NewValue']= $datetime1->format('M-d-Y');
                                     
-                                    error_log("summaryyyyyyy=-============".$summary['NewValue']);
+                                 error_log("summaryyyyyyy=-============".$summary['NewValue']);
                                 }else{
 //                                error_log("===Field Name22222222==");
                                    $summary['NewValue'] = trim(html_entity_decode(strip_tags($changeSummary['NewValue']))); 
@@ -630,12 +631,12 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                              array_push($getActivities['ChangeSummary'], $summary);  
                            }
                            array_push($activityDetails, $getActivities);
-                       }
+                     //  }
                   }
                     $checkDates=array();
-                    error_log("========864454=============".print_r(array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate')))),1));
+                  //  error_log("========864454=============".print_r(array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate')))),1));
                     $preparedDates['createdDate']= array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate'))));
-                    error_log("========23243=============".print_r($preparedDates['createdDate'],1));
+                   // error_log("========23243=============".print_r($preparedDates['createdDate'],1));
                     $checkDates = array_fill(0,count($preparedDates['createdDate']), []);
                     foreach($activityDetails as $extracteData){
                        $idx = array_search($extracteData['createdDate'], $preparedDates['createdDate']);
@@ -645,7 +646,24 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                        array_push($checkDates[$idx], $extracteData);
                         
                     }
-                return  $activityDetails=$checkDates;
+                    $activityDetails=$checkDates;
+                    $preparedActivities = array();
+                    $finalActivity = array('activityDate' => '', 'activityData' => array());
+                    $tempActivity = array();
+                    foreach ($activityDetails as $extractActs) {
+                        foreach($extractActs as $item){
+                       // error_log("@@@@@@@--------item-----".print_r($item,1));
+                                $tempActivity[$item['createdDate']][] = $item;
+                             //    error_log("@@@@@@@--------item-----".print_r($tempActivity,1));
+                        }
+                    }
+                    foreach ($tempActivity as $key => $value) {
+                        $finalActivity = array('activityDate' => '', 'activityData' => array());
+                        $finalActivity = array('activityDate' => $key, 'activityData' => $value);
+                        array_push($preparedActivities, $finalActivity);
+                    }
+        
+                  return array('activities'=>$preparedActivities);  
      } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:getAllProjectActivities::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
