@@ -653,7 +653,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     foreach ($activityDetails as $extractActs) {
                         foreach($extractActs as $item){
                        // error_log("@@@@@@@--------item-----".print_r($item,1));
-                                $tempActivity[$item['createdDate']][] = $item;
+                                $tempActivity[$item['dateOnly']][] = $item;
                              //    error_log("@@@@@@@--------item-----".print_r($tempActivity,1));
                         }
                     }
