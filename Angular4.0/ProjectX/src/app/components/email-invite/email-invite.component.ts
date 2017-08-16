@@ -35,7 +35,7 @@ export class EmailInviteComponent implements OnInit {
       params => 
       { 
         thisObj.route.params.subscribe(params => {
-           var projectName=decodeURIComponent(params['projectName']);alert(projectName);
+           var projectName=decodeURIComponent(params['projectName']);
            this.projectName=projectName;
               //thisObj.projectName=params['projectName'];
               this.projectService.getProjectDetails(thisObj.projectName,(data)=>{ 
