@@ -4,7 +4,7 @@
 
      <div class="modal-content">
 <div class="modal-header text-center text-uppercase">Create User</div>
-<div class="text-center" style="color: #637282;padding-bottom:8px;padding-top:8px;border-bottom:#f8f8f8 solid 1px; "> You are invited to {{projectName}} </div>
+<div class="text-center" > <div class="inviteuser_content">You are invited to {{projectName}}</div> </div>
 <div class="modal-body">
 <form   #newUserForm="ngForm" (ngSubmit)="submitted && newUserForm.form.valid && saveUser()" novalidate="true">
   
