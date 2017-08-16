@@ -329,10 +329,10 @@ class Collaborators extends ActiveRecord
     
     /**
      * @author Ryan
-     * @param type $projectId,$user
+     * @param type $user
      * @return type int 
      */
-    public static function createUser($projectId,$user){
+    public static function createUser($user){
         try{error_log("in create user");
             $collaborator=new Collaborators();
             $collaborator->FirstName=$user->firstName;
@@ -372,12 +372,12 @@ class Collaborators extends ActiveRecord
         }
     }
     
-    public static function saveProfilePic($userid,$profilepic){
+    public static function saveUserProfile($userid,$profilepic){
         try{
             $qry="insert into CollaboratorProfile(`CollaboratorId`,`ProfilePic`) values($userid,'$profilepic');";
             Yii::$app->db->createCommand($qry)->execute();
         } catch (\Throwable $ex) {
-            Yii::error("Collaborators:saveProfilePic::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            Yii::error("Collaborators:saveUserProfile::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }

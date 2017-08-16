@@ -42,11 +42,37 @@ class TinyUserCollection extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+                       'timestamp' => [
+                'class' => '\yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['CreatedOn', 'UpdatedOn'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['UpdatedOn'],
+                ],
+                 'value' => function() { return new \MongoDB\BSON\UTCDateTime(time() * 1000); // unix timestamp 
+                 },
+            ],
         ];
+       
     }
     
+       public static function createNewUser($user,$userId){
+        
+        try {
+
+        $userObj= new TinyUserCollection();
+        $userObj->CollaboratorId = (int)$userId;
+        $userObj->UserName=$user->firstName.'.'.$user->lastName;;
+        $userObj->ProfilePicture=$user->userProfileImage;
+        $userObj->Email=$user->email;
+        $userObj->OrganizationId= 1;
+        $userObj->insert();  
+        unset($userObj);
     
+        } catch (\Throwable $ex) {
+            Yii::error("TinyUserCollection:createNewUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
     public static function getMiniUserDetails($collaboratorId){
         
         $query = new Query();

@@ -91,7 +91,7 @@ class ProjectInvitation extends ActiveRecord
    public static function disableInvite($invite_email,$invite_code)
    {
        try{
-           $qry="update ProjectInvitation set IsValid=0 where InvitationCode='$invite_code' and Email='$invite_email'";
+           $qry="update ProjectInvitation set IsValid=0,AcceptedDate=now() where InvitationCode='$invite_code' and Email='$invite_email'";
            Yii::$app->db->createCommand($qry)->execute();
        } catch (\Throwable $ex) {
             Yii::error("ProjectInvitation:disableInvite::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -99,11 +99,11 @@ class ProjectInvitation extends ActiveRecord
         }
    }
    
-   public static function getNewUserEmail($code){
+   public static function getMiniInvitationDetails($code){
         try{
-            $qry="select Email from ProjectInvitation where InvitationCode='$code'";
-            $email = Yii::$app->db->createCommand($qry)->queryOne();
-            return $email;
+            $qry="select ProjectId,Email,IsValid from ProjectInvitation where InvitationCode='$code'";
+            $invitationDetails = Yii::$app->db->createCommand($qry)->queryOne();
+            return $invitationDetails;
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getNewUserEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());

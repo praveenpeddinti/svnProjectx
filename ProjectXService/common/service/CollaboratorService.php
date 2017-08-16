@@ -2,7 +2,7 @@
 
 namespace common\service;
 
-use common\models\mongo\TicketCollection;
+use common\models\mongo\{TicketCollection,TinyUserCollection};
 use common\components\{CommonUtility,CommonUtilityTwo,ServiceFactory,NotificationTrait};
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
@@ -376,17 +376,18 @@ class CollaboratorService {
      * @param type $profilepic
      * @return type int
      */
-    public function saveNewUser($projectId, $user, $profilepic,$code) {
+    public function saveNewUser($projectId, $user,$code) {
         try {
             $usermail=$user->email;
             $invite_code=$code;
-            $userid = Collaborators::createUser($projectId, $user);
-            if ($userid > 0) {
-                $status = $this->addUserToTeam($projectId, $userid);
-                Collaborators::saveProfilePic($userid, $profilepic);
+            $userId = Collaborators::createUser($user);
+            TinyUserCollection::createNewUser($user,$userId);
+            if ($userId > 0) {
+                $status = $this->addUserToTeam($projectId, $userId);
+                Collaborators::saveUserProfile($userId, $user->userProfileImage);
                 $this->invalidateInvite($usermail, $invite_code);
             }
-            return $userid;
+            return $userId;
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:saveNewUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -668,8 +669,13 @@ class CollaboratorService {
     
     public function getEmailFromCode($code){
         try{
-            $email=ProjectInvitation::getNewUserEmail($code);
-            return $email;
+            $invitationDetails = ProjectInvitation::getMiniInvitationDetails($code);
+            if($invitationDetails["IsValid"] == 1){
+             return $invitationDetails;
+            }else{
+                 return "invalidCode";
+            }
+           
         } catch (Exception $ex) {
             Yii::error("CollaboratorService:getEmailFromCode::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
