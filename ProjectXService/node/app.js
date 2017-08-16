@@ -3,10 +3,12 @@ var spawn = require('child_process').spawn;
 var bodyParser = require("body-parser");
 var multer = require("multer");
 var uploads = multer({ dest: '/usr/share/nginx/www/ProjectXService/node/uploads/' });
+var uploadImages = multer({ dest: '/usr/share/nginx/www/ProjectXService/frontend/web/files/temp' });
 //app.use(multer({dest:__dirname+'/file/uploads/'}));
 var app = Express();
 
 var type = uploads.array("uploads[]", 12);
+var typeImage = uploadImages.array("uploads[]", 12);
 var dir = "/usr/share/nginx/www/ProjectXService";
 var exec = require('child_process').exec;
 var child;
@@ -38,6 +40,26 @@ console.log("the file-------- " );
     }
     
 });
+app.post("/uploadImage", typeImage, function(req, res, cb) {
+console.log("the uploadImage-------- " );
+    
+    if (!req.files) {
+        res.send('No files were uploaded.');
+    } else{
+       // console.log("the responce -------- " + req.files[0].path + " --- " + JSON.stringify(req.files));
+     for(var i=0;i<req.files.length;i++){
+        var path = req.files[i].path;
+        path = path.replace("/usr/share/nginx/www/ProjectXService/frontend/web/", "");
+        req.files[i].path = path; 
+     }
+        res.send(req.files);
+    }
+    
+});
+
+
+
+
 app.post("/assignedTo",function(req, res, cb) {
 //console.log(req.body+"----assignedTo-------- "+req+"-----"+req.body);
 var request = req.body;
