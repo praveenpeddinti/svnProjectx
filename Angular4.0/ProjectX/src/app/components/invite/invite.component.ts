@@ -47,7 +47,8 @@ export class InviteComponent implements OnInit {
           }
         }
         else if(result.data.UserType=="New"){
-          this._router.navigate(['project',result.data.PName,'create-user'],{queryParams: {code:code}});
+          //this._router.navigate(['project',result.data.PName,'create-user'],{queryParams: {code:code}});
+          this._router.navigate(['create-user'],{queryParams: {code:code}});
         }else{
            this._router.navigate(['login']);
         }
