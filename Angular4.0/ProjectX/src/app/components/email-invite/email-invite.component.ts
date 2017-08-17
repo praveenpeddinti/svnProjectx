@@ -86,7 +86,7 @@ export class EmailInviteComponent implements OnInit {
           var email =  object["inputEL"]["nativeElement"]["value"];
           this.isEmpty=false;
           var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          this.isEmailValid = pattern.test(email);
+          this.isEmailValid = pattern.test(email.trim());
           if(this.isEmailValid)
           {
             this.isEmailValid=false;
