@@ -132,6 +132,7 @@ export class EmailInviteComponent implements OnInit {
                 }else{
                   console.log("Email Not Sent");
                 }
+                setTimeout(()=>{jQuery("#inviteModel").modal('hide');},3000);
               }
             })
       }
