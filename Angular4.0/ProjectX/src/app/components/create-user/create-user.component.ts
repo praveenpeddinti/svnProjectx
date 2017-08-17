@@ -49,10 +49,11 @@ public inviteCode;
             if(data.data == "invalidCode"){
               setTimeout(function(){
                   thisObj._router.navigate(['login']);
-              },5000)
+              },3000)
             
             }else{
               this.form['email']=data.data.Email;
+              this.projectName=data.data.ProjectName;
               thisObj.projectId=data.data.ProjectId;
             }
            
