@@ -1517,9 +1517,7 @@ button.toast-close-button {
 .ui-chips-token{ display:block!important;}
 .ui-chips ul li .ui-chips-input-token{ display:block!important; float: left!important; width: 100%!important; clear: both!important;}
 .ui-state-highlight {
-    border-bottom: solid 1px #e6e8eb!important;
-    background: #fff!important;
-    color: #637282!important;
+   color: #695ea5!important;background:#f7f9fa!important;
 }
 .ui-state-highlight:nth-last-child() {border-bottom:none!important;}
 .ui-inputtext:focus {
