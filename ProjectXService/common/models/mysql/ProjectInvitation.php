@@ -101,8 +101,9 @@ class ProjectInvitation extends ActiveRecord
    
    public static function getMiniInvitationDetails($code){
         try{
-            $qry="select ProjectId,Email,IsValid from ProjectInvitation where InvitationCode='$code'";
-            $invitationDetails = Yii::$app->db->createCommand($qry)->queryOne();
+//            $qry="select ProjectId,Email,IsValid from ProjectInvitation where InvitationCode='$code'";
+//            $invitationDetails = Yii::$app->db->createCommand($qry)->queryOne();
+           $invitationDetails = ProjectInvitation::verifyCode($code);
             return $invitationDetails;
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getNewUserEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
