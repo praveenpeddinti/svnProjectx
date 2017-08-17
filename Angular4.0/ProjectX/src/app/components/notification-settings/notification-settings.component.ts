@@ -60,7 +60,16 @@ this._ajaxService.AjaxSubscribe("settings/notification-preferences",data,(respon
 }
  
 isChecked(Id,type,e){
+  
         var isChecked=e.target.checked;
+       if(isChecked==false){
+        if (type=="SystemNotification")
+          this.isSelectedAll_SN=false;
+         else if(type=="EmailNotification")
+          this.isSelectedAll_EN=false;
+         else
+          this.isSelectedAll_PN=false;
+        }
         var post_data={id:Id,type:type,isChecked:isChecked};
         this._ajaxService.AjaxSubscribe("settings/notifications-settings-status-update",post_data,(response) => {
      });
