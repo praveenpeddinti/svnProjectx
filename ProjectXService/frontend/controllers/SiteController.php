@@ -27,7 +27,6 @@ use common\models\mysql\Collaborators;
 use common\models\mongo\TinyUserCollection;
 use common\models\mysql\ProjectTeam;
 use common\service\CollaboratorService;
-use common\service\CollaboratorService;
 
 /**
  * Site controller
