@@ -11,9 +11,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="alert alert-success fade in" [hidden]="!isSuccess">
-          <a href="#" class="close" data-dismiss="alert">&times;</a>
-          <strong>Invitation sent successfully.</strong>
+        <div class="success_content" *ngIf="isSuccess">
+          <!--<a href="#" class="close" data-dismiss="alert">&times;</a>-->
+          Invitation sent successfully.
         </div>
 
             <div class="usrcomponent">

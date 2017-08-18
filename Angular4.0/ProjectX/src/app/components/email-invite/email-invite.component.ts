@@ -132,7 +132,7 @@ export class EmailInviteComponent implements OnInit {
                 }else{
                   console.log("Email Not Sent");
                 }
-                setTimeout(()=>{jQuery("#inviteModel").modal('hide');},3000);
+                setTimeout(()=>{jQuery("#inviteModel").modal('hide');this.isSuccess=false;},3000);
               }
             })
       }
@@ -144,6 +144,7 @@ export class EmailInviteComponent implements OnInit {
       this.isEmpty=false;
       //this.zone.run(()=>{this.selectedUsers=undefined;})
       jQuery("#invite_search").attr("value",""); //jquery was used since model binding was not getting updated....
+      this.isSuccess=false;
     }
 
   

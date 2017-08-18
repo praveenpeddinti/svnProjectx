@@ -13,5 +13,6 @@
 .ui-corner-all {
     border-radius:none!important;
 }
+.success_content{color: #4F8A10;padding:5px 8px;border:#f8f8f8 solid 1px; font-size:14px; display: inline-block; border-radius:25px; margin-top: 10px;}
 
 
