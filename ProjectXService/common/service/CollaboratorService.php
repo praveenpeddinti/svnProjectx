@@ -686,9 +686,9 @@ class CollaboratorService {
      * @autor Padmaja
      *  @param type $page
      */
-    public function getAllActivities($page,$projectId){
+    public function getAllActivities($postData){
         try{
-            return $activities=CommonUtilityTwo::getAllProjectActivities($page,$projectId);
+            return $activities=CommonUtilityTwo::getAllProjectActivities($postData);
         } catch (Exception $ex) {
             Yii::error("CollaboratorService:getAllActivities::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());

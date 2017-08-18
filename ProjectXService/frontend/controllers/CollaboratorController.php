@@ -273,6 +273,199 @@ class CollaboratorController extends Controller
              return $response;
         }
     }
+    /**
+    * @author Padmaja
+    *  @description This is used for verifying projects is exists or not
+    * @param type 
+    * @return array
+    */
+    public function actionVerifyingProjectName(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $getProjectDetails=ServiceFactory::getProjectServiceInstance()->verifyProjectName($postData->projectName);
+           if(!empty($getProjectDetails) || empty($getProjectDetails)){
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $getProjectDetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $getProjectDetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }
+            return $response;
+         } catch (\Throwable $th) { 
+             Yii::error("CollabaratorController:actionVerifyingProjectName::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message =  $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+      /**
+    * @author Padmaja
+    * @description This is used for saving project details
+    * @param type 
+    * @return array
+    */
+    public function actionSaveProjectDetails(){
+        try{
+            $postData = json_decode(file_get_contents("php://input")); 
+            $fileExt=!empty($postData->fileExtention)?$postData->fileExtention:"";
+            $returnId=ServiceFactory::getProjectServiceInstance()->savingProjectDetails($postData->projectName,$postData->description,$postData->userInfo->Id,$postData->projectLogo);
+            if($returnId!='failure'){
+                $projectId=$returnId;
+                if (strpos($postData->projectLogo,'assets') !== false) {
+                  $logo=$postData->projectLogo;
+                } else {
+                   $extractUrl= explode('projectlogo/',$postData->projectLogo);
+                   $projectLogoPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['projectLogo'] ;
+                    if (file_exists($projectLogoPath."/".$extractUrl[1])) {
+                        rename($projectLogoPath . "/" . $extractUrl[1],$projectLogoPath . "/" . $postData->projectName."_".$returnId.".$fileExt");
+                        $logo=$postData->projectName."_".$returnId.".$fileExt";
+                    } else {
+                        error_log("not existeddddddddd");
+                    }
+                
+                }
+                ServiceFactory::getCollaboratorServiceInstance()->updateProjectlogo($projectId,$logo);
+                $getStatus=ServiceFactory::getProjectServiceInstance()->savingProjectTeamDetails($projectId,$postData->userInfo->Id);
+               // $getlastIdDetails= CommonUtilityTwo::getLastProjectDetails($projectId,$postData->userInfo->Id);
+             }
+             if($getStatus == 'failure' || $returnId=='failure'){
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $projectId;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $projectId;
+                $response = CommonUtility::prepareResponse($responseBean,"json");
+         
+            }
+            return $response;
+        } catch (\Throwable $th) { 
+             Yii::error("CollabaratorController:actionSaveProjectDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+        /**
+    * @author Padmaja
+    * @description This is used for updating project Details
+    * @param type 
+    * @return array
+    */
+    public function actionUpdateProjectDetails(){
+        try{
+            $postData = json_decode(file_get_contents("php://input")); 
+            $fileExt=!empty($postData->fileExtention)?$postData->fileExtention:"";
+            $projectId=!empty($postData->projectId)?$postData->projectId:"";
+            $updateStatus=ServiceFactory::getProjectServiceInstance()->updatingProjectDetails($postData->projectName,$postData->description,$fileExt,$postData->projectLogo,$projectId);
+            if($updateStatus=='success'){
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $updateStatus;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $updateStatus;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }
+             return $response;
+        } catch (Exception $ex) {
+            Yii::log("CollabaratorController:actionUpdateProjectDetails::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');
+    }
+        
+    }
+       /**
+    * @author Padmaja
+    * @description This is used for get project dashboard details
+    * @param type 
+    * @return array
+    */
+    public function actionGetProjectDashboardDetails(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            error_log("111111111111111111111--------");
+            $projectdetails=ServiceFactory::getProjectServiceInstance()->getProjectDashboardDetails($postData->projectName,$postData->projectId,$postData->userInfo->Id,$postData->page);
+           // $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData);
+            if(!empty($projectdetails)){
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $projectdetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $projectdetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }
+             return $response;
+             
+        } catch (\Throwable $th) { 
+             Yii::error("SiteController:actionGetProjectDashboardDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
+    }
+        /**
+    * @author Padmaja
+    * @description This is used for get all activities for project dashboard
+    * @param type 
+    * @return array
+    */
+    public function actionGetAllActivitiesForProjectDashboard(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $projectdetails=ServiceFactory::getProjectServiceInstance()->getAllActivities($postData);
+            if(!empty($projectdetails)){
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $projectdetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }else{
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $projectdetails;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }
+             return $response; 
+        }  catch (\Throwable $th) { 
+             Yii::error("SiteController:getAllActivitiesForProjectDashboard::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
+        
+    }
     
 }  
     ?>

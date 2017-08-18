@@ -361,7 +361,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      */
     public static function getProjectDetailsForProjectDashboard($projectId,$userId,$page){
         try{
-             error_log("-----------###################-------------".$projectId."hk--".$userId);
+            // error_log("-----------###################-------------".$projectId."hk--".$userId);
             $projectInfo=array();
             $prepareDetails=array();
             $userInfo=array();
@@ -531,24 +531,25 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             throw new ErrorException($ex->getMessage());
         }
     }
-    /**
+    /**@author Padmaja
      * @description This method is used to get all project Activities
      * @return type $projectId
      *  @return type $userId
      */
-  public static function getAllProjectActivities($page,$projectId){
-      try{
+  public static function getAllProjectActivities($postData){
+        try{
                     $activitiesArray=array();
                     $getActivities=array();
                     $activityDetails=array();
-                   // $getEventDetails= EventCollection::getAllActivities($postData);
-                    $getEventDetails= EventCollection::getAllActivitiesByProject($page,$projectId);
+                    $getEventDetails= EventCollection::getAllActivities($postData);
+//                    $getEventDetails= EventCollection::getAllActivitiesByProject($page,$projectId);
                     //error_log("@@@@---event-----".print_r($getEventDetails,1));die;
                    foreach($getEventDetails as $extractedEventDetails){
                      // error_log("eventttttt-tt------------".print_r($extractedEventDetails,1));
                     //   foreach($extractedEventDetails['Data'] as $getId){
                            $getActivities=array();
-                           $activitiesArray= EventCollection::getActivitiesById($extractedEventDetails['_id']);
+//                           $activitiesArray= EventCollection::getActivitiesById($extractedEventDetails['_id']);
+                           $activitiesArray= $extractedEventDetails;
 //                           error_log("------44444444--------".$activitiesArray['OccuredIn']);
                            $getActivities['ProjectId']=$activitiesArray['ProjectId'];
                            $projectDetails = Projects::getProjectMiniDetails($activitiesArray['ProjectId']);
@@ -586,6 +587,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                            $getActivities['createdDate']= $datetime1->format('M-d-Y');
                            $Date = $datetime1->format('Y-m-d H:i:s');
                            $getActivities['dateOnly'] =$datetime1->format('Y-m-d');
+                         //   $getActivities['Month']= $datetime1->format('M');
+//                           $getActivities['Day']= $datetime1->format('d');
+//                           $getActivities['Year']= $datetime1->format('Y');
+                          $getActivities['time']= $Date;
                            $getActivities['ChangeSummary'] = array();
 //                           error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
@@ -633,30 +638,31 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                            array_push($activityDetails, $getActivities);
                      //  }
                   }
-                    $checkDates=array();
-                  //  error_log("========864454=============".print_r(array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate')))),1));
-                    $preparedDates['createdDate']= array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate'))));
-                   // error_log("========23243=============".print_r($preparedDates['createdDate'],1));
-                    $checkDates = array_fill(0,count($preparedDates['createdDate']), []);
-                    foreach($activityDetails as $extracteData){
-                       $idx = array_search($extracteData['createdDate'], $preparedDates['createdDate']);
-                       if(!is_array($checkDates[$idx])){
-                           $checkDates[$idx]=array();
-                       }
-                       array_push($checkDates[$idx], $extracteData);
-                        
-                    }
-                    $activityDetails=$checkDates;
+//                    $checkDates=array();
+//                  //  error_log("========864454=============".print_r(array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate')))),1));
+//                    $preparedDates['createdDate']= array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate'))));
+//                   // error_log("========23243=============".print_r($preparedDates['createdDate'],1));
+//                    $checkDates = array_fill(0,count($preparedDates['createdDate']), []);
+//                    foreach($activityDetails as $extracteData){
+//                       $idx = array_search($extracteData['createdDate'], $preparedDates['createdDate']);
+//                       if(!is_array($checkDates[$idx])){
+//                           $checkDates[$idx]=array();
+//                       }
+//                       array_push($checkDates[$idx], $extracteData);
+//                        
+//                    }
+//                    $activityDetails=$checkDates;
                     $preparedActivities = array();
                     $finalActivity = array('activityDate' => '', 'activityData' => array());
                     $tempActivity = array();
-                    foreach ($activityDetails as $extractActs) {
-                        foreach($extractActs as $item){
-                       // error_log("@@@@@@@--------item-----".print_r($item,1));
+                 //    error_log("@@@@@@@--------item-----".print_r($activityDetails,1));
+//                    foreach ($activityDetails as $extractActs) {
+                        foreach($activityDetails as $item){
+                    
                                 $tempActivity[$item['dateOnly']][] = $item;
                              //    error_log("@@@@@@@--------item-----".print_r($tempActivity,1));
                         }
-                    }
+//                    }
                     foreach ($tempActivity as $key => $value) {
                         $finalActivity = array('activityDate' => '', 'activityData' => array());
                         $finalActivity = array('activityDate' => $key, 'activityData' => $value);

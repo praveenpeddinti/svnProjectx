@@ -89,7 +89,7 @@ class EventCollection extends ActiveRecord
         * $occuredIn=['Bucket','Project','Ticket']
      */
 //    public function getAllActivities($page,$pageLength,$projectId="",$occuredIn=[],$referringId=""){
-    public static function getAllActivities($page){
+    public static function getAllActivities($postData){
          try{
 //            $userId = $postData->userInfo->Id;
 //            $page=$postData->page;
@@ -98,28 +98,28 @@ class EventCollection extends ActiveRecord
 //            $projectId=!empty($postData->ProjectId)?$postData->ProjectId:"";
 //            $activityDropdownFlag=!empty($postData->activityDropdownFlag)?$postData->activityDropdownFlag:"";
 //            $activityPage=$postData->activityPage;
-            $where = ['Status'=>(int)1];//,'ProjectId'=>(int)$projectId,'OccuredIn'=>$occuredIn,'ReferringId'=>(int)$referringId];
+//            $where = ['Status'=>(int)1];//,'ProjectId'=>(int)$projectId,'OccuredIn'=>$occuredIn,'ReferringId'=>(int)$referringId];
             $matchArray = ['Status'=>(int)1];
           
             $attributes = self::getEventAttribute();
-           // error_log("$$$$$$$$$".print_r($attributes,1));
-//            foreach ($attributes as $attribute){
-//                if(property_exists($postData, $attribute)){
-//                    if($postData->$attribute != null && $postData->$attribute != ""){
-//                        $where[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->$attribute:$postData->$attribute;
-//                        $matchArray[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->$attribute:$postData->$attribute;
-//                    }
-//                }
-//            }
-             error_log("******************".$page);
-             $pL = 3 ;
-             $days = $page * $pL; 
-             if($page == 1)
-             $today = date("Y-m-d",strtotime('1 days')); //less than this
-             else{
-                $days1 = ($page -1)* $pL; 
-                $today = date("Y-m-d",strtotime('-'.($days1).' days'));
-             }//less than this
+            error_log("$$$$$+++++++++++++++$$$$".print_r($postData,1));
+            foreach ($attributes as $attribute){
+                if(property_exists($postData->attributes, $attribute)){
+                    if($postData->attributes->$attribute != null && $postData->attributes->$attribute != ""){
+//                        $where[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->attributes->$attribute:$postData->attributes->$attribute;
+                        $matchArray[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->attributes->$attribute:$postData->attributes->$attribute;
+                    }
+                }
+            }
+//             error_log("******************".$page);
+//             $pL = 3 ;
+//             $days = $page * $pL; 
+//             if($page == 1)
+//             $today = date("Y-m-d",strtotime('1 days')); //less than this
+//             else{
+//                $days1 = ($page -1)* $pL; 
+//                $today = date("Y-m-d",strtotime('-'.($days1).' days'));
+//             }//less than this
              
              
 //             if($projectId == ""){
@@ -143,60 +143,72 @@ class EventCollection extends ActiveRecord
 //                
 //               }
 //               error_log("++++++aawewwqead++======sdzxf=".print_r($where,1));
-            $queryD = new Query();
-            $queryD->from('EventCollection')->select(['CreatedOn'])->orderBy('CreatedOn DESC')
-            ->where($where)->distinct('CreatedOn');
-//          error_log("+++++query++=====sdzxf=".print_r($query,1));
-           $dates = $queryD->all();
-           foreach($dates as $key=>$extract){
-               $mil = (string)$extract['CreatedOn'];
-                        $seconds = $mil / 1000;
-             $dates[$key]['date']=  date('m/d/Y',$seconds);
-           }
-           $dates = array_values(array_unique(array_column($dates, 'date')));
-           $strt = $page*$pL;
-           $end = $strt + $pL;
-           if(count($dates) != 0 && count($dates) <= $pL && $page < 1){
-               $ltD = $dates[0];
-               $gtD = end($dates);
-           }else if($end < count($dates)){
-               $ltD = $dates[$strt];
-               $gtD = $dates[$end];
-           }else if($strt < count($dates)){
-               $ltD = $dates[$strt];
-               $gtD = end($dates);
-           }else{
-               $ltD = "";
-               $gtD = "";
-           }
-             error_log("+++++++++++========sdzxf=".print_r($dates,1));
-//             error_log("+++++++++ltd++========sdzxf=".($ltD));
-//             error_log("++++++++++gtd+========sdzxf=".$gtD);
-             if($page == 0){
-                 $ltD = date('m/d/Y',strtotime("+1 day", strtotime($ltD)));
-             }
+//            $queryD = new Query();
+//            $queryD->from('EventCollection')->select(['CreatedOn'])->orderBy('CreatedOn DESC')
+//            ->where($where)->distinct('CreatedOn');
+////          error_log("+++++query++=====sdzxf=".print_r($query,1));
+//           $dates = $queryD->all();
+//           foreach($dates as $key=>$extract){
+//               $mil = (string)$extract['CreatedOn'];
+//                        $seconds = $mil / 1000;
+//             $dates[$key]['date']=  date('m/d/Y',$seconds);
+//           }
+//           $dates = array_values(array_unique(array_column($dates, 'date')));
+//           $strt = $page*$pL;
+//           $end = $strt + $pL;
+//           if(count($dates) != 0 && count($dates) <= $pL && $page < 1){
+//               $ltD = $dates[0];
+//               $gtD = end($dates);
+//           }else if($end < count($dates)){
+//               $ltD = $dates[$strt];
+//               $gtD = $dates[$end];
+//           }else if($strt < count($dates)){
+//               $ltD = $dates[$strt];
+//               $gtD = end($dates);
+//           }else{
+//               $ltD = "";
+//               $gtD = "";
+//           }
+//             error_log("+++++++++++========sdzxf=".print_r($dates,1));
+////             error_log("+++++++++ltd++========sdzxf=".($ltD));
+////             error_log("++++++++++gtd+========sdzxf=".$gtD);
+//             if($page == 0){
+//                 $ltD = date('m/d/Y',strtotime("+1 day", strtotime($ltD)));
+//             }
              
              //
 //                      $matchArray = array('Status'=>(int)1,'CreatedOn' => array('$lt'=>new \MongoDB\BSON\UTCDateTime(strtotime($ltD)*1000),'$gt'=>new \MongoDB\BSON\UTCDateTime(strtotime($gtD)*1000)),'ProjectId'=>(int)$projectId,'OccuredIn'=>$occuredIn);
-                      $matchArray['CreatedOn']= array('$lt'=>new \MongoDB\BSON\UTCDateTime(strtotime($ltD)*1000),'$gt'=>new \MongoDB\BSON\UTCDateTime(strtotime($gtD)*1000));//,'ProjectId'=>(int)$projectId,'OccuredIn'=>$occuredIn);
-                    $query = Yii::$app->mongodb->getCollection('EventCollection');
-                    $pipeline = array(
-                         array('$match' => $matchArray),
-                        array('$sort' => array('CreatedOn'=>-1)),
-                         array(
-                            '$group' => array( 
-                                '_id' =>  array('CreatedOn'=>'$CreatedOn'),
-                             //  "commentData" => array('$push' => array('$ProjectId')),
-                             "Data" => array('$push' => '$_id'),
-                             ),
-                             
-                        ),
-                        );
-                         
-                $eventCollectionData = $query->aggregate($pipeline);
-             
-             
-                return $eventCollectionData ;
+//                      $matchArray['CreatedOn']= array('$lt'=>new \MongoDB\BSON\UTCDateTime(strtotime($ltD)*1000),'$gt'=>new \MongoDB\BSON\UTCDateTime(strtotime($gtD)*1000));//,'ProjectId'=>(int)$projectId,'OccuredIn'=>$occuredIn);
+//              $where = ['ProjectId'=>(int)$projectId];
+            $query=new Query();
+            $query->from('EventCollection')->where($matchArray)
+            ->orderBy(["CreatedOn"=>SORT_DESC]);
+            $provider = new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                'pageSize' => (int)$postData->pageLength,
+                'page'=>(int)$postData->page
+                ]
+            ]);
+           return  $eventCollectionData = $provider->getModels();
+//                    $query = Yii::$app->mongodb->getCollection('EventCollection');
+//                    $pipeline = array(
+//                         array('$match' => $matchArray),
+//                        array('$sort' => array('CreatedOn'=>-1)),
+//                         array(
+//                            '$group' => array( 
+//                                '_id' =>  array('CreatedOn'=>'$CreatedOn'),
+//                             //  "commentData" => array('$push' => array('$ProjectId')),
+//                             "Data" => array('$push' => '$_id'),
+//                             ),
+//                             
+//                        ),
+//                        );
+//                         
+//                $eventCollectionData = $query->aggregate($pipeline);
+//             
+//             
+//                return $eventCollectionData ;
                 
        } catch (\Throwable $ex) {
             Yii::error("EventCollection:getAllActivities::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

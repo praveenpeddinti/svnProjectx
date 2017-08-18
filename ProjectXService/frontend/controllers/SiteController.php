@@ -27,6 +27,7 @@ use common\models\mysql\Collaborators;
 use common\models\mongo\TinyUserCollection;
 use common\models\mysql\ProjectTeam;
 use common\service\CollaboratorService;
+use common\service\CollaboratorService;
 
 /**
  * Site controller
@@ -766,7 +767,7 @@ class SiteController extends Controller
     public function actionGetAllActivitiesForProjectDashboard(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-            $projectdetails=ServiceFactory::getCollaboratorServiceInstance()->getAllActivities($postData->page,$postData->projectId);
+            $projectdetails=ServiceFactory::getCollaboratorServiceInstance()->getAllActivities($postData);
             if(!empty($projectdetails)){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;

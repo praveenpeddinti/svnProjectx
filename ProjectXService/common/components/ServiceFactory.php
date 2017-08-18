@@ -6,6 +6,7 @@ use common\service\StoryService;
 use common\service\CollaboratorService;
 use common\service\TimeReportService;
 use common\service\BucketService;
+use common\service\ProjectService;
 use yii\base\ErrorException;
 
 /*
@@ -20,6 +21,8 @@ class ServiceFactory {
     private static $inst_collaborator_service = null;
     private static $inst_timereport_service = null;
     private static $inst_bucket_service = null;
+    private static $inst_project_service = null;
+    
     private function __construct() {
         
     }
@@ -68,6 +71,17 @@ class ServiceFactory {
             return self::$inst_bucket_service;
         } catch (\Throwable $ex) {
             Yii::error("ServiceFactory:getBucketServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+     public static function getProjectServiceInstance() {
+        try {
+            if (!self::$inst_project_service) {
+                self::$inst_project_service = new ProjectService();
+            }
+            return self::$inst_project_service;
+        } catch (\Throwable $ex) {
+            Yii::error("ServiceFactory:getProjectServiceInstance::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
