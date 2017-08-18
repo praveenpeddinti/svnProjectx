@@ -1502,6 +1502,7 @@ button.toast-close-button {
 .modal-content{background:#fff;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
 .modal-header{background:#f7f9fa; border-bottom:solid 1px #e6e8eb; color:#695ea5; font:normal 16px/24px 'open_sansregular';}
 .model_submit{ background:#695ea5;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase;}
+.model_cancel{ background:#a7b4d3;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase;}
 .invitesearch{ background:#fff; border:solid 1px #e6e8eb; width:100%; height:35px;}
 .model_label{font:normal 14px/20px 'open_sansregular'; color: #637282; font-weight:normal!important;}
 .butnbor{ border:none!important; outline: none!important;}
@@ -1573,5 +1574,5 @@ button.toast-close-button {
 
 .no_record_found{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #695ea5;margin-left: 45%; }
 
-
+.but:hover{ color:#58637e;}
 

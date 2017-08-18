@@ -105,81 +105,9 @@
             </div>     
    </div>
    </div>
-   <div *ngIf="creationPopUp">
-         <div class="modal fade custommodel"  id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Edit PROJECT</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-     <form  #projectEditForm="ngForm" (ngSubmit)="submitted && projectEditForm.form.valid && editProjectDetails()" novalidate="true">
-
-      <div class="modal-body">
-       
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 ">
-                   <!--<textarea name="projectLogo" id="summernote" [(ngModel)]="entryForm.projectLogo"  #projectLogo="ngModel"></textarea>-->
-               <div class="pull-right"> 
-                  <div class="model_proimg">
-                 <img *ngIf="clearImgsrc" alt="" src="assets/images/logo.jpg" name="projectLogo" class="projectlogo"   />
-                 <img *ngIf="!clearImgsrc" alt="" src="assets/images/logo.jpg" name="projectLogo" class="projectlogo"    />
-                  <div class="model_proimgedit" (click)="CallFileupload()" ><i class="fa fa-pencil" aria-hidden="true"></i>
-                  </div>
-                   <input  type="file" id="inputFile" style="display: none;" (change)="fileUploadEvent($event, 'fileChange')"  multiple />
-                  
-                  </div>
-                    <div *ngIf="fileuploadMessage" id="fileuploadMessage"  class="fielderror">Invalid format</div>
-               </div>
-  
-              </div>
-
-            </div>
-  
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 ">
-                <label class="model_label"> Project Name </label>
-                <div class="customformfieldsmarginbottom autoSearchTask">
-                  <input type="text" class="customformfields " required [(ngModel)]="form.projectName" name="projectName" #projectName="ngModel"
-                    id="projectName" (keyup)="verifyProjectName(form.projectName);" (keydown)="veryInputByspinner()" />
-                  <div *ngIf="submitted && projectName.errors " class="fielderror">
-                    <div [hidden]="!projectName.errors.required">Project Name is required</div>
-                  </div>
-                    <div [hidden]="!verifyProjectMess" class="fielderror"> Project name you have entered is already exists in the system!</div>
-          
-         <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
-                </div>
-              </div>
-  
-            </div>
-
-             <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Description </label>
-                        <div class="customformfieldsmarginbottom relativediv ">
-                            <textarea  [(ngModel)]="form.description"   name="description"  #description="ngModel" class="customformfieldstextarea " required id="summernote"></textarea>
-                            <div *ngIf="submitted && description.errors " class="fielderror">
-                                <div [hidden]="!description.errors.required">Description is required</div>
-                            </div>
-                             <div [hidden]="!summernoteLength">Description cannot be more than 500 characters long.</div>
-                        </div>
-                    </div>
-                </div>
-
-              </div>
-    
-      <div class="modal-footer">
-        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">Update</button>
-        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;resetForm();" >CANCEL</button>
-      </div>
-       </form>
-    </div>
+   <div *ngIf="editPopUp">
+       <app-project-form projectForm='edit'></app-project-form>
   </div>
-</div>
- 
-</div>
 </div>
 <div class="col-md-4">
         <app-activities [dashboardData]="dashboardData"></app-activities>

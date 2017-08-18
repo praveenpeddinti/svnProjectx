@@ -1,0 +1,18 @@
+.modalbg{ background:#fff;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+.modalhed{ background:#f7f9fa; border-bottom:solid 1px #e6e8eb; color:#695ea5; font:normal 16px/24px 'open_sansregular';}
+.model_submit{ background:#695ea5;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase;}
+.model_cancel{ background:#a7b4d3;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase;}
+
+.modal_label{ color:#637282; font:normal 14px/22px 'open_sansregular'; font-weight:normal!important;}
+.modal_txtbox{ background:#fff; border:solid 1px #e6e8eb;}
+#projectName{position: relative; padding-right:50px;}
+.txtbox_spinner{ height: 30px;
+    position: absolute;
+    right: 10px;
+    top: 32px;
+    width: 30px;}
+.model_proimg{ width:90px; height:90px; border-radius:100%; background:#f7f9fa; position:relative;}
+.model_proimg img{ border-radius:100%; width:90px; height:90px;}
+.model_proimgedit{ width:20px; height:20px; background:#776dad; border-radius:100%; text-align:center; vertical-align:middle; position:absolute; right:5px; top:5px; cursor:pointer;}
+.model_proimgedit i{ font-size:12px; color:#fff;}
+.label{font-weight:normal !important;}

@@ -43,7 +43,7 @@ export class UserDashboardComponent implements OnInit {
   public submitted=false;
   public creationPopUp=true;
 
-  public clearImgsrc=true;
+  public clearImgsrc:any;
   public checkImage:any;
   public fileuploadMessage=0; 
   public verifyProjectMess=false;
@@ -52,6 +52,11 @@ export class UserDashboardComponent implements OnInit {
   public noMoreProjects:boolean = false;
   public noProjectsFound:boolean = false;
   public noActivitiesFound:boolean = false;
+  public spinnerSettings={
+      color:"",
+      class:""
+    };
+ public projectForm:string;
   constructor(
           private _router: Router,
           private _service: LoginService,
@@ -108,6 +113,7 @@ export class UserDashboardComponent implements OnInit {
             if (thisObj.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
                thisObj.dashboardData.activities[curActLength - 1].activityData = thisObj.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
                result.data.activities .splice(0, 1);
+                            console.log("@@-44-"+JSON.stringify(result.data.activities));
                thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
             } else {
               thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
@@ -115,6 +121,7 @@ export class UserDashboardComponent implements OnInit {
           } else {
             thisObj.noMoreActivities = true;
           }
+          
         }
 
       }
@@ -123,168 +130,9 @@ export class UserDashboardComponent implements OnInit {
     });
   }
 
-  CallFileupload(){
-       jQuery("input[id='inputFile']").click(); 
-      this.fileuploadClick=true;
-    }
-        /*
-    @params       : fileInput,comeFrom
-    @ParamType    :  any,string
-    @Description  : Uploading File
-    */
-    public fileUploadEvent(fileInput: any, comeFrom: string):void 
-    {
-        if(comeFrom == 'fileChange') {
-            this.filesToUpload = <Array<File>> fileInput.target.files;
-       } else if(comeFrom == 'fileDrop') {
-            this.filesToUpload = <Array<File>> fileInput.dataTransfer.files;
-       } else {
-            this.filesToUpload = <Array<File>> fileInput.target.files;
-       }
-            
-            this.hasBaseDropZoneOver = false;
-            this.fileUploadStatus = true;
-            this.fileUploadService.makeFileRequest(GlobalVariable.FILE_UPLOAD_URL, [], this.filesToUpload).then(
-                (result :Array<any>) => {
-    
-                for(var i = 0; i<result.length; i++){
-                   result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
-                    var uploadedFileExtension = (result[i].originalname).split('.').pop();
-                     if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                      this.fileuploadMessage=0; 
-                       var postData={
-                              logoName:"[[image:" +result[i].path + "|" + result[i].originalname + "]]"
-                            }
-                          this._ajaxService.AjaxSubscribe("site/get-project-image",postData,(result)=>
-                            {
-                                if(result.data){
-                                    jQuery(".projectlogo").attr("src",result.data);
-                                    this.fileExtention=uploadedFileExtension;
-                               }
-                               this.projectImage=jQuery(".projectlogo").attr("src");
-                            
-                    });
-                     } else{
-                        this.fileuploadMessage=1; 
-                   }
-                }
-                this.fileUploadStatus = false;
-            }, (error) => {
-                console.error("Error occured in story-formcomponent::fileUploadEvent"+error);
-                this.fileUploadStatus = false;
-            });
-    }
-    public spinnerSettings={
-      color:"",
-      class:""
-    };
-    public makeAjax(){
-      
-    }
-  
-    public makeAjaxVar = function(postData){
-       
-    }
-    public timer=undefined;
-      verifyProjectName(value){
-        // alert("@@@---");
-        //  this.spinnerSettings.color='';
-       // this.spinnerSettings.class ='';
-       
-       clearTimeout(this.timer);
-         var postData={
-                      projectName:value.trim()
-                  } ;
-                   console.log("sssssssssss---------"+value.trim());
-                  if(value.trim()=='' || value.trim() == undefined){
-                  // alert("sssssssssss");
-                     this.spinnerSettings.color='';
-                     this.spinnerSettings.class ='';
-                     this.verifyProjectMess=false;
-                  }else{
-                        this.verifyByspinner=2;
-                        this.spinnerSettings.color="blue";
-                        this.spinnerSettings.class = "fa fa-spinner fa-spin";
-                        // alert(this.timer);
-                       this.timer = setTimeout(()=>{
-                         this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
-                        { 
-                           //alert("@@@---"+JSON.stringify(result.statusCode));
-                            if (result.data != false) {
-                               this.verified=0;
-                               this.verifyByspinner=3;
-                              this.spinnerSettings.color="red";
-                              this.spinnerSettings.class = "fa fa-times";
-                               this.verifyProjectMess=true;
-                              // alert(this.verifyProjectMess);
-                             }else{
-                              this.verified=1;
-                              this.verifyByspinner=1;
-                              this.spinnerSettings.color="green";
-                              this.spinnerSettings.class = "fa fa-check";
-                            }
-                                    
-                        })
-                       },3000);
-                       
-                  }
-      
-    }
-   veryInputByspinner(){
-        //this.verifyByspinner='';
-        this.spinnerSettings.color='';
-        this.spinnerSettings.class ='';
-        this.verifyProjectMess=false;
-    }
-    public editorDesc="";
-      saveProjectDetails(){
-        if(this.verified==1 && this.fileuploadMessage==0){
-           this.projectImage=jQuery('.projectlogo').attr("src");
-           var editor=jQuery('#summernote').summernote('code');
-            this.editorDesc =jQuery(editor).text().trim();
-            this.form['description']=this.editorDesc;
-           // editor=jQuery(editor).text().trim();
-            // if(editor.length>500){
-            //     this.summernoteLength=true;
-            // }else{
-             var postData={
-                      projectName:this.form['projectName'].trim(),
-                      description:this.form['description'],
-                      projectLogo:this.projectImage,
-                      fileExtention:this.fileExtention
-                  } ;
-                
-              this._ajaxService.AjaxSubscribe("site/save-project-details",postData,(result)=>
-              {
-                    if (result.statusCode == 200) {
-                       setTimeout(() => {
-                          this.submitted=false;
-                          this.form={
-                                  description:""
-                          };
-                            this.creationPopUp=false;
-                         }, 1000);
-                         this.creationPopUp=true;
-                         this._router.navigate(['project',this.form['projectName']]);
-                      }else{
-                 }
-                }) 
-          //  }
-       }else{
-
-       }
-    }
- 
-    resetForm(){
-       this.submitted=false;
-         this.form={
-                 description:""
-            };
-        jQuery("#summernote").summernote('destroy');
-        this.verifyProjectMess=false; 
-  }
     creationProject(){
        //jQuery("#summernote").summernote();
+       // alert("121212");
         var formobj=this;
         this.editor.initialize_editor('summernote','keyup',formobj);
         this.form={
@@ -295,25 +143,21 @@ export class UserDashboardComponent implements OnInit {
        this.verifyByspinner='';
        this.fileuploadMessage=0; 
        this.checkImage=jQuery('.projectlogo').attr("src");
-       if(this.checkImage=='assets/images/logo.jpg'){
+     // this.clearImgsrc=="assets/images/logo.jpg";
+       if(this.checkImage=="assets/images/logo.jpg"){
          this.clearImgsrc=true; 
        }else{
+        //  alert("asd");
            this.clearImgsrc=false;
-          // this.checkImage='assets/images/logo.jpg'; alert("555"+this.clearImgsrc);
+          // this.checkImage='assets/images/logo.jpg';; alert("555"+this.clearImgsrc);
        }
-      // alert("@@--"+this.clearImgsrc);
+      //alert("@@--"+this.clearImgsrc);
         this.verifyProjectMess=false; 
          this.spinnerSettings.color='';
          this.spinnerSettings.class ='';
     }
 
-    // clearlengthMessage(){
-    //     this.summernoteLength=false; 
-    // alert("alererer"+this.summernoteLength) ;   
-    // }
-
-
-    @HostListener('window:scroll', ['$event']) 
+     @HostListener('window:scroll', ['$event']) 
     loadNotificationsOnScroll(event) {
      // console.debug("Scroll Event", window.pageYOffset );
       if ((!this.noMoreActivities || !this.noMoreProjects ) && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
