@@ -365,7 +365,7 @@ class StoryController extends Controller
         }catch (\Throwable $th) {
             Yii::error("StoryController:actionGetFieldDetailsByFieldId::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
-             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->statusCode =  ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
@@ -437,7 +437,7 @@ class StoryController extends Controller
             }else{
                 $response='failure';
                 $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::FAILURE;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "FAILURE";
                 $responseBean->data =    $getUpdateStatus;
                 $response = CommonUtility::prepareResponse($responseBean,"json");
@@ -1015,7 +1015,14 @@ class StoryController extends Controller
         $postData = json_decode(file_get_contents("php://input"));
         $projectId = $postData->projectId;
         $options=array();
-        $options['Filters'] = ServiceFactory::getStoryServiceInstance()->getFilterOptions();
+        $tempFilter = array();
+        $filters = ServiceFactory::getStoryServiceInstance()->getFilterOptions();
+         foreach ($filters as $item) {
+
+                $tempFilter[$item['Type']][] = $item;
+        }
+        $options['General']=$tempFilter['general'];
+        $options['My']=$tempFilter['individual'];
         $options['Buckets'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
         $preparedFilters = CommonUtility::prepareFilterOption($options);
         $responseBean = new ResponseBean();
@@ -1341,6 +1348,35 @@ class StoryController extends Controller
              return $response;
         }
     }
+    
+    
+    public function actionSaveEditedReport(){
+       
+       try {
+          $reportt_post_data=json_decode(file_get_contents("php://input"));
+          error_log(print_r($reportt_post_data,1));
+       
+//                if(isset($comment_post_data->Comment->OrigianalCommentorId)){
+//                $comment_post_data->Comment->OriginalCommentorId=$comment_post_data->Comment->OrigianalCommentorId;
+//            }
+       $returnData = ServiceFactory::getStoryServiceInstance()->saveEditedReport($reportt_post_data);
+       $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $returnData;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response; 
+       } catch (\Throwable $th) {
+            Yii::error("StoryController:actionSaveEditedReport::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+       
+   }
      
 }
 
