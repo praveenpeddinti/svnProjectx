@@ -356,8 +356,8 @@ class CollaboratorService {
             $activityLimit = $params->activityLimit;
             $timeZone = $params->timeZone;
             $projectDetails = ProjectTeam::getAllProjects($userId, $pageLength, $pageNo);
-            $projectCount = ProjectTeam::getProjectsCountByUserId($userId);
-            $preparedDahboard['projectCount'] = $projectCount['count'];
+            $projectCount = self::getTotalProjectCount($userId);
+            $preparedDahboard['projectCount'] = $projectCount;
             $preparedDahboard['weeklyTimeLog'] = ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId);
             $preparedDahboard['projects'] = CommonUtilityTwo::prepareProjectsForUserDashboard($projectDetails, $userId);
             $activities = ServiceFactory::getStoryServiceInstance()->getNotifications($userId, 0, $activityOffset, $activityLimit, 1, true, $timeZone);
