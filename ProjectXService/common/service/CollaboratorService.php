@@ -499,6 +499,7 @@ class CollaboratorService {
     public function verifyCode($invite_code) {
         try {
             $usertype="";
+            $userData=array();
             $invite_data = ProjectInvitation::verifyCode($invite_code);
             error_log("==Invite Userrrrrrrr==".$invite_data['UserId']);
             if (empty($invite_data) || $invite_data['IsValid']==0) { //either empty or invalid code
@@ -508,11 +509,12 @@ class CollaboratorService {
                     $usertype="Existing";
                     $add_status=$this->addUserToTeam($invite_data['ProjectId'],$invite_data['UserId'] );
                     $this->invalidateInvite($invite_data['Email'], $invite_code);
+                    $userData=Collaborators::getCollaboratorWithProfile($invite_data['Email']);
                 }else{
                     $usertype="New";
                 }
             }
-            return array('UserType'=>$usertype,'PName'=>$invite_data['ProjectName']);
+            return array('UserType'=>$usertype,'User'=>$userData);
         } catch (\Throwable $ex) {
             Yii::error("StoryService:verifyCode::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
