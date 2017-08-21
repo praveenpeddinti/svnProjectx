@@ -6,6 +6,7 @@
                   <div class="col-md-9">
                       <div  class="project_heading">
                          <img  src="assets/images/logo.jpg" class="project_logo"/> 
+                         <!--<img *ngIf="!setlogo" src="{{projectLogo}}" class="project_logo"/> -->
                         {{projectName}}</div>
                   </div>
                   <div class="col-md-3">
@@ -86,17 +87,19 @@
                  </div>
             </div>
             <div class="row devider1"></div> 
-              Active Users 
+              Active Users  
+               <div *ngIf="!projectDetails.userInfo">
+                       (No Active Users)
+                       </div>
               <div class="row">
               <div class="col-md-12">
+                 
                 <div *ngIf="projectDetails.userInfo">
                   <div *ngFor="let extractUserInfo of projectDetails.userInfo| slice:0:10;let j=index;">
                         <img alt="" src="{{extractUserInfo.ProfilePicture}}" class="active_userimg useractive">
                     </div>
                 </div>
-               <!-- <img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/> - -->
-               
-               <span  id="demo" class="collapse"><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/></span>
+                  <span  id="demo" class="collapse"><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/></span>
             </div>
             <div *ngIf="userInfoLength>10">
                 <div class="col-md-12">
@@ -110,6 +113,6 @@
   </div>
 </div>
 <div class="col-md-4">
-        <app-activities [dashboardData]="dashboardData"></app-activities>
+        <app-activities [dashboardData]="dashboardData" noMoreActivities=false noActivitiesFound=false></app-activities>
         </div>
    

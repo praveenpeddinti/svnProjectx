@@ -1,46 +1,37 @@
-import { Component, OnInit,HostListener} from '@angular/core';
+import { Component, OnInit,HostListener,ViewChild} from '@angular/core';
 import {AuthGuard} from '../../services/auth-guard.service';
 import { Router,ActivatedRoute } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { GlobalVariable } from '../../config';
-import { FileUploadService } from '../../services/file-upload.service';
-import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 import { AjaxService } from '../../ajax/ajax.service';
 import { DatePipe } from '@angular/common';
+import { ActivitiesComponent } from '../../components/activities/activities.component';
+import { ProjectFormComponent } from '../../components/project-form/project-form.component';
 declare var jQuery:any;
 @Component({
   selector: 'app-project-dashboard',
   templateUrl: './project-dashboard.component.html',
   styleUrls: ['./project-dashboard.component.css'],
-  providers: [ProjectService,AuthGuard,FileUploadService]
+  providers: [ProjectService,AuthGuard]
 })
 export class ProjectDashboardComponent implements OnInit {
+  @ViewChild(ActivitiesComponent) activitiesComponent: ActivitiesComponent;
+  @ViewChild(ProjectFormComponent) projectFormComponent: ProjectFormComponent;
   private projectId;
   public projectName;
   public description;
   public projectLogo;
   public form={};
-  public filesToUpload: Array<File>;
-  public hasBaseDropZoneOver:boolean = false;
-  public hasFileDroped:boolean = false;
   editorData:string='';
-  public fileUploadStatus:boolean = false;
   public projectImage:any;
-  public fileuploadMessage=0; 
-  public fileExtention:any;
-  public verifyByspinner:any;
   public summernoteLength=0;
-  public fileuploadClick=false;
   public verified =0;
   public submitted=false;
   public creationPopUp=true;
   public editPopUp=true;
   public projectDetails=[];
-  public verifyProjectMess=false;
   public copyProjectname:any;
   public copydescription:any;
-  public clearImgsrc=true;
-  public checkImage:any;
   public activityDetails=[];
   private page=0;
   private offset=0;
@@ -48,13 +39,12 @@ export class ProjectDashboardComponent implements OnInit {
   public dashboardData:any;
   public userInfoLength:any;
   public noMoreActivities:boolean = false;
+  public noActivitiesFound:boolean = false;
   public projectForm:string; 
-  public spinnerSettings={
-      color:"",
-      class:""
-    };
-   constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,   private fileUploadService: FileUploadService,
-          private editor:SummerNoteEditorService, private _ajaxService: AjaxService) {this.filesToUpload = []; }
+  public setlogo:any;
+
+   constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,
+          private _ajaxService: AjaxService) {}
 
   ngOnInit() {
     this.dashboardData ='';
@@ -82,7 +72,13 @@ export class ProjectDashboardComponent implements OnInit {
                 thisObj.form['projectName']=thisObj.projectName; 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
-               // alert("------33------"+JSON.stringify(thisObj.form['projectId']));
+//                 alert("------33------"+JSON.stringify(thisObj.form['projectLogo']));
+//                 if(thisObj.form['projectLogo']=='assets/images/logo.jpg'){
+//                   thisObj.setlogo=true;
+//                 }else{
+//                   thisObj.setlogo=false;
+//                 }
+//  alert("------33345------"+JSON.stringify(thisObj.setlogo));
                //  jQuery("#summernote").summernote('code',thisObj.form['description']);
                  thisObj.copyProjectname=thisObj.form['projectName'];
                   thisObj.copydescription=thisObj.form['description'];
@@ -94,13 +90,7 @@ export class ProjectDashboardComponent implements OnInit {
 
   }
    ngAfterViewInit() {
-       //  setTimeout(() => {
-        //alert("12");
-     //   var formobj=this;
-    //    this.editor.initialize_editor('summernote','keyup',formobj);
-       //  },2000);
-     //   this.editor.initialize_editor('summernote',null,this);
-  
+    
     }
 
     currentProjectDetails(){
@@ -140,14 +130,18 @@ export class ProjectDashboardComponent implements OnInit {
                 this._ajaxService.AjaxSubscribe("collaborator/get-all-activities-for-project-dashboard",post_data,(result)=>
                 {   
                   
-                   this.noMoreActivities = false;
                     var thisObj=this;
                    // alert(JSON.stringify(result.data));
                     if (page == 0 ) { 
-                    //  alert("121212");        
+                    //  alert("121212"); 
+                         thisObj.noMoreActivities = false;     
                             thisObj.dashboardData = result.data;
                             console.log("Onload__activity__"+JSON.stringify(thisObj.dashboardData.activities))
                             var curActLength = thisObj.dashboardData.activities.length;
+                              if(thisObj.dashboardData.activities.length==0){
+                                  thisObj.noActivitiesFound=true;
+                              }
+                            
                     }else{
                       var curActLength = thisObj.dashboardData.activities.length;
                         if (result.data.activities.length > 0) {
@@ -181,24 +175,25 @@ export class ProjectDashboardComponent implements OnInit {
    }
   clearEditedDetails(form){
     console.log("12333");
-     this.fileuploadMessage=0; 
-     this.editPopUp=true;
-     this.submitted=false;
-    // setTimeout(()=>{
-     var formobj=this;
-     this.editor.initialize_editor('summernote','keyup',formobj);
-    //  }, 150);
-     this.verifyProjectMess=false; 
-     this.spinnerSettings.color='';
-     this.spinnerSettings.class ='';
-     this.form['projectName']=this.copyProjectname;
-     //jQuery("#summernote").summernote('code',this.copydescription);;;
-     this.checkImage=jQuery('.projectlogo').attr("src");
-     if(this.checkImage=='assets/images/logo.jpg'){
-        this.clearImgsrc=true; 
-     }else{
-        this.clearImgsrc=false;
-      }
+      this.projectFormComponent.clearEditedDetails(form);
+     //  this.fileuploadMessage=0; 
+    //  this.editPopUp=true;
+    //  this.submitted=false;
+    // // setTimeout(()=>{
+    //  var formobj=this;
+    //  this.editor.initialize_editor('summernote','keyup',formobj);
+    // //  }, 150);
+    //  this.verifyProjectMess=false; 
+    //  this.spinnerSettings.color='';
+    //  this.spinnerSettings.class ='';
+    //  this.form['projectName']=this.copyProjectname;
+    //  //jQuery("#summernote").summernote('code',this.copydescription);;;
+    //  this.checkImage=jQuery('.projectlogo').attr("src");
+    //  if(this.checkImage=='assets/images/logo.jpg'){
+    //     this.clearImgsrc=true; 
+    //  }else{
+    //     this.clearImgsrc=false;
+    //   }
   }
  
 }
