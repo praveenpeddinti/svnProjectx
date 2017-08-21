@@ -1515,7 +1515,7 @@ button.toast-close-button {
 .usrcomponent .ui-autocomplete-panel .ui-autocomplete-list-item{  border-bottom:solid 1px #e6e8eb; color:#637282; font:normal 13px/24px 'open_sansregular'; padding: 3px 10px;}
 .usrcomponent .ui-autocomplete-panel .ui-autocomplete-list-item:hover{ color: #695ea5!important;background:#f7f9fa!important;}
 .usrcomponent .ui-autocomplete-panel .ui-autocomplete-list-item:last-child{ border-bottom: none;}
-.ui-chips-token{ display:block!important;}
+.ui-chips-token{ display:block!important;border-bottom: solid 1px #c0c0c0;}
 .ui-chips ul li .ui-chips-input-token{ display:block!important; float: left!important; width: 100%!important; clear: both!important;}
 .ui-state-highlight {
    color: #695ea5!important;background:#f7f9fa!important;
@@ -1562,7 +1562,7 @@ button.toast-close-button {
 	background-color: #695ea5;
 	/*border: 2px solid #555555;*/
 }   
- .ui-state-default ul{ margin-top: 50px!important;}  
+ /*.ui-state-default ul{ margin-top: 50px!important;}  */
  .ui-widget-content{ border-top:none!important;}
  
  
@@ -1574,5 +1574,6 @@ button.toast-close-button {
 
 .no_record_found{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #695ea5;margin-left: 45%; }
 
+.inuser .ui-chips>ul.ui-inputtext {margin-top: 50px!important;}
 .but:hover{ color:#58637e;}
 
