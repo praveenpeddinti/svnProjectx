@@ -56,7 +56,7 @@ public form={};
           private _router: Router,
           private _ajaxService: AjaxService,private zone:NgZone,
           private fileUploadService: FileUploadService,
-          private editor:SummerNoteEditorService,
+          public editor:SummerNoteEditorService,
           private projectService:ProjectService
   ) {this.filesToUpload = []; }
   ngOnInit() {
@@ -331,5 +331,30 @@ public form={};
         this.verifyProjectMess=false; 
   }
 
-
+ creationProject(){ 
+       //jQuery("#summernote").summernote();
+       // alert("121212");
+        var formobj=this;
+        this.editor.initialize_editor('summernote','keyup',formobj);
+        this.form={
+                 description:""
+            };
+       this.creationPopUp=true;
+      // this.summernoteLength=false;
+       this.verifyByspinner='';
+       this.fileuploadMessage=0; 
+       this.checkImage=jQuery('.projectlogo').attr("src");
+     // this.clearImgsrc=="assets/images/logo.jpg";
+       if(this.checkImage=="assets/images/logo.jpg"){
+         this.clearImgsrc=true; 
+       }else{
+        //  alert("asd");
+           this.clearImgsrc=false;
+          // this.checkImage='assets/images/logo.jpg';; alert("555"+this.clearImgsrc);
+       }
+      //alert("@@--"+this.clearImgsrc);
+        this.verifyProjectMess=false; 
+         this.spinnerSettings.color='';
+         this.spinnerSettings.class ='';
+    }
 }
