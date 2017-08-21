@@ -9,17 +9,14 @@ import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
 import { GlobalVariable } from '../../config';
-import { FileUploadService } from '../../services/file-upload.service';
-import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 import { DatePipe } from '@angular/common';
 import { ProjectFormComponent } from '../../components/project-form/project-form.component';
-
 declare var jQuery:any;
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css'],
-  providers:[AuthGuard,FileUploadService]
+  providers:[AuthGuard]
 })
 export class UserDashboardComponent implements OnInit {
   @ViewChild(ProjectFormComponent) projectFormComponent: ProjectFormComponent;
@@ -29,36 +26,12 @@ export class UserDashboardComponent implements OnInit {
   public activityOffset=0;
   public activityLimit=10;
   public dashboardData:any;
-  public form={
-    description:""
-  };
-  public filesToUpload: Array<File>;
-  public hasBaseDropZoneOver:boolean = false;
-  public hasFileDroped:boolean = false;
-  editorData:string='';
-  public fileUploadStatus:boolean = false;
-  public projectImage:any;
-  public fileExtention:any;
-  public verifyByspinner:any;
- // public summernoteLength=false;
-  public fileuploadClick=false;
-  public verified =0;
   public submitted=false;
   public creationPopUp=true;
-
-  public clearImgsrc:any;
-  public checkImage:any;
-  public fileuploadMessage=0; 
-  public verifyProjectMess=false;
-
   public noMoreActivities:boolean = false;
   public noMoreProjects:boolean = false;
   public noProjectsFound:boolean = false;
   public noActivitiesFound:boolean = false;
-  public spinnerSettings={
-      color:"",
-      class:""
-    };
  public projectForm:string;
   constructor(
           private _router: Router,
@@ -67,9 +40,7 @@ export class UserDashboardComponent implements OnInit {
           private shared:SharedService,
           private _ajaxService: AjaxService,
           private zone:NgZone,
-          private fileUploadService: FileUploadService,
-          private editor:SummerNoteEditorService
-  ) {this.filesToUpload = []; }
+   ) { }
 
    ngAfterViewInit() { 
        // var formobj=this;
@@ -135,30 +106,6 @@ export class UserDashboardComponent implements OnInit {
 
     creationProject(){
       this.projectFormComponent.creationProject();
-    //    //jQuery("#summernote").summernote();
-    //    // alert("121212");
-    //     var formobj=this;
-    //     //this.projectFormComponent.editor.initialize_editor('summernote','keyup',formobj);
-    //     this.form={
-    //              description:""
-    //         };
-    //    this.creationPopUp=true;
-    //   // this.summernoteLength=false;
-    //    this.verifyByspinner='';
-    //    this.fileuploadMessage=0; 
-    //    this.checkImage=jQuery('.projectlogo').attr("src");
-    //  // this.clearImgsrc=="assets/images/logo.jpg";
-    //    if(this.checkImage=="assets/images/logo.jpg"){
-    //      this.clearImgsrc=true; 
-    //    }else{
-    //     //  alert("asd");
-    //        this.clearImgsrc=false;
-    //       // this.checkImage='assets/images/logo.jpg';; alert("555"+this.clearImgsrc);
-    //    }
-    //   //alert("@@--"+this.clearImgsrc);
-    //     this.verifyProjectMess=false; 
-    //      this.spinnerSettings.color='';
-    //      this.spinnerSettings.class ='';
     }
 
      @HostListener('window:scroll', ['$event']) 
