@@ -835,7 +835,6 @@ trait NotificationTrait {
                     $Date = $datetime->format('Y-m-d H:i:s');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
-                    error_log($user."=====================".$notification['ActivityFrom']."===========&&&&&&&&&&&&&&&&&&&&7===================".$notification['Notification_Type']);
                     $on="";
                     if ($notification['Notification_Type'] == 'comment') {
                         //Eg : moin.hussain commented on #33 Ticket 
