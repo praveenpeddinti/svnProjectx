@@ -12,6 +12,8 @@ import { GlobalVariable } from '../../config';
 import { FileUploadService } from '../../services/file-upload.service';
 import {SummerNoteEditorService} from '../../services/summernote-editor.service';
 import { DatePipe } from '@angular/common';
+import { ProjectFormComponent } from '../../components/project-form/project-form.component';
+
 declare var jQuery:any;
 @Component({
   selector: 'app-user-dashboard',
@@ -20,6 +22,7 @@ declare var jQuery:any;
   providers:[AuthGuard,FileUploadService]
 })
 export class UserDashboardComponent implements OnInit {
+  @ViewChild(ProjectFormComponent) projectFormComponent: ProjectFormComponent;
   public users=JSON.parse(localStorage.getItem('user'));
   public projectOffset=0;
   public projectLimit=3;
@@ -131,30 +134,31 @@ export class UserDashboardComponent implements OnInit {
   }
 
     creationProject(){
-       //jQuery("#summernote").summernote();
-       // alert("121212");
-        var formobj=this;
-        this.editor.initialize_editor('summernote','keyup',formobj);
-        this.form={
-                 description:""
-            };
-       this.creationPopUp=true;
-      // this.summernoteLength=false;
-       this.verifyByspinner='';
-       this.fileuploadMessage=0; 
-       this.checkImage=jQuery('.projectlogo').attr("src");
-     // this.clearImgsrc=="assets/images/logo.jpg";
-       if(this.checkImage=="assets/images/logo.jpg"){
-         this.clearImgsrc=true; 
-       }else{
-        //  alert("asd");
-           this.clearImgsrc=false;
-          // this.checkImage='assets/images/logo.jpg';; alert("555"+this.clearImgsrc);
-       }
-      //alert("@@--"+this.clearImgsrc);
-        this.verifyProjectMess=false; 
-         this.spinnerSettings.color='';
-         this.spinnerSettings.class ='';
+      this.projectFormComponent.creationProject();
+    //    //jQuery("#summernote").summernote();
+    //    // alert("121212");
+    //     var formobj=this;
+    //     //this.projectFormComponent.editor.initialize_editor('summernote','keyup',formobj);
+    //     this.form={
+    //              description:""
+    //         };
+    //    this.creationPopUp=true;
+    //   // this.summernoteLength=false;
+    //    this.verifyByspinner='';
+    //    this.fileuploadMessage=0; 
+    //    this.checkImage=jQuery('.projectlogo').attr("src");
+    //  // this.clearImgsrc=="assets/images/logo.jpg";
+    //    if(this.checkImage=="assets/images/logo.jpg"){
+    //      this.clearImgsrc=true; 
+    //    }else{
+    //     //  alert("asd");
+    //        this.clearImgsrc=false;
+    //       // this.checkImage='assets/images/logo.jpg';; alert("555"+this.clearImgsrc);
+    //    }
+    //   //alert("@@--"+this.clearImgsrc);
+    //     this.verifyProjectMess=false; 
+    //      this.spinnerSettings.color='';
+    //      this.spinnerSettings.class ='';
     }
 
      @HostListener('window:scroll', ['$event']) 
