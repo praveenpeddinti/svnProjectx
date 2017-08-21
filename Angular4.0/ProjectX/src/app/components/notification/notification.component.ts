@@ -22,6 +22,7 @@ export class NotificationComponent implements OnInit{
     private page=1;
     public nomorenotifications:boolean= false;
     public ready=true;
+    private promptedBoxId;
      @ViewChildren(ConfirmationBoxComponent) confirmationBox: QueryList<ConfirmationBoxComponent>;
      constructor(
         private _router: Router,
@@ -89,13 +90,19 @@ export class NotificationComponent implements OnInit{
 
   }
     promptConfirmationBox(domPosition) 
-  { //alert('delete-'+domPosition);
+  { 
    var array = this.confirmationBox.toArray();
    array.forEach(function (value) {
       value.getDataFromParent(-1);
-      });
-     array[domPosition].getDataFromParent(domPosition);
-    
+    });
+  
+    if(this.promptedBoxId !== domPosition){
+         array[domPosition].getDataFromParent(domPosition);
+    this.promptedBoxId = domPosition;
+    }else{
+     this.promptedBoxId = "";
+    }
+   
 
 
   }

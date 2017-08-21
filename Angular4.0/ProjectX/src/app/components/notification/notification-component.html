@@ -56,12 +56,16 @@
 <!--<div class="not_date">{{notify.date}}</div>-->
 </div>
 <a *ngIf="notify.IsSeen==0" id="mark_{{notify.id.$oid}}" type="button" data-toggle="tooltip" data-placement="top" title="Mark As Read"   (click)="readNotification(notify.Project,notify.id.$oid,$event,i)" class="notificationread notiall-delete">
-<i class="fa fa-times" aria-hidden="true"></i>
+<!--<i class="fa fa-times" aria-hidden="true"></i>-->
+<i class="fa fa-check" aria-hidden="true"></i>
+
 </a>
 <a   type="button" data-toggle="tooltip" data-placement="top" title="Delete"   (click)="promptConfirmationBox(i)" class="notificationdelete notiall-delete">
-<i class="fa fa-times" aria-hidden="true"></i>
+<i class="fa fa-trash" aria-hidden="true"></i>
 </a>
+<div class="notfi_deletbox">
 <app-confirmation-box [boxId]="i" [cancelAction]="'closeConfirmationBox'" [okAction]="'emitDeleteNotification'" (callBackToParent)="deleteNotification(notify.Project,notify.id.$oid,$event,i)" >  </app-confirmation-box>
+</div>
 </div>
 </li>
 <li class="notificationlist_all" *ngIf="nomorenotifications" id="notificationMessage">

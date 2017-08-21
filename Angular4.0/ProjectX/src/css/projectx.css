@@ -1577,3 +1577,8 @@ button.toast-close-button {
 .inuser .ui-chips>ul.ui-inputtext {margin-top: 50px!important;}
 .but:hover{ color:#58637e;}
 
+
+
+    .notfi_deletbox .delete_followersbgtablesinglepop::after{right:14px!important; }
+/*.notfi_deletbox .delete_followersbgtable::after{right:14px!important;}*/
+

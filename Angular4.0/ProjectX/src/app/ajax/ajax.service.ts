@@ -64,6 +64,7 @@ NodeSubscribe(url:string,params:Object,callback)
       this.http.post(GlobalVariable.NOTIFICATION_URL+url, params) 
       .subscribe(
       (data) => {
+          this.sharedServece.setLoader(false);
         // jQuery("#commonSpinner").removeClass("loading"); 
         // jQuery("#commonSpinner").addClass("unloading"); 
         var res = data.json();//For Success Response
