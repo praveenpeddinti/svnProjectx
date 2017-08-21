@@ -98,3 +98,7 @@
 
 </form>
 
+<div *ngIf="openReportPopup">
+<app-report-confirmation [updatedFieldValue]="updatedFieldValue"  [title]="reportPopuplable" [formData]="postParams" (cancleToParent)="cancleChangingStatus($event)" (saveFromParent)="saveReportWithStatus($event)"></app-report-confirmation>
+</div>
+

@@ -58,6 +58,10 @@ export class StoryEditComponent implements OnInit
   private childTasks = [];
   private showTotalEstimated=false;   
   private taskFieldsEditable=[]; 
+  public reportPopuplable:any;
+  public postParams:any;
+  public openReportPopup:boolean=false;
+  public updatedFieldValue:any;
   constructor(private fileUploadService: FileUploadService, private _ajaxService: AjaxService,private _service: StoryService,
     public _router: Router,private mention:MentionService,private projectService:ProjectService,
     private http: Http,private route: ActivatedRoute,private editor:SummerNoteEditorService,private shared:SharedService) { 
@@ -278,7 +282,8 @@ export class StoryEditComponent implements OnInit
        }        
        for(var i=0;list.length>i;i++)
        {
-          listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
+        let val = (status=='Status')?list[i]:list[i].Id;
+          listItem.push({label:list[i].Name, value:val,priority:priority,type:status});
        }
      }
     listMainArray.push({type:"",filterValue:listItem});
@@ -290,8 +295,10 @@ export class StoryEditComponent implements OnInit
     @ParamType :  Object
     @Description: Submit Edit Story/Ticket
     */
+    
   editStorySubmit(edit_data)
   { 
+    
     jQuery("#title_error").hide();
     jQuery("#desc_error").hide();
     var desc=jQuery("#description").summernote('code');
@@ -311,6 +318,17 @@ export class StoryEditComponent implements OnInit
     }
     if(error == 0)
     {
+      if(typeof edit_data.workflow == 'object'){
+        if(edit_data.workflow.ConfigType==0){
+          edit_data.workflow=edit_data.workflow.Id;
+        }else{
+           this.reportPopuplable = edit_data.workflow.CaptureMessage;
+           this.postParams=edit_data;
+           this.openReportPopup=true;
+            this.updatedFieldValue ='';
+           return ;
+        }
+    }
       edit_data.description= desc;
       edit_data.default_task=[];
       if(this.defaultTasksShow){
@@ -329,6 +347,7 @@ export class StoryEditComponent implements OnInit
         this._ajaxService.AjaxSubscribe("story/update-ticket-details",post_data,(data)=>
     
         {
+           this.openReportPopup=false;
          this._router.navigate(['project',this.projectName,this.url_TicketId,'details']);
         });
     }
@@ -473,4 +492,15 @@ export class StoryEditComponent implements OnInit
      
         return subTasksArray;
     }
+
+cancleChangingStatus(value:any){
+  this.openReportPopup=false;
+  jQuery('body').removeClass('modal-open');
+  
+}
+saveReportWithStatus(value:any){
+  value.workflow=value.workflow.Id;
+  this.editStorySubmit(value);
+}
+
 }

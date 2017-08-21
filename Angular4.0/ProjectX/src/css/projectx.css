@@ -508,6 +508,13 @@ color: #0199e0;
 .ticketactivity .property  a{color:#0199e0; text-decoration:none;}
 .ticketactivity .erdate{color:#a2a2a2; font:normal 13px/15px 'robotoregular', Arial, Helvetica, sans-serif; cursor:auto;  float:right;  }
 
+.ticketactivityreport{ display:block;  height:auto; min-height:31px;  margin-bottom:10px; font:normal 13px/15px 'robotoregular', Arial, Helvetica, sans-serif; color:#4c4c4c;  padding:8px 10px 8px 0px; border-radius:2px;
+	 -moz-border-radius:2px;
+	 -webkit-border-radius:2px;word-wrap: break-word;}
+.ticketactivityreport .property {color:#0199e0; cursor:pointer;}
+.ticketactivityreport .property  a{color:#0199e0; text-decoration:none;}
+.ticketactivityreport .erdate{color:#a2a2a2; font:normal 13px/15px 'robotoregular', Arial, Helvetica, sans-serif; cursor:auto;  float:right;  }
+
 @media screen and (max-width:480px){
 	
 .user{font:normal 14px/15px 'robotoregular', Arial, Helvetica, sans-serif; }	

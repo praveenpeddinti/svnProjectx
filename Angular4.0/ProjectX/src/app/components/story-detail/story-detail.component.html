@@ -70,7 +70,7 @@
                         </textarea>
 
                         <div class="customdropdown">
-                            <p-dropdown *ngSwitchCase="'select'" [style]="{'width':'100%'}" [ngModel]="field.valueId"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [displayOptions]="dropDisplayList" [options]="dropList" >
+                            <p-dropdown *ngSwitchCase="'select'" [style]="{'width':'100%'}" [(ngModel)]="field.valueId"   name="dropdownContainer_{{i}}" (onFocus)="dropdownFocus($event,i)" (onBlur)="selectBlurField($event,i)"  (onChange)="restoreField($event,field.elId,i,field.renderType,field.Id)" id='{{field.elId}}_{{i}}'  [hidden]="showMyEditableField[i]" [displayOptions]="dropDisplayList" [options]="dropList" >
                             </p-dropdown>
                             <input *ngSwitchCase="'select'" type="hidden" id="{{field.elId}}_{{i}}_currentSelected">
                         </div>
@@ -370,18 +370,29 @@
                     <div class="user">
               <a href="javascript:void(0)"> <img src="{{comment.ActivityBy.ProfilePicture}}" /></a>  by <span><a href="javascript:void(0)">{{comment.ActivityBy.UserName}}</a> </span> <div *ngIf="(comment.PropertyChanges.length == 0)" class="userdate">( {{comment.ActivityOn}} ) </div>    
             </div>
-          <div *ngFor="let property of comment.PropertyChanges;">   
-    <div class="ticketactivity {{property.Slug.$oid}}">
-   <span *ngIf="property.SpecialActivity=='0'" > 
-     <a  *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/project',projectName,property.PoppedChildId,'details']" (click)="navigateStoryDetail(property.PoppedChildId)" >#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a>
- <span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
+
+<!--property loop-->
  
- <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span> <span *ngIf="property.PreviousValue!=''">to</span>  <span *ngIf="property.NewValue=='-zero-' || property.NewValue=='-none-'">{{property.NewValue}}</span><span class="property">  <a *ngIf="property.NewValue!='-zero-' || property.NewValue=='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}" data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
-                </span>
-    <span *ngIf="property.type!='user'"> 
-        <span *ngIf="property.PreviousValue!=0" class="bold" [innerText]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!='' && property.PreviousValue!=0">to</span> <span class="bold" [innerText]= "property.NewValue"></span> 
-                </span>
-  </span>              
+          <div *ngFor="let property of comment.PropertyChanges;let propIdx = index;">  
+             <div *ngIf="comment.CDescription==''"> 
+    <div class="ticketactivity {{property.Slug.$oid}}">
+         <span class="erdate">( {{property.ActivityOn}} )</span>
+   <span *ngIf="property.SpecialActivity=='0'" >
+<a *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/project',projectName,property.PoppedChildId,'details']" (click)="navigateStoryDetail(property.PoppedChildId)">#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a>
+<span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} <span *ngIf="property.type=='user'"> 
+ 
+ <span class="property"><a href="javascript:void(0)" data-id="{{property.PreviousValue.CollaboratorId}}" data-name="{{property.PreviousValue.UserName}}">{{property.PreviousValue.UserName}}</a></span><span *ngIf="property.PreviousValue!=''">to</span> <span *ngIf="property.NewValue=='-zero-' || property.NewValue=='-none-'">{{property.NewValue}}</span>
+<span
+    class="property"> <a *ngIf="property.NewValue!='-zero-' || property.NewValue=='-none-'" href="#" data-id="{{property.NewValue.CollaboratorId}}"
+        data-name="{{property.NewValue.UserName}}">{{property.NewValue.UserName}}</a> </span>
+    </span>
+    <span *ngIf="property.type!='user'">
+        <span *ngIf="property.PreviousValue!=0" class="bold" [innerText]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!='' && property.PreviousValue!=0">to</span>    <span class="bold" [innerText]="property.NewValue"></span>
+   
+    <!--here-->
+
+    </span>
+    </span>             
    <span *ngIf="property.SpecialActivity=='1'"> 
        <span *ngIf="property.type=='follower'"><span class="bold">{{(comment.ActivityBy.UserName == property.ActionFieldTitle.Name)?'You':property.ActionFieldTitle.Name}}</span> {{property.Action}}&nbsp; <span class="bold" >{{ property.NewValue}}</span> </span> 
       <span *ngIf="property.type=='childtask' || property.type=='related' || property.type=='unrelated'">
@@ -390,12 +401,25 @@
      
 </span>
    
-   <span class="erdate">( {{property.ActivityOn}} )</span>
+  
 </div>
-                 </div>
-            
-            
-            <div  *ngIf="(comment.PropertyChanges.length == 0)" id="commentContent" class="comment{{(comment.Status ==2)?'_reply':''}}" >
+</div>
+
+<!--report-->
+
+<div *ngIf="comment.CDescription!='' && property.ActionFieldName=='workflow'"> 
+    <div class="ticketactivity {{property.Slug.$oid}}">
+         <span class="erdate">( {{property.ActivityOn}} )</span>
+   <span *ngIf="property.SpecialActivity=='0'" >
+<a *ngIf="(comment.PoppedFromChild !='')" [routerLink]="['/project',projectName,property.PoppedChildId,'details']" (click)="navigateStoryDetail(property.PoppedChildId)">#{{property.PoppedChildId}} &nbsp;{{property.PoppedChildTitle}} </a>
+<span class="bold">{{property.ActionFieldTitle}}</span> {{property.Action}} 
+    <span *ngIf="property.type!='user'">
+        <span *ngIf="property.PreviousValue!=0" class="bold" [innerText]= "property.PreviousValue"> </span> <span *ngIf="property.PreviousValue!='' && property.PreviousValue!=0">to</span>    <span class="bold" [innerText]="property.NewValue"></span>
+   
+  
+
+
+<div  id="commentContent" class="comment" >
                 <div (dragover)="fileOverBase($event,'edit_comments',cmtIdx)" (dragleave)="fileDragLeave($event,'edit_comments',cmtIdx)" fileDrop>
                 <div class="commentedtext" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.ParentIndex)" >
                     <div class="user">
@@ -454,6 +478,92 @@
                   </button>
                 </div>
                 </div>
+            </div>
+
+
+
+
+
+
+
+    </span>
+    </span>             
+ 
+  
+</div>
+</div>
+</div>
+
+
+            
+            <!--comment loop-->
+
+            <div  *ngIf="(comment.PropertyChanges.length == 0)" id="commentContent" class="comment{{(comment.Status ==2)?'_reply':''}}" >
+                <div (dragover)="fileOverBase($event,'edit_comments',cmtIdx)" (dragleave)="fileDragLeave($event,'edit_comments',cmtIdx)" fileDrop>
+                <div class="commentedtext" *ngIf="comment.Status ==2" (click)="navigateToParentComment(comment.ParentIndex)" >
+                    <div class="user">
+                        <a href="javascript:void(0)">
+                    <img src="{{commentsList[comment.ParentIndex].ActivityBy.ProfilePicture}}" />
+                    </a>
+                    by <span><a href="javascript:void(0)">{{commentsList[comment.ParentIndex].ActivityBy.UserName}}</a>
+                    </span>
+                    </div>
+                     <span *ngIf="commentsList[comment.ParentIndex].PropertyChanges.length!=0">TEST____
+                     <div class="ticketactivityreport {{commentsList[comment.ParentIndex].PropertyChanges[0].Slug.$oid}}"  >  
+                   <a *ngIf="(commentsList[comment.ParentIndex].PoppedFromChild !='')" [routerLink]="['/project',projectName,commentsList[comment.ParentIndex].PropertyChanges[0].PoppedChildId,'details']" (click)="navigateStoryDetail(commentsList[comment.ParentIndex].PropertyChanges[0].PoppedChildId)">#{{commentsList[comment.ParentIndex].PropertyChanges[0].PoppedChildId}} &nbsp;{{commentsList[comment.ParentIndex].PropertyChanges[0].PoppedChildTitle}} </a>
+                    <span class="bold">{{commentsList[comment.ParentIndex].PropertyChanges[0].ActionFieldTitle}}</span> {{commentsList[comment.ParentIndex].PropertyChanges[0].Action}}      
+                   <span *ngIf="commentsList[comment.ParentIndex].PropertyChanges[0].PreviousValue!=0" class="bold" [innerText]= "commentsList[comment.ParentIndex].PropertyChanges[0].PreviousValue"> </span> <span *ngIf="commentsList[comment.ParentIndex].PropertyChanges[0].PreviousValue!='' && commentsList[comment.ParentIndex].PropertyChanges[0].PreviousValue!=0">to</span>    <span class="bold" [innerText]="commentsList[comment.ParentIndex].PropertyChanges[0].NewValue"></span>
+                     </div>
+                     </span>
+                    <div [innerHTML]="commentsList[comment.ParentIndex].CDescription">
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div style="position:relative">
+                <div id="dropble_comment_{{cmtIdx}}" 
+                          (drop)="fileUploadEvent($event, 'fileDrop','edit_comments',cmtIdx)" >
+                     </div>
+                     <div class="pop_over_bg" id="comments_gif_{{cmtIdx}}" [hidden]="true"><img   src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     </div>
+                     <div >
+                <div *ngIf="comment.Status ==0" id="Activity_content_{{cmtIdx}}" class="commentp" >
+                (Comment removed)
+                </div>
+                <div *ngIf="comment.Status !=0" id="Activity_content_{{cmtIdx}}" class="commentp" [innerHTML]="comment.CDescription">
+                
+                </div>
+                <div *ngIf="comment.Status !=0" id="Reply_Icons_{{cmtIdx}}" class="clearfix pull-right">
+
+                <div class="commedit reply_icn" (click)="replyComment(cmtIdx,comment.ActivityBy.CollaboratorId)"></div> 
+                <div *ngIf="comment.ActivityBy.UserName == getAllData.username" class="commedit edit_icn" (click)="editComment(cmtIdx)"></div> 
+                <div *ngIf="(comment.ActivityBy.UserName == getAllData.username && comment.repliesCount==0)" class="commedit delete_icn" id="commentdel_{{comment.Slug.$oid}}"  (click)="commentdeleteDiv(1,cmtIdx,comment.Slug.$oid)"></div>
+<!--(click)="deleteComment(cmtIdx,comment.Slug.$oid)"-->
+                </div>
+                </div>
+                
+                
+          </div>
+          <div class="alert alert-danger editComment" id="edit_comment_{{cmtIdx}}" style="display:none" >
+
+          </div>
+        </div>
+        <div id="Actions_{{cmtIdx}}" [hidden]="true" >
+                    <div class="uploadcomponent pull-left" style="background:#f8f8f8;">
+                      <div class="uploadbottom">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        File upload
+                      </div>
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','edit_comments',cmtIdx)"  multiple  />
+                </div>
+                <div class="alignright margintop15">
+                  <button class="normal bluebutton bluebuttonmedium "  (click)="submitEditedComment(cmtIdx,comment.Slug.$oid)">
+                    SUBMIT
+                  </button> &nbsp;
+                  <button class="normal bluebutton greybutton bluebuttonmedium" (click)="cancelEdit(cmtIdx)">
+                    CANCEL
+                  </button>
+                </div>
+          </div>
             </div>
             </div>
         
@@ -533,6 +643,9 @@
       </div>
  </div>
 <!--Comments Section End-->
-
-    </div>
+<div *ngIf="openReportPopup">
+<app-report-confirmation [updatedFieldValue]="updatedFieldValue"  [title]="reportPopuplable" [formData]="postParams" (cancleToParent)="cancleChangingStatus($event)" (saveFromParent)="saveReportWithStatus($event)"></app-report-confirmation>
+</div>
+  </div>
 <!--</div>-->
+

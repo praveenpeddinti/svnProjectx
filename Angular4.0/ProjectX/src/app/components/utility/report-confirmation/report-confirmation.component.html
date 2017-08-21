@@ -1,0 +1,59 @@
+<div id="reportPopupId" data-backdrop="false" data-toggle="modal" data-target="#reportPopup"  ></div>
+<div class="modal fade custommodel"  id="reportPopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Report/Reason</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+ <form  #reportCaptureForm="ngForm" (ngSubmit)="rsubmitted && reportCaptureForm.form.valid && saveReport()" novalidate="true">
+      <div class="modal-body">
+        
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> {{title}}</label>
+
+             <div (dragover)="fileOverBase($event,'comments','')" (dragleave)="fileDragLeave($event,'comments','')" fileDrop>
+                <div style="position: relative">
+                     <div id="dropble_comment_" 
+                          (drop)="fileUploadEvent($event, 'fileDrop','comments','')" >
+                     </div>
+                     <div class="progress_bar"  [ngClass]="{pop_over_bg: fileUploadStatus}"><img  id="last_comments" [hidden]="true" src="assets/images/loader.gif" height="20" width="70" alt=""/>
+                     </div>
+                     <!--<ckeditor #commentEditor [config]="toolbarForDetail" [(ngModel)]="commentDesc" name="commentDesc" required >
+                     </ckeditor>-->
+                     <!--<textarea  id="commentEditor" name="commentDesc" [(ngModel)]="form.description"  #commentDesc="ngModel" required></textarea>
+                </div>
+                <div class="alert alert-danger" [innerHTML]="commentError" [hidden]="commentError == ''">
+                </div>-->
+                       <div class="customformfieldsmarginbottom relativediv ">
+                            <textarea  [(ngModel)]="form.description"   name="report"  #report="ngModel" class="" required id="report_summernote"></textarea>
+                            <div *ngIf="rsubmitted && report.errors " class="fielderror">
+                                <div [hidden]="!report.errors.required">Report is required</div>
+                            </div>
+                             <div [hidden]="!summernoteLength">Report cannot be more than 500 characters long.</div>
+                        </div>
+                           </div>
+                    </div>
+                </div>
+
+          </div> 
+      </div>
+    
+      <div class="modal-footer">
+        <div class="uploadcomponent pull-left" style="background:#f8f8f8;">
+                      <div class="uploadbottom">
+                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                        File upload
+                      </div>
+                      <input class="transparentinput" type="file" (change)="fileUploadEvent($event, 'fileChange','comments','')"  multiple  />
+         </div>
+        <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="rsubmitted=true;">Save</button>
+        <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="canclePopup()" >CANCEL</button>
+      </div>
+ </form>
+    </div>
+  </div>
+</div>

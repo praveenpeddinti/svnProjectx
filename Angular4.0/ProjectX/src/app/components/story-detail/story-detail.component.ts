@@ -50,7 +50,7 @@ public blurTimeout=[];
   private follower_search_results:string[];
   private texts:string;
   private check_status:boolean=false;
-private showTotalEstimated=false;
+  private showTotalEstimated=false;
   private childTasksArray=[];
   private childTaskData="";
   public commentsList=[];
@@ -63,6 +63,10 @@ private showTotalEstimated=false;
   public bucketId:any;
   public commentError:any='';
   public editCommentError:any='';
+  public reportPopuplable:any='';
+  public openReportPopup:boolean=false;
+  public postParams:any;
+  public updatedFieldValue:any;
   //Configuration varibale for CKEDITOR in detail page.
   private toolbarForDetail={toolbar : [
     [ 'Heading 1', '-', 'Bold','-', 'Italic','-','Underline','Link','NumberedList','BulletedList' ]
@@ -81,7 +85,11 @@ private showTotalEstimated=false;
   public searchSlug='';
   public relateTicketId='';
   public navigatedFrom;//added by Ryan
-
+  public currentFieldData={
+    fieldDataId:'',
+    fieldIndex:'',
+    fieldValueId:''
+  };
   public commentDelId='';
   public commentDelSlug='';
   public childTaskmodel={};
@@ -112,6 +120,7 @@ var thisObj = this;
     //jsonform['description']='';//added by ryan
    this.replyToComment=-1;
    //@Praveen P toggle for plus button in follower list
+   jQuery('body').removeClass('modal-open');// for enabling the scrollbar after popup closing
    jQuery(document).click(function(e) {
      if( jQuery(e.target).closest('div#followerdiv').length==0 && e.target.id != 'follwersAdd' && e.target.id != 'follwersAddI'  ) {
       jQuery("#followerdiv").css( "display",'none' );
@@ -198,13 +207,12 @@ var thisObj = this;
          this.editor.initialize_editor('commentEditor','keyup',this); //for comment
          console.log("=Plan Level="+this.checkPlanLevel);
       //jQuery('span[id^="check_"]').hide();
-
     }
 
 getArtifacts(obj){
   this._ajaxService.AjaxSubscribe("story/get-my-ticket-attachments",obj,(data)=>
         { 
-        if(data.statusCode == 200 && data.data.length!= 0){
+        if(data.statusCode == 200 && data.data.length!= 0){ 
                          this.attachmentsData = data.data;                            
         } else {
             this.attachmentsData =[];
@@ -421,6 +429,8 @@ this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
 //Changes inline editable filed to thier respective edit modes - Left Column fields.
 //Renders data to dropdowns dynamically.
   editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType,where){ 
+   this.currentFieldData.fieldDataId=fieldDataId,
+   this.currentFieldData.fieldIndex=fieldIndex
    this.dropList=[];
    this.dropDisplayList=[];
    var thisObj=this;
@@ -445,7 +455,7 @@ this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
    
     setTimeout(()=>{document.getElementById(inptFldId).focus();},150);
     }
-    if(renderType == "select"){
+    if(renderType == "select"){ 
         var reqData = {
           fieldId:fieldDataId,
           projectId:this.ticketData.data.Project.PId,
@@ -463,6 +473,12 @@ this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
                 this.dropList=this.dropDisplayList[0].filterValue;
                 //sets the dropdown prefocused
+                if(fieldTitle=='Status'){
+                  let value=this.dropList[0].label;
+                  let valueId=this.dropList[0].value.Id;
+                  this.fieldsData[this.currentFieldData.fieldIndex].valueId=valueId;
+                  this.fieldsData[this.currentFieldData.fieldIndex].value=value;
+                }
                 jQuery("#"+inptFldId+" div").click();
                 
             });
@@ -514,12 +530,33 @@ private dateVal = new Date();
             jQuery("textarea#"+restoreFieldId+"_"+fieldIndex).val(editedObj);
             document.getElementById(restoreFieldId).innerText = (editedObj == "") ? "--":editedObj;
             postEditedText.value = editedObj;
+             this.postDataToAjax(postEditedText,isChildActivity);
             break;
             
             case "select":
+            if(postEditedText.editedId=='workflow'){
+              if(editedObj.value.ConfigType==0){
+             var appendHtml = (restoreFieldId.split("_")[1] == "priority")?"&nbsp; <i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
+            document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;
+            postEditedText.value = editedObj.value.Id;
+            this.postDataToAjax(postEditedText,isChildActivity);
+            }else{
+              this.reportPopuplable = editedObj.value.CaptureMessage;
+              this.postParams=postEditedText;
+              postEditedText.value = editedObj.value.Id;
+              this.openReportPopup=true;
+              this.updatedFieldValue = document.getElementById(restoreFieldId).innerHTML;
+              var appendHtml = (restoreFieldId.split("_")[1] == "priority")?"&nbsp; <i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
+              document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;
+          
+            }
+            }else{
             var appendHtml = (restoreFieldId.split("_")[1] == "priority")?"&nbsp; <i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
             document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;
-            postEditedText.value = editedObj.value;
+            postEditedText.value = editedObj.value.Id;
+             this.postDataToAjax(postEditedText,isChildActivity);
+            }
+           
             break;
 
             case "date":
@@ -528,6 +565,7 @@ private dateVal = new Date();
             document.getElementById(restoreFieldId).innerHTML = (date == "") ? "--":date;
             postEditedText.value = this.dateVal.toString();
             var rightNow = new Date();
+            this.postDataToAjax(postEditedText,isChildActivity);
             break;
 
           }
@@ -539,9 +577,10 @@ private dateVal = new Date();
         }else{  
             this.showMyEditableField[fieldIndex] = true;
         }
-       
-       this.postDataToAjax(postEditedText,isChildActivity);
+
+      
   }
+  
     inputKeyDown(event,eleId){
         if (event.shiftKey == true) {
             event.preventDefault();
@@ -711,7 +750,7 @@ private dateVal = new Date();
        listItem.push({label:"--Select a Member--", value:"",priority:priority,type:status});
        }
          for(var i=0;list.length>i;i++){
-           listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
+           listItem.push({label:list[i].Name, value:list[i],priority:priority,type:status});
        }
      }
       listMainArray.push({type:"",filterValue:listItem});
@@ -845,11 +884,14 @@ var thisObj = this;
 // Added by Padmaja for Inline Edit
 //Common Ajax method to save the changes.
     public postDataToAjax(postEditedText,isChildActivity=0){
+      console.log("-------"+JSON.stringify(postEditedText));
      clearTimeout(this.inlineTimeout);
     this.inlineTimeout =  setTimeout(() => { 
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
         {
           if(result.statusCode== 200){ 
+             this.openReportPopup=false;
+             jQuery('body').removeClass('modal-open');
           if(postEditedText.editedId == "title" || postEditedText.editedId == "desc"){
                      if(postEditedText.editedId == "title"){
                         document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerText=result.data.updatedFieldData;
@@ -860,15 +902,17 @@ var thisObj = this;
                    }
                
           }
-    
-             else if(postEditedText.editedId == "estimatedpoints"){ 
+           else if(postEditedText.editedId == "estimatedpoints"){ 
                  jQuery("#"+postEditedText.ticketId+"_totalestimatepoints").html(result.data.updatedFieldData.value);
                }
           
              else if(result.data.updatedState!=''){ 
                  document.getElementById(this.ticketId+'_'+result.data.updatedState.field_name).innerText=result.data.updatedState.state;
                 this.statusId = result.data.updatedFieldData;
+                var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
+                this.getArtifacts(ticketIdObj);
            }
+          
         /**
         * @author:Praveen P
         * @description : This is used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list 
@@ -1566,4 +1610,17 @@ submitOnEnter(event) {
   }
 }
 
+cancleChangingStatus(value:any){
+  this.openReportPopup=false;
+  jQuery('body').removeClass('modal-open');
+  var appendHtml = (value.editedId.split("_")[1] == "priority")?"&nbsp; <i class='fa fa-circle "+value.updatedFieldValue+"' aria-hidden='true'></i>":"";
+  document.getElementById(value.ticketId+"_"+value.editedId).innerHTML = (value.updatedFieldValue == ""||value.updatedFieldValue == "--Select a Member--") ? "--":value.updatedFieldValue+appendHtml;
+  this.fieldsData[this.currentFieldData.fieldIndex].Id=this.currentFieldData.fieldDataId;
+  this.currentFieldData.fieldValueId='';
+  this.currentFieldData.fieldDataId='';
+  this.currentFieldData.fieldIndex='';
+}
+saveReportWithStatus(value:any){
+  this.postDataToAjax(value);
+}
 }
