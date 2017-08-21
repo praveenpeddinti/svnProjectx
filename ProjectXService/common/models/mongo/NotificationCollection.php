@@ -39,8 +39,8 @@ class NotificationCollection extends ActiveRecord
      "OldValue",
      "NewValue",
      "CommentSlug",
-     "TargetTicketId"
-    
+     "TargetTicketId",
+     "CommentOwner"
    
         ];
     }
