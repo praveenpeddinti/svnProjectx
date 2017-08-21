@@ -84,7 +84,7 @@ trait NotificationTrait {
      * @param type $newValue
      * @param type $activityUserId
      */
-    public function saveActivity($ticketId, $projectId, $actionfieldName, $newValue, $activityUserId, $slug = "", $timezone) {
+    public function saveActivity($ticketId, $projectId, $actionfieldName, $newValue, $activityUserId, $slug = "", $timezone="Asia/Kolkata",$reportData=array()) {
         try {
             $oldValue = "";
             $action = "";
@@ -122,56 +122,85 @@ trait NotificationTrait {
                     }
                 }
 
+            $db = TicketComments::getCollection();
+            $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
+            $record = $db->findOne(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId));
+            //  $record = iterator_to_array($record);
+            //  error_log(print_r($record,1));
+            //$slug =  new \MongoDB\BSON\ObjectID();
+            if(empty($reportData) && ($record["RecentActivityUser"] != $activityUserId || $record["Activity"] == "Comment" || $record["Activity"] == "Report" ||  $record["Activity"] == "PoppedFromChild")) {
+                // $dataArray = array();
+                $commentDataArray = array(
+                    "Slug" => $slug,
+                    "CDescription" => "",
+                    "CrudeCDescription" => "",
+                    "ActivityOn" => $currentDate,
+                    "ActivityBy" => (int) $activityUserId,
+                    "Status" => (int) 1,
+                    "PropertyChanges" => array(array("Slug" => $slug, "ActionFieldName" => $actionfieldName, "Action" => $action, "PreviousValue" => $oldValue, "NewValue" => $newValue, "CreatedOn" => $currentDate)),
+                    "ParentIndex" => "",
+                    "PoppedFromChild" => ""
+                );
+                $v = $db->findAndModify(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array('$addToSet' => array('Activities' => $commentDataArray)), array('new' => 1, "upsert" => 1));
+                $v = $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $activityUserId, "Activity" => "PropertyChange"));
+                CommonUtility::prepareActivity($commentDataArray, $projectId, $timezone);
+                $returnValue = array("referenceKey" => -1, "data" => $commentDataArray);
+            } else if(empty($reportData) && $record["Activity"] != "Report"){ 
+                $recentSlug = $record["RecentActivitySlug"];
+                $property = array("Slug" => $slug, "ActionFieldName" => $actionfieldName, "Action" => $action, "PreviousValue" => $oldValue, "NewValue" => $newValue, "CreatedOn" => $currentDate);
+
                 $db = TicketComments::getCollection();
                 $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
                 $record = $db->findOne(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId));
                 //  $record = iterator_to_array($record);
                 //  error_log(print_r($record,1));
                 //$slug =  new \MongoDB\BSON\ObjectID();
-                if ($record["RecentActivityUser"] != $activityUserId || $record["Activity"] == "Comment" || $record["Activity"] == "PoppedFromChild") {
-                    // $dataArray = array();
-                    $commentDataArray = array(
-                        "Slug" => $slug,
-                        "CDescription" => "",
-                        "CrudeCDescription" => "",
-                        "ActivityOn" => $currentDate,
-                        "ActivityBy" => (int) $activityUserId,
-                        "Status" => (int) 1,
-                        "PropertyChanges" => array(array("Slug" => $slug, "ActionFieldName" => $actionfieldName, "Action" => $action, "PreviousValue" => $oldValue, "NewValue" => $newValue, "CreatedOn" => $currentDate)),
-                        "ParentIndex" => "",
-                        "PoppedFromChild" => ""
-                    );
-                    $v = $db->findAndModify(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array('$addToSet' => array('Activities' => $commentDataArray)), array('new' => 1, "upsert" => 1));
-                    $v = $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $activityUserId, "Activity" => "PropertyChange"));
-                    CommonUtility::prepareActivity($commentDataArray, $projectId, $timezone);
-                    $returnValue = array("referenceKey" => -1, "data" => $commentDataArray);
-                } else {
-                    $recentSlug = $record["RecentActivitySlug"];
-                    $property = array("Slug" => $slug, "ActionFieldName" => $actionfieldName, "Action" => $action, "PreviousValue" => $oldValue, "NewValue" => $newValue, "CreatedOn" => $currentDate);
-
+               
                     $v = $db->findAndModify(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId, "Activities.Slug" => $recentSlug), array('$addToSet' => array('Activities.$.PropertyChanges' => $property)), array('new' => 1, "upsert" => 1));
 
                     $activitiesCount = count($v["Activities"]);
                     if ($activitiesCount > 0) {
                         $activitiesCount = $activitiesCount - 1;
                     }
-                    CommonUtility::prepareActivityProperty($property, $projectId, $timezone);
-                    $returnValue = array("referenceKey" => $activitiesCount, "data" => $property);
+                CommonUtility::prepareActivityProperty($property, $projectId, $timezone);
+                $returnValue = array("referenceKey" => $activitiesCount, "data" => $property);
+            }else if(!empty($reportData)){
+               $commentDataArray = array(
+                    "Slug" => $slug,
+                    "CDescription" => $reportData['CDescription'],
+                    "CrudeCDescription" => $reportData['CrudeDescription'],
+                    "ActivityOn" => $currentDate,
+                    "ActivityBy" => (int) $activityUserId,
+                    "Status" => (int) 1,
+                    "PropertyChanges" => array(array("Slug" => $slug, "ActionFieldName" => $actionfieldName, "Action" => $action, "PreviousValue" => $oldValue, "NewValue" => $newValue, "CreatedOn" => $currentDate)),
+                    "ParentIndex" => "",
+                    "PoppedFromChild" => ""
+                );
+                $v = $db->findAndModify(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array('$addToSet' => array('Activities' => $commentDataArray)), array('new' => 1, "upsert" => 1));
+                $v = $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $ticketId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $activityUserId, "Activity" => "Report"));
+                CommonUtility::prepareActivity($commentDataArray, $projectId, $timezone); 
+                $returnValue = array("referenceKey" => -1, "data" => $commentDataArray);
+            }
+            if ($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow") {
+                //    $slug =  new \MongoDB\BSON\ObjectID();
+                $description="";
+                $cdescription="";
+                if(!empty($reportData)){
+                    $description =$reportData['CrudeDescription'];
+                    $cdescription =$reportData['CDescription'];
                 }
-                if ($ticketDetails["IsChild"] == 1 && $actionfieldName == "workflow") {
-                    //    $slug =  new \MongoDB\BSON\ObjectID();
-                    $commentDataArray = array(
-                        "Slug" => $slug,
-                        "CDescription" => "",
-                        "CrudeCDescription" => "",
-                        "ActivityOn" => $currentDate,
-                        "ActivityBy" => (int) $activityUserId,
-                        "Status" => (int) 1,
-                        "PropertyChanges" => array(array("Slug" => $slug, "ActionFieldName" => $actionfieldName, "Action" => $action, "PreviousValue" => $oldValue, "NewValue" => $newValue, "CreatedOn" => $currentDate)),
-                        "ParentIndex" => "",
-                        "PoppedFromChild" => (int) $ticketId
-                    );
-                    $parentStoryId = $ticketDetails["ParentStoryId"];
+                $commentDataArray = array(
+                    "Slug" => $slug,
+                    "CDescription" => $cdescription,
+                    "CrudeCDescription" => $description,
+                    "ActivityOn" => $currentDate,
+                    "ActivityBy" => (int) $activityUserId,
+                    "Status" => (int) 1,
+                    "PropertyChanges" => array(array("Slug" => $slug, "ActionFieldName" => $actionfieldName, "Action" => $action, "PreviousValue" => $oldValue, "NewValue" => $newValue, "CreatedOn" => $currentDate)),
+                    "ParentIndex" => "",
+                    "PoppedFromChild" => (int) $ticketId
+                );
+                $parentStoryId = $ticketDetails["ParentStoryId"];
 
                     $v = $db->findAndModify(array("ProjectId" => (int) $projectId, "TicketId" => (int) $parentStoryId), array('$addToSet' => array('Activities' => $commentDataArray)), array('new' => 1, "upsert" => 1));
                     $v = $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $parentStoryId), array("RecentActivitySlug" => $slug, "RecentActivityUser" => (int) $activityUserId, "Activity" => "PoppedFromChild"));

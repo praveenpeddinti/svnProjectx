@@ -447,7 +447,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionUpdateStoryFieldInline::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =  ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =  $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -582,7 +582,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionSubmitComment::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = $th->getMessage();//ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -626,7 +626,7 @@ class StoryController extends Controller
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $data;
             $response = CommonUtility::prepareResponse($responseBean,"json");
-             return $response;
+            return $response;
         } catch (\Throwable $th) {
             Yii::error("StoryController:actionGetTicketActivity::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
@@ -1006,7 +1006,7 @@ class StoryController extends Controller
    
     /**
      * @author Anand
-     * @uses Get all bucket details for current project
+     * @uses Get all Filter Options
      * @return type
      */
     
@@ -1349,36 +1349,8 @@ class StoryController extends Controller
         }
     }
     
+} 
     
-    public function actionSaveEditedReport(){
-       
-       try {
-          $reportt_post_data=json_decode(file_get_contents("php://input"));
-          error_log(print_r($reportt_post_data,1));
-       
-//                if(isset($comment_post_data->Comment->OrigianalCommentorId)){
-//                $comment_post_data->Comment->OriginalCommentorId=$comment_post_data->Comment->OrigianalCommentorId;
-//            }
-       $returnData = ServiceFactory::getStoryServiceInstance()->saveEditedReport($reportt_post_data);
-       $responseBean = new ResponseBean();
-            $responseBean->statusCode = ResponseBean::SUCCESS;
-            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $returnData;
-            $response = CommonUtility::prepareResponse($responseBean,"json");
-             return $response; 
-       } catch (\Throwable $th) {
-            Yii::error("StoryController:actionSaveEditedReport::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
-             $responseBean = new ResponseBean();
-             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
-             $responseBean->data = [];
-             $response = CommonUtility::prepareResponse($responseBean,"json");
-             return $response;
-        }
-       
-   }
-     
-}
 
 
 ?>

@@ -664,7 +664,26 @@ class StoryService {
                         
                        // error_log($fieldName."----------activtiyr reuls---------------");
                         $slug =  new \MongoDB\BSON\ObjectID();
-                        $activity=$this->saveActivity($ticket_data->ticketId,$projectId,$fieldName, $value["value"],$userId,$slug,$timezone);
+                        $reportdata=array();
+                        if($fieldDetails["Field_Name"] == "workflow"){
+                            
+                            if(property_exists($ticket_data,'reportData')){
+                            $refinedData = CommonUtility::refineDescription($ticket_data->reportData);
+                                $plainDescription= strip_tags($ticket_data->reportData);
+                                $reportMentionArray = $refinedData['UsersList'];               
+                                $reportProcessedDesc = $refinedData["description"];
+                                $reportsArtifacts = $refinedData["ArtifactsList"];
+                                $reportdata['CrudeDescription']=$ticket_data->reportData;
+                                $reportdata['CDescription']=$reportProcessedDesc;
+                                $reportdata['PlaneDescription']=$plainDescription;
+                                $reportdata['Status']=1;
+                            if (!empty($reportsArtifacts)) {
+                            TicketArtifacts::saveArtifacts($ticket_data->ticketId, $projectId, $reportsArtifacts, $userId);
+                          }
+                 }  
+                        }
+                        
+                        $activity=$this->saveActivity($ticket_data->ticketId,$projectId,$fieldName, $value["value"],$userId,$slug,$timezone,$reportdata);
                         if($activity != "noupdate")
                         {
                         $notificationPanelIds=$this->saveNotifications($editticket,$fieldName,$ticket_data->$key,$fieldDetails["Type"],$slug,$bulkUpdate=1);
@@ -943,7 +962,23 @@ class StoryService {
             $slug =  new \MongoDB\BSON\ObjectID();
             $this->saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldType,$slug);
     error_log("updateStoryFieldInline---13");
-                $activityData = $this->saveActivity($ticket_data->ticketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser,$slug,$timezone);
+                $reportdata=array();
+                 if(property_exists($ticket_data,'reportData')){
+                    $refinedData = CommonUtility::refineDescription($ticket_data->reportData);
+                    $plainDescription= strip_tags($ticket_data->reportData);
+                    $reportMentionArray = $refinedData['UsersList'];               
+                    $reportProcessedDesc = $refinedData["description"];
+                    $reportsArtifacts = $refinedData["ArtifactsList"];
+                    $reportdata['CrudeDescription']=$ticket_data->reportData;
+                    $reportdata['CDescription']=$reportProcessedDesc;
+                    $reportdata['PlaneDescription']=$plainDescription;
+                    $reportdata['Status']=1;
+                    if (!empty($reportsArtifacts)) {
+                    TicketArtifacts::saveArtifacts($ticket_data->ticketId, $ticket_data->projectId, $reportsArtifacts, $loggedInUser);
+                  }
+                 }
+                 
+                $activityData = $this->saveActivity($ticket_data->ticketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser,$slug,$timezone,$reportdata);
                 $updateStaus = $collection->update($condition, $newData);
                 if($field_name=='workflow'){
                 $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value,$loggedInUser);
@@ -1013,8 +1048,7 @@ class StoryService {
                 $collection = Yii::$app->mongodb->getCollection('TicketComments');
                 $newdata = array('$set' => array("Activities.$.CrudeCDescription" => $commentDesc, "Activities.$.CDescription" => $processedDesc,"Activities.$.PlainDescription" => (string)$plainDescription));
                 $collection->update(array("TicketId" => (int) $commentData->ticketId, "ProjectId" => (int) $commentData->projectId, "Activities.Slug" => new \MongoDB\BSON\ObjectID($commentData->Comment->Slug)), $newdata);
-                $retData = array("CrudeCDescription" => $commentDesc,
-                    "CDescription" => $processedDesc);
+                $retData = array("CrudeCDescription" => $commentDesc,"CDescription" => $processedDesc);
                 if (!empty($artifacts)) {
                     TicketArtifacts::saveArtifacts($commentData->ticketId, $commentData->projectId, $artifacts, $commentData->userInfo->Id);
                 }
@@ -1917,7 +1951,7 @@ class StoryService {
         } 
        
     }
-
-}
-
-  
+    
+   }
+        
+        

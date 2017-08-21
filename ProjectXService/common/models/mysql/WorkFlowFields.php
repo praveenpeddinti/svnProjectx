@@ -47,7 +47,7 @@ class WorkFlowFields extends ActiveRecord
     
       public static function getStoryWorkFlowList($workflowType,$workflowId){
         try{
-        $query = "select   wf.Id,wf.Name,wf.Status,ws.Name as State from WorkFlowFields wf
+        $query = "select wf.Id,wf.Name,wf.Status,ws.Name as State,wr.ConfigType,wr.CaptureMessage from WorkFlowFields wf join WorkFlowReportConfiguration wr on wr.WorkFlowId=wf.Id 
  join WorkFlowMapping wm on wf.Id=wm.MappedWorkFlowId join WorkFlowState ws on wf.State=ws.Id where wm.WorkFlowType=$workflowType and wm.WorkFlowId=$workflowId order by wm.Position asc ;";
         $data = Yii::$app->db->createCommand($query)->queryAll();
         return $data;   
