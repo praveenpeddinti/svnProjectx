@@ -145,7 +145,7 @@ class ProjectTeam extends ActiveRecord
           
            $team=implode(',',$userTeam);
            //$query = "select distinct C.UserName,C.Email from Collaborators C join ProjectTeam PT on PT.CollaboratorId=C.Id where C.UserName like '$search%' and C.Status=1";
-           $query = "select distinct C.UserName,C.Email from Collaborators C join ProjectTeam PT on PT.CollaboratorId=C.Id where C.UserName like '$search%' and C.Status=1 and C.Id not in($team)";
+           $query = "select distinct C.UserName,C.Email from Collaborators C  where C.UserName like '$search%' and C.Status=1 and C.Id not in($team)";
            $users = Yii::$app->db->createCommand($query)->queryAll();
            return $users;
        } catch (\Throwable $ex) {
