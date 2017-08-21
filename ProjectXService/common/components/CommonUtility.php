@@ -517,10 +517,12 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     $value["readable_value"] = $assignedToDetails;
                 }
                 if ($storyFieldDetails["Type"] == 10) {
-
-                    $bucketName = Bucket::getBucketName($value["value"], $ticketDetails["ProjectId"]);
-                    $value["readable_value"] = $bucketName;
-                    $value["meta_data"] = Bucket::getBucketsList($projectId);
+                    $value["readable_value"] = "";
+                    if($value["value"] != ""){
+                         $bucketName = Bucket::getBucketName($value["value"], $ticketDetails["ProjectId"]);
+                         $value["readable_value"] = $bucketName;
+                    }
+                   $value["meta_data"] = Bucket::getBucketsList($projectId);
                     if($ticketDetails['IsChild']==1){
                         $value["readonly"] = 1; 
                     }
