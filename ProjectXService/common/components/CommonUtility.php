@@ -1126,8 +1126,13 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }
             else if ($type == 10) {
                 //bucket
-                $bucketDetails = Bucket::getBucketName($property["PreviousValue"], $projectId);
-                $property["PreviousValue"] = $bucketDetails["Name"];
+                 $property["PreviousValue"] = "";
+                if($property["PreviousValue"] != ""){
+                    $bucketDetails = Bucket::getBucketName($property["PreviousValue"], $projectId); 
+                    $property["PreviousValue"] = $bucketDetails["Name"];
+                }
+               
+               
                 $bucketDetails = Bucket::getBucketName($property["NewValue"], $projectId);
                 $property["NewValue"] = $bucketDetails["Name"];
             }

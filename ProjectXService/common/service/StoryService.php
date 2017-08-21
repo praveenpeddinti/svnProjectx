@@ -250,6 +250,8 @@ class StoryService {
 //                            $bucket = Bucket::getBackLogBucketId($projectId);
 //                            $fieldBean->value = (int)$bucket["Id"];
 //                            $fieldBean->value_name = $bucket["Name"];
+                         $fieldBean->value = "";
+                          $fieldBean->value_name = "";
                          }
                      else{
                           $fieldBean->value=""; 
