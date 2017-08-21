@@ -1031,6 +1031,8 @@ class StoryService {
                     "ActivityOn" => $commentedOn,
                     "ActivityBy" => (int) $commentData->userInfo->Id,
                     "Status" => ($commentData->Comment->ParentIndex == "") ? (int) 1 : (int) 2,
+                    "Reply"=>($commentData->Comment->Reply == "") ? (int) 0 : (int) 1,
+                    "OrginalCommentor"=>$commentData->Comment->OriginalCommentorId,
                     "PropertyChanges" => [],
                     "PoppedFromChild" => "",
                     "ParentIndex" => ($commentData->Comment->ParentIndex == "") ? "" : (int) $commentData->Comment->ParentIndex,
@@ -1052,6 +1054,8 @@ class StoryService {
                 $mentionArray = $refinedData['UsersList'];
                 $notify_type = "comment";
                 $actionName = "commented";
+                if($commentDataArray["Reply"]==1)
+                $notify_type = "repliedOn"; 
                 $this->saveNotificationsForComment($commentData,$mentionArray,$notify_type,$slug);
 
                 return $commentDataArray;
