@@ -1,14 +1,18 @@
     <?php
 
 return [
+    /* System Notification Messages*/
     "mention" => "has mentioned",
     "changed" =>"has changed",
+    "dueDate"=>"has set due date",
+    "dueDateChange"=>"has changed due date",
     "assigned" => "has assigned",
     "stakeholder"=>"as a stakeholder",
     "comment"=>"has commented",
     "reply"=>"has replied to your comment on",
+    "repliedOn"=>"has replied on",
     "edit"=>"has edited comment",
-    "delete"=>"has deleted comment",
+    "delete"=>"has deleted a comment",
     "addedyou"=>"added you as follower",
     "added"=>"has added",
     "removed"=>"has removed",
@@ -26,6 +30,35 @@ return [
     "created" => "has created",
     "related" => "has related",
     "unrelated" => "has unrelated",
+    //"TimeLogChanged"=>"has changed",
+    
+             /*  EmailNotification Messages*/
+            'tickettype' => 'A story/task type was changed.',
+            'Assigned to' => 'A story/task assigned to was changed.',
+            'Stakeholder' => 'A stakeholder in a story/task was changed.',
+            'duedate'=>'A story/task due date was set.',
+            'duedate change'=>'A story/task due date was changed.',
+            'Comment'=>'A comment was added to a story/task.',
+            'Comment edit'=>'A comment was edited in a story/task.',
+            'Comment delete'=>'A comment was deleted in a story/task.',
+           // 'Comment Reply'=>'Sreeni Jakka replied to your comment in a story/task.',
+            'added follower'=>'A follower was added in a story/task.',
+           'removed follower'=>'A follower was removed in a story/task.',
+            'Mention'=>'You were mentioned in a story/task.',
+          //  'Removing User'=>'',
+            'TotalTimeLog'=>'A timelog was added in a story/task.',
+            'Title'=>'The title of a story/task was edited.',
+            'Description'=>'A story/task description was edited.',
+            'workflow'=>'The status in a story/task was changed.',
+            'priority'=>'The priority in a story/task was changed.',
+            'story/task creation'=>'A new story/task was created.',
+            'bucket'=>'A bucket in a story/task has been changed.',
+          //   'Relate'=>'',
+          //  'Unrelate'=>'',
+           // 'New task inside a story '=>'',
+            'estimatedpoints'=>'The estimated story points were changed/added in a story/task.',
+            'dod'=>'DoD in a story/task was changed.',
+            'dod edit'=>'DoD in a story/task was edited.',
   
     
     
