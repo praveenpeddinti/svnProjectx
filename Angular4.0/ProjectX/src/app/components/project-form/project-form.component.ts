@@ -243,6 +243,7 @@ public form={};
                           //         description:""
                           // };
                             this.creationPopUp=false;
+                             jQuery('#addProjectModel').modal('hide');
                          }, 1000);
                          this.creationPopUp=true;
                         // alert("2"+this.creationPopUp);
@@ -281,6 +282,7 @@ public form={};
                        setTimeout(() => {
                           this.submitted=false;
                           this.editPopUp=false;
+                          jQuery('#addProjectModel').modal('hide');
                          // alert("2222222"+this.editPopUp);
                          }, 1000);
                         // this.editPopUp=true;
