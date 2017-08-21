@@ -24,7 +24,7 @@
             </div>
             <span class="fielderror" [hidden]="!isEmailValid">Email Invalid </span>
             <span class="fielderror" [hidden]="!isEmpty">Please select atleast one user to invite</span>
-            <div style="margin-top: 50px;"><div [hidden]="selectedUser.length==0"><p-chips value="" [(ngModel)]="selectedUser" [styleClass]="invitesearch" [allowDuplicates]="false" ></p-chips></div>
+            <div class="inuser"><div [hidden]="selectedUser.length==0"><p-chips value="" [(ngModel)]="selectedUser" [styleClass]="invitesearch " [allowDuplicates]="false" ></p-chips></div>
             </div>
       </div>
     
