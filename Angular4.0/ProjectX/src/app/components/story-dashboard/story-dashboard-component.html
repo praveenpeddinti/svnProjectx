@@ -42,7 +42,7 @@
         <ngx-datatable-row-detail  [rowHeight]="auto" #myDetailRow>
             <ng-template let-row="row" ngx-datatable-row-detail-template>
               <div class="story_tasks">
-                   <app-childtask ticketId="{{row[0].field_value}}"></app-childtask>
+                   <app-childtask ticketId="{{row[0].field_value}}" projectId="{{projectId}}"></app-childtask>
            </div>
            </ng-template>
         </ngx-datatable-row-detail>
