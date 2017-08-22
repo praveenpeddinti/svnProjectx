@@ -35,7 +35,9 @@ class Settings extends ActiveRecord
      */
     public static function getAllNotificationTypes($userId){
         $query="select * from CollaboratorNotificationsSettings cns join
-                Notifications ns on ns.Id=cns.ActivityId where cns.CollaboratorId=$userId";
+                Notifications ns on ns.Id=cns.ActivityId where cns.CollaboratorId=$userId  order by ActivityTitle";
+                   error_log("%%%%%%%%%%%%%%%%".$query);
+
         $data = Yii::$app->db->createCommand($query)->queryAll();
         error_log("+++++++++++++++++++++".sizeof($data));
         return $data;
