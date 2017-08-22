@@ -31,6 +31,7 @@ export class CreateUserComponent implements OnInit {
  public userProfileImage:string;
   @Output() myevent=new EventEmitter();
 public inviteCode;
+
   constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService,private fileUploadService: FileUploadService,) { }
 
   ngOnInit() {
@@ -128,6 +129,9 @@ public inviteCode;
                 for(var i = 0; i<result.length; i++){
                   this.form["userProfileImage"] = "/"+result[i].path;
                   this.userProfileImage = GlobalVariable.BASE_API_URL + result[i].path;
+                
+                  this.form["originalImageName"] = result[i].originalname;
+                   
                   //  result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
                   //   var uploadedFileExtension = (result[i].originalname).split('.').pop();
                   //    if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
