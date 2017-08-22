@@ -8,10 +8,11 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\components\{CommonUtility,ServiceFactory};
+use common\components\{CommonUtility,ServiceFactory,EventTrait};
 use common\models\bean\ResponseBean;
 use common\models\mongo\TinyUserCollection;
 use common\models\mongo\NotificationCollection;
+use common\models\mysql\Projects;
 /**
  * 
  * Story Controller
@@ -356,7 +357,7 @@ class CollaboratorController extends Controller
              Yii::error("CollabaratorController:actionSaveProjectDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = $th->getMessage();
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
