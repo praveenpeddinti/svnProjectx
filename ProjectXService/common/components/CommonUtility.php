@@ -1799,7 +1799,10 @@ $text_message=$html . $text_message .
                       if($key=='Buckets'){
                          $type= 'bucket'; 
                          $showchild=1;
-                      }else{
+                      } else if($key=='State'){
+                         $type= 'state'; 
+                         $showchild=1;
+                      }else {
                          $type= $val['Type'];
                          $showchild=$val['ShowChild'];
                       }
