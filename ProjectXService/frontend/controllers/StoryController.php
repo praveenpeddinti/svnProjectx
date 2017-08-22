@@ -1024,6 +1024,7 @@ class StoryController extends Controller
         $options['General']=$tempFilter['general'];
         $options['My']=$tempFilter['individual'];
         $options['Buckets'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
+        $options['State'] = ServiceFactory::getStoryServiceInstance()->getStateListFilters();
         $preparedFilters = CommonUtility::prepareFilterOption($options);
         $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
