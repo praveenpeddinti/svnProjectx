@@ -186,11 +186,10 @@ class TicketCollection extends ActiveRecord
                  $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
                  $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000));break;                 //  $conditions['Fields.duedate.value']=(int)$StoryData->userInfo->Id;break;
                 case 10:
-//                      unset($conditions['Fields.duedate.value']);
-                  $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
-                  $todayDate = date("Y-m-d H:i:s");
-                  $conditions['Fields.duedate.value'] = array('$gte' => new \MongoDB\BSON\UTCDateTime(strtotime($todayDate) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
-                  break;
+                     $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+                     $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+                    $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
+                 break;
                default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             }      
            } else if($StoryData->filterOption->type=='individual'){
@@ -220,16 +219,11 @@ class TicketCollection extends ActiveRecord
                    $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
                    $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000)); break;
                 case 12:
-//                  $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
-//                  $todayDate = date("Y-m-d H:i:s");
-                    $conditions["IsChild"] = array('$in' => array(0,1));
-                    $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
-                    $monday = strtotime("last monday");
-                    $monday = date('w', $monday)==date('w') ? $monday+7*86400 : $monday;
-                    $sunday = strtotime(date("Y-m-d",$monday)." +6 days");
-                    $todayDate = date("Y-m-d",$monday);
-                    $lastDayOfweek = date("Y-m-d",$sunday);
-                    $conditions['Fields.duedate.value'] = array('$gte' => new \MongoDB\BSON\UTCDateTime(strtotime($todayDate) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
+                     $conditions["IsChild"] = array('$in' => array(0,1));
+                     $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+                     $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+                     $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+                    $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
                   break;
                default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             }      
