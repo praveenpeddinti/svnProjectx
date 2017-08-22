@@ -136,33 +136,33 @@ export class ProjectDashboardComponent implements OnInit {
                    // alert(JSON.stringify(result.data));
                     if (page == 0 ) { 
                     //  alert("121212"); 
-                         thisObj.noMoreActivities = false;     
-                            thisObj.dashboardData = result.data;
-                            console.log("Onload__activity__"+JSON.stringify(thisObj.dashboardData.activities))
-                            var curActLength = thisObj.dashboardData.activities.length;
-                              if(thisObj.dashboardData.activities.length==0){
-                                  thisObj.noActivitiesFound=true;
+                         this.noMoreActivities = false;     
+                            this.dashboardData = result.data;
+                            console.log("Onload__activity__"+JSON.stringify(this.dashboardData.activities))
+                            var curActLength = this.dashboardData.activities.length;
+                              if(this.dashboardData.activities.length==0){
+                                  this.noActivitiesFound=true;
                               }
                             
                     }else{
-                      var curActLength = thisObj.dashboardData.activities.length;
+                      var curActLength = this.dashboardData.activities.length;
                         if (result.data.activities.length > 0) {
                           console.log("Total__Activity"+JSON.stringify(result.data.activities));
-                          console.log(thisObj.dashboardData.activities[curActLength - 1].activityDate +"==77777777777777777777===="+ result.data.activities[0].activityDate)
-                          if (thisObj.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
-                            thisObj.dashboardData.activities[curActLength - 1].activityData = thisObj.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
-                            console.log("After__Concat"+JSON.stringify(thisObj.dashboardData.activities));
-                            // // console.log("@@-44-"+JSON.stringify(thisObj.dashboardData.activities[curActLength - 1].activityData));
+                          console.log(this.dashboardData.activities[curActLength - 1].activityDate +"==77777777777777777777===="+ result.data.activities[0].activityDate)
+                          if (this.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
+                            this.dashboardData.activities[curActLength - 1].activityData = this.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
+                            console.log("After__Concat"+JSON.stringify(this.dashboardData.activities));
+                            // // console.log("@@-44-"+JSON.stringify(this.dashboardData.activities[curActLength - 1].activityData));
                             result.data.activities .splice(0, 1);
                             console.log("Final__IN"+JSON.stringify(result.data.activities));
-                            thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
+                            this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
                             //alert("11");
                         } else {
-                            thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
+                            this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
                           // alert("Final__out"+JSON.stringify(thisObj.dashboardData.activities));
                         }
                         } else {
-                           thisObj.noMoreActivities = true;
+                           this.noMoreActivities = true;
                         }
                       // alert("###--"+JSON.stringify(thisObj.dashboardData));
                     }

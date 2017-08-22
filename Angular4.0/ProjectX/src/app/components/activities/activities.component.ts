@@ -13,9 +13,9 @@ export class ActivitiesComponent implements OnInit {
   }
 
   dashboardData:any[];
-
-  ngOnInit() {
-    //alert(this.noMoreActivities);
+   ngOnInit() {
+    //alert(dashboardData.activities);
+   
   }
 
   
