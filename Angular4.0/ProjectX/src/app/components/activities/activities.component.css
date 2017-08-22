@@ -33,7 +33,8 @@
 .activities_bg{ border-bottom:solid 1px #c1c7cd; padding:5px 0px 5px 40px; margin-bottom:10px; position:relative; min-height:50px; cursor:pointer; clear: both;}
 .activities_bg .user{ width:30px; height:30px; position:absolute; left:0px; top:10px;}
 .activities_bg .user img{ width:30px; height:30px; border-radius:100%;}
-.activities_bg .activitycon{ color:#637282; font:normal 14px/18px 'open_sansregular';}
+.activities_bg .activitycon{ color:#637282; font:normal 14px/18px 'open_sansregular';
+overflow-wrap: break-word;}
 
 .activities_bg .activitypro{color:#637282; font:normal 12px/22px 'open_sansregular';}
 .devider1{ width:100%; height:1px; background:#e6e8eb; margin:5px 0px;}
