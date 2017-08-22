@@ -378,9 +378,23 @@ class CollaboratorService {
      */
     public function saveNewUser($projectId, $user,$code) {
         try {
+           // error_log("saven ew user----------".print_r($user,1));
+             $userId = Collaborators::createUser($user);
+            
+            $extension = CommonUtility::getExtension($user->originalImageName);
+            $extension = strtolower($extension);
+            $userName =  $user->firstName."".$user->lastName;
+            $newImagePath = $userName."_".$userId.".".$extension;
+            $userProfileTempPath = Yii::$app->params['ProjectRoot'].$user->userProfileImage;
+            //error_log("userProfileTempPath----".$userProfileTempPath);
+            $newFilePath = Yii::$app->params['UserProfilePath']."".$newImagePath;
+            $userNewProfilePath = Yii::$app->params['ProjectRoot']. $newFilePath ;
+           // error_log("userNewProfilePath----".$userNewProfilePath);  
+            rename($userProfileTempPath,$userNewProfilePath);
+           // $logo=$postData->projectName."_".$returnId.".$fileExt";
+            $user->userProfileImage = $newFilePath;
             $usermail=$user->email;
             $invite_code=$code;
-            $userId = Collaborators::createUser($user);
             TinyUserCollection::createNewUser($user,$userId);
             if ($userId > 0) {
                 $status = $this->addUserToTeam($projectId, $userId);
