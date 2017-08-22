@@ -145,6 +145,7 @@ export class EmailInviteComponent implements OnInit {
       //this.zone.run(()=>{this.selectedUsers=undefined;})
       jQuery("#invite_search").attr("value",""); //jquery was used since model binding was not getting updated....
       this.isSuccess=false;
+      this.isEmailValid=false;
     }
 
   
