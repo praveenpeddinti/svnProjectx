@@ -31,7 +31,7 @@ export class InviteComponent implements OnInit {
   }
 
   verifyInvitation(code){ 
-  
+   localStorage.setItem('user',null);
    var userid_from_cookie=parseInt(this._cookieService.get('user'));
    var id_from_code=parseInt(code.substring(10));
    var invite_obj={inviteCode:code};
@@ -39,8 +39,12 @@ export class InviteComponent implements OnInit {
     { 
       if(result.statusCode==200)
       { 
-        if(result.data.UserType=='Existing'){
+        if(result.data.UserType=='Existing'){ 
           if(userid_from_cookie==id_from_code){ 
+            var user={'Id':result.data.User.Id,'username':result.data.User.UserName,'token':''};
+            localStorage.setItem('profilePicture',result.data.User.ProfilePic);
+            localStorage.setItem('ProjectName',this.projectName);
+            localStorage.setItem('user',JSON.stringify(user));
             this._router.navigate(['user-dashboard']);
           }else{
             this._router.navigate(['login']);
