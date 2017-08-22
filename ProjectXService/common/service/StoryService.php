@@ -1951,6 +1951,16 @@ class StoryService {
         } 
        
     }
+    public function getStateListFilters(){
+        try{
+            $stateFilters=WorkFlowFields::getBucketsListFilters();
+            return $stateFilters;
+         } catch (Exception $ex) {
+             Yii::error("StoryService:getStateListFilters::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+            
     
    }
         
