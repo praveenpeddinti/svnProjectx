@@ -704,7 +704,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             unset($conditions['Followers.FollowerId']);
             $conditions['Fields.assignedto.value'] = (int) $userId;
             $assigned = $collection->count($conditions);
-            $topTickets = array("id" => 1, "name" => 'My active stories/task', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
+            $topTickets = array("id" => 4, "name" => 'My active stories/task', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
 
@@ -723,7 +723,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $conditions['Fields.assignedto.value'] = (int) $userId;
             $assigned = $collection->count($conditions);
             
-            $topTickets = array("id" => 2, "name" => 'My over due stories/tasks', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
+            $topTickets = array("id" => 11, "name" => 'My over due stories/tasks', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
 
@@ -742,7 +742,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             unset($conditions['Followers.FollowerId']);
             $conditions['Fields.assignedto.value'] = (int) $userId;
             $assigned = $collection->count($conditions);
-            $topTickets = array("id" => 3, "name" => 'My due stories/tasks for current week', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
+            $topTickets = array("id" => 12, "name" => 'My due stories/tasks for current week', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
 //          foreach ($filters as $filter) {
