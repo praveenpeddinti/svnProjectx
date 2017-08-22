@@ -1,5 +1,5 @@
 <ol *ngIf="isLoggedOut==false" class="breadcrumb">
-    <li  (click)="modifyBreadcrumb(null)"><a routerLink="" class="breadcrumb"><i  class="fa fa-home" aria-hidden="true"></i></a></li>
+    <li  (click)="modifyBreadcrumb(null)"><a routerLink="" ><i  class="fa fa-home" aria-hidden="true"></i></a></li>
     <li *ngFor="let item of items;let i=index;let last=last">
         <img *ngIf="item.type=='Story'" src="assets/images/story-icon.png" />
         <img *ngIf="item.type=='Task'" src="assets/images/task-icon.png" />
