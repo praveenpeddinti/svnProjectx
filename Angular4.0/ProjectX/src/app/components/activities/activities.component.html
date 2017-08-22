@@ -1,39 +1,36 @@
-     <div class="all_activitybg">
-     <div *ngFor=" let activityData of activityDetails" > 
-           <div class="activity_date">
-                 <div class="month">{{activityData[0].Month}}</div>
-                 <div class="date">{{activityData[0].Day}}</div>
-                 <div class="clearfix">{{activityData[0].Year}}</div>
+  <div class="activity_hed">Activity</div>
+            <div class="devider1 martb5"></div>
+        <div *ngIf="dashboardData.activities!=''">
+                  <div *ngFor="let getActivity of dashboardData.activities;let i=index;">
+                         <div class="activity_date">
+                                  <!--<div class="devider1 martb5"></div>-->
+            <div class="activity_datebg">
+                <div class="datemonth"><span>{{getActivity.activityDate| dateFormat:'MMM'}}</span>{{getActivity.activityDate | dateFormat:'DD'}}</div>
+                <div class="Year">{{getActivity.activityDate| dateFormat:'YYYY'}}</div>
             </div>
-             <div class="all_activity">
-            <div *ngFor=" let finalData of activityData" > 
-           
-                  
-                     
-                         <div *ngIf="finalData.ChangeSummary!=''"> 
-                         <div *ngFor=" let ChangeSummary of finalData.ChangeSummary" >     
-                              <div class="allactivitydiv">               
-                        <div class="activityusericon" *ngIf="finalData.ProfilePicture"><img src="{{finalData.ProfilePicture}}"/></div>
-                         <div class="activityusericon" *ngIf="!finalData.ProfilePicture"><img src="{{finalData.ProfilePicture}}"/></div>  
-                        <div class="activity_description">
-                        <div class="activity_content"><span class="activity_mention">{{finalData.userName}}</span>
-                         <!--has added <span class="activity_mention">moin.hussian</span> to -->
-                         {{finalData.DisplayAction}}
-                        {{ChangeSummary.ActionOn}}
-                        <span class="activity_mention" *ngIf="!ChangeSummary.OldValue && ChangeSummary.NewValue"> to</span>
-                        <span class="activity_mention" *ngIf="ChangeSummary.OldValue"> from {{ChangeSummary.OldValue}}</span>
+                         </div>
+                 <div *ngFor=" let finalData of getActivity.activityData;let j=index;" >
+                        <div *ngIf="finalData.ChangeSummary!=''"> 
+                                <div *ngFor=" let ChangeSummary of finalData.ChangeSummary" >
+                                            <div class="activities_bg">
+                                                <div class="user" *ngIf="finalData.ProfilePicture"><img src="{{finalData.ProfilePicture}}"/></div>
+                                                <div class="user" *ngIf="!finalData.ProfilePicture"><img src="{{finalData.ProfilePicture}}"/></div>
+
+<div class="activitycon">{{finalData.userName}}  {{finalData.DisplayAction}} {{ChangeSummary.ActionOn}} 
+                        <span class="" *ngIf="!ChangeSummary.OldValue && ChangeSummary.NewValue"> to</span>
+                        <span class="" *ngIf="ChangeSummary.OldValue"> from {{ChangeSummary.OldValue}}</span>
                          <span *ngIf="ChangeSummary.OldValue && ChangeSummary.NewValue"> to</span> {{ChangeSummary.NewValue}} in {{finalData.Title}}
-                         <!--<img *ngIf="finalData.planlevel=='Story'" src="assets/images/story-icon.png" class="story_task_img"/>
-                        <img *ngIf="finalData.planlevel=='Task'" src="assets/images/task-icon.png" class="story_task_img"/>-->
-                           <!--<span class="activity_mention">{{finalData.Title}}</span>  as a follower --></div> 
-                        <div class="not_activity_date">({{finalData.time}}) <span>{{finalData.ProjectName}}</span></div>
-                        </div> 
+                         </div>
+                <div class="activitypro">({{finalData.time| dateFormat:'hh:mm:ss A'}}) -{{finalData.ProjectName}}</div>
+            </div> 
+                                      </div>
+                            </div>
+                  </div>
+            <!--</div>-->
                         </div>
-                    </div> 
-                             </div>
-                   
-                   
-            </div>
-            </div>
-        </div>
-        </div>
+                </div>
+                <span class="no_record_found" *ngIf="noActivitiesFound">No activity</span>
+    <span class="no_record_found" *ngIf="!noActivitiesFound && noMoreActivities">No more activities</span>
+      
+
+

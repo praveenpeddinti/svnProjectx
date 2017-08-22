@@ -1,19 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-activities',
-  inputs: ['activityDetails'],
+  inputs: ['dashboardData','noMoreActivities','noActivitiesFound'],
   templateUrl: './activities.component.html',
   styleUrls: ['./activities.component.css']
 })
 export class ActivitiesComponent implements OnInit {
-
+  public noMoreActivities:boolean = false;
+  public noActivitiesFound:boolean = false;
   constructor() { 
     
   }
 
-  activityDetails:any[];
+  dashboardData:any[];
 
   ngOnInit() {
+    //alert(this.noMoreActivities);
   }
 
   
