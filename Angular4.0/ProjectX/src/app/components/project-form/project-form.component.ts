@@ -41,7 +41,8 @@ export class ProjectFormComponent implements OnInit {
   public projectForm:string;
   public copyProjectname:any;
   public copydescription:any;
-
+  public noMoreActivities:boolean = false;
+  public noActivitiesFound:boolean = false;
 public form={};
   // public form={
   //        description:""
@@ -64,7 +65,7 @@ public form={};
    //alert("##"+this.projectForm);
     if(this.projectForm=='create'){
      // alert("121212");
-    }else if(this.projectForm=='edit'){
+     }else if(this.projectForm=='edit'){
      //  alert("3333");
       var thisObj=this;
         this.route.queryParams.subscribe(
@@ -171,7 +172,7 @@ public form={};
                      this.verifyProjectMess=false;
                   }else{
                         this.verifyByspinner=2;
-                        this.spinnerSettings.color="blue";
+                        this.spinnerSettings.color="";
                         this.spinnerSettings.class = "fa fa-spinner fa-spin";
                         // alert(this.timer);
                        this.timer = setTimeout(()=>{
@@ -357,4 +358,25 @@ public form={};
          this.spinnerSettings.color='';
          this.spinnerSettings.class ='';
     }
+   clearEditedDetails(form){
+    console.log("12333");
+     this.fileuploadMessage=0; 
+     this.editPopUp=true;
+     this.submitted=false;
+    // setTimeout(()=>{
+     var formobj=this;
+     this.editor.initialize_editor('summernote','keyup',formobj);
+    //  }, 150);
+     this.verifyProjectMess=false; 
+     this.spinnerSettings.color='';
+     this.spinnerSettings.class ='';
+     this.form['projectName']=this.copyProjectname;
+     //jQuery("#summernote").summernote('code',this.copydescription);;;
+     this.checkImage=jQuery('.projectlogo').attr("src");
+     if(this.checkImage=='assets/images/logo.jpg'){
+        this.clearImgsrc=true; 
+     }else{
+        this.clearImgsrc=false;
+      }
+  }
 }
