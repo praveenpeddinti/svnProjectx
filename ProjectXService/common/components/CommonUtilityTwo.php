@@ -285,10 +285,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                      $topTickets='';
                      $projects=Projects::getProjectMiniDetails($extractDetails['ProjectId']);
                      $userDetails=Collaborators::getCollaboratorById($projects['CreatedBy']);
-                     $projectTeamDetails=Collaborators::getFilteredProjectTeam($extractDetails['ProjectId'],$userDetails['UserName']);
+                    // $projectTeamDetails=Collaborators::getFilteredProjectTeam($extractDetails['ProjectId'],$userDetails['UserName']);
                      $projectInfo['projectId']=$extractDetails['ProjectId'];
                      $projectInfo['createdBy']=$userDetails['UserName'];
-                     $projectInfo['profilePic']=$projectTeamDetails[0]['ProfilePic'];
                      $projectInfo['projectName']=$projects['ProjectName'];
                      $projectInfo['createdOn'] =$extractDetails['CreatedOn'];
                      $projecTeam=ProjectTeam::getProjectTeamCount($extractDetails['ProjectId']);
@@ -304,6 +303,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                      $projectInfo['storyPoints']=  self::getTotalStoryPoints($extractDetails['ProjectId'],$userId);
                       array_push($prepareDetails,$projectInfo);
                     }
+                    error_log("prepareProjectsForUserDashboard______________".print_r($prepareDetails,1));
                     return $prepareDetails;
              } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:prepareProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -687,20 +687,23 @@ static function validateDateFormat($date, $format = 'M-d-Y')
    */
   public static function getTopTicketsStats($projectId, $userId = '', $bucketId = '') {
 
-        try {
+        try{
             $topTicketsArray = array();
             $filters = Filters::getAllActiveFilters();
             $conditions = array('ProjectId' => (int) $projectId);
+            $total = $assigned = $followed = '';
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
             if ($bucketId != '')
                 $conditions['Fields.bucket.value'] = (int) $bucketId;
-            $conditions['Followers.FollowerId'] = (int) $userId;
+            $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
             $conditions['Fields.state.value'] = (int) 3;
             $total = $collection->count($conditions);
+            unset($conditions['$or']);
+            $conditions['Followers.FollowerId'] = (int) $userId;
+            $followed = $collection->count($conditions);
             unset($conditions['Followers.FollowerId']);
             $conditions['Fields.assignedto.value'] = (int) $userId;
             $assigned = $collection->count($conditions);
-            $followed = (int) $total;
             $topTickets = array("id" => 1, "name" => 'My active stories/task', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
@@ -709,26 +712,37 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $total = $assigned = $followed = '';
             $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
             unset($conditions['Fields.state.value']);
-            $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000));
-            $assigned = $collection->count($conditions);
             unset($conditions['Fields.assignedto.value']);
+            $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000));
+            $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
+            $total = $collection->count($conditions);
+            unset($conditions['$or']);
             $conditions['Followers.FollowerId'] = (int) $userId;
             $followed = $collection->count($conditions);
-            $topTickets = array("id" => 2, "name" => 'Over due stories/tasks', 'total' => $followed, 'assigned' => $assigned, 'followed' => $followed);
+            unset($conditions['Followers.FollowerId']);
+            $conditions['Fields.assignedto.value'] = (int) $userId;
+            $assigned = $collection->count($conditions);
+            
+            $topTickets = array("id" => 2, "name" => 'My over due stories/tasks', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
 
             //  Due stories/tasks for current week
             $total = $assigned = $followed = '';
             $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
-            $todayDate = date("Y-m-d H:i:s");
-            $conditions['Fields.duedate.value'] = array('$gte' => new \MongoDB\BSON\UTCDateTime(strtotime($todayDate) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
-            $conditions['Fields.assignedto.value'] = (int) $userId;
-            $assigned = $collection->count($conditions);
+           // $todayDate = date("Y-m-d H:i:s");
+             $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+            $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
             unset($conditions['Fields.assignedto.value']);
+            $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
+            $total = $collection->count($conditions);
+            unset($conditions['$or']);
             $conditions['Followers.FollowerId'] = (int) $userId;
             $followed = $collection->count($conditions);
-            $topTickets = array("id" => 3, "name" => 'Due stories/tasks for current week', 'total' => $followed, 'assigned' => $assigned, 'followed' => $followed);
+            unset($conditions['Followers.FollowerId']);
+            $conditions['Fields.assignedto.value'] = (int) $userId;
+            $assigned = $collection->count($conditions);
+            $topTickets = array("id" => 3, "name" => 'My due stories/tasks for current week', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
 //          foreach ($filters as $filter) {
@@ -802,7 +816,10 @@ public static function prepareUserDashboardActivities($activities) {
     public static function getTotalStoryPoints($projectId,$userId){
         try {
            $totalStoryPoints=0;
+           $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
            $matchArray = array("ProjectId" => (int) $projectId,'$or'=>array(array('Fields.assignedto.value'=>(int)$userId)));
+             
+           $matchArray['$and']=[['$or'=>[['Fields.duedate.value'=>array('$gt'=>new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000))],['Fields.duedate.value'=>'']]]];
             $query = Yii::$app->mongodb->getCollection('TicketCollection');
             $pipeline = array(
                
