@@ -100,7 +100,7 @@ $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$us
     * @param type $userId
     * @return type
     */
-      public static function saveNotificationsSettingsForUser($userId){
+        public static function saveNotificationsSettingsForUser($userId){
           try{
              $query="select Id from Notifications where status=1"; 
              $data = Yii::$app->db->createCommand($query)->queryAll();
@@ -113,6 +113,7 @@ $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$us
              }
             $queryString =  implode(",",$dataArray);
             $insertQuery = $insertQuery.$queryString;
+             error_log($insertQuery);
             Yii::$app->db->createCommand($insertQuery)->execute(); 
           } catch (Exception $ex) {
       Yii::error("Settings:saveNotificationsSettingsForUser::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
