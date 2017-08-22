@@ -399,6 +399,7 @@ class CollaboratorService {
             if ($userId > 0) {
                 $status = $this->addUserToTeam($projectId, $userId);
                 Collaborators::saveUserProfile($userId, $user->userProfileImage);
+                Settings::saveNotificationsSettingsForUser($userId);
                 $this->invalidateInvite($usermail, $invite_code);
             }
             return $userId;
