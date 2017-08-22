@@ -1,4 +1,4 @@
-import { Component, OnInit,NgZone,Input } from '@angular/core';
+import { Component, OnInit,NgZone,Input,Output ,EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AjaxService } from '../../ajax/ajax.service';
 import {Router,ActivatedRoute} from '@angular/router';
@@ -12,10 +12,12 @@ declare var jQuery:any;
   inputs: ['projectForm'],
   templateUrl: './project-form.component.html',
   styleUrls: ['./project-form.component.css'],
-   providers: [ProjectService]
+   providers: [ProjectService],
+  
 })
 export class ProjectFormComponent implements OnInit {
-  private projectId;
+    @Output() cancleToParent: EventEmitter<any> = new EventEmitter();
+    private projectId;
   public projectName;
   public description;
   public projectLogo;
@@ -45,6 +47,7 @@ export class ProjectFormComponent implements OnInit {
   public noActivitiesFound:boolean = false;
   public form={};
   public setLogo:any;
+  public updatedLogo:any;
 
   // public form={
   //        description:""
@@ -138,8 +141,14 @@ export class ProjectFormComponent implements OnInit {
                           this._ajaxService.AjaxSubscribe("site/get-project-image",postData,(result)=>
                             {
                                 if(result.data){
+                                 this.updatedLogo= result.data;
                                     jQuery(".projectlogo").attr("src",result.data);
                                     this.fileExtention=uploadedFileExtension;
+                                    if(this.projectForm=='edit'){
+                                    //  alert("1212");
+                                    //   jQuery(".projectlogo").attr("src",'');
+                                    //   jQuery(".projectlogo").attr("src",result.data)
+                                    }
                                }
                                this.projectImage=jQuery(".projectlogo").attr("src");
                             
@@ -339,9 +348,11 @@ export class ProjectFormComponent implements OnInit {
                          // alert("2222222"+this.editPopUp);
                          }, 1000);
                         // this.editPopUp=true;
-                         // alert("232"+this.editPopUp);
-                      // alert("2222222"+this.form['projectName']);
-                           this._router.navigate(['project',this.form['projectName']]);
+                        // alert("232"+this.editPopUp);
+                      // alert("2222222"+this.updatedLogo);
+                       this.cancleToParent.emit(this.updatedLogo);
+                          //  jQuery(".project_logoss").attr("src", this.updatedLogo);
+                            this._router.navigate(['project',this.form['projectName']]);
                       }else{
                       //   alert("333");
                  }
@@ -383,6 +394,7 @@ export class ProjectFormComponent implements OnInit {
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
         jQuery("#summernote").summernote('destroy');
+        jQuery(".projectlogo").attr("src",this.projectLogo);
         this.verifyProjectMess=false; 
   }
 

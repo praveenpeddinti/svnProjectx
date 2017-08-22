@@ -5,7 +5,7 @@
                <div class="clearfix">
                   <div class="col-md-9">
                       <div  class="project_heading">
-                         <img *ngIf="setLogo" src="assets/images/logo.jpg" class="project_logo"/> 
+                         <img *ngIf="setLogo" src="assets/images/logo.jpg" class="project_logo" /> 
                          <img *ngIf="!setLogo" src="{{projectLogo}}" class="project_logo"/>
                         {{projectName}}</div>
                   </div>
@@ -109,7 +109,7 @@
    </div>
    </div>
    <div *ngIf="editPopUp">
-       <app-project-form projectForm='edit'></app-project-form>
+       <app-project-form projectForm='edit' (cancleToParent)="cal($event)"></app-project-form>
   </div>
 </div>
 <div class="col-md-4">

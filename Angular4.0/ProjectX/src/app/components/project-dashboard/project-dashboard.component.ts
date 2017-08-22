@@ -45,6 +45,7 @@ export class ProjectDashboardComponent implements OnInit {
 
    constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,
           private _ajaxService: AjaxService) {}
+          
 
   ngOnInit() {
     this.dashboardData ='';
@@ -196,6 +197,10 @@ export class ProjectDashboardComponent implements OnInit {
     //  }else{
     //     this.clearImgsrc=false;
     //   }
+  }
+  cal(val){
+    this.setLogo=false;
+      jQuery(".project_logo").attr("src",val);
   }
  
 }
