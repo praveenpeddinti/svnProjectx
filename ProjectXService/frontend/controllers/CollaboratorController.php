@@ -344,7 +344,6 @@ class CollaboratorController extends Controller
                 $responseBean->data = $projectId;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             }else{
-                EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
