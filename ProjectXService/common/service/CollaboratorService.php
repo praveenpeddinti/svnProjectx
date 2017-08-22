@@ -608,6 +608,10 @@ class CollaboratorService {
         try {
             $notification_types = array();
             $notification_types = Settings::getAllNotificationTypes($userId);
+            if(count($notification_types) == 0){
+                Settings::saveNotificationsSettingsForUser($userId);
+                $notification_types = Settings::getAllNotificationTypes($userId);
+            }
             return $notification_types;
         } catch (Exception $ex) {
             Yii::error("CollaboratorService:getAllNotificationTypes::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
