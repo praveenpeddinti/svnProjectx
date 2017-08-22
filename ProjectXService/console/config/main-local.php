@@ -7,14 +7,14 @@ return [
     'components' => [
     'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=10.10.73.33;dbname=Techo2_ProjectX',
+            'dsn' => 'mysql:host=10.10.73.77;dbname=Techo2_ProjectX_Dev',
             'username' => 'root',
-            'password' => 'techo2',
+            'password' => 'Techo2',
             'charset' => 'utf8',
         ],
         'mongodb' => [
             'class' => 'yii\mongodb\Connection',
-            'dsn' => 'mongodb://10.10.73.33:27017/Techo2_ProjectX',
+            'dsn' => 'mongodb://10.10.73.77:27017/Techo2_ProjectX_Dev',
 
         ],
                  'mailer' => [
