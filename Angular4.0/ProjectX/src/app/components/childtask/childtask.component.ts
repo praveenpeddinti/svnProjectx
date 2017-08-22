@@ -12,13 +12,14 @@ declare var jQuery:any;
 })
 export class ChildtaskComponent implements OnInit {
   @Input() ticketId;
+  @Input() projectId;
    row1 = [];
   private ticketName;
   public FilterOption=[];
     public FilterOptionToDisplay=[];
      public selectedFilter=null;  
      public projectName; 
-     private projectId;
+    // private projectId;
      public statusId=''; 
      private dropList=[];
      private ticketData;
@@ -97,7 +98,7 @@ private _service: StoryService,private _ajaxService: AjaxService) { }
   
      this.row1=[];
      console.log('In child task', this.ticketId);
-    this._service.getSubTasksDetails(1, this.ticketId, (response) => {
+    this._service.getSubTasksDetails(this.projectId, this.ticketId, (response) => {
      console.log('response came----');
                    let jsonForm = {};
             if (response.statusCode == 200) {
