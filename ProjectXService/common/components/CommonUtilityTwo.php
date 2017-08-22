@@ -544,6 +544,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     $getEventDetails= EventCollection::getAllActivities($postData);
 //                    $getEventDetails= EventCollection::getAllActivitiesByProject($page,$projectId);
                     //error_log("@@@@---event-----".print_r($getEventDetails,1));die;
+                    $timezone=$postData->timeZone;
                    foreach($getEventDetails as $extractedEventDetails){
                      // error_log("eventttttt-tt------------".print_r($extractedEventDetails,1));
                     //   foreach($extractedEventDetails['Data'] as $getId){
@@ -582,7 +583,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                            $getActivities['ProfilePicture']=$tinyUserDetails['ProfilePicture'];
                            $getActivities['Miscellaneous']=$activitiesArray['Miscellaneous'];
                            $datetime1=$activitiesArray['CreatedOn']->toDateTime();
-                           $timezone="Asia/Kolkata";
                            $datetime1->setTimezone(new \DateTimeZone($timezone));
                            $getActivities['createdDate']= $datetime1->format('M-d-Y');
                            $Date = $datetime1->format('Y-m-d H:i:s');
@@ -595,13 +595,13 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 //                           error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
                                $summary = array();
-                              $summary['ActionOn']=!empty($changeSummary['ActionOn'])?$changeSummary['ActionOn']:'';
+                               $summary['ActionOn']=!empty($changeSummary['ActionOn'])?$changeSummary['ActionOn']:'';
                               if(!empty($changeSummary['OldValue'])){
+                                  error_log("test----".$changeSummary['OldValue']);
                                 $validDate = CommonUtility::validateDate($changeSummary['OldValue']);
                                 if($validDate){
                                    // $summary['OldValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
                                     $datetime1=$summary['OldValue']->toDateTime();
-                                    $timezone="Asia/Kolkata";
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
                                     $summary['OldValue']= $datetime1->format('Y-m-d H:i:s');
                                 }else{
@@ -619,7 +619,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    // error_log("=====-============".$validDate);
                                     $summary['NewValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
                                     $datetime1=$summary['NewValue']->toDateTime();
-                                    $timezone="Asia/Kolkata";
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
                                     $summary['NewValue']= $datetime1->format('M-d-Y');
                                     
