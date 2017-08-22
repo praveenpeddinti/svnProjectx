@@ -1,6 +1,5 @@
 <?php
-
-$config = [
+return [
     'components' => [
   
     ],
