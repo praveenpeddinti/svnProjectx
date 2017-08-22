@@ -55,7 +55,13 @@ class Projects extends ActiveRecord
         try{
         $query = "select PId,ProjectName,Description,ProjectLogo from Projects where ProjectName='$projectName';";
         $data = Yii::$app->db->createCommand($query)->queryOne();
-       $data["ProjectLogo"] = Yii::$app->params['ServerURL'].$data["ProjectLogo"];
+        $data["ProjectLogo"] = Yii::$app->params['ServerURL'].$data["ProjectLogo"];
+        error_log("logg----".$data["ProjectLogo"]);
+        if (strpos($data["ProjectLogo"],'assets') !== false) {
+            $data['setLogo']=true;
+        }else{
+            $data['setLogo']=false;  
+        }
         $data["Description"] = strip_tags($data["Description"]);
         return $data;   
         } catch (\Throwable $ex) {
