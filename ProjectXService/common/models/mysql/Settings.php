@@ -93,6 +93,28 @@ $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$us
 
         return $data; 
     }
+   
+      public static function saveNotificationsSettingsForUser($userId=1){
+           $query="select Id from Notifications where status=1"; 
+         //  error_log("%%%%%%%%%%%%%%%%".$query);
+   
+             $data = Yii::$app->db->createCommand($query)->queryAll();
+               $insertQuery = "INSERT INTO CollaboratorNotificationsSettings(CollaboratorId,ActivityId,SystemNotification,EmailNotification,PushNotification) VALUES";
+             $dataArray = array();
+               foreach ($data as $value) {
+                  $activityId = $value['Id'];
+                array_push($dataArray,"($userId,$activityId,1,1,0)");
+                
+             }
+            $queryString =  implode(",",$dataArray);
+            $insertQuery = $insertQuery.$queryString;
+           //  error_log('insertQuery--------'.$insertQuery);
+            $data = Yii::$app->db->createCommand($insertQuery)->execute();
+         //    $status="(".$data[0]['SystemNotification'].','.$data[0]['EmailNotification'].','.$data[0]['PushNotification'].")";
+             return $data; 
+     }  
+    
+     
 }
 
 
