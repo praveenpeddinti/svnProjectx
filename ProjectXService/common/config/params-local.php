@@ -9,9 +9,8 @@ return [
     "AppURL"=> "http://10.10.73.33:4200",   
     "ElasticEmailApiKey"=> "9d55f483-0501-4005-8ada-3335f666e731",
     "EmailServerURL"=>"http://10.10.73.33",
-
     "InviteUrl"=>"http://10.10.73.33:4200",
-
     "pageLength"=>10,
-    "projectLogo"=>"/files/projectlogo"
+    "projectLogo"=>"/files/projectlogo",
+    "UserProfilePath"=>"/files/user/"
 ];
