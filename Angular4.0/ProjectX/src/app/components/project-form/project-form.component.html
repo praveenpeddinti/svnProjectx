@@ -18,8 +18,18 @@
                    <!--<textarea name="projectLogo" id="summernote" [(ngModel)]="entryForm.projectLogo"  #projectLogo="ngModel"></textarea>-->
                <div class="pull-right"> 
                   <div class="model_proimg">
-                 <img *ngIf="clearImgsrc" alt="" src="assets/images/logo.jpg" name="projectLogo" class="projectlogo"   />
+                 <!--<div *ngIf="projectForm=='create'" class="create">  -->
+                 <!--<img *ngIf="clearImgsrc" alt="" src="assets/images/logo.jpg" name="projectLogo" class="projectlogo"   />
                  <img *ngIf="!clearImgsrc" alt="" src="assets/images/logo.jpg" name="projectLogo" class="projectlogo"    />
+                  </div>-->
+<!--<img  src="{{projectLogo}}" name="projectLogo" class="project_logo"/>-->
+                      <!--<div *ngIf="projectForm=='edit'" class="edit">
+                         <img *ngIf="setLogo" src="assets/images/logo.jpg" name="projectLogo" class="project_logo"/> 
+                         <img  src="{{projectLogo}}" name="projectLogo" class="project_logo"/>
+                       
+                      </div>-->
+                      <img *ngIf="clearImgsrc" alt="" src="assets/images/logo.jpg" name="projectLogo" class="projectlogo"   />
+                      <img *ngIf="!clearImgsrc" alt="" src="assets/images/logo.jpg" name="projectLogo" class="projectlogo"    />
                   <div class="model_proimgedit" (click)="CallFileupload()" ><i class="fa fa-pencil" aria-hidden="true"></i>
                   </div>
                    <input  type="file" id="inputFile" style="display: none;" (change)="fileUploadEvent($event, 'fileChange')"  multiple />
@@ -36,22 +46,15 @@
                 <label class="model_label"> Project Name </label>
                 <div class="customformfieldsmarginbottom autoSearchTask">
                   <input type="text" class="customformfields " required [(ngModel)]="form.projectName" name="projectName" #projectName="ngModel"
-                    id="projectName" (keyup)="verifyProjectName(form.projectName);" (keydown)="veryInputByspinner()" />
-                  <div *ngIf="submitted && projectName.errors " class="fielderror">
+                    id="projectName" (keyup)="verifyProjectName(form.projectName);" (keydown)="veryInputByspinner()" autocomplete="off"/>
+                  <div *ngIf="submitted && projectName.errors " class="fielderror" >
                     <div [hidden]="!projectName.errors.required">Project Name is required</div>
                   </div>
                     <div [hidden]="!verifyProjectMess" class="fielderror"> Project name you have entered is already exists in the system!</div>
-            <!--<div *ngIf="verifyByspinner==1" class="txtbox_spinner green_color"><i class="fa fa-check" aria-hidden="true"></i></div>
-             <div *ngIf="verifyByspinner==3"  class="txtbox_spinner red_color"><i class="fa fa-times" aria-hidden="true"></i></div>
-             <div *ngIf="verifyByspinner==2" class="txtbox_spinner blue_color"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></div>-->
-         <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
+             <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
                 </div>
               </div>
-
-
-                 <!--<div [hidden]="!verifyProjectMess" > Project name you have entered is already exists in the system!</div>-->
-           
-            </div>
+       </div>
 
               <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 ">

@@ -43,7 +43,9 @@ export class ProjectFormComponent implements OnInit {
   public copydescription:any;
   public noMoreActivities:boolean = false;
   public noActivitiesFound:boolean = false;
-public form={};
+  public form={};
+  public setLogo:any;
+
   // public form={
   //        description:""
   //  };
@@ -80,9 +82,9 @@ public form={};
                 thisObj.projectId=data.data.PId;
                   // alert("------------"+JSON.stringify(thisObj.projectId));
                  thisObj.description=data.data.Description;
-                  thisObj.projectLogo=data.data.ProjectLogo;
+                 thisObj.projectLogo=data.data.ProjectLogo;
+                 thisObj.setLogo=data.data.setLogo;
                 //  alert("------------"+JSON.stringify(thisObj.projectLogo));;
-                
                 }else{
                this._router.navigate(['pagenotfound']);  
               }
@@ -90,7 +92,8 @@ public form={};
                 thisObj.form['projectName']=thisObj.projectName; 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
-               // alert("------33------"+JSON.stringify(thisObj.form['projectId']));
+                thisObj.form['setLogo']=thisObj.setLogo;
+              // alert("------fghh------"+JSON.stringify(thisObj.form['setLogo']));
                //  jQuery("#summernote").summernote('code',thisObj.form['description']);
                  thisObj.copyProjectname=thisObj.form['projectName'];
                  thisObj.copydescription=thisObj.form['description'];
@@ -155,13 +158,64 @@ public form={};
        
     }
     public timer=undefined;
-      verifyProjectName(value){
-       //  alert("@@@---");
-        //  this.spinnerSettings.color='';
-       // this.spinnerSettings.class ='';
+    //   verifyProjectName(value){
+    //    //  alert("@@@---");
+    //     //  this.spinnerSettings.color='';
+    //    // this.spinnerSettings.class ='';
        
-       clearTimeout(this.timer);
-         var postData={
+    //    clearTimeout(this.timer);
+    //      var postData={
+    //                   projectName:value.trim()
+    //               } ;
+    //                console.log("sssssssssss---------"+value.trim());
+    //               if(value.trim()=='' || value.trim() == undefined){
+    //               // alert("sssssssssss");
+    //                  this.spinnerSettings.color='';
+    //                  this.spinnerSettings.class ='';
+    //                  this.verifyProjectMess=false;
+    //               }else{
+    //                     this.verifyByspinner=2;
+    //                     this.spinnerSettings.color="";
+    //                     this.spinnerSettings.class = "fa fa-spinner fa-spin";
+    //                     // alert(this.timer);
+    //                    this.timer = setTimeout(()=>{
+    //                      this._ajaxService.AjaxSubscribe("collaborator/verifying-project-name",postData,(result)=>
+    //                     { 
+    //                        //alert("@@@---"+JSON.stringify(result.statusCode));
+    //                         if (result.data != false) {
+    //                            this.verified=0;
+    //                            this.verifyByspinner=3;
+    //                           this.spinnerSettings.color="red";
+    //                           this.spinnerSettings.class = "fa fa-times";
+    //                            this.verifyProjectMess=true;
+    //                           // alert(this.verifyProjectMess);
+    //                          }else{
+    //                           this.verified=1;
+    //                           this.verifyByspinner=1;
+    //                           this.spinnerSettings.color="green";
+    //                           this.spinnerSettings.class = "fa fa-check";
+    //                         }
+                                    
+    //                     })
+    //                    },2000);
+                       
+    //               }
+      
+    // }
+    verifyProjectName(value){
+          clearTimeout(this.timer);
+          if(this.projectForm=='create'){
+            this.AjaxCallForProjectName(value);
+          }else if(this.projectForm=='edit'){
+              if(this.copyProjectname.trim()===value.trim()){
+                console.log("yes");
+              }else{
+                this.AjaxCallForProjectName(value);
+              }
+          }
+    }
+    AjaxCallForProjectName(value){
+           var postData={
                       projectName:value.trim()
                   } ;
                    console.log("sssssssssss---------"+value.trim());
@@ -176,7 +230,7 @@ public form={};
                         this.spinnerSettings.class = "fa fa-spinner fa-spin";
                         // alert(this.timer);
                        this.timer = setTimeout(()=>{
-                         this._ajaxService.AjaxSubscribe("collaborator/verifying-project-name",postData,(result)=>
+                         this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
                         { 
                            //alert("@@@---"+JSON.stringify(result.statusCode));
                             if (result.data != false) {
@@ -194,27 +248,25 @@ public form={};
                             }
                                     
                         })
-                       },2000);
+                       },3000);
                        
                   }
-      
     }
-   veryInputByspinner(){
+    veryInputByspinner(){
         //this.verifyByspinner='';
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
         this.verifyProjectMess=false;
     }
     public editorDesc="";
-
     postProjectDetails(projectForm){
-      if(projectForm=='create'){
-        this.saveProjectDetails();
-      }else{
-        this.editProjectDetails();
-      }
+        if(projectForm=='create'){
+          this.saveProjectDetails();
+        }else{
+          this.editProjectDetails();
+        }
 
-   }
+    }
    saveProjectDetails(){
         if(this.verified==1 && this.fileuploadMessage==0){
             this.projectImage=jQuery('.projectlogo').attr("src");
@@ -327,7 +379,9 @@ public form={};
         //  this.form={
         //          description:""
         //     };
-        jQuery("#summernote").summernote('code',this.copydescription);
+       // jQuery("#summernote").summernote('code',this.copydescription);
+        this.spinnerSettings.color='';
+        this.spinnerSettings.class ='';
         jQuery("#summernote").summernote('destroy');
         this.verifyProjectMess=false; 
   }

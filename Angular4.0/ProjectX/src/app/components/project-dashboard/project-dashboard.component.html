@@ -5,8 +5,8 @@
                <div class="clearfix">
                   <div class="col-md-9">
                       <div  class="project_heading">
-                         <img  src="assets/images/logo.jpg" class="project_logo"/> 
-                         <!--<img *ngIf="!setlogo" src="{{projectLogo}}" class="project_logo"/> -->
+                         <img *ngIf="setLogo" src="assets/images/logo.jpg" class="project_logo"/> 
+                         <img *ngIf="!setLogo" src="{{projectLogo}}" class="project_logo"/>
                         {{projectName}}</div>
                   </div>
                   <div class="col-md-3">
@@ -50,7 +50,7 @@
                          <div class="clearfix marb10">
                            <div class="col-md-10 col-xs-9">{{extracttopTickets.name}}</div>
                            <div class="col-md-2 col-xs-3">
-                              <div class="pull-right but"> {{extracttopTickets.total}}</div>
+                              <div class="pull-right but" [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:extracttopTickets.id}"> {{extracttopTickets.total}}</div>
                            </div>
                         </div>
                       
@@ -88,7 +88,7 @@
             </div>
             <div class="row devider1"></div> 
               Active Users  
-               <div *ngIf="!projectDetails.userInfo">
+               <div *ngIf="projectDetails.userInfo==''">
                        (No Active Users)
                        </div>
               <div class="row">

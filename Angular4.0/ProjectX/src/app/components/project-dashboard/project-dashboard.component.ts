@@ -41,7 +41,7 @@ export class ProjectDashboardComponent implements OnInit {
   public noMoreActivities:boolean = false;
   public noActivitiesFound:boolean = false;
   public projectForm:string; 
-  public setlogo:any;
+  public setLogo:any;
 
    constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,
           private _ajaxService: AjaxService) {}
@@ -62,7 +62,8 @@ export class ProjectDashboardComponent implements OnInit {
                 thisObj.projectId=data.data.PId;
                   // alert("------------"+JSON.stringify(thisObj.projectId));
                  thisObj.description=data.data.Description;
-                  thisObj.projectLogo=data.data.ProjectLogo;
+                 thisObj.projectLogo=data.data.ProjectLogo;
+                 thisObj.setLogo=data.data.setLogo;
                 //  alert("------------"+JSON.stringify(thisObj.projectLogo));;
                 
                 }else{
@@ -72,7 +73,8 @@ export class ProjectDashboardComponent implements OnInit {
                 thisObj.form['projectName']=thisObj.projectName; 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
-//                 alert("------33------"+JSON.stringify(thisObj.form['projectLogo']));
+                thisObj.form['setLogo']=thisObj.setLogo;
+                // alert("------33------"+JSON.stringify(thisObj.form['projectLogo']));
 //                 if(thisObj.form['projectLogo']=='assets/images/logo.jpg'){
 //                   thisObj.setlogo=true;
 //                 }else{
