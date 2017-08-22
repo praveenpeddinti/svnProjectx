@@ -56,6 +56,16 @@ class WorkFlowFields extends ActiveRecord
        throw new ErrorException($ex->getMessage()); 
         }
     }
+    public static function getBucketsListFilters(){
+        try{
+            $query="select * from WorkFlowState";
+            $data = Yii::$app->db->createCommand($query)->queryAll();
+            return $data;
+        } catch (Exception $ex) {
+ Yii::error("WorkFlowFields:getBucketsListFilters::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
+       throw new ErrorException($ex->getMessage()); 
+        }
+    }
     
 }
 
