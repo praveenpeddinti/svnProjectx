@@ -169,36 +169,17 @@ class TicketCollection extends ActiveRecord
      */
         public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
         try {
-            
             $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
                 if($StoryData->filterOption->type=='general'){
-                    error_log("&&&&&&&&&&&&&&&&&&&&&&&&&&&".$StoryData->filterOption->id);
                 switch((int)$StoryData->filterOption->id){
-//               case 2:
-//                   $conditions["IsChild"] = array('$in' => array(0,1));
-//                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
-//               case 3:
-//                   $conditions["IsChild"] = array('$in' => array(0,1));
-//                   $conditions['Fields.assignedto.value']=(int)$StoryData->userInfo->Id;break;
-//               case 4:
-//                   $conditions["IsChild"] = array('$in' => array(0,1));
-//                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
-//                   $conditions['Fields.state.value']=(int)3;break; // in progress
-//               case 5:
-//                   $conditions["IsChild"] = array('$in' => array(0,1));
-//                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
-//                   $conditions['Fields.state.value']=(int)6;break; // my closed
-//               case 6:
-//                   $conditions["IsChild"] = array('$in' => array(0,1));
-//                   $conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
                case 7:
                    $bucket=Bucket::getActiveBucketId($projectId);
                    if($bucket!='failure'){
                     $conditions['Fields.bucket.value']=(int)$bucket['Id'];   
                    }
-                   break;
-               case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
+                  break;
+              case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
                case 9:
                    //  unset($conditions['Fields.duedate.value']);
                  $conditions["IsChild"] = array('$in' => array(0,1));
@@ -209,12 +190,11 @@ class TicketCollection extends ActiveRecord
                   $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
                   $todayDate = date("Y-m-d H:i:s");
                   $conditions['Fields.duedate.value'] = array('$gte' => new \MongoDB\BSON\UTCDateTime(strtotime($todayDate) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
-            break;
+                  break;
                default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             }      
-           }
-            if($StoryData->filterOption->type=='individual'){
-                error_log("----------------------------------".$StoryData->filterOption->id);
+           } else if($StoryData->filterOption->type=='individual'){
+             
                 switch((int)$StoryData->filterOption->id){
                      case 2:
                    $conditions["IsChild"] = array('$in' => array(0,1));
@@ -240,15 +220,25 @@ class TicketCollection extends ActiveRecord
                    $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
                    $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000)); break;
                 case 12:
-                   $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
-                  $todayDate = date("Y-m-d H:i:s");
-                  $conditions['Fields.duedate.value'] = array('$gte' => new \MongoDB\BSON\UTCDateTime(strtotime($todayDate) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
-                  $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+//                  $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+//                  $todayDate = date("Y-m-d H:i:s");
+                    $conditions["IsChild"] = array('$in' => array(0,1));
+                    $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+                    $monday = strtotime("last monday");
+                    $monday = date('w', $monday)==date('w') ? $monday+7*86400 : $monday;
+                    $sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+                    $todayDate = date("Y-m-d",$monday);
+                    $lastDayOfweek = date("Y-m-d",$sunday);
+                    $conditions['Fields.duedate.value'] = array('$gte' => new \MongoDB\BSON\UTCDateTime(strtotime($todayDate) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
                   break;
                default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             }      
-           }else if($StoryData->filterOption->type=='bucket'){
+           }
+           else if($StoryData->filterOption->type=='bucket'){
             $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
+           }
+           else if($StoryData->filterOption->type=='state'){
+            $conditions['Fields.state.value']=(int)$StoryData->filterOption->id;
            }
         }
             if ($StoryData->sortorder == 'desc')
