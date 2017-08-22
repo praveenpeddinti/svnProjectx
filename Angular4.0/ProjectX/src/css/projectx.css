@@ -31,7 +31,10 @@ body{font-family: 'open_sansregular'!important; font-size: 14px;color: #637282;}
 .navbar-brand {float: left;height: auto;padding: 0 15px;font-size: 18px;line-height: 20px;}
 .navbar-inverse {background-color: #fff;border-color: #080808;}
 .navbar {position: relative;min-height: 50px;margin-bottom: 0px;border-top:0;border-left:0;border-right:0;border-bottom: 1px solid #cfcfcf;}
-@media (min-width: 768px) {.navbar {border-radius: 0px;}}
+@media (min-width: 768px) {
+  .navbar {border-radius: 0px;}
+
+}
 
 /*Login styles*/
 .loginsection{width:400px;margin:auto;}
@@ -1569,7 +1572,7 @@ button.toast-close-button {
 .no_record_found{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #695ea5;margin-left: 45%; }
 
 .inuser .ui-chips>ul.ui-inputtext {margin-top: 50px!important;}
-.but:hover{ color:#58637e;}
+.but:hover{ color:#58637e; cursor: pointer;}
 
 
 
