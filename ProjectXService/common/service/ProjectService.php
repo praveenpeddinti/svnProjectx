@@ -1,7 +1,7 @@
 <?php
 namespace common\service;
 use common\models\mongo\TicketCollection;
-use common\components\CommonUtilityTwo;
+use common\components\{CommonUtilityTwo, SVNUtility,EventTrait};
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
 use common\models\mysql\Bucket;
@@ -46,6 +46,10 @@ class ProjectService {
         try {
             $ProjectModel = new Projects();
             $projectId = $ProjectModel->savingProjectDetails($projectName, $description, $userId, $projectLogo);
+          //  SVNUtility::createRepository($projectName);
+           EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$userId,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
+   
+            
             return $projectId;
         } catch (\Throwable $ex) {
             Yii::error("ProjectService:savingProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
