@@ -66,11 +66,11 @@ public inviteCode;
 
     saveUser()
     {
-     
       if(this.form['password'] ==this.form['confirmpassword']){
         this.isPasswordMatch=true;
       }else{
         this.isPasswordMatch=false;
+         jQuery("#mismatch_error").show(); //used jquery since Password mismatch validation doesn't sync with Form Inbuilt Validation
       }
 
       if(this.isPasswordMatch)
@@ -156,6 +156,13 @@ public inviteCode;
                 console.error("Error occured in story-formcomponent::fileUploadEvent"+error);
                 this.fileUploadStatus = false;
             });
+    }
+
+    public checkConfirmField(event){
+
+         if(event==''){
+           jQuery("#mismatch_error").hide(); //used jquery since Password mismatch validation doesn't sync with Form Inbuilt Validation
+         }
     }
 
 }
