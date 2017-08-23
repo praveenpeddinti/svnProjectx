@@ -16,8 +16,10 @@ declare var jQuery:any;
   
 })
 export class ProjectFormComponent implements OnInit {
-    @Output() cancleToParent: EventEmitter<any> = new EventEmitter();
-    private projectId;
+  
+   @Output() appendLogoToParent: EventEmitter<any> = new EventEmitter();
+   @Output() appendDescriptionParent: EventEmitter<any> = new EventEmitter();
+  private projectId;
   public projectName;
   public description;
   public projectLogo;
@@ -346,11 +348,12 @@ export class ProjectFormComponent implements OnInit {
                           this.editPopUp=false;
                           jQuery('#addProjectModel').modal('hide');
                          // alert("2222222"+this.editPopUp);
-                         }, 1000);
+                         }, 500);
                         // this.editPopUp=true;
                         // alert("232"+this.editPopUp);
                       // alert("2222222"+this.updatedLogo);
-                       this.cancleToParent.emit(this.updatedLogo);
+                       this.appendLogoToParent.emit(this.updatedLogo);
+                       this.appendDescriptionParent.emit(this.form['description']);
                           //  jQuery(".project_logoss").attr("src", this.updatedLogo);
                             this._router.navigate(['project',this.form['projectName']]);
                       }else{
@@ -437,7 +440,7 @@ export class ProjectFormComponent implements OnInit {
      this.spinnerSettings.color='';
      this.spinnerSettings.class ='';
      this.form['projectName']=this.copyProjectname;
-     //jQuery("#summernote").summernote('code',this.copydescription);;;
+     jQuery("#summernote").summernote('code',this.copydescription);
      this.checkImage=jQuery('.projectlogo').attr("src");
      if(this.checkImage=='assets/images/logo.jpg'){
         this.clearImgsrc=true; 

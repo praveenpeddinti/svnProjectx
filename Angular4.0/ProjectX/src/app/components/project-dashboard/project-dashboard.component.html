@@ -96,7 +96,7 @@
                  
                 <div *ngIf="projectDetails.userInfo">
                   <div *ngFor="let extractUserInfo of projectDetails.userInfo| slice:0:10;let j=index;">
-                        <img alt="" src="{{extractUserInfo.ProfilePicture}}" class="active_userimg useractive">
+                        <img alt="" src="{{extractUserInfo.ProfilePicture}}" ata-toggle="tooltip" title="{{extractUserInfo.UserName}}"  class="active_userimg useractive">
                     </div>
                 </div>
                   <span  id="demo" class="collapse"><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/><img src="images/623-06124606n.jpg" class="active_userimg useractive"/></span>
@@ -109,10 +109,10 @@
    </div>
    </div>
    <div *ngIf="editPopUp">
-       <app-project-form projectForm='edit' (cancleToParent)="cal($event)"></app-project-form>
+       <app-project-form projectForm='edit' (appendLogoToParent)="appendLogo($event)" (appendDescriptionParent)="appendDescription($event)"></app-project-form>
   </div>
 </div>
 <div class="col-md-4">
-        <app-activities [dashboardData]="dashboardData.activities" noMoreActivities=false noActivitiesFound=false></app-activities>
+        <app-activities [dashboardData]="dashboardData" noMoreActivities=false noActivitiesFound=false></app-activities>
         </div>
    

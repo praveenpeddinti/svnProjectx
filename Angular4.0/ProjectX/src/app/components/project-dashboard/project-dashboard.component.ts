@@ -198,9 +198,13 @@ export class ProjectDashboardComponent implements OnInit {
     //     this.clearImgsrc=false;
     //   }
   }
-  cal(val){
+  appendLogo(val){
     this.setLogo=false;
       jQuery(".project_logo").attr("src",val);
   }
+  appendDescription(val){
+    this.description=val;
+  }
+  
  
 }
