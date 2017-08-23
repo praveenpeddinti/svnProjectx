@@ -546,6 +546,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 //                    $getEventDetails= EventCollection::getAllActivitiesByProject($page,$projectId);
                     //error_log("@@@@---event-----".print_r($getEventDetails,1));die;
                     $timezone=$postData->timeZone;
+                    $setNewVal='';
                    foreach($getEventDetails as $extractedEventDetails){
                      // error_log("eventttttt-tt------------".print_r($extractedEventDetails,1));
                     //   foreach($extractedEventDetails['Data'] as $getId){
@@ -560,19 +561,21 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                            if($getActivities['OccuredIn']=='Ticket'){
                                 $selectFields = ['Title','Fields.planlevel.value_name'];
                                 $getTicketDetails = TicketCollection::getTicketDetails($activitiesArray['ReferringId'],$activitiesArray['ProjectId'],$selectFields);
+                                $setNewVal=$getTicketDetails['Title'];
                                 $getActivities['Title']='#'.$activitiesArray['ReferringId'].' '.$getTicketDetails['Title'];
                                 $getActivities['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
+                                
                             }
                             else if($getActivities['OccuredIn']=='Bucket'){
-                              //  $getTicketDetails = TicketCollection::checkTicketsinBuckets($activitiesArray['ProjectId'],$activitiesArray['ReferringId']);
-                             $getBucketDetails =Bucket::getBucketName($activitiesArray['ReferringId'],$activitiesArray['ProjectId']);
-                                // error_log("----------------".print_r($getTicketDetails[0]['Fields']['bucket']['value_name'],1));
-                               $getActivities['Title']=!empty($getBucketDetails['Name'])?$getBucketDetails['Name']:'';
-                               $getActivities['planlevel']='';
+                              $getBucketDetails =Bucket::getBucketName($activitiesArray['ReferringId'],$activitiesArray['ProjectId']);
+                              $getActivities['Title']=!empty($getBucketDetails['Name'])?$getBucketDetails['Name']:'';
+                              $getActivities['planlevel']='';
+                               $setNewVal=$getActivities['Title'];
                             }
                             else if($getActivities['OccuredIn']=='Project'){
                                 $getActivities['Title']=!empty($projectDetails['ProjectName'])?$projectDetails['ProjectName']:'';
                                 $getActivities['planlevel']='';
+                                 $setNewVal=$getActivities['Title'];
                             }
                                 
                            $getActivities['ReferringId']=$activitiesArray['ReferringId'];
@@ -597,40 +600,111 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
                                $summary = array();
                                $summary['ActionOn']=!empty($changeSummary['ActionOn'])?$changeSummary['ActionOn']:'';
-                              if(!empty($changeSummary['OldValue'])){
-                                  error_log("test----".$changeSummary['OldValue']);
-                                $validDate = CommonUtility::validateDate($changeSummary['OldValue']);
-                                if($validDate){
-                                   // $summary['OldValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                                    $datetime1=$summary['OldValue']->toDateTime();
+                               if( $summary['ActionOn']=='duedate'){
+                                if(!empty($changeSummary['OldValue'])){
+                                    $datetime1=$changeSummary['OldValue']->toDateTime();
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
-                                    $summary['OldValue']= $datetime1->format('Y-m-d H:i:s');
+                                    $summary['OldValue']= $datetime1->format('M-d-Y');
+                                    error_log("@@@@-----". $summary['OldValue']);
                                 }else{
-//                               error_log("===Field Name111111==");
-                                   $summary['OldValue'] =trim(html_entity_decode(strip_tags($changeSummary['OldValue']))); 
-                                
-                                     error_log("oldvalueeee=-============".$summary['OldValue']);
+                                    $summary['OldValue'] ='';
                                 }
-                              }else{
-                                  $summary['OldValue'] ='';
-                              }
-                              if(!empty($changeSummary['NewValue'])){
-                                $validDate = CommonUtility::validateDate($changeSummary['NewValue']);
-                                if($validDate){
-                                   // error_log("=====-============".$validDate);
-                                    $summary['NewValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                                    $datetime1=$summary['NewValue']->toDateTime();
+                                 if(!empty($changeSummary['NewValue'])){
+                                    error_log("set new vall----".$setNewVal);
+                                    $datetime1=$changeSummary['NewValue']->toDateTime();
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
                                     $summary['NewValue']= $datetime1->format('M-d-Y');
-                                    
-                                 error_log("summaryyyyyyy=-============".$summary['NewValue']);
+                                    error_log("@@@@-----". $summary['NewValue']);
+                                 
                                 }else{
-//                                error_log("===Field Name22222222==");
-                                   $summary['NewValue'] = trim(html_entity_decode(strip_tags($changeSummary['NewValue']))); 
-                                }
-                              }else{
-                                  $summary['NewValue'] ='';
-                              }
+                                    error_log("@@@dgdfg-----");
+                                    $summary['NewValue'] ='';
+                                }   
+                               }else if($summary['ActionOn']=='totaltimelog' || $summary['ActionOn']=='estimatedpoints'){
+                                   if(!empty($changeSummary['OldValue'])){
+                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $summary['NewValue']=$changeSummary['NewValue'];
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                   }
+                               }else if($summary['ActionOn']=='description'){
+                                    if(!empty($changeSummary['OldValue'])){
+                                        
+                                       $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 120);
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 120);;
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                   }
+                               }else if($summary['ActionOn']=='projectcreation'){
+                                    if(!empty($changeSummary['OldValue'])){
+                                        
+                                       $summary['OldValue']=$setNewVal;
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $summary['NewValue']=$setNewVal;
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                   }
+                               }else{
+                                      if(!empty($changeSummary['OldValue'])){
+                                        
+                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $summary['NewValue']=$changeSummary['NewValue'];
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                   }
+                               }
+//                              if(!empty($changeSummary['OldValue'])){
+//                                  error_log("test----".$changeSummary['OldValue']);
+//                                $validDate = CommonUtility::validateDate($changeSummary['OldValue']);
+//                                if($validDate){
+//                                   // $summary['OldValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+//                                    $datetime1=$summary['OldValue']->toDateTime();
+//                                    $datetime1->setTimezone(new \DateTimeZone($timezone));
+//                                    $summary['OldValue']= $datetime1->format('Y-m-d H:i:s');
+//                                }else{
+////                               error_log("===Field Name111111==");
+//                                   $summary['OldValue'] =trim(html_entity_decode(strip_tags($changeSummary['OldValue']))); 
+//                                
+//                                     error_log("oldvalueeee=-============".$summary['OldValue']);
+//                                }
+//                              }else{
+//                                  $summary['OldValue'] ='';
+//                              }
+//                              if(!empty($changeSummary['NewValue'])){
+//                                 error_log("set new vall----".$setNewVal); 
+//                                $validDate = CommonUtility::validateDate($changeSummary['NewValue']);
+//                                if($validDate){
+//                                   // error_log("=====-============".$validDate);
+//                                    $summary['NewValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+//                                    $datetime1=$summary['NewValue']->toDateTime();
+//                                    $datetime1->setTimezone(new \DateTimeZone($timezone));
+//                                    $summary['NewValue']= $datetime1->format('M-d-Y');
+//                                    
+//                                 error_log("summaryyyyyyy=-============".$summary['NewValue']);
+//                                }else{
+//                                 error_log("===Field Name22222222==");
+//                                  // $summary['NewValue'] = trim(html_entity_decode(strip_tags($changeSummary['NewValue']))); 
+//                                 $summary['NewValue'] = trim(html_entity_decode(strip_tags($setNewVal))); 
+//                                }
+//                              }else{
+//                                  error_log("@@@dgdfg-----");
+//                                  $summary['NewValue'] ='';
+//                              }
                              // $getActivities['ChangeSummary']['OldValue']=!empty($changeSummary['OldValue'])?$changeSummary['OldValue']:'';
                              // $getActivities['ChangeSummary']['NewValue']=!empty($changeSummary['NewValue'])?$changeSummary['NewValue']:'';
                              array_push($getActivities['ChangeSummary'], $summary);  
