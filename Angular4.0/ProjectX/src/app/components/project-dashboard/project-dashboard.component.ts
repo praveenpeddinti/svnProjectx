@@ -51,6 +51,7 @@ export class ProjectDashboardComponent implements OnInit {
           
 
   ngOnInit() {
+     window.scrollTo(0,0);
     this.dashboardData ='';
     var thisObj = this;
    
@@ -118,8 +119,8 @@ export class ProjectDashboardComponent implements OnInit {
     @HostListener('window:scroll', ['$event']) 
     projectActivityScroll(){
      var thisObj=this;
-         if (thisObj.dashboardScroll && jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height())) {
-                        thisObj.dashboardScroll=false;
+         if ((!this.noMoreActivities) && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
+                       // thisObj.dashboardScroll=false;
                         thisObj.page++;
                        //     setTimeout(() => { 
                         thisObj.projectActivities(thisObj.page);
@@ -129,6 +130,7 @@ export class ProjectDashboardComponent implements OnInit {
                     }
     }
     projectActivities(page){
+     // alert("page"+page);
               var post_data={
                'page':page,
                'pageLength':10,
@@ -171,7 +173,7 @@ export class ProjectDashboardComponent implements OnInit {
                         }
                       // alert("###--"+JSON.stringify(thisObj.dashboardData));
                     }
-                    this.dashboardScroll=true;
+                  //  this.dashboardScroll=true;
                })
     }
    scrollDataBuilder(activityData,prepareData){

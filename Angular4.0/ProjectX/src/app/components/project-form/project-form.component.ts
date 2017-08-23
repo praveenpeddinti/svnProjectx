@@ -68,10 +68,10 @@ export class ProjectFormComponent implements OnInit {
           private projectService:ProjectService
   ) {this.filesToUpload = []; }
   ngOnInit() {
-   //this.descLength=this.form.description.length;
    //alert("##"+this.projectForm);
+     
     if(this.projectForm=='create'){
-     // alert("121212");
+      // alert("121212");
      }else if(this.projectForm=='edit'){
      //  alert("3333");
       var thisObj=this;
@@ -97,7 +97,7 @@ export class ProjectFormComponent implements OnInit {
                 thisObj.form['projectName']=thisObj.projectName; 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
-                thisObj.form['setLogo']=thisObj.setLogo;
+                  thisObj.form['setLogo']=thisObj.setLogo;
               // alert("------fghh------"+JSON.stringify(thisObj.form['setLogo']));
                //  jQuery("#summernote").summernote('code',thisObj.form['description']);
                  thisObj.copyProjectname=thisObj.form['projectName'];
@@ -218,7 +218,8 @@ export class ProjectFormComponent implements OnInit {
           if(this.projectForm=='create'){
             this.AjaxCallForProjectName(value);
           }else if(this.projectForm=='edit'){
-              if(this.copyProjectname.trim()===value.trim()){
+            
+              if(this.copyProjectname.trim()===value.trim().toLowerCase( )){
                 console.log("yes");
               }else{
                 this.AjaxCallForProjectName(value);
