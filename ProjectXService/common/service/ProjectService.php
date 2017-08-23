@@ -92,10 +92,11 @@ class ProjectService {
                         $logo = Yii::$app->params['projectLogo'] . '/' . $projectName . "_" . $projectId . ".$fileExt";
                     }
                 } else {
+                     $logo = Yii::$app->params['projectLogo'] . '/' . $projectName . "_" . $projectId . ".$fileExt";
                     error_log("not existeddddddddd----");
                 }
             }
-            error_log("not existeddddddddd@@@@@@@@@@@@@--------" . $logo);
+            error_log("not existeddddddddd@@@@@@@@@@@@@--------" . $projectLogo);
             $ProjectModel = new Projects();
             $updateStatus = $ProjectModel->updateProjectDetails($projectName, $description, $fileExt, $logo, $projectId);
             return $updateStatus;
