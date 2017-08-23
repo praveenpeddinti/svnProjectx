@@ -1591,3 +1591,4 @@ button.toast-close-button {
     overflow: unset!important;
     z-index: 9999!important;
 }
+.float_right{float:right;}
