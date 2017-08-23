@@ -86,7 +86,7 @@ font-weight:normal;
 /*.checkbox {
     margin-top: -5px;
 }*/
-.checkbox {
+/*.checkbox {
     padding-left: 20px;
 }
  .checkbox {
@@ -116,6 +116,32 @@ font-weight:normal;
 }
 input[type=checkbox]:checked + input {
     background: #6f4e95;
+}*/
+
+
+
+input[type="checkbox"] {
+  opacity: 0;
+  cursor: pointer;
+}
+
+input[type="checkbox"] + label {
+  
+    margin-left: -25px;
+}
+
+input[type="checkbox"] + label span {
+    display:inline-block;
+    width:19px;
+    height:19px;
+    margin:-2px 10px 0 0;
+    vertical-align:middle;
+    background:url("/assets/images/check_radio_sheet.png") left top no-repeat;
+    cursor:pointer;
+}
+
+input[type="checkbox"]:checked + label span {
+    background:url("/assets/images/check_radio_sheet.png") -19px top no-repeat;
 }
 
  
@@ -139,13 +165,26 @@ $(document).ready(function(){
        <table border="0" cellspacing="0" cellpadding="0" align="center">
   <thead>
 <tr>
-    <th width="25%"></th>
+    <th width="25%" class="blue-bg">Activity</th>
     <th width="25%" class="blue-bg">System Notifications
-	<div class="clearfix">Select all &nbsp;<input type="checkbox" [ngModel]="isSelectedAll_SN?true:false" (click)="isCheckedAll('SystemNotification',$event)"></div> </th>
+      <p>
+  <input type="checkbox" [ngModel]="isSelectedAll_SN?true:false" (click)="isCheckedAll('SystemNotification',$event)">
+ <label><span></span>Select all &nbsp;</label></p>
+     </th>
     <th width="25%" class="blue-bg">Email Notifications
-	<div class="clearfix">Select all &nbsp;<input type="checkbox" [ngModel]="isSelectedAll_EN?true:false" (click)="isCheckedAll('EmailNotification',$event)"></div> </th>
+   <p>
+    <input type="checkbox" [ngModel]="isSelectedAll_EN?true:false" (click)="isCheckedAll('EmailNotification',$event)">
+    <label><span></span>Select all &nbsp;</label></p>
+  
+  </th>
+   
+   
     <th width="25%" class="blue-bg">Push Notifications
-	<div class="clearfix">Select all &nbsp;<input type="checkbox" [ngModel]="isSelectedAll_PN?true:false" (click)="isCheckedAll('PushNotification',$event)"></div> </th>
+        <p>
+       <input type="checkbox" [ngModel]="isSelectedAll_PN?true:false" (click)="isCheckedAll('PushNotification',$event)">
+    <label><span></span>Select all &nbsp;</label>
+    <p>
+ </th>
   </tr>
 </thead>
 <tbody *ngFor="let nTypes of NotificationTypesToDisplay;let i=index;">
@@ -153,10 +192,21 @@ $(document).ready(function(){
     <td class="blue-bg2" style="text-align:left;">{{nTypes.ActivityTitle}}
 	<div class="noti_info">{{nTypes.ActivityDescription}}</div>
     </td>
-	<td data-title="System Notifications"><input name="systemNotification" type="checkbox" class="marl120" [ngModel]="nTypes.SystemNotification==1?true:false"  (click)="isChecked(nTypes.Id,'SystemNotification',$event)">
+	<td data-title="System Notifications">
+    <p>
+    <input name="systemNotification" type="checkbox" class="marl120" [ngModel]="nTypes.SystemNotification==1?true:false"  (click)="isChecked(nTypes.Id,'SystemNotification',$event)">
+    <label><span></span></label></p>
 </td>
-    <td data-title="Email Notifications"><input name="emailNotification" type="checkbox" class="marl120" [ngModel]="nTypes.EmailNotification==1?true:false" (click)="isChecked(nTypes.Id,'EmailNotification',$event)"></td>
-    <td data-title="Push Notifications"><input  name="pushNotification" type="checkbox" class="marl120" [ngModel]="nTypes.PushNotification==1?true:false"  (click)="isChecked(nTypes.Id,'PushNotification',$event)"></td>
+    <td data-title="Email Notifications">
+      <p>
+      <input name="emailNotification" type="checkbox" class="marl120" [ngModel]="nTypes.EmailNotification==1?true:false" (click)="isChecked(nTypes.Id,'EmailNotification',$event)">
+      <label><span></span></label></p>
+      </td>
+    <td data-title="Push Notifications">
+      <p>
+      <input  name="pushNotification" type="checkbox" class="marl120" [ngModel]="nTypes.PushNotification==1?true:false"  (click)="isChecked(nTypes.Id,'PushNotification',$event)">
+      <label><span></span></label></p>
+      </td>
   </tr>
   </tbody>
   
