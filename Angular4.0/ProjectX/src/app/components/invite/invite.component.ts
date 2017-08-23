@@ -31,7 +31,13 @@ export class InviteComponent implements OnInit {
   }
 
   verifyInvitation(code){ 
-   localStorage.setItem('user',null);
+   //localStorage.setItem('user',null);
+   //localStorage.setItem('profilePicture',null);
+   if(localStorage.getItem('user')!=null){
+      var userInfo=localStorage.getItem('user');
+      var localUserInfo=JSON.parse(userInfo);
+      var userid_from_local=parseInt(localUserInfo.Id);
+   }
    var userid_from_cookie=parseInt(this._cookieService.get('user'));
    var id_from_code=parseInt(code.substring(10));
    var invite_obj={inviteCode:code};
@@ -40,6 +46,8 @@ export class InviteComponent implements OnInit {
       if(result.statusCode==200)
       { 
         if(result.data.UserType=='Existing'){ 
+          localStorage.setItem('user',null);
+          localStorage.setItem('profilePicture',null);
           if(userid_from_cookie==id_from_code){ 
             var user={'Id':result.data.User.Id,'username':result.data.User.UserName,'token':''};
             localStorage.setItem('profilePicture',result.data.User.ProfilePic);
@@ -54,7 +62,11 @@ export class InviteComponent implements OnInit {
           //this._router.navigate(['project',result.data.PName,'create-user'],{queryParams: {code:code}});
           this._router.navigate(['create-user'],{queryParams: {code:code}});
         }else{
-           this._router.navigate(['login']);
+              if(userid_from_local==userid_from_cookie){
+                this._router.navigate(['user-dashboard']);
+              }else{
+                    this._router.navigate(['login']);
+              }
         }
 
       }
