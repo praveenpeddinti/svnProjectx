@@ -803,7 +803,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 
             //  Due stories/tasks for current week
             $total = $assigned = $followed = '';
-            $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sundindividualay', strtotime('tomorrow')));
+            $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
            // $todayDate = date("Y-m-d H:i:s");
              $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
             $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
