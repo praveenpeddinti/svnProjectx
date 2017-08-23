@@ -1796,17 +1796,9 @@ $text_message=$html . $text_message .
            foreach($options as $key=>$value){
              $temp['type']=$key;
                  foreach($value as $val){
-                      if($key=='Buckets'){
-                         $type= 'bucket'; 
-                         $showchild=1;
-                      } else if($key=='State'){
-                         $type= 'state'; 
-                         $showchild=1;
-                      }else {
-                         $type= $val['Type'];
-                         $showchild=$val['ShowChild'];
-                      }
-             array_push($temp['filterValue'],array("label"=>$val['Name'],"value"=>array("label"=>$val['Name'],"id"=>$val['Id'],"type"=>$type,"showChild"=>$showchild)));
+                   $type= (array_key_exists("Type",$val))?$val['Type']:strtolower($temp['type']);
+                   $showchild=(array_key_exists("ShowChild",$val))?$val['ShowChild']:1;
+                   array_push($temp['filterValue'],array("label"=>$val['Name'],"value"=>array("label"=>$val['Name'],"id"=>$val['Id'],"type"=>$type,"showChild"=>$showchild)));
                }
              array_push($refinedFilter,$temp); 
              $temp=array('type'=>'','filterValue'=>array());
