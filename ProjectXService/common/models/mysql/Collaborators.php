@@ -298,7 +298,7 @@ class Collaborators extends ActiveRecord
     public function getResponsibleProjectTeam($projectId,$role)
     {
         try{
-         $qry = "select C.Id,C.UserName as Name,C.Email,concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId and PT.Role in (".$role.")";
+         $qry = "select C.Id,C.UserName as Name,C.Email,concat('".Yii::$app->params['ServerURL']."',CP.ProfilePic) as ProfilePic from ProjectTeam PT join Collaborators C  join CollaboratorProfile CP on PT.CollaboratorId = C.Id and PT.CollaboratorId=CP.CollaboratorId where PT.ProjectId = $projectId";// and PT.Role in (".$role.")";
          $data = Yii::$app->db->createCommand($qry)->queryAll();
          return $data;
             
