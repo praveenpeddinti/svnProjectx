@@ -63,6 +63,8 @@ export class BucketComponent{
     public isCurrentBucketExist:number=0;
     public bStatus;
     public BucketRole:string='';
+    public storyActivities=[];
+public showActivities = false;
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     constructor(
         private _router: Router,
@@ -140,6 +142,11 @@ export class BucketComponent{
             if (response.statusCode == 200) {
             this.zone.run(() =>{ 
                 this.bucketDetails= this.prepareBucketData(response.data,this.bucketDetails);
+                this.editBucketallDetails =this.bucketDetails[0];
+                // alert(JSON.stringify(this.storyActivities));
+                console.log("final bdetails===="+JSON.stringify(this.bucketDetails));
+                //var workPercentage =this.bucketDetails.
+
                 var listData=[];
                 if(postData.bucketStatus=='Current'){
                    listData = [
@@ -297,19 +304,24 @@ public errorBucketLog(id,msg){
   
   
 /* Edit Bucket Start */
-editBucketPopup(){
+editBucketPopup(thisBucketObject){
+        // alert("777777777777777777777777777777777"+JSON.stringify(thisBucketObject));
+this.editBucketallDetails =thisBucketObject;
+    // alert("888888888888888888888888888888888888888"+JSON.stringify(this.editBucketallDetails));
     this.Type= 'Edit';
-    this.form['Id'] = this.editBucketallDetails.BucketId;
-    this.form['title']=this.editBucketallDetails.BucketName;
-    this.form['description']=this.editBucketallDetails.Description;
-    jQuery("#summernote").summernote('code',this.editBucketallDetails.Description);
-    this.form['startDateVal'] = this.editBucketallDetails.StartDate;
-    this.form['dueDateVal'] = this.editBucketallDetails.DueDate;
-    this.form['selectedUserFilter']=this.editBucketallDetails.ResponsibleUser;
-    this.form['selectedBucketTypeFilter']=this.editBucketallDetails.BucketType;
-    this.BucketRole=this.editBucketallDetails.BucketRole;
-     (this.editBucketallDetails.EmailNotify==0)?this.form['notifyEmail']=false:this.form['notifyEmail']=true;
-     (this.editBucketallDetails.EmailReminder==0)?this.form['sendReminder']=false:this.form['sendReminder']=true;
+    // this.form['Id'] = this.editBucketallDetails.BucketId;
+    // this.form['title']=this.editBucketallDetails.BucketName;
+    // this.form['description']=(this.editBucketallDetails.Description != null && this.editBucketallDetails.Description != '' && this.editBucketallDetails.Description != undefined ) ? this.editBucketallDetails.Description : "";
+    // jQuery("#summernote").summernote('code',this.form['description']);
+    // this.form['startDateVal'] = this.editBucketallDetails.StartDate;
+    // this.form['dueDateVal'] = this.editBucketallDetails.DueDate;
+    // this.form['selectedUserFilter']=this.editBucketallDetails.ResponsibleUser;
+    // this.form['selectedBucketTypeFilter']=this.editBucketallDetails.BucketType;
+    // this.BucketRole=this.editBucketallDetails.BucketRole;
+    //  (this.editBucketallDetails.EmailNotify==0)?this.form['notifyEmail']=false:this.form['notifyEmail']=true;
+    //  (this.editBucketallDetails.EmailReminder==0)?this.form['sendReminder']=false:this.form['sendReminder']=true;
+    //      alert("9999999999999999999999999999999999999999"+JSON.stringify(this.form));
+
 }    
  
 editBucket(){
@@ -341,7 +353,7 @@ editBucket(){
         jQuery('#bucketSuccessMsg').show();
         jQuery('#bucketSuccessMsg').addClass('timelogSuccessMsg');
         jQuery("#bucketSuccessMsg").html('Bucket updated successfully');
-      //jQuery('#bucketSuccessMsg').fadeOut( "slow" );
+        jQuery('#bucketSuccessMsg').fadeOut( "slow" );
       this.callshowBuckets(this.BucketRole);
     }
     });
@@ -353,15 +365,16 @@ editBucket(){
 filterBucketChange(bucketId,event){
 
     this.editBucketallDetails = bucketId;
-    if(event.text=='Edit'){
+    if(event.value=='Edit'){
         jQuery("#editBucketButton").click();
     }else{
       
        var postData={
        'projectId':this.projectId,
        'bucketId':bucketId.BucketId,
-       'changeStatus':event.text
+       'changeStatus':event.value
        }
+       //alert(JSON.stringify(postData)+"jshduiahdkhadkahsduahj");
        this._ajaxService.AjaxSubscribe("bucket/get-bucket-change-status",postData,(response) => {
         if(response.data=='success'){
                jQuery('#bucketStatusErrorMsg').show();  
@@ -428,6 +441,37 @@ filterBucketChange(bucketId,event){
         jQuery("#expand").show();
         jQuery("#collapse").hide();
       }
+
+private activityDetails="";
+showStoryActivities(BucketId){
+    // alert(BucketId);
+    // var postData = {
+    //     projectId:this.projectId,
+    //     bucketId:BucketId
+    // }
+    // var post_data={
+    //            'page':page,
+    //            'projectFlag': projectFlag,
+    //            'limit':limit,
+    //             'activityPage':activityPage,
+    //             'ProjectId':projectId,
+    //             'activityDropdownFlag':activityDropdownFlag
+    //         }
+
+    // this._ajaxService.AjaxSubscribe("site/get-all-projects-by-user",post_data,(result)=>
+    // { 
+
+    // });
+    // this._ajaxService.AjaxSubscribe("bucket/get-bucket-story-activities",postData,(response) => {
+
+            
+    //         this.storyActivities = response.data;
+    //         alert("-----"+this.storyActivities.length);
+    //         this.showActivities = true;
+    //     });
+
+}
+
  
     /**
     * @author:Praveen

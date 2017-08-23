@@ -1,0 +1,135 @@
+<!--<p>
+  create-bucket works!
+</p>-->
+
+<div class="modal fade custommodel"  id="addBucketModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{(Type=='New')?'Create Bucket':'Edit Bucket'}}</h5>
+                <!--<h5 *ngIf="Type=='Edit'" class="modal-title">Edit Bucket</h5>-->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+      
+        <form #addBucketForm="ngForm" (ngSubmit)="submitted && addBucketForm.form.valid && typeAheadResults.flag && BucketForAddorEdit(Type)" novalidate="true">
+            <div class="modal-body">
+                <div *ngIf="bucketSuccessMsg.length > 0"id="bucketSuccessMsg" class="{{bucketMsgClass}}">
+                    {{bucketSuccessMsg}}
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> Bucket Name </label>
+                        <div class="customformfieldsmarginbottom paddingright25 ">
+                            <input type="text" pInputText [(ngModel)]="form.title" name="title"  #title="ngModel" placeholder="Bucket Name" minlength="3" pattern="^[a-zA-Z0-9\s]+$" (keyup)="checkBucketName(form.title)" required/>
+                            <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
+                            <div *ngIf="submitted && title.errors " class="fielderror">
+                                <div [hidden]="!title.errors.required">
+                                  Bucket Name can not be blank
+                                </div>
+                                <div [hidden]="!title.errors.minlength">
+                                  Bucket Name must have at least 3 characters.
+                                </div>
+                                <div [hidden]="!title.errors.pattern">
+                                  Bucket Name should be alphanumeric
+                                </div>
+                            </div>
+                            <div *ngIf="typeAheadResults.msg != ''" id="addTitleErrMsg" class="fielderror">
+                                {{typeAheadResults.msg}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> Description </label>
+                        <div class="customformfieldsmarginbottom relativediv ">
+                            <textarea  [(ngModel)]="form.description" id="bucketDescId" name="description"  #description="ngModel" maxlength="50" class="customformfieldstextarea " required></textarea>
+                            <div *ngIf="submitted && description.errors " class="fielderror">
+                                <div [hidden]="!description.errors.required">Description is required</div>
+                                <div [hidden]="!description.errors.maxlength">Description should be less than 500</div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> Start Date </label>
+                        <div class="paddingright25 ">
+                            <p-calendar required  [(ngModel)]="form.startDateVal" name="startDateVal"  #startDateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"></p-calendar>
+                        </div>
+                        <div *ngIf="submitted && startDateVal.errors " class="fielderror">
+                            <div  [hidden]="!startDateVal.errors.required">Start Date is required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> End Date </label>
+                        <div class="paddingright25 ">
+                            <p-calendar required [(ngModel)]="form.dueDateVal" name="dueDateVal"  #dueDateVal="ngModel" [minDate]="form.startDateVal"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"></p-calendar>
+                        </div>
+                        <div *ngIf="submitted && dueDateVal.errors " class="fielderror">
+                            <div  [hidden]="!dueDateVal.errors.required">End Date is required</div>
+                        </div>
+                        <div id="addDueDateErrMsg" class="fielderror" style="display:none;"></div>
+                    </div>
+                </div>
+                <!--<div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <p-checkbox name="notifyEmail" binary="true" [(ngModel)]="form.notifyEmail"  #notifyEmail="ngModel" label="Notify by E-mail?" ></p-checkbox>
+                        <p-checkbox name="sendReminder" binary="true"  [(ngModel)]="form.sendReminder" #sendReminder="ngModel"  label="Send Reminder?" ></p-checkbox>
+                    </div>
+                </div>-->
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> Owner </label>
+                        <div class="customdropdown customdropdownheader paddingright25" id="filterDropdown">
+                            <p-dropdown required [style]="{'width':'367px'}" [(ngModel)]="form.selectedUserFilter" name="selectedUserFilter" #selectedUserFilter="ngModel" (onChange)="filterCreateBucketUsers()" [displayOptions]="FilterOptionToDisplay" [options]="FilterOption"></p-dropdown>
+                        </div>
+                        <div *ngIf="submitted && selectedUserFilter.errors " class="fielderror">
+                            <div  [hidden]="!selectedUserFilter.errors.required">Please select Responsible</div>
+                        </div>
+                        <div id="responsibleErrMsg" class="fielderror" style="display:none;"></div>
+                     </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <p-checkbox name="setCurrent" binary="true" [(ngModel)]="form.setCurrent"  #setCurrent="ngModel" label="Set as Current" ></p-checkbox>
+                        <!--<p-checkbox name="sendReminder" binary="true"  [(ngModel)]="form.sendReminder" #sendReminder="ngModel"  label="Send Reminder?" ></p-checkbox>-->
+                    </div>
+                </div>
+                <!--<div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        <label class="timereportlabel"> Bucket Type </label>
+                        <div class="customdropdown customdropdownheader paddingright25" id="filterDropdown">
+                        <p-dropdown required [style]="{'width':'367px'}" [(ngModel)]="form.selectedBucketTypeFilter" name="selectedBucketTypeFilter" #selectedBucketTypeFilter="ngModel" (onChange)="filterBucketType()" [displayOptions]="BucketFilterOptionToDisplay" [options]="BucketFilterOption"></p-dropdown>
+                        </div>
+                        <div *ngIf="submitted && selectedBucketTypeFilter.errors " class="fielderror">
+                            <div  [hidden]="!selectedBucketTypeFilter.errors.required">Please select Bucket Type</div>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                        Note: It's the one that should be getting worked on
+                    </div>
+                </div>
+                
+            </div>
+    
+            <div class="modal-footer">
+                <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">{{(Type=='New')?'SUBMIT':'UPDATE'}}</button>
+                <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
+            </div>
+            <!--<div *ngIf="Type=='Edit'" class="modal-footer">
+                <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">UPDATE</button>
+                <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
+            </div>-->
+        </form>
+        </div>
+    </div>
+</div>

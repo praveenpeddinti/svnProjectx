@@ -7,6 +7,8 @@ import { AjaxService } from '../../ajax/ajax.service';
 import { DatePipe } from '@angular/common';
 import { ActivitiesComponent } from '../../components/activities/activities.component';
 import { ProjectFormComponent } from '../../components/project-form/project-form.component';
+import { CreateBucketComponent } from '../../components/create-bucket/create-bucket.component';
+
 declare var jQuery:any;
 @Component({
   selector: 'app-project-dashboard',
@@ -41,6 +43,7 @@ export class ProjectDashboardComponent implements OnInit {
   public noMoreActivities:boolean = false;
   public noActivitiesFound:boolean = false;
   public projectForm:string; 
+      @ViewChild(CreateBucketComponent) createBucketObj:CreateBucketComponent;
   public setLogo:any;
 
    constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,
@@ -60,6 +63,7 @@ export class ProjectDashboardComponent implements OnInit {
            this.projectName=projectName;
             this.projectService.getProjectDetails(this.projectName,(data)=>{ 
               if(data.data!=false){
+                // alert(thisObj.projectId+"============");
                 thisObj.projectId=data.data.PId;
                   // alert("------------"+JSON.stringify(thisObj.projectId));
                  thisObj.description=data.data.Description;

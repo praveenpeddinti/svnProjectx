@@ -54,6 +54,7 @@ import { ConfirmationBoxComponent } from './components/utility/confirmation-box/
 import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 import { EmailInviteComponent } from './components/email-invite/email-invite.component';
 import { InviteComponent } from './components/invite/invite.component';
+import { CreateBucketComponent } from './components/create-bucket/create-bucket.component';
 import { DateFormat } from './pipes/dateFormat.pipe';
 import { ReportConfirmationComponent } from './components/utility/report-confirmation/report-confirmation.component';
 import { ProjectFormComponent } from './components/project-form/project-form.component';
@@ -185,7 +186,7 @@ const ROUTES=[
 
 
 
-  declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent, ReportConfirmationComponent ,ProjectFormComponent],
+  declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent, ReportConfirmationComponent ,ProjectFormComponent,CreateBucketComponent],
 
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService], // {provide:UrlSerializer,useClass:CustomUrlSerializer}

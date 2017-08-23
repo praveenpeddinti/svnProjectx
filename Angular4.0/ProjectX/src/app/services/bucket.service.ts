@@ -55,6 +55,7 @@ var post_data={
      
     }
     post_data.data.title = post_data.data.title.trim();
+    // alert(JSON.stringify(post_data.data)+"-----------save bucket-------");
     if(post_data.data.title!='' && post_data.data.description !='' ){
        this._ajaxService.AjaxSubscribe("bucket/save-bucket-details",post_data,(data)=>
     { 

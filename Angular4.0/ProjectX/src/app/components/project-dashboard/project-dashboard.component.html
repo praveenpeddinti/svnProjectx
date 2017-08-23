@@ -108,6 +108,7 @@
             </div>     
    </div>
    </div>
+   <div class="createbut pull-right" data-backdrop="false" data-toggle="modal" data-target="#addBucketModel" (click)="createBucketObj.clearForm();">Create Bucket <i class="fa fa-plus ifontsize" aria-hidden="true"></i></div>
    <div *ngIf="editPopUp">
        <app-project-form projectForm='edit' (appendLogoToParent)="appendLogo($event)" (appendDescriptionParent)="appendDescription($event)"></app-project-form>
   </div>
@@ -115,4 +116,8 @@
 <div class="col-md-4">
         <app-activities [dashboardData]="dashboardData" noMoreActivities=false noActivitiesFound=false></app-activities>
         </div>
+<div *ngIf="projectId != undefined">
+        <app-create-bucket Type="New" [projectId]="projectId" [projectName]="projectName"></app-create-bucket>
+</div>
+
    

@@ -6,9 +6,7 @@
         <div class="pull-right">
             <div (click)="clearDateTimeEntry()" class="add" data-backdrop="false" data-toggle="modal" data-target="#addTimelogModel"  ><i  class="fa fa-plus"></i>
             </div>
-            <div>    
-                <input type="button" id="editBucketButton" hidden class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" data-backdrop="false" data-toggle="modal" data-target="#addTimelogModel" (click)="editBucketPopup()"  />
-            </div>
+            
         </div>
     </div>
 </div>
@@ -27,8 +25,13 @@
         <div class="tab-content tab-content_content" >
             <div class="col-md-12 col-sm-12" *ngFor="let bDetails of bucketDetails;let i=index;">
                 <div class="col-md-12">
+                    <div>    
+                        <input type="button" id="editBucketButton{{i}}"  class="normal bluebutton bluebuttonmedium tablebuttons" name="EDIT" value="EDIT" data-backdrop="false" data-toggle="modal" data-target="#addTimelogModel"   />
+                        <!--(click)="editBucketPopup(bDetails)"-->
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
+                           <!--<div class="sprint_hed" ><a href="javascript:void(0)" (click)="showStoryActivities(bDetails.BucketId)">{{bDetails.BucketName}}</a></div>-->
                            <div class="sprint_hed"><a href="javascript:void(0)" (click)="showStoryTaskActivity()">{{bDetails.BucketName}}</a></div>
                         </div>
                         <div class="col-md-6">
@@ -70,7 +73,7 @@
                                 <div class="description_content" [innerHTML]="bDetails.ShortDescription" id="bucket_description_short" style="display:block;" ></div>
                                 <div class="description_content" [innerHTML]="bDetails.Description" id="foo" style="display:none;"></div>
 
-                                <button *ngIf="bDetails.ShortDescription.length>25" id="example-one" data-text-swap="(- Less)" data-text-original="(+ More)" (click)="toggle_visibility('foo','example-one');" class="viewmore_click">(+ More)</button>
+                                <button *ngIf="bDetails.ShortDescription?.length>25" id="example-one" data-text-swap="(- Less)" data-text-original="(+ More)" (click)="toggle_visibility('foo','example-one');" class="viewmore_click">(+ More)</button>
 
                             </div>
                             <div class="col-md-4" *ngIf="bDetails.BucketType !=1">
@@ -120,7 +123,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="history_div" [ngClass]="{ 'hide': hide}">fdfdsfdsfdsfsd</div>-->
+                    <div class="history_div" [ngClass]="{ 'hide': hide}">fdfdsfdsfdsfsd</div> -->
+                    <!--<div *ngIf="activityDetails!=''" >
+                        <app-activities [activityDetails]="activityDetails"></app-activities>
+                    </div>-->
+
                 </div>
                              
                  
@@ -131,114 +138,7 @@
 </div>
 
  <!--Start Popup modal Div-->
-<div class="modal fade custommodel"  id="addTimelogModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 *ngIf="Type=='New'" class="modal-title">Create Bucket</h5>
-                <h5 *ngIf="Type=='Edit'" class="modal-title">Edit Bucket</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-      
-        <form #addBucketForm="ngForm" (ngSubmit)="submitted && addBucketForm.form.valid && BucketForAddorEdit(Type)" novalidate="true">
-            <div class="modal-body">
-                <div id="bucketSuccessMsg" class="timelogSuccessMsg"> </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Title </label>
-                        <div class="customformfieldsmarginbottom paddingright25 ">
-                            <input type="text" pInputText [(ngModel)]="form.title" name="title"  #title="ngModel" placeholder="Title" minlength="3" required/>
-                            <div *ngIf="submitted && title.errors " class="fielderror">
-                                <div [hidden]="!title.errors.required">
-                                  Title is required
-                                </div>
-                                <div [hidden]="!title.errors.minlength">
-                                  Title must be at least 3 characters long.
-                                </div>
-                            </div>
-                            <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Description </label>{{form.description}}
-                        <div class="customformfieldsmarginbottom relativediv ">
-                            <textarea  [(ngModel)]="form.description" id="summernote" name="description"  #description="ngModel" class="customformfieldstextarea " required></textarea>
-                            <div *ngIf="submitted && description.errors " class="fielderror">
-                                <div [hidden]="!description.errors.required">Description is required</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Start Date </label>
-                        <div class="paddingright25 ">
-                            <p-calendar required  [(ngModel)]="form.startDateVal" name="startDateVal"  #startDateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"></p-calendar>
-                        </div>
-                        <div *ngIf="submitted && startDateVal.errors " class="fielderror">
-                            <div  [hidden]="!startDateVal.errors.required">Start Date is required</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Due Date </label>
-                        <div class="paddingright25 ">
-                            <p-calendar required [(ngModel)]="form.dueDateVal" name="dueDateVal"  #dueDateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"></p-calendar>
-                        </div>
-                        <div *ngIf="submitted && dueDateVal.errors " class="fielderror">
-                            <div  [hidden]="!dueDateVal.errors.required">Due Date is required</div>
-                        </div>
-                        <div id="addDueDateErrMsg" class="fielderror" style="display:none;"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <p-checkbox name="notifyEmail" binary="true" [(ngModel)]="form.notifyEmail"  #notifyEmail="ngModel" label="Notify by E-mail?" ></p-checkbox>
-                        <p-checkbox name="sendReminder" binary="true"  [(ngModel)]="form.sendReminder" #sendReminder="ngModel"  label="Send Reminder?" ></p-checkbox>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Responsible </label>
-                        <div class="customdropdown customdropdownheader paddingright25" id="filterDropdown">
-                            <p-dropdown required [style]="{'width':'367px'}" [(ngModel)]="form.selectedUserFilter" name="selectedUserFilter" #selectedUserFilter="ngModel" (onChange)="filterCreateBucketUsers()" [displayOptions]="FilterOptionToDisplay" [options]="FilterOption"></p-dropdown>
-                        </div>
-                        <div *ngIf="submitted && selectedUserFilter.errors " class="fielderror">
-                            <div  [hidden]="!selectedUserFilter.errors.required">Please select Responsible</div>
-                        </div>
-                        <div id="responsibleErrMsg" class="fielderror" style="display:none;"></div>
-                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <label class="timereportlabel"> Bucket Type </label>
-                        <div class="customdropdown customdropdownheader paddingright25" id="filterDropdown">
-                        <p-dropdown required [style]="{'width':'367px'}" [(ngModel)]="form.selectedBucketTypeFilter" name="selectedBucketTypeFilter" #selectedBucketTypeFilter="ngModel" (onChange)="filterBucketType()" [displayOptions]="BucketFilterOptionToDisplay" [options]="BucketFilterOption"></p-dropdown>
-                        </div>
-                        <div *ngIf="submitted && selectedBucketTypeFilter.errors " class="fielderror">
-                            <div  [hidden]="!selectedBucketTypeFilter.errors.required">Please select Bucket Type</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    
-            <div *ngIf="Type=='New'" class="modal-footer">
-                <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">SUBMIT</button>
-                <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
-            </div>
-            <div *ngIf="Type=='Edit'" class="modal-footer">
-                <button type="submit" class="normal bluebutton bluebuttonmedium " (click)="submitted=true;">UPDATE</button>
-                <button type="button" class="normal bluebutton bluebuttonmedium tablebuttonsgrey " data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
-            </div>
-        </form>
-        </div>
-    </div>
-</div>
+<!--<app-create-bucket Type="Edit" [bucketDetails]="editBucketallDetails"></app-create-bucket>-->
  <!--End Popup modal Div-->
 
 </div>
