@@ -46,7 +46,26 @@ class ProjectService {
         try {
             $ProjectModel = new Projects();
             $projectId = $ProjectModel->savingProjectDetails($projectName, $description, $userId, $projectLogo);
-          //  SVNUtility::createRepository($projectName);
+           // SVNUtility::createRepository($projectName);
+            
+            $bucket = new Bucket();
+            $bucket->ProjectId = (int)$projectId;
+            $bucket->Name = "Backlog";
+            $bucket->Description = "";
+            $bucket->StartDate = "";
+            $bucket->DueDate = "";
+            $bucket->Responsible = (int)$userId;
+//            $bucket->BucketType = (int)$bucketDetails->data->selectedBucketTypeFilter;
+//            $bucket->BucketStatus = (int)$bucketDetails->data->selectedBucketTypeFilter;
+            $bucket->BucketStatus = 1;
+//            $bucket->BucketStatus = (int)0;
+            $bucket->EmailNotify = (int)1;
+            $bucket->EmailReminder = (int)1;
+            $bucket->Status = (int)1;
+            $bucket->save();
+           // $returnValue = $bucket->Id;
+            
+            
            EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$userId,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
    
             
