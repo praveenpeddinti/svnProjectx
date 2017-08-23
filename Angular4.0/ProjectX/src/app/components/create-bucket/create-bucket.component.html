@@ -22,7 +22,8 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
                         <label class="timereportlabel"> Bucket Name </label>
                         <div class="customformfieldsmarginbottom paddingright25 ">
-                            <input type="text" pInputText [(ngModel)]="form.title" name="title"  #title="ngModel" placeholder="Bucket Name" minlength="3" pattern="^[a-zA-Z0-9\s]+$" (keyup)="checkBucketName(form.title)" required/>
+                            <!--placeholder="Bucket Name"-->
+                            <input type="text" pInputText [(ngModel)]="form.title" name="title"  #title="ngModel"  minlength="3" pattern="^[a-zA-Z0-9\s\._\-]+$" (keyup)="checkBucketName(form.title)" required/>
                             <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
                             <div *ngIf="submitted && title.errors " class="fielderror">
                                 <div [hidden]="!title.errors.required">
@@ -45,10 +46,11 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
                         <label class="timereportlabel"> Description </label>
                         <div class="customformfieldsmarginbottom relativediv ">
-                            <textarea  [(ngModel)]="form.description" id="bucketDescId" name="description"  #description="ngModel" maxlength="500" class="customformfieldstextarea " required></textarea>
+                            <textarea  [(ngModel)]="form.description" id="bucketDescId" name="description"  #description="ngModel"  class="customformfieldstextarea " required></textarea>
                             <div *ngIf="submitted && description.errors " class="fielderror">
                                 <div [hidden]="!description.errors.required">Description is required</div>
-                                <div [hidden]="!description.errors.maxlength">Description should be less than 500</div>
+                                <!--maxlength="500"-->
+                                <!--<div [hidden]="!description.errors.maxlength">Description should be less than 500</div>-->
                             </div>
                             
                         </div>
@@ -58,7 +60,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
                         <label class="timereportlabel"> Start Date </label>
                         <div class="paddingright25 ">
-                            <p-calendar required  [(ngModel)]="form.startDateVal" name="startDateVal"  #startDateVal="ngModel"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"></p-calendar>
+                            <p-calendar required  [(ngModel)]="form.startDateVal" name="startDateVal"  #startDateVal="ngModel" [minDate]="minDate"  class="primeDateComponent customcalenderdiv"  [readonlyInput]="true" [minDate]="calendarVal" [showIcon]="true"  dateFormat="M-dd-yy" id="addTimelogDate"></p-calendar>
                         </div>
                         <div *ngIf="submitted && startDateVal.errors " class="fielderror">
                             <div  [hidden]="!startDateVal.errors.required">Start Date is required</div>

@@ -41,7 +41,7 @@ export class CreateBucketComponent implements OnInit {
   private BucketFilterOptionToDisplay=[];
   private bucketSuccessMsg="";
   private bucketMsgClass="";
-  // private minDate = new Date();
+  private minDate = new Date();
 @ViewChild('addBucketForm') bucketForm:HTMLFormElement;
 
   constructor(private editor:SummerNoteEditorService,private _router: Router,
@@ -170,7 +170,7 @@ private typeAheadResults ={
       class:""
     };
 checkBucketName(event){
-  var titlePattern = /^[a-zA-Z0-9\s]+$/;
+  var titlePattern = /^[a-zA-Z0-9\s\.\-_]+$/;
   clearTimeout(this.typeAheadTimer);
   if(event.trim()=='' || event.trim() == undefined || titlePattern.test(event) == false){
     this.typeAheadResults.flag = false;
@@ -239,6 +239,7 @@ clearForm(){
           class:""
         };
         clearTimeout(this.typeAheadTimer);
+        jQuery('body').removeClass('modal-open');
       // alert(JSON.stringify(this.form)+"--------------After clear");
 
 }
