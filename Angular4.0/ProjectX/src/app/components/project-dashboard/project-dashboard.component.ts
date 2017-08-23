@@ -185,28 +185,14 @@ export class ProjectDashboardComponent implements OnInit {
   clearEditedDetails(form){
     console.log("12333");
       this.projectFormComponent.clearEditedDetails(form);
-     //  this.fileuploadMessage=0; 
-    //  this.editPopUp=true;
-    //  this.submitted=false;
-    // // setTimeout(()=>{
-    //  var formobj=this;
-    //  this.editor.initialize_editor('summernote','keyup',formobj);
-    // //  }, 150);
-    //  this.verifyProjectMess=false; 
-    //  this.spinnerSettings.color='';
-    //  this.spinnerSettings.class ='';
-    //  this.form['projectName']=this.copyProjectname;
-    //  //jQuery("#summernote").summernote('code',this.copydescription);;;
-    //  this.checkImage=jQuery('.projectlogo').attr("src");
-    //  if(this.checkImage=='assets/images/logo.jpg'){
-    //     this.clearImgsrc=true; 
-    //  }else{
-    //     this.clearImgsrc=false;
-    //   }
   }
   appendLogo(val){
-    this.setLogo=false;
+    // this.setLogo=false;
+    //alert("df"+val);
+    if(val != undefined){
+      this.setLogo=false;
       jQuery(".project_logo").attr("src",val);
+    }
   }
   appendDescription(val){
     this.description=val;

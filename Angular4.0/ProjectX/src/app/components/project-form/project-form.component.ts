@@ -98,7 +98,7 @@ export class ProjectFormComponent implements OnInit {
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
                   thisObj.form['setLogo']=thisObj.setLogo;
-              // alert("------fghh------"+JSON.stringify(thisObj.form['setLogo']));
+            //  alert("------fghh------"+JSON.stringify(thisObj.form['setLogo']));
                //  jQuery("#summernote").summernote('code',thisObj.form['description']);
                  thisObj.copyProjectname=thisObj.form['projectName'];
                  thisObj.copydescription=thisObj.form['description'];
@@ -169,50 +169,7 @@ export class ProjectFormComponent implements OnInit {
        
     }
     public timer=undefined;
-    //   verifyProjectName(value){
-    //    //  alert("@@@---");
-    //     //  this.spinnerSettings.color='';
-    //    // this.spinnerSettings.class ='';
-       
-    //    clearTimeout(this.timer);
-    //      var postData={
-    //                   projectName:value.trim()
-    //               } ;
-    //                console.log("sssssssssss---------"+value.trim());
-    //               if(value.trim()=='' || value.trim() == undefined){
-    //               // alert("sssssssssss");
-    //                  this.spinnerSettings.color='';
-    //                  this.spinnerSettings.class ='';
-    //                  this.verifyProjectMess=false;
-    //               }else{
-    //                     this.verifyByspinner=2;
-    //                     this.spinnerSettings.color="";
-    //                     this.spinnerSettings.class = "fa fa-spinner fa-spin";
-    //                     // alert(this.timer);
-    //                    this.timer = setTimeout(()=>{
-    //                      this._ajaxService.AjaxSubscribe("collaborator/verifying-project-name",postData,(result)=>
-    //                     { 
-    //                        //alert("@@@---"+JSON.stringify(result.statusCode));
-    //                         if (result.data != false) {
-    //                            this.verified=0;
-    //                            this.verifyByspinner=3;
-    //                           this.spinnerSettings.color="red";
-    //                           this.spinnerSettings.class = "fa fa-times";
-    //                            this.verifyProjectMess=true;
-    //                           // alert(this.verifyProjectMess);
-    //                          }else{
-    //                           this.verified=1;
-    //                           this.verifyByspinner=1;
-    //                           this.spinnerSettings.color="green";
-    //                           this.spinnerSettings.class = "fa fa-check";
-    //                         }
-                                    
-    //                     })
-    //                    },2000);
-                       
-    //               }
-      
-    // }
+ 
     verifyProjectName(value){
           clearTimeout(this.timer);
           if(this.projectForm=='create'){
@@ -340,7 +297,7 @@ export class ProjectFormComponent implements OnInit {
                       projectLogo:this.projectImage,  
                       fileExtention:this.fileExtention
                   } ;
-             //  alert("jsonnn---------"+JSON.stringify(postData));
+            // alert("jsonnn---------"+JSON.stringify(postData));
               this._ajaxService.AjaxSubscribe("collaborator/update-project-details",postData,(result)=>
               {
                     if (result.statusCode == 200) {
@@ -352,8 +309,12 @@ export class ProjectFormComponent implements OnInit {
                          }, 500);
                         // this.editPopUp=true;
                         // alert("232"+this.editPopUp);
-                      // alert("2222222"+this.updatedLogo);
+                      //  alert("2222222"+this.updatedLogo);
+                      //  if(this.updatedLogo==undefined){
+                      //     this.appendLogoToParent.emit("assets/images/logo.jpg");
+                      //  }else{
                        this.appendLogoToParent.emit(this.updatedLogo);
+                      // }
                        this.appendDescriptionParent.emit(this.form['description']);
                           //  jQuery(".project_logoss").attr("src", this.updatedLogo);
                             this._router.navigate(['project',this.form['projectName']]);
@@ -398,7 +359,15 @@ export class ProjectFormComponent implements OnInit {
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
         jQuery("#summernote").summernote('destroy');
-        jQuery(".projectlogo").attr("src",this.projectLogo);
+       // alert("trueee---"+this.form['setLogo']);
+       // alert("@@@"+jQuery('.projectlogo').attr("src"));
+        if(this.form['setLogo']!=true){
+          jQuery(".projectlogo").attr("src",this.projectLogo);
+        }else{
+      //    alert("111");
+          this.form['setLogo']=true;
+          jQuery(".projectlogo").attr("src","assets/images/logo.jpg");
+        }
         this.verifyProjectMess=false; 
   }
 
