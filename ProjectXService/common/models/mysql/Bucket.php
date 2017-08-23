@@ -187,27 +187,27 @@ class Bucket extends ActiveRecord
     public static function checkBucketName($bucketName,$projectId,$btype){
         try{
             $returnValue='failure';
-            if($btype==2){
-            $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketStatus=2 AND Projectid=$projectId"; 
-            $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
-                if(empty($checkCurrentBucket)){error_log("---1----");
-                $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'";
-                $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
-                    if(sizeof($bucketData)>0){
-                        $returnValue='Yes';
-                    }else{
-                       $returnValue='failure'; 
-                    }
-                }else{$returnValue='current'; }
-            }else{
+//            if($btype==2){
+//            $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketStatus=2 AND Projectid=$projectId"; 
+//            $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
+//                if(empty($checkCurrentBucket)){error_log("---1----");
+//                $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'";
+//                $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+//                    if(sizeof($bucketData)>0){
+//                        $returnValue='Yes';
+//                    }else{
+//                       $returnValue='failure'; 
+//                    }
+//                }else{$returnValue='current'; }
+//            }else{
                  $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'";
-            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+                $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
                 if(sizeof($bucketData)>0){
-                    $returnValue='Yes';
+                    $returnValue='No';
                 }else{
-                   $returnValue='failure'; 
+                   $returnValue='Yes'; 
                 }  
-            }
+//            }
             return $returnValue;
 
         } catch (\Throwable $ex) {
@@ -222,8 +222,8 @@ class Bucket extends ActiveRecord
             $startDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->startDateVal)));
             $notifyEmail=0;
             $sendReminder=0;
-            if(count($bucketDetails->data->notifyEmail)==1){$notifyEmail=1;}
-            if(count($bucketDetails->data->sendReminder)==1){$sendReminder=1;}
+//            if(count($bucketDetails->data->notifyEmail)==1){$notifyEmail=1;}
+//            if(count($bucketDetails->data->sendReminder)==1){$sendReminder=1;}
             $returnValue = 'failure';
             $bucket = new Bucket();
             $bucket->ProjectId = (int)$bucketDetails->projectId;
@@ -233,7 +233,8 @@ class Bucket extends ActiveRecord
             $bucket->DueDate = $bucketDetails->data->dueDateVal;
             $bucket->Responsible = (int)$bucketDetails->data->selectedUserFilter;
 //            $bucket->BucketType = (int)$bucketDetails->data->selectedBucketTypeFilter;
-            $bucket->BucketStatus = (int)$bucketDetails->data->selectedBucketTypeFilter;
+//            $bucket->BucketStatus = (int)$bucketDetails->data->selectedBucketTypeFilter;
+            $bucket->BucketStatus = ($bucketDetails->data->setCurrent)?(int)2:(int)1;
 //            $bucket->BucketStatus = (int)0;
             $bucket->EmailNotify = (int)$notifyEmail;
             $bucket->EmailReminder = (int)$sendReminder;

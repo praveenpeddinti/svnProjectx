@@ -153,8 +153,8 @@ class BucketController extends Controller
     public function actionSaveBucketDetails(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-            $checkbucket=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->data->title,$postData->projectId,$postData->data->selectedBucketTypeFilter);
-            if($checkbucket=='failure'){
+            $checkbucket=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->data->title,$postData->projectId,"");
+            if($checkbucket["available"]=='Yes'){
                 $lastBucketId=ServiceFactory::getBucketServiceInstance()->getSaveBucketDetails($postData);
                 if($lastBucketId!='failure'){
                   EventTrait::saveEvent($postData->projectId,"Bucket",$lastBucketId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$lastBucketId)],array("BucketId"=>(int)$lastBucketId));    
@@ -166,11 +166,11 @@ class BucketController extends Controller
                 $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
                 $responseBean->data = $response;
                 return $response = CommonUtility::prepareResponse($responseBean,"json");
-            }else if($checkbucket=='current'){
+            }else if($checkbucket["available"]=='No'){
                 $response='current';
                 $responseBean = new ResponseBean;
                 $responseBean->status = ResponseBean::FAILURE;
-                $responseBean->message = "Current bucket is exist";
+                $responseBean->message = "Bucket already exists";
                 $responseBean->data =    $response;
                 return $response = CommonUtility::prepareResponse($responseBean,"json");
             }else{
@@ -274,6 +274,36 @@ class BucketController extends Controller
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
         } 
+    }
+    
+    public function actionGetBucketStoryActivities(){
+        $postData = json_decode(file_get_contents("php://input"));
+        $storyActivitiesData=ServiceFactory::getBucketServiceInstance()->getBucketStoryActivities($postData->projectId,$postData->bucketId);
+        
+        error_log("++++++++++actionGetBucketStoryActivities++++++++++++".print_r($postData,1));
+        $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $storyActivitiesData;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+      return $response;
+    }
+    
+    public function actionCheckBucketName(){
+        $postData = json_decode(file_get_contents("php://input"));
+        $availablity=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->bucketName,$postData->projectId);
+        
+        error_log("++++++++++actionCheckBucketName++++++++++++".print_r($postData,1));
+        $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            if($availablity["available"] == "Yes"){
+                $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            }else{
+                $responseBean->message = "Bucket already exists..!";
+            }
+            $responseBean->data = $availablity;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+      return $response;
     }
 }
 

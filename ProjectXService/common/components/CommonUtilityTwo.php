@@ -168,7 +168,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 $milestoneMessage = "This milestone was closed <span class='title'>$countOfdays</span> days after due date.";
             }
             $prepareBucketArray = array();
-            $prepareBucketArray['BucketType'] = $bucketDetails['BucketType'];
+//            $prepareBucketArray['BucketType'] = $bucketDetails['BucketType'];
+            $prepareBucketArray['BucketType'] = $bucketDetails['BucketStatus'];
             $prepareBucketArray['BucketId'] = $bucketDetails['Id'];
             $prepareBucketArray['BucketName'] = $bucketDetails['Name'];
             $userDetails = TinyUserCollection::getMiniUserDetails($bucketDetails['Responsible']);
@@ -182,7 +183,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $prepareBucketArray["Description"] = $bucketDetails["Description"];
             $prepareBucketArray["ShortDescription"] = $shortBucketDesc;
             $prepareBucketArray['ResponsibleUser'] =$bucketDetails["Responsible"];
-            $prepareBucketArray['BucketType'] =$bucketDetails["BucketType"];
+//            $prepareBucketArray['BucketType'] =$bucketDetails["BucketType"];
             $prepareBucketArray['EmailNotify'] =$bucketDetails["EmailNotify"];
             $prepareBucketArray['EmailReminder'] =$bucketDetails["EmailReminder"];
             $prepareBucketArray['DropDownBucket'] =(int)0;

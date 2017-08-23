@@ -67,10 +67,12 @@ class BucketService {
     * @return type 
     * @param type $bucketData
      */      
-    public function checkBucketName($bucketName,$projectId,$btype){
+    public function checkBucketName($bucketName,$projectId,$btype=""){
         try{
          $bucketModel = new Bucket();
-         return $bucketModel->checkBucketName($bucketName,$projectId,$btype);
+         $availability = array("available"=>"");
+         $availability["available"] = $bucketModel->checkBucketName($bucketName,$projectId,$btype);
+         return $availability;
         } catch (\Throwable $ex) {
             Yii::error("BucketService:checkBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
