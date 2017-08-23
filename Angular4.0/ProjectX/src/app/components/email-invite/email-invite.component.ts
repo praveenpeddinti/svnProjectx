@@ -25,6 +25,8 @@ export class EmailInviteComponent implements OnInit {
   public emailList:any[]=[];
   public isSuccess:boolean=false;
   public checkAutoComplete:boolean=false;
+  public noResult:boolean=false;
+  public displayContainerDiv:boolean=false;
 
   constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService,private zone:NgZone) { }
 
@@ -45,7 +47,8 @@ export class EmailInviteComponent implements OnInit {
                   }
             })
           })
-      })
+      });
+                                 
   }
   // showToInviteUsers(){
   //   this.isInvite=true;
@@ -63,9 +66,16 @@ export class EmailInviteComponent implements OnInit {
         {
           var user_info=user.UserName +" " + "(" +user.Email+")";
           user_data.push(user_info); 
+          this.noResult=false;
+          this.selectedUsers=null;
         }
          this.inviteUsers=user_data;
-         this.selectedUsers=null;
+         //this.selectedUsers=null;
+         if(this.inviteUsers.length==0){
+          this.inviteUsers=['No Results'];
+          //this.noResult=true;
+          this.checkEmail(event.query);
+         }
       }
     })   
   }
@@ -73,7 +83,11 @@ export class EmailInviteComponent implements OnInit {
   selectedValue(value){ this.checkAutoComplete=true; //This is used to avoid conflict between (keyup.enter) and default enter of component
     if(!(this.selectedUser.indexOf(value)>-1))
     {
+      if(value!="No Results"){
       this.selectedUser.push(value);
+      //this.displayContainerDiv=true;
+      jQuery("#invite_placeholder").hide();
+      }
       this.isEmpty=false;
     }
     this.selectedUsers=undefined;
@@ -146,9 +160,24 @@ export class EmailInviteComponent implements OnInit {
       jQuery("#invite_search").attr("value",""); //jquery was used since model binding was not getting updated....
       this.isSuccess=false;
       this.isEmailValid=false;
+      //this.selectedUsers="";
+      jQuery("#invite_placeholder").show();
     }
 
-  
-  
+
+    checkEmail(email){
+      var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      var status = pattern.test(email.trim());
+      if(status==true){
+        this.noResult=true;
+      }else{
+        this.noResult=false;
+      }
+    }
+
+    addNewUser(){
+      this.selectedValue(this.selectedUsers);
+      this.selectedUsers=null;
+    }
 
 }
