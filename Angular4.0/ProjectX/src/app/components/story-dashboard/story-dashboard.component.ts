@@ -32,6 +32,7 @@ export class StoryDashboardComponent {
      public inlineTimeout;
      public editing = {};
      private dateVal = new Date();
+     public filterType:any;
     //private projectId;              
      //public projectId;  
     @ViewChild('myTable') table: any;
@@ -116,7 +117,10 @@ expanded: any = {};
             this.pageNo=params['page'];//added by Ryan
             this.sortorder=params['sort'];//added by Ryan
             this.sortvalue=params['col'];
-            if(params['filter']!=undefined){this.filterValue=params['filter'];}
+            if(params['filter']!=undefined){
+                this.filterValue=params['filter'];
+                this.filterType=params['filterType'];
+            }
             thisObj.offset=this.pageNo-1;//added by Ryan
             this.rememberState(this.pageNo,this.sortorder,this.sortvalue,this.filterValue);
     
@@ -135,21 +139,31 @@ expanded: any = {};
                 */  
                 localStorage.setItem('ProjectName',thisObj.projectName);
                 localStorage.setItem('ProjectId',thisObj.projectId);
-                thisObj._service.getFilterOptions(thisObj.projectId,(response) => { 
+                thisObj._service.getFilterOptions(thisObj.projectId,(response) => {
+            
                 thisObj.FilterOption=response.data[0].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
-            });
-            if(localStorage.getItem('filterArray')!=null){
+                console.log("Filter___Option"+JSON.stringify(response.data));
+
+                this.setFilterValue(response).then((val)=>{
+                     if(localStorage.getItem('filterArray')!=null){
             var filterArray=JSON.parse(localStorage.getItem('filterArray'));
             thisObj.selectedFilter=filterArray;
             }
+                thisObj.page(thisObj.projectId,thisObj.offset, thisObj.limit, thisObj.sortvalue, thisObj.sortorder,thisObj.selectedFilter);
+           
+                })
+               
+           
+            })
+                
             
              
    /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: Default routing
         */
-        thisObj.page(thisObj.projectId,thisObj.offset, thisObj.limit, thisObj.sortvalue, thisObj.sortorder,thisObj.selectedFilter);
+      
         var ScrollHeightDataTable=jQuery(".ngx-datatable").width() - 12;
         jQuery("#filterDropdown").css("paddingRight",10);
        jQuery(".ngx-datatable").css("width",ScrollHeightDataTable);
@@ -173,6 +187,33 @@ expanded: any = {};
  
 }
 
+
+setFilterValue(response){
+
+     var error=false;
+     var thisObj = this;
+      var promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      response.data.forEach(element => {
+                 element.filterValue.forEach(obj=>{
+                        if(obj.value.type==thisObj.filterType && obj.value.id==thisObj.filterValue){
+                           localStorage.setItem('filterArray',JSON.stringify(obj.value)); 
+                           return;
+                        }
+                    })
+                  });
+  
+      if (error) {
+        reject();
+      } else {
+
+        resolve();
+      }
+    }, 100);
+  });
+  return promise;
+}
+
     // ngAfterViewInit()
     // {
     //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.general:eq(0)').before('<label>Filter</label>');
@@ -187,6 +228,7 @@ expanded: any = {};
         if(selectedOption!=null) //added by Ryan
         {
             this.filterValue=selectedOption.id;
+            this.filterType=selectedOption.type;
             localStorage.setItem('filterArray',JSON.stringify(selectedOption));
         }
        
@@ -216,7 +258,7 @@ expanded: any = {};
                 this.sortvalue=sortvalue;//added by Ryan
                 this.offset=this.pageNo-1;//added by Ryan
                 this.rememberState(this.pageNo,this.sortorder,this.sortvalue,this.filterValue);
-                var url='/project/'+this.projectName+'/list?page='+(offset+1)+'&sort='+sortorder+'&col='+sortvalue+'&filter='+this.filterValue;
+                var url='/project/'+this.projectName+'/list?page='+(offset+1)+'&sort='+sortorder+'&col='+sortvalue+'&filter='+this.filterValue+'&filterType='+this.filterType;
                 this.location.replaceState(url);
                 /* =========Section End==========================================*/ 
 
