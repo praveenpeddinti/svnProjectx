@@ -778,7 +778,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             unset($conditions['Followers.FollowerId']);
             $conditions['Fields.assignedto.value'] = (int) $userId;
             $assigned = $collection->count($conditions);
-            $topTickets = array("id" => 4, "name" => 'My active stories/task', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
+            $topTickets = array("id" => 4,'type'=>'individual', "name" => 'My active stories/task', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
 
@@ -797,13 +797,13 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $conditions['Fields.assignedto.value'] = (int) $userId;
             $assigned = $collection->count($conditions);
             
-            $topTickets = array("id" => 11, "name" => 'My over due stories/tasks', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
+            $topTickets = array("id" => 11,'type'=>'individual', "name" => 'My over due stories/tasks', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
 
             //  Due stories/tasks for current week
             $total = $assigned = $followed = '';
-            $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+            $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sundindividualay', strtotime('tomorrow')));
            // $todayDate = date("Y-m-d H:i:s");
              $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
             $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
@@ -816,7 +816,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             unset($conditions['Followers.FollowerId']);
             $conditions['Fields.assignedto.value'] = (int) $userId;
             $assigned = $collection->count($conditions);
-            $topTickets = array("id" => 12, "name" => 'My due stories/tasks for current week', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
+            $topTickets = array("id" => 12,'type'=>'individual', "name" => 'My due stories/tasks for current week', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
 //          foreach ($filters as $filter) {
