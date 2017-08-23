@@ -14,5 +14,8 @@
     border-radius:none!important;
 }
 .success_content{color: #4F8A10;padding:5px 8px;border:#f8f8f8 solid 1px; font-size:14px; display: inline-block; border-radius:25px; margin-top: 10px;}
-
-
+.addusers_place{margin-top: 50px; border: dashed 1px #a7b4d3; text-align: center; display:block; padding:10px;}
+.but_add{ background:#5dcff3; display:inline-block; color:#fff; font:normal 14px/20px 'open_sansregular';padding:3px 7px;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; cursor:pointer; }
+.but_add a{ color:#fff; text-decoration:none;}
+.but_add a:hover{ color:#0a7698;}
+.but_add:hover{ color:#0a7698; cursor:pointer;}
