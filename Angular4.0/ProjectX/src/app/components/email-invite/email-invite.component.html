@@ -19,18 +19,25 @@
             <div class="usrcomponent">
 
               <!--<p-autoComplete  [(ngModel)]="selectedUsers" [minLength]="1" placeholder="Search ...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email  (keyup.enter)="validateEmail(email.value)"   (completeMethod)="searchUsersToInvite($event)" ></p-autoComplete>-->
-              <p-autoComplete id="invite_search" [(ngModel)]="selectedUsers" [minLength]="1" placeholder="Add or search for users...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email  (keyup.enter)="validateEmail(email)"   (completeMethod)="searchUsersToInvite($event)" ></p-autoComplete>
+              <p-autoComplete id="invite_search"   [delay]="1000" [(ngModel)]="selectedUsers" emptyMessage="No Results" [minLength]="1" placeholder="Add or search for users...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email  (keyup.enter)="validateEmail(email)"   (completeMethod)="searchUsersToInvite($event)" >
+                <ng-template  let-selectedUsers pTemplate="item">
+                    <span> {{selectedUsers}} </span>
+                    <div *ngIf="noResult" (click)="addNewUser()" class="but_add float_right">Add</div>
+                </ng-template>
+              </p-autoComplete>
 
             </div>
             <span class="fielderror" [hidden]="!isEmailValid">Email Invalid </span>
-            <span class="fielderror" [hidden]="!isEmpty">Please select atleast one user to invite</span>
+            <span class="fielderror" [hidden]="!isEmpty">Please add user to invite</span>
+            <div id="invite_placeholder" class="addusers_place">Add users here to Invite</div>
             <div class="inuser"><div [hidden]="selectedUser.length==0"><p-chips value="" [(ngModel)]="selectedUser" [styleClass]="invitesearch " [allowDuplicates]="false" ></p-chips></div>
             </div>
       </div>
     
       <div class="modal-footer">
-        <button class="model_submit butnbor" (click)="sendInvitation()">Invite</button>
-            <button class="model_cancel butnbor" (click)="cancelInvitation()">Cancel</button>
+        <button *ngIf="selectedUser.length==0" class="model_submit butnbor but_unvisible"  [disabled]="selectedUser.length==0" (click)="sendInvitation()">Invite</button>
+        <button *ngIf="selectedUser.length!=0"  class="model_submit butnbor but_visible"   (click)="sendInvitation()">Invite</button>
+            <button class="model_cancel butnbor"  (click)="cancelInvitation()">Cancel</button>
       </div>
        
     </div>
