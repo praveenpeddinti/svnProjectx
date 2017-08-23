@@ -59,8 +59,8 @@ class ProjectService {
 //            $bucket->BucketStatus = (int)$bucketDetails->data->selectedBucketTypeFilter;
             $bucket->BucketStatus = 1;
 //            $bucket->BucketStatus = (int)0;
-            $bucket->EmailNotify = (int)1;
-            $bucket->EmailReminder = (int)1;
+           // $bucket->EmailNotify = (int)1;
+           // $bucket->EmailReminder = (int)1;
             $bucket->Status = (int)1;
             $bucket->save();
            // $returnValue = $bucket->Id;
