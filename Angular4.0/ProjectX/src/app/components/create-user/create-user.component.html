@@ -78,7 +78,7 @@
 
     
                   <label class="loginformlabel" for="password">Confirm Password</label>
-                  <input class="invitesearch" [(ngModel)]="form.confirmpassword" id="confirmpassword" type="password" id="confirmpass" class="form-control customfield" required minlength="1"
+                  <input class="invitesearch" (ngModelChange)="checkConfirmField($event)"  [(ngModel)]="form.confirmpassword" id="confirmpassword" type="password" id="confirmpass" class="form-control customfield" required minlength="1"
                     maxlength="50" name="confirmpassword" #confirmpassword="ngModel">
                   <div *ngIf=" submitted && confirmpassword.errors" class="fielderror">
                     <div [hidden]="!confirmpassword.errors.required">
