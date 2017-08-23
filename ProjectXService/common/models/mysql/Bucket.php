@@ -220,8 +220,8 @@ class Bucket extends ActiveRecord
     public function saveBucketDetails($bucketDetails) {
         try {
             $startDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->startDateVal)));
-            $notifyEmail=0;
-            $sendReminder=0;
+//            $notifyEmail=0;
+//            $sendReminder=0;
 //            if(count($bucketDetails->data->notifyEmail)==1){$notifyEmail=1;}
 //            if(count($bucketDetails->data->sendReminder)==1){$sendReminder=1;}
             $returnValue = 'failure';
@@ -236,8 +236,8 @@ class Bucket extends ActiveRecord
 //            $bucket->BucketStatus = (int)$bucketDetails->data->selectedBucketTypeFilter;
             $bucket->BucketStatus = ($bucketDetails->data->setCurrent)?(int)2:(int)1;
 //            $bucket->BucketStatus = (int)0;
-            $bucket->EmailNotify = (int)$notifyEmail;
-            $bucket->EmailReminder = (int)$sendReminder;
+//            $bucket->EmailNotify = (int)$notifyEmail;
+//            $bucket->EmailReminder = (int)$sendReminder;
             $bucket->Status = (int)1;
             $bucket->save();
             $returnValue = $bucket->Id;
