@@ -12,6 +12,8 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\base\ErrorException;
+use common\components\CommonUtilityTwo;
+use common\models\mongo\TinyUserCollection;
 
 class Bucket extends ActiveRecord 
 {
@@ -406,11 +408,168 @@ class Bucket extends ActiveRecord
       $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
       return $bucketDetails;
     }
+    
+     /**
+     * @author Ryan
+     * @return array
+     * @throws ErrorException
+     */
+   public static function getTotalBuckets($projectId){
+       try{
+          $query="select count(*) as count from Bucket where ProjectId=$projectId";
+          $bucketsCount = Yii::$app->db->createCommand($query)->queryAll();
+          return $bucketsCount;
+       } catch (\Throwable $ex) {
+            Yii::error("Bucket:getTotalBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+   }
+   
+   /**
+     * @author Ryan
+     * @return array
+     * @throws ErrorException
+     */
+   public static function getBucketsCountByType($projectId){
+       try{
+          $query="select BucketStatus,count(*) as Totallog from Bucket where BucketStatus IN (1,2,3,4) and ProjectId=$projectId GROUP BY BucketStatus";
+          $bucketsCount = Yii::$app->db->createCommand($query)->queryAll();
+          $count_array=array();
+          $count_array=array("Backlog"=>0,"Current"=>0,"Completed"=>0,"Closed"=>0,"Total"=>0);
+          if(isset($bucketsCount) && count($bucketsCount)>0){
+              foreach ($bucketsCount as $key => $value) {
+                           switch ($value['BucketStatus']) {
+                               case 1:
+                                    $count_array['Backlog'] = $value['Totallog'];
+                                break;
+                                case 2:
+                                    $count_array['Current'] = $value['Totallog'];
+                                break;
+                                case 3:
+                                    $count_array['Completed'] = $value['Totallog'];
+                                break;
+                                case 4:
+                                    $count_array['Closed'] = $value['Totallog'];
+                                break;
+                               default:
+                                   break;
+                           }
+                           $count_array["Total"]=(int)$count_array["Total"]+(int)$value['Totallog'];
+              }
+              
+          }      
+          return $count_array;
+       } catch (\Throwable $ex) {
+            Yii::error("Bucket:getTotalBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+   }
+   
+   public static function getBucketsInfo($projectId,$type=0){
+       try{
+           $current_bucket_details=array();
+           $closed_bucket_details=array();
+           $backlog_bucket_details=array();
+           $completed_bucket_details=array();
+           $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where ProjectId=$projectId and BucketStatus=$type";
+           $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
+           error_log("==Bucket Data Count==".count($bucket_data));
+           if(isset($bucket_data) && count($bucket_data)>0){
+           foreach($bucket_data as $bucket_details){ 
+               switch($bucket_details['BucketStatus']){
+                   case 1:
+                       $backlogStats=CommonUtilityTwo::getTopTicketsStats($projectId,'',$bucket_details['Id']);
+                       $mergedBacklogInfo=array_merge($bucket_details,$backlogStats);
+                       //array_push($backlog_bucket_details,$bucket_details);
+                       array_push($backlog_bucket_details,$mergedBacklogInfo);
+                       break;
+                   case 2:
+                       $currentStats=CommonUtilityTwo::getTopTicketsStats($projectId,'',$bucket_details['Id']);
+                       $bucket_owner=TinyUserCollection::getMiniUserDetails($bucket_details['Responsible']);
+                       $mergedCurrentInfo=array_merge($bucket_details,$currentStats);
+                       $finalCurrentInfo=array_merge($mergedCurrentInfo,$bucket_owner);
+                       array_push($current_bucket_details,$finalCurrentInfo);
+                       break;
+                   case 3:
+                       $completedStats=CommonUtilityTwo::getTopTicketsStats($projectId,'',$bucket_details['Id']);
+                       $mergedCompletedInfo=array_merge($bucket_details,$completedStats);
+                      // array_push($completed_bucket_details,$bucket_details);
+                       array_push($completed_bucket_details,$mergedCompletedInfo);
+                       break;
+                   case 4:
+                       $closedStats=CommonUtilityTwo::getTopTicketsStats($projectId,'',$bucket_details['Id']);
+                       $mergedClosedInfo=array_merge($bucket_details,$closedStats);
+                       array_push($closed_bucket_details,$mergedClosedInfo);
+                      // array_push($closed_bucket_details,$bucket_details);
+                       
+                       break;
+                   default:
+                       break;
+               }
+           }
+               error_log("==Current Bucket Count==".count($current_bucket_details));
+               if($type==2){
+                   $totalStats=array('Current'=>$current_bucket_details);
+               }else{
+               $totalStats=array('Backlog'=>$backlog_bucket_details,'Current'=>$current_bucket_details,'Completed'=>$completed_bucket_details,'Closed'=>$closed_bucket_details);
+               }
+               return $totalStats;
+          
+        }
+           
+       } catch (\Throwable $ex) {
+            Yii::error("Bucket:getBucketsInfo::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+   }
+   
+   public static function getCurrentWeekBucketsInfo($currentWeekBuckets){
+       try{
+           
+            $bucketIds=array(); 
+            $activityCount=array();
+            $currentWeekBucketDetailsByMaxActivity=array();
+            foreach($currentWeekBuckets as $buckets){
+                if($buckets["_id"]!=0 || $buckets["_id"]!=null){
+                    array_push($bucketIds,$buckets['_id']);
+                    array_push($activityCount,$buckets['count']);
+                 }
+                }
+          
+               usort($currentWeekBuckets, function($a,$b){
+                   return $a['count']<=$b['count'];
+               });
+               
+               error_log("==After Sort Array==".print_r($currentWeekBuckets,1));
+               $ids= implode(",",$bucketIds);
+               error_log("==Ids==".$ids);
+            $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where  Id in (".$ids.") and BucketStatus!=2 order by DueDate desc";
+            $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
+            error_log("==Bucket Data==".print_r($bucket_data,1));
+            
+                foreach($currentWeekBuckets as $key=>$value){
+                    foreach($bucket_data as $bucketData){
+                        if($bucketData['Id']==$value['_id']){
+                             error_log("---buckkkk--".$bucketData['Id']);
+                            $owner=TinyUserCollection::getMiniUserDetails($bucketData['Responsible']);
+                            $mergedBucketInfo=array_merge($bucketData,$owner);
+                            array_push($currentWeekBucketDetailsByMaxActivity,$mergedBucketInfo);
+                        }
+                    }       
+                }
+           
+            error_log("==Sorted Buckets==".print_r($currentWeekBucketDetailsByMaxActivity,1));
+            
+            return $currentWeekBucketDetailsByMaxActivity;
+           
+       } catch (\Throwable $ex) {
+            Yii::error("Bucket:getCurrentWeekBucketsInfo::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+   }
  
 }
 
 
             
-            
-
 ?>
