@@ -1779,6 +1779,9 @@ $text_message=$html . $text_message .
                  foreach($value as $val){
                    $type= (array_key_exists("Type",$val))?$val['Type']:strtolower($temp['type']);
                    $showchild=(array_key_exists("ShowChild",$val))?$val['ShowChild']:1;
+                   if($key == "State"){
+                       $showchild =0;
+                   }
                    array_push($temp['filterValue'],array("label"=>$val['Name'],"value"=>array("label"=>$val['Name'],"id"=>$val['Id'],"type"=>$type,"showChild"=>$showchild)));
                }
              array_push($refinedFilter,$temp); 
