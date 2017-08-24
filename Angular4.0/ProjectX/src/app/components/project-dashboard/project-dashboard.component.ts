@@ -5,6 +5,8 @@ import { ProjectService } from '../../services/project.service';
 import { GlobalVariable } from '../../config';
 import { AjaxService } from '../../ajax/ajax.service';
 import { DatePipe } from '@angular/common';
+import {BucketService} from '../../services/bucket.service';
+import {SharedService} from '../../services/shared.service';
 import { ActivitiesComponent } from '../../components/activities/activities.component';
 import { ProjectFormComponent } from '../../components/project-form/project-form.component';
 import { CreateBucketComponent } from '../../components/create-bucket/create-bucket.component';
@@ -14,7 +16,7 @@ declare var jQuery:any;
   selector: 'app-project-dashboard',
   templateUrl: './project-dashboard.component.html',
   styleUrls: ['./project-dashboard.component.css'],
-  providers: [ProjectService,AuthGuard]
+  providers: [ProjectService,AuthGuard,BucketService]
 })
 export class ProjectDashboardComponent implements OnInit {
   @ViewChild(ActivitiesComponent) activitiesComponent: ActivitiesComponent;
@@ -41,13 +43,29 @@ export class ProjectDashboardComponent implements OnInit {
   public dashboardData:any;
   public userInfoLength:any;
   public noMoreActivities:boolean = false;
+
+  public bucketStats={
+    'Total':0,
+    'Current':0,
+    'Backlog':0,
+    'Completed':0,
+    'Closed':0
+  };
+  public stateData:any={};
+  public currentBucketContainer:any;
+  public currentWeekBucketContainer:any;
+
   public noActivitiesFound:boolean = false;
   public projectForm:string; 
       @ViewChild(CreateBucketComponent) createBucketObj:CreateBucketComponent;
   public setLogo:any;
-
+  public spinnerSettings={
+      color:"",
+      class:""
+    };
+       
    constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,
-          private _ajaxService: AjaxService) {}
+           private _ajaxService: AjaxService,private bucketService:BucketService,private shared:SharedService) { }
           
 
   ngOnInit() {
@@ -92,6 +110,27 @@ export class ProjectDashboardComponent implements OnInit {
                   thisObj.copydescription=thisObj.form['description'];
                  thisObj.currentProjectDetails();
                  thisObj.projectActivities(this.page);
+                 this.bucketService.getTotalBucketStats(thisObj.projectId,(data)=>
+                  {
+                    this.bucketStats.Total=data.data.BucketTypesCount.Total;
+                    this.bucketStats.Current=data.data.BucketTypesCount.Current;
+                    this.bucketStats.Completed=data.data.BucketTypesCount.Completed;
+                    this.bucketStats.Closed=data.data.BucketTypesCount.Closed;
+                    this.bucketStats.Backlog=data.data.BucketTypesCount.Backlog;
+                    
+                  });
+                  this.bucketService.getCurrentBucketsInfo(thisObj.projectId,(data)=>
+                  {
+                    console.log("==Current Buckets Data=="+JSON.stringify(data));
+                    this.currentBucketContainer=data.data.BucketInfo.Current;
+                    var currentBucketLength=this.currentBucketContainer.length;
+                  });
+                  this.bucketService.getCurrentWeekActiveBuckets(thisObj.projectId,(data)=>
+                  {
+                    console.log("==Current Week Buckets=="+JSON.stringify(data));
+                    this.currentWeekBucketContainer=data.data;
+                  });
+                  
             });
         });
            });
@@ -161,7 +200,6 @@ export class ProjectDashboardComponent implements OnInit {
                             console.log("After__Concat"+JSON.stringify(this.dashboardData.activities));
                             // // console.log("@@-44-"+JSON.stringify(this.dashboardData.activities[curActLength - 1].activityData));
                             result.data.activities .splice(0, 1);
-                            console.log("Final__IN"+JSON.stringify(result.data.activities));
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
                             //alert("11");
                         } else {
