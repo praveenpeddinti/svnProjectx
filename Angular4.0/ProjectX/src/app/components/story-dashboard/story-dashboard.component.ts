@@ -140,7 +140,8 @@ expanded: any = {};
                 localStorage.setItem('ProjectName',thisObj.projectName);
                 localStorage.setItem('ProjectId',thisObj.projectId);
                 thisObj._service.getFilterOptions(thisObj.projectId,(response) => {
-                this.setFilterValue(response).then((val:any)=>{
+                thisObj.FilterOption=response.data[0].filterValue;
+                this.setFilterValue(response).then((val:any)=>{ alert(val);
                 thisObj.FilterOption=response.data[val].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
                 if(localStorage.getItem('filterArray')!=null){
@@ -210,7 +211,15 @@ setFilterValue(response){
       if (error) {
         reject();
       } else {
-        index = (index== -1)?0:index 
+       if(index== -1 || inner)
+        {
+       index = 0;
+       thisObj.selectedFilter =response.data[index].filterValue[0].value;
+       localStorage.setItem('filterArray',JSON.stringify(thisObj.selectedFilter));
+        }
+         
+       
+       
         resolve(index);
       }
     }, 100);
