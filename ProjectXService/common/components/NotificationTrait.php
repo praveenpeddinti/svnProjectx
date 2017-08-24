@@ -653,8 +653,8 @@ trait NotificationTrait {
                 $actionType = "change";
                 $tic->Notification_Type = $notification_Type;
                 $tic->ActivityOn = $notifyType;
-                $oldValue = CommonUtility::refineDescriptionForEmail($oldValue);
-                $newValue = CommonUtility::refineDescriptionForEmail($newValue);
+               // $oldValue = CommonUtility::refineDescriptionForEmail($oldValue);
+                //$newValue = CommonUtility::refineDescriptionForEmail($newValue);
                 $tic->OldValue = $oldValue;
                 $tic->NewValue = $newValue;
                 //$tic->Status = 0;
@@ -798,6 +798,7 @@ trait NotificationTrait {
                         //Eg : moin.hussain assigned you to ticket #33 
                         $to = "you";
                     } else {
+                         $preposition = "to";
                         $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
                         //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
                         //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
@@ -806,8 +807,10 @@ trait NotificationTrait {
                     $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "user", 'type' => Yii::$app->params['assigned'], 'to' => $to, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "OtherMessage" => Yii::$app->params[$activityOn], "Preposition" => $preposition);
                     array_push($result_msg, $message);
                 } else if ($notification['ActivityOn'] == 'Description' || $notification['ActivityOn'] == 'Title') {
-                    $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
-                    $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
+//                    $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
+//                    $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
+                     $notification['OldValue']= '"'.$notification['OldValue'].'"';
+                         $notification['NewValue']='"'.$notification['NewValue'].'"';
                     $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "description", 'type' => Yii::$app->params[$notification['Notification_Type']], 'id' => $notification['_id'], 'ActivityOn' => $notification['ActivityOn'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], 'status' => $notification['Notification_Type'], 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue']);
                     array_push($result_msg, $message);
                 } else if ($notification['ActivityOn'] == 'ChildTask' || $notification['ActivityOn'] == 'TicketRelation') {
@@ -939,18 +942,19 @@ trait NotificationTrait {
                             $oldValue = $datetime->format('M-d-Y');
                         }
 
-                        $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
+                        $preposition = $notification['Notification_Type'] == "set" ? "tokkkk" : "**";
                         error_log($storyFieldName."========+++++++++++++++=============".$notification['Notification_Type']);
 //                        $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                         $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params[$storyFieldName], 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
 
                         array_push($result_msg, $message);
                     } else if ($storyField['Type'] != 6) {
-                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
-                            $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
-                            $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
-                        }
-
+//                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
+//                           $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
+//                            $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
+//                        }
+                         $notification['OldValue']= '"'.$notification['OldValue'].'"';
+                         $notification['NewValue']='"'.$notification['NewValue'].'"';
                         $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
                         $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $notification['OldValue'], "NewValue" => $notification['NewValue'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                         array_push($result_msg, $message);
