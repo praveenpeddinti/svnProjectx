@@ -780,29 +780,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             foreach ($ticketDetails["Fields"] as $key => $value) {
 
                 if ($key == "planlevel") {
-                    //$arr2ordered[0]["other_data"] = $value["value"];
                     $Othervalue["planlevel"] = $value["value"];
-                    //$Othervalue["childClass"] = "child_2";
                     $Othervalue["parentStoryId"] = $ticketDetails['ParentStoryId'];
-                   // $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]);
-                    
-                    //if($ticketDetails['ParentStoryId'])
-                      if($filter != null){
-                $showChild = $filter->showChild ;
-               $filterType = $filter->type ;
-            if($filterType == "general" && $showChild==0){
-                $Othervalue["totalSubtasks"] = "";
-            }else{
-              $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]); 
-            }
-             }else{
-               $Othervalue["totalSubtasks"] = sizeof($ticketDetails["Tasks"]);   
-             }
-                    
-                $projectDetails = Projects::getProjectMiniDetails($projectId);
-                 $Othervalue["project_name"] =  $projectDetails['ProjectName'];
-                
-                    
+                    $projectDetails = Projects::getProjectMiniDetails($projectId);
+                    $Othervalue["project_name"] =  $projectDetails['ProjectName'];
                     $arr2ordered[0]["other_data"] = $Othervalue;
                 }
                 
@@ -958,7 +939,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
              if($filter != null){
                 $showChild = $filter->showChild ;
                $filterType = $filter->type ;
-                if($filterType == "general" && $showChild==0){
+                if($showChild==0){
                    $arrow['other_data'] = 0; 
                 }else{
                      $arrow['other_data'] = sizeof($ticketDetails["Tasks"]);  
