@@ -169,14 +169,20 @@ class TicketCollection extends ActiveRecord
      */
         public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
         try {
+            $ticketDetails = [];
+            error_log("data-----------".print_r($StoryData,1));
             $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
                 if($StoryData->filterOption->type=='general'){
                 switch((int)$StoryData->filterOption->id){
                case 7:
-                   $bucket=Bucket::getActiveBucketId($projectId);
-                   if($bucket!='failure'){
-                    $conditions['Fields.bucket.value']=(int)$bucket['Id'];   
+                   $buckets=Bucket::getProjectBucketByAttributes($projectId,2);
+                   if($buckets!='failure'){
+                    $bucketIds = array_column($buckets, 'Id');
+                    $bucketIds = array_map('intval', $bucketIds);
+                    $conditions['Fields.bucket.value']=array('$in' =>$bucketIds);   
+                   }else{
+                      return $ticketDetails; 
                    }
                   break;
               case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
@@ -254,6 +260,7 @@ class TicketCollection extends ActiveRecord
            
            $cursor = $collection->find($conditions, array(), $options);
             $ticketDetails = iterator_to_array($cursor);
+            error_log("couint-----XX------".count($ticketDetails));
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getAllTicketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -288,10 +295,11 @@ class TicketCollection extends ActiveRecord
                case 6:$conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
                case 7:
-                   $bucket=Bucket::getActiveBucketId($projectId);
-                   
-                   if($bucket!='failure'){
-                    $conditions['Fields.bucket.value']=(int)$bucket['Id'];   
+                   $buckets=Bucket::getProjectBucketByAttributes($projectId,2);
+                   if($buckets!='failure'){
+                     $bucketIds = array_column($buckets, 'Id');
+                     $bucketIds = array_map('intval', $bucketIds);
+                    $conditions['Fields.bucket.value']=array('$in' =>$bucketIds);    
                    }
                    break;
                case 8:$conditions['Fields.state.value']=(int)6;break;    
