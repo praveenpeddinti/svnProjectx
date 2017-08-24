@@ -284,7 +284,9 @@ class StoryController extends Controller
             
         }
        // $response_data['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($projectId);
-
+        $userId =  $post_data->userInfo->Id;
+        $preference_items = ServiceFactory::getStoryServiceInstance()->getUserPreferences($userId);
+        $response_data['task_preferences'] = $preference_items;
         $responseBean = new ResponseBean;
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -1290,34 +1292,7 @@ class StoryController extends Controller
             return $response;
     }
 
-     /*
-    * @author Ryan Marshal
-    * @description This method is used to get the preferences of prechecked tasks in Story Creation.
-    * @return type Json
-    */
-    public function actionGetPreference()
-    {
-        try{
-            $ticketData = json_decode(file_get_contents("php://input"));
-            $loginUserId=$ticketData->userInfo->Id;
-            $preference_items = ServiceFactory::getStoryServiceInstance()->getUserPreferences($loginUserId);
-            $responseBean = new ResponseBean();
-            $responseBean->statusCode = ResponseBean::SUCCESS;
-            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $preference_items;
-            $response = CommonUtility::prepareResponse($responseBean, "json");
-            return $response;
-            
-        } catch (\Throwable $th) {
-            Yii::error("StoryController:actionGetPreference::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
-             $responseBean = new ResponseBean();
-             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
-             $responseBean->data = [];
-             $response = CommonUtility::prepareResponse($responseBean,"json");
-             return $response;
-        }
-    }
+   
     
     /**
      * @author Anand
