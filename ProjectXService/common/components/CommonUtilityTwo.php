@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 namespace common\components;
-use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts,EventCollection};
+use common\models\mongo\{TicketCollection,TinyUserCollection,TicketArtifacts,EventCollection,TicketTimeLog};
 use common\models\mysql\{Priority,Projects,WorkFlowFields,Bucket,TicketType,StoryFields,StoryCustomFields,PlanLevel,MapListCustomStoryFields,ProjectTeam,Collaborators,Filters};
 use Yii;
 use yii\base\ErrorException;
@@ -767,8 +767,17 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $conditions = array('ProjectId' => (int) $projectId);
             $total = $assigned = $followed = '';
             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            if ($bucketId != '')
+            if ($bucketId != ''){ //this is specifically for buckets by Ryan......
                 $conditions['Fields.bucket.value'] = (int) $bucketId;
+                $tickets_count=$collection->count($conditions);
+                $totalStoryPoints=  CommonUtilityTwo::getTotalStoryPoints($projectId,'' , $bucketId); //anand's method call
+                error_log("==Tickets Count==".$tickets_count);
+                $totalWorkedHours=CommonUtilityTwo::getTotalWorkedHoursByBucket($projectId,$bucketId);
+                error_log("==Worked Hours==".$totalWorkedHours);
+                $stateCount=CommonUtilityTwo::getBucketStatesCount($projectId,$bucketId);
+                $topTickets=array('TicketsCount'=>$tickets_count,'StoryPoints'=>$totalStoryPoints,"WorkedHours"=>$totalWorkedHours,'States'=>$stateCount); //padmaja's method call
+                array_push($topTicketsArray,$topTickets);
+            }else{
             $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
             $conditions['Fields.state.value'] = (int) 3;
             $total = $collection->count($conditions);
@@ -819,6 +828,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $topTickets = array("id" => 12,'type'=>'individual', "name" => 'My due stories/tasks for current week', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
+            }
 //          foreach ($filters as $filter) {
 //                        $topTickets = '';
 //                        switch((int)$filter['Id']){
@@ -887,13 +897,28 @@ public static function prepareUserDashboardActivities($activities) {
      * @return type
      * @throws ErrorException
      */
-    public static function getTotalStoryPoints($projectId,$userId){
+    public static function getTotalStoryPoints($projectId,$userId='',$bucketId=''){ //modified by Ryan , added 
         try {
            $totalStoryPoints=0;
+
+           if($bucketId!=''){ //by Ryan
+               $matchArray = array("ProjectId" => (int) $projectId,
+                                   "Fields.bucket.value"=>(int)$bucketId,
+                                   '$or'=>array(array("Fields.planlevel.value"=>1),array("Fields.planlevel.value"=>2)),
+                                   "IsChild"=>0);
+               $_id='$Fields.bucket.value';
+           }else{
+           $_id='$Fields.assignedto.value';
+
            $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+
            $matchArray = array("ProjectId" => (int) $projectId,'$or'=>array(array('Fields.assignedto.value'=>(int)$userId)));
-             
            $matchArray['$and']=[['$or'=>[['Fields.duedate.value'=>array('$gt'=>new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000))],['Fields.duedate.value'=>'']]]];
+
+           }
+
+             
+
             $query = Yii::$app->mongodb->getCollection('TicketCollection');
             $pipeline = array(
                
@@ -901,7 +926,7 @@ public static function prepareUserDashboardActivities($activities) {
                 array('$match' => $matchArray),
                 array(
                     '$group' => array(
-                         '_id' => '$Fields.assignedto.value',
+                         '_id' => $_id,//modified by Ryan
                         "count" => array('$sum' => 1),
                         "totalPoints" => array('$sum' => '$Fields.totalestimatepoints.value'),
                     ),
@@ -912,9 +937,147 @@ public static function prepareUserDashboardActivities($activities) {
              $totalCount =  $ArrayStoryPoints[0]["count"];
              $totalStoryPoints =  number_format(round($ArrayStoryPoints[0]["totalPoints"]));
           }
+          error_log("==Total Story Points==".$totalStoryPoints);
             return $totalStoryPoints;
         } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:getTotalStoryPoints::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    /**
+     * @author Ryan Marshal
+     * @param type $projectId
+     * @param type $bucketId
+     * @return type
+     * @throws ErrorException
+     */
+    public static function getTotalWorkedHoursByBucket($projectId,$bucketId){
+        try{
+            $totalWorkedHours=0;
+            $matchArray = array("ProjectId" => (int) $projectId,"Fields.bucket.value"=>(int) $bucketId);
+            $query = Yii::$app->mongodb->getCollection('TicketCollection');
+            $pipeline = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.bucket.value',
+                        "count" => array('$sum' => 1),
+                        "totalHours" => array('$sum' => '$TotalTimeLog'),
+                    ),
+                ),
+            );
+             $workedHours = $query->aggregate($pipeline);
+            if(count($workedHours)>0){
+             $totalCount =  $workedHours[0]["count"];
+             error_log("===Total Hours==".$workedHours[0]["totalHours"]);
+             $totalWorkedHours =  number_format(round($workedHours[0]["totalHours"]));
+          }
+          error_log("==Worked Hourssssss==".$totalWorkedHours);
+                return $totalWorkedHours;
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtilityTwo:getTotalWorkedHoursByBucket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    public static function getBucketStatesCount($projectId,$bucketId){
+        try{
+            $states=array();
+            $matchArray = array("ProjectId" => (int) $projectId,"Fields.bucket.value"=>(int) $bucketId,);
+            $query = Yii::$app->mongodb->getCollection('TicketCollection');
+            $matchArray["Fields.state.value"]=1;
+            $pipeline1 = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.bucket.value',
+                        'count'=>array('$sum' => 1), 
+                    ),
+                ),
+            );
+            $matchArray["Fields.state.value"]=4;
+            $pipeline2 = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.bucket.value',
+                        'count'=>array('$sum' => 1),
+                    ),
+                ),
+            );
+            $matchArray["Fields.state.value"]=3;
+            $pipeline3 = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.bucket.value',
+                        'count'=>array('$sum' => 1),
+                    ),
+                ),
+            );
+            $matchArray["Fields.state.value"]=2;
+            $pipeline4 = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.bucket.value',
+                        'count'=>array('$sum' => 1),
+                    ),
+                ),
+            );
+            $matchArray["Fields.state.value"]=7;
+            $pipeline5 = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.bucket.value',
+                        'count'=>array('$sum' => 1),
+                    ),
+                ),
+            );
+            $matchArray["Fields.state.value"]=6;
+            $pipeline6 = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.bucket.value',
+                        'count'=>array('$sum' => 1),
+                    ),
+                ),
+            );
+            
+            $new = $query->aggregate($pipeline1);
+            if(count($new)>0){$states['New']=$new[0]['count'];}
+            $paused = $query->aggregate($pipeline2);
+            if(count($paused)>0){$states['Paused']=$paused[0]['count'];}
+            $inprogress = $query->aggregate($pipeline3);
+            if(count($inprogress)>0){$states['InProgress']=$inprogress[0]['count'];}
+            $waiting = $query->aggregate($pipeline4);
+            if(count($waiting)>0){$states['Waiting']=$waiting[0]['count'];}
+            $reopened= $query->aggregate($pipeline5);
+            if(count($reopened)>0){$states['Reopened']=$reopened[0]['count'];}
+            $closed= $query->aggregate($pipeline6);
+            if(count($closed)>0){$states['Closed']=$closed[0]['count'];}
+            error_log("==States==".print_r($states,1));
+            return $states;
+            
+        } catch (\Throwable $ex) {
+            Yii::error("CommonUtilityTwo:getBucketStatesCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
