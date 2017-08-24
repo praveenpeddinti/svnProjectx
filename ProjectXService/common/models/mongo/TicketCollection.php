@@ -279,8 +279,35 @@ class TicketCollection extends ActiveRecord
             $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
            if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
                 if($StoryData->filterOption->type=='general'){
-                  switch((int)$StoryData->filterOption->id){
-               case 2:$conditions["IsChild"] = array('$in' => array(0,1));
+                switch((int)$StoryData->filterOption->id){
+               case 7:
+                   $buckets=Bucket::getProjectBucketByAttributes($projectId,2);
+                   if($buckets!='failure'){
+                    $bucketIds = array_column($buckets, 'Id');
+                    $bucketIds = array_map('intval', $bucketIds);
+                    $conditions['Fields.bucket.value']=array('$in' =>$bucketIds);   
+                   }else{
+                      return $ticketDetails; 
+                   }
+                  break;
+              case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
+               case 9:
+                   //  unset($conditions['Fields.duedate.value']);
+                 $conditions["IsChild"] = array('$in' => array(0,1));
+                 $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+                 $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000));break;                 //  $conditions['Fields.duedate.value']=(int)$StoryData->userInfo->Id;break;
+                case 10:
+                     $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+                     $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+                    $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
+                 break;
+               default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
+            }      
+           } else if($StoryData->filterOption->type=='individual'){
+             
+                switch((int)$StoryData->filterOption->id){
+                     case 2:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];break;
                case 3:
                    $conditions["IsChild"] = array('$in' => array(0,1));
@@ -288,25 +315,35 @@ class TicketCollection extends ActiveRecord
                case 4:
                    $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id]];
-                      $conditions['Fields.state.value']=(int)3;break;
-               case 5:$conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['Fields.state.value']=(int)3;break; // in progress
+               case 5:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
-                       $conditions['Fields.state.value']=(int)6;break;
-               case 6:$conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['Fields.state.value']=(int)6;break; // my closed
+               case 6:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
-               case 7:
-                   $buckets=Bucket::getProjectBucketByAttributes($projectId,2);
-                   if($buckets!='failure'){
-                     $bucketIds = array_column($buckets, 'Id');
-                     $bucketIds = array_map('intval', $bucketIds);
-                    $conditions['Fields.bucket.value']=array('$in' =>$bucketIds);    
-                   }
-                   break;
-               case 8:$conditions['Fields.state.value']=(int)6;break;    
+             // case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
+              case 11:
+                   $conditions["IsChild"] = array('$in' => array(0,1));
+                   $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+                   $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+                   $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000)); break;
+                case 12:
+                     $conditions["IsChild"] = array('$in' => array(0,1));
+                     $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
+                     $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+                     $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+                    $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
+                  break;
                default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
-            }   
-           }else if($StoryData->filterOption->type=='bucket'){
+            }      
+           }
+           else if($StoryData->filterOption->type=='bucket'){
             $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
+           }
+           else if($StoryData->filterOption->type=='state'){
+            $conditions['Fields.state.value']=(int)$StoryData->filterOption->id;
            }
         }
             $query->from('TicketCollection')
