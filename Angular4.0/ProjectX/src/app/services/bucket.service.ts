@@ -87,6 +87,32 @@ var post_data={
     }
  
  }
+
+ getTotalBucketStats(projectId,totalBucketsCallback){
+    var post_data={'projectId':projectId};
+    this._ajaxService.AjaxSubscribe("bucket/get-total-bucket-stats",post_data,(data)=>
+    { 
+         
+         totalBucketsCallback(data);
+
+    });
+ }
+
+ getCurrentBucketsInfo(projectId,bucketsInfoCallback){
+   var post_data={'projectId':projectId,type:2};
+    this._ajaxService.AjaxSubscribe("bucket/get-buckets",post_data,(data)=>
+    {  
+         bucketsInfoCallback(data);
+    });
+ }
+
+ getCurrentWeekActiveBuckets(projectId,currentWeekbucketsCallback){
+   var post_data={'projectId':projectId};
+   this._ajaxService.AjaxSubscribe("bucket/get-current-week-buckets",post_data,(data)=>
+    {  
+         currentWeekbucketsCallback(data);
+    });
+ }
   
 
 }
