@@ -275,7 +275,81 @@ class BucketController extends Controller
              return $response;
         } 
     }
+   
     
+    /**
+     * @author Ryan
+     * @uses gets total bucket counts
+     * @return type
+     */
+    public function actionGetTotalBucketStats(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $totalBucketStats=ServiceFactory::getBucketServiceInstance()->getBucketsCount($postData->projectId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $totalBucketStats;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+            return $response;
+        }catch (\Throwable $th) { 
+             Yii::error("BucketController:actionGetTotalBucketStats::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
+    } 
+    
+    /**
+     * @author Ryan
+     * @uses gets total bucket counts
+     * @return type
+     */
+    public function actionGetBuckets(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $bucketsInfo=ServiceFactory::getBucketServiceInstance()->getBucketsForProject($postData->projectId,$postData->type);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $bucketsInfo;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+            return $response;
+        }catch (\Throwable $th) { 
+             Yii::error("BucketController:actionGetBuckets::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
+    }
+    
+    public function actionGetCurrentWeekBuckets(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $currentWeekBucketsInfo=ServiceFactory::getBucketServiceInstance()->getCurrentWeekBuckets($postData->projectId);
+            $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $currentWeekBucketsInfo;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+            return $response;
+        } catch (\Throwable $th) { 
+             Yii::error("BucketController:actionGetCurrentWeekBuckets::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
+    }
+
     public function actionGetBucketStoryActivities(){
         $postData = json_decode(file_get_contents("php://input"));
         $storyActivitiesData=ServiceFactory::getBucketServiceInstance()->getBucketStoryActivities($postData->projectId,$postData->bucketId);
