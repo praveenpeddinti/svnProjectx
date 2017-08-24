@@ -96,6 +96,25 @@ export class StoryComponent
                        )
                   });
                 //this.form = jsonForm;-->removed
+
+           var preferences=response.data.task_preferences.PreferenceItems;
+            if(preferences!=""){
+                var preferences_array=preferences.split(',');
+                for(let item of preferences_array)
+                {
+                        this.selectedTickets.push(item.trim());                
+                }
+                if(this.selectedTickets.length==this.taskArray.length)
+                { 
+                    this.checkvalue=true;
+                }
+               
+                jsonForm['tasks']=this.selectedTickets;//shifted by Ryan from above
+
+
+            }
+
+
               }else{
                     console.log("storyFrom Component ngOnInit fail---");
               }
@@ -106,31 +125,7 @@ export class StoryComponent
             e.preventDefault();
         }
     }); 
-    
-    /* Added By Ryan */ 
-    this._service.getPreferences((response)=>
-    {
-        this.checkvalue=false;
-        this.selectedTickets=[];
-        if(response.statusCode == 200){
-            var preferences=response.data.PreferenceItems;
-            console.log("==Prefernce data=="+JSON.stringify(preferences));
-            if(preferences!=""){
-                var preferences_array=preferences.split(',');
-                for(let item of preferences_array)
-                {
-                        this.selectedTickets.push(item.trim());                
-                }
-                if(this.selectedTickets.length==this.taskArray.length)
-                {
-                    this.checkvalue=true;
-                }
-               
-                jsonForm['tasks']=this.selectedTickets;//shifted by Ryan from above
-                
-            }
-        }else{console.log("==User Preferences has some issue==");}
-    });
+ 
         this.form = jsonForm;//shifted by Ryan from above
 
       
@@ -294,7 +289,7 @@ export class StoryComponent
                        this.form['default_task'].push(tsk);
                  };
                }  
-              delete this.form['tasks']; 
+             // delete this.form['tasks']; 
             this._service.saveStory(thisObj.projectId,thisObj.form,(response)=>{
                 if(response.statusCode == 200){
                      thisObj._router.navigate(['project',thisObj.projectName,'list']);
