@@ -217,9 +217,6 @@ setFilterValue(response){
        thisObj.selectedFilter =response.data[index].filterValue[0].value;
        localStorage.setItem('filterArray',JSON.stringify(thisObj.selectedFilter));
         }
-         
-       
-       
         resolve(index);
       }
     }, 100);
