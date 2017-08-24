@@ -140,21 +140,16 @@ expanded: any = {};
                 localStorage.setItem('ProjectName',thisObj.projectName);
                 localStorage.setItem('ProjectId',thisObj.projectId);
                 thisObj._service.getFilterOptions(thisObj.projectId,(response) => {
-            
-                thisObj.FilterOption=response.data[0].filterValue;
+                this.setFilterValue(response).then((val:any)=>{
+                thisObj.FilterOption=response.data[val].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
-                console.log("Filter___Option"+JSON.stringify(response.data));
-
-                this.setFilterValue(response).then((val)=>{
-                     if(localStorage.getItem('filterArray')!=null){
+                if(localStorage.getItem('filterArray')!=null){
             var filterArray=JSON.parse(localStorage.getItem('filterArray'));
             thisObj.selectedFilter=filterArray;
             }
                 thisObj.page(thisObj.projectId,thisObj.offset, thisObj.limit, thisObj.sortvalue, thisObj.sortorder,thisObj.selectedFilter);
            
                 })
-               
-           
             })
                 
             
@@ -192,22 +187,31 @@ setFilterValue(response){
 
      var error=false;
      var thisObj = this;
+     var index:any=-1;
+     var outer:boolean=true;
+     var inner:boolean=true;
       var promise = new Promise((resolve, reject) => {
+       
     setTimeout(() => {
       response.data.forEach(element => {
+          
+            if(outer){
+                index+=1;
                  element.filterValue.forEach(obj=>{
-                        if(obj.value.type==thisObj.filterType && obj.value.id==thisObj.filterValue){
+                        if(inner && obj.value.type==thisObj.filterType && obj.value.id==thisObj.filterValue){
                            localStorage.setItem('filterArray',JSON.stringify(obj.value)); 
-                           return;
+                           thisObj.selectedFilter=obj.value;
+                           inner=outer=false;
                         }
                     })
+                 }
                   });
   
       if (error) {
         reject();
       } else {
-
-        resolve();
+        index = (index== -1)?0:index 
+        resolve(index);
       }
     }, 100);
   });
