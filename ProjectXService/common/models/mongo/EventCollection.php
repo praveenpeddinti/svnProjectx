@@ -341,6 +341,38 @@ class EventCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+    /**
+     * @author Ryan
+     * @description This method is used to get current week active buckets
+     * @return type $projectId
+    */
+    public static function getCurrentWeekActiveBuckets($projectId){
+        try{
+            $weekFirstDay = date("Y-m-d H:i:s", strtotime('last monday', strtotime('tomorrow'))); 
+            $toDate = date("Y-m-d H:i:s");
+            $matchArray = array("ProjectId" => (int) $projectId,'CreatedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
+             $pipeline = array(
+                       // array('$unwind' => '$TimeLog'),
+                        array('$match' => $matchArray),
+                        array(
+                            '$group' => array(
+                                '_id' => '$Miscellaneous.BucketId',
+                                "count" => array('$sum' => 1),
+                              //  "totalHours" => array('$sum' => '$TimeLog.Time')
+                                // "data" => array('$push' => '$ActionBy'),
+                             ),
+                        ),
+                    );
+             $query = Yii::$app->mongodb->getCollection('EventCollection');
+             $activityBucketCount=$query->aggregate($pipeline);
+             error_log("==Activity Bucket Count==".print_r($activityBucketCount,1));
+             return $activityBucketCount;
+        }catch (\Throwable $ex) {
+            Yii::error("EventCollection:getCurrentWeekActiveBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
 }
 
 
