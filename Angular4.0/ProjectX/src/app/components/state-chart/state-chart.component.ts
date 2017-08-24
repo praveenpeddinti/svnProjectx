@@ -16,7 +16,7 @@ export class StateChartComponent implements OnInit {
   @Input('index') index;
   constructor(private shared:SharedService) { }
 
-  ngOnInit() { alert('state count=='+this.stateCount);
+  ngOnInit() { 
   //  this.shared.getStateStats().subscribe(value=>
   //  {
   //    alert("==From Shared=="+JSON.stringify(value));
