@@ -11,7 +11,7 @@
 <tbody>
   <tr *ngFor="let topTick of statsData;let k=index;">
     <td style="text-align:left;">{{topTick.name}}</td>
-     <td data-title="Total" ><span [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:topTick.id}" class="but cursor_pointer">{{topTick.total}}</span></td>
+     <td data-title="Total" ><span [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:topTick.id,filterType:topTick.type}" class="but cursor_pointer">{{topTick.total}}</span></td>
     <td data-title="Assigned" class="tdclr">{{topTick.assigned}}</td>
     <td data-title="Followed" class="tdclr">{{topTick.followed}}</td>
   </tr>
