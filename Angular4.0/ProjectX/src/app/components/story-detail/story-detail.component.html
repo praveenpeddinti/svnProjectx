@@ -508,7 +508,7 @@
                     by <span><a href="javascript:void(0)">{{commentsList[comment.ParentIndex].ActivityBy.UserName}}</a>
                     </span>
                     </div>
-                     <span *ngIf="commentsList[comment.ParentIndex].PropertyChanges.length!=0">TEST____
+                     <span *ngIf="commentsList[comment.ParentIndex].PropertyChanges.length!=0">
                      <div class="ticketactivityreport {{commentsList[comment.ParentIndex].PropertyChanges[0].Slug.$oid}}"  >  
                    <a *ngIf="(commentsList[comment.ParentIndex].PoppedFromChild !='')" [routerLink]="['/project',projectName,commentsList[comment.ParentIndex].PropertyChanges[0].PoppedChildId,'details']" (click)="navigateStoryDetail(commentsList[comment.ParentIndex].PropertyChanges[0].PoppedChildId)">#{{commentsList[comment.ParentIndex].PropertyChanges[0].PoppedChildId}} &nbsp;{{commentsList[comment.ParentIndex].PropertyChanges[0].PoppedChildTitle}} </a>
                     <span class="bold">{{commentsList[comment.ParentIndex].PropertyChanges[0].ActionFieldTitle}}</span> {{commentsList[comment.ParentIndex].PropertyChanges[0].Action}}      

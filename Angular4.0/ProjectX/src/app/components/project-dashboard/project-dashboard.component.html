@@ -31,13 +31,13 @@
                       </div>
                    </div>
                    <div class="col-md-3 col-xs-12">
-                       <div class="marb10">New <span class="but cursor_pointer">{{projectDetails.New}}</span></div>
+                       <div class="marb10">New <span class="but cursor_pointer" [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:1,filterType:'state'}">{{projectDetails.New}}</span></div>
                    </div>
                    <div class="col-md-3 col-xs-12">
-                       <div class="marb10">Inprogress <span class="but">{{projectDetails.InProgress}}</span></div>
+                       <div class="marb10">Inprogress <span class="but" [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:3,filterType:'state'}">{{projectDetails.InProgress}}</span></div>
                    </div>
                    <div class="col-md-3 col-xs-12">
-                      <div class="marb10">Closed <span class="but">{{projectDetails.closedTickets}}</span></div>
+                      <div class="marb10">Closed <span class="but" [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:6,filterType:'state'}">{{projectDetails.closedTickets}}</span></div>
                    </div>
                 </div>
             </div>
