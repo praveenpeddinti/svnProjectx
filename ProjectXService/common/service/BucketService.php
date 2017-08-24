@@ -8,6 +8,7 @@ use common\models\mysql\Bucket;
 use common\models\mysql\BucketType;
 use common\models\mysql\BucketStatus;
 use common\models\mongo\AccessTokenCollection;
+use common\models\mongo\EventCollection;
 use Yii;
 use yii\base\ErrorException;
 
@@ -146,6 +147,48 @@ class BucketService {
         }
     }
     
+    /**
+    * @author Ryan
+    * @description Used for getting Count of Buckets with Types
+    * @return type 
+     */  
+    public function getBucketsCount($projectId){
+        try{
+                $bucket_types_count=Bucket::getBucketsCountByType($projectId);
+                return array('BucketTypesCount'=>$bucket_types_count);
+            
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:getBucketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    /**
+    * @author Ryan
+    * @description Used for getting Count of Buckets with Types
+    * @return type 
+     */  
+    public function getBucketsForProject($projectId,$type){
+        try{
+                $bucketsInfo=Bucket::getBucketsInfo($projectId,$type);
+                return array('BucketInfo'=>$bucketsInfo);
+            
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:getBucketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    public function getCurrentWeekBuckets($projectId){
+        try{
+            $currentWeekBucketsId=  EventCollection::getCurrentWeekActiveBuckets($projectId);
+            $currentWeekBuckets=Bucket::getCurrentWeekBucketsInfo($currentWeekBucketsId);
+            return $currentWeekBuckets;
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:getBucketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
 }
 
-  
