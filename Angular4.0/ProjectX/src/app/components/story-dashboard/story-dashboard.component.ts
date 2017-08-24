@@ -140,7 +140,6 @@ expanded: any = {};
                 localStorage.setItem('ProjectName',thisObj.projectName);
                 localStorage.setItem('ProjectId',thisObj.projectId);
                 thisObj._service.getFilterOptions(thisObj.projectId,(response) => {
-                thisObj.FilterOption=response.data[0].filterValue;
                 this.setFilterValue(response).then((val:any)=>{ 
                 thisObj.FilterOption=response.data[val].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
