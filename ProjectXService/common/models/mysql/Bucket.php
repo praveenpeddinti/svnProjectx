@@ -460,7 +460,7 @@ class Bucket extends ActiveRecord
           }      
           return $count_array;
        } catch (\Throwable $ex) {
-            Yii::error("Bucket:getTotalBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            Yii::error("Bucket:getBucketsCountByType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
    }
