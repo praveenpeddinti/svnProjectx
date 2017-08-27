@@ -174,18 +174,58 @@ class BucketService {
                 return array('BucketInfo'=>$bucketsInfo);
             
         } catch (\Throwable $ex) {
-            Yii::error("BucketService:getBucketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            Yii::error("BucketService:getBucketsForProject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
     
+     /**
+    * @author Ryan
+    * @description Used for getting Current Week Buckets with more count
+    * @return type array
+     */  
     public function getCurrentWeekBuckets($projectId){
         try{
+            $currentBucketsItems=array();
             $currentWeekBucketsId=  EventCollection::getCurrentWeekActiveBuckets($projectId);
             $currentWeekBuckets=Bucket::getCurrentWeekBucketsInfo($currentWeekBucketsId);
-            return $currentWeekBuckets;
+            foreach($currentWeekBuckets as $currentBucketInfo){
+                    $currentBucketDetails=CommonUtilityTwo::getTopTicketsStats($projectId, '', $currentBucketInfo['Id']);
+                    $merged_other_bucket=array_merge($currentBucketDetails,$currentBucketInfo);
+                    array_push($currentBucketsItems,$merged_other_bucket);
+                }
+            return $currentBucketsItems;
         } catch (\Throwable $ex) {
-            Yii::error("BucketService:getBucketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            Yii::error("BucketService:getCurrentWeekBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+     /**
+    * @author Ryan
+    * @description Used for getting Count of Buckets with Types
+    * @return type 
+     */  
+    public function getMoreCountBuckets($projectId,$isData=0){
+        try{
+            $otherBucketsItems=array();
+            if($isData==0){
+                 $otherBuckets= EventCollection::getOtherBucketsCount($projectId,$isData);
+                 error_log("==count otherrrr==".$otherBuckets);
+                 return $otherBuckets;
+            }else{
+                $otherBuckets= EventCollection::getOtherBucketsCount($projectId,$isData);
+                $otherBucketsData=Bucket::getCurrentWeekBucketsInfo($otherBuckets);
+                foreach($otherBucketsData as $otherBucketInfo){
+                    $otherBucketDetails=CommonUtilityTwo::getTopTicketsStats($projectId, '', $otherBucketInfo['Id']);
+                    $merged_other_bucket=array_merge($otherBucketDetails,$otherBucketInfo);
+                    array_push($otherBucketsItems,$merged_other_bucket);
+                }
+                return $otherBucketsItems;
+            }
+           
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:getMoreCountBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }
