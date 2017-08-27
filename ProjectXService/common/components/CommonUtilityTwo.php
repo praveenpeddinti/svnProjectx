@@ -986,6 +986,12 @@ public static function prepareUserDashboardActivities($activities) {
     public static function getBucketStatesCount($projectId,$bucketId){
         try{
             $states=array();
+            $states['New']=0;
+            $states['Paused']=0;
+            $states['InProgress']=0;
+            $states['Waiting']=0;
+            $states['Reopened']=0;
+            $states['Closed']=0;
             $matchArray = array("ProjectId" => (int) $projectId,"Fields.bucket.value"=>(int) $bucketId,);
             $query = Yii::$app->mongodb->getCollection('TicketCollection');
             $matchArray["Fields.state.value"]=1;
