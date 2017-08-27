@@ -994,8 +994,11 @@ public static function prepareUserDashboardActivities($activities) {
             $states['Closed']=0;
             $matchArray = array("ProjectId" => (int) $projectId,"Fields.bucket.value"=>(int) $bucketId,);
             $query = Yii::$app->mongodb->getCollection('TicketCollection');
-            $matchArray["Fields.state.value"]=1;
-            $pipeline1 = array(
+            $states_query="select * from WorkFlowState";
+            $ticketStates=Yii::$app->db->createCommand($states_query)->queryAll();
+            foreach($ticketStates as $ticketState){ error_log("Ticket ID==".$ticketState['Id']);
+                $matchArray["Fields.state.value"]=(int)$ticketState['Id'];
+                $pipeline = array(
                
                 array('$unwind'=> '$Fields'),
                 array('$match' => $matchArray),
@@ -1003,83 +1006,108 @@ public static function prepareUserDashboardActivities($activities) {
                     '$group' => array(
                          '_id' => '$Fields.bucket.value',
                         'count'=>array('$sum' => 1), 
+                        'data'=>array('$push'=>'$Fields.state.value')
                     ),
                 ),
-            );
-            $matchArray["Fields.state.value"]=4;
-            $pipeline2 = array(
-               
-                array('$unwind'=> '$Fields'),
-                array('$match' => $matchArray),
-                array(
-                    '$group' => array(
-                         '_id' => '$Fields.bucket.value',
-                        'count'=>array('$sum' => 1),
-                    ),
-                ),
-            );
-            $matchArray["Fields.state.value"]=3;
-            $pipeline3 = array(
-               
-                array('$unwind'=> '$Fields'),
-                array('$match' => $matchArray),
-                array(
-                    '$group' => array(
-                         '_id' => '$Fields.bucket.value',
-                        'count'=>array('$sum' => 1),
-                    ),
-                ),
-            );
-            $matchArray["Fields.state.value"]=2;
-            $pipeline4 = array(
-               
-                array('$unwind'=> '$Fields'),
-                array('$match' => $matchArray),
-                array(
-                    '$group' => array(
-                         '_id' => '$Fields.bucket.value',
-                        'count'=>array('$sum' => 1),
-                    ),
-                ),
-            );
-            $matchArray["Fields.state.value"]=7;
-            $pipeline5 = array(
-               
-                array('$unwind'=> '$Fields'),
-                array('$match' => $matchArray),
-                array(
-                    '$group' => array(
-                         '_id' => '$Fields.bucket.value',
-                        'count'=>array('$sum' => 1),
-                    ),
-                ),
-            );
-            $matchArray["Fields.state.value"]=6;
-            $pipeline6 = array(
-               
-                array('$unwind'=> '$Fields'),
-                array('$match' => $matchArray),
-                array(
-                    '$group' => array(
-                         '_id' => '$Fields.bucket.value',
-                        'count'=>array('$sum' => 1),
-                    ),
-                ),
-            );
-            
-            $new = $query->aggregate($pipeline1);
-            if(count($new)>0){$states['New']=$new[0]['count'];}
-            $paused = $query->aggregate($pipeline2);
-            if(count($paused)>0){$states['Paused']=$paused[0]['count'];}
-            $inprogress = $query->aggregate($pipeline3);
-            if(count($inprogress)>0){$states['InProgress']=$inprogress[0]['count'];}
-            $waiting = $query->aggregate($pipeline4);
-            if(count($waiting)>0){$states['Waiting']=$waiting[0]['count'];}
-            $reopened= $query->aggregate($pipeline5);
-            if(count($reopened)>0){$states['Reopened']=$reopened[0]['count'];}
-            $closed= $query->aggregate($pipeline6);
-            if(count($closed)>0){$states['Closed']=$closed[0]['count'];}
-            error_log("==States==".print_r($states,1));
+            ); 
+                $result=$query->aggregate($pipeline);error_log("==Result==".print_r($result,1));
+                switch($ticketState['Id']){
+                    case 1: if(count($result)>0){$states['New']=$result[0]['count'];}break;
+                    case 2: if(count($result)>0){$states['Waiting']=$result[0]['count'];}break;
+                    case 3: if(count($result)>0){$states['InProgress']=$result[0]['count'];}break;
+                    case 4: if(count($result)>0){$states['Paused']=$result[0]['count'];}break;
+                    case 6: if(count($result)>0){$states['Closed']=$result[0]['count'];}break;
+                    case 7: if(count($result)>0){$states['Reopened']=$result[0]['count'];}break;
+                    default:break;
+                }
+           }
+//            $matchArray["Fields.state.value"]=1;
+//            $pipeline1 = array(
+//               
+//                array('$unwind'=> '$Fields'),
+//                array('$match' => $matchArray),
+//                array(
+//                    '$group' => array(
+//                         '_id' => '$Fields.bucket.value',
+//                        'count'=>array('$sum' => 1), 
+//                        'data'=>array('$push'=>'$Fields.state.value')
+//                    ),
+//                ),
+//            ); 
+//            $matchArray["Fields.state.value"]=4;
+//            $pipeline2 = array(
+//               
+//                array('$unwind'=> '$Fields'),
+//                array('$match' => $matchArray),
+//                array(
+//                    '$group' => array(
+//                         '_id' => '$Fields.bucket.value',
+//                        'count'=>array('$sum' => 1),
+//                    ),
+//                ),
+//            );
+//            $matchArray["Fields.state.value"]=3;
+//            $pipeline3 = array(
+//               
+//                array('$unwind'=> '$Fields'),
+//                array('$match' => $matchArray),
+//                array(
+//                    '$group' => array(
+//                         '_id' => '$Fields.bucket.value',
+//                        'count'=>array('$sum' => 1),
+//                    ),
+//                ),
+//            );
+//            $matchArray["Fields.state.value"]=2;
+//            $pipeline4 = array(
+//               
+//                array('$unwind'=> '$Fields'),
+//                array('$match' => $matchArray),
+//                array(
+//                    '$group' => array(
+//                         '_id' => '$Fields.bucket.value',
+//                        'count'=>array('$sum' => 1),
+//                    ),
+//                ),
+//            );
+//            $matchArray["Fields.state.value"]=7;
+//            $pipeline5 = array(
+//               
+//                array('$unwind'=> '$Fields'),
+//                array('$match' => $matchArray),
+//                array(
+//                    '$group' => array(
+//                         '_id' => '$Fields.bucket.value',
+//                        'count'=>array('$sum' => 1),
+//                    ),
+//                ),
+//            );
+//            $matchArray["Fields.state.value"]=6;
+//            $pipeline6 = array(
+//               
+//                array('$unwind'=> '$Fields'),
+//                array('$match' => $matchArray),
+//                array(
+//                    '$group' => array(
+//                         '_id' => '$Fields.bucket.value',
+//                        'count'=>array('$sum' => 1),
+//                    ),
+//                ),
+//            );
+//            
+//            $new = $query->aggregate($pipeline1); error_log("==New==".print_r($new,1));
+//            if(count($new)>0){$states['New']=$new[0]['count'];}
+//            $paused = $query->aggregate($pipeline2);
+//            if(count($paused)>0){$states['Paused']=$paused[0]['count'];}
+//            $inprogress = $query->aggregate($pipeline3);
+//            if(count($inprogress)>0){$states['InProgress']=$inprogress[0]['count'];}
+//            $waiting = $query->aggregate($pipeline4);
+//            if(count($waiting)>0){$states['Waiting']=$waiting[0]['count'];}
+//            $reopened= $query->aggregate($pipeline5);
+//            if(count($reopened)>0){$states['Reopened']=$reopened[0]['count'];}
+//            $closed= $query->aggregate($pipeline6);
+//            if(count($closed)>0){$states['Closed']=$closed[0]['count'];}
+//            error_log("==States==".print_r($states,1));
             return $states;
             
         } catch (\Throwable $ex) {
