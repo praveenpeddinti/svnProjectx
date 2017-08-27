@@ -373,8 +373,44 @@ class EventCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+    /**
+     * @author Ryan
+     * @description This method is used to get other buckets and their count
+     * @return type $projectId
+    */
+    public static function getOtherBucketsCount($projectId,$isData=0){
+        try{
+            $count=0;
+            $weekFirstDay = date("Y-m-d H:i:s", strtotime('last monday', strtotime('tomorrow'))); 
+            $matchArray = array("ProjectId" => (int) $projectId,'CreatedOn'=>array('$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000)));
+            $pipeline = array(
+                       // array('$unwind' => '$TimeLog'),
+                        array('$match' => $matchArray),
+                        array(
+                            '$group' => array(
+                                '_id' => '$Miscellaneous.BucketId',
+                                "count" => array('$sum' => 1),
+                              //  "totalHours" => array('$sum' => '$TimeLog.Time')
+                                // "data" => array('$push' => '$ActionBy'),
+                             ),
+                        ),
+                    );
+            $query = Yii::$app->mongodb->getCollection('EventCollection');
+            $otherBuckets=$query->aggregate($pipeline);
+            if($isData==0){ 
+            error_log("other count==".count($otherBuckets));
+                return count($otherBuckets);
+            }else{
+                return $otherBuckets;
+            }
+            
+        } catch (\Throwable $ex) {
+            Yii::error("EventCollection:getOtherBucketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
 }
-
 
 
 ?>
