@@ -333,10 +333,12 @@ class BucketController extends Controller
         try{
             $postData = json_decode(file_get_contents("php://input"));
             $currentWeekBucketsInfo=ServiceFactory::getBucketServiceInstance()->getCurrentWeekBuckets($postData->projectId);
+            $count=ServiceFactory::getBucketServiceInstance()->getMoreCountBuckets($postData->projectId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $currentWeekBucketsInfo;
+            $responseBean->totalCount=$count;
             $response = CommonUtility::prepareResponse($responseBean,"json");
             return $response;
         } catch (\Throwable $th) { 
@@ -378,6 +380,27 @@ class BucketController extends Controller
             $responseBean->data = $availablity;
             $response = CommonUtility::prepareResponse($responseBean,"json");
       return $response;
+    }
+    
+    public function actionGetOtherBuckets(){
+        try{
+        $postData = json_decode(file_get_contents("php://input"));
+        $otherBuckets=ServiceFactory::getBucketServiceInstance()->getMoreCountBuckets($postData->projectId,1);
+        $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $otherBuckets;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+            return $response;
+        }catch (\Throwable $th) { 
+             Yii::error("BucketController:actionGetOtherBuckets::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
 }
 
