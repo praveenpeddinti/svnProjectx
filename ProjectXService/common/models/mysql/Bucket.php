@@ -530,7 +530,7 @@ class Bucket extends ActiveRecord
             $activityCount=array();
             $currentWeekBucketDetailsByMaxActivity=array();
             foreach($currentWeekBuckets as $buckets){
-                if($buckets["_id"]!=0 || $buckets["_id"]!=null){
+                if($buckets["_id"]!=0 || $buckets["_id"]!=''){
                     array_push($bucketIds,$buckets['_id']);
                     array_push($activityCount,$buckets['count']);
                  }
@@ -541,25 +541,25 @@ class Bucket extends ActiveRecord
                });
                
                error_log("==After Sort Array==".print_r($currentWeekBuckets,1));
-               $ids= implode(",",$bucketIds);
-               error_log("==Ids==".$ids);
-            $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where  Id in (".$ids.") and BucketStatus!=2 order by DueDate desc";
-            $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
-            error_log("==Bucket Data==".print_r($bucket_data,1));
+               error_log("==Bucket Ids==".print_r($bucketIds,1));
+               if(!empty($bucketIds[0])){ 
+                    $ids= implode(",",$bucketIds);
+                    error_log("==Ids==".$ids);
+                    $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where  Id in (".$ids.") and BucketStatus!=2 order by DueDate desc";
+                    $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
             
-                foreach($currentWeekBuckets as $key=>$value){
-                    foreach($bucket_data as $bucketData){
-                        if($bucketData['Id']==$value['_id']){
-                             error_log("---buckkkk--".$bucketData['Id']);
-                            $owner=TinyUserCollection::getMiniUserDetails($bucketData['Responsible']);
-                            $mergedBucketInfo=array_merge($bucketData,$owner);
-                            array_push($currentWeekBucketDetailsByMaxActivity,$mergedBucketInfo);
-                        }
-                    }       
-                }
-           
-            error_log("==Sorted Buckets==".print_r($currentWeekBucketDetailsByMaxActivity,1));
-            
+                    foreach($currentWeekBuckets as $key=>$value){
+                        foreach($bucket_data as $bucketData){
+                            if($bucketData['Id']==$value['_id']){
+                                 error_log("---buckkkk--".$bucketData['Id']);
+                                $owner=TinyUserCollection::getMiniUserDetails($bucketData['Responsible']);
+                                $mergedBucketInfo=array_merge($bucketData,$owner);
+                                array_push($currentWeekBucketDetailsByMaxActivity,$mergedBucketInfo);
+                            }
+                        }       
+                    }
+               }
+                      
             return $currentWeekBucketDetailsByMaxActivity;
            
        } catch (\Throwable $ex) {
