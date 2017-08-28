@@ -155,21 +155,15 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }else{
               $dueDate = $bucketDetails["DueDate"];
             }
-            if($bType=='Current'){
+            if($bucketDetails["BucketStatusName"]=='Current'){
             if(strtotime($dueDate) > strtotime($nowDate))
                 $milestoneMessage = "This milestone have passed for due date.";
             }
-            if($bType=='Closed'){
-                $closeDateTime = strtotime($bucketDetails["CloseDate"]);
-                $closeDate = date('M-d-Y',$closeDateTime);
-                $datediff = (strtotime($closeDate) - strtotime($dueDate));
-                $countOfdays = floor($datediff / (60 * 60 * 24));
-                if($countOfdays>0)
-                $milestoneMessage = "This milestone was closed <span class='title'>$countOfdays</span> days after due date.";
-            }
+
             $prepareBucketArray = array();
+            $prepareBucketArray["chartDetails"]=array();
 //            $prepareBucketArray['BucketType'] = $bucketDetails['BucketType'];
-            $prepareBucketArray['BucketType'] = $bucketDetails['BucketStatus'];
+            $prepareBucketArray['BucketStatus'] = $bucketDetails['BucketStatus'];
             $prepareBucketArray['BucketId'] = $bucketDetails['Id'];
             $prepareBucketArray['BucketName'] = $bucketDetails['Name'];
             $userDetails = TinyUserCollection::getMiniUserDetails($bucketDetails['Responsible']);
@@ -177,43 +171,34 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $prepareBucketArray["UserName"] = $userDetails["UserName"];
             $prepareBucketArray["StartDate"] = $startDate;
             $prepareBucketArray["DueDate"] = $dueDate;
-            $prepareBucketArray["CloseDate"] = $closeDate;
-            //$shortBucketDesc= CommonUtility::refineActivityDataTimeDesc($bucketDetails["Description"],50);
             $shortBucketDesc= CommonUtilityTwo::truncateHtml($bucketDetails["Description"],50);
             $prepareBucketArray["Description"] = $bucketDetails["Description"];
             $prepareBucketArray["ShortDescription"] = $shortBucketDesc;
             $prepareBucketArray['ResponsibleUser'] =$bucketDetails["Responsible"];
-//            $prepareBucketArray['BucketType'] =$bucketDetails["BucketType"];
-//            $prepareBucketArray['EmailNotify'] =$bucketDetails["EmailNotify"];
-//            $prepareBucketArray['EmailReminder'] =$bucketDetails["EmailReminder"];
-            $prepareBucketArray['DropDownBucket'] =(int)0;
-            $prepareBucketArray['BucketRole'] = $bType;
+            $prepareBucketArray['DropDownBucket'] ="none";
+            $prepareBucketArray['BucketStatusName'] = $bucketDetails["BucketStatusName"];
             $prepareBucketArray['milestoneMessage'] = $milestoneMessage;
             
             
-            $checkTicketsinBuckets = TicketCollection::checkTicketsinBuckets($projectId,$bucketDetails['Id']);
-            if(count($checkTicketsinBuckets)==0){
-                $prepareBucketArray['AllTasks'] =(int)0;
-                $prepareBucketArray['ClosedTasks'] =(int)0;
-                $prepareBucketArray['OpenTasks'] =(int)0;
-                $prepareBucketArray['TotalHours'] =(int)0;
-                $prepareBucketArray['Taskspercentage'] = (int)0;
-                
-            }else{
-                $prepareBucketArray['AllTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='All');
-                $prepareBucketArray['ClosedTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='Closed');
-                $prepareBucketArray['OpenTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='Open');
-                $prepareBucketArray['TotalHours'] =TicketCollection::getTotalWorkHoursForBucket($projectId,$bucketDetails['Id'],'Fields.bucket.value');
-                $prepareBucketArray['Taskspercentage'] = (int)round((($prepareBucketArray['ClosedTasks']/$prepareBucketArray['AllTasks'])*100));
-                
-            }
-            //$startDateTime = $ticketDetails["StartDate"];
-            //$startDateTime->setTimezone(new \DateTimeZone($timezone));
-            //$startDate = $startDateTime->format('M-d-Y');
-            //$dueDateTime = $ticketDetails["StartDate"]->toDateTime();
-            //$dueDateTime->setTimezone(new \DateTimeZone($timezone));
-            //$dueDate = $dueDateTime->format('M-d-Y');
-            //error_log("--prapereBucketData-Two--".print_r($prepareBucketArray,1));
+//            $checkTicketsinBuckets = TicketCollection::checkTicketsinBuckets($projectId,$bucketDetails['Id']);
+//            if(count($checkTicketsinBuckets)==0){
+//                $prepareBucketArray['AllTasks'] =(int)0;
+//                $prepareBucketArray['ClosedTasks'] =(int)0;
+//                $prepareBucketArray['OpenTasks'] =(int)0;
+//                $prepareBucketArray['TotalHours'] =(int)0;
+//                $prepareBucketArray['Taskspercentage'] = (int)0;
+//                
+//            }else{
+//                $prepareBucketArray['AllTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='All');
+//                $prepareBucketArray['ClosedTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='Closed');
+//                $prepareBucketArray['OpenTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='Open');
+//                $prepareBucketArray['TotalHours'] =TicketCollection::getTotalWorkHoursForBucket($projectId,$bucketDetails['Id'],'Fields.bucket.value');
+//                $prepareBucketArray['Taskspercentage'] = (int)round((($prepareBucketArray['ClosedTasks']/$prepareBucketArray['AllTasks'])*100));
+//                
+//            }
+            $prepareBucketArray["chartDetails"]["statusCounts"] = CommonUtilityTwo::getStatusCount($projectId, $bucketDetails['Id']);
+            $prepareBucketArray["chartDetails"]["stateCounts"] = CommonUtilityTwo::getBucketStatesCount($projectId, $bucketDetails['Id']);
+            $prepareBucketArray["topTicketStats"] = CommonUtilityTwo::getTopTicketsStats($projectId,'', $bucketDetails['Id']);
             return $prepareBucketArray;
         } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:prepareBucketDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -775,7 +760,21 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 $totalWorkedHours=CommonUtilityTwo::getTotalWorkedHoursByBucket($projectId,$bucketId);
                 error_log("==Worked Hours==".$totalWorkedHours);
                 $stateCount=CommonUtilityTwo::getBucketStatesCount($projectId,$bucketId);
-                $topTickets=array('TicketsCount'=>$tickets_count,'StoryPoints'=>$totalStoryPoints,"WorkedHours"=>$totalWorkedHours,'States'=>$stateCount); //padmaja's method call
+                
+                $conditions['Fields.state.value'] = (int) 3;
+                $totalActive = $collection->count($conditions);
+                
+                $total = $assigned = $followed = '';
+                $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+                unset($conditions['Fields.state.value']);
+                $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000));
+                $totalOverDue = $collection->count($conditions);
+                
+                 $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+                 $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
+                 $totalCurrentWeek = $collection->count($conditions);
+                 
+                $topTickets=array('TicketsCount'=>$tickets_count,'StoryPoints'=>$totalStoryPoints,"WorkedHours"=>$totalWorkedHours,'ActiveTickets'=>$totalActive,'OverDue'=>$totalOverDue,'CurrentOverDue'=>$totalCurrentWeek,'States'=>$stateCount); //padmaja's method call
                 array_push($topTicketsArray,$topTickets);
             }else{
             $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
@@ -1114,6 +1113,41 @@ public static function prepareUserDashboardActivities($activities) {
             Yii::error("CommonUtilityTwo:getBucketStatesCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
+    }
+    
+    public static function getStatusCount($projectId,$bucketId){
+        $StatusList = \common\models\mysql\WorkFlowFields::getWorkflowStatusList();
+        $matchArray = array("ProjectId" => (int) $projectId,"Fields.bucket.value"=>(int) $bucketId,);
+        $query = Yii::$app->mongodb->getCollection('TicketCollection');
+        $statusCounts=array();
+        foreach ($StatusList as  $value) {
+            error_log("------>>>>>>".$value["Id"]);
+            $matchArray["Fields.workflow.value"]=(int)$value["Id"];
+//            $matchArray["Fields.bucket.value"]=(int)22;
+            $pipeline5 = array(
+               
+                array('$unwind'=> '$Fields'),
+                array('$match' => $matchArray),
+                array(
+                    '$group' => array(
+                         '_id' => '$Fields.workflow.value_name',
+                        'count'=>array('$sum' => 1),
+                    ),
+                ),
+            );
+            $data = $query->aggregate($pipeline5);
+            $key= preg_replace('/\s/','',ucwords(strtolower($value["Name"])));
+            if(count($data) > 0){
+                $statusCounts[$key] = $data[0]["count"];
+            }else{
+                $statusCounts[$key] = 0;
+            }
+            
+        }
+        error_log("++++++getStatusCount+++++++++".print_r($statusCounts,1));
+        return $statusCounts;
+        
+        
     }
     
 }

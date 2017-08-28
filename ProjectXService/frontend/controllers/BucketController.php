@@ -160,7 +160,7 @@ class BucketController extends Controller
                   EventTrait::saveEvent($postData->projectId,"Bucket",$lastBucketId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$lastBucketId)],array("BucketId"=>(int)$lastBucketId));    
                 }
                
-                $response='success';
+                $response=array("status"=>'success',"BucketId"=>$lastBucketId);
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -203,21 +203,30 @@ class BucketController extends Controller
     public function actionUpdateBucketDetails(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-            $checkbucket=ServiceFactory::getBucketServiceInstance()->checkupdateBucketName($postData->data->title,$postData->data->Id,$postData->projectId,$postData->data->selectedBucketTypeFilter,$postData->bucketRole);
-            if($checkbucket=='failure'){
+            $checkbucket=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->data->title,$postData->projectId,$postData->bucketId);
+            if($checkbucket["available"]=='Yes'){
                 $saveBucketDetails=ServiceFactory::getBucketServiceInstance()->updateBucketDetails($postData);
                // EventTrait::saveEvent($postData->projectId,"Bucket",$postData->data->Id,"updated","update",$postData->userInfo->Id,[array("ActionOn"=>"bucketupdation","OldValue"=>0,"NewValue"=>(int)$lastBucketId)],array("BucketId"=>(int)$lastBucketId));    
-                $response='success';
-                $responseBean = new ResponseBean();
-                $responseBean->statusCode = ResponseBean::SUCCESS;
-                $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-                $responseBean->data = $response;
-                return $response = CommonUtility::prepareResponse($responseBean,"json");
-            }else if($checkbucket=='current'){
-                $response='current';
+                if($saveBucketDetails["Status"]=="success"){
+                        $response=$saveBucketDetails;
+                        $responseBean = new ResponseBean();
+                        $responseBean->statusCode = ResponseBean::SUCCESS;
+                        $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+                        $responseBean->data = $response["data"];
+                        return $response = CommonUtility::prepareResponse($responseBean,"json");
+                }else{
+//                    $response='current';
+                    $responseBean = new ResponseBean;
+                    $responseBean->statusCode = ResponseBean::FAILURE;
+                    $responseBean->message = "Update Failed";
+                    $responseBean->data =    "";
+                    return $response = CommonUtility::prepareResponse($responseBean,"json");
+                }
+            }else if($checkbucket["available"]=='No'){
+                $response='No';
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::FAILURE;
-                $responseBean->message = "Current bucket is exist";
+                $responseBean->message = "Bucket already exists";
                 $responseBean->data =    $response;
                 return $response = CommonUtility::prepareResponse($responseBean,"json");
             }else{
@@ -250,17 +259,17 @@ class BucketController extends Controller
         try{
         $postData = json_decode(file_get_contents("php://input"));
         $bucketFilterData=ServiceFactory::getBucketServiceInstance()->getBucketChangeStatus($postData->projectId,$postData->bucketId,$postData->changeStatus);
-            if($bucketFilterData=='success'){
+            if($bucketFilterData["Status"]=='success'){
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
-            $responseBean->message = "FAILURE";
+            $responseBean->message = "SUCCESS";
             $responseBean->data = $bucketFilterData;
             $response = CommonUtility::prepareResponse($responseBean,"json");
             }else{
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::FAILURE;
             $responseBean->message = "FAILURE";
-            $responseBean->data = $bucketFilterData;
+            $responseBean->data = "";
             $response = CommonUtility::prepareResponse($responseBean,"json");
             }
         
@@ -351,20 +360,7 @@ class BucketController extends Controller
              return $response;
         } 
     }
-
-    public function actionGetBucketStoryActivities(){
-        $postData = json_decode(file_get_contents("php://input"));
-        $storyActivitiesData=ServiceFactory::getBucketServiceInstance()->getBucketStoryActivities($postData->projectId,$postData->bucketId);
-        
-        error_log("++++++++++actionGetBucketStoryActivities++++++++++++".print_r($postData,1));
-        $responseBean = new ResponseBean();
-            $responseBean->statusCode = ResponseBean::SUCCESS;
-            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            $responseBean->data = $storyActivitiesData;
-            $response = CommonUtility::prepareResponse($responseBean,"json");
-      return $response;
-    }
-    
+  
     public function actionCheckBucketName(){
         $postData = json_decode(file_get_contents("php://input"));
         $availablity=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->bucketName,$postData->projectId);

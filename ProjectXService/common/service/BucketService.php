@@ -33,7 +33,7 @@ class BucketService {
             $bucketModel = new Bucket();
             $bucketDetails = $bucketModel->getBucketDetails($bucketData);
             foreach ($bucketDetails as $bucket) {
-                $details = CommonUtilityTwo::prepareBucketDashboardDetails($bucket,$bucketData->projectId,$timezone,$bucketData->bucketStatus);
+                $details = CommonUtilityTwo::prepareBucketDashboardDetails($bucket,$bucketData->projectId,$timezone,$bucket["BucketStatus"]);
                 array_push($finalData, $details);
                 //break;
             } 
@@ -55,7 +55,14 @@ class BucketService {
     public function getBucketTypeFilter($projectId,$type){
         try{
          $bucketModel = new Bucket();
-         return $bucketModel->getBucketTypeFilter($projectId,$type);
+          $data = $bucketModel->getBucketTypeFilter($projectId,$type);
+          $dropList = array(array("Id"=>0,"Name"=>"Edit"));
+          foreach ($data as $value) {
+              array_push($dropList, array("Id"=>$value["Id"],"Name"=>"Mark as ".$value["Name"]));
+          }
+          
+          error_log("------getBucketTypeFilter----------->".print_r($dropList,1));
+          return $dropList;
         } catch (\Throwable $ex) {
             Yii::error("BucketService:getBucketTypeFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -68,11 +75,11 @@ class BucketService {
     * @return type 
     * @param type $bucketData
      */      
-    public function checkBucketName($bucketName,$projectId,$btype=""){
+    public function checkBucketName($bucketName,$projectId,$bucketId=""){
         try{
          $bucketModel = new Bucket();
          $availability = array("available"=>"");
-         $availability["available"] = $bucketModel->checkBucketName($bucketName,$projectId,$btype);
+         $availability["available"] = $bucketModel->checkBucketName($bucketName,$projectId,$bucketId);
          return $availability;
         } catch (\Throwable $ex) {
             Yii::error("BucketService:checkBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -120,10 +127,18 @@ class BucketService {
     public function updateBucketDetails($bucketData){
         try{
          $bucketModel = new Bucket();
-         $summary=array();
-         $response = $bucketModel->updateBucketDetails($bucketData);
-          $Oldbucket=Bucket::findOne($bucketData->data->Id);
-          error_log("OLd_bucket_details___".print_r($Oldbucket,1));
+         $response=array();
+         $status = $bucketModel->updateBucketDetails($bucketData);
+         $response["Status"] = $status;
+         if($status == "success"){
+             $newBucketData = $this->getBucketDetails($bucketData);
+             $response["data"] = $newBucketData;
+         }else{
+             $response["data"] = "";
+         }
+         
+//          $Oldbucket=Bucket::findOne($bucketData->data->Id);
+//          error_log("OLd_bucket_details___".print_r($Oldbucket,1));
           return $response;
           
         } catch (\Throwable $ex) {
@@ -137,10 +152,32 @@ class BucketService {
     * @return type 
     * @param type $projectId,$bucketId,statusType
      */      
-    public function getBucketChangeStatus($projectId,$bucketId,$StatusType){
+    public function getBucketChangeStatus($projectId,$bucketId,$Status){
         try{
          $bucketModel = new Bucket();
-         return $bucketModel->getBucketChangeStatus($projectId,$bucketId,$StatusType);
+         $response = array();
+         $resStatus =  $bucketModel->getBucketChangeStatus($projectId,$bucketId,$Status);
+         $response["Status"] = $resStatus;
+         if($resStatus == "success"){
+             $response["dropList"] = $this->getBucketTypeFilter($projectId, $Status);
+             $response["newBucketStatusName"] = $bucketModel->getBucketStatusNameById($Status)[0]["Name"];
+             if($response["newBucketStatusName"] == "Completed"){
+                 $conditions = array('ProjectId' => (int) $projectId);
+                 $newData = array();
+                 $conditions['Fields.bucket.value'] = (int) $bucketId;
+                 $newData['Fields.workflow.value'] = (int) 14;
+                 $newData['Fields.workflow.value_name'] = "Closed";
+                 $newData['Fields.state.value'] = (int) 6;
+                 $newData['Fields.state.value_name'] = (int) "Closed";
+                 $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+                 $collection->update($conditions,$newData);
+                 $response["topTicketStats"] = CommonUtilityTwo::getTopTicketsStats($projectId, '', $bucketId);
+                 $response["statusCounts"] = CommonUtilityTwo::getStatusCount($projectId, $bucketId);
+                 $response["stateCounts"] = CommonUtilityTwo::getBucketStatesCount($projectId, $bucketId);
+             }
+                 
+         }
+         return $response;
         } catch (\Throwable $ex) {
             Yii::error("BucketService:getBucketChangeStatus::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());

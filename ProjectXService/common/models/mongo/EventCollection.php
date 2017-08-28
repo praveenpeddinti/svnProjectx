@@ -102,12 +102,22 @@ class EventCollection extends ActiveRecord
             $matchArray = ['Status'=>(int)1];
           
             $attributes = self::getEventAttribute();
-            error_log("$$$$$+++++++++++++++$$$$".print_r($postData,1));
+            error_log("$$$$$+++++++==++++++++$$$$".print_r($postData,1));
             foreach ($attributes as $attribute){
                 if(property_exists($postData->attributes, $attribute)){
                     if($postData->attributes->$attribute != null && $postData->attributes->$attribute != ""){
-//                        $where[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->attributes->$attribute:$postData->attributes->$attribute;
+                        if($attribute == "Miscellaneous"){
+                            $misAttr = $postData->attributes->$attribute;
+                            $misCond = array();
+                            foreach($misAttr as $key=>$value){
+                                $misCond[$key] = ($key == "BucketId")?(int)$value:$value;
+                            }
+                            $matchArray[$attribute] =$misCond;
+                            
+                        }else{
+                            
                         $matchArray[$attribute] = ($attribute == "ProjectId"||$attribute == "ReferringId")?(int)$postData->attributes->$attribute:$postData->attributes->$attribute;
+                        }
                     }
                 }
             }
