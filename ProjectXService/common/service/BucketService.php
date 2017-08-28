@@ -209,13 +209,12 @@ class BucketService {
     public function getMoreCountBuckets($projectId,$isData=0){
         try{
             $otherBucketsItems=array();
+            $otherBuckets= EventCollection::getOtherBucketsCount($projectId,$isData);
+            $otherBucketsData=Bucket::getCurrentWeekBucketsInfo($otherBuckets);
             if($isData==0){
-                 $otherBuckets= EventCollection::getOtherBucketsCount($projectId,$isData);
-                 error_log("==count otherrrr==".$otherBuckets);
-                 return $otherBuckets;
+                 error_log("==count otherrrr==".count($otherBucketsData));
+                 return count($otherBucketsData);
             }else{
-                $otherBuckets= EventCollection::getOtherBucketsCount($projectId,$isData);
-                $otherBucketsData=Bucket::getCurrentWeekBucketsInfo($otherBuckets);
                 foreach($otherBucketsData as $otherBucketInfo){
                     $otherBucketDetails=CommonUtilityTwo::getTopTicketsStats($projectId, '', $otherBucketInfo['Id']);
                     $merged_other_bucket=array_merge($otherBucketDetails,$otherBucketInfo);
