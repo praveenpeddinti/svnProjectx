@@ -1,0 +1,139 @@
+<div class="clearfix" *ngIf="bucketDetails.length > 0">
+        <div class="col-md-8">
+            <div class="row">
+                   <div class="col-md-8">
+                       <div class="bucket_heading">{{bucketDetails[0]?.BucketName}}
+                       </div>
+                   </div>
+                   <div class="col-md-4">
+                       
+<div class="custom_selctdropdown pull-right">
+<p-dropdown [style]="{'width':'200px'}" [(ngModel)]="bucketDetails[0].DropDownBucket" name="bucketChange" (onChange)="filterBucketChange($event)" [displayOptions]="bucketChangedFilterToDisplay" [options]="bucketChangedFilterOption"></p-dropdown>
+</div>
+
+
+                   </div>
+            </div>       
+            <div class="devider1 clearfix"></div>
+             <div class="row"></div>
+               <div class="row">
+                   <div class="col-md-4">
+                      <div class="status_{{bucketDetails[0].BucketStatusName | lowercase}}">{{bucketDetails[0].BucketStatusName}}</div>
+                   </div>
+                   <div class="col-md-4">
+                      {{bucketDetails[0].StartDate}}  <span class="purple_color">&nbsp; TO &nbsp;</span>  {{bucketDetails[0].DueDate}}
+                   </div>
+                   <div class="col-md-4">
+                      <div class="float_right">
+                         <img src="{{bucketDetails[0].ProfilePicture}}" class="userpic"/> {{bucketDetails[0].UserName}}
+                      </div>
+                   </div>
+               </div>
+               <div class="row devider1"></div>
+               <div class="pro_bucketbg marb20">
+                  
+                  <div class="row">
+                      <div class="col-md-12">
+                         <div class="prodashboard_desc marb10" [innerHTML]="bucketDetails[0].Description">
+
+                         </div>
+                         
+                      </div>
+                      
+                  </div>
+                  
+               </div>
+               
+              <div class="row">
+                <div class="col-md-6">
+                    <div class="all_storytask marb20">
+                        <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">Stories/tasks</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right but">{{bucketDetails[0].topTicketStats[0].TicketsCount}}</div>
+                           </div>
+                        </div>
+                        
+                        <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">Story points</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right counts">{{bucketDetails[0].topTicketStats[0].StoryPoints}}</div>
+                           </div>
+                        </div>
+                        
+                        <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">Worked hours</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right counts">{{bucketDetails[0].topTicketStats[0].WorkedHours}}</div>
+                           </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="all_storytask marb20">
+                        <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">All active stories/tasks</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right but">{{bucketDetails[0].topTicketStats[0].ActiveTickets}}</div>
+                           </div>
+                        </div>
+                        
+                         <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">Over due stories/tasks</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right but">{{bucketDetails[0].topTicketStats[0].OverDue}}</div>
+                           </div>
+                        </div>
+                        
+                        <div class="clearfix marb10">
+                           <div class="col-md-10 col-xs-9">Due stories/tasks for current week</div>
+                           <div class="col-md-2 col-xs-3">
+                              <div class="pull-right but">{{bucketDetails[0].topTicketStats[0].CurrentOverDue}}</div>
+                           </div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                    
+                    
+                </div>
+                
+                
+             </div> 
+             
+              <div *ngIf="(stateData | json) != ({} | json)" class="pro_bucketbg marb20">
+             
+                 <div class="heading3">State Chart</div>
+                 <app-state-chart   [stateCount]="stateData" chartType="pie"></app-state-chart>
+                  <!--<div class="chartbg"><img src="images/paichart.jpg" class="img-responsive"/></div>-->
+              
+             </div>
+               <div *ngIf="(statusData | json) != ({} | json)" class="pro_bucketbg marb20">
+             
+                 <div class="heading3">Status Chart</div>
+                 <app-state-chart   [stateCount]="statusData" chartType="bar"></app-state-chart>
+                  <!--<div class="chartbg"><img src="images/paichart.jpg" class="img-responsive"/></div>-->
+              
+             </div>
+
+             <div  *ngIf="(form | json) != ({} | json) ">
+                    <app-create-bucket  Type="Edit" [formData]="form" [projectId]="projectId" [projectName]="projectName" [bucketId]="bucketDetails[0].BucketId" (bucketUpdated)="onBucketUpdate($event)"></app-create-bucket>
+                </div>
+               
+        </div>
+        <div class="col-md-4">
+          <app-activities *ngIf="dashboardData != undefiend" [dashboardData]="dashboardData" noMoreActivities=false noActivitiesFound=false></app-activities>
+            
+        </div>
+</div>
+
+
+
+
+
+<!--<p>
+  bucket-dashboard works!
+</p>-->

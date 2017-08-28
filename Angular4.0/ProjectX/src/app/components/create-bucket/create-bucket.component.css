@@ -1,0 +1,27 @@
+.spinner_relative{position: relative; padding-right:50px;}
+
+
+.txtbox_spinner{ height: 30px;
+    position: absolute;
+    right: 10px;
+    top: 32px;
+    width: 30px;}
+  label { font-weight: normal!important;}  
+ .ui-chkbox-label{
+      font-size:14px;
+      font-weight:normal;
+  }
+  .model_submit{ background:#695ea5;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase; padding:5px 15px;}
+.model_cancel{ background:#a7b4d3;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase; padding:5px 15px;}
+.ui-corner-all {
+    border-radius:none!important;
+}
+.modal-content{background:#fff;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
+.modal-header{ background:#f7f9fa; border-bottom:solid 1px #e6e8eb; color:#695ea5; font:normal 16px/24px 'open_sansregular'; padding:5px 10px;}
+.modal-title{ color:#695ea5; font:normal 16px/24px 'open_sansregular';}
+.butnbor{ border:none; outline:none;}
+
+
+
+
+

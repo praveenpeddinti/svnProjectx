@@ -37,7 +37,6 @@ import {UrlSerializer} from '@angular/router';
 import {CustomUrlSerializer} from './CustomUrlSerializer';
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { BucketComponent }  from './components/bucket/bucket.component';
 import {BucketService} from './services/bucket.service';
 import { ActivitiesComponent } from './components/activities/activities.component';
 import {RoundProgressModule} from 'angular-svg-round-progressbar';
@@ -60,6 +59,7 @@ import { ChartsModule } from 'ng2-charts';
 import { StateChartComponent } from './components/state-chart/state-chart.component';
 import { ReportConfirmationComponent } from './components/utility/report-confirmation/report-confirmation.component';
 import { ProjectFormComponent } from './components/project-form/project-form.component';
+import { BucketDashboardComponent } from './components/bucket-dashboard/bucket-dashboard.component';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -141,7 +141,8 @@ const ROUTES=[
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
                {path: 'project/:projectName/bucket',children:[
-                { path: '' , component: BucketComponent},
+                { path: '' , component: BucketDashboardComponent},
+                // { path: '' , component: BucketComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
@@ -189,7 +190,7 @@ const ROUTES=[
 
 
 
-  declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent,BucketComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent,StateChartComponent, ReportConfirmationComponent ,ProjectFormComponent,CreateBucketComponent],
+  declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent,StateChartComponent, ReportConfirmationComponent ,ProjectFormComponent,CreateBucketComponent,BucketDashboardComponent],
 
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService], // {provide:UrlSerializer,useClass:CustomUrlSerializer}

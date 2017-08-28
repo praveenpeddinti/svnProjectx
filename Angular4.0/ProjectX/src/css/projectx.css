@@ -704,17 +704,21 @@ padding-left:0px!important;
 .pagenotfound{ width:100%; height: auto; text-align: center;}
 
 .customcalenderdiv .ui-calendar button, .customcalenderdiv .ui-calendar button:hover, .customcalenderdiv .ui-calendar button:focus{
-    background: #e8e8e8;
-    border: 1px solid #d6d6d6;
+    background: #695ea5!important;
+    border: 1px solid #695ea5!important;
     border-left:0;
-    color:#333;
-    border-radius:0
+    color:#fff;
+    border-radius:0;
    
 }
 
+.ui-button:focus, .ui-button:hover { background: #695ea5!important;
+    border: 1px solid #695ea5!important;
+    }
+
 .breadcrumb{margin-bottom:20px;padding:6px 10px 4px;background:#fff; border-bottom:solid 1px #c1c7cd; border-radius:0px!important;}
 .breadcrumb .fa-home{font-size:20px;color:#695ea5;vertical-align: text-bottom}
-.breadcrumb label{font-weight:normal;color: #637282;}
+.breadcrumb label{font-weight:normal;color: #637282; text-decoration: none;}
 .breadcrumb img{vertical-align: text-bottom}
 .customcalenderdiv  .ui-calendar input {
     border-bottom-right-radius: 0!important;
@@ -833,7 +837,7 @@ padding-left:0px!important;
 .customdropdown-menutablealignment{right:0;left:auto}
 .yes{ background:#237ea7; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center; display:inline-block;}
 .no{background:#757777; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center;display:inline-block;}
-.modal.custommodel{overflow-x: visible!important;overflow-y: visible!important;}
+/*.modal.custommodel{overflow-x: visible!important;overflow-y: visible!important;}*/
 .marb5{ margin-bottom: 5px!important;}
 /*end*/
 .ngx-datatable .datatable-body .datatable-body-row > div{display: table!important}
@@ -1472,7 +1476,7 @@ button.toast-close-button {
     vertical-align: top;
 }
 .inlineblock{ display:inline-block!important;}
-.primeDateComponent button{ left:80%!important;}
+.primeDateComponent button{ left:85%!important;}
 .datatable-row-detail{ padding: 0px!important;}
 .ui-dropdown-panel .ui-dropdown-items-wrapper {
   /*  width: 150px;
@@ -1592,3 +1596,32 @@ button.toast-close-button {
     z-index: 9999!important;
 }
 .float_right{float:right;}
+
+.custom_selctdropdown .ui-state-default { border:solid 2px #e6e8eb; background:#fff; font:normal 14px/20px 'open_sansregular'; color:#524693; border-radius:4px; -web-border-radius:4px; -moz-border-radius:4px; padding:2px 10px 2px 5px;}
+
+.custom_selctdropdown .ui-dropdown .ui-dropdown-trigger { border:none!important;}
+.custom_selctdropdown .ui-dropdown .ui-dropdown-label {color:#524693;}
+.custom_selctdropdown .ui-dropdown .ui-dropdown-trigger .fa-caret-down:before {
+    content: "\f107";
+	font-family: 'FontAwesome';
+}
+
+.custom_selctdropdown2 .ui-state-default { background:#fff; border:solid 1px #e6e8eb; font:normal 14px/20px 'open_sansregular'; color:#524693; border-radius:4px; -web-border-radius:4px; -moz-border-radius:4px; padding:2px 10px 2px 5px;}
+
+.custom_selctdropdown2 .ui-dropdown .ui-dropdown-trigger { border:none!important;}
+.custom_selctdropdown2 .ui-dropdown .ui-dropdown-label {color:#524693;}
+.custom_selctdropdown2 .ui-dropdown .ui-dropdown-trigger .fa-caret-down:before {
+    content: "\f107";
+	font-family: 'FontAwesome';
+}
+
+.ui-chkbox-box.ui-state-active, .ui-radiobutton-box.ui-state-active {
+    background: #695ea5 none repeat scroll 0 0!important;
+    border: 1px solid #695ea5!important;
+    color: #ffffff;
+}
+
+
+
+
+

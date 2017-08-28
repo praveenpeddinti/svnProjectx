@@ -130,7 +130,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="createbut pull-right" data-backdrop="false" data-toggle="modal" data-target="#addBucketModel" (click)="createBucketObj.clearForm();">Create Bucket <i class="fa fa-plus ifontsize" aria-hidden="true"></i></div>
+                    <div class="createbut pull-right" data-backdrop="false" data-toggle="modal" data-target="#addBucketModel" (click)="createBucketObj.clearForm('');">Create Bucket <i class="fa fa-plus ifontsize" aria-hidden="true"></i></div>
                     <!--<div class="createbut pull-right">Create Bucket <i class="fa fa-plus ifontsize15" aria-hidden="true"></i></div>-->
                <div  *ngIf="projectId != undefined">
                     <app-create-bucket  Type="New" [projectId]="projectId" [projectName]="projectName"></app-create-bucket>
