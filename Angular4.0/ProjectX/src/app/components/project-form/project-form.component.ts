@@ -86,7 +86,7 @@ export class ProjectFormComponent implements OnInit {
               if(data.data!=false){
                 thisObj.projectId=data.data.PId;
                   // alert("------------"+JSON.stringify(thisObj.projectId));
-                 thisObj.description=data.data.Description;
+                 thisObj.description= '<p>'+data.data.Description+'</p>';
                  thisObj.projectLogo=data.data.ProjectLogo;
                  thisObj.setLogo=data.data.setLogo;
                 //  alert("------------"+JSON.stringify(thisObj.projectLogo));;
