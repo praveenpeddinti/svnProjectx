@@ -1031,6 +1031,7 @@ trait NotificationTrait {
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
+                $planType = $ticket_data["Fields"]["planlevel"]["value_name"];
                 $from_user = TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
 
                 $activityOn = $notification['ActivityOn'];
@@ -1166,7 +1167,7 @@ EOD;
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} replied:</td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
-                        $email_text['message'] = $fromUser . " replied to your comment in a story/task.";
+                        $email_text['message'] = $fromUser . " replied to your comment in a {$planType}.";
                     } else if ($notification['Notification_Type'] == "edit") {
                         //  error_log("replyyyyyyyyyyyyy-----------------------111111111111s");
                         $preposition = "";
@@ -1174,7 +1175,7 @@ EOD;
                         $type = Yii::$app->params['reply'];
 
                         $text_message = <<<EOD
-        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">A story/task comment has been edited by {$fromUser}:</td></tr>
+        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">A {$planType} comment has been edited by {$fromUser}:</td></tr>
         <tr><td height="10">&nbsp;</td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"><b>Comment before editing was:</b></td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['OldValue']}</td></tr>
@@ -1232,7 +1233,7 @@ EOD;
                         if ($oldValue != '') {
                             $dueDate = $oldValue . " to " . $newValue;
                             $text_message = <<<EOD
-             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">by {$fromUser} changed the Story/Task {$storyField['Title']} from {$dueDate}</td></tr>
+             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">by {$fromUser} changed the {$planType} {$storyField['Title']} from {$dueDate}</td></tr>
 EOD;
                             $user_activity = "duedate change";
                         } else {
@@ -1253,7 +1254,7 @@ EOD;
                         }
                         if($notification['ActivityOn']!="dod"){
                         $text_message = <<<EOD
-                        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} changed the Story/Task {$storyField['Title']} from {$ticketState}</td></tr>
+                        <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} changed the {$planType} {$storyField['Title']} from {$ticketState}</td></tr>
 EOD;
                         }
                         if ($notification['ActivityOn'] == "stakeholder") {
@@ -1485,7 +1486,7 @@ EOD;
                 $ticket_message = "<tr><td style='font-family:'Arial;font-size:18px;color:#0199e0; line-height:30px; font-weight:bold; padding-top:10px; padding-bottom:10px;'>" . $link_message . "</td></tr>";
                 $view_ticket_message = "<tr><td><a style='font-family:Arial;font-size:12px;line-height:40px;color:#0199e0; text-decoration:none;' href={$link}>View Activity</a></td></tr>
                                     </table></td><td width='15'>&nbsp;</td></tr></table> </td></tr>";
-                $activity = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333; padding-bottom:10px;padding-top:10px;' width='570'>by {$fromUser} changed the Story/Task:";
+                $activity = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333; padding-bottom:10px;padding-top:10px;' width='570'>by {$fromUser} changed the {$planType} :";
 
 
                 $notifiedCollaborators = $notification['NotifiedCollaborators'];
