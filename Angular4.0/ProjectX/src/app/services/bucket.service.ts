@@ -88,6 +88,12 @@ var post_data={
  
  }
 
+ /**
+  * @author:Ryan
+  * @description:Used for getting Buckets Counts with their Types
+  * @param projectId 
+  * @param totalBucketsCallback 
+  */
  getTotalBucketStats(projectId,totalBucketsCallback){
     var post_data={'projectId':projectId};
     this._ajaxService.AjaxSubscribe("bucket/get-total-bucket-stats",post_data,(data)=>
@@ -98,6 +104,12 @@ var post_data={
     });
  }
 
+ /**
+  * @author:Ryan
+  * @description:Used for getting Current Buckets 
+  * @param projectId 
+  * @param bucketsInfoCallback 
+  */
  getCurrentBucketsInfo(projectId,bucketsInfoCallback){
    var post_data={'projectId':projectId,type:2};
     this._ajaxService.AjaxSubscribe("bucket/get-buckets",post_data,(data)=>
@@ -106,6 +118,12 @@ var post_data={
     });
  }
 
+ /**
+  * @author:Ryan
+  * @description:Used for getting current week buckets
+  * @param projectId 
+  * @param currentWeekbucketsCallback 
+  */
  getCurrentWeekActiveBuckets(projectId,currentWeekbucketsCallback){
    var post_data={'projectId':projectId};
    this._ajaxService.AjaxSubscribe("bucket/get-current-week-buckets",post_data,(data)=>
@@ -113,6 +131,19 @@ var post_data={
          currentWeekbucketsCallback(data);
     });
  }
-  
 
+ /**
+  * @author:Ryan
+  * @description:used for getting other buckets 
+  * @param projectId 
+  * @param otherBucketsCallback 
+  */
+ getOtherBucketsInfo(projectId,otherBucketsCallback){
+  var post_data={'projectId':projectId};
+   this._ajaxService.AjaxSubscribe("bucket/get-other-buckets",post_data,(data)=>
+    {  
+         otherBucketsCallback(data);
+    }); 
+ }
+  
 }
