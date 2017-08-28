@@ -11,7 +11,7 @@ return [
     "comment"=>"has commented",
     "reply"=>"has replied to your comment on",
     "repliedOn"=>"has replied on",
-    "edit"=>"has edited comment",
+    "edit"=>"has edited a comment",
     "delete"=>"has deleted a comment",
     "addedyou"=>"added you as follower",
     "added"=>"has added",
