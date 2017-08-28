@@ -77,8 +77,8 @@
           class="activitycon">
           <span class="not_mention">
 {{activitydata.from}}
-</span> {{activitydata.type}} {{activitydata.ActivityOn}} from {{activitydata.OldValue}} to {{activitydata.NewValue}}
-          for <span class="not_mention"> #{{activitydata.TicketId}}  {{activitydata.Title | truncate :150  }} </span>
+</span> {{activitydata.type}} {{activitydata.ActivityOn}} from {{activitydata.OldValue | truncate :[150]}} to {{activitydata.NewValue | truncate :[150]}}
+          for <span class="not_mention"> #{{activitydata.TicketId}}  {{activitydata.Title | truncate :[30]  }} </span>
           <div class="not_date">{{activitydata.date | dateFormat:'hh:mm:ss A'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
 
@@ -88,7 +88,7 @@
           <span class="not_mention">
 {{activitydata.from}}
     </span> {{activitydata.type}} <span class="not_mention">{{activitydata.to}}</span> {{activitydata.OtherMessage}}
-          {{activitydata.Preposition}} &nbsp; <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title | truncate :150  }} </span>
+          {{activitydata.Preposition}} &nbsp; <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title | truncate :[30]  }} </span>
           <div class="not_date">{{activitydata.date | dateFormat:'hh:mm:ss A'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
 
@@ -97,7 +97,7 @@
           <span class="not_mention">
 {{activitydata.from}}
 </span> {{activitydata.type}} {{activitydata.ActivityOn}} {{activitydata.Preposition}} {{activitydata.NewValue}}
-          for <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title | truncate:150  }} </span>
+          for <span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title | truncate :[30]  }} </span>
           <div class="not_date">{{activitydata.date | dateFormat:'hh:mm:ss A'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
         <div [style]="{cursor:pointer}" (click)="goToTicket(activitydata.Project,activitydata.TicketId,activitydata.id.$oid,activitydata.Slug.$oid)"
@@ -105,7 +105,7 @@
           <span class="not_mention">
 {{activitydata.from}}
 </span> {{activitydata.type}} {{activitydata.ActivityOn}} {{activitydata.Preposition}} {{activitydata.NewValue}}
-          <span class="not_mention">#{{activitydata.TargetTicketId}} {{activitydata.TargetTicketTitle | truncate :150  }} </span>for <span class="not_mention"> #{{activitydata.TicketId}} {{activitydata.Title | truncate :150 }} </span>
+          <span class="not_mention">#{{activitydata.TargetTicketId}} {{activitydata.TargetTicketTitle | truncate :[30]  }} </span>for <span class="not_mention"> #{{activitydata.TicketId}} {{activitydata.Title | truncate :[30] }} </span>
           <div class="not_date">{{activitydata.date | dateFormat:'hh:mm:ss A'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
 
@@ -113,7 +113,7 @@
           *ngIf="activitydata.object=='mention'||activitydata.object=='comment' ||activitydata.object=='reply' " class="activitycon">
           <span class="not_mention">
 {{activitydata.from}}
-</span> {{activitydata.type}} <span class="not_mention">{{activitydata.ActivityOn}} </span> {{activitydata.Preposition}}&nbsp;<span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title | truncate :150 }} </span>
+</span> {{activitydata.type}} <span class="not_mention">{{activitydata.ActivityOn}} </span> {{activitydata.Preposition}}&nbsp;<span class="not_mention">#{{activitydata.TicketId}} {{activitydata.Title | truncate :[30] }} </span>
           <div class="not_date">{{activitydata.date | dateFormat:'hh:mm:ss A'}} -{{activitydata.Project.ProjectName}}</div>
         </div>
       </div>
