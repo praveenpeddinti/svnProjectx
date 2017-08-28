@@ -43,6 +43,8 @@ export class ProjectDashboardComponent implements OnInit {
   public dashboardData:any;
   public userInfoLength:any;
   public noMoreActivities:boolean = false;
+  public moreCount;
+  public otherBucketsContainer:any;
 
   public bucketStats={
     'Total':0,
@@ -122,13 +124,20 @@ export class ProjectDashboardComponent implements OnInit {
                   this.bucketService.getCurrentBucketsInfo(thisObj.projectId,(data)=>
                   {
                     console.log("==Current Buckets Data=="+JSON.stringify(data));
-                    this.currentBucketContainer=data.data.BucketInfo.Current;
-                    var currentBucketLength=this.currentBucketContainer.length;
+                    if(data.statusCode==200){
+                      if(data.data.BucketInfo!=null){
+                        this.currentBucketContainer=data.data.BucketInfo.Current;
+                      }
+                    }
+                    
                   });
                   this.bucketService.getCurrentWeekActiveBuckets(thisObj.projectId,(data)=>
                   {
                     console.log("==Current Week Buckets=="+JSON.stringify(data));
-                    this.currentWeekBucketContainer=data.data;
+                    if(data.statusCode==200){
+                      this.currentWeekBucketContainer=data.data;
+                      this.moreCount=data.totalCount;
+                    }
                   });
                   
             });
@@ -184,7 +193,7 @@ export class ProjectDashboardComponent implements OnInit {
                     //  alert("121212"); 
                          this.noMoreActivities = false;     
                             this.dashboardData = result.data;
-                            console.log("Onload__activity__"+JSON.stringify(this.dashboardData.activities))
+                            //console.log("Onload__activity__"+JSON.stringify(this.dashboardData.activities))
                             var curActLength = this.dashboardData.activities.length;
                               if(this.dashboardData.activities.length==0){
                                   this.noActivitiesFound=true;
@@ -193,11 +202,11 @@ export class ProjectDashboardComponent implements OnInit {
                     }else{
                       var curActLength = this.dashboardData.activities.length;
                         if (result.data.activities.length > 0) {
-                          console.log("Total__Activity"+JSON.stringify(result.data.activities));
-                          console.log(this.dashboardData.activities[curActLength - 1].activityDate +"==77777777777777777777===="+ result.data.activities[0].activityDate)
+                          //console.log("Total__Activity"+JSON.stringify(result.data.activities));
+                          //console.log(this.dashboardData.activities[curActLength - 1].activityDate +"==77777777777777777777===="+ result.data.activities[0].activityDate)
                           if (this.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
                             this.dashboardData.activities[curActLength - 1].activityData = this.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
-                            console.log("After__Concat"+JSON.stringify(this.dashboardData.activities));
+                           // console.log("After__Concat"+JSON.stringify(this.dashboardData.activities));
                             // // console.log("@@-44-"+JSON.stringify(this.dashboardData.activities[curActLength - 1].activityData));
                             result.data.activities .splice(0, 1);
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
@@ -236,5 +245,16 @@ export class ProjectDashboardComponent implements OnInit {
     this.description=val;
   }
   
+  /**
+   * @author:Ryan
+   * @description:Used for getting other buckets
+   */
+  getOtherBuckets(){
+    this.bucketService.getOtherBucketsInfo(this.projectId,(data)=>
+    {
+      console.log("==Other buckets data=="+JSON.stringify(data));
+      this.otherBucketsContainer=data.data;
+    })
+  }
  
 }
