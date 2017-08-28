@@ -383,7 +383,7 @@ class EventCollection extends ActiveRecord
         try{
             $count=0;
             $weekFirstDay = date("Y-m-d H:i:s", strtotime('last monday', strtotime('tomorrow'))); 
-            $matchArray = array("ProjectId" => (int) $projectId,'CreatedOn'=>array('$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000)));
+            $matchArray = array("ProjectId" => (int) $projectId,'CreatedOn'=>array('$lt' =>new \MongoDB\BSON\UTCDateTime(strtotime($weekFirstDay)*1000)));
             $pipeline = array(
                        // array('$unwind' => '$TimeLog'),
                         array('$match' => $matchArray),
@@ -398,12 +398,7 @@ class EventCollection extends ActiveRecord
                     );
             $query = Yii::$app->mongodb->getCollection('EventCollection');
             $otherBuckets=$query->aggregate($pipeline);
-            if($isData==0){ 
-            error_log("other count==".count($otherBuckets));
-                return count($otherBuckets);
-            }else{
-                return $otherBuckets;
-            }
+            return $otherBuckets;
             
         } catch (\Throwable $ex) {
             Yii::error("EventCollection:getOtherBucketsCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
