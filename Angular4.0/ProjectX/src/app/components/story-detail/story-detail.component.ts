@@ -229,7 +229,7 @@ getArtifacts(obj){
     
     //added by Ryan for summernote
     this.editor.initialize_editor('detailEditor',null,this);
-     jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
+     jQuery("#detailEditor").summernote('code','<p>'+this.ticketEditableDesc+'</p>');
     //  alert("here");
     //  jQuery("#detailEditor").summernote('code',jQuery("#detailEditor").html());
     this.showDescEditor = false;
@@ -246,7 +246,7 @@ getArtifacts(obj){
       console.log("==in submit desc=="+editorData);
       //var editorData=this.form['description'];
       var editorDesc=jQuery(editorData).text().trim();
-
+ 
           if(editorDesc != ""){
           this.descError = "";
         
@@ -254,7 +254,7 @@ getArtifacts(obj){
         var postEditedText={
           isLeftColumn:0,
           id:'Description',
-          value:editorDesc,
+          value:editorData,
           ticketId:this.ticketId,
           projectId:this.projectId,
           editedId:'desc'
