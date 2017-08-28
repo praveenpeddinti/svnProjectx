@@ -12,6 +12,7 @@ export class StateChartComponent implements OnInit {
   public pieChartLabels:string[]=[];
   public pieChartData:number[] = [300, 500, 100];
   public pieChartType:string = 'pie';
+  public barChartOptions:any = {legend: {position: 'right'}};
   @Input('stateCount') stateCount:any={};
   @Input('index') index;
   constructor(private shared:SharedService) { }
@@ -23,7 +24,7 @@ export class StateChartComponent implements OnInit {
   //  });
   var key=Object.keys(this.stateCount);
   this.pieChartLabels=key;
-  this.pieChartData=[this.stateCount.New,this.stateCount.Paused,this.stateCount.Waiting,this.stateCount.Reopened,this.stateCount.Closed];
+  this.pieChartData=[this.stateCount.New,this.stateCount.Paused,this.stateCount.InProgress,this.stateCount.Waiting,this.stateCount.Reopened,this.stateCount.Closed];
   }
   ngAfterViewInit(){
    
