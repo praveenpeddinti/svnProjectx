@@ -942,7 +942,7 @@ trait NotificationTrait {
                             $oldValue = $datetime->format('M-d-Y');
                         }
 
-                        $preposition = $notification['Notification_Type'] == "set" ? "tokkkk" : "**";
+                        $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
                         error_log($storyFieldName."========+++++++++++++++=============".$notification['Notification_Type']);
 //                        $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params["{$notification['Notification_Type']}"], 'ActivityOn' => $storyFieldName, 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
                         $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'type' => Yii::$app->params[$storyFieldName], 'OldValue' => $oldValue, "NewValue" => $newValue, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'status' => $notification['Notification_Type'], 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
@@ -1508,7 +1508,7 @@ EOD;
                 $value = $collaborator['Email'];
                 $notified_user = $collaborator['UserName'];
                 $display_name = $collaborator['FirstName'] . " " . $collaborator['LastName'];
-                $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have {$title} kkkknew activity alert.</span></td></tr>";
+                $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>you have {$title} new activity alert.</span></td></tr>";
                 $text_message = $project_logo . $user_message . $ticket_message . $activity . $message . $view_ticket_message;
                 CommonUtility::sendEmail($mailingName, $resUser, $text_message, $subject);
             }
