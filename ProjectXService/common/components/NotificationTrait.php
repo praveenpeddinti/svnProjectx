@@ -1102,15 +1102,17 @@ trait NotificationTrait {
                     $preposition = "to";
                     //  $message=array('from'=>$from_user['UserName'],'object'=>"user",'type'=> Yii::$app->params['assignedTo'],'to'=>$to,'Title'=>$ticket_data['Title'],'TicketId'=>$notification['TicketId'],'date'=>$Date,'id'=>$notification['_id'],'PlanLevel'=>$planLevel,'Profile'=>$from_user['ProfilePicture'],"OtherMessage"=>Yii::$app->params['stakeholder'],"Preposition"=>$preposition);
                     $fieldName = "";
+                    echo "==---------$$$$$$$$$$$$------------------".$planType;
                     if ($activityOn != "assignedto") {
                         $fieldName = $storyField["Title"];
+                         // $user_activity=$planType."Stakeholder";
+                    }else{
+                        $user_activity=$planType."Assigned to";
                     }
-                    $fieldName = $fieldName == "" ? "" : "as a " . $fieldName;
+                     $fieldName = $fieldName == "" ? "" : "as a " . $fieldName;
                     $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">by {$fromUser} changed the {$storyField['Title']} from {$assigned_message}.</td></tr>
 EOD;
-                           //  $user_activity=$notification['ActivityOn'];
-        $user_activity="Assigned to";
                 }
 
 
@@ -1122,14 +1124,14 @@ EOD;
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser}:</td></tr>
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Total invested hours: {$workedHours}</td></tr>
 EOD;
-               $user_activity = $notification['ActivityOn'];
+               $user_activity = $planType.$notification['ActivityOn'];
              } else if ($activityOn == "Title") {
                     $description_message = $notification['OldValue'] . " to " . $notification['NewValue'];
                     $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Title: {$description_message} </td></tr>
 EOD;
-              $user_activity = $activityOn;
+              $user_activity = $planType.$activityOn;
              } else if ($activityOn == "Description") {
                     $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">A story description has been edited by {$fromUser}:</td></tr>
@@ -1139,7 +1141,7 @@ EOD;
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"><b>Description after editing was:</b></td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
-                 $user_activity = $activityOn;
+                 $user_activity = $planType.$activityOn;
         }
                 $commentAllowedArray = ["comment", "reply", "edit", "delete"];
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
@@ -1157,7 +1159,7 @@ EOD;
                 <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} added a new comment</td></tr>
    <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
-                        $user_activity = "Comment";
+                        $user_activity = $planType."Comment";
                     } else if ($notification['Notification_Type'] == "reply") {
                         $preposition = "";
                         $object = "reply";
@@ -1182,7 +1184,7 @@ EOD;
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"><b>Comment after editing was:</b></td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
-           $user_activity = "Comment edit";         
+           $user_activity = $planType."Comment edit";         
         
         } else if ($notification['Notification_Type'] == "delete") {
                         //  error_log("replyyyyyyyyyyyyy-----------------------111111111111s");
@@ -1194,7 +1196,7 @@ EOD;
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} deleted comment:</td></tr>
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
-          $user_activity = "Comment delete";              
+          $user_activity = $planType."Comment delete";              
         }
                 } else if ($notification['Notification_Type'] == "mention") {
                     $datetime = $notification['NotificationDate']->toDateTime();
@@ -1207,7 +1209,7 @@ EOD;
                 <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} mentioned you:</td></tr>
    <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
-                 $user_activity = "Mention";   
+                 $user_activity = $planType."Mention";   
    }
 
 
@@ -1235,12 +1237,12 @@ EOD;
                             $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">by {$fromUser} changed the {$planType} {$storyField['Title']} from {$dueDate}</td></tr>
 EOD;
-                            $user_activity = "duedate change";
+                            $user_activity = $planType."duedate change";
                         } else {
                             $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">by {$fromUser}  set the due date to {$newValue}</td></tr>
 EOD;
-                            $user_activity = "duedate";
+                            $user_activity = $planType."duedate";
                         }
                     } else if ($storyField['Type'] != 6) {
                         if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype" && $notification['ActivityOn'] != "dod") {
@@ -1258,11 +1260,11 @@ EOD;
 EOD;
                         }
                         if ($notification['ActivityOn'] == "stakeholder") {
-                            $user_activity = 'Stakeholder';
+                            $user_activity = $planType.'Stakeholder';
                         }
                         if($notification['ActivityOn']=="dod"){
                             if ($notification['OldValue'] != '' )
-                                      $user_activity = "dod edit";
+                                      $user_activity = $planType."dod edit";
                              $text_message = <<<EOD
                         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">DOD:{$ticketState}</td></tr>
 EOD;
@@ -1303,12 +1305,11 @@ EOD;
                             $text_message = <<<EOD
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;"> {$follower_message} </td></tr>
 EOD;
-                            $user_activity = $notification['Notification_Type'] . " follower";
+                            $user_activity = $planType.$notification['Notification_Type'] . " follower";
                         }
                         
-                        if($user_activity=="stakeholder")
-                            $user_activity="Stakeholder";
-                        echo $notification['Notification_Type'] . "+++++++++++++++1111111111111111++++" . $user_activity . "++++++++++=" . $notification['ActivityOn'];
+                        if($activityOn=="stakeholder")
+                            $user_activity=$planType."Stakeholder";
                         if ($notification['Notification_Type'] != "reply") {
                             $email_text = array('message' => Yii::$app->params[$user_activity]);
                         }
@@ -1363,6 +1364,7 @@ EOD;
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
+                $planType = $ticket_data["Fields"]["planlevel"]["value_name"];
                 $from_user = TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
                 $storyField = StoryFields::getFieldDetails($activityOn, "Field_Name");
                 $activityOnFieldType = $storyField["Type"];
