@@ -157,8 +157,7 @@
                   <div *ngIf="current.BucketStatus==2" class="status_current">Current</div>
                   <div class="row">
                       <div class="col-md-8">
-                         <div class="prodashboard_desc marb10">
-                             {{current.Description}}
+                         <div [innerHTML]="current.Description" class="prodashboard_desc marb10">
                              </div>
                       </div>
                       <div class="col-md-4">
@@ -214,8 +213,7 @@
                   <div class="status_backlog">Backlog</div>
                   <div class="clearfix">
                       
-                         <div class="prodashboard_desc marb10">
-                             {{currentWeekBucket.Description}}
+                         <div [innerHTML]="currentWeekBucket.Description" class="prodashboard_desc marb10">
                              </div>
                    
                           <div class="row marb10">
@@ -228,15 +226,15 @@
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Stories/Tasks</div>
-                             <div class="col-md-6 col-xs-6"><div class="but">50</div></div>
+                             <div class="col-md-6 col-xs-6"><div class="but">{{currentWeekBucket[0].TicketsCount}}</div></div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Total Story Points</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">90</div>
+                             <div class="col-md-6 col-xs-6 pro_bucketdetails">{{currentWeekBucket[0].StoryPoints}}</div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Worked Hours</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">30.00</div>
+                             <div class="col-md-6 col-xs-6 pro_bucketdetails">{{currentWeekBucket[0].WorkedHours}}</div>
                           </div>
                           </div>
                      
@@ -264,9 +262,9 @@
                 <div id="accordion" role="tablist" aria-multiselectable="true">
   <div class="">
     <div class="" role="tab" id="headingOne">
-      <div class="morebuckets">
+      <div class="morebuckets" (click)="getOtherBuckets()">
         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-           More <span>(2)</span><i class="fa pull-right" aria-hidden="true"></i>
+           More <span>({{moreCount}})</span><i class="fa pull-right" aria-hidden="true"></i>
         </a>
       </div>
     </div>
@@ -274,110 +272,53 @@
     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
        <div class="row">
                
-                   <div class="col-md-6">
+                   <div *ngFor="let otherBuckets of otherBucketsContainer" class="col-md-6">
                    <div class="marb20">
                        <div class="row">
                    <div class="col-md-6">
-                      <div class="but">Version_1</div>
+                      <div class="but">{{otherBuckets.Name}}</div>
                    </div>
                    <div class="col-md-6">
                       <div class="float_right">
-                         <img src="images/623-06124606n.jpg" class="userpic"/> Sreeni.jakka
+                         <img [src]="otherBuckets.ProfilePicture" class="userpic"/>{{otherBuckets.UserName}}
                       </div>
                    </div>
                </div>
                <div class="row devider1"></div>
                <div class="pro_bucketbg backlog_bg ">
-                  <div class="status_closed">Closed</div>
+                  <div *ngIf="otherBuckets.BucketStatus==1" class="status_backlog">Backlog</div>
+                  <div *ngIf="otherBuckets.BucketStatus==3" class="status_backlog">Completed</div>
+                  <div *ngIf="otherBuckets.BucketStatus==4" class="status_backlog">Closed</div>
                   <div class="clearfix">
                       
-                         <div class="prodashboard_desc marb10">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem 
-Ipsum has been the industry's standard dummy text A quick summary of the project 
-in terms of</div>
-                         <p>a. Current Bucket with emphasis<br/>
-b. Buckets that have activity currently<br/>
-c. Other Buckets with limited information in the above order of emphasis for</p>
+                         <div [innerHTML]="otherBuckets.Description" class="prodashboard_desc marb10"></div>
                    
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Start Date</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">Jul-25-2017</div>
+                             <div class="col-md-6 col-xs-6 pro_bucketdetails">{{otherBuckets.StartDate | dateFormat:'MMM-DD-YYYY'}}</div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">End Date</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">Jul-25-2017</div>
+                             <div class="col-md-6 col-xs-6 pro_bucketdetails">{{otherBuckets.EndDate | dateFormat:'MMM-DD-YYYY'}}</div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Stories/Tasks</div>
-                             <div class="col-md-6 col-xs-6"><div class="but">50</div></div>
+                             <div class="col-md-6 col-xs-6"><div class="but">{{otherBuckets[0].TicketsCount}}</div></div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Total Story Points</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">90</div>
+                             <div class="col-md-6 col-xs-6 pro_bucketdetails">{{otherBuckets[0].StoryPoints}}</div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Worked Hours</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">30.00</div>
+                             <div class="col-md-6 col-xs-6 pro_bucketdetails">{{otherBuckets[0].WorkedHours}}</div>
                           </div>
                           </div>
                      
                   </div>
                   </div>
                
-                   </div>
-                   
-                   
-                   <div class="col-md-6">
-                   <div class="marb20">
-                       <div class="row">
-                   <div class="col-md-6">
-                      <div class="but">Version_1</div>
-                   </div>
-                   <div class="col-md-6">
-                      <div class="float_right">
-                         <img src="images/623-06124606n.jpg" class="userpic"/> Sreeni.jakka
-                      </div>
-                   </div>
-               </div>
-               <div class="row devider1"></div>
-               <div class="pro_bucketbg backlog_bg ">
-                  <div class="status_complete">Complete</div>
-                  <div class="clearfix">
-                      
-                         <div class="prodashboard_desc marb10">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem 
-Ipsum has been the industry's standard dummy text A quick summary of the project 
-in terms of</div>
-                         <p>a. Current Bucket with emphasis<br/>
-b. Buckets that have activity currently<br/>
-c. Other Buckets with limited information in the above order of emphasis for</p>
-                   
-                          <div class="row marb10">
-                             <div class="col-md-6 col-xs-6">Start Date</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">Jul-25-2017</div>
-                          </div>
-                          <div class="row marb10">
-                             <div class="col-md-6 col-xs-6">End Date</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">Jul-25-2017</div>
-                          </div>
-                          <div class="row marb10">
-                             <div class="col-md-6 col-xs-6">Stories/Tasks</div>
-                             <div class="col-md-6 col-xs-6"><div class="but">50</div></div>
-                          </div>
-                          <div class="row marb10">
-                             <div class="col-md-6 col-xs-6">Total Story Points</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">90</div>
-                          </div>
-                          <div class="row marb10">
-                             <div class="col-md-6 col-xs-6">Worked Hours</div>
-                             <div class="col-md-6 col-xs-6 pro_bucketdetails">30.00</div>
-                          </div>
-                          </div>
-                     
-                  </div>
-                  </div>
-               
-                   </div>
-                   
-                   
+                   </div>                  
                </div>
     </div>
   </div></div>
