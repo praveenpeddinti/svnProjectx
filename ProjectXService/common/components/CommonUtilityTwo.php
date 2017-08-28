@@ -825,7 +825,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             unset($conditions['Followers.FollowerId']);
             $conditions['Fields.assignedto.value'] = (int) $userId;
             $assigned = $collection->count($conditions);
-            $topTickets = array("id" => 12,'type'=>'individual', "name" => 'My due stories/tasks for current week', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
+            $topTickets = array("id" => 12,'type'=>'individual', "name" => 'My current week due stories/tasks', 'total' => $total, 'assigned' => $assigned, 'followed' => $followed);
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
             }
