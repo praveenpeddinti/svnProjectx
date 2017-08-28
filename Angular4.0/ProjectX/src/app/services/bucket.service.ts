@@ -68,11 +68,12 @@ var post_data={
  
  }
  
- updateBucket(projectId,bucketData,bucketRole,updateBucketCallback){ 
+ updateBucket(projectId,bucketId,bucketData,updateBucketCallback){ 
 var post_data={
       'projectId':projectId,
       'data':bucketData,
-      'bucketRole':bucketRole,
+      'bucketId':bucketId
+      // 'bucketStatus':bucketStatus,
      
     }
     post_data.data.title = post_data.data.title.trim();
