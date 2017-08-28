@@ -29,6 +29,7 @@ export class CreateUserComponent implements OnInit {
   public fileExtention:any;
   public fileUploadStatus:boolean = false;
  public userProfileImage:string;
+ public isValidFile:boolean=true;
   @Output() myevent=new EventEmitter();
 public inviteCode;
 
@@ -44,7 +45,6 @@ public inviteCode;
       params => 
       { 
          thisObj.inviteCode=params['code'];
-     
         this.projectService.getUserDetails( thisObj.inviteCode,(data)=>{
           if(data.statusCode==200){
             if(data.data == "invalidCode"){
@@ -65,7 +65,7 @@ public inviteCode;
 
 
     saveUser()
-    {
+    {     
       if(this.form['password'] ==this.form['confirmpassword']){
         this.isPasswordMatch=true;
       }else{
@@ -73,7 +73,7 @@ public inviteCode;
          jQuery("#mismatch_error").show(); //used jquery since Password mismatch validation doesn't sync with Form Inbuilt Validation
       }
 
-      if(this.isPasswordMatch)
+      if(this.isPasswordMatch && this.isValidFile)
       {
         // Make an ajax to save the User
         //this.projectImage=jQuery('#projectlogo').attr("src");
@@ -132,10 +132,15 @@ public inviteCode;
                 
                   this.form["originalImageName"] = result[i].originalname;
                    
-                  //  result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
-                  //   var uploadedFileExtension = (result[i].originalname).split('.').pop();
-                  //    if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                  //      var postData={
+                   result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
+                    var uploadedFileExtension = (result[i].originalname).split('.').pop();
+                     if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") 
+                     {
+                        this.isValidFile=true;
+                     }
+                     else{
+                       this.isValidFile=false;
+                       }//      var postData={
                   //             logoName:"[[image:" +result[i].path + "|" + result[i].originalname + "]]"
                   //           }
                   //         this._ajaxService.AjaxSubscribe("site/get-project-image",postData,(result)=>

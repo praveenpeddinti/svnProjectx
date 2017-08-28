@@ -23,6 +23,7 @@
             </div>
             <input  type="file" id="my_file" style="display: none;" (change)="fileUpload($event, 'fileChange')"/>
             </div>
+             <div [hidden]="isValidFile" id="fileuploadMessage"  class="fielderror">Invalid file format</div>
   </div>
          <div style="clear: both;">
           <label class="loginformlabel"> First Name </label>
@@ -51,9 +52,9 @@
                       </div>
                     </div>
                   <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
+
        
 
-           
             <label class="loginformlabel" for="email">Email</label>
             <input [(ngModel)]="form.email" disabled="disabled" id="email" type="text" class="form-control customfield" 
                         name="email" #email="ngModel">        
