@@ -329,7 +329,7 @@ export class StoryEditComponent implements OnInit
            return ;
         }
     }
-      edit_data.description= desc;
+      edit_data.description= jQuery("#description").summernote('code');
       edit_data.default_task=[];
       if(this.defaultTasksShow){
       var selectedTask=[];
