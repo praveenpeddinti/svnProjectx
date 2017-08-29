@@ -40,8 +40,8 @@ return [
             'storyAssigned to' => 'A story assigned to was changed.',
             'taskAssigned to' => 'A task assigned to was changed.',
     
-            'storyStakeholder' => 'A stakeholder in a story was changed.',
-            'taskStakeholder' => 'A stakeholder in a task was changed.',
+            'storystakeholder' => 'A stakeholder in a story was changed.',
+            'taskstakeholder' => 'A stakeholder in a task was changed.',
     
             //'Stakeholder' => 'A stakeholder in a story/task was changed.',
             'storyduedate'=>'A story due date was set.',
