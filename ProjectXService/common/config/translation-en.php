@@ -30,6 +30,7 @@ return [
     "created" => "has created",
     "related" => "has related",
     "unrelated" => "has unrelated",
+    'TotalTimeLog'=>'has changed',
     //"TimeLogChanged"=>"has changed",
     
              /*  EmailNotification Messages*/
@@ -69,6 +70,7 @@ return [
               'taskMention'=>'You were mentioned in a task.',
     
           //  'Removing User'=>'',
+      
             'storyTotalTimeLog'=>'A timelog was added in a story.',
              'taskTotalTimeLog'=>'A timelog was added in a task.',
     
