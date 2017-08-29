@@ -430,6 +430,7 @@ footer{font-size:12px}
 .commedit{  float:left; margin-left:10px; width:28px; height:28px; margin-bottom: 10px;}
 .commentp img{ max-width:100%; margin-bottom: 20px;}
 /*.commentp p img{width:200px; height: 100px; margin-right: 15px;}*/
+
 .comment_reply{
 	position: relative;
 	background: #ebebeb;
@@ -466,6 +467,9 @@ footer{font-size:12px}
     overflow: hidden;
     float:left;
 }
+
+/*.comment_reply .commentedtext p:first-child{display:none!important;}*/
+.comment_reply .commentedtext p br:first-child{ display:none!important;}
 
 .comment_reply .commentedtext img, video{height: 70px;
     margin-right: 20px;
@@ -646,6 +650,8 @@ color: #0199e0;
   overflow: hidden;  
   height:63px;
 }
+#replySnippetContent .replySnippet p br:first-child{ display:none!important;}
+#replySnippetContent .replySnippet p:first-child{height:auto!important;}
 
 /*#replySnippetContent .replySnippet p::after {
   content: "";
@@ -720,6 +726,8 @@ padding-left:0px!important;
 .breadcrumb .fa-home{font-size:20px;color:#695ea5;vertical-align: text-bottom}
 .breadcrumb label{font-weight:normal;color: #637282; text-decoration: none;}
 .breadcrumb img{vertical-align: text-bottom}
+.breadcrumb li a{text-decoration: none;color: #695ea5;}
+.breadcrumb li a:hover{text-decoration: none;color: #695ea5;}
 .customcalenderdiv  .ui-calendar input {
     border-bottom-right-radius: 0!important;
      border-bottom-left-radius: 0!important;
