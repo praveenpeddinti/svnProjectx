@@ -33,73 +33,73 @@ return [
     //"TimeLogChanged"=>"has changed",
     
              /*  EmailNotification Messages*/
-            'Storytickettype' => 'A story type was changed.',
-            'Tasktickettype' => 'A task type was changed.',
+            'storytickettype' => 'A story type was changed.',
+            'tasktickettype' => 'A task type was changed.',
     
-            'StoryAssigned to' => 'A story assigned to was changed.',
-            'TaskAssigned to' => 'A task assigned to was changed.',
+            'storyAssigned to' => 'A story assigned to was changed.',
+            'taskAssigned to' => 'A task assigned to was changed.',
     
-            'StoryStakeholder' => 'A stakeholder in a story was changed.',
-            'TaskStakeholder' => 'A stakeholder in a task was changed.',
+            'storyStakeholder' => 'A stakeholder in a story was changed.',
+            'taskStakeholder' => 'A stakeholder in a task was changed.',
     
             //'Stakeholder' => 'A stakeholder in a story/task was changed.',
-            'Storyduedate'=>'A task due date was set.',
-            'Taskduedate'=>'A story due date was set.',
+            'storyduedate'=>'A story due date was set.',
+            'taskduedate'=>'A task due date was set.',
 
-            'Storyduedate change'=>'A story due date was changed.',
-    'Taskduedate change'=>'A task due date was changed.',
+            'storyduedate change'=>'A story due date was changed.',
+    'taskduedate change'=>'A task due date was changed.',
     
-            'StoryComment'=>'A comment was added to a story.',
-     'TaskComment'=>'A comment was added to a task.',
+            'storyComment'=>'A comment was added to a story.',
+     'taskComment'=>'A comment was added to a task.',
     
-            'StoryComment edit'=>'A comment was edited in a story.',
-      'TaskComment edit'=>'A comment was edited in a task.',
+            'storyComment edit'=>'A comment was edited in a story.',
+      'taskComment edit'=>'A comment was edited in a task.',
     
-            'StoryComment delete'=>'A comment was deleted in a story.',
-    'TaskComment delete'=>'A comment was deleted in a task.',
+            'storyComment delete'=>'A comment was deleted in a story.',
+    'taskComment delete'=>'A comment was deleted in a task.',
            // 'Comment Reply'=>'Sreeni Jakka replied to your comment in a story/task.',
-            'Storyadded follower'=>'A follower was added in a story.',
-      'Taskadded follower'=>'A follower was added in a task.',
+            'storyadded follower'=>'A follower was added in a story.',
+      'taskadded follower'=>'A follower was added in a task.',
     
-           'Storyremoved follower'=>'A follower was removed in a story.',
-     'Taskremoved follower'=>'A follower was removed in a task.',
+           'storyremoved follower'=>'A follower was removed in a story.',
+     'taskremoved follower'=>'A follower was removed in a task.',
     
     
-            'StoryMention'=>'You were mentioned in a story.',
-              'TaskMention'=>'You were mentioned in a task.',
+            'storyMention'=>'You were mentioned in a story.',
+              'taskMention'=>'You were mentioned in a task.',
     
           //  'Removing User'=>'',
-            'StoryTotalTimeLog'=>'A timelog was added in a story.',
-             'TaskTotalTimeLog'=>'A timelog was added in a task.',
+            'storyTotalTimeLog'=>'A timelog was added in a story.',
+             'taskTotalTimeLog'=>'A timelog was added in a task.',
     
-            'StoryTitle'=>'The title of a story was edited.',
-            'TaskTitle'=>'The title of a task was edited.',
+            'storyTitle'=>'The title of a story was edited.',
+            'taskTitle'=>'The title of a task was edited.',
     
-            'StoryDescription'=>'A story description was edited.',
-             'TaskDescription'=>'A story/task description was edited.',
+            'storyDescription'=>'A story description was edited.',
+             'taskDescription'=>'A story/task description was edited.',
     
-            'Storyworkflow'=>'The status in a story was changed.',
-             'Taskworkflow'=>'The status in a task was changed.',
+            'storyworkflow'=>'The status in a story was changed.',
+             'taskworkflow'=>'The status in a task was changed.',
     
-            'Storypriority'=>'The priority in a story was changed.',
-             'Taskpriority'=>'The priority in a task was changed.',
+            'storypriority'=>'The priority in a story was changed.',
+             'taskpriority'=>'The priority in a task was changed.',
     
             'story/task creation'=>'A new story/tasK was created.',
-           //'Taskstory/task creation'=>'A new story/task was created.',
+           //'taskstory/task creation'=>'A new story/task was created.',
 
-            'Storybucket'=>'A bucket in a story has been changed.',
-             'Taskbucket'=>'A bucket in a task has been changed.',
+            'storybucket'=>'A bucket in a story has been changed.',
+             'taskbucket'=>'A bucket in a task has been changed.',
           //   'Relate'=>'',
           //  'Unrelate'=>'',
            // 'New task inside a story '=>'',
-            'Storyestimatedpoints'=>'The estimated story points were changed/added in a story.',
-           'Taskestimatedpoints'=>'The estimated story points were changed/added in a task.',
+            'storyestimatedpoints'=>'The estimated story points were changed/added in a story.',
+           'taskestimatedpoints'=>'The estimated story points were changed/added in a task.',
     
-            'Storydod'=>'DoD in a story was changed.',
-             'Taskdod'=>'DoD in a task was changed.',
+            'storydod'=>'DoD in a story was changed.',
+             'taskdod'=>'DoD in a task was changed.',
     
-            'Storydod edit'=>'DoD in a story was edited.',
-            'Taskdod edit'=>'DoD in a task was edited.',
+            'storydod edit'=>'DoD in a story was edited.',
+            'taskdod edit'=>'DoD in a task was edited.',
   
   
     
