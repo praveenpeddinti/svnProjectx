@@ -28,7 +28,7 @@
          <div style="clear: both;">
           <label class="loginformlabel"> First Name </label>
           
-              <input class="invitesearch borderradius_none" type="text" pInputText [(ngModel)]="form.firstName" name="firstName"  #firstName="ngModel" placeholder="First Name" minlength="3" required/>
+              <input class="invitesearch borderradius_none" type="text" pInputText [(ngModel)]="form.firstName" name="firstName"  #firstName="ngModel" placeholder="First Name" minlength="3" (focusout)="prepareDisplayName()" required/>
                   <div *ngIf="submitted && firstName.errors " class="fielderror">
                       <div [hidden]="!firstName.errors.required">
                           First name is required
@@ -42,7 +42,7 @@
 
     
           <label class="loginformlabel"> Last Name </label>
-              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.lastName" name="lastName"  #lastName="ngModel" placeholder="Last Name" minlength="3" required/>
+              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.lastName" name="lastName"  #lastName="ngModel" placeholder="Last Name" minlength="3" (focusout)="prepareDisplayName()" required/>
                   <div *ngIf="submitted && lastName.errors " class="fielderror">
                       <div [hidden]="!lastName.errors.required">
                           Last name is required
@@ -52,7 +52,19 @@
                       </div>
                     </div>
                   <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
-
+           <label class="loginformlabel"> Display Name </label>
+              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.displayName" name="displayName"  #displayName="ngModel" placeholder="Display Name" minlength="3" pattern="[a-zA-Z0-9_.]*" required/>
+                  <div *ngIf="submitted && displayName.errors " class="fielderror">
+                      <div [hidden]="!displayName.errors.required">
+                          Display name is required
+                      </div>
+                      <div *ngIf = "(!displayName.errors.minlength && displayName.errors.pattern) || displayName.errors.pattern">
+                                  Special characters are not allowed.
+                      </div>
+                       <div *ngIf ="!displayName.errors.pattern && displayName.errors.minlength">               
+                                Display name must be at least 3 characters long.
+                      </div>
+                    </div>
        
 
             <label class="loginformlabel" for="email">Email</label>

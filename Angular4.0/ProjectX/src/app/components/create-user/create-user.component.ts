@@ -63,9 +63,12 @@ public inviteCode;
       })
   }
 
-
+public prepareDisplayName(){
+  if((this.form['firstName']!='' && this.form['firstName']!=undefined) && (this.form['lastName']!='' && this.form['lastName']!=undefined))
+  this.form['displayName']=this.form['firstName']+this.form['lastName'];
+}
     saveUser()
-    {     
+    {    
       if(this.form['password'] ==this.form['confirmpassword']){
         this.isPasswordMatch=true;
       }else{
