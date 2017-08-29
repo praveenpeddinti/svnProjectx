@@ -1106,7 +1106,7 @@ trait NotificationTrait {
                     echo "==---------$$$$$$$$$$$$------------------".$planType;
                     if ($activityOn != "assignedto") {
                         $fieldName = $storyField["Title"];
-                         // $user_activity=$planType."Stakeholder";
+                          $user_activity=$planType.$activityOn;
                     }else{
                         $user_activity=$planType."Assigned to";
                     }
@@ -1246,6 +1246,7 @@ EOD;
                             $user_activity = $planType."duedate";
                         }
                     } else if ($storyField['Type'] != 6) {
+                        echo "=======p=======r=======i========o===========r=======i============t=======yy=======".$notification['ActivityOn'];
                         if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype" && $notification['ActivityOn'] != "dod") {
                             $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
                             $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
@@ -1256,12 +1257,10 @@ EOD;
                             $ticketState = $notification['OldValue'] . " => " . $notification['NewValue'];
                         }
                         if($notification['ActivityOn']!="dod"){
+                         $user_activity = $planType.$notification['ActivityOn'];
                         $text_message = <<<EOD
                         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} changed the {$planType} {$storyField['Title']} from {$ticketState}</td></tr>
 EOD;
-                        }
-                        if ($notification['ActivityOn'] == "stakeholder") {
-                            $user_activity = $planType.'Stakeholder';
                         }
                         if($notification['ActivityOn']=="dod"){
                             if ($notification['OldValue'] != '' )
@@ -1308,9 +1307,6 @@ EOD;
 EOD;
                             $user_activity = $planType.$notification['Notification_Type'] . " follower";
                         }
-                        
-                        if($activityOn=="stakeholder")
-                            $user_activity=$planType."Stakeholder";
                         if ($notification['Notification_Type'] != "reply") {
                             $email_text = array('message' => Yii::$app->params[$user_activity]);
                         }
@@ -1365,7 +1361,7 @@ EOD;
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
-                $planType = $ticket_data["Fields"]["planlevel"]["value_name"];
+                $planType = strtolower($ticket_data["Fields"]["planlevel"]["value_name"]);
                 $from_user = TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
                 $storyField = StoryFields::getFieldDetails($activityOn, "Field_Name");
                 $activityOnFieldType = $storyField["Type"];
