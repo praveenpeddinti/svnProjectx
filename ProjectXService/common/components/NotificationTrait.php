@@ -774,6 +774,7 @@ trait NotificationTrait {
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
+              //  $planType = strtolower($ticket_data["Fields"]["planlevel"]["value_name"]);
                 $from_user = TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
 
                 $projectDetails = $projectObj->getProjectMiniDetails($notification["ProjectId"]);
@@ -903,7 +904,7 @@ trait NotificationTrait {
                     $Date = $datetime->format('Y-m-d H:i:s');
                     $collaborator = new Collaborators();
                     $selectfields = ['Title', 'TicketId', 'Fields.planlevel'];
-                   // $preposition = "on";
+                    $preposition = "on";
                     if ($notification['Notification_Type'] == 'mention') {
 
                         if ($notification['NotifiedUser'] == $user) {
@@ -911,7 +912,7 @@ trait NotificationTrait {
                             //     moin.hussain mentioned you in a reply
                             //     moin.hussain mentined you on Ticket #33
                             $notification['NotifiedUser'] = 'you';
-                            $message = array('onlyDate' => $dateOnly, 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "mention", 'type' => Yii::$app->params['mention'], 'id' => $notification['_id'], 'Slug' => $notification['CommentSlug'], 'ActivityOn' => $notification['NotifiedUser'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture']);
+                            $message = array('onlyDate' => $dateOnly, 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "mention", 'type' => Yii::$app->params['mention'], 'id' => $notification['_id'], 'Slug' => $notification['CommentSlug'], 'ActivityOn' => $notification['NotifiedUser'], 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'],"Preposition" => $preposition);
                             array_push($result_msg, $message);
                         }
                     }
@@ -1031,7 +1032,7 @@ trait NotificationTrait {
                 $ticket_data = TicketCollection::getTicketDetails($notification['TicketId'], $projectId, $selectfields);
                 $ticket_msg = 'to' . ' ' . '#' . $notification['TicketId'] . ' ' . $ticket_data['Title'];
                 $planLevel = $ticket_data["Fields"]["planlevel"]["value"];
-                $planType = $ticket_data["Fields"]["planlevel"]["value_name"];
+                $planType = strtolower($ticket_data["Fields"]["planlevel"]["value_name"]);
                 $from_user = TinyUserCollection::getMiniUserDetails($notification['ActivityFrom']);
 
                 $activityOn = $notification['ActivityOn'];
@@ -1235,7 +1236,7 @@ EOD;
                         if ($oldValue != '') {
                             $dueDate = $oldValue . " to " . $newValue;
                             $text_message = <<<EOD
-             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">by {$fromUser} changed the {$planType} {$storyField['Title']} from {$dueDate}</td></tr>
+             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">by {$fromUser} changed the {$planType} due date from {$dueDate}</td></tr>
 EOD;
                             $user_activity = $planType."duedate change";
                         } else {
