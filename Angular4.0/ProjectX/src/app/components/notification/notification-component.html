@@ -68,7 +68,7 @@
 </div>
 </div>
 </li>
-<li class="notificationlist_all" *ngIf="nomorenotifications" id="notificationMessage">
+<li class="notificationlist_all" *ngIf="allNotification.length!=0 && nomorenotifications" id="notificationMessage">
      <div class="notificationdiv nonotification">No more notifications</div>
 </li> 
 </ul>

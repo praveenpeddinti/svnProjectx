@@ -1507,7 +1507,7 @@ button.toast-close-button {
       z-index: 9999!important;
 
 }
-
+.nonotification{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #695ea5 }
 .modal-content{background:#fff;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
 .modal-header{background:#f7f9fa; border-bottom:solid 1px #e6e8eb; color:#695ea5; font:normal 16px/24px 'open_sansregular';}
 .model_submit{ background:#695ea5;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; text-transform:uppercase;}
