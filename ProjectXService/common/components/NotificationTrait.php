@@ -1253,7 +1253,6 @@ EOD;
                             $user_activity = "duedate";
                         }
                     } else if ($storyField['Type'] != 6) {
-                        echo "=======p=======r=======i========o===========r=======i============t=======yy=======".$notification['ActivityOn'];
                         if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype" && $notification['ActivityOn'] != "dod") {
                             $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
                             $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
@@ -1271,6 +1270,8 @@ EOD;
                         if($notification['ActivityOn']=="dod"){
                             if ($notification['OldValue'] != '' )
                                       $user_activity ="dod edit";
+                            else
+                                $user_activity ="dod";
                              $text_message = <<<EOD
                         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">DOD:{$ticketState}</td></tr>
 EOD;
@@ -1314,7 +1315,8 @@ EOD;
                             $user_activity = $notification['Notification_Type'] . " follower";
                         }
                         if ($notification['Notification_Type'] != "reply") {
-                            $email_text = array('message' => Yii::t('app',$user_activity.$planType));
+                            $email_text = array('message' => Yii::t('app',$user_activity.', {planType}',["planType"=>$planType]));
+                            echo "========22222222222222222=============".$email_text['message'];
                         }
                         $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>{$email_text['message']}</span></td></tr>";
 
