@@ -1127,10 +1127,9 @@ EOD;
 EOD;
                $user_activity = $planType.$notification['ActivityOn'];
              } else if ($activityOn == "Title") {
-                    $description_message = $notification['OldValue'] . " to " . $notification['NewValue'];
+                    $description_message = '"'.$notification['OldValue'] .'"'. " to " .'"'. $notification['NewValue'].'"';
                     $text_message = <<<EOD
-             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Activity by {$fromUser}:</td></tr>
-             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">Title: {$description_message} </td></tr>
+             <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$fromUser} edited the title from {$description_message} </td></tr>
 EOD;
               $user_activity = $planType.$activityOn;
              } else if ($activityOn == "Description") {
@@ -1252,7 +1251,6 @@ EOD;
                             $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
                         }
                         $ticketState = $notification['NewValue'];
-                        //$user_activity=$notification['ActivityOn'];
                         if ($notification['OldValue'] != '' ) {
                             $ticketState = $notification['OldValue'] . " => " . $notification['NewValue'];
                         }
@@ -1376,7 +1374,7 @@ EOD;
                 // echo $notification['EmailNotification']."===============GGGGGGGGGGGGGGGGG====================".$notification['ActivityOn'];
 
                 if ($activityOn == "Title") {
-                    $description_message = $notification['OldValue'] . " to " . $notification['NewValue'];
+                    $description_message = '"'.$notification['OldValue'] .'"'. " to " . '"'.$notification['NewValue'].'"';
                     $text_message = <<<EOD
              <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;padding-top:10px;">Title: {$description_message}</td></tr>
 EOD;
