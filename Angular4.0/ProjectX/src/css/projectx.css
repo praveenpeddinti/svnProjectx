@@ -847,6 +847,7 @@ padding-left:0px!important;
 .no{background:#757777; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center;display:inline-block;}
 /*.modal.custommodel{overflow-x: visible!important;overflow-y: visible!important;}*/
 .marb5{ margin-bottom: 5px!important;}
+.marb20{ margin-bottom:20px;}
 /*end*/
 .ngx-datatable .datatable-body .datatable-body-row > div{display: table!important}
 .assignedto{margin: 0 0 0 16px}
@@ -1580,6 +1581,7 @@ button.toast-close-button {
 .green_color{ color:#02b62f;}
 .blue_color{ color:#1468e6;}
 .red_color{ color:#ff0000;}
+.purple_color{ color:#695ea5;}
 
 .no_record_found{text-align: center;font-size: 13px;font-weight: 600;text-align: center;color: #695ea5;margin-left: 45%; }
 
@@ -1621,7 +1623,13 @@ button.toast-close-button {
 .custom_selctdropdown2 .ui-dropdown .ui-dropdown-trigger .fa-caret-down:before {
     content: "\f107";
 	font-family: 'FontAwesome';
+    margin-top: 5px;
 }
+
+.custom_selctdropdown2 .ui-inputtext:focus { box-shadow:none!important; outline: none!important; border: none!important;}
+.custom_selctdropdown2 .ui-inputtext:hover { box-shadow:none!important; outline: none!important; border: none!important;}
+
+.custom_selctdropdown2 .ui-helper-hidden-accessible .ui-inputtext:focus { box-shadow:0!important; outline: none!important; border: none!important;}
 
 .ui-chkbox-box.ui-state-active, .ui-radiobutton-box.ui-state-active {
     background: #695ea5 none repeat scroll 0 0!important;
