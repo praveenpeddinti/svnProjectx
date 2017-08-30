@@ -6,7 +6,7 @@ body{ color:#637282;font:normal 14px/20px 'open_sansregular';}
 .devider1{ width:100%; height:1px; background:#e6e8eb; margin:5px 0px;}
 .heading{ font:normal 24px/30px 'open_sansregular'; color:#032632;}
 .heading2{font:normal 16px/25px 'open_sansregular'; color:#524693;}
-.but{ background:#a7b4d3; display:inline-block; color:#fff; font:normal 14px/20px 'open_sansregular';padding:3px 7px;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; }
+.but{ background:#758cc4; display:inline-block; color:#fff; font:normal 14px/20px 'open_sansregular';padding:3px 7px;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; }
 .but a{ color:#fff; text-decoration:none;}
 .but a:hover{ color:#58637e;}
 .boxbg{ background:#f7f9fa; width:100%; clear:both; margin-top:5px; margin-bottom:10px; padding:5px 0px;}
