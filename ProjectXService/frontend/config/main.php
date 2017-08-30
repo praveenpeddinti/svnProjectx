@@ -8,11 +8,29 @@ $params = array_merge(
 );
 
 return [
+      'language' => 'en',
+    'sourceLanguage' => 'en',
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+        
+       'i18n' => [
+        'translations' => [
+            'app*' => [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'basePath' => __DIR__ . '/../../common/messages',
+               // 'sourceLanguage' => 'fr',
+                'fileMap' => [
+                    'app' => 'translation.php',
+                    'app/error' => 'error.php',
+                ],
+            ],
+        ],
+    ],
+        
+        
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
