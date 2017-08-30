@@ -8,11 +8,27 @@ $params = array_merge(
 );
 
 return [
+    
     'id' => 'app-console',
+      'language' => 'en',
+    //'sourceLanguage' => 'fr',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
     'components' => [
+       'i18n' => [
+        'translations' => [
+            'app*' => [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'basePath' => __DIR__ . '/../../common/messages',
+               // 'sourceLanguage' => 'fr',
+                'fileMap' => [
+                    'app' => 'translation.php',
+                    'app/error' => 'error.php',
+                ],
+            ],
+        ],
+    ],
         'log' => [
             'targets' => [
                 [
