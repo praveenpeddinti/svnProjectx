@@ -450,8 +450,9 @@ class SiteController extends Controller
             $projectId=!empty($postData->projectId)?$postData->projectId:"";
             $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
             $pageLength=Yii::$app->params['pageLength'];
+            error_log("page5555--".$pageLength);
             $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag,$projectId,$pageLength,$userId); 
-            if(empty($searchData['ticketCollection']) && empty($searchData['ticketComments']) && empty($searchData['ticketArtifacts'])&& empty($searchData['tinyUserData'])){
+            if(empty($searchData['mainData']['ticketCollection']) && empty($searchData['mainData']['ticketComments']) && empty($searchData['mainData']['ticketArtifacts'])&& empty($searchData['mainData']['tinyUserData'])){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "no result found";
@@ -470,7 +471,7 @@ class SiteController extends Controller
              Yii::error("SiteController:actionGlobalSearch::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;

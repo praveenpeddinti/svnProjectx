@@ -98,9 +98,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             return FALSE; 
         }
         
-        error_log("-----------------" . $date);
+//        error_log("-----------------" . $date);
         $date = preg_replace("/\([^)]+\)/", "", $date);
-        error_log("------------afet-----" . $date);
+//        error_log("------------afet-----" . $date);
         if ((bool) strtotime($date)) {
             return $date;
         } else {
@@ -1219,6 +1219,35 @@ $text_message=$html . $text_message .
             throw new ErrorException($ex->getMessage());
         }
     }
+     /**
+    * @author Padmaja
+    * @param Param $ticketCollectionCount
+     * @return array
+    */
+    public static function searchStringCountForProjectwise($ticketCommentsCount){
+        try{
+            $individualCount=array();
+            error_log("@@@@@---".print_r($ticketCommentsCount,1));
+            if(!empty($ticketCommentsCount)){
+                foreach($ticketCommentsCount as $extractProjectCount){
+                   // error_log("@@@@@---".print_r($extractProjectCount,1));
+                    error_log("########--------".$extractProjectCount['_id']['ProjectId']);
+                  //  array_push($individualCount, $extractProjectCount['ProjectId']);
+                }
+                 error_log("**********".print_r($individualCount,1));
+                return $projectwiseCount = array_count_values($individualCount);
+            }else{
+              return $projectwiseCount =0;  
+            }
+           // error_log("**********".print_r($individualCount,1));
+          //  return $projectwiseCount = array_count_values($individualCount);
+            //error_log("seperate------------".print_r($projectwiseCount,1)); 
+        }catch (\Throwable $ex) {
+            Yii::error("CommonUtility:searchStringCountForProjectwise::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+       
+    }
    /**
     * @author Padmaja
     * @param type $searchString
@@ -1238,12 +1267,30 @@ $text_message=$html . $text_message .
                     $offset = ($page - 1) * $pageLength;
                     $limit = $pageLength;
                 }
+                error_log("projectId-----".$searchString);
            // $searchString=strtolower($searchString);
             if ( !empty($searchString)) {
+                $collectAllCount=array();
                 $TicketCollFinalArray = array();
                 $TicketArtifactsFinalArray = array();
                 $TicketCommentsFinalArray = array();
                 $TinyUserFinalArray = array();
+                /** Array for count **/
+                $prepareArrayForAllCount=array();
+                $ticketCommentsCount=array();
+                $ticketCollectionCount=array();
+                $tinyUserDataCount=array();
+                $ticketArtifactsCount=array();
+                $individualCount=array();
+                $individualCountForTask=array();
+                $individualCountForComment=array();
+                $individualCountForArtifacts=array();
+                $individualCountForUser=array();
+                $collectionCount=array();
+                $collectAllCountforComments =array(); 
+                $collectAllCountforArtifacts =array(); 
+                $collectAllCountforTasks =array();  
+                 /** Ended Array for count **/
                 $options = array(
                     "limit" =>$limit,
                     "skip" => $offset
@@ -1252,50 +1299,59 @@ $text_message=$html . $text_message .
                 $totalProjects=ProjectTeam::getProjectsCountByUserId($userId);
                 $projectIdArray=array();
                 $getProjectIdArray=array();
-                foreach($totalProjects as $getProjectId){
+                 foreach($totalProjects as $getProjectId){
                    $getProjectIdArray['ProjectId'] =$getProjectId['ProjectId'];
-                   // error_log("search------------".$getProjectId['ProjectId']);
-                    //$getProjectId['ProjectId'];
                    array_push($projectIdArray,(int)$getProjectId['ProjectId']);
                 }
-                error_log("arrayyyy--33333333------".print_r($projectIdArray,1));
+                $totalCountForAll=array();
+                $countForEchProject=array();
                 if($searchFlag==1){
                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
                  if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
                          error_log("asssssss-----------------------");
-                        if(strpos($searchString, '#') !== false){
+                           if(strpos($searchString, '#') !== false){
                            $getTicketIdNumber = explode('#', $searchString);
                            error_log("numerrrrrrrrrrrrr".$getTicketIdNumber[1]);
                             if(is_numeric($getTicketIdNumber[1])){
                                $searchString=str_replace("#","",$searchString);
                            }
                            if(!empty($projectId)){
-                             $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                              $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                             $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
                             }else{
-                               $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options); 
-                            }
+                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options); 
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array()); 
+                           }
 
                         }else{
                             if(!empty($projectId)){  
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                                
                             }else{
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options);
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array());
+                                
                             }
                         }
                     }else{
                         $searchString = \quotemeta($searchString);
                         $searchString=htmlspecialchars($searchString);
-                     
-                         if(!empty($projectId)){ 
+                        if(!empty($projectId)){ 
                         //    $searchString = \quotemeta($searchString);
-                         //   $searchString=htmlspecialchars($searchString);
-                       
+                        //   $searchString=htmlspecialchars($searchString);
                            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                        }else{
+                           $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                         }else{
                             $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options);
-                        }
+                            $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array());
+                            
+                         }
                     }
                     $ticketCollectionData = iterator_to_array($cursor);
+                    $ticketCollectionCount= iterator_to_array($cursorForCount);
+                   error_log("ticketCOl@@@@@@@@@@lection count--------".count($ticketCollectionCount));
+                 
                     $TicketCollFinalArray = array();
                      foreach($ticketCollectionData as $extractCollection){
                         $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
@@ -1335,9 +1391,23 @@ $text_message=$html . $text_message .
                              ),
                         ),array('$limit' => $limit),array('$skip' => $offset)
                         );
+                    $countPipeline = array(
+                        array('$unwind' => '$Activities'),
+                        array('$match' => $matchArray),
+                         array(
+                            '$group' => array(
+                                '_id' =>  array('TicketId'=> '$TicketId', 'ProjectId'=> '$ProjectId'),
+                                "commentData" => array('$push' => '$Activities'),
+
+                             ),
+                        )
+                        );
                     $ticketCommentsData = $query->aggregate($pipeline);
+                    $ticketCommentsCount = $query->aggregate($countPipeline);
+                    error_log("comment-343---".count($ticketCommentsCount));
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
+                    $totalTicketComments=count($ticketCommentsData);
                         foreach($ticketCommentsData as $extractComments){
                            $selectFields = ['Title','ProjectId', 'TicketId','Description','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn'];
                            $getTicketDetails = TicketCollection::getTicketDetails($extractComments['_id']['TicketId'],$extractComments['_id']['ProjectId'],$selectFields);
@@ -1363,15 +1433,20 @@ $text_message=$html . $text_message .
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                             $forTicketComments['Project'] = $projectDetails; 
+                            $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
-                          $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
-                    $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array(),$options);
+                    $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
+                     $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array(),$options);
+                    $cursorCountArtifacts =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array());
                     if(!empty($projectId)){
                        $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array(),$options); 
+                       $cursorCountArtifacts =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array()); 
+                       
                     }
                     $ticketArtifactsData = iterator_to_array($cursor);
+                    $ticketArtifactsCount=iterator_to_array($cursorCountArtifacts);
+                    error_log("ticketArtifactsCount---333--------".count($ticketArtifactsCount)); 
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
@@ -1401,7 +1476,10 @@ $text_message=$html . $text_message .
 
                     $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
                     $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                    $cursorCountTinyUser=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array());
                     $tinyUserData = iterator_to_array($cursor);
+                    $tinyUserDataCount = iterator_to_array($cursorCountTinyUser);
+                     error_log("ticketuserCount-----------".count($tinyUserDataCount));
                     $TinyUserFinalArray = array();
                     foreach($tinyUserData as $extractUserData){
                         $forUsercollection['Title']=  $extractUserData['UserName'];
@@ -1413,8 +1491,10 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forUsercollection['UpdatedOn'] = $readableDate; 
                           }
-                         array_push($TinyUserFinalArray, $forUsercollection);
+                        array_push($TinyUserFinalArray, $forUsercollection);
                     }
+
+             
                 }else if($searchFlag==2){
                   //  $searchString=stripslashes($searchString);
                     $searchString = \quotemeta($searchString);
@@ -1435,7 +1515,20 @@ $text_message=$html . $text_message .
                              ),
                         ),array('$limit' => $limit),array('$skip' => $offset)
                         );
+                       $countPipeline = array(
+                        array('$unwind' => '$Activities'),
+                        array('$match' => $matchArray),
+                         array(
+                            '$group' => array(
+                                '_id' =>  array('TicketId'=> '$TicketId', 'ProjectId'=> '$ProjectId'),
+                                "commentData" => array('$push' => '$Activities'),
+
+                             ),
+                        )
+                        );
                     $ticketCommentsData = $query->aggregate($pipeline);
+                    $ticketCommentsCount = $query->aggregate($countPipeline);
+                     error_log("comment-343---".count($ticketCommentsCount));
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
                         foreach($ticketCommentsData as $extractComments){
@@ -1464,15 +1557,18 @@ $text_message=$html . $text_message .
                                 $forTicketComments['UpdatedOn'] = $readableDate;
                            }
                             $projectDetails = Projects::getProjectMiniDetails($getTicketDetails["ProjectId"]);
-                             $forTicketComments['Project'] = $projectDetails; 
+                            $forTicketComments['Project'] = $projectDetails;
+                            $forTicketComments['ticketCommentsCount'] = count($ticketCommentsCount); 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
                 }else if($searchFlag==3){
                     $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
                     $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                    $cursorCountTinyUser=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array());
                     $tinyUserData = iterator_to_array($cursor);
+                    $tinyUserDataCount = iterator_to_array($cursorCountTinyUser);
                     $TinyUserFinalArray = array();
-                    foreach($tinyUserData as $extractUserData){
+                     foreach($tinyUserData as $extractUserData){
                         $forUsercollection['Title']=  $extractUserData['UserName'];
                         $forUsercollection['ProfilePicture']=  Yii::$app->params['ServerURL'].$extractUserData['ProfilePicture'];
                         $forUsercollection['description']=  $extractUserData['Email'];
@@ -1482,18 +1578,23 @@ $text_message=$html . $text_message .
                             $readableDate =$datetime->format('M-d-Y h:i:s A');
                             $forUsercollection['UpdatedOn'] = $readableDate; 
                           }
-                         array_push($TinyUserFinalArray, $forUsercollection);
+                        $forUsercollection['tinyUserDataCount']= count($tinyUserDataCount);
+                        array_push($TinyUserFinalArray, $forUsercollection);
                     }
-                    
-           
                     
                 }else if($searchFlag==4){
                     $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
                     $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array(),$options);
+                    $cursorCountArtifacts =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array());
                     if(!empty($projectId)){
                        $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array(),$options); 
+                       $cursorCountArtifacts =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array()); 
+                       
                     }
                     $ticketArtifactsData = iterator_to_array($cursor);
+                    $ticketArtifactsCount=iterator_to_array($cursorCountArtifacts);
+                    error_log("ticketArtifactsCount---333--------".count($ticketArtifactsCount)); 
+                                    
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
@@ -1523,24 +1624,31 @@ $text_message=$html . $text_message .
                 }else if($searchFlag==5){
                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
               if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
-                         error_log("asssssss-----------------------");
                         if(strpos($searchString, '#') !== false){
                            $getTicketIdNumber = explode('#', $searchString);
-                           error_log("numerrrrrrrrrrrrr".$getTicketIdNumber[1]);
                             if(is_numeric($getTicketIdNumber[1])){
                                $searchString=str_replace("#","",$searchString);
                            }
                            if(!empty($projectId)){
                              $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                            }else{
-                               $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options); 
-                            }
+                             $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                            //  error_log("1111111--------".count($cursor));;
+                             
+                           }else{
+                                 error_log("www--".$getTicketIdNumber[1]);
+                                $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options); 
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array()); 
+                           }
 
                         }else{
                             if(!empty($projectId)){  
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                                
                             }else{
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options);
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array());
+                                
                             }
                         }
                     }else{
@@ -1550,15 +1658,19 @@ $text_message=$html . $text_message .
                          if(!empty($projectId)){ 
                         //    $searchString = \quotemeta($searchString);
                          //   $searchString=htmlspecialchars($searchString);
-                       
                            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                        }else{
+                           $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                            error_log("333--------------tttt---------");
+                         }else{
                             $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options);
-                        }
+                            $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array());
+                            
+                         }
                     }
-                     $ticketCollectionData = iterator_to_array($cursor);
+                    $ticketCollectionData = iterator_to_array($cursor);
+                    $ticketCollectionCount= iterator_to_array($cursorForCount);
                     $TicketCollFinalArray = array();
-                    
+                    $individualCount=array();
                      foreach($ticketCollectionData as $extractCollection){
                         $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
                         $forTicketCollection['Title'] = $extractCollection['Title'];
@@ -1575,17 +1687,29 @@ $text_message=$html . $text_message .
                             $forTicketCollection['UpdatedOn'] = $readableDate;
                         }
                         $projectDetails = Projects::getProjectMiniDetails($extractCollection["ProjectId"]);
-                        $forTicketCollection['Project'] = $projectDetails; 
+                        $forTicketCollection['Project'] = $projectDetails;
+                        $forTicketCollection['ticketCollectionCount'] = count($ticketCollectionCount); 
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
-                }else{
+                      if(!empty($ticketCollectionCount)){
+                        foreach($ticketCollectionCount as $extractProjectCount){
+                            array_push($individualCountForTask, $extractProjectCount['ProjectId']);
+                             
+                        }
+                         $collectAllCountforTasks = array_count_values($individualCountForTask);
+                        }else{
+                         $collectAllCountforTasks =array();  
+                        }
+                 }else{
+                   
+                                        /* onload */
                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
                     $options = array(
                         "limit" =>$limit,
                         "skip" => $offset
                     );
                  if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
-                         error_log("asssssss-----------------------");
+                         error_log("2222-----------------------");
                         if(strpos($searchString, '#') !== false){
                            $getTicketIdNumber = explode('#', $searchString);
                            error_log("numerrrrrrrrrrrrr".$getTicketIdNumber[1]);
@@ -1593,35 +1717,46 @@ $text_message=$html . $text_message .
                                $searchString=str_replace("#","",$searchString);
                            }
                            if(!empty($projectId)){
+                                error_log("12122---".$getTicketIdNumber[1]);
                              $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                            }else{
-                               $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options); 
-                            }
+                             $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                             
+                           }else{
+                                 error_log("www--".$getTicketIdNumber[1]);
+                                $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options); 
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array()); 
+                           }
 
                         }else{
                             if(!empty($projectId)){  
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                                
                             }else{
                                 $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options);
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array());
+                                
                             }
                         }
                     }else{
+                         error_log("333-----------------------");
                         $searchString = \quotemeta($searchString);
                         $searchString=htmlspecialchars($searchString);
                      
                          if(!empty($projectId)){ 
-                        //    $searchString = \quotemeta($searchString);
-                         //   $searchString=htmlspecialchars($searchString);
-                       
                            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
-                        }else{
+                           $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                            error_log("333--------------tttt---------");
+                         }else{
                             $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array(),$options);
-                        }
+                            $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array());
+                            
+                         }
                     }
                     $ticketCollectionData = iterator_to_array($cursor);
+                    $ticketCollectionCount= iterator_to_array($cursorForCount);
                     $TicketCollFinalArray = array();
-                    error_log("trickererer--------".print_r($ticketCollectionData,1));
-                     foreach($ticketCollectionData as $extractCollection){
+                      foreach($ticketCollectionData as $extractCollection){
                         $forTicketCollection['TicketId'] = $extractCollection['TicketId'];
                         $forTicketCollection['Title'] = $extractCollection['Title'];
                         $forTicketCollection['description'] = !empty($extractCollection['PlainDescription'])?$extractCollection['PlainDescription']:'';
@@ -1640,12 +1775,8 @@ $text_message=$html . $text_message .
                         $forTicketCollection['Project'] = $projectDetails; 
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
-                    error_log("beforeeeeeeeeeeeeeee".$searchString);
-//                    $searchString=stripslashes($searchString);
-//                   $searchString = \quotemeta($searchString);
-                   // $searchString=htmlspecialchars($searchString);
-                   // $searchString=htmlspecialchars_decode($searchString);
-                  $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>array('$in'=>$projectIdArray));
+
+                     $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>array('$in'=>$projectIdArray));
                     if(!empty($projectId)){
                         $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>(int)$projectId);
                     }
@@ -1661,7 +1792,19 @@ $text_message=$html . $text_message .
                              ),
                         ),array('$limit' => $limit),array('$skip' => $offset)
                         );
+                        $countPipeline = array(
+                        array('$unwind' => '$Activities'),
+                        array('$match' => $matchArray),
+                         array(
+                            '$group' => array(
+                                '_id' =>  array('TicketId'=> '$TicketId', 'ProjectId'=> '$ProjectId'),
+                                "commentData" => array('$push' => '$Activities'),
+
+                             ),
+                        )
+                        );
                     $ticketCommentsData = $query->aggregate($pipeline);
+                    $ticketCommentsCount = $query->aggregate($countPipeline);
                     $TicketCommentsFinalArray = array();
                     $commentsArray= array();
                         foreach($ticketCommentsData as $extractComments){
@@ -1679,13 +1822,13 @@ $text_message=$html . $text_message .
                              // error_log("crudeeeeeeeee------------".$commentsArray['CrudeCDescription']);
                              // error_log($searchString."----"."asddddd##########".(int)stripos($commentsArray['CrudeCDescription'],stripslashes($searchString)));
                                if(stripos($commentsArray['CrudeCDescription'],$searchString)!==false){
-                                   error_log("####################");
+                                 //  error_log("####################");
                                 array_push($commentsfinalArray,$commentsArray);
                               }
                            }
                             $forTicketComments['comments']=$commentsfinalArray;
-                           $forTicketComments['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
-                           $forTicketComments['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
+                            $forTicketComments['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
+                            $forTicketComments['reportedby'] = $getTicketDetails['Fields']['reportedby']['value_name'];
                             $UpdatedOn = $getTicketDetails['UpdatedOn'];
                             if(isset($UpdatedOn)){
                                 $datetime = $UpdatedOn->toDateTime();
@@ -1696,12 +1839,18 @@ $text_message=$html . $text_message .
                              $forTicketComments['Project'] = $projectDetails; 
                             array_push($TicketCommentsFinalArray, $forTicketComments);
                        }
+             
                     $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
-                     $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array(),$options);
+                    $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array(),$options);
+                    $cursorCountArtifacts =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array());
                     if(!empty($projectId)){
                        $cursor =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array(),$options); 
+                       $cursorCountArtifacts =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array()); 
                     }
                     $ticketArtifactsData = iterator_to_array($cursor);
+                    $ticketArtifactsCount=iterator_to_array($cursorCountArtifacts);
+                   
+                    error_log("ticketArtifactsCount-555--333--------".count($ticketArtifactsCount)); 
                     $TicketArtifactsFinalArray = array();
                     foreach($ticketArtifactsData as $extractArtifacts){
                         $selectFields = ['Title','ProjectId', 'TicketId','Fields.planlevel.value_name','Fields.reportedby.value_name','UpdatedOn','CrudeDescription'];
@@ -1734,7 +1883,10 @@ $text_message=$html . $text_message .
                     }
                     $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
                     $cursor=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array(),$options);
+                    $cursorCountTinyUser=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array());
                     $tinyUserData = iterator_to_array($cursor);
+                    $tinyUserDataCount = iterator_to_array($cursorCountTinyUser);
+                    error_log("ticketuserCount-----sdfdsf------".count($tinyUserDataCount));
                     $TinyUserFinalArray = array();
                  
                     foreach($tinyUserData as $extractUserData){
@@ -1749,13 +1901,64 @@ $text_message=$html . $text_message .
                           }
                          array_push($TinyUserFinalArray, $forUsercollection);
                     }
-                }  
-                $getCollectionData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
+                }
+                // Ended ----------
+            
+                $renderCount=self::getStringCountForGLobalsearch($searchString,$projectId,$userId,$projectIdArray,$limit,$offset);
+                    if(!empty($ticketCollectionCount)){
+                        foreach($ticketCollectionCount as $extractProjectCount){
+                            array_push($individualCountForTask, $extractProjectCount['ProjectId']);
+                             
+                        }
+                        // error_log("**********".print_r($individualCount,1));
+                        $collectAllCountforTasks = array_count_values($individualCountForTask);
                         }else{
-            $getCollectionData=array();
-        }
+                         $collectAllCountforTasks =array();  
+                        }
+                    //    error_log("**********---4545--".print_r(array($collectAllCountforTasks),1));
+                             if(!empty($ticketCommentsCount)){
+                        foreach($ticketCommentsCount as $extractcommentsCount){
+                            array_push($individualCountForComment,$extractcommentsCount['_id']['ProjectId']);
+                        }
+                        $collectAllCountforComments = array_count_values($individualCountForComment);
+                        }else{
+                         $collectAllCountforComments =array();  
+                        }
+                        if(!empty($ticketArtifactsCount)){
+                        foreach($ticketArtifactsCount as $extractArtifactCount){
+                             array_push($individualCountForArtifacts,$extractArtifactCount['ProjectId']);
+                        }
+                        $collectAllCountforArtifacts = array_count_values($individualCountForArtifacts);
+                        }else{
+                         $collectAllCountforArtifacts =array();  
+                        }
+                    $prepareArrayForAllCount=array(count($ticketCollectionCount),count($ticketCommentsCount),count($ticketArtifactsCount),count($tinyUserDataCount));
+                    $getAllCount=array_sum($prepareArrayForAllCount);  
+                     $dataCount=array();
+                    $dataCount['TaskCount']=count($ticketCollectionCount);
+                    $dataCount['commentsCount']=count($ticketCommentsCount);
+                    $dataCount['artifactsCount']=count($ticketArtifactsCount);
+                    $dataCount['userDataCount']=count($tinyUserDataCount);
+                    $dataCount['allCount']=$getAllCount;
+                    $mainData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
+                    if(!empty($dataCount)){
+                        $dataCount=$dataCount;
+                    }else{
+                       $dataCount=array();
+                    }
+                    $getProjectCountForAll=self::array_sum_combine($collectAllCountforTasks,$collectAllCountforComments,$collectAllCountforArtifacts);
+                    if(!empty($getProjectCountForAll)){
+                        $getProjectCountForAll=$getProjectCountForAll;
+                    }else{
+                        $getProjectCountForAll=0;
+                    }
+                    //  error_log("projectfunction**************".print_r($getProjectCountForAll,1));
+                    $getCollectionData=array('mainData'=>$mainData,'dataCount'=>$renderCount['dataCount'],'projectCountForAll'=>$renderCount['getProjectCountForAll']);
+                    }else{
+                     $getCollectionData=array();
+                    }
          
-            return $getCollectionData;
+                return $getCollectionData;
  
         } catch (\Throwable $ex) {
             Yii::error("CommonUtility:getAllDetailsForSearch::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -1763,6 +1966,7 @@ $text_message=$html . $text_message .
         }
     }
     
+
     /**
      * @author Anand
      * @uses prepare the filter options
@@ -2113,6 +2317,181 @@ public static function getUniqueArrayObjects($arrayOfObjects){
         }
         
     }
+       /**
+     * @author Padmaja
+     * @description This method is used for showing counts for search
+     * @return type array
+     */
+    public static function getStringCountForGLobalsearch($searchString,$projectId,$userId,$projectIdArray,$limit,$offset){
+        error_log("enters here");       
+        $options = array(
+                    "limit" =>$limit,
+                    "skip" => $offset
+                );
+                   /** Array for count **/
+                $prepareArrayForAllCount=array();
+                $ticketCommentsCount=array();
+                $ticketCollectionCount=array();
+                $tinyUserDataCount=array();
+                $ticketArtifactsCount=array();
+                $individualCount=array();
+                $individualCountForTask=array();
+                $individualCountForComment=array();
+                $individualCountForArtifacts=array();
+                $individualCountForUser=array();
+                $collectionCount=array();
+                $collectAllCountforComments =array(); 
+                $collectAllCountforArtifacts =array(); 
+                $collectAllCountforTasks =array();  
+                 /** Ended Array for count **/
+                $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+                 if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
+                         if(strpos($searchString, '#') !== false){
+                           $getTicketIdNumber = explode('#', $searchString);
+                            if(is_numeric($getTicketIdNumber[1])){
+                               $searchString=str_replace("#","",$searchString);
+                           }
+                           if(!empty($projectId)){
+                              $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                            }else{
+                                 $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array()); 
+                           }
+
+                        }else{
+                            if(!empty($projectId)){  
+                                 $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                            }else{
+                                $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>'^'.$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array());
+                             }
+                        }
+                    }else{
+                        $searchString = \quotemeta($searchString);
+                        $searchString=htmlspecialchars($searchString);
+                     
+                         if(!empty($projectId)){ 
+                           $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
+                         }else{
+                             $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),'ProjectId'=>array('$in'=>$projectIdArray)))),array());
+                            
+                         }
+                    }
+                    $ticketCollectionCount= iterator_to_array($cursorForCount);
+                    $TicketCollFinalArray = array();
+                   /*count logic starts*/
+                         if(!empty($ticketCollectionCount)){
+                        foreach($ticketCollectionCount as $extractProjectCount){
+                            array_push($individualCountForTask, $extractProjectCount['ProjectId']);
+                             
+                        }
+                        $collectAllCountforTasks = array_count_values($individualCountForTask);
+                        }else{
+                         $collectAllCountforTasks =array();  
+                        }
+                        $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>array('$in'=>$projectIdArray));
+                        if(!empty($projectId)){
+                            $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>(int)$projectId);
+                        }
+                        $query = Yii::$app->mongodb->getCollection('TicketComments');
+               
+                        $countPipeline = array(
+                        array('$unwind' => '$Activities'),
+                        array('$match' => $matchArray),
+                         array(
+                            '$group' => array(
+                                '_id' =>  array('TicketId'=> '$TicketId', 'ProjectId'=> '$ProjectId'),
+                                "commentData" => array('$push' => '$Activities'),
+
+                             ),
+                        )
+                        );
+                     $ticketCommentsCount = $query->aggregate($countPipeline);
+                    $TicketCommentsFinalArray = array();
+                       if(!empty($ticketCommentsCount)){
+                        foreach($ticketCommentsCount as $extractcommentsCount){
+                            array_push($individualCountForComment,$extractcommentsCount['_id']['ProjectId']);
+                        }
+                        $collectAllCountforComments = array_count_values($individualCountForComment);
+                        }else{
+                         $collectAllCountforComments =array();  
+                        }
+                     $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
+                    $cursorCountArtifacts =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>array('$in'=>$projectIdArray)),array());
+                    if(!empty($projectId)){
+                       $cursorCountArtifacts =  $collection->find(array('$or'=>array(array("Artifacts.OriginalFileName"=>array('$regex'=>$searchString,'$options' => 'i'))),'ProjectId'=>(int)$projectId),array()); 
+                    }
+                    $ticketArtifactsCount=iterator_to_array($cursorCountArtifacts);
+                      if(!empty($ticketArtifactsCount)){
+                        foreach($ticketArtifactsCount as $extractArtifactCount){
+                             array_push($individualCountForArtifacts,$extractArtifactCount['ProjectId']);
+                        }
+                        $collectAllCountforArtifacts = array_count_values($individualCountForArtifacts);
+                        }else{
+                         $collectAllCountforArtifacts =array();  
+                        }
+                 // error_log("****---777777777777============--".print_r($collectAllCountforArtifacts,1));
+                    $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
+                    $cursorCountTinyUser=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array());
+                    $tinyUserDataCount = iterator_to_array($cursorCountTinyUser);
+                  //  error_log("ticketuserCount-----sdfdsf------".count($tinyUserDataCount));
+                    $prepareArrayForAllCount=array(count($ticketCollectionCount),count($ticketCommentsCount),count($ticketArtifactsCount),count($tinyUserDataCount));
+                    $getAllCount=array_sum($prepareArrayForAllCount);  
+                    $dataCount=array();
+                    $dataCount['TaskCount']=count($ticketCollectionCount);
+                    $dataCount['commentsCount']=count($ticketCommentsCount);
+                    $dataCount['artifactsCount']=count($ticketArtifactsCount);
+                    $dataCount['userDataCount']=count($tinyUserDataCount);
+                    $dataCount['allCount']=$getAllCount;
+                    if(!empty($dataCount)){
+                       $dataCount=$dataCount;
+                   }else{
+                      $dataCount=array();
+                   }
+                $getProjectCountForAll=self::array_sum_combine($collectAllCountforTasks,$collectAllCountforComments,$collectAllCountforArtifacts);
+                if(!empty($getProjectCountForAll)){
+                    $getProjectCountForAll=$getProjectCountForAll;
+                }else{
+                    $getProjectCountForAll=0;
+                }
+                  return array('dataCount'=>$dataCount,'getProjectCountForAll'=>$getProjectCountForAll);
+                     
+             
+    }
+         /**
+     * @author Padmaja
+     * @description This method is used for adding all array
+     * @return type array
+     */
+   public static function array_sum_combine($arr1,$arr2,$arr3)
+    {
+      $return = array();
+      $args = func_get_args();
+     // error_log("######".print_r($args,1));
+     // if(!empty($arr1) && !empty($arr2) && !empty($arr3)){
+          error_log("@@----");
+        foreach ($args as $arr)
+        {
+          foreach ($arr as $k => $v)
+          {
+              $projectDetails=Projects::getProjectMiniDetails($k);
+      //        error_log("kkkkkWWWWWW@@@@@@@--".$projectDetails['ProjectName']); 
+              $k= $projectDetails['ProjectName'];
+             // $project['ProjectName']=$k;
+            if (!array_key_exists($k, $return))
+            {
+             //   error_log("kkkkkWWWWWW@@@@@@@--".$k);
+               $return[$k] = 0;
+            }
+               $return[$k] += $v;
+
+          }
+        }
+     // }
+    //  error_log("returrrnnrnr---".print_r($return,1));
+      return $return;
+    }
+ 
+ 
+
 }
 
 ?>
