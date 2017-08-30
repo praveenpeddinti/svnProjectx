@@ -1,18 +1,34 @@
 <div class="search">
 <div class="searchresulttext searchresulttextmarginzero">Search results for <span class="heighlight">{{searchString}}</span> in 
+
 <span *ngIf="projectName">{{projectName}}</span><span *ngIf="!projectName">All</span></div>
- <div class="tabbable tabs-left row">
+
+<div *ngIf="checkData==0">
+     <div class="clearboth marb20">
+             <div class="custom_selctdropdown pull-right marb20">
+   <p-dropdown  [style]="{'width':'220px'}" [(ngModel)]="selectedProject" [ngValue]="selectedProject" (onChange)="changeProject()" [displayOptions]="optionTodisplay"   [options]="projects">
+<ng-template  let-projects pTemplate="item">
+    {{projects.value.id}}<span class="pull-right purple_color"> {{projects.value.name}} </span>
+                  </ng-template>
+          </p-dropdown>
+     </div>
+     </div>
+          </div>
+
+ <div class="tabbable tabs-left row" style="clear:both;">
  
      <div class="col-xs-12 col-sm-3 col-md-3 tabpaddingrightzero" id="nosearchdiv" [style.display]="(searchDivTabs ==false) ? 'none':'inherit'">
 <ul class="nav nav-tabs">
-<li class="active"><a (click)="callsearchByClick(1)" data-toggle="tab">All</a></li>
-<li ><a (click)="callsearchByClick(5)" data-toggle="tab">Story/Task</a></li>
-<li ><a (click)="callsearchByClick(2)" data-toggle="tab">Comments</a></li>
-<li><a (click)="callsearchByClick(3)" data-toggle="tab">Users</a></li>
-<li><a (click)="callsearchByClick(4)" data-toggle="tab">Artifacts</a></li>
+<li class="active"><a (click)="callsearchByClick(1)" data-toggle="tab">All  <span class="pull-right purple_color">{{allCount}}</span></a></li>
+<li ><a (click)="callsearchByClick(5)" data-toggle="tab">Story/Task  <span class="pull-right purple_color">{{taskCount}}</span></a></li>
+<li ><a (click)="callsearchByClick(2)" data-toggle="tab">Comments  <span class="pull-right purple_color">{{commentsCount}}</span></a></li>
+<li><a (click)="callsearchByClick(3)" data-toggle="tab">Users  <span class="pull-right purple_color">{{userDataCount}}</span></a></li>
+<li><a (click)="callsearchByClick(4)" data-toggle="tab">Artifacts  <span class="pull-right purple_color">{{artifactsCount}}</span></a></li>
 </ul>
 
  </div>
+
+
   <div id="noseachdivclass" class="{{noSearchDivClass}}">
       
      <div class="tab-content tab-content_content" >
