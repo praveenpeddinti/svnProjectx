@@ -1,5 +1,9 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input,ViewChild } from '@angular/core';
 import {SharedService} from '../../services/shared.service';
+import * as Chart from 'chart.js';
+
+declare var jQuery:any;
+declare var Chart:any;
 
 @Component({
   selector: 'app-state-chart',
@@ -39,37 +43,67 @@ export class StateChartComponent implements OnInit {
   @Input('stateCount') stateCount:any={};
   @Input('chartType') chartType:string;
   @Input('index') index;
+  public barData:any[]=[];
+
   constructor(private shared:SharedService) { }
 
 
   ngOnInit() { 
 
+    //  this.shared.getStateStats().subscribe(value=>
+    //  {
+    //    alert("==From Shared=="+JSON.stringify(value));
+    //  });
+    var key=Object.keys(this.stateCount);
+    this.pieChartLabels=key;
+    //this.pieChartData=[this.stateCount.New,this.stateCount.Paused,this.stateCount.InProgress,this.stateCount.Waiting,this.stateCount.Reopened,this.stateCount.Closed];
+
+
   this.pieChartType = this.chartType;
-  var key=Object.keys(this.stateCount);
-  this.pieChartLabels=key;
-  // alert(this.pieChartLabels+"++keys++");
   if(this.pieChartType == "pie"){
     this.pieChartData=[
       {data:[this.stateCount.New,this.stateCount.Paused,this.stateCount.InProgress,this.stateCount.Waiting,this.stateCount.Reopened,this.stateCount.Closed],
         label:""
     }];
-    this.loaded = true;
+    //this.loaded = true;
   }else{
-    // alert(JSON.stringify(this.stateCount));
-    for(let i in key){
-      this.pieChartData.push({label:key[i],data:[this.stateCount[key[i]]]})
-      // this.pieChartData.push(this.stateCount[key[i]]);
-      // this.pieChartData[i] = {data:this.stateCount[key[i]],label:key[i]};
-    }
-
-    this.loaded = true;
+   //this.pieChartLabels=[' '];
+    this.barChartOptions=
+    {
+      // scaleShowVerticalLines: false,
+      // responsive: true
+      scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    maxTicksLimit: 5,
+                    
+                }
+            }],
+            xAxes: [{
+                categoryPercentage: 1.0,
+                barPercentage: 0.6
+            }]
+        },
+        legend:{position:'bottom'}
+    };
+        // alert(JSON.stringify(this.stateCount));
+        for(let i in key){
+          this.pieChartData.push({data:[this.stateCount[key[i]]],label:key[i]});
+          //this.pieChartData.push({data:[10,20,30,40,50,60,70,80,90,100,110,120,130,140],label:'New'});
+         //this.barData.push(this.stateCount[key[i]]);
+        }
+       // this.pieChartData.push({data:this.barData,label:"ProjectX"});
+        this.loaded = true;
     
 
-  }
+    }
   
   }
   ngAfterViewInit(){
-   
+    // var ctx = document.getElementById("pieChart");
+    // var myChart = new Chart(ctx).Pie(this.pieChartData, this.pieChartLabels);
+    // document.getElementById('js-legend').innerHTML = myChart.generateLegend();
   }
 
   // events
