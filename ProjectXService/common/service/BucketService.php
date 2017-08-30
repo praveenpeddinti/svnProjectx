@@ -1,6 +1,7 @@
 <?php
 namespace common\service;
 use common\models\mongo\TicketCollection;
+use yii\mongodb\Query;
 use common\components\CommonUtilityTwo;
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
@@ -154,28 +155,27 @@ class BucketService {
      */      
     public function getBucketChangeStatus($projectId,$bucketId,$Status){
         try{
+            if($Status == 3){
+                $query = new Query();
+                $conditions = array('ProjectId' => (int) $projectId);
+                $conditions['Fields.bucket.value'] = (int) $bucketId;
+                $conditions['Fields.state.value'] = array('$ne'=>(int) 6);
+                $query->from('TicketCollection')
+                    ->where($conditions);
+                $totalCount = $query->count();
+//                error_log("===================".$totalCount);
+                if($totalCount){
+                    $response["Status"] = "Can not mark as Completed. Please close all the tickets in the bucket";
+                    return $response;
+                }
+            }
          $bucketModel = new Bucket();
          $response = array();
          $resStatus =  $bucketModel->getBucketChangeStatus($projectId,$bucketId,$Status);
          $response["Status"] = $resStatus;
          if($resStatus == "success"){
              $response["dropList"] = $this->getBucketTypeFilter($projectId, $Status);
-             $response["newBucketStatusName"] = $bucketModel->getBucketStatusNameById($Status)[0]["Name"];
-             if($response["newBucketStatusName"] == "Completed"){
-                 $conditions = array('ProjectId' => (int) $projectId);
-                 $newData = array();
-                 $conditions['Fields.bucket.value'] = (int) $bucketId;
-                 $newData['Fields.workflow.value'] = (int) 14;
-                 $newData['Fields.workflow.value_name'] = "Closed";
-                 $newData['Fields.state.value'] = (int) 6;
-                 $newData['Fields.state.value_name'] = (int) "Closed";
-                 $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-                 $collection->update($conditions,$newData);
-                 $response["topTicketStats"] = CommonUtilityTwo::getTopTicketsStats($projectId, '', $bucketId);
-                 $response["statusCounts"] = CommonUtilityTwo::getStatusCount($projectId, $bucketId);
-                 $response["stateCounts"] = CommonUtilityTwo::getBucketStatesCount($projectId, $bucketId);
-             }
-                 
+             $response["newBucketStatusName"] = $bucketModel->getBucketStatusNameById($Status)[0]["Name"];                 
          }
          return $response;
         } catch (\Throwable $ex) {

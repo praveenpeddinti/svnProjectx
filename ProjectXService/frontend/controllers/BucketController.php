@@ -265,6 +265,12 @@ class BucketController extends Controller
             $responseBean->message = "SUCCESS";
             $responseBean->data = $bucketFilterData;
             $response = CommonUtility::prepareResponse($responseBean,"json");
+            }else if($bucketFilterData["Status"]!='failure'){
+                $responseBean = new ResponseBean();
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = $bucketFilterData["Status"];
+                $responseBean->data = "" ;
+                $response = CommonUtility::prepareResponse($responseBean,"json");
             }else{
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::FAILURE;
