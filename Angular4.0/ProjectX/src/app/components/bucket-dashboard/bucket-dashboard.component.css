@@ -36,6 +36,8 @@
 .activities_bg .activitycon{ color:#637282; font:normal 14px/18px 'open_sansregular';}
 
 .activities_bg .activitypro{color:#637282; font:normal 12px/22px 'open_sansregular';}
+.success_content{color: #4F8A10;padding:5px 8px;border:#f8f8f8 solid 1px; font-size:14px; display: inline-block; border-radius:25px; margin-top: 10px;}
+.error_content{color: #f57979;padding:5px 8px;border:#f8f8f8 solid 1px; font-size:14px; display: inline-block; border-radius:25px; margin-top: 10px;}
 
 .userpic{
 width: 30px;

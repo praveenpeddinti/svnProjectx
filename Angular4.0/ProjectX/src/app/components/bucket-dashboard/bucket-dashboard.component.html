@@ -1,5 +1,8 @@
 <div class="clearfix" *ngIf="bucketDetails.length > 0">
         <div class="col-md-8">
+            <div *ngIf="bucketPageError != ''" class="error_content">
+                    {{bucketPageError}}
+            </div>
             <div class="row">
                    <div class="col-md-8">
                        <div class="bucket_heading">{{bucketDetails[0]?.BucketName}}

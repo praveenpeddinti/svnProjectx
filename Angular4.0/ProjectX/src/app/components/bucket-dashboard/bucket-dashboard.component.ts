@@ -37,14 +37,7 @@ export class BucketDashboardComponent implements OnInit {
   private statusData = {};
   private stateData = {};
   private form={};
-    // Id:'',
-    // title:'',
-    // description:'',
-    // startDateVal:new Date(),
-    // dueDateVal:new Date(),
-    // setCurrent:false,
-    // selectedUserFilter:'',
-    // };
+  private bucketPageError="";
 @ViewChild(CreateBucketComponent) editBucketObj:CreateBucketComponent;
   // private dropClass="selectpicker show-menu-arrow sbox float_right";
 
@@ -174,20 +167,29 @@ prepareEditFromData(){
                         };
                         this._ajaxService.AjaxSubscribe("bucket/get-bucket-change-status",postData,(response) => {
                             // alert(JSON.stringify(response)+"<=====changeStatus=========>");
-                            this.bucketChangedFilterToDisplay=this.prepareItemArray(response.data.dropList,false,'changebucket');
-                            this.bucketChangedFilterOption=this.bucketChangedFilterToDisplay[0].filterValue;
-                            this.bucketDetails[0].DropDownBucket = "none";
-                            this.bucketDetails[0].BucketStatusName = response.data.newBucketStatusName;
-                            if(response.data.newBucketStatusName == "Completed"){
-                                this.bucketDetails[0].topTicketStats = response.data.topTicketStats;
-                                this.statusData={};
-                                this.stateData={};
-                                setTimeout(()=>{
-                                this.statusData = response.data.statusCounts; 
-                                this.stateData = response.data.stateCounts;
-                                },200);
-
-                            }
+                            if(response.statusCode == 200){
+                                if(response.message == "SUCCESS"){
+                                    this.bucketChangedFilterToDisplay=this.prepareItemArray(response.data.dropList,false,'changebucket');
+                                    this.bucketChangedFilterOption=this.bucketChangedFilterToDisplay[0].filterValue;
+                                    this.bucketDetails[0].DropDownBucket = "none";
+                                    this.bucketDetails[0].BucketStatusName = response.data.newBucketStatusName;
+                                }else{
+                                        if(event.value == 3){
+                                            //  alert(response.message);
+                                            this.showBucketPageError(response.message)
+                                            this.bucketDetails[0].DropDownBucket = "none";
+                                        }
+                                }
+                            // if(response.data.newBucketStatusName == "Completed"){
+                            //     this.bucketDetails[0].topTicketStats = response.data.topTicketStats;
+                            //     this.statusData={};
+                            //     this.stateData={};
+                            //     setTimeout(()=>{
+                            //     this.statusData = response.data.statusCounts; 
+                            //     this.stateData = response.data.stateCounts;
+                            //     },200);
+                            // }
+                         }
                         });
 
       }
@@ -266,9 +268,14 @@ prepareEditFromData(){
          this.bucketDetails[0].DropDownBucket = "none";
         jQuery("#addBucketModel").modal('hide');
         // alert(this.bucketDetails[0].DropDownBucket);
-        
-
     }
 
+
+    showBucketPageError(msg){
+        this.bucketPageError = msg;
+            setTimeout(()=>{
+               this.bucketPageError = "";
+           },5000);
+    }
 
 }
