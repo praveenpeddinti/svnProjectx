@@ -58,11 +58,12 @@ class TinyUserCollection extends ActiveRecord
        public static function createNewUser($user,$userId){
         
         try {
-       // error_log("======================3##################=================".print_r($user,1));
+        error_log("======================3##################=================");
         $userObj= new TinyUserCollection();
         $userObj->CollaboratorId = (int)$userId;
-        $userObj->UserName=$user->firstName.'.'.$user->lastName;;
-        $userObj->DisplayName=$user->displayName;
+       // $userObj->UserName=$user->firstName.'.'.$user->lastName;
+         $userObj->UserName=$user->displayName;
+       // $userObj->DisplayName=$user->displayName;
         $userObj->ProfilePicture=$user->userProfileImage;
         $userObj->Email=$user->email;
         $userObj->OrganizationId= 1;
