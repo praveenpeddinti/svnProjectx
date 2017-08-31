@@ -181,6 +181,9 @@ class CollaboratorController extends Controller
              $projectId=$userData->projectId;
              $userid=$userData->userid;
              $status=ServiceFactory::getCollaboratorServiceInstance()->addUserToTeam($projectId,$userid);
+             if($status==true){
+                 EventTrait::saveEvent($projectId,"Project",'',"invite","invite",$userid,[]); 
+             }
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SUCCESS;
              $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -465,6 +468,76 @@ class CollaboratorController extends Controller
              return $response;
         } 
         
+    }
+    
+     /**
+    * @author Ryan
+    * @description This is used for getting the Team  Members for Project based on Roles
+    * @param type 
+    * @return array or null
+    */
+    public function actionGetTeamMembers(){
+        try{
+             $postData = json_decode(file_get_contents("php://input"));
+             $projectId=(int)$postData->projectId;
+             $userId=(int)$postData->userInfo->Id;
+             $role=ServiceFactory::getCollaboratorServiceInstance()->checkRole($projectId,$userId);
+             if($role['Id']==3 || $role['Id']==4){
+                $teamMembers=ServiceFactory::getCollaboratorServiceInstance()->getResponsibleProjectTeam($projectId,'');
+                $count=count($teamMembers);
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $teamMembers;
+                $responseBean->totalCount=$count;
+                $response = CommonUtility::prepareResponse($responseBean,"json");
+             }else{
+                 $role=null;
+                 $responseBean = new ResponseBean;
+                 $responseBean->statusCode = ResponseBean::SUCCESS;
+                 $responseBean->message = "success";
+                 $responseBean->data = $role;
+                 $response = CommonUtility::prepareResponse($responseBean,"json");
+             }
+             return $response;
+        } catch (\Throwable $th) { 
+             Yii::error("CollaboratorController:getTeamMembers::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
+    }
+    
+     /**
+    * @author Ryan
+    * @description This is used for checking whether user already in team
+    * @param type 
+    * @return string
+    */
+    public function actionCheckUserExist(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            $projectId=$postData->projectId;
+            $email=$postData->email;
+            $status=ServiceFactory::getCollaboratorServiceInstance()->checkUserInTeam($projectId,$email);
+            $responseBean = new ResponseBean;
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = "success";
+            $responseBean->data = $status;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+            return $response;
+        } catch (\Throwable $th) { 
+             Yii::error("CollaboratorController:checkUserExist::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = $th->getMessage();
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        } 
     }
     
 }  
