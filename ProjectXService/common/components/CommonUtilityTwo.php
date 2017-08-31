@@ -528,8 +528,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     $getActivities=array();
                     $activityDetails=array();
                     $getEventDetails= EventCollection::getAllActivities($postData);
-//                    $getEventDetails= EventCollection::getAllActivitiesByProject($page,$projectId);
-                    //error_log("@@@@---event-----".print_r($getEventDetails,1));die;
                     $timezone=$postData->timeZone;
                     $setNewVal='';
                    foreach($getEventDetails as $extractedEventDetails){
@@ -580,144 +578,203 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 //                           $getActivities['Day']= $datetime1->format('d');
 //                           $getActivities['Year']= $datetime1->format('Y');
                           $getActivities['time']= $Date;
-                           $getActivities['ChangeSummary'] = array();
+                          $getActivities['ChangeSummary'] = array();
 //                           error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
                                $summary = array();
                                $summary['ActionOn']=!empty($changeSummary['ActionOn'])?$changeSummary['ActionOn']:'';
-                               if( $summary['ActionOn']=='duedate'){
+                               $actionOn=$summary['ActionOn'];
+                               error_log("aa@@@@@@@@---==========================--".$actionOn);
+                                if( $summary['ActionOn']=='duedate'){
+                                $prepare_text = Yii::t('app','dueDate');
+                                $summary['prepare_text']= $prepare_text;
+                                $summary['action']='';
                                 if(!empty($changeSummary['OldValue'])){
                                     $datetime1=$changeSummary['OldValue']->toDateTime();
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
                                     $summary['OldValue']= $datetime1->format('M-d-Y');
+                                    $summary['OldValueText']='from';
                                     error_log("@@@@-----". $summary['OldValue']);
                                 }else{
                                     $summary['OldValue'] ='';
+                                    $summary['OldValueText']='';
                                 }
                                  if(!empty($changeSummary['NewValue'])){
-                                    error_log("set new vall----".$setNewVal);
+                                   // error_log("set new vall----".$setNewVal);
                                     $datetime1=$changeSummary['NewValue']->toDateTime();
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
                                     $summary['NewValue']= $datetime1->format('M-d-Y');
                                     error_log("@@@@-----". $summary['NewValue']);
-                                 
+                                     $summary['NewValueText']='to';
                                 }else{
                                     error_log("@@@dgdfg-----");
                                     $summary['NewValue'] ='';
-                                }   
-                               }else if($summary['ActionOn']=='totaltimelog' || $summary['ActionOn']=='estimatedpoints'){
+                                    $summary['NewValueText']='';
+                                }  
+                                
+                               }else if($summary['ActionOn']=='totaltimelog' ){
+                                  $prepare_text = Yii::t('app','TotalTimeLog');
+                                  $summary['prepare_text']= $prepare_text;
+                                  $summary['action']='Total Time Log';
                                    if(!empty($changeSummary['OldValue'])){
                                        $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValueText']='from';
                                    }else{
                                        $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
                                        $summary['NewValue']=$changeSummary['NewValue'];
+                                       $summary['NewValueText']='to';
                                    }else{
                                        $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
                                    }
-                               }else if($summary['ActionOn']=='description'){
-                                    if(!empty($changeSummary['OldValue'])){
-                                        
-                                       $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 120);
+                                 
+                               }elseif($summary['ActionOn']=='estimatedpoints' || $summary['ActionOn']=='dod' ){
+                                    $prepare_text = Yii::t('app','set');
+                                    $summary['action']=Yii::t('app',$summary['ActionOn']);
+                                   if(!empty($changeSummary['OldValue'])){
+                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValueText']='from';
                                    }else{
                                        $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
-                                       $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 120);;
+                                       $summary['NewValue']=$changeSummary['NewValue'];
+                                       $summary['NewValueText']='to';
                                    }else{
                                        $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
+                                   }
+                                    $summary['prepare_text']= 'has '.$prepare_text;
+                               }else if($summary['ActionOn']=='description'){
+                                   error_log("@@@------------");
+                                    $prepare_text = Yii::t('app','changed');
+                                    $summary['prepare_text']= $prepare_text;
+                                    $summary['action']=$actionOn;
+                                    if(!empty($changeSummary['OldValue'])){
+                                        
+                                       $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 80);
+                                       $summary['OldValueText']='from';
+                                       
+                                    }else{
+                                       $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);;
+                                       $summary['NewValueText']='to';
+                                       
+                                    }else{
+                                       $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
                                    }
                                }else if($summary['ActionOn']=='projectcreation'){
+                                   // $prepare_text = array('message' => Yii::$app->params['created']);
+                                  $prepare_text = Yii::t('app','created');
+                                  $summary['action']='';
+                                      //error_log("@@@@--".print_r($prepare_text,1));
                                     if(!empty($changeSummary['OldValue'])){
                                         
                                        $summary['OldValue']=$setNewVal;
+                                       $summary['OldValueText']='from';
                                    }else{
                                        $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
                                        $summary['NewValue']=$setNewVal;
+                                       $summary['NewValueText']='to';
                                    }else{
                                        $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
                                    }
-                               }else{
-                                      if(!empty($changeSummary['OldValue'])){
+                                    $summary['prepare_text']= $prepare_text;
+                               }else if($summary['ActionOn']=='comment'){
+                                   error_log("jhhhk-------------------");
+                                   // $prepare_text = array('message' => Yii::$app->params['created']);
+                                   error_log("@@@------333333333333--------".$getActivities['ActionType']);
+                                    if($getActivities['ActionType']=='comment'){
+                                        error_log("innere22323----");
+                                     $prepare_text = Yii::t('app','comment');
+                                    }elseif($getActivities['ActionType']=='repliedOn'){
+                                        $prepare_text = Yii::t('app','repliedOn');
+                                    }
+                                    $summary['action']='';
+                                      //error_log("@@@@--".print_r($prepare_text,1));
+                                    if(!empty($changeSummary['OldValue'])){
                                         
                                        $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValueText']='from';
                                    }else{
                                        $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
                                        $summary['NewValue']=$changeSummary['NewValue'];
+                                       $summary['NewValueText']='to';
                                    }else{
                                        $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
                                    }
+                                    $summary['prepare_text']= $prepare_text;
+                               }else if($summary['ActionOn']=='bucket'|| $summary['ActionOn']=='workflow'){
+                                   error_log("jhhhk-------------------");
+                                     $prepare_text = Yii::t('app','changed');
+                                    $summary['action']=($summary['ActionOn']=='workflow'?'work flow':$actionOn);
+                                    error_log("changesummery55555555555-------".$changeSummary['OldValue']);
+                                    if(!empty($changeSummary['OldValue'])){
+                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValueText']='from';
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $summary['NewValue']=$changeSummary['NewValue'];
+                                       $summary['NewValueText']='to';
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
+                                   }
+                                    $summary['prepare_text']= $prepare_text;
+                               }else{
+                                    error_log("jhhhk------34444444444-------------");
+                                    $prepare_text='';
+                                    $summary['action']=$actionOn;
+                                    if(!empty($changeSummary['OldValue'])){
+                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValueText']='from';
+                                       $prepare_text = Yii::t('app','TotalTimeLog');// for the text has changed
+                                 
+                                   }else{
+                                        $prepare_text = Yii::t('app','set');
+                                        $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $summary['NewValue']=$changeSummary['NewValue'];
+                                        $summary['NewValueText']='to';
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                       $summary['NewValueText']='to';
+                                   }
+                                    $summary['prepare_text']= $prepare_text;
                                }
-//                              if(!empty($changeSummary['OldValue'])){
-//                                  error_log("test----".$changeSummary['OldValue']);
-//                                $validDate = CommonUtility::validateDate($changeSummary['OldValue']);
-//                                if($validDate){
-//                                   // $summary['OldValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-//                                    $datetime1=$summary['OldValue']->toDateTime();
-//                                    $datetime1->setTimezone(new \DateTimeZone($timezone));
-//                                    $summary['OldValue']= $datetime1->format('Y-m-d H:i:s');
-//                                }else{
-////                               error_log("===Field Name111111==");
-//                                   $summary['OldValue'] =trim(html_entity_decode(strip_tags($changeSummary['OldValue']))); 
-//                                
-//                                     error_log("oldvalueeee=-============".$summary['OldValue']);
-//                                }
-//                              }else{
-//                                  $summary['OldValue'] ='';
-//                              }
-//                              if(!empty($changeSummary['NewValue'])){
-//                                 error_log("set new vall----".$setNewVal); 
-//                                $validDate = CommonUtility::validateDate($changeSummary['NewValue']);
-//                                if($validDate){
-//                                   // error_log("=====-============".$validDate);
-//                                    $summary['NewValue'] = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-//                                    $datetime1=$summary['NewValue']->toDateTime();
-//                                    $datetime1->setTimezone(new \DateTimeZone($timezone));
-//                                    $summary['NewValue']= $datetime1->format('M-d-Y');
-//                                    
-//                                 error_log("summaryyyyyyy=-============".$summary['NewValue']);
-//                                }else{
-//                                 error_log("===Field Name22222222==");
-//                                  // $summary['NewValue'] = trim(html_entity_decode(strip_tags($changeSummary['NewValue']))); 
-//                                 $summary['NewValue'] = trim(html_entity_decode(strip_tags($setNewVal))); 
-//                                }
-//                              }else{
-//                                  error_log("@@@dgdfg-----");
-//                                  $summary['NewValue'] ='';
-//                              }
-                             // $getActivities['ChangeSummary']['OldValue']=!empty($changeSummary['OldValue'])?$changeSummary['OldValue']:'';
-                             // $getActivities['ChangeSummary']['NewValue']=!empty($changeSummary['NewValue'])?$changeSummary['NewValue']:'';
-                             array_push($getActivities['ChangeSummary'], $summary);  
+                            array_push($getActivities['ChangeSummary'], $summary);  
                            }
                            array_push($activityDetails, $getActivities);
                      //  }
                   }
-//                    $checkDates=array();
-//                  //  error_log("========864454=============".print_r(array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate')))),1));
-//                    $preparedDates['createdDate']= array_reverse(array_values(array_unique(array_column($activityDetails,'createdDate'))));
-//                   // error_log("========23243=============".print_r($preparedDates['createdDate'],1));
-//                    $checkDates = array_fill(0,count($preparedDates['createdDate']), []);
-//                    foreach($activityDetails as $extracteData){
-//                       $idx = array_search($extracteData['createdDate'], $preparedDates['createdDate']);
-//                       if(!is_array($checkDates[$idx])){
-//                           $checkDates[$idx]=array();
-//                       }
-//                       array_push($checkDates[$idx], $extracteData);
-//                        
-//                    }
-//                    $activityDetails=$checkDates;
+
                     $preparedActivities = array();
                     $finalActivity = array('activityDate' => '', 'activityData' => array());
                     $tempActivity = array();
                  //    error_log("@@@@@@@--------item-----".print_r($activityDetails,1));
 //                    foreach ($activityDetails as $extractActs) {
                         foreach($activityDetails as $item){
-                    
                                 $tempActivity[$item['dateOnly']][] = $item;
                              //    error_log("@@@@@@@--------item-----".print_r($tempActivity,1));
                         }
@@ -733,7 +790,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             Yii::error("CommonUtilityTwo:getAllProjectActivities::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
-  
+   
   }
 
   /**

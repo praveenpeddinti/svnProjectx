@@ -663,7 +663,7 @@ class SiteController extends Controller
        try{
             $postData = json_decode(file_get_contents("php://input"));
             if(!empty($postData->logoName)){
-            $projectsInfo=ServiceFactory::getCollaboratorServiceInstance()->saveProjectLogo($postData->logoName);    
+                $projectsInfo=ServiceFactory::getCollaboratorServiceInstance()->saveProjectLogo($postData->logoName);    
             }
               if(!empty($projectsInfo)){
                 $responseBean = new ResponseBean;

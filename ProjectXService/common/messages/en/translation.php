@@ -41,7 +41,8 @@ return [
     "unfollowed" => "is unfollowed",   
     "unrelated" => "has unrelated",
     'TotalTimeLog'=>'has changed',
-    
+    'estimatedpoints'=>'estimated points',
+    'dod'=>'dod',
      /*Email notifications */
             'tickettype, {planType}' => 'A {planType} type was changed.',
             'Assigned to, {planType}' => 'A {planType} assigned to was changed.',

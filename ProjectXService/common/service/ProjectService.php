@@ -98,7 +98,6 @@ class ProjectService {
             } else {
                 $extractUrl = explode('projectlogo/', $projectLogo);
                 $projectLogoPath = Yii::$app->params['ProjectRoot'] . Yii::$app->params['projectLogo'];
-                error_log("eee-------" . $extractUrl[1]);
                 if (file_exists($projectLogoPath . "/" . $extractUrl[1])) {
                     error_log("eee-----aaaaaa--" . $fileExt);
                     if (empty($fileExt) || $fileExt == '') {
@@ -106,8 +105,7 @@ class ProjectService {
                         rename($projectLogoPath . "/" . $extractUrl[1], $projectLogoPath . "/" . $extractUrl[1]);
                         $logo = Yii::$app->params['projectLogo'] . '/' . $extractUrl[1];
                     } else {
-                        error_log("aaaa6666666666aa-----------" . $extractUrl[1]);
-                        rename($projectLogoPath . "/" . $extractUrl[1], $projectLogoPath . "/" . $projectName . "_" . $projectId . ".$fileExt");
+                         rename($projectLogoPath . "/" . $extractUrl[1], $projectLogoPath . "/" . $projectName . "_" . $projectId . ".$fileExt");
                         $logo = Yii::$app->params['projectLogo'] . '/' . $projectName . "_" . $projectId . ".$fileExt";
                     }
                 } else {
@@ -115,7 +113,7 @@ class ProjectService {
                     error_log("not existeddddddddd----");
                 }
             }
-            error_log("not existeddddddddd@@@@@@@@@@@@@--------" . $projectLogo);
+            error_log("not existeddddddddd@@@@@@@@@@@@@--------" . $logo);
             $ProjectModel = new Projects();
             $updateStatus = $ProjectModel->updateProjectDetails($projectName, $description, $fileExt, $logo, $projectId);
             return $updateStatus;

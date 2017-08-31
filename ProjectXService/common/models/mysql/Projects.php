@@ -62,7 +62,8 @@ class Projects extends ActiveRecord
         }else{
             $data['setLogo']=false;  
         }
-        $data["Description"] = $data["Description"];
+        $data["Description"] = !empty($data["Description"])?$data["Description"]:'';
+        $data["PId"] = !empty($data["PId"])?$data["PId"]:'';
         return $data;   
         } catch (\Throwable $ex) {
              Yii::error("Projects:getProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

@@ -321,41 +321,45 @@ class CollaboratorController extends Controller
         try{
             $postData = json_decode(file_get_contents("php://input")); 
             $fileExt=!empty($postData->fileExtention)?$postData->fileExtention:"";
-            $returnId=ServiceFactory::getProjectServiceInstance()->savingProjectDetails($postData->projectName,$postData->description,$postData->userInfo->Id,$postData->projectLogo);
-            if($returnId!='failure'){
-                $projectId=$returnId;
-                if (strpos($postData->projectLogo,'assets') !== false) {
-                  $logo=$postData->projectLogo;
-                } else {
-                   $extractUrl= explode('projectlogo/',$postData->projectLogo);
-                   $projectLogoPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['projectLogo'] ;
-                    if (file_exists($projectLogoPath."/".$extractUrl[1])) {
-                        rename($projectLogoPath . "/" . $extractUrl[1],$projectLogoPath . "/" . $postData->projectName."_".$returnId.".$fileExt");
-                        $logo=$postData->projectName."_".$returnId.".$fileExt";
+            $checkProjectName= Projects::getProjectDetails($postData->projectName);
+           // error_log("22222222-----------".print_r($checkProjectName['PId'],1));
+            if($checkProjectName['PId']==''){
+                $returnId=ServiceFactory::getProjectServiceInstance()->savingProjectDetails($postData->projectName,$postData->description,$postData->userInfo->Id,$postData->projectLogo);
+                if($returnId!='failure'){
+                    $projectId=$returnId;
+                    if (strpos($postData->projectLogo,'assets') !== false) {
+                      $logo=$postData->projectLogo;
                     } else {
-                        error_log("not existeddddddddd");
+                       $extractUrl= explode('projectlogo/',$postData->projectLogo);
+                       $projectLogoPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['projectLogo'] ;
+                        if (file_exists($projectLogoPath."/".$extractUrl[1])) {
+                            rename($projectLogoPath . "/" . $extractUrl[1],$projectLogoPath . "/" . $postData->projectName."_".$returnId.".$fileExt");
+                            $logo=$postData->projectName."_".$returnId.".$fileExt";
+                        } else {
+                            error_log("not existeddddddddd");
+                        }
+
                     }
-                
+                    ServiceFactory::getCollaboratorServiceInstance()->updateProjectlogo($projectId,$logo);
+                    $getStatus=ServiceFactory::getProjectServiceInstance()->savingProjectTeamDetails($projectId,$postData->userInfo->Id);
+                   // $getlastIdDetails= CommonUtilityTwo::getLastProjectDetails($projectId,$postData->userInfo->Id);
+                 }
+                 if($getStatus == 'failure' || $returnId=='failure'){
+                    $responseBean = new ResponseBean;
+                    $responseBean->statusCode = ResponseBean::FAILURE;
+                    $responseBean->message = "failure";
+                    $responseBean->data = $projectId;
+                    $response = CommonUtility::prepareResponse($responseBean,"json"); 
+                }else{
+                    $responseBean = new ResponseBean;
+                    $responseBean->statusCode = ResponseBean::SUCCESS;
+                    $responseBean->message = "success";
+                    $responseBean->data = $projectId;
+                    $response = CommonUtility::prepareResponse($responseBean,"json");
+
                 }
-                ServiceFactory::getCollaboratorServiceInstance()->updateProjectlogo($projectId,$logo);
-                $getStatus=ServiceFactory::getProjectServiceInstance()->savingProjectTeamDetails($projectId,$postData->userInfo->Id);
-               // $getlastIdDetails= CommonUtilityTwo::getLastProjectDetails($projectId,$postData->userInfo->Id);
-             }
-             if($getStatus == 'failure' || $returnId=='failure'){
-                $responseBean = new ResponseBean;
-                $responseBean->statusCode = ResponseBean::FAILURE;
-                $responseBean->message = "failure";
-                $responseBean->data = $projectId;
-                $response = CommonUtility::prepareResponse($responseBean,"json"); 
-            }else{
-                $responseBean = new ResponseBean;
-                $responseBean->statusCode = ResponseBean::SUCCESS;
-                $responseBean->message = "success";
-                $responseBean->data = $projectId;
-                $response = CommonUtility::prepareResponse($responseBean,"json");
-         
+                return $response;
             }
-            return $response;
         } catch (\Throwable $th) { 
              Yii::error("CollabaratorController:actionSaveProjectDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
