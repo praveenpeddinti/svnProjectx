@@ -377,9 +377,11 @@ class CollaboratorService {
      * @return type int
      */
     public function saveNewUser($projectId, $user,$code) {
-        try {
-             $userId = Collaborators::createUser($user);
-            
+        try { 
+            $userId='';
+            $isUserExist = Collaborators::getCollaboratorByEmail($user->email);
+            if($isUserExist==''){
+            $userId = Collaborators::createUser($user);
             $extension = CommonUtility::getExtension($user->originalImageName);
             $extension = strtolower($extension);
             $userName =  $user->firstName."".$user->lastName;
@@ -401,6 +403,9 @@ class CollaboratorService {
                 Collaborators::saveUserProfile($userId, $user->userProfileImage);
                 Settings::saveNotificationsSettingsForUser($userId);
                 $this->invalidateInvite($usermail, $invite_code);
+            }
+            }else{
+                return "User Exist";
             }
             return $userId;
         } catch (\Throwable $ex) {
