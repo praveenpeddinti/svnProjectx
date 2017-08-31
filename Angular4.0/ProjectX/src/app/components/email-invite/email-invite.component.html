@@ -19,7 +19,7 @@
             <div class="usrcomponent">
 
               <!--<p-autoComplete  [(ngModel)]="selectedUsers" [minLength]="1" placeholder="Search ...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email  (keyup.enter)="validateEmail(email.value)"   (completeMethod)="searchUsersToInvite($event)" ></p-autoComplete>-->
-              <p-autoComplete id="invite_search"   [delay]="1000" [(ngModel)]="selectedUsers" emptyMessage="No Results" [minLength]="1" placeholder="Add or search for users...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email  (keyup.enter)="validateEmail(email)"   (completeMethod)="searchUsersToInvite($event)" >
+              <p-autoComplete id="invite_search"   [delay]="1000" [(ngModel)]="selectedUsers" emptyMessage="No Results" [minLength]="1" placeholder="Add or search for users...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email    (completeMethod)="searchUsersToInvite($event)" >
                 <ng-template  let-selectedUsers pTemplate="item">
                     <span> {{selectedUsers}} </span>
                     <div *ngIf="noResult" (click)="addNewUser()" class="but_add float_right">Add</div>
@@ -28,7 +28,8 @@
 
             </div>
             <span class="fielderror" [hidden]="!isEmailValid">Email Invalid </span>
-            <span class="fielderror" [hidden]="!isEmpty">Please add user to invite</span>
+            <span class="fielderror"  [hidden]="!isEmpty">Please add user to invite</span>
+            <span class="fielderror"  [hidden]="!isExist">User already in the team</span>
             <div id="invite_placeholder" class="addusers_place">Add users here to Invite</div>
             <div class="inuser"><div [hidden]="selectedUser.length==0"><p-chips value="" [(ngModel)]="selectedUser" [styleClass]="invitesearch " [allowDuplicates]="false" ></p-chips></div>
             </div>

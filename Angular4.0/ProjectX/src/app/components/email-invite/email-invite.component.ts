@@ -27,6 +27,7 @@ export class EmailInviteComponent implements OnInit {
   public checkAutoComplete:boolean=false;
   public noResult:boolean=false;
   public displayContainerDiv:boolean=false;
+  public isExist:boolean=false;
 
   constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService,private zone:NgZone) { }
 
@@ -83,7 +84,7 @@ export class EmailInviteComponent implements OnInit {
   selectedValue(value){ this.checkAutoComplete=true; //This is used to avoid conflict between (keyup.enter) and default enter of component
     if(!(this.selectedUser.indexOf(value)>-1))
     {
-      if(value!="No Results"){
+      if(value!="No Results"){ 
       this.selectedUser.push(value);
       //this.displayContainerDiv=true;
       jQuery("#invite_placeholder").hide();
@@ -99,6 +100,7 @@ export class EmailInviteComponent implements OnInit {
       if(!this.checkAutoComplete){
           var email =  object["inputEL"]["nativeElement"]["value"];
           this.isEmpty=false;
+          this.isExist=false;
           var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
           this.isEmailValid = pattern.test(email.trim());
           if(this.isEmailValid)
@@ -160,12 +162,14 @@ export class EmailInviteComponent implements OnInit {
       jQuery("#invite_search").attr("value",""); //jquery was used since model binding was not getting updated....
       this.isSuccess=false;
       this.isEmailValid=false;
+      this.isExist=false;
       //this.selectedUsers="";
       jQuery("#invite_placeholder").show();
     }
 
 
     checkEmail(email){
+      this.isExist=false;
       var pattern=/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       var status = pattern.test(email.trim());
       if(status==true){
@@ -175,9 +179,23 @@ export class EmailInviteComponent implements OnInit {
       }
     }
 
-    addNewUser(){
-      this.selectedValue(this.selectedUsers);
-      this.selectedUsers=null;
+    addNewUser(){ 
+       var userInfo={email:this.selectedUsers,projectId:this.projectId};
+       var userMail=this.selectedUsers;
+       this._ajaxService.AjaxSubscribe("collaborator/check-user-exist",userInfo,(result)=>
+       {
+          if(result.statusCode==200){
+              if(result.data=="not exist"){ 
+                  this.selectedValue(userMail);
+                  this.selectedUsers=null;
+                }else{
+                    /*Show error message */
+                    this.isExist=true;
+                    this.selectedUsers=userMail;
+                  }
+            }
+        });
+      //this.selectedUsers=null;
     }
 
 }
