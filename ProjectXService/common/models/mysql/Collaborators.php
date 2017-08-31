@@ -383,6 +383,38 @@ class Collaborators extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-
+    
+    /**
+     * @author Ryan
+     * @param type $projectId,$userid
+     * @return type array 
+     */
+    public static function getUserRole($projectId,$userId){
+        try{
+            $qry="select R.Id from ProjectRoles R join ProjectTeam PT on PT.Role=R.Id where PT.CollaboratorId=$userId and PT.ProjectId=$projectId";
+            $role=Yii::$app->db->createCommand($qry)->queryOne();
+            return $role;
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getUserRole::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    /**
+     * @author Ryan
+     * @param type $projectId,$email
+     * @return type array 
+     */
+    public static function findUserInTeam($projectId,$email){
+        try{
+            $qry="select C.Id from Collaborators C join ProjectTeam PT on PT.CollaboratorId=C.Id where C.Email='$email' and PT.ProjectId=$projectId";
+            $user=Yii::$app->db->createCommand($qry)->queryOne();
+            return $user;
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:findUserInTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
 }
 ?>
