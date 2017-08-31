@@ -653,8 +653,8 @@ trait NotificationTrait {
                 $actionType = "change";
                 $tic->Notification_Type = $notification_Type;
                 $tic->ActivityOn = $notifyType;
-               // $oldValue = CommonUtility::refineDescriptionForEmail($oldValue);
-                //$newValue = CommonUtility::refineDescriptionForEmail($newValue);
+                $oldValue = CommonUtility::refineDescriptionForEmail($oldValue);
+                $newValue = CommonUtility::refineDescriptionForEmail($newValue);
                 $tic->OldValue = $oldValue;
                 $tic->NewValue = $newValue;
                 //$tic->Status = 0;
@@ -865,6 +865,7 @@ trait NotificationTrait {
                 /*                 * *** Any changes in Editor ********** */
                 $commentAllowedArray = ["comment", "reply", "edit", "delete","repliedOn"];
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
+                    error_log("1--------------------------------66666666666--------------".$notification['OldValue']);
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                     $Date = $datetime->format('Y-m-d H:i:s');
@@ -874,6 +875,7 @@ trait NotificationTrait {
                     if ($notification['Notification_Type'] == 'comment') {
                         //Eg : moin.hussain commented on #33 Ticket 
                         if ($notification['ActivityFrom'] != $user) {
+                            $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 50);
                             $preposition = ' "'.$notification['NewValue'].'"'." on";
                             $object = "comment";
                             $type = Yii::t('app','comment');
@@ -952,10 +954,10 @@ trait NotificationTrait {
 
                         array_push($result_msg, $message);
                     } else if ($storyField['Type'] != 6) {
-//                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
-//                           $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
-//                            $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
-//                        }
+                        if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
+                           $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 50);
+                            $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 50);
+                        }
                          $notification['OldValue']= '"'.$notification['OldValue'].'"';
                          $notification['NewValue']='"'.$notification['NewValue'].'"';
                         $preposition = $notification['Notification_Type'] == "set" ? "to" : "**";
