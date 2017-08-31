@@ -53,7 +53,7 @@
                     </div>
                   <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
            <label class="loginformlabel"> Display Name </label>
-              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.displayName" name="displayName"  #displayName="ngModel" placeholder="Display Name" minlength="3" pattern="[a-zA-Z0-9_.]*" required/>
+              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.displayName" name="displayName"  #displayName="ngModel" placeholder="Display Name" minlength="3" pattern="[a-zA-Z0-9_.]*" (focusout)="prepareDisplayName()" required/>
                   <div *ngIf="submitted && displayName.errors " class="fielderror">
                       <div [hidden]="!displayName.errors.required">
                           Display name is required
