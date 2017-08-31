@@ -100,7 +100,7 @@ export class ProjectDashboardComponent implements OnInit {
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
                 thisObj.form['setLogo']=thisObj.setLogo;
-                // alert("------33------"+JSON.stringify(thisObj.form['projectLogo']));
+             //   alert("------33------"+JSON.stringify(thisObj.form['projectLogo']));
 //                 if(thisObj.form['projectLogo']=='assets/images/logo.jpg'){
 //                   thisObj.setlogo=true;
 //                 }else{
@@ -236,10 +236,13 @@ export class ProjectDashboardComponent implements OnInit {
   }
   appendLogo(val){
     // this.setLogo=false;
-    //alert("df"+val);
+    jQuery(".imgs").attr("src",'');
     if(val != undefined){
       this.setLogo=false;
-      jQuery(".project_logo").attr("src",val);
+      jQuery(".imgs").attr("src",val);
+      this.projectLogo=val;
+    }else{
+       this.setLogo=true;
     }
   }
   appendDescription(val){
@@ -257,5 +260,6 @@ export class ProjectDashboardComponent implements OnInit {
       this.otherBucketsContainer=data.data;
     })
   }
+
  
 }

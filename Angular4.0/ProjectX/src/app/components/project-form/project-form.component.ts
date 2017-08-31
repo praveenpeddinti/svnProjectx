@@ -101,7 +101,7 @@ export class ProjectFormComponent implements OnInit {
             //  alert("------fghh------"+JSON.stringify(thisObj.form['setLogo']));
                //  jQuery("#summernote").summernote('code',thisObj.form['description']);
                  thisObj.copyProjectname=thisObj.form['projectName'];
-                 thisObj.copydescription=thisObj.form['description'];
+                
                 
             });
         });
@@ -308,11 +308,13 @@ export class ProjectFormComponent implements OnInit {
                          // alert("2222222"+this.editPopUp);
                          }, 500);
                         // this.editPopUp=true;
-                        // alert("232"+this.editPopUp);
+                        // alert("232"+this.editPopUp);http://10.10.73.10/files/projectlogo/d8bab7842010255213fe04c3c02e0153-images.jpeg
                       //  alert("2222222"+this.updatedLogo);
                       //  if(this.updatedLogo==undefined){
                       //     this.appendLogoToParent.emit("assets/images/logo.jpg");
                       //  }else{
+                        alert("####"+this.updatedLogo);
+                         this.copydescription=this.form['description'];
                        this.appendLogoToParent.emit(this.updatedLogo);
                       // }
                        this.appendDescriptionParent.emit(this.form['description']);
@@ -352,17 +354,12 @@ export class ProjectFormComponent implements OnInit {
   }
      resetFormForedit(){
        this.submitted=false;
-        //  this.form={
-        //          description:""
-        //     };
-       // jQuery("#summernote").summernote('code',this.copydescription);
+       jQuery("#summernote").summernote('code',this.copydescription);
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
-        jQuery("#summernote").summernote('destroy');
-       // alert("trueee---"+this.form['setLogo']);
-       // alert("@@@"+jQuery('.projectlogo').attr("src"));
-        if(this.form['setLogo']!=true){
-          jQuery(".projectlogo").attr("src",this.projectLogo);
+        jQuery("#summernote").summernote('destroy',true);
+         if(this.form['setLogo']!=true){
+           jQuery(".projectlogo").attr("src",this.updatedLogo);
         }else{
       //    alert("111");
           this.form['setLogo']=true;
@@ -410,7 +407,7 @@ export class ProjectFormComponent implements OnInit {
      this.spinnerSettings.color='';
      this.spinnerSettings.class ='';
      this.form['projectName']=this.copyProjectname;
-     jQuery("#summernote").summernote('code',this.copydescription);
+     //jQuery("#summernote").summernote('code',this.copydescription);
      this.checkImage=jQuery('.projectlogo').attr("src");
      if(this.checkImage=='assets/images/logo.jpg'){
         this.clearImgsrc=true; 
