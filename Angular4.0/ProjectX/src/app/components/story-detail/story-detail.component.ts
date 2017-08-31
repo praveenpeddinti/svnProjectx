@@ -229,7 +229,7 @@ getArtifacts(obj){
     
     //added by Ryan for summernote
     this.editor.initialize_editor('detailEditor',null,this);
-     jQuery("#detailEditor").summernote('code','<p>'+this.ticketEditableDesc+'</p>');
+     jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
     //  alert("here");
     //  jQuery("#detailEditor").summernote('code',jQuery("#detailEditor").html());
     this.showDescEditor = false;
@@ -261,7 +261,7 @@ getArtifacts(obj){
         };
         this.postDataToAjax(postEditedText);
         this.showDescEditor = true;
-        this.ticketCrudeDesc = editorDesc;//this.ticketEditableDesc;
+        this.ticketCrudeDesc = editorData;//this.ticketEditableDesc;
         }else{
           this.descError = "Description cannot be empty.";
         }
@@ -270,6 +270,7 @@ getArtifacts(obj){
 
   cancelDesc(){
     this.descError = "";
+    alert(this.ticketCrudeDesc);
     this.ticketEditableDesc = this.ticketCrudeDesc;
     this.showDescEditor = true;
 
