@@ -715,6 +715,42 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+     /*
+     * @autor Ryan
+     * @param type $userId,$projectId
+     * @description Used for getting the role of logged in user
+     */
+    public function checkRole($projectId,$userId){ 
+        try{
+            $role=Collaborators::getUserRole($projectId,$userId);
+            return $role;
+        } catch (Exception $ex) {
+            Yii::error("CollaboratorService:checkRole::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+     /*
+     * @autor Ryan
+     * @param type $projectId,$email
+     * @description Used for checking user exists in team
+     */
+    public function checkUserInTeam($projectId,$email){
+        try{
+            $user=Collaborators::findUserInTeam($projectId,$email);
+            error_log("Users Data--".print_r($user,1));
+            if($user!=''){
+                return 'exist';
+            }else{
+                return 'not exist';
+            }
+           
+        } catch (Exception $ex) {
+            Yii::error("CollaboratorService:checkUserInTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
 
 
 }
