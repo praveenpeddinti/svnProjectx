@@ -791,22 +791,23 @@ trait NotificationTrait {
 
                 if ($activityOnFieldType == 6) { //newly assigned 
                     //$action_user=Collaborators::getCollaboratorById($notification['ActivityOn']);
-                    $preposition='';
+                    $preposition='to';
+                     $to='';
                     if ($notification['NotifiedUser'] == $notification['NewValue']) {
-                        if($activityOn=="assigned")
-                                    $preposition = "to";
-                        //for logged in user
+                         //for logged in user
                         //Eg : moin.hussain assigned you to ticket #33 
                         $to = "you";
                     } else {
-                         $preposition = "to";
                         $action_user = Collaborators::getCollaboratorById($notification['NewValue']);
                         //Eg : moin.hussain assigned sateesh.mandru to Ticket #33
                         //$msg=$from_user['UserName'] .' '. Yii::$app->params['assignedTo'] .' '.$action_user['UserName'].' '.$ticket_msg;
                         $to = $action_user['UserName'];
-                    }
+                   }
+                   if($activityOn=="assignedto") 
+                    $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "user", 'type' => Yii::t('app','assigned'), 'to' => $to, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "Preposition" => $preposition);
+                   else
                     $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "user", 'type' => Yii::t('app','assigned'), 'to' => $to, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "OtherMessage" => Yii::t('app',$activityOn), "Preposition" => $preposition);
-                    array_push($result_msg, $message);
+                   array_push($result_msg, $message);
                 } else if ($notification['ActivityOn'] == 'Description' || $notification['ActivityOn'] == 'Title') {
                     $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 50);
                     $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 50);
@@ -865,7 +866,6 @@ trait NotificationTrait {
                 /*                 * *** Any changes in Editor ********** */
                 $commentAllowedArray = ["comment", "reply", "edit", "delete","repliedOn"];
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
-                    error_log("1--------------------------------66666666666--------------".$notification['OldValue']);
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
                     $Date = $datetime->format('Y-m-d H:i:s');
@@ -927,7 +927,7 @@ trait NotificationTrait {
                 // {
                 // $storyField = StoryFields::getFieldDetails($notification['ActivityOn'],"Field_Name");
                 else if (isset($storyField['Title'])) {
-
+error_log("-------------------------55555555555555----------------".$notification['ActivityOn']);
                     $storyFieldName = $storyField['Title'];
                     //Eg : moin.hussain set duedate to 'apr-14-2017'
                     if ($storyField['Type'] == 4) {
@@ -965,14 +965,6 @@ trait NotificationTrait {
                         array_push($result_msg, $message);
                     }
                 }
-
-                /* Left Panel Changed Field Values Start */
-
-
-
-                /*                 * *******Left Panel  Changed Field Values End ****************** */
-
-
 
                 /*                 * ** Changes in Editor End ************ */
             }
