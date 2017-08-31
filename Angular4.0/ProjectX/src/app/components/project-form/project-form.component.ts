@@ -86,7 +86,7 @@ export class ProjectFormComponent implements OnInit {
               if(data.data!=false){
                 thisObj.projectId=data.data.PId;
                   // alert("------------"+JSON.stringify(thisObj.projectId));
-                 thisObj.description= '<p>'+data.data.Description+'</p>';
+                 thisObj.description= data.data.Description;
                  thisObj.projectLogo=data.data.ProjectLogo;
                  thisObj.setLogo=data.data.setLogo;
                 //  alert("------------"+JSON.stringify(thisObj.projectLogo));;
@@ -250,7 +250,7 @@ export class ProjectFormComponent implements OnInit {
             // }else{
              var postData={
                       projectName:this.form['projectName'].trim(),
-                      description:this.form['description'],
+                      description:editor,
                       projectLogo:this.projectImage,
                       fileExtention:this.fileExtention
                   } ;
