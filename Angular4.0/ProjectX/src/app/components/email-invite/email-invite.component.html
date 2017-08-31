@@ -19,7 +19,7 @@
             <div class="usrcomponent">
 
               <!--<p-autoComplete  [(ngModel)]="selectedUsers" [minLength]="1" placeholder="Search ...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email  (keyup.enter)="validateEmail(email.value)"   (completeMethod)="searchUsersToInvite($event)" ></p-autoComplete>-->
-              <p-autoComplete id="invite_search"   [delay]="1000" [(ngModel)]="selectedUsers" emptyMessage="No Results" [minLength]="1" placeholder="Add or search for users...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email    (completeMethod)="searchUsersToInvite($event)" >
+              <p-autoComplete id="invite_search"   [delay]="1000" [(ngModel)]="selectedUsers" emptyMessage="No Results" [minLength]="2" placeholder="Add or search for users...." [suggestions]="inviteUsers"  [style]="{'width':'100%'}" [styleClass]="invitesearch" (onSelect)="selectedValue($event)" #email    (completeMethod)="searchUsersToInvite($event)" >
                 <ng-template  let-selectedUsers pTemplate="item">
                     <span> {{selectedUsers}} </span>
                     <div *ngIf="noResult" (click)="addNewUser()" class="but_add float_right">Add</div>
