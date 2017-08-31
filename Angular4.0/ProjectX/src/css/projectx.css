@@ -1603,8 +1603,25 @@ button.toast-close-button {
 .ngx-datatable{ overflow:unset !important;}
 .ngx-datatable .datatable-body .datatable-row-detail {
     overflow: unset!important;
-    z-index: 9999!important;
+   z-index: 5000!important;
 }
+.datatable-row-wrapper{overflow: unset!important;
+ /*z-index: 9999!important;*/
+   }
+
+   .datatable-row-group .ui-dropdown .ui-dropdown-panel {
+    /*z-index:9999!important;*/
+    overflow: unset!important;
+}
+
+.datatable-body .ui-dropdown .ui-dropdown-panel {
+    z-index:50007!important;
+}
+
+.datatable-row-group .ui-dropdown .datatable-body-row{
+    overflow: unset!important;}
+
+
 .float_right{float:right;}
 
 .custom_selctdropdown .ui-state-default { border:solid 2px #e6e8eb; background:#fff; font:normal 14px/20px 'open_sansregular'; color:#524693; border-radius:4px; -web-border-radius:4px; -moz-border-radius:4px; padding:2px 10px 2px 5px;}
@@ -1623,13 +1640,38 @@ button.toast-close-button {
 .custom_selctdropdown2 .ui-dropdown .ui-dropdown-trigger .fa-caret-down:before {
     content: "\f107";
 	font-family: 'FontAwesome';
-    margin-top: 5px;
+     margin-top: 5px;
 }
+
+
+.custom_selctdropdown2 .ui-dropdown .ui-dropdown-trigger .fa {
+    margin-left: 0!important;
+    margin-top: 0.6em!important;
+}
+
+
+
+.custom_selctdropdown3 .ui-state-default { background:#fff; border:solid 1px #e6e8eb; font:normal 12px/17px 'open_sansregular'; color:#524693; border-radius:4px; -web-border-radius:4px; -moz-border-radius:4px; padding:0px 10px 0px 2px;}
+
+.custom_selctdropdown3 .ui-dropdown .ui-dropdown-trigger { border:none!important;}
+.custom_selctdropdown3 .ui-dropdown .ui-dropdown-label {color:#524693;}
+.custom_selctdropdown3 .ui-dropdown .ui-dropdown-trigger .fa-caret-down:before {
+    content: "\f107";
+	font-family: 'FontAwesome';
+    font-size:15px!important;
+   
+}
+
+.custom_selctdropdown2 .ui-dropdown .ui-dropdown-trigger .fa { margin-top: 0.45em!important;}
+
+
+
 
 .custom_selctdropdown2 .ui-inputtext:focus { box-shadow:none!important; outline: none!important; border: none!important;}
 .custom_selctdropdown2 .ui-inputtext:hover { box-shadow:none!important; outline: none!important; border: none!important;}
 
 .custom_selctdropdown2 .ui-helper-hidden-accessible .ui-inputtext:focus { box-shadow:0!important; outline: none!important; border: none!important;}
+
 
 .ui-chkbox-box.ui-state-active, .ui-radiobutton-box.ui-state-active {
     background: #695ea5 none repeat scroll 0 0!important;
@@ -1637,7 +1679,14 @@ button.toast-close-button {
     color: #ffffff;
 }
 
+.editinput{ background: #fff; border: 1px solid #d6d6d6;
+    border-radius:0px!important;
+    padding:5px;
+    font-size: 12px;
+    width: 100%!important;}
 
-
-
-
+    .ui-dropdown:hover{ background:#fff!important;}
+    .ui-state-disabled{background:#fff!important;}
+.ui-widget-header .ui-button, .ui-widget-content .ui-button, .ui-widget.ui-button, .ui-button{  background: #695ea5 none repeat scroll 0 0!important;
+    border: 1px solid #695ea5!important;}
+    .ui-datepicker.ui-widget .ui-datepicker-calendar td a.ui-state-active{background: #695ea5!important;}

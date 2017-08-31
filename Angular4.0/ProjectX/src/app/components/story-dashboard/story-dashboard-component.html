@@ -78,7 +78,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
            
             <p-calendar [hidden]="!editing[i +'-'+row.$$index]" *ngSwitchCase="'date'" [(ngModel)]="dateVal" (onSelect)="restoreField($event,row[i].field_name+'_'+row[0].field_value+'_span',i,row[i].render_type,row[i].field_id,i +'-'+row.$$index,row)" class="primeDateComponent" name="date_{{i}}"   id='{{row[i].field_name}}_{{i}}' [readonlyInput]="true" [minDate]="minDate" [showIcon]="true"  dateFormat="M-dd-yy" >
                         </p-calendar> 
-                        <span [hidden]="!editing[i +'-'+row.$$index]" class="customdropdown">
+                        <span [hidden]="!editing[i +'-'+row.$$index]" class="custom_selctdropdown3">
                             <p-dropdown class="inlineblock dropdown_wrap" *ngSwitchCase="'select'" [style]="{'width':'100%'}" [ngModel]="row[i].value_id"   name="dropdownContainer_{{i}}"  id="{{row[i].field_name}}_{{row[0].field_value}}_drop" (onBlur)="selectBlurField($event,i)" (onChange)="restoreField($event,row[i].field_name+'_'+row[0].field_value+'_span',i,row[i].render_type,row[i].field_id,i +'-'+row.$$index,row)"  [displayOptions]="dropDisplayList" [options]="dropList" >
                             </p-dropdown>
                             <input *ngSwitchCase="'select'" type="hidden" id="{{row[i].field_name}}_{{row[0].field_value}}_currentSelected">

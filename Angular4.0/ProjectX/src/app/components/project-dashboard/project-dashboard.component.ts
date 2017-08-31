@@ -143,6 +143,7 @@ export class ProjectDashboardComponent implements OnInit {
             });
         });
            });
+           this.shared.change(this._router.url,thisObj.projectName,'','',thisObj.projectName); //added by Ryan for breadcrumb purpose
 
   }
    ngAfterViewInit() {
