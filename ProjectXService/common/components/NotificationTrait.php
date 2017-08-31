@@ -808,8 +808,8 @@ trait NotificationTrait {
                     $message = array('onlyDate' => $dateOnly, 'Slug' => $notification['CommentSlug'], 'Project' => $projectDetails, 'IsSeen' => $notification['Status'], 'from' => $from_user['UserName'], 'object' => "user", 'type' => Yii::t('app','assigned'), 'to' => $to, 'Title' => $ticket_data['Title'], 'TicketId' => $notification['TicketId'], 'date' => $Date, 'id' => $notification['_id'], 'PlanLevel' => $planLevel, 'Profile' => $from_user['ProfilePicture'], "OtherMessage" => Yii::t('app',$activityOn), "Preposition" => $preposition);
                     array_push($result_msg, $message);
                 } else if ($notification['ActivityOn'] == 'Description' || $notification['ActivityOn'] == 'Title') {
-                    $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 10);
-                    $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 10);
+                    $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 50);
+                    $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 50);
                     $notification_type=$notification['Notification_Type'];
                      $notification['OldValue']= '"'.$notification['OldValue'].'"';
                          $notification['NewValue']='"'.$notification['NewValue'].'"';
