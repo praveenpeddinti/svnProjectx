@@ -64,8 +64,11 @@ public inviteCode;
   }
 
 public prepareDisplayName(){
-  if((this.form['firstName']!='' && this.form['firstName']!=undefined) && (this.form['lastName']!='' && this.form['lastName']!=undefined))
-  this.form['displayName']=this.form['firstName']+this.form['lastName'];
+  if(this.form['displayName']=='' || this.form['displayName']==undefined){
+     if((this.form['firstName']!='' && this.form['firstName']!=undefined) && (this.form['lastName']!='' && this.form['lastName']!=undefined))
+      this.form['displayName']=this.form['firstName']+this.form['lastName'];
+  }
+ 
 }
     saveUser()
     {    
