@@ -337,8 +337,9 @@ class Collaborators extends ActiveRecord
             $collaborator=new Collaborators();
             $collaborator->FirstName=$user->firstName;
             $collaborator->LastName=$user->lastName;
-            $collaborator->DisplayName=$user->displayName;
-            $collaborator->UserName=$user->firstName.'.'.$user->lastName;
+            //$collaborator->DisplayName=$user->displayName;
+          //  $collaborator->UserName=$user->firstName.'.'.$user->lastName;
+            $collaborator->UserName=$user->displayName;
             $collaborator->Email=$user->email;
             $collaborator->Password=md5($user->password);
             $collaborator->OrganizationId=1;
