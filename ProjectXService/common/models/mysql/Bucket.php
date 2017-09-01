@@ -456,7 +456,7 @@ class Bucket extends ActiveRecord
             $activityCount=array();
             $currentWeekBucketDetailsByMaxActivity=array();
             foreach($currentWeekBuckets as $buckets){
-                if($buckets["_id"]!=0 || $buckets["_id"]!=''){
+                if($buckets["_id"]!=0 && $buckets["_id"]!='' && !empty($buckets["_id"])){
                     array_push($bucketIds,$buckets['_id']);
                     array_push($activityCount,$buckets['count']);
                  }
