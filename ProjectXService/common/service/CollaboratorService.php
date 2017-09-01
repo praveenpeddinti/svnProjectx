@@ -522,7 +522,7 @@ class CollaboratorService {
             $userData=array();
             $invite_data = ProjectInvitation::verifyCode($invite_code);
             error_log("==Invite Userrrrrrrr==".$invite_data['UserId']);
-            if (empty($invite_data) || $invite_data['IsValid']==0) { //either empty or invalid code
+            if ($invite_data['IsValid']==0) { //either empty or invalid code
                $usertype=null;
             }else{ 
                 if($invite_data['UserId']>0){
