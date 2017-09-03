@@ -18,7 +18,7 @@
   
   <div class="pull-right">
   <div class="model_proimg">
-            <img  alt="" [src]="userProfileImage" name="projectLogo" id="projectlogo" />
+            <img  alt="" [src]="userProfileImage" name="originalImageName" id="userlogo" />
             <div (click)="CallFileupload()" class="model_proimgedit"><i class="fa fa-pencil" aria-hidden="true"></i>
             </div>
             <input  type="file" id="my_file" style="display: none;" (change)="fileUpload($event, 'fileChange')"/>
@@ -75,7 +75,7 @@
     
                   <label class="loginformlabel" for="password">Password</label>
                   <input class="invitesearch" [(ngModel)]="form.password" id="password" type="password" id="pass" class="form-control customfield" required minlength="8"
-                    maxlength="20" name="password" #password="ngModel">
+                    maxlength="15" name="password" #password="ngModel">
                   <div *ngIf=" submitted && password.errors" class="fielderror">
                     <div [hidden]="!password.errors.required">
                      Password is required
@@ -91,8 +91,8 @@
 
     
                   <label class="loginformlabel" for="password">Confirm Password</label>
-                  <input class="invitesearch" (ngModelChange)="checkConfirmField($event)"  [(ngModel)]="form.confirmpassword" id="confirmpassword" type="password" id="confirmpass" class="form-control customfield" required minlength="1"
-                    maxlength="50" name="confirmpassword" #confirmpassword="ngModel">
+                  <input class="invitesearch" (ngModelChange)="checkConfirmField($event)"  [(ngModel)]="form.confirmpassword" id="confirmpassword" type="password" id="confirmpass" class="form-control customfield" required minlength="8"
+                    maxlength="15" name="confirmpassword" #confirmpassword="ngModel">
                   <div *ngIf=" submitted && confirmpassword.errors" class="fielderror">
                     <div [hidden]="!confirmpassword.errors.required">
                       Confirm password is required
