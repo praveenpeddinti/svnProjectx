@@ -69,7 +69,7 @@ class WorkFlowFields extends ActiveRecord
     
     public static function getWorkflowStatusList(){
         try{
-            $query="select Id,Name from WorkFlowFields";
+            $query="select Id,Name,State from WorkFlowFields";
             $data = Yii::$app->db->createCommand($query)->queryAll();
             return $data;
         } catch (Exception $ex) {

@@ -183,7 +183,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionEditTicket::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -1323,6 +1323,56 @@ class StoryController extends Controller
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
         }
+    }
+    
+    /**
+     * @author  Anand Singh
+     * @uses    Get all advanced filter options
+     * @return type
+     */
+    
+     public function actionGetAdvanceFilterOptions(){
+        try{
+        $postData = json_decode(file_get_contents("php://input"));
+        $projectId = $postData->projectId;
+        $options=array();
+        $tempFilter = array();
+       // $filters = ServiceFactory::getStoryServiceInstance()->getFilterOptions();
+        $advanceFilters = ServiceFactory::getStoryServiceInstance()->getAdvanceFilterOptions();
+//         foreach ($filters as $item) {
+//
+//                $tempFilter[$item['Type']][] = $item;
+//        }
+//        $options['General']=$tempFilter['general'];
+//        $options['My']=$tempFilter['individual'];
+        $tempFilter = array();
+        foreach ($advanceFilters as $item) {
+
+                $tempFilter[$item['Type']][] = $item;
+        }
+        $options['NoLabel']=$tempFilter['NoLabel'];
+        $options['Buckets'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
+        $options['State'] = ServiceFactory::getStoryServiceInstance()->getStateListFilters();
+        $options['Status'] = ServiceFactory::getStoryServiceInstance()->getWorkflowFields();
+        $options['DueDate']=$tempFilter['DueDate'];
+      
+        $preparedFilters = CommonUtility::prepareFilterOption($options);
+        $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $preparedFilters;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+      return $response;  
+        } catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetFilterOptions::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message =   $th->getMessage();//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+        
     }
     
 } 

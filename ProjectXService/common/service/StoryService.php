@@ -2,7 +2,7 @@
 namespace common\service;
 use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
 use common\components\{CommonUtility,CommonUtilityTwo,NotificationTrait,EventTrait};
-use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects,UserPreferences};
+use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects,UserPreferences,AdvanceFilters};
 use common\models\bean\FieldBean;
 use yii\base\ErrorException;
 use Yii;
@@ -1960,6 +1960,39 @@ class StoryService {
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+    /**
+     * @author Anand
+     * @uses Get  advance filter options
+     * @return type
+     */
+    
+      public function getAdvanceFilterOptions(){
+        try {
+           $filters = AdvanceFilters::getAdvanceFilters();
+           return $filters;
+        } catch (\Throwable $ex) {
+            Yii::error("StoryService:getAdvanceFilterOptions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }  
+    }
+    
+    
+    /**
+     * @author Anand
+     * @uses Get  getWorkflowFields options
+     * @return type
+     */
+     public function getWorkflowFields(){
+        try {
+           $filters = WorkFlowFields::getWorkflowStatusList();
+           return $filters;
+        } catch (\Throwable $ex) {
+            Yii::error("StoryService:getWorkflowFields::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }  
+    }
+      
             
     
    }
