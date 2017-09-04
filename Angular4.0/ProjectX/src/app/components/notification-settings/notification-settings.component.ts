@@ -1,6 +1,9 @@
 import {Component, OnInit } from '@angular/core';
 import { AjaxService } from '../../ajax/ajax.service';
 import { Directive,NgZone } from '@angular/core';
+import {SharedService} from '../../services/shared.service';
+import { Router,ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-notification-settings',
   templateUrl: './notification-settings.component.html',
@@ -16,9 +19,10 @@ public PN_count=0;
 public NotificationTypesToDisplay=[];
 public totalNotificationsCount=0;
 
-  constructor(private _ajaxService: AjaxService,private zone: NgZone) { }
+  constructor(private _ajaxService: AjaxService,private zone: NgZone, private shared:SharedService,private _router: Router) { }
 
   ngOnInit() {
+        this.shared.change(this._router.url,'','Notification Settings','Other',''); //added By Ryan for breadcrumb purpose
 this.notificationPrefernces();
 }
 
@@ -95,9 +99,6 @@ isChecked(Id,type,e){
     }
    
 isCheckedAll(type,e){
-    // this.SN_count=0;
-    // this.EN_count=0;
-    // this.PN_count=0;
       var isChecked=e.target.checked;
 
        if(isChecked==true){
