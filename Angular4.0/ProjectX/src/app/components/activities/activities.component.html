@@ -16,11 +16,30 @@
                                                 <div class="user" *ngIf="finalData.ProfilePicture"><img src="{{finalData.ProfilePicture}}"/></div>
                                                 <div class="user" *ngIf="!finalData.ProfilePicture"><img src="{{finalData.ProfilePicture}}"/></div>
 
-<div class="activitycon">{{finalData.userName}}  {{finalData.DisplayAction}} {{ChangeSummary.ActionOn}} 
+<!--   <div class="activitycon">{{finalData.userName}}  {{ChangeSummary.prepare_text.message}} {{ChangeSummary.ActionOn}} 
                         <span class="" *ngIf="!ChangeSummary.OldValue && ChangeSummary.NewValue"> to</span>
                         <span class="" *ngIf="ChangeSummary.OldValue"> from {{ChangeSummary.OldValue}}</span>
                          <span *ngIf="ChangeSummary.OldValue && ChangeSummary.NewValue"> to</span> {{ChangeSummary.NewValue}} in {{finalData.Title}}
+                         </div> ChangeSummary.action!='projectcreation' -->
+                         <div class="activitycon">{{finalData.userName}}  {{ChangeSummary.prepare_text}} 
+                         <span class="" *ngIf="ChangeSummary.action"> {{ChangeSummary.action}}</span>
+                        <span class="" *ngIf="ChangeSummary.OldValueText"> {{ChangeSummary.OldValueText}}</span>
+                        {{ChangeSummary.OldValue}}
+                        <span class="" *ngIf="ChangeSummary.NewValueText"> {{ChangeSummary.NewValueText}}</span>
+                       {{ChangeSummary.NewValue}} in 
+                        <span *ngIf="finalData.Title.includes('#')" > --
+                            <span *ngIf="finalData.Miscellaneous.Slug">
+                            <a  [routerLink]="['/project',finalData.ProjectName,finalData.ReferringId,'details']"  [queryParams]= "{Slug:finalData.Miscellaneous.Slug.$oid}">{{finalData.Title}}</a>
+                        </span>
+                        <span *ngIf ="!finalData.Miscellaneous.Slug">
+                            <a  [routerLink]="['/project',finalData.ProjectName,finalData.ReferringId,'details']">{{finalData.Title}}</a>
+                        </span>
+                            </span>
+                     <span *ngIf="ChangeSummary.action==''">
+                        {{finalData.Title}}
+                        </span>
                          </div>
+                         
                 <div class="activitypro">({{finalData.time| dateFormat:'hh:mm:ss A'}}) -{{finalData.ProjectName}}</div>
             </div> 
                                       </div>
@@ -29,6 +48,7 @@
             <!--</div>-->
                         </div>
                 </div>
+       
                 <span class="no_record_found" *ngIf="noActivitiesFound">No activity</span>
     <span class="no_record_found" *ngIf="!noActivitiesFound && noMoreActivities">No more activities</span>
       
