@@ -706,7 +706,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                       //error_log("@@@@--".print_r($prepare_text,1));
                                     if(!empty($changeSummary['OldValue'])){
                                         
-                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 80);
                                        $summary['OldValueText']='from';
                                    }else{
                                        $summary['OldValue'] ='';
@@ -733,7 +733,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
-                                       $summary['NewValue']=$changeSummary['NewValue'];
+                                       $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
                                        $summary['NewValueText']='to';
                                    }else{
                                        $summary['NewValue'] ='';
