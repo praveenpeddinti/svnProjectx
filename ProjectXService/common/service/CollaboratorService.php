@@ -391,7 +391,7 @@ class CollaboratorService {
             $newFilePath = Yii::$app->params['UserProfilePath']."".$newImagePath;
             $userNewProfilePath = Yii::$app->params['ProjectRoot']. $newFilePath ;
            // error_log("userNewProfilePath----".$userNewProfilePath);  
-            //rename($userProfileTempPath,$userNewProfilePath);
+            rename($userProfileTempPath,$userNewProfilePath);
            // $logo=$postData->projectName."_".$returnId.".$fileExt";
             $user->userProfileImage = $newFilePath;
             $usermail=$user->email;
