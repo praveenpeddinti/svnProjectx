@@ -51,9 +51,6 @@ export class ProjectFormComponent implements OnInit {
   public setLogo:any;
   public updatedLogo:any;
 
-  // public form={
-  //        description:""
-  //  };
  public spinnerSettings={
       color:"",
       class:""
@@ -98,8 +95,7 @@ export class ProjectFormComponent implements OnInit {
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
                   thisObj.form['setLogo']=thisObj.setLogo;
-            //  alert("------fghh------"+JSON.stringify(thisObj.form['setLogo']));
-               //  jQuery("#summernote").summernote('code',thisObj.form['description']);
+              //  jQuery("#summernote").summernote('code',thisObj.form['description']);
                  thisObj.copyProjectname=thisObj.form['projectName'];
                 
                 
@@ -242,12 +238,6 @@ export class ProjectFormComponent implements OnInit {
            var editor=jQuery('#summernote').summernote('code');
             this.editorDesc =jQuery(editor).text().trim();
             this.form['description']=this.editorDesc;
-            //  this.form['description']=this.editorDesc;
-            //  alert("7777"+ JSON.stringify(this.form['description']));
-           // editor=jQuery(editor).text().trim();
-            // if(editor.length>500){
-            //     this.summernoteLength=true;
-            // }else{
              var postData={
                       projectName:this.form['projectName'].trim(),
                       description:editor,
@@ -261,10 +251,7 @@ export class ProjectFormComponent implements OnInit {
                        setTimeout(() => {
                           this.submitted=false;
                           this.form=[];
-                          // this.form={
-                          //         description:""
-                          // };
-                            this.creationPopUp=false;
+                           this.creationPopUp=false;
                              jQuery('#addProjectModel').modal('hide');
                          }, 1000);
                          this.creationPopUp=true;
@@ -274,19 +261,16 @@ export class ProjectFormComponent implements OnInit {
                       }else{
                  }
                 }) 
-          //  }
+         
        }else{
 
        }
     }
       editProjectDetails(){
-          // if(this.verified==1){
            this.projectImage=jQuery('.projectlogo').attr("src");
             var editor=jQuery('#summernote').summernote('code');
             editor=jQuery(editor).text().trim();
             this.form['description']=jQuery('#summernote').summernote('code');
-            
-         // alert(editor.length);
             if(editor.length>500){
                 this.summernoteLength=1;
             }else{
@@ -305,29 +289,16 @@ export class ProjectFormComponent implements OnInit {
                           this.submitted=false;
                           this.editPopUp=false;
                           jQuery('#addProjectModel').modal('hide');
-                         // alert("2222222"+this.editPopUp);
                          }, 500);
-                        // this.editPopUp=true;
-                        // alert("232"+this.editPopUp);http://10.10.73.10/files/projectlogo/d8bab7842010255213fe04c3c02e0153-images.jpeg
-                      //  alert("2222222"+this.updatedLogo);
-                      //  if(this.updatedLogo==undefined){
-                      //     this.appendLogoToParent.emit("assets/images/logo.jpg");
-                      //  }else{
-                        alert("####"+this.updatedLogo);
-                         this.copydescription=this.form['description'];
+                        this.copydescription=this.form['description'];
                        this.appendLogoToParent.emit(this.updatedLogo);
-                      // }
                        this.appendDescriptionParent.emit(this.form['description']);
-                          //  jQuery(".project_logoss").attr("src", this.updatedLogo);
                             this._router.navigate(['project',this.form['projectName']]);
                       }else{
-                      //   alert("333");
                  }
                 }) 
             }
-      //  }else{
-
-      //  }
+     
   }
  
     resetFormForcreate(){
@@ -358,8 +329,9 @@ export class ProjectFormComponent implements OnInit {
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
         jQuery("#summernote").summernote('destroy',true);
+       // alert("summer"+this.form['setLogo']);
          if(this.form['setLogo']!=true){
-           jQuery(".projectlogo").attr("src",this.updatedLogo);
+            jQuery(".projectlogo").attr("src",this.form['projectLogo']);
         }else{
       //    alert("111");
           this.form['setLogo']=true;

@@ -100,16 +100,8 @@ export class ProjectDashboardComponent implements OnInit {
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
                 thisObj.form['setLogo']=thisObj.setLogo;
-             //   alert("------33------"+JSON.stringify(thisObj.form['projectLogo']));
-//                 if(thisObj.form['projectLogo']=='assets/images/logo.jpg'){
-//                   thisObj.setlogo=true;
-//                 }else{
-//                   thisObj.setlogo=false;
-//                 }
-//  alert("------33345------"+JSON.stringify(thisObj.setlogo));
-               //  jQuery("#summernote").summernote('code',thisObj.form['description']);
-                 thisObj.copyProjectname=thisObj.form['projectName'];
-                  thisObj.copydescription=thisObj.form['description'];
+                thisObj.copyProjectname=thisObj.form['projectName'];
+                thisObj.copydescription=thisObj.form['description'];
                  thisObj.currentProjectDetails();
                  thisObj.projectActivities(this.page);
                  this.bucketService.getTotalBucketStats(thisObj.projectId,(data)=>
@@ -211,11 +203,11 @@ export class ProjectDashboardComponent implements OnInit {
                             // // console.log("@@-44-"+JSON.stringify(this.dashboardData.activities[curActLength - 1].activityData));
                             result.data.activities .splice(0, 1);
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
-                            //alert("11");
+                              //alert("11");
                         } else {
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
                           // alert("Final__out"+JSON.stringify(thisObj.dashboardData.activities));
-                        }
+                      }
                         } else {
                            this.noMoreActivities = true;
                         }
@@ -235,14 +227,23 @@ export class ProjectDashboardComponent implements OnInit {
       this.projectFormComponent.clearEditedDetails(form);
   }
   appendLogo(val){
-    // this.setLogo=false;
-    jQuery(".imgs").attr("src",'');
+      jQuery(".imgs").attr("src",'');
     if(val != undefined){
       this.setLogo=false;
       jQuery(".imgs").attr("src",val);
       this.projectLogo=val;
     }else{
-       this.setLogo=true;
+      if(!this.projectLogo.includes("assets")){
+         this.setLogo=false;
+          this.projectLogo=this.projectLogo;
+          jQuery(".imgs").attr("src",this.projectLogo);
+       }else{
+           this.setLogo=true;
+          jQuery(".imgs").attr("src",'assets/images/logo.jpg');
+       
+      }
+     
+     // this.projectLogo=val;
     }
   }
   appendDescription(val){
