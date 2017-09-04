@@ -59,8 +59,8 @@ import { ChartsModule } from 'ng2-charts';
 import { StateChartComponent } from './components/state-chart/state-chart.component';
 import { ReportConfirmationComponent } from './components/utility/report-confirmation/report-confirmation.component';
 import { ProjectFormComponent } from './components/project-form/project-form.component';
+import { AdvanceFilterComponent } from './components/utility/advance-filter/advance-filter.component';
 import { BucketDashboardComponent } from './components/bucket-dashboard/bucket-dashboard.component';
-
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',component: PageNotFoundComponent },
@@ -187,11 +187,7 @@ const ROUTES=[
    ChipsModule,
    ChartsModule
     ],
-
-
-
-  declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent,StateChartComponent, ReportConfirmationComponent ,ProjectFormComponent,CreateBucketComponent,BucketDashboardComponent],
-
+  declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent,StateChartComponent, ReportConfirmationComponent ,ProjectFormComponent,CreateBucketComponent,BucketDashboardComponent ,AdvanceFilterComponent],
   bootstrap:    [ AppComponent ],
   providers:[FileUploadService, LoginService,AjaxService,AuthGuard,StoryService,MentionService,SummerNoteEditorService,TimeReportService,SharedService,CookieService,BucketService], // {provide:UrlSerializer,useClass:CustomUrlSerializer}
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],

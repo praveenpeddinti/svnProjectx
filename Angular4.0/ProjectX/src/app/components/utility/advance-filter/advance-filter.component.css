@@ -1,0 +1,51 @@
+.advance_filter_panel{
+    height:auto;
+    min-height:100px;
+    width: 400px;
+    /* border-radius: 25%; */
+    z-index: 10000000000;
+
+    /*padding: 10px;*/
+    position: absolute;
+   /* margin: 9px 8px 4px -82px; */
+    right: 10px;
+    top:40px;
+    /*background: url(../../../../assets/images/checked.png) right -30px no-repeat #f7f9fa;*/
+}
+
+
+[data-toggle="collapse"] i:before{ content: "\f062"; color:#524693; font-size: 12px;} 
+[data-toggle="collapse"].collapsed i:before{ content: "\f063"; color:#524693; font-size: 12px;}
+
+.morebuckets a:hover{text-decoration: none!important;}
+
+.arrowbox {
+	position: relative;
+	background: #f7f9fa;
+	border: 4px solid #f7f9fa;
+    padding: 10px;
+}
+.arrowbox:after, .arrow_box:before {
+	bottom: 100%;
+	right: 2%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrowbox:after {
+	border-color: rgba(136, 183, 213, 0);
+	border-bottom-color: #f7f9fa;
+	border-width: 12px;
+
+}
+.arrowbox:before {
+	border-color: rgba(247, 249, 250, 0);
+	border-bottom-color: #f7f9fa;
+	border-width:18px;
+	margin-left: -18px;
+}
+
