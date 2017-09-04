@@ -1200,7 +1200,7 @@ button.toast-close-button {
 
  /*
   * AngularJS-Toaster
-  * Version 0.3
+  * Version 0.3max-
  */
 :not(.no-enter)#toast-container > div.ng-enter,
 :not(.no-leave)#toast-container > div.ng-leave
@@ -1690,6 +1690,7 @@ button.toast-close-button {
     .ui-state-disabled{background:#fff!important; }
 .ui-widget-header .ui-button, .ui-widget-content .ui-button, .ui-widget.ui-button, .ui-button{  background: #695ea5 none repeat scroll 0 0!important;
     border: 1px solid #695ea5!important;}
+
     .ui-datepicker.ui-widget .ui-datepicker-calendar td a.ui-state-active{background: #695ea5!important;}
 
     /*FILTERS*/
@@ -1708,3 +1709,41 @@ button.toast-close-button {
 .n_ddown .custom_selctdropdown .ui-state-default{ padding-top:0px!important;  padding-bottom:0px!important;}
 .n_ddown .custom_selctdropdown{ padding-right: 0px!important;}
 
+
+
+/*CHART UI*/
+  .ngx-charts {
+  float: left;
+  overflow: visible;
+  width: 100%!important; clear: both!important; 
+ 
+   }
+
+   .chart-legend {
+  display:block!important;
+  padding: 0;
+  width:100%!important;
+  float: left!important;
+  }
+.legend-wrap{width:100%!important;}
+
+  .chart-legend .legend-labels{ overflow:unset!important; width:100%!important;}
+  .chart-legend .legend-label{ border-bottom: solid 1px #e6e8eb; margin:0px!important; width:25%; float: left;padding-bottom:5px!important;padding-top:10px!important;}
+  .chart-legend .legend-label-color{border-radius:0px!important;margin-right:0px;}
+  .chart-legend div{ width: 100%!important;}
+
+  .ng-tns-c14-5 div{width: 100%!important;}
+  .ng-tns-c14-6 div{width: 100%!important;}
+  .ngx-charts-outer{width: 100%!important;}
+  .ngx-charts-outer .chart-legend{width: 100%!important;}
+    .legend-title{margin-left: 0px!important;}
+  .legend-title .legend-title-text{ font-weight:normal!important;  line-height: 30px!important; color: ##695ea5!important; font-size:14px!important;}
+  .ng-tns-c14-6 .ngx-charts{width:100%!important;}
+  .ngx-charts .bar-chart{width:100%!important;}
+.ngx-charts .chart{width:100%!important;}
+
+@media (max-width: 767px) {
+.chart-legend .legend-label{ width:50%!important;}
+.activity_date{width:100%!important;}
+
+}

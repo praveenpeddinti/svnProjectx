@@ -17,8 +17,12 @@
   <!--<script src='assets/js/jquery.tinymce.min.js'></script>  Tiny MCE--> 
   <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
-  <script src="http://localhost:4201/socket.io/socket.io.js"></script>
-  <script src="node_modules/chart.js/src/chart.js"></script>
+ <script src="http://10.10.73.21:4201/socket.io/socket.io.js"></script>
+
+
+
+ 
+
 
   <!--<script src="assets/js/tinymce.min.js"></script>-->
   <!-- <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.js"></script>-->
@@ -31,8 +35,9 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 }) 
 
+var socket = io.connect('http://10.10.73.21:4201');
 
-var socket = io.connect('http://localhost:4201');
+
 
 </script>
 </head>

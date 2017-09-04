@@ -55,12 +55,13 @@ import { EmailInviteComponent } from './components/email-invite/email-invite.com
 import { InviteComponent } from './components/invite/invite.component';
 import { CreateBucketComponent } from './components/create-bucket/create-bucket.component';
 import { DateFormat } from './pipes/dateFormat.pipe';
-import { ChartsModule } from 'ng2-charts';
 import { StateChartComponent } from './components/state-chart/state-chart.component';
 import { ReportConfirmationComponent } from './components/utility/report-confirmation/report-confirmation.component';
 import { ProjectFormComponent } from './components/project-form/project-form.component';
 import { AdvanceFilterComponent } from './components/utility/advance-filter/advance-filter.component';
 import { BucketDashboardComponent } from './components/bucket-dashboard/bucket-dashboard.component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
+
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',component: PageNotFoundComponent },
@@ -185,7 +186,7 @@ const ROUTES=[
    SpinnerComponentModule,
    //Ng2DropdownModule,
    ChipsModule,
-   ChartsModule
+   NgxChartsModule
     ],
   declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent,StateChartComponent, ReportConfirmationComponent ,ProjectFormComponent,CreateBucketComponent,BucketDashboardComponent ,AdvanceFilterComponent],
   bootstrap:    [ AppComponent ],
