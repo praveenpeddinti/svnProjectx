@@ -32,6 +32,7 @@ export class CreateUserComponent implements OnInit {
  public isValidFile:boolean=true;
   @Output() myevent=new EventEmitter();
 public inviteCode;
+public showHelper:boolean=false;
 
   constructor(private _ajaxService: AjaxService,private _router:Router,private route:ActivatedRoute,private projectService:ProjectService,private fileUploadService: FileUploadService,) { }
 
@@ -71,14 +72,14 @@ public prepareDisplayName(){
  
 }
     saveUser()
-    {    
-      if(this.form['password'] ==this.form['confirmpassword']){
-        this.isPasswordMatch=true;
-      }else{
-        this.isPasswordMatch=false;
-         jQuery("#mismatch_error").show(); //used jquery since Password mismatch validation doesn't sync with Form Inbuilt Validation
-      }
-
+    {       
+        if(this.form['password'] ==this.form['confirmpassword']){
+          this.isPasswordMatch=true;
+        }else{
+          this.isPasswordMatch=false;
+          jQuery("#mismatch_error").show(); //used jquery since Password mismatch validation doesn't sync with Form Inbuilt Validation
+        }
+      
       if(this.isPasswordMatch && this.isValidFile)
       {
         // Make an ajax to save the User
@@ -175,5 +176,19 @@ public prepareDisplayName(){
            jQuery("#mismatch_error").hide(); //used jquery since Password mismatch validation doesn't sync with Form Inbuilt Validation
          }
     }
+
+    public checkPasswordField(event){
+      if(event==''){
+        jQuery("#password_valid").hide();
+      }
+    }
+
+    public showPasswordHelper(){
+      this.showHelper=true;
+    }
+
+    public hidePasswordHelper(){
+      this.showHelper=false;
+    } 
 
 }

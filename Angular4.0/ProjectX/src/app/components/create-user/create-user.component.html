@@ -28,7 +28,7 @@
          <div style="clear: both;">
           <label class="loginformlabel"> First Name </label>
           
-              <input class="invitesearch borderradius_none" type="text" pInputText [(ngModel)]="form.firstName" name="firstName"  #firstName="ngModel" placeholder="First Name" minlength="3" (focusout)="prepareDisplayName()" required/>
+              <input class="invitesearch borderradius_none" type="text" pInputText [(ngModel)]="form.firstName" name="firstName"  #firstName="ngModel" placeholder="First Name" minlength="3" maxlength="30" (focusout)="prepareDisplayName()" required/>
                   <div *ngIf="submitted && firstName.errors " class="fielderror">
                       <div [hidden]="!firstName.errors.required">
                           First name is required
@@ -36,13 +36,16 @@
                       <div [hidden]="!firstName.errors.minlength">
                                   First name must be at least 3 characters long.
                       </div>
+                      <div [hidden]="!firstName.errors.maxlength">
+                                  First name must not be more than 30 characters long.
+                      </div>
                     </div>
                   <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
        
 
     
           <label class="loginformlabel"> Last Name </label>
-              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.lastName" name="lastName"  #lastName="ngModel" placeholder="Last Name" minlength="3" (focusout)="prepareDisplayName()" required/>
+              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.lastName" name="lastName"  #lastName="ngModel" placeholder="Last Name" minlength="3" maxlength="30" (focusout)="prepareDisplayName()" required/>
                   <div *ngIf="submitted && lastName.errors " class="fielderror">
                       <div [hidden]="!lastName.errors.required">
                           Last name is required
@@ -50,10 +53,13 @@
                       <div [hidden]="!lastName.errors.minlength">
                                   Last name must be at least 3 characters long.
                       </div>
+                      <div [hidden]="!lastName.errors.maxlength">
+                                  Last name must not be more than 30 characters long.
+                      </div>
                     </div>
                   <div id="addTitleErrMsg" class="fielderror" style="display:none;"></div>
            <label class="loginformlabel"> Display Name </label>
-              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.displayName" name="displayName"  #displayName="ngModel" placeholder="Display Name" minlength="3" pattern="[a-zA-Z0-9_.]*" (focusout)="prepareDisplayName()" required/>
+              <input type="text" class="invitesearch borderradius_none" pInputText [(ngModel)]="form.displayName" name="displayName"  #displayName="ngModel" placeholder="Display Name" minlength="3"  pattern="[a-zA-Z0-9_.]*" (focusout)="prepareDisplayName()" required/>
                   <div *ngIf="submitted && displayName.errors " class="fielderror">
                       <div [hidden]="!displayName.errors.required">
                           Display name is required
@@ -74,21 +80,26 @@
 
     
                   <label class="loginformlabel" for="password">Password</label>
-                  <input class="invitesearch" [(ngModel)]="form.password" id="password" type="password" id="pass" class="form-control customfield" required minlength="8"
-                    maxlength="15" name="password" #password="ngModel">
-                  <div *ngIf=" submitted && password.errors" class="fielderror">
+                  <input class="invitesearch" (ngModelChange)="checkPasswordField($event)" (blur)="hidePasswordHelper()" (focus)="showPasswordHelper()"  [(ngModel)]="form.password" id="password" type="password"  class="form-control customfield" required 
+                     name="password" #password="ngModel" ngPasswordValidator>
+                  <div *ngIf=" submitted && password.errors" class="fielderror"  >
                     <div [hidden]="!password.errors.required">
                      Password is required
                     </div>
-                    <div [hidden]="!password.errors.minlength">
+                    <!--<div [hidden]="!password.errors.minlength">
                      Password must be at least 8 characters long.
-                    </div>
-                    <div [hidden]="!password.errors.maxlength">
-                     Password cannot be more than 20 characters long.
-                    </div>
+                    </div>-->
+                    <!--<div [hidden]="!password.errors.maxlength">
+                     Password cannot be more than 15 characters long.
+                    </div>-->
+                    <div id="password_valid" *ngIf="!(password.errors=='passwordRulesInvalid') && !password.errors.required">Password is not valid</div>
                   </div>
-             
-
+                  <!--<div id="password_valid" [hidden]="!isInvalid" class="fielderror">
+                     Password must contain atleast one special characters and atleast one digit
+                    </div>-->
+                    <div class="password-helper" *ngIf="showHelper" style="background: #f7f9fa; padding:5px 10px!important; font-size: 13px;margin-top:10px;">
+                    <ng-password-helper></ng-password-helper>
+                    </div>
     
                   <label class="loginformlabel" for="password">Confirm Password</label>
                   <input class="invitesearch" (ngModelChange)="checkConfirmField($event)"  [(ngModel)]="form.confirmpassword" id="confirmpassword" type="password" id="confirmpass" class="form-control customfield" required minlength="8"
@@ -98,10 +109,10 @@
                       Confirm password is required
                     </div>
                     <div [hidden]="!confirmpassword.errors.minlength">
-                      Confirm password must be at least 1 characters long.
+                      Confirm password must be at least 8 characters long.
                     </div>
                     <div [hidden]="!confirmpassword.errors.maxlength">
-                     Confirm password cannot be more than 50 characters long.
+                     Confirm password cannot be more than 15 characters long.
                     </div>
                   </div>
                   <div id="mismatch_error" class="fielderror" [hidden]="isPasswordMatch">
