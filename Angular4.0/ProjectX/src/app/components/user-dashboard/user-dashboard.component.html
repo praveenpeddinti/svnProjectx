@@ -41,7 +41,7 @@
       <div class="row devider1"></div>
       <div class="row">
         <div class="col-md-12">
-          Current Buckets <span class="nocurrent_bucket" *ngIf="pdetail.currentBucket==''">(No Current Buckets)</span><span *ngIf="pdetail.currentBucket!=''"><span class="but martb5 marr5 cursor_pointer" *ngFor="let bucket of pdetail.currentBucket;let j=index;">{{bucket.Name}}</span></span>
+          Current Buckets <span class="nocurrent_bucket" *ngIf="pdetail.currentBucket==''">(No Current Buckets)</span><span *ngIf="pdetail.currentBucket!=''"><span class="but martb5 marr5 cursor_pointer" *ngFor="let bucket of pdetail.currentBucket;let j=index;"><span [routerLink]="['/project',pdetail.projectName,'bucket']" [queryParams]="{BucketId:bucket.Id}">{{bucket.Name}}</span></span></span>
 
         </div>
       </div>
