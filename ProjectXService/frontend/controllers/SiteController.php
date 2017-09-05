@@ -449,9 +449,10 @@ class SiteController extends Controller
             $searchFlag=!empty($postData->searchFlag)?$postData->searchFlag:""; 
             $projectId=!empty($postData->projectId)?$postData->projectId:"";
             $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
+            $pName=!empty($postData->pName)?$postData->pName:"";
             $pageLength=Yii::$app->params['pageLength'];
             error_log("page5555--".$pageLength);
-            $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag,$projectId,$pageLength,$userId); 
+            $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag,$projectId,$pageLength,$userId,$pName); 
             if(empty($searchData['mainData']['ticketCollection']) && empty($searchData['mainData']['ticketComments']) && empty($searchData['mainData']['ticketArtifacts'])&& empty($searchData['mainData']['tinyUserData'])){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;

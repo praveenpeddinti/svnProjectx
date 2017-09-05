@@ -1256,7 +1256,7 @@ $text_message=$html . $text_message .
     * @param type $projectId
     * @return array
     */
-    public static function getAllDetailsForSearch($searchString,$page,$searchFlag="",$projectId="",$pageLength,$userId){
+        public static function getAllDetailsForSearch($searchString,$page,$searchFlag="",$projectId="",$pageLength,$userId,$pName=""){
         try{
                 $page = $page ;
               //  $pageLength = 10;
@@ -1295,6 +1295,11 @@ $text_message=$html . $text_message .
                     "limit" =>$limit,
                     "skip" => $offset
                 );
+                if(!empty($pName)){
+                   $getProjectInfo= Projects::getProjectDetails($pName);
+                   error_log("aaeae^^^^^^^^^^^^^^^".print_r($getProjectInfo,1));
+                   $projectId=$getProjectInfo['PId'];
+                }
                 //error_log("search------------".print_r($options,1));
                 $totalProjects=ProjectTeam::getProjectsCountByUserId($userId);
                 $projectIdArray=array();
@@ -1305,6 +1310,7 @@ $text_message=$html . $text_message .
                 }
                 $totalCountForAll=array();
                 $countForEchProject=array();
+                 error_log("############^^^^^".$projectId);
                 if($searchFlag==1){
                     $collection = Yii::$app->mongodb->getCollection('TicketCollection');
                  if (strpos($searchString, '#') !== false || is_numeric($searchString)!= false) {
@@ -1905,53 +1911,54 @@ $text_message=$html . $text_message .
                 // Ended ----------
             
                 $renderCount=self::getStringCountForGLobalsearch($searchString,$projectId,$userId,$projectIdArray,$limit,$offset);
-                    if(!empty($ticketCollectionCount)){
-                        foreach($ticketCollectionCount as $extractProjectCount){
-                            array_push($individualCountForTask, $extractProjectCount['ProjectId']);
-                             
-                        }
-                        // error_log("**********".print_r($individualCount,1));
-                        $collectAllCountforTasks = array_count_values($individualCountForTask);
-                        }else{
-                         $collectAllCountforTasks =array();  
-                        }
-                    //    error_log("**********---4545--".print_r(array($collectAllCountforTasks),1));
-                             if(!empty($ticketCommentsCount)){
-                        foreach($ticketCommentsCount as $extractcommentsCount){
-                            array_push($individualCountForComment,$extractcommentsCount['_id']['ProjectId']);
-                        }
-                        $collectAllCountforComments = array_count_values($individualCountForComment);
-                        }else{
-                         $collectAllCountforComments =array();  
-                        }
-                        if(!empty($ticketArtifactsCount)){
-                        foreach($ticketArtifactsCount as $extractArtifactCount){
-                             array_push($individualCountForArtifacts,$extractArtifactCount['ProjectId']);
-                        }
-                        $collectAllCountforArtifacts = array_count_values($individualCountForArtifacts);
-                        }else{
-                         $collectAllCountforArtifacts =array();  
-                        }
-                    $prepareArrayForAllCount=array(count($ticketCollectionCount),count($ticketCommentsCount),count($ticketArtifactsCount),count($tinyUserDataCount));
-                    $getAllCount=array_sum($prepareArrayForAllCount);  
-                     $dataCount=array();
-                    $dataCount['TaskCount']=count($ticketCollectionCount);
-                    $dataCount['commentsCount']=count($ticketCommentsCount);
-                    $dataCount['artifactsCount']=count($ticketArtifactsCount);
-                    $dataCount['userDataCount']=count($tinyUserDataCount);
-                    $dataCount['allCount']=$getAllCount;
+//                    if(!empty($ticketCollectionCount)){
+//                        foreach($ticketCollectionCount as $extractProjectCount){
+//                            array_push($individualCountForTask, $extractProjectCount['ProjectId']);
+//                             
+//                        }
+//                        // error_log("**********".print_r($individualCount,1));
+//                        $collectAllCountforTasks = array_count_values($individualCountForTask);
+//                        }else{
+//                         $collectAllCountforTasks =array();  
+//                        }
+//                    //    error_log("**********---4545--".print_r(array($collectAllCountforTasks),1));
+//                             if(!empty($ticketCommentsCount)){
+//                        foreach($ticketCommentsCount as $extractcommentsCount){
+//                            array_push($individualCountForComment,$extractcommentsCount['_id']['ProjectId']);
+//                        }
+//                        $collectAllCountforComments = array_count_values($individualCountForComment);
+//                        }else{
+//                         $collectAllCountforComments =array();  
+//                        }
+//                        if(!empty($ticketArtifactsCount)){
+//                        foreach($ticketArtifactsCount as $extractArtifactCount){
+//                             array_push($individualCountForArtifacts,$extractArtifactCount['ProjectId']);
+//                        }
+//                        $collectAllCountforArtifacts = array_count_values($individualCountForArtifacts);
+//                        }else{
+//                         $collectAllCountforArtifacts =array();  
+//                        }
+//                    $prepareArrayForAllCount=array(count($ticketCollectionCount),count($ticketCommentsCount),count($ticketArtifactsCount),count($tinyUserDataCount));
+//                    $getAllCount=array_sum($prepareArrayForAllCount);  
+//                     $dataCount=array();
+//                    $dataCount['TaskCount']=count($ticketCollectionCount);
+//                    $dataCount['commentsCount']=count($ticketCommentsCount);
+//                    $dataCount['artifactsCount']=count($ticketArtifactsCount);
+//                    $dataCount['userDataCount']=count($tinyUserDataCount);
+//                    $dataCount['allCount']=$getAllCount;
+//                    if(!empty($dataCount)){
+//                        $dataCount=$dataCount;
+//                    }else{
+//                       $dataCount=array();
+//                    }
+//                    $getProjectCountForAll=self::array_sum_combine($collectAllCountforTasks,$collectAllCountforComments,$collectAllCountforArtifacts);
+//                    if(!empty($getProjectCountForAll)){
+//                        $getProjectCountForAll=$getProjectCountForAll;
+//                    }else{
+//                        $getProjectCountForAll=0;
+//                    }
                     $mainData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
-                    if(!empty($dataCount)){
-                        $dataCount=$dataCount;
-                    }else{
-                       $dataCount=array();
-                    }
-                    $getProjectCountForAll=self::array_sum_combine($collectAllCountforTasks,$collectAllCountforComments,$collectAllCountforArtifacts);
-                    if(!empty($getProjectCountForAll)){
-                        $getProjectCountForAll=$getProjectCountForAll;
-                    }else{
-                        $getProjectCountForAll=0;
-                    }
+                 
                     //  error_log("projectfunction**************".print_r($getProjectCountForAll,1));
                     $getCollectionData=array('mainData'=>$mainData,'dataCount'=>$renderCount['dataCount'],'projectCountForAll'=>$renderCount['getProjectCountForAll']);
                     }else{
@@ -2432,7 +2439,23 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                     $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
                     $cursorCountTinyUser=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array());
                     $tinyUserDataCount = iterator_to_array($cursorCountTinyUser);
-                  //  error_log("ticketuserCount-----sdfdsf------".count($tinyUserDataCount));
+                error_log("ticketuserCount-----sdfdsf------".print_r($tinyUserDataCount,1));
+//                      if(!empty($tinyUserDataCount)){
+//                           $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+//                        foreach($tinyUserDataCount as $extractTinyUserCount){
+//                            // array_push($individualCountForUser,$extractTinyUserCount['CollaboratorId']);
+//                           
+//                        if(!empty($projectId)){
+//                              $cursorCountForUser =  $collection->find(array('$or'=>array(array("Fields.assignedto.value"=>$extractTinyUserCount['CollaboratorId'],"ProjectId" => (int)$projectId))),array());
+//                            }else{
+//                                 $cursorCountForUser =  $collection->find(array('$or'=>array(array("Fields.assignedto.value"=>$extractTinyUserCount['CollaboratorId'],'ProjectId'=>array('$in'=>$projectIdArray)))),array()); 
+//                        }
+//                        }
+//                        error_log("$$$$$$$$$$$$------".print_r($cursorCountForUser,1));
+//                     //   $collectAllCountforTinyUser = array_count_values($individualCountForUser);
+//                        }else{
+//                       //  $collectAllCountforTinyUser =array();  
+//                        }
                     $prepareArrayForAllCount=array(count($ticketCollectionCount),count($ticketCommentsCount),count($ticketArtifactsCount),count($tinyUserDataCount));
                     $getAllCount=array_sum($prepareArrayForAllCount);  
                     $dataCount=array();
@@ -2446,7 +2469,8 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                    }else{
                       $dataCount=array();
                    }
-                $getProjectCountForAll=self::array_sum_combine($collectAllCountforTasks,$collectAllCountforComments,$collectAllCountforArtifacts);
+                $AllArray=array('All'=>$getAllCount);
+                $getProjectCountForAll=self::array_sum_combine($AllArray,$collectAllCountforTasks,$collectAllCountforComments,$collectAllCountforArtifacts);
                 if(!empty($getProjectCountForAll)){
                     $getProjectCountForAll=$getProjectCountForAll;
                 }else{
@@ -2461,7 +2485,7 @@ public static function getUniqueArrayObjects($arrayOfObjects){
      * @description This method is used for adding all array
      * @return type array
      */
-   public static function array_sum_combine($arr1,$arr2,$arr3)
+   public static function array_sum_combine($arr0,$arr1,$arr2,$arr3)
     {
       $return = array();
       $args = func_get_args();
@@ -2472,9 +2496,12 @@ public static function getUniqueArrayObjects($arrayOfObjects){
         {
           foreach ($arr as $k => $v)
           {
+            if(is_int($k)){
+              error_log("######----------".$k);
               $projectDetails=Projects::getProjectMiniDetails($k);
-      //        error_log("kkkkkWWWWWW@@@@@@@--".$projectDetails['ProjectName']); 
+      //        error_log("kkkkkWWWWWW@@@@@@@--".$projectDetails['ProjectName']);
               $k= $projectDetails['ProjectName'];
+            }
              // $project['ProjectName']=$k;
             if (!array_key_exists($k, $return))
             {
