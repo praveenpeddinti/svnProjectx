@@ -2440,22 +2440,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                     $cursorCountTinyUser=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array());
                     $tinyUserDataCount = iterator_to_array($cursorCountTinyUser);
                 error_log("ticketuserCount-----sdfdsf------".print_r($tinyUserDataCount,1));
-//                      if(!empty($tinyUserDataCount)){
-//                           $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-//                        foreach($tinyUserDataCount as $extractTinyUserCount){
-//                            // array_push($individualCountForUser,$extractTinyUserCount['CollaboratorId']);
-//                           
-//                        if(!empty($projectId)){
-//                              $cursorCountForUser =  $collection->find(array('$or'=>array(array("Fields.assignedto.value"=>$extractTinyUserCount['CollaboratorId'],"ProjectId" => (int)$projectId))),array());
-//                            }else{
-//                                 $cursorCountForUser =  $collection->find(array('$or'=>array(array("Fields.assignedto.value"=>$extractTinyUserCount['CollaboratorId'],'ProjectId'=>array('$in'=>$projectIdArray)))),array()); 
-//                        }
-//                        }
-//                        error_log("$$$$$$$$$$$$------".print_r($cursorCountForUser,1));
-//                     //   $collectAllCountforTinyUser = array_count_values($individualCountForUser);
-//                        }else{
-//                       //  $collectAllCountforTinyUser =array();  
-//                        }
                     $prepareArrayForAllCount=array(count($ticketCollectionCount),count($ticketCommentsCount),count($ticketArtifactsCount),count($tinyUserDataCount));
                     $getAllCount=array_sum($prepareArrayForAllCount);  
                     $dataCount=array();
@@ -2499,14 +2483,12 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             if(is_int($k)){
               error_log("######----------".$k);
               $projectDetails=Projects::getProjectMiniDetails($k);
-      //        error_log("kkkkkWWWWWW@@@@@@@--".$projectDetails['ProjectName']);
               $k= $projectDetails['ProjectName'];
             }
              // $project['ProjectName']=$k;
             if (!array_key_exists($k, $return))
             {
-             //   error_log("kkkkkWWWWWW@@@@@@@--".$k);
-               $return[$k] = 0;
+                $return[$k] = 0;
             }
                $return[$k] += $v;
 
