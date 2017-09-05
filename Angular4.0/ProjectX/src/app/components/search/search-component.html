@@ -3,7 +3,7 @@
 
 <span *ngIf="projectName">{{projectName}}</span><span *ngIf="!projectName">All</span></div>
 
-<div *ngIf="checkData==0 && checkDataForcount==0">
+<div *ngIf="checkData==0">
      <div class="clearboth marb20">
              <div class="custom_selctdropdown pull-right marb20">
    <p-dropdown  [style]="{'width':'220px'}" [(ngModel)]="selectedProject"  [ngValue]="selectedProject"     [options]="projects">
