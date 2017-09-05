@@ -52,7 +52,7 @@
     <ul class="nav navbar-nav navbar-right top-menu top-right-menu">  
                         <!-- mesages -->  
                         <li class="dropdown searchboxareapaddingtop">
-                          <span *ngIf="_router.url!='/user-dashboard'" class="searchboxarea"><i class="fa fa-search" aria-hidden="true"></i>
+                          <span *ngIf="_router.url!='/user-dashboard' && projectId!=undefined" class="searchboxarea"><i class="fa fa-search" aria-hidden="true"></i>
             <input class="form-control searchbox" id="globalsearch" placeholder="Search..." (keyup.enter)="globalSearchNavigate()"></span>
             <div id="searchError" class="fielderror" style="display:none;"></div>
                           </li>

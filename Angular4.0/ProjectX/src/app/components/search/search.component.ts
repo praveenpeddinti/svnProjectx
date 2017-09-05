@@ -34,6 +34,9 @@ export class SearchComponent implements OnInit{
     private projects=[];
     private optionTodisplay=[];
     public checkData:any;
+    public checkDataForcount:any;
+    public getPname;
+    public copyList:any;
     ngOnInit(){
    var thisObj = this;
      this.route.queryParams.subscribe(
@@ -52,7 +55,7 @@ export class SearchComponent implements OnInit{
                 this.searchArray=[];
                // this.searchCount=[];
                     console.log("@@@@@@@@@@@@@"+JSON.stringify(thisObj.searchString));
-                   this.load_contents(this.page,this.searchString,this.searchFlag,'','');
+                   this.load_contents(this.page,this.searchString,this.searchFlag,'','','');
             }else{
                  this.checkData=1;
                   this.projectService.getProjectDetails(this.projectName,(data)=>{ 
@@ -60,7 +63,7 @@ export class SearchComponent implements OnInit{
                         this.projectId=data.data.PId; 
                     this.page=1;
                     this.searchArray=[];
-                    this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'');
+                    this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'','');
                     }else{
                     this._router.navigate(['pagenotfound']);  
                     }
@@ -96,16 +99,17 @@ export class SearchComponent implements OnInit{
                     thisObj.ready=false;
                     thisObj.page++;
                   //  alert("loading"+thisObj.projectId);
-                    thisObj.load_contents(thisObj.page,thisObj.searchString,thisObj.searchFlag,thisObj.projectId,'scroll'); 
+                    thisObj.load_contents(thisObj.page,thisObj.searchString,thisObj.searchFlag,thisObj.projectId,'scroll',thisObj.getPname); 
                     
                 }
               }
-   public  load_contents(page,searchString,searchFlag,projectId,scroll){
+   public  load_contents(page,searchString,searchFlag,projectId,scroll,pName){
         var post_data={
         'projectId':projectId,
         'searchString':searchString,
         'page':page,
-        'searchFlag':searchFlag
+        'searchFlag':searchFlag,
+        'pName':pName
       }
       console.log("psearchparam"+JSON.stringify(post_data));
           this._ajaxService.AjaxSubscribe("site/global-search",post_data,(result)=>
@@ -115,6 +119,7 @@ export class SearchComponent implements OnInit{
                    // document.getElementById("nosearchdiv").style.display = 'block';;
                    this.searchDivTabs=true;
                     this.noSearchDivClass='col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero';
+                    //  alert("here4444--------"+JSON.stringify(result.data.mainData));
                     this.searchArray= this.searchDataBuilder(result.data.mainData,this.searchArray);
                     this.taskCount= result.data.dataCount.TaskCount;
                     this.commentsCount=result.data.dataCount.commentsCount;
@@ -123,8 +128,17 @@ export class SearchComponent implements OnInit{
                     this.allCount=result.data.dataCount.allCount;
                     this.optionTodisplay=this.projectsArray(result.data.projectCountForAll);
                     this.projects=this.optionTodisplay[0].filterValue;
+                 // alert("here33--------"+JSON.stringify(this.projects));
+                //  alert("@@@---"+pName);
+                    if(this.copyList!=undefined){
+                    this.projects=this.copyList;
+                    }
+                  //  alert("###-555-----"+JSON.stringify(this.copyList));
+                    this.checkDataForcount=0;
                     this.ready=true;
                     }else{
+                         this.checkDataForcount=1;
+                       // alert("23232323");
                         if(scroll=='scroll' && result.message =='no result found'){
                                if (document.getElementById('searchsection').innerHTML.indexOf("No Results Found") != -1) {
                                   document.getElementById('searchsection').innerHTML='No Results Found';
@@ -166,20 +180,20 @@ export class SearchComponent implements OnInit{
          }
   projectsArray(list:any){
      var listItem=[];
-   listItem.push({label:"Projects", value:''});
+//    listItem.push({label:'All'+' '+this.allCount, value:{'name':'All','count':this.allCount}});
         var listMainArray=[];
               for (var key in list) {
-             listItem.push({label:key+' '+list[key], value:{'id':key,'name':list[key]}});
+             listItem.push({label:key+' '+list[key], value:{'name':key,'count':list[key]}});
                }
         listMainArray.push({type:"",filterValue:listItem});
          return listMainArray;
 }
-prepareCount(CountArray){
- for(let searchCount in CountArray){
-        alert("@@@56--"+searchCount);
-       }
-    //    alert("4444--"+searchCount);
-}
+// prepareCount(CountArray){
+//  for(let searchCount in CountArray){
+//         alert("@@@56--"+searchCount);
+//        }
+//     //    alert("4444--"+searchCount);
+// }
     // preparing serach data
     searchDataBuilder(searchData,prepareData){
         for(let searchArray in searchData){
@@ -198,16 +212,28 @@ prepareCount(CountArray){
         this.searchArray=[];
         this.searchFlag=searchFlag;
         this.page=1;
-        // alert("loading12333"+this.projectId);
         document.getElementById('searchsection').innerHTML=' ';
-        this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'');
+        this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'',this.getPname);
         
      }
       changeProject(){
        // alert("s__P@@@@@@@@@---"+JSON.stringify(this.selectedProject));
         localStorage.setItem('ProjectName',this.selectedProject.name);
         localStorage.setItem('ProjectId',this.selectedProject.id);
-        this._router.navigate(['project',this.selectedProject.name,'list']);
+      //  this._router.navigate(['project',this.selectedProject.name,'list']);
+    }
+    showDetailsByProject(pName){
+       this.copyList=this.projects;
+        if(pName=='All'){
+            this.getPname='';
+        }else{
+             this.getPname=pName;
+        }
+         this.searchArray=[];
+        this.page=1;
+        this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'',this.getPname);
+      // this.projects=this.projects;
+      //  alert("###-6666-----"+JSON.stringify(this.projects));
     }
 }
 
