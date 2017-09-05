@@ -8,7 +8,7 @@ import { LoginComponent }  from './components/login/login.component';
 import { HomeComponent }  from './components/home/home.component';
 import { StoryDashboardComponent }  from './components/story-dashboard/story-dashboard.component';
 import {StoryService} from './services/story.service';
-import {DropdownModule,CalendarModule,AutoCompleteModule,CheckboxModule,BreadcrumbModule,MenuItem,ChipsModule} from 'primeng/primeng'; 
+import {DropdownModule,CalendarModule,AutoCompleteModule,CheckboxModule,BreadcrumbModule,MenuItem,ChipsModule,MultiSelectModule,ListboxModule} from 'primeng/primeng'; 
 // HashLocationStrategy added to avoid Refresh Problems on Web Server....
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import {LoginService, Collaborator} from './services/login.service';
@@ -61,6 +61,7 @@ import { ProjectFormComponent } from './components/project-form/project-form.com
 import { AdvanceFilterComponent } from './components/utility/advance-filter/advance-filter.component';
 import { BucketDashboardComponent } from './components/bucket-dashboard/bucket-dashboard.component';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
+import { NgPasswordHelperModule, NgPasswordRulesService} from 'ng-password-helper';
 
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
@@ -186,7 +187,10 @@ const ROUTES=[
    SpinnerComponentModule,
    //Ng2DropdownModule,
    ChipsModule,
-   NgxChartsModule
+   MultiSelectModule,
+   ListboxModule,
+   NgxChartsModule,
+   NgPasswordHelperModule
     ],
   declarations: [DateFormat, AppComponent,LoginComponent,HomeComponent, HeaderComponent,FooterComponent,StoryComponent,StoryDashboardComponent,StoryDetailComponent, StoryEditComponent,TruncatePipe,SearchComponent,NotificationComponent,StandupComponent,TimeReportComponent,PageNotFoundComponent,BreadcrumbComponent, ChildtaskComponent,ActivitiesComponent, ProjectDetailComponent, UserDashboardComponent, TopTicketStatsComponent,CreateUserComponent, ProjectDashboardComponent,ConfirmationBoxComponent,EmailInviteComponent, InviteComponent, NotificationSettingsComponent,StateChartComponent, ReportConfirmationComponent ,ProjectFormComponent,CreateBucketComponent,BucketDashboardComponent ,AdvanceFilterComponent],
   bootstrap:    [ AppComponent ],
@@ -194,6 +198,25 @@ const ROUTES=[
   schemas: [ CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {
+     constructor(private ngPasswordRulesService: NgPasswordRulesService) {
  
- }
+     let rules = new Array();
+ 
+     // use some default rules
+     rules.push(ngPasswordRulesService.RULE_UPPER);
+     rules.push(ngPasswordRulesService.RULE_LOWER);
+     rules.push(ngPasswordRulesService.RULE_DIGIT);
+     rules.push(ngPasswordRulesService.RULE_SPECIAL);
+     //customized password rules
+     rules.push({desc: 'At least 8 and no more than 15 characters',  regex:new RegExp('^.{8,15}$'),  valid: false });
+     ngPasswordRulesService.setRules(rules);
+ 
+  }
+ 
+}
+ 
+    
+
+
+ 
  
