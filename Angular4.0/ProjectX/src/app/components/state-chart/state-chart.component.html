@@ -1,15 +1,5 @@
 <div *ngIf="chartType == 'pie'" style="display: block">
-  <!--<canvas baseChart height="150"
-          [datasets]="pieChartData"
-          [labels]="pieChartLabels"
-          [chartType]="pieChartType"
-          [options]="barChartOptions"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)"></canvas>-->
-          
-          <!--<p-chart [type]="pieChartType" [data]="data"></p-chart>-->
-
-          <ngx-charts-pie-chart
+    <ngx-charts-pie-chart *ngIf="pieChartData.length!=0"
                 [view]="view" 
                 [results]="pieChartData"
                 [legend]="showLegend"
@@ -19,10 +9,8 @@
 
 </div>
 
-<div *ngIf="chartType == 'bar'" style="display: block">
-
-
-              <ngx-charts-bar-vertical 
+<div *ngIf="chartType == 'bar'"  style="display: block">
+              <ngx-charts-bar-vertical *ngIf="pieChartData.length!=0"
                     [view]="view"
                     [results]="pieChartData"
                     [gradient]="false"
