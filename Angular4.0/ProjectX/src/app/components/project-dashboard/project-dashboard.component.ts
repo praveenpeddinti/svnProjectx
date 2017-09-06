@@ -254,12 +254,15 @@ export class ProjectDashboardComponent implements OnInit {
    * @author:Ryan
    * @description:Used for getting other buckets
    */
-  getOtherBuckets(){
-    this.bucketService.getOtherBucketsInfo(this.projectId,(data)=>
+  getOtherBuckets(){ 
+    if(jQuery("#toggle_other").attr('aria-expanded')==true)
     {
-      console.log("==Other buckets data=="+JSON.stringify(data));
-      this.otherBucketsContainer=data.data;
-    })
+      this.bucketService.getOtherBucketsInfo(this.projectId,(data)=>
+      {
+        console.log("==Other buckets data=="+JSON.stringify(data));
+        this.otherBucketsContainer=data.data;
+      });
+    }
   }
 
  
