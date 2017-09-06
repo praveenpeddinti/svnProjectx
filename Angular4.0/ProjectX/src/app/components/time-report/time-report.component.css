@@ -15,26 +15,30 @@
 #descriptionerr_msg{
     display:none;
 }
-.timeboxtitle{text-align: center;color:#717171;}
-.timeboxlabel{text-align: center;color:#237ea7;text-transform: uppercase;}
-.timereportdiv{background:#e2e2e2;padding:10px}
+.timeboxtitle{color:#637282;}
+.timeboxlabel{color:#695ea5;text-transform: uppercase;}
+.timereportdiv{background:#f7f9fa;padding:10px}
 .timereportdiv ul{padding:0;margin:0;list-style: none}
 .timereportdiv ul:after{content:"";display:block;clear:both}
-.timereportdiv ul li{float: left}
-.timereportdiv ul li .timecountouter{position: relative;margin-left:60px;}
+.timereportdiv ul li{float: left; width: 100%; text-align: center; }
+.timereportdiv ul li .timecountouter{position: relative;}
 .timereportdiv ul li .timecountouter .timecount{background: #e8e8e8;padding:10px;
 	border: 1px dashed #333;font-size:18px;font-weight:bold}
-.timereportdiv ul li .timecountouter i{position: absolute;left:-48px;top:1px;color:#237ea7;font-size:38px}
+.timereportdiv ul li i{color:#637282;font-size:38px; margin-bottom:10px;}
 
 .timewrapbox {
 	position: relative;
 	background: #ffffff;
         padding:7px 10px 5px;
-        font-size:18px;font-weight:bold
+        font-size:18px;font-weight:bold;
+        color:#695ea5;
+            display: inline-block;
+            margin:auto;
+            
 }
 .timewrapbox:after {
-	right: 100%;
-	top: 50%;
+bottom: 100%;
+	left: 40%;
 	border: solid transparent;
 	content: " ";
 	height: 0;
@@ -42,13 +46,13 @@
 	position: absolute;
 	pointer-events: none;
 	border-color: rgba(255, 255, 255, 0);
-	border-right-color: #ffffff;
+	border-bottom-color: #ffffff;
 	border-width: 8px;
 	margin-top: -8px;
 }
-.timereportlabel{margin-bottom:0;display: block; color: #6d6d6d;
+.timereportlabel{margin-bottom:0;display: block; color: #637282;
     font-family: "robotoregular";
-    font-size: 13px;
+    font-size: 14px;
     font-weight: normal;}
 .paddingtop20{padding-top:19px}
 .add{
@@ -124,3 +128,7 @@
     z-index: 10000;
     position: relative;
 }
+
+.primeDateComponent button{left:100%!important;}
+
+
