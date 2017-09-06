@@ -651,7 +651,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     $summary['prepare_text']= 'has '.$prepare_text;
                                }else if($summary['ActionOn']=='description'){
                                    error_log("@@@------------");
-                                    $prepare_text = Yii::t('app','changed');
+                                    $prepare_text = Yii::t('app','TotalTimeLog');
                                     $summary['prepare_text']= $prepare_text;
                                     $summary['action']=$actionOn;
                                     if(!empty($changeSummary['OldValue'])){
@@ -722,7 +722,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     $summary['prepare_text']= $prepare_text;
                                }else if($summary['ActionOn']=='bucket'|| $summary['ActionOn']=='workflow'){
                                    error_log("jhhhk-------------------");
-                                     $prepare_text = Yii::t('app','changed');
+                                     $prepare_text = Yii::t('app','TotalTimeLog');
                                     $summary['action']=($summary['ActionOn']=='workflow'?'work flow':$actionOn);
                                     error_log("changesummery55555555555-------".$changeSummary['OldValue']);
                                     if(!empty($changeSummary['OldValue'])){
