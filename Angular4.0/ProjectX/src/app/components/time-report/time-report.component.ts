@@ -10,6 +10,7 @@ import {AuthGuard} from '../../services/auth-guard.service';
 import { ProjectService } from '../../services/project.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import { NgForm } from '@angular/forms';
+import {Location} from '@angular/common';
 
 declare var jQuery:any;
 
@@ -65,11 +66,21 @@ export class TimeReportComponent{
    public deletePopUp=true;
    public editSuccessMsg:any;
    public addSuccessMsg:any;
+   public teamMembers:SelectItem[];
+   public selectedMember:string;
+   public teamCount=0;
+   public Members:string[]=[];
     columns = [
                 {
                     name: 'Date',
                     flexGrow: 1,
                     sortby: 'Date',
+                    class: 'paddingleft10'
+                },
+                { //new column added by Ryan
+                    name:'User',
+                    flexGrow: 2,
+                    sortby: 'Id',
                     class: 'paddingleft10'
                 },
                 {
@@ -101,9 +112,11 @@ export class TimeReportComponent{
 
     expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    pageNo:number=0; //added by Ryan
+    
     constructor(
         private _router: Router,
-        private _service: TimeReportService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute,private shared:SharedService) { 
+        private _service: TimeReportService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute,private shared:SharedService,private timeLocation:Location) { 
         console.log("in constructor"); 
         let PageParameters = {
                 offset: 0,
@@ -132,14 +145,31 @@ export class TimeReportComponent{
         thisObj.route.queryParams.subscribe(
         params => 
         { 
+            /* Section To Remember the State of Pages while user navigation */
+            // if(params['page']!=undefined)
+            // {
+               
+            //     this.pageNo=params['page'];//added by Ryan
+            //     this.sortorder=params['sort'];//added by Ryan
+            //     this.sortvalue=params['col'];
+            //     this.fromDateVal=params['fromDate'];//added by Ryan 
+            //     this.toDateVal=params['toDate']; // added by Ryan
+            //     thisObj.offset=this.pageNo-1;//added by Ryan
+            //     var pagination_count={page:'Time Report',count:this.pageNo,sort:this.sortorder,col:this.sortvalue,fromDate:this.fromDateVal,toDate:this.toDateVal};
+            //     var pagination=JSON.stringify(pagination_count);
+            //     localStorage.setItem('timeReportState',pagination);//added by Ryan
+            // }
+            /* =========Section End==========================================*/ 
+
             thisObj.route.params.subscribe(params => {
                 thisObj.projectName=params['projectName'];
+                this.shared.change(this._router.url,true,'Time Report','Other',thisObj.projectName);
                 thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode!=404) {
                     thisObj.projectId=data.data.PId;  
-                    this.page(thisObj.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+                    this.page(thisObj.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal,this.Members);
                     //var thisObj = this;
-                    this.shared.change(this._router.url,null,'Time Report','Other',thisObj.projectName);
+                    this.getTeamMembers();
                 }
                 });
             });
@@ -162,7 +192,7 @@ export class TimeReportComponent{
         if( (new Date(this.fromDateVal) > new Date(this.toDateVal))){
         jQuery("#toDate_error").show();
         }else{
-        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate);
+        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate,this.Members);
         }
     }
     clearDateTimeEntry(){
@@ -179,10 +209,10 @@ export class TimeReportComponent{
     @params    :  offset,limit,sortvalue,sortorder
     @Description: StoryComponent/Task list Rendering
     */
-    page(projectId,offset, limit, sortvalue, sortorder,fromDateVal,toDateVal ) {
-        this._service.getTimeReportDetails(projectId, offset, limit, sortvalue, sortorder,fromDateVal,toDateVal,(response) => {
+    page(projectId,offset, limit, sortvalue, sortorder,fromDateVal,toDateVal,members ) {
+        this._service.getTimeReportDetails(projectId, offset, limit, sortvalue, sortorder,fromDateVal,toDateVal,members,(response) => {
             let jsonForm = {};
-            if (response.statusCode == 200) {console.log("-----timedata---"+JSON.stringify(response));
+            if (response.statusCode == 200) {
                 this.rows =[];
                 const start = offset * limit;
                 const end = start + limit;
@@ -197,8 +227,16 @@ export class TimeReportComponent{
                 this.rows = data;
                 this.count = response.totalCount;
                 this.totaltimehours=response.data.totalHours;
-            
-
+               
+                this.pageNo=offset+1;//added by Ryan
+                this.sortorder=sortorder;//added by Ryan
+                this.sortvalue=sortvalue;
+                this.offset=this.pageNo-1;//added by Ryan
+                var pagination_count={page:'Time Report',count:this.pageNo,sort:this.sortorder,col:this.sortvalue,fromDate:this.fromDateString,toDate:this.toDateString};
+                var pagination=JSON.stringify(pagination_count);
+                localStorage.setItem('timeReportState',pagination);//added by Ryan
+                var url='/project/'+this.projectName+'/time-report?page='+this.pageNo+'&sort='+sortorder+'&col='+sortvalue+'&fromDate='+this.fromDateString+'&toDate='+this.toDateString;
+                this.timeLocation.go(url);
             } else {
                 console.log("fail---");
             }
@@ -210,7 +248,7 @@ export class TimeReportComponent{
     onPage(event) {
         this.offset = event.offset;
         this.limit = event.limit;
-        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal,this.Members);
     }
 
     /*
@@ -219,7 +257,7 @@ export class TimeReportComponent{
     onSort(event) {
         this.sortvalue = event.sorts[0].prop;
         this.sortorder = event.sorts[0].dir;
-        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal,this.Members);
     }
 
     renderStoryForm() {
@@ -303,7 +341,7 @@ export class TimeReportComponent{
                     this._ajaxService.AjaxSubscribe("time-report/update-timelog",post_data,(response)=>
                     { 
                         if (response.statusCode == 200) {
-                            this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+                            this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal,this.Members);
                              this.editSuccessMsg=true;
                             setTimeout(() => {
                                 this.editPopUp=false;
@@ -344,7 +382,7 @@ export class TimeReportComponent{
                 this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
                 { 
                     if (response.statusCode == 200) {
-                        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+                        this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal,this.Members);
                         this.addSuccessMsg=true;
                         setTimeout(() => {
                             this.submitted=false;
@@ -393,7 +431,7 @@ export class TimeReportComponent{
                         }, 250);
 
           this.deletePopUp=true;
-            this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal);
+            this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal,this.Members);
         });            
     }
     
@@ -433,5 +471,34 @@ export class TimeReportComponent{
     
     fullTextshow(a){jQuery("#fullText_"+a).css("display", "block");
     
+    } 
+
+    getTeamMembers()
+    {
+        var post_data={'projectId':this.projectId};
+        this._ajaxService.AjaxSubscribe("collaborator/get-team-members",post_data,(result)=>
+        {
+            this.teamMembers=[];
+            this.teamCount=result.totalCount;
+            console.log("==Team Members=="+JSON.stringify(result));
+            if(result.data==null){
+                /*Hide Dropdown for Team Members */
+            }else{
+                for(let member of result.data){
+                    this.teamMembers.push({label:member.Name,value:{Name:member.Name,Id:member.Id,Profile:member.ProfilePic}});
+                }
+            }
+        });
+    }
+
+    getSelectedMembers(event){
+       var usersList=event.value;
+       var ids=[];
+       for(let user of usersList){
+        ids.push(user.Id);
+       }
+       
+      this.Members=ids;
+
     }
 }
