@@ -686,7 +686,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    }
                                     if(!empty($changeSummary['NewValue'])){
                                        $summary['NewValue']=$setNewVal;
-                                       $summary['NewValueText']='to';
+                                       $summary['NewValueText']='a Project';
                                    }else{
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
