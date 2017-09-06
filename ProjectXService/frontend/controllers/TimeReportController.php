@@ -75,13 +75,22 @@ class TimeReportController extends Controller
             $arrayTimelog = ServiceFactory::getTimeReportServiceInstance()->getTimeReportCountAndWorkLog($StoryData,$projectId);
             $totalCount = 0;
             $totalWorkLogHours = 0;
-            if(count($arrayTimelog)>0){
-             $totalCount =  $arrayTimelog[0]["count"];
-              $totalWorkLogHours =  number_format(round($arrayTimelog[0]["totalHours"],2),2);
-          }
+            $totalHoursOfEachMember=array();
+            $totalHours=0;
+            if(!empty($arrayTimelog)){
+                foreach($arrayTimelog as $timeLog){ error_log("in for each==");
+                    if(count($timeLog)>0){
+                     $totalCount+=  $timeLog["count"];
+                     $totalWorkLogHours =  number_format(round($timeLog["totalHours"],2),2);
+                     $totalHours+=$totalWorkLogHours;
+                     //array_push($totalHoursOfEachMember,$totalWorkLogHours);
+                  }
+                }
+                array_push($totalHoursOfEachMember,$totalHours);
+            }
             $fromDate = CommonUtility::convert_date_zone(strtotime($StoryData->fromDate),$StoryData->timeZone);
             $toDate = CommonUtility::convert_date_zone(strtotime($StoryData->toDate),$StoryData->timeZone);
-            $finalData = array("fromDate"=>$fromDate,"toDate"=>$toDate,"data"=>$data,"totalHours"=>$totalWorkLogHours);
+            $finalData = array("fromDate"=>$fromDate,"toDate"=>$toDate,"data"=>$data,"totalHours"=>$totalHoursOfEachMember);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
@@ -93,7 +102,7 @@ class TimeReportController extends Controller
              Yii::error("TimeReportController:actionGetTimeReportDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = $th->getMessage();
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
