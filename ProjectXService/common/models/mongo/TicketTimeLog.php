@@ -160,11 +160,21 @@ class TicketTimeLog extends ActiveRecord
         try {
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $skip = $StoryData->offset * $StoryData->pagesize;
-            $limit = $skip + $StoryData->pagesize;
+            $limit = $skip + $StoryData->pagesize; error_log("----Member Ids---".print_r($StoryData->members,1));
+            $selectedMembers=array();
+            $members=$StoryData->members;
+            foreach($members as $member){
+                $member=(int)$member;
+                array_push($selectedMembers,$member);
+            }
             if($skip>0){
                 //$skip =$skip-1; 
             }
-            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
+            if(empty($StoryData->members)){
+                $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
+            }else{ //added by Ryan for getting the time reports of selected members of Team
+                $matchArray = array('TimeLog.CollaboratorId' => array('$in'=>$selectedMembers), "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000))); 
+            }
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
                 array('$unwind' => '$TimeLog'),
@@ -198,8 +208,17 @@ class TicketTimeLog extends ActiveRecord
     public static function getTimeReportCountAndWorkLog($StoryData, $projectId) {
         try {
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
-            $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
-            
+            $selectedMembers=array();
+            $members=$StoryData->members;
+            foreach($members as $member){
+                $member=(int)$member;
+                array_push($selectedMembers,$member);
+            }
+            if(empty($StoryData->members)){
+                $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
+            }else{ //added for getting the worklogs of selected Members
+                 $matchArray = array('TimeLog.CollaboratorId' => array('$in'=>$selectedMembers), "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000))); 
+            }
             $query = Yii::$app->mongodb->getCollection('TicketTimeLog');
             $pipeline = array(
                 array('$unwind' => '$TimeLog'),
