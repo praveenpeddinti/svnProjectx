@@ -1,5 +1,5 @@
 .search{color:#637282;}
-.search .searchresulttext{border-bottom:solid 1px #f0f0f0;padding:10px 0px;font-size:16px;color:#000;margin-bottom:20px;font-weight:600;}
+.search .searchresulttext{padding:10px 0px;font-size:16px;color:#000;font-weight:600;}
 
 .search .searchdiv{padding:10px 0;border-bottom:1px dotted #c1c7cd;color:#637282;}
 .search .searchdiv .searchresulttitle a{color:#695ea5;font-size:16px; font-family: 'open_sansregular'; text-decoration: none;}
@@ -19,4 +19,7 @@
 .tabs-left .nav-tabs > li.active > a, .tabs-left .nav-tabs > li.active > a:hover, .tabs-left .nav-tabs > li.active > a:focus{border-color: #e6e8eb transparent #e6e8eb #e6e8eb;color:#695ea5;background: #fff;margin-right:-1px;position:relative;border-radius:0;border-right:0;z-index: 1}
 
 .tab-content_content{border:1px solid #e6e8eb;min-height:221px;padding:10px 20px}
+
+.breadcrumb{ margin-bottom:0px!important;}
+
 

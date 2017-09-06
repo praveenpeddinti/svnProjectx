@@ -16,7 +16,6 @@ declare var jQuery:any;
   
 })
 export class ProjectFormComponent implements OnInit {
-  
    @Output() appendLogoToParent: EventEmitter<any> = new EventEmitter();
    @Output() appendDescriptionParent: EventEmitter<any> = new EventEmitter();
   private projectId;
@@ -41,7 +40,6 @@ export class ProjectFormComponent implements OnInit {
   public checkImage:any;
   public fileuploadMessage=0; 
   public verifyProjectMess=false;
-  public descLength:any;
   public projectForm:string;
   public copyProjectname:any;
   public copydescription:any;
@@ -50,7 +48,6 @@ export class ProjectFormComponent implements OnInit {
   public form={};
   public setLogo:any;
   public updatedLogo:any;
-
  public spinnerSettings={
       color:"",
       class:""
@@ -66,8 +63,7 @@ export class ProjectFormComponent implements OnInit {
   ) {this.filesToUpload = []; }
   ngOnInit() {
    //alert("##"+this.projectForm);
-     
-    if(this.projectForm=='create'){
+     if(this.projectForm=='create'){
       // alert("121212");
      }else if(this.projectForm=='edit'){
      //  alert("3333");
@@ -93,9 +89,9 @@ export class ProjectFormComponent implements OnInit {
                 thisObj.form['projectId']=thisObj.projectId; 
                 thisObj.form['projectName']=thisObj.projectName; 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
-                thisObj.form['description']=thisObj.description;
+                thisObj.form['description']=thisObj.description;;
                   thisObj.form['setLogo']=thisObj.setLogo;
-              //  jQuery("#summernote").summernote('code',thisObj.form['description']);
+               //  jQuery("#summernote").summernote('code',thisObj.form['description']);
                  thisObj.copyProjectname=thisObj.form['projectName'];
                 
                 
@@ -237,7 +233,8 @@ export class ProjectFormComponent implements OnInit {
             this.projectImage=jQuery('.projectlogo').attr("src");
            var editor=jQuery('#summernote').summernote('code');
             this.editorDesc =jQuery(editor).text().trim();
-            this.form['description']=this.editorDesc;
+            alert("3434343++--"+this.editorDesc);
+              this.form['description']=this.editorDesc;
              var postData={
                       projectName:this.form['projectName'].trim(),
                       description:editor,
@@ -386,5 +383,9 @@ export class ProjectFormComponent implements OnInit {
      }else{
         this.clearImgsrc=false;
       }
+  }
+  checkDescField(event){
+    jQuery(event).text();
+    alert("+++"+jQuery(event).text());
   }
 }

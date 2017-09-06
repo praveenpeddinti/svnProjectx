@@ -5,8 +5,8 @@
                          <div class="activity_date">
                                   <!--<div class="devider1 martb5"></div>-->
             <div class="activity_datebg">
-                <div class="datemonth"><span>{{getActivity.activityDate| dateFormat:'MMM'}}</span>{{getActivity.activityDate | dateFormat:'DD'}}</div>
-                <div class="Year">{{getActivity.activityDate| dateFormat:'YYYY'}}</div>
+                <div class="datemonth"><span>{{getActivity.activityDate| dateFormat:'MMM'}}</span>  {{getActivity.activityDate | dateFormat:'DD'}}</div>
+                <div class="Year">  {{getActivity.activityDate| dateFormat:'YYYY'}}</div>
             </div>
                          </div>
                  <div *ngFor=" let finalData of getActivity.activityData;let j=index;" >
@@ -52,7 +52,7 @@
                                     <span class="" *ngIf="ChangeSummary.OldValueText"> {{ChangeSummary.OldValueText}}</span>
                                     {{ChangeSummary.OldValue}}
                                     <span class="" *ngIf="ChangeSummary.NewValueText"> {{ChangeSummary.NewValueText}}</span>
-                                {{ChangeSummary.NewValue}} in  {{finalData.Title}}
+                               "{{ChangeSummary.NewValue}}"  <!--in  {{finalData.Title}}-->
                                            </div>
                      <div class="activitypro">({{finalData.time| dateFormat:'hh:mm:ss A'}}) -{{finalData.ProjectName}}</div>
                             </span>

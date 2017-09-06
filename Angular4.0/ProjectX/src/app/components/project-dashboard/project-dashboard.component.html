@@ -87,11 +87,8 @@
                  </div>
             </div>
             <div class="row devider1"></div> 
-              Active Users  
-               <div *ngIf="projectDetails.userInfo==''">
-                       (No Active Users)
-                       </div>
-              <div class="row">
+              Active Users <span *ngIf="projectDetails.userInfo==''">(0) </span>
+               <div class="row">
               <div class="col-md-12">
                  
                 <div *ngIf="projectDetails.userInfo">

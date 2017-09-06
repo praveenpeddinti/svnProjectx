@@ -1,10 +1,13 @@
 <div class="search">
-<div class="searchresulttext searchresulttextmarginzero">Search results for <span class="heighlight">{{searchString}}</span> in 
+    <div class="row">
+        <div class="col-md-8">
+            <div class="searchresulttext searchresulttextmarginzero searchresulttext_bornone">Search results for <span class="heighlight">{{searchString}}</span> in 
 
 <span *ngIf="projectName">{{projectName}}</span><span *ngIf="!projectName">All</span></div>
-
-<div *ngIf="checkData==0">
-     <div class="clearboth marb20">
+        </div>
+        <div class="col-md-4">
+    <div *ngIf="checkData==0" >
+     <div class="clearboth">
              <div class="custom_selctdropdown pull-right marb20">
    <p-dropdown  [style]="{'width':'220px'}" [(ngModel)]="selectedProject"  [ngValue]="selectedProject"     [options]="projects">
    <ng-template  let-projects pTemplate="item">
@@ -14,6 +17,9 @@
      </div>
      </div>
           </div>
+    </div>
+    </div>
+
 
  <div class="tabbable tabs-left row" style="clear:both;">
  
