@@ -42,6 +42,7 @@ public showHelper:boolean=false;
      
      this.userProfileImage = GlobalVariable.BASE_API_URL+"files/user/user_noimage.png";
      this.form["userProfileImage"] = "/files/user/user_noimage.png"; 
+     this.form["originalImageName"]="/files/user/user_noimage.png";
     thisObj.route.queryParams.subscribe(
       params => 
       { 
