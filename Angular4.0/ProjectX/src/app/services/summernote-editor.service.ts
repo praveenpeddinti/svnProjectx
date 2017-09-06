@@ -99,11 +99,17 @@ export class SummerNoteEditorService
                         },
                     callbacks: {
                     onKeyup: function(e) {
+                        //  alert("333"+this.summernoteLength);
+                         this.summernoteLength=false; 
+                        //  alert("444444444444444444"+this.summernoteLength);
                          var editor=jQuery('#'+element).summernote('code');
                          editor=jQuery(editor).text().trim();
+                         obj.form['description']=editor;
+                        // alert("2323");
                          if(editor!='')
                          {
-                            obj.form['description']= jQuery('#'+element).summernote('code');
+                            obj.form['description']=editor;
+                         //  obj.form['description']= jQuery('#'+element).summernote('code');
                             console.log(obj.form['description']);
                          }
                          else

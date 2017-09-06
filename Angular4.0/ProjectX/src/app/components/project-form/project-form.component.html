@@ -62,7 +62,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
                         <label class="model_label"> Description </label>
                         <div class="customformfieldsmarginbottom relativediv ">
-                            <textarea  [(ngModel)]="form.description" id="summernote" (ngModelChange)="checkDescField($event)" name="description"  #description="ngModel" class="customformfieldstextarea " required maxlength="500" minlength="3"></textarea>
+                            <textarea  [(ngModel)]="form.description" id="summernote"  name="description"  #description="ngModel" class="customformfieldstextarea " required maxlength="500" minlength="3"></textarea>
                             <div *ngIf="submitted && description.errors " class="fielderror">
                                 <div [hidden]="!description.errors.required">Description is required</div>
                                  <div [hidden]="!description.errors.maxlength && description.errors.required">  Description cannot be more than 500 characters long.</div>

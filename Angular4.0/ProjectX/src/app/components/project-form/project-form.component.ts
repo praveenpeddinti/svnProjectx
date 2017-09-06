@@ -384,8 +384,10 @@ export class ProjectFormComponent implements OnInit {
         this.clearImgsrc=false;
       }
   }
+
   checkDescField(event){
+    alert("34343");
     jQuery(event).text();
-    alert("+++"+jQuery(event).text());
   }
+
 }
