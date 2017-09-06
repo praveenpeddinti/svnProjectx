@@ -118,6 +118,7 @@ export class SearchComponent implements OnInit{
                    if(result.message !='no result found'){
                    // document.getElementById("nosearchdiv").style.display = 'block';;
                    this.searchDivTabs=true;
+                    document.getElementById('searchsection').innerHTML=' '; 
                     this.noSearchDivClass='col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero';
                     //  alert("here4444--------"+JSON.stringify(result.data.mainData));
                     this.searchArray= this.searchDataBuilder(result.data.mainData,this.searchArray);
@@ -128,22 +129,26 @@ export class SearchComponent implements OnInit{
                     this.allCount=result.data.dataCount.allCount;
                     this.optionTodisplay=this.projectsArray(result.data.projectCountForAll);
                     this.projects=this.optionTodisplay[0].filterValue;
-                    console.log("here33--############------"+JSON.stringify(this.projects));
+                 // alert("here33--############------"+JSON.stringify(this.copyList));
+                 // alert("hjkhjkjhk------"+JSON.stringify(this.optionTodisplay));
                 //  alert("@@@---"+pName);;
                     if(this.copyList!=undefined){
                     this.projects=this.copyList;
+                    this.optionTodisplay=this.copyList;
                     }
-                    console.log("###-555-----"+JSON.stringify(this.copyList));
+                 //    alert("uyuyy------"+JSON.stringify(this.optionTodisplay));
+                   console.log("###-555-----"+JSON.stringify(this.copyList));
                     this.checkDataForcount=0;
                     this.ready=true;
                     }else{
                       //  alert("2323232");
                           this.optionTodisplay=this.projectsArray(result.data.projectCountForAll);
                         this.projects=this.optionTodisplay[0].filterValue;
-                        console.log("here33--############------"+JSON.stringify(this.projects));
+                    //    console.log("here33--############------"+JSON.stringify(this.projects));
                     //  alert("@@@---"+pName);;
                         if(this.copyList!=undefined){
                         this.projects=this.copyList;
+                         this.optionTodisplay=this.copyList;
                         }
                          this.checkDataForcount=1;
                        // alert("23232323");
@@ -188,20 +193,14 @@ export class SearchComponent implements OnInit{
          }
   projectsArray(list:any){
      var listItem=[];
-//    listItem.push({label:'All'+' '+this.allCount, value:{'name':'All','count':this.allCount}});
+       listItem.push({label:"--Projects--", value:"",'count':''});
         var listMainArray=[];
               for (var key in list) {
-             listItem.push({label:key+' '+list[key], value:{'name':key,'count':list[key]}});
+             listItem.push({label:key+' '+list[key], value:key,'count':list[key]});
                }
         listMainArray.push({type:"",filterValue:listItem});
          return listMainArray;
 }
-// prepareCount(CountArray){
-//  for(let searchCount in CountArray){
-//         alert("@@@56--"+searchCount);
-//        }
-//     //    alert("4444--"+searchCount);
-// }
     // preparing serach data
     searchDataBuilder(searchData,prepareData){
         for(let searchArray in searchData){
@@ -231,8 +230,9 @@ export class SearchComponent implements OnInit{
       //  this._router.navigate(['project',this.selectedProject.name,'list']);
     }
     showDetailsByProject(pName){
-      this.zone.run(() => { 
-       this.copyList=this.projects;
+        this.copyList=this.projects;
+       this.copyList=this.optionTodisplay;
+     console.log(pName);
         if(pName=='All'){
             this.getPname='';
         }else{
@@ -241,9 +241,7 @@ export class SearchComponent implements OnInit{
          this.searchArray=[];
         this.page=1;
         this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'',this.getPname);
-      // this.projects=this.projects;
-      //  alert("###-6666-----"+JSON.stringify(this.projects));
-       });
+     
     }
 }
 
