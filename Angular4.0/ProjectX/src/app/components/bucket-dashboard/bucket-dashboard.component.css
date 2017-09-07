@@ -11,7 +11,7 @@
 .heading{ font:normal 24px/30px 'open_sansregular'; color:#032632;}
 .heading2{font:normal 16px/25px 'open_sansregular'; color:#524693;}
 .heading2:focus{ outline:none; border:none;}
-.pro_bucketbg{ background:#edf0f6; margin-top:8px; padding:10px; clear:both; color:#637282; font:normal 14px/18px 'open_sansregular';}
+.pro_bucketbg{ background:#edf0f6; margin-top:8px; padding:10px; clear:both; color:#637282; font:normal 14px/18px 'open_sansregular'; width: 100%; float: left;}
 .prodashboard_desc{font:normal 14px/18px 'open_sansregular'; color:#637282;}
 .pro_bucketdetails{color:#695ea5;}
 .chartbg{ background:#fff; padding:10px;}
@@ -23,8 +23,10 @@
 .all_storytask{ width:100%; background:#f7f9fa; border:solid 1px #e6e8eb; padding:10px 0px 0px; height:auto; min-height:120px;}
 .but{ background:#758cc4; display:inline-block; color:#fff; font:normal 14px/20px 'open_sansregular';padding:3px 7px;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; cursor:pointer; }
 .but a{ color:#fff; text-decoration:none;}
-.but a:hover{ color:#58637e;}
-.but:hover{ color:#58637e; cursor:pointer;}
+.but a:hover{ color:#fff;}
+.but:hover{ color:#fff; cursor:pointer;}
+.but:focus{outline: none; border: none;}
+.but a:focus{outline: none; border: none;}
 .activity_hed{ color:#000000; font:normal 18px/30px 'open_sansregular';}
 .activity_datebg{ background:#524693; border:solid 2px #695ea5; display:inline-block; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;  clear:both; margin-bottom:10px; height:35px; padding-right:5px;}
 .activity_datebg .datemonth{ background:#fff; float:left;color:#695ea5;  line-height:30px; border-radius:4px 0px 0px 4px; -moz-border-radius:4px 0px 0px 4px; -webkit-border-radius:4px 0px 0px 4px; padding:1px 6px 0px 6px; font-weight:500;}
