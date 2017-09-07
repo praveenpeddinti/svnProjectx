@@ -233,7 +233,7 @@ export class ProjectFormComponent implements OnInit {
             this.projectImage=jQuery('.projectlogo').attr("src");
            var editor=jQuery('#summernote').summernote('code');
             this.editorDesc =jQuery(editor).text().trim();
-            alert("3434343++--"+this.editorDesc);
+           // alert("3434343++--"+this.editorDesc);
               this.form['description']=this.editorDesc;
              var postData={
                       projectName:this.form['projectName'].trim(),
@@ -386,7 +386,7 @@ export class ProjectFormComponent implements OnInit {
   }
 
   checkDescField(event){
-    alert("34343");
+   // alert("34343");
     jQuery(event).text();
   }
 
