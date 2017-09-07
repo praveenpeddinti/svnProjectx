@@ -13,7 +13,8 @@ return [
     
     /* system notifications */
      'mention' => 'has mentioned',
-    'Change' =>'has changedkkk {notification_type}',
+    'changed'=>'has changed',
+    //'Change' =>'has changedkkk {notification_type}',
     'created' => 'has created',
     'related' => 'has related',
     "dueDate"=>"has set due date",
