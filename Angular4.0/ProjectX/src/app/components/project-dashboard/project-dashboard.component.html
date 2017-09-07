@@ -181,10 +181,9 @@
                       </div>
                   </div>
                   
-                  <div class="heading3">State Chart</div>
-                  <div *ngIf="current[0].States.length!=0" class="chartbg">
-                       <app-state-chart chartType="pie"   [stateCount]="current[0].States"></app-state-chart>
-                  </div>
+                  <ng-container *ngIf="current[0].States.length!=0">
+                       <app-state-chart classStr="chartbg" chartType="pie"   [stateCount]="current[0].States"></app-state-chart>
+                  </ng-container>
                   
                </div>
                </div>
