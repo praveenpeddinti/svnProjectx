@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row marb5">
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <label class="timereportlabel"> Start Date </label>
                         <div class="calen_issue">
@@ -91,16 +91,16 @@
 
                 <div *ngIf="Type == 'New'" class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        <div class="modal_checkboxlable">
-                            <p-checkbox name="setCurrent"  binary="true" [(ngModel)]="form.setCurrent"  #setCurrent="ngModel" label="Set as Current" ></p-checkbox>
+                        <div class="modal_checkboxlable ">
+                            <p-checkbox name="setCurrent"  binary="true" [(ngModel)]="form.setCurrent"  #setCurrent="ngModel" label="Set as Current" class="nchbox" ></p-checkbox>
                         </div>
                         <!--<p-checkbox name="sendReminder" binary="true"  [(ngModel)]="form.sendReminder" #sendReminder="ngModel"  label="Send Reminder?" ></p-checkbox>-->
                     </div>
                 </div>
 
                 <div *ngIf="Type == 'New'" class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                        Note: It's the one that should be getting worked on
+                    <div class="col-xs-12 col-sm-12 col-md-12 notetext">
+                        <span class="Highest">Note:</span> It's the one that should be getting worked on
                     </div>
                 </div>
                 
