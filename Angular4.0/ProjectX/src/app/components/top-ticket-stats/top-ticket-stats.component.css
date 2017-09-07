@@ -8,7 +8,9 @@ body{ color:#637282;font:normal 14px/20px 'open_sansregular';}
 .heading2{font:normal 16px/25px 'open_sansregular'; color:#524693;}
 .but{ background:#758cc4; display:inline-block; color:#fff; font:normal 14px/20px 'open_sansregular';padding:3px 7px;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; }
 .but a{ color:#fff; text-decoration:none;}
-.but a:hover{ color:#58637e;}
+.but a:hover{ color:#fff;}
+.but:focus{outline: none; border: none;}
+.but a:focus{outline: none; border: none;}
 .boxbg{ background:#f7f9fa; width:100%; clear:both; margin-top:5px; margin-bottom:10px; padding:5px 0px;}
 
 #no-more-tables table {margin:0px auto; width:98%; }
