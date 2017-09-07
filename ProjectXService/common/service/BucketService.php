@@ -59,7 +59,7 @@ class BucketService {
           $data = $bucketModel->getBucketTypeFilter($projectId,$type);
           $dropList = array(array("Id"=>0,"Name"=>"Edit"));
           foreach ($data as $value) {
-              array_push($dropList, array("Id"=>$value["Id"],"Name"=>"Mark as ".$value["Name"]));
+              array_push($dropList, array("Id"=>$value["Id"],"Name"=>"Set as ".$value["Name"]));
           }
           
           error_log("------getBucketTypeFilter----------->".print_r($dropList,1));
