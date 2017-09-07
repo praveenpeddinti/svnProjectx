@@ -1,3 +1,5 @@
+<div *ngIf="sum>0" class="{{classStr}}">
+<div *ngIf="chartType == 'pie'" class="heading3">State Chart</div>
 <div *ngIf="chartType == 'pie'" style="display: block">
     <ngx-charts-pie-chart *ngIf="pieChartData.length!=0"
                 [view]="view" 
@@ -9,7 +11,8 @@
 
 </div>
 
-<div *ngIf="chartType == 'bar'"  style="display: block">
+<div *ngIf="chartType == 'bar'" class="heading3">Status Chart</div>
+<div *ngIf="chartType == 'bar'" style="display: block">
               <ngx-charts-bar-vertical *ngIf="pieChartData.length!=0"
                     [view]="view"
                     [results]="pieChartData"
@@ -18,4 +21,5 @@
                     [yAxis]="showYAxis"
                     [legend]="showLegend">
             </ngx-charts-bar-vertical>
+</div>
 </div>

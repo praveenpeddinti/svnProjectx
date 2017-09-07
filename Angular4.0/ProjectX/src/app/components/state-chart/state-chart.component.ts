@@ -44,6 +44,8 @@ export class StateChartComponent implements OnInit {
   @Input('stateCount') stateCount:any={};
   @Input('chartType') chartType:string;
   @Input('index') index;
+  @Input('classStr') classStr;
+  
   public barData:any[]=[];
 
 
@@ -52,6 +54,7 @@ export class StateChartComponent implements OnInit {
   private showYAxis = true;
   private showLegend = true;
   private  view: any[] = [750, 400];
+  private sum=0;
 
   constructor(private shared:SharedService) { }
 
@@ -103,9 +106,9 @@ export class StateChartComponent implements OnInit {
     // };
         // alert(JSON.stringify(this.stateCount));
         for(let i in key){
-          if(this.stateCount[key[i]]!=0){
+          this.sum+=this.stateCount[key[i]];
           this.pieChartData.push({value:[this.stateCount[key[i]]],name:key[i]});
-          }
+          
           //this.pieChartData.push({data:[10,20,30,40,50,60,70,80,90,100,110,120,130,140],label:'New'});
          //this.barData.push(this.stateCount[key[i]]);
         }
