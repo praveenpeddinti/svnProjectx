@@ -193,7 +193,7 @@ export class SearchComponent implements OnInit{
          }
   projectsArray(list:any){
      var listItem=[];
-       listItem.push({label:"--Projects--", value:"",'count':''});
+      // listItem.push({label:"--Projects--", value:"",'count':''});
         var listMainArray=[];
               for (var key in list) {
              listItem.push({label:key+' '+list[key], value:key,'count':list[key]});
@@ -231,8 +231,8 @@ export class SearchComponent implements OnInit{
     }
     showDetailsByProject(pName){
         this.copyList=this.projects;
-       this.copyList=this.optionTodisplay;
-     console.log(pName);
+        this.copyList=this.optionTodisplay;
+         console.log(pName);
         if(pName=='All'){
             this.getPname='';
         }else{
