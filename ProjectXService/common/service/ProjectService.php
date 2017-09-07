@@ -57,17 +57,21 @@ class ProjectService {
             $bucket->Responsible = (int)$userId;
 //            $bucket->BucketType = (int)$bucketDetails->data->selectedBucketTypeFilter;
 //            $bucket->BucketStatus = (int)$bucketDetails->data->selectedBucketTypeFilter;
-            $bucket->BucketStatus = 1;
+            $bucket->BucketStatus = (int)1;
 //            $bucket->BucketStatus = (int)0;
            // $bucket->EmailNotify = (int)1;
            // $bucket->EmailReminder = (int)1;
             $bucket->Status = (int)1;
-            $bucket->save();
+            if($bucket->save()){
+               error_log("-------Id--------".$bucket->Id);
+               $bucketId = $bucket->Id;
+          }
+            
            // $returnValue = $bucket->Id;
             
             
            EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$userId,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
-   
+           EventTrait::saveEvent($projectId,"Bucket",$bucketId,"created","create",$userId,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$bucketId)],array("BucketId"=>(int)$bucketId));    
             
             return $projectId;
         } catch (\Throwable $ex) {
