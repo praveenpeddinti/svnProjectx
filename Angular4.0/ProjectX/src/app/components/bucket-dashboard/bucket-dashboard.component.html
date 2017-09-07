@@ -107,20 +107,19 @@
                 
              </div> 
              
-              <div *ngIf="(stateData | json) != ({} | json)" class="pro_bucketbg marb20">
+              <ng-container *ngIf="(stateData | json) != ({} | json)" >
              
-                 <div class="heading3">State Chart</div>
-                 <app-state-chart   [stateCount]="stateData" chartType="pie"></app-state-chart>
+                 <app-state-chart  classStr="pro_bucketbg marb20" [stateCount]="stateData" chartType="pie"></app-state-chart>
                   <!--<div class="chartbg"><img src="images/paichart.jpg" class="img-responsive"/></div>-->
               
-             </div>
-               <div *ngIf="(statusData | json) != ({} | json)" class="pro_bucketbg marb20">
+              </ng-container>
+               <ng-container *ngIf="(statusData | json) != ({} | json)" >
              
-                 <div class="heading3">Status Chart</div>
-                 <app-state-chart   [stateCount]="statusData" chartType="bar"></app-state-chart>
+                 
+                 <app-state-chart classStr="pro_bucketbg marb20"  [stateCount]="statusData" chartType="bar"></app-state-chart>
                   <!--<div class="chartbg"><img src="images/paichart.jpg" class="img-responsive"/></div>-->
               
-             </div>
+               </ng-container>
 
              <div  *ngIf="(form | json) != ({} | json) ">
                     <app-create-bucket  Type="Edit" [formData]="form" [projectId]="projectId" [projectName]="projectName" [bucketId]="bucketDetails[0].BucketId" (bucketUpdated)="onBucketUpdate($event)"></app-create-bucket>
