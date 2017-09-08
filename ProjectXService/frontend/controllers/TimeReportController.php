@@ -150,20 +150,19 @@ class TimeReportController extends Controller
             $sortvalue = $searchData->sortvalue;
             $searchString = $searchData->searchString;
             $getSearchDetails=ServiceFactory::getTimeReportServiceInstance()->getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
-            
-            if(!empty($getSearchDetails)){
+//            if(!empty($getSearchDetails)){
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
                 $responseBean->data = $getSearchDetails;
                 $response = CommonUtility::prepareResponse($responseBean, "json");
-            }else{
-                $responseBean = new ResponseBean;
-                $responseBean->status = ResponseBean::FAILURE;
-                $responseBean->message = "failure";
-                $responseBean->data = $getSearchDetails;
-                $response = CommonUtility::prepareResponse($responseBean,"json"); 
-                }
+//            }else{
+//                $responseBean = new ResponseBean;
+//                $responseBean->status = ResponseBean::SUCCESS;
+//                $responseBean->statusCode = ResponseBean::SUCCESS;
+//                $responseBean->data = $getSearchDetails;
+//                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+//                }
         return $response;
          } catch (\Throwable $th) { 
              Yii::error("TimeReportController:actionGetStoryDetailsForTimelog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
