@@ -26,8 +26,15 @@ export class ChildtaskComponent implements OnInit {
      private showMyEditableField =[];
      private dropDisplayList=[];
      private dateVal = new Date();
+     public minDate:Date;
      //private ticketId;
      public editing = {};
+     private fieldsData = [];
+  public currentFieldData={
+    fieldDataId:'',
+    fieldIndex:'',
+    fieldValueId:''
+  };
      public inlineTimeout;
     columnsSub = [
                 {
@@ -152,11 +159,18 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
                 this.dropList=this.dropDisplayList[0].filterValue;
                 //sets the dropdown prefocused
+                if(fieldTitle=='workflow'){
+                  let value=this.dropList[0].label;
+                  let valueId=this.dropList[0].value.Id;
+                   this.fieldsData[this.currentFieldData.fieldIndex].valueId=valueId;
+                   this.fieldsData[this.currentFieldData.fieldIndex].value=value;
+                }
                 jQuery("#"+inptFldId+" div").click();
                 
             });
     }else if(renderType == "date"){
       //sets the datepicker prefocused
+      this.minDate=new Date();
       this.dateVal = row[6].field_value;
       setTimeout(()=>{
         jQuery("#"+inptFldId+" span input").focus();
@@ -215,8 +229,10 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
             break;
 
             case "date":
-            var date = (this.dateVal.getMonth() + 1) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
-            date = date.replace(/(\b\d{1}\b)/g, "0$1");
+            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+          var date = (monthNames[this.dateVal.getMonth()]) + '-' + this.dateVal.getDate() + '-' +  this.dateVal.getFullYear();
+            date = date.replace(/(\b\d{1}\b)/g, '0$1');         
             document.getElementById(restoreFieldId).innerHTML = (date == "") ? "--":date;
             postEditedText.value = this.dateVal.toString();
             var rightNow = new Date();
