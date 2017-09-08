@@ -178,6 +178,11 @@ export class TimeReportComponent{
          
     }
 
+    ngAfterViewInit(){ 
+    //    jQuery(".ui-chkbox-icon ui-clickable").addClass("fa fa-check");
+    //    jQuery(".ui-chkbox-box ui-widget ui-corner-all ui-state-default").addClass("ui-state-active");
+    }
+
     selectFromDate(event){
         this.fromDateVal=event;
     }
@@ -288,7 +293,8 @@ export class TimeReportComponent{
                 this._ajaxService.AjaxSubscribe("time-report/get-story-details-for-timelog",post_data,(result)=>
                 {
                     
-                    if(result.status !='401'){ 
+                    //if(result.status !='401'){ 
+                        if(result.data.length !=0){ 
                         var subTaskData = result.data;
                         for(let subTaskfield of subTaskData){
                             var currentData = '#'+subTaskfield.TicketId+' '+subTaskfield.Title;
@@ -300,7 +306,8 @@ export class TimeReportComponent{
                         this.search_results=prepareSearchData;
                         jQuery(".ui-autocomplete-list-item").removeClass("ui-state-highlight");
                     }else{
-                        if(!searchStrg.includes("#") && result.status =='401'){
+                        //if(!searchStrg.includes("#") && result.status =='401'){
+                            if(!searchStrg.includes("#")){
                             let appendstring=['Please select valid story/task'];
                             this.search_results=appendstring;
                         }
