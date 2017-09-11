@@ -66,7 +66,7 @@ class ProjectInvitation extends ActiveRecord
     {
         error_log("==Recipient Id==".$recipient_id['Id']);
         try{
-            if(!isset($recipient_id)){$invite_code=$invite_code.$recipient_id['Id'];}
+            if(isset($recipient_id)){$invite_code=$invite_code.$recipient_id['Id'];}
             $qry = "update ProjectInvitation set InvitationCode='$invite_code' where Email='$recipient_email' and ProjectId=$projectId";
             Yii::$app->db->createCommand($qry)->execute();
             return $invite_code;
