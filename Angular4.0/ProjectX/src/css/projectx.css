@@ -64,6 +64,7 @@ footer{background:#758cc4; padding:8px 0px; color:#fff; font:normal 14px/24px 'o
 .navbar-right .headerrightnavbar .dropdown-menu> li > a {
   padding:6px 15px
 }
+
 .navbar-inverse .navbar-nav > li > a {
     
     color: #fff!important;
@@ -1765,9 +1766,29 @@ p-calendar .ui-state-active{color:#fff!important;}
   .ngx-charts .bar-chart{width:100%!important;}
 .ngx-charts .chart{width:100%!important;}
 
+ngx-charts-legend-entry span:focus{ outline: none!important; border: none!important;}
+.chart-legend .legend-labels:focus{outline: none!important; border: none!important;}
+.chart-legend .legend-label-text:focus{outline: none!important; border: none!important;}
+.chart-legend .legend-label:focus{outline: none!important; border: none!important;}
+
 @media (max-width: 767px) {
 .chart-legend .legend-label{ width:50%!important;}
 .activity_date{width:100%!important;}
+.nav > li{display: inline-block!important;}
+.navbar-header .navbar-toggle{display:none!important;}
+.navbar-nav .open .dropdown-menu {
+    position: absolute!important;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    color: #262626;
+    text-decoration: none;
+    background-color: #f5f5f5;
+
+}
+
+.navbar-nav .open .dropdown-menu > li > a:hover{ color: #262626!important;background-color: #f5f5f5!important;}
 
 }
 
