@@ -99,13 +99,14 @@ width: 30px;
 
     
 [data-toggle="collapse"] i:before{   
-  content: "\f062";
+  content: "\f063";
   color:#524693;
   
 }
 
 [data-toggle="collapse"].collapsed i:before{
-  content: "\f063";
+  
+  content: "\f062";
   color:#524693;
 }
 

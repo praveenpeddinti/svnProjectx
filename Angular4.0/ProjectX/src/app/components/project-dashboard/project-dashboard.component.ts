@@ -136,7 +136,7 @@ export class ProjectDashboardComponent implements OnInit {
         });
            });
            this.shared.change(this._router.url,thisObj.projectName,'','',thisObj.projectName); //added by Ryan for breadcrumb purpose
-
+           
   }
    ngAfterViewInit() {
     
@@ -255,12 +255,13 @@ export class ProjectDashboardComponent implements OnInit {
    * @description:Used for getting other buckets
    */
   getOtherBuckets(){ 
-    if(jQuery("#toggle_other").attr('aria-expanded')==true)
+    if(jQuery("#toggle_other").attr('aria-expanded')=='true')
     {
       this.bucketService.getOtherBucketsInfo(this.projectId,(data)=>
       {
         console.log("==Other buckets data=="+JSON.stringify(data));
         this.otherBucketsContainer=data.data;
+        jQuery(".panel-collapse").collapse("show");
       });
     }
   }
