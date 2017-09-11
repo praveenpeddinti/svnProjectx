@@ -57,6 +57,7 @@ export class BucketDashboardComponent implements OnInit {
                 thisObj.projectName=params['projectName'];
                 thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode!=404) {
+                    this.page = 0;
                 //   alert("+++++++++");
                     thisObj.projectId=data.data.PId;
                     thisObj.load_bucketContents(1,'','');
@@ -101,10 +102,14 @@ export class BucketDashboardComponent implements OnInit {
         });
     }
  parseDate(s) {
-  var months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,
-                jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
-  var p = s.split('-');
-  return new Date(p[2], months[p[0].toLowerCase()], p[1]);
+     if(s !=null){
+        var months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,
+                        jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+        var p = s.split('-');
+        return new Date(p[2], months[p[0].toLowerCase()], p[1]);
+     }else{
+         return new Date();
+     }
 }
 
 prepareEditFromData(){
@@ -227,7 +232,7 @@ prepareEditFromData(){
                     var thisObj=this;
                    // alert(JSON.stringify(result.data));
                     if (page == 0 ) { 
-                    //  alert("121212"); 
+                     console.log("121212"); 
                          this.noMoreActivities = false;     
                             this.dashboardData = result.data;
                             console.log("Onload__activity__"+JSON.stringify(this.dashboardData.activities))
