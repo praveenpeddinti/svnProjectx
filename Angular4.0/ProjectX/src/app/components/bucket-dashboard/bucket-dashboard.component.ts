@@ -46,7 +46,7 @@ export class BucketDashboardComponent implements OnInit {
         private _service: BucketService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute,private shared:SharedService,private editor:SummerNoteEditorService,private zone: NgZone) { }
 
   ngOnInit() {
-
+    jQuery('body').removeClass('modal-open');
     var thisObj = this;
         thisObj.route.queryParams.subscribe(
         params => 
