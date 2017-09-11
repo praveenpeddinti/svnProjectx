@@ -30,7 +30,7 @@
             <span class="fielderror" [hidden]="!isEmailValid">Email Invalid </span>
             <span class="fielderror"  [hidden]="!isEmpty">Please add user to invite</span>
             <span class="fielderror"  [hidden]="!isExist">User already in the team</span>
-            <div id="invite_placeholder" class="addusers_place">Add users here to Invite</div>
+            <div id="invite_placeholder" *ngIf="selectedUser.length==0" class="addusers_place">Add users here to Invite</div>
             <div class="inuser"><div [hidden]="selectedUser.length==0"><p-chips value="" [(ngModel)]="selectedUser" [styleClass]="invitesearch " [allowDuplicates]="false" ></p-chips></div>
             </div>
       </div>

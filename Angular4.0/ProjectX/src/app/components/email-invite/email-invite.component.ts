@@ -88,6 +88,7 @@ export class EmailInviteComponent implements OnInit {
       this.selectedUser.push(value);
       //this.displayContainerDiv=true;
       jQuery("#invite_placeholder").hide();
+      this.isExist=false;
       }
       this.isEmpty=false;
     }
