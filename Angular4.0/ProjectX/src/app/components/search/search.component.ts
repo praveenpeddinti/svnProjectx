@@ -165,7 +165,7 @@ export class SearchComponent implements OnInit{
                         }else{
                             if(searchFlag=='' || searchFlag==undefined){
                                 this.noSearchDivClass='';
-                                this.noSearchDivClass='col-xs-12 col-sm-12 col-md-12 tabpaddingleftzero';
+                                this.noSearchDivClass=' tabpaddingleftzero';
                              //   document.getElementById("nosearchdiv").style.display ='';
                               //  document.getElementById("nosearchdiv").style.display = 'none'; 
                                this.searchDivTabs=false;

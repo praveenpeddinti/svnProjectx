@@ -9,7 +9,7 @@
     <div *ngIf="checkData==0" >
      <div class="clearboth">
              <div class="custom_selctdropdown pull-right marb20">
-   <p-dropdown  [style]="{'width':'220px'}" [(ngModel)]="selectedProject"  [ngValue]="selectedProject"  [displayOptions]="optionTodisplay"    [options]="projects">
+   <p-dropdown  [style]="{'width':'220px'}" [(ngModel)]="ghhh"  [ngValue]="4"  [displayOptions]="optionTodisplay"    [options]="projects">
    <ng-template  let-projects pTemplate="item">
    <span (click)='showDetailsByProject(projects.value)'> {{projects.value}}<div class="pull-right purple_color" > {{projects.count}} </div></span>
                   </ng-template>
@@ -21,7 +21,7 @@
     </div>
 
 
- <div class="tabbable tabs-left row" style="clear:both;">
+ <div class="tabbable tabs-left" style="clear:both;">
  
      <div class="col-xs-12 col-sm-3 col-md-3 tabpaddingrightzero" id="nosearchdiv" [style.display]="(searchDivTabs ==false) ? 'none':'inherit'">
 <ul class="nav nav-tabs">
