@@ -21,7 +21,7 @@ export class CreateBucketComponent implements OnInit {
   private bucketId:String;
   private projectId:String;
   private formData:any={};
-  private form={
+  private formB={
     Id:'',
     title:'',
     description:'',
@@ -69,7 +69,7 @@ private typeAheadResults ={
                     var formobj=this;
         this.editor.initialize_editor('bucketDescId','keyup',formobj);
         if(this.Type == "Edit"){
-          jQuery('#bucketDescId').summernote('code',this.form['description']);
+          jQuery('#bucketDescId').summernote('code',this.formB['description']);
           // this.checkBucketName(this.form['title']);
           this.typeAheadResults.flag = true;
         }
@@ -80,19 +80,19 @@ private typeAheadResults ={
                 // alert("Form___data___"+JSON.stringify(this.formData))
 
     if(this.Type == "New"){
-    this.form['Id']='';
-    this.form['title']='';
-    this.form['description']='';
-    this.form['startDateVal']=new Date();
-    this.form['dueDateVal']='';
-    this.form['setCurrent']=false;
+    this.formB['Id']='';
+    this.formB['title']='';
+    this.formB['description']='';
+    this.formB['startDateVal']=new Date();
+    this.formB['dueDateVal']='';
+    this.formB['setCurrent']=false;
     // this.form['sendReminder']=true;
-    this.form['selectedUserFilter']='';
+    this.formB['selectedUserFilter']='';
     // this.form['selectedBucketTypeFilter']='';
     }else{
       // alert("onIntelse+++++"+JSON.stringify(this.formData));
-      this.form = this.formData;
-      this.prevBucketName = this.form.title;
+      this.formB = this.formData;
+      this.prevBucketName = this.formB["title"];
     }
 
    
@@ -117,7 +117,7 @@ private prepareItemArray(list:any,priority:boolean,status){
         return listMainArray;
     }
 
-
+public editorDesc="";
 BucketForAddorEdit(event){
 
   // alert("BucketForAddorEdit");
@@ -130,12 +130,13 @@ BucketForAddorEdit(event){
 addBucket(){
     
     var editor=jQuery('#bucketDescId').summernote('code');
-    editor=jQuery(editor).text().trim();
-    this.form['description']=jQuery('#bucketDescId').summernote('code').trim();
-
+    // this.editorDesc=jQuery(editor).text().trim();
+    this.formB['description']=editor;
+// alert(this.formB['description']);
     if(this.Type == "New"){
-        this._service.saveBucket(this.projectId,this.form,(response)=>{
-        this._router.navigate(['project',this.projectName,'bucket'],{queryParams:{BucketId:response.data["BucketId"]}});
+      // this.formB['description']=editor;
+        this._service.saveBucket(this.projectId,this.formB,(response)=>{
+        
         if(response.data["status"]=='failure'){
           this.bucketMsgClass='fielderror';
           this.bucketSuccessMsg = 'Bucket already exist';
@@ -145,11 +146,14 @@ addBucket(){
         }else{
           this.bucketMsgClass='timelogSuccessMsg';
           this.bucketSuccessMsg = 'Bucket added successfully';
+          setTimeout(()=>{
+            this._router.navigate(['project',this.projectName,'bucket'],{queryParams:{BucketId:response.data["BucketId"]}});
+          },1500);
         }
         });
     }else{
-      alert("In else"+JSON.stringify(this.form));
-      this._service.updateBucket(this.projectId,this.bucketId,this.form,(response)=>{
+      alert("In else"+JSON.stringify(this.formB));
+      this._service.updateBucket(this.projectId,this.bucketId,this.formB,(response)=>{
         // alert(JSON.stringify(response)+"******updateBucket***********");
           this.bucketUpdated.emit(response.data);
         });
@@ -208,7 +212,7 @@ clearForm(resetEditForm){
   this.bucketSuccessMsg="";
   this.bucketMsgClass="";
 
-    this.form['startDateVal']=new Date();
+    this.formB['startDateVal']=new Date();
     jQuery('#bucketDescId').summernote('code','');
     this.typeAheadResults ={
               flag:false,
@@ -221,19 +225,19 @@ clearForm(resetEditForm){
         clearTimeout(this.typeAheadTimer);
           if(this.Type == "Edit"){
             //  alert(JSON.stringify(this.form)+"+++++++Before-");
-                this.form['Id']=resetEditForm.Id;
-                this.form.title=resetEditForm.title;
-                this.form['description']=resetEditForm.description;
-                this.form['startDateVal']=resetEditForm.startDateVal;
-                this.form['dueDateVal']=resetEditForm.dueDateVal;
-                this.form['setCurrent']=resetEditForm.setCurrent;
+                this.formB['Id']=resetEditForm.Id;
+                this.formB["title"]=resetEditForm.title;
+                this.formB['description']=resetEditForm.description;
+                this.formB['startDateVal']=resetEditForm.startDateVal;
+                this.formB['dueDateVal']=resetEditForm.dueDateVal;
+                this.formB['setCurrent']=resetEditForm.setCurrent;
                 // this.form['sendReminder']=true;
-                this.form['selectedUserFilter']=resetEditForm.selectedUserFilter;
+                this.formB['selectedUserFilter']=resetEditForm.selectedUserFilter;
             // alert(JSON.stringify(this.form)+"+++++++After");
             // this.form = resetEditForm;
             // alert(JSON.stringify(this.form)+"+++++++inside if clear form");
             jQuery('#bucketDescId').summernote('code',resetEditForm.description);
-            this.prevBucketName = this.form.title;
+            this.prevBucketName = this.formB["title"];
           }
         jQuery('body').removeClass('modal-open');
       // alert(JSON.stringify(this.form)+"--------------After clear");

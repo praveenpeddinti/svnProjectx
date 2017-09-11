@@ -102,19 +102,29 @@ export class SummerNoteEditorService
                         //  alert("333"+this.summernoteLength);
                          this.summernoteLength=false; 
                         //  alert("444444444444444444"+this.summernoteLength);
+                        // console.log(element+"==========Iddddd===========");
                          var editor=jQuery('#'+element).summernote('code');
-                         editor=jQuery(editor).text().trim();
-                         obj.form['description']=editor;
-                        // alert("2323");
-                         if(editor!='')
-                         {
-                            obj.form['description']=editor;
-                         //  obj.form['description']= jQuery('#'+element).summernote('code');
-                            console.log(obj.form['description']);
+                        //  console.log(editor+"=====**=======");
+                         if(obj.formB != undefined){
+                             obj.formB['description']=editor;
                          }
-                         else
-                         {
-                             obj.form['description']='';
+                         editor=jQuery(editor).text().trim();
+                        //  console.log(editor+"============");
+                        //  console.log(obj.formB['description']+"=-=-=-=-=-");
+                         if(obj.form != undefined){
+                            obj.form['description']=editor;
+                            // alert("2323");
+                            if(editor!='')
+                            {
+                                obj.form['description']=editor;
+                            //  obj.form['description']= jQuery('#'+element).summernote('code');
+                                console.log(obj.form['description']);
+                            }
+                            else
+                            {
+                                console.log("cmoing here******");
+                                obj.form['description']='';
+                            }
                          }
 
                     }},
