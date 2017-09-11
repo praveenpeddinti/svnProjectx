@@ -1750,7 +1750,7 @@ p-calendar .ui-state-active{color:#fff!important;}
   }
 .legend-wrap{width:100%!important;}
 
-  .chart-legend .legend-labels{ overflow:unset!important; width:100%!important;}
+  .chart-legend .legend-labels{ overflow:unset!important; width:100%!important;background: none!important;}
   .chart-legend .legend-label{ border-bottom: solid 1px #e6e8eb; margin:0px!important; width:25%; float: left;padding-bottom:5px!important;padding-top:10px!important;}
   .chart-legend .legend-label-color{border-radius:0px!important;margin-right:0px;}
   .chart-legend div{ width: 100%!important;}
