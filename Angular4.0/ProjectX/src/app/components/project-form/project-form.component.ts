@@ -345,9 +345,9 @@ export class ProjectFormComponent implements OnInit {
        // alert("121212");
         var formobj=this;
         this.editor.initialize_editor('summernote','keyup',formobj);
-        this.form={
-                 description:""
-            };
+        // this.form={
+        //          description:""
+        //     };
        this.creationPopUp=true;
       // this.summernoteLength=false;
        this.verifyByspinner='';
