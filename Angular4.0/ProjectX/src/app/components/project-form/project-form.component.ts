@@ -89,10 +89,12 @@ export class ProjectFormComponent implements OnInit {
                 thisObj.form['projectId']=thisObj.projectId; 
                 thisObj.form['projectName']=thisObj.projectName; 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
-                thisObj.form['description']=thisObj.description;;
+               // thisObj.form['description']=thisObj.description;;
                   thisObj.form['setLogo']=thisObj.setLogo;
-               //  jQuery("#summernote").summernote('code',thisObj.form['description']);
-                 thisObj.copyProjectname=thisObj.form['projectName'];
+             // alert("------------"+JSON.stringify(thisObj.form['description']));;
+               thisObj.form['description'] =jQuery(thisObj.description).text().trim();
+
+               thisObj.copyProjectname=thisObj.form['projectName'];
                 
                 
             });
@@ -266,14 +268,15 @@ export class ProjectFormComponent implements OnInit {
       editProjectDetails(){
            this.projectImage=jQuery('.projectlogo').attr("src");
             var editor=jQuery('#summernote').summernote('code');
-            editor=jQuery(editor).text().trim();
-            this.form['description']=jQuery('#summernote').summernote('code');
-            if(editor.length>500){
-                this.summernoteLength=1;
-            }else{
+            this.editorDesc =jQuery(editor).text().trim();
+           // alert("3434343++--"+this.editorDesc);
+              this.form['description']=this.editorDesc;
+            // if(editor.length>500){
+            //     this.summernoteLength=1;
+            // }else{
              var postData={
                       projectName:this.form['projectName'].trim(),
-                      description:this.form['description'],
+                      description:editor,
                       projectId:this.form['projectId'],
                       projectLogo:this.projectImage,  
                       fileExtention:this.fileExtention
@@ -287,14 +290,14 @@ export class ProjectFormComponent implements OnInit {
                           this.editPopUp=false;
                           jQuery('#addProjectModel').modal('hide');
                          }, 500);
-                        this.copydescription=this.form['description'];
+                        this.description=editor;
                        this.appendLogoToParent.emit(this.updatedLogo);
-                       this.appendDescriptionParent.emit(this.form['description']);
+                       this.appendDescriptionParent.emit(editor);
                             this._router.navigate(['project',this.form['projectName']]);
                       }else{
                  }
                 }) 
-            }
+           // }
      
   }
  
@@ -371,6 +374,8 @@ export class ProjectFormComponent implements OnInit {
     // setTimeout(()=>{
      var formobj=this;
      this.editor.initialize_editor('summernote','keyup',formobj);
+    jQuery('#summernote').summernote('code',this.description);
+
     //  }, 150);
      this.verifyProjectMess=false; 
      this.spinnerSettings.color='';
