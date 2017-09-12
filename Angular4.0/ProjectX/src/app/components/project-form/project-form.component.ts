@@ -93,7 +93,7 @@ export class ProjectFormComponent implements OnInit {
                   thisObj.form['setLogo']=thisObj.setLogo;
              // alert("------------"+JSON.stringify(thisObj.form['description']));;
                thisObj.form['description'] =jQuery(thisObj.description).text().trim();
-
+                console.log("343434--"+thisObj.form['projectName']);
                thisObj.copyProjectname=thisObj.form['projectName'];
                 
                 
@@ -168,9 +168,10 @@ export class ProjectFormComponent implements OnInit {
           clearTimeout(this.timer);
           if(this.projectForm=='create'){
             this.AjaxCallForProjectName(value);
-          }else if(this.projectForm=='edit'){
-            
-              if(this.copyProjectname.trim()===value.trim().toLowerCase( )){
+          }else if(this.projectForm==='edit'){
+             console.log("@@@---"+this.copyProjectname.trim());
+            console.log("444---"+value.trim().toLowerCase( ));
+              if(this.copyProjectname.trim().toLowerCase( )===value.trim().toLowerCase( )){
                 console.log("yes");
               }else{
                 this.AjaxCallForProjectName(value);
