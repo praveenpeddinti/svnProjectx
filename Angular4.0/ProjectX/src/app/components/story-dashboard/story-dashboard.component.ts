@@ -377,7 +377,7 @@ if(row[0].other_data.planlevel==2){
   }
 
 
-editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row){ 
+editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,value_id,row){ 
     //alert("fieldId---"+fieldId+"---fieldDataId---"+fieldDataId+"---fieldTitle---"+fieldTitle+"---renderType--"+renderType); 
      this.dropList=[];
     var inptFldId = fieldId;
@@ -392,8 +392,10 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
           fieldId:fieldDataId,
           projectId:this.projectId,
           ticketId:row[0].field_value,
+         // workflowType:1,
           workflowType:1,
-          statusId:1,
+          //statusId:1,
+          statusId:value_id
         };
        // alert(JSON.stringify(reqData));
         //Fetches the field list data for current dropdown in edit mode.
@@ -402,7 +404,6 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
                 var listData = {
                   list:data.data
                 };
-               // alert(JSON.stringify(data.data));
                 var priority=(fieldTitle=="Priority"?true:false);
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
                 this.dropList=this.dropDisplayList[0].filterValue;
