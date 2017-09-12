@@ -59,7 +59,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
  <ngx-datatable-column  *ngFor="let column of columns;let i=index;" name="{{column.name}}" prop="{{column.sortby}}" [resizeable]="false"
   [flexGrow]="column.flexGrow">
   <ng-template  class="foo" let-row="row" ngx-datatable-cell-template>
-    <div class="{{column.class}} " *ngIf="row[i].field_name!='arrow'" >
+    <div class="{{column.class}} " *ngIf="row[i].field_name!='arrow'" (click)="showStoryDetail(row)">
       <!--(click)=="showStoryDetail(row)"-->
       <!--This img tag belongs to Ticket Id-->
       <img *ngIf="row[i].other_data.planlevel==1" src="assets/images/story-icon.png"  />
@@ -75,7 +75,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
          <div class="stateStyle" *ngIf="row[i].field_name=='workflow'" id="{{i+'-'+row.$$index+'_workflow'}}">{{row[i].other_data}} </div>
         <span [ngSwitch]="row[i].render_type" >
          <span  
-              (click)="(row[i].field_name=='Id') ? showStoryDetail(row):''"
+            
               title="Double click to edit"  id="{{row[i].field_name}}_{{row[0].field_value}}_span"
               (dblclick)="editThisField($event,i,row[i].field_id,row[i].field_name,row[i].render_type,i +'-'+row.$$index,row)" [hidden]="editing[i +'-'+row.$$index]" >
 <i *ngIf="row[i].field_name=='priority'" class="fa fa-circle {{row[i].field_value}}" aria-hidden="true"></i>
