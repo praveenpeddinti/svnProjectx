@@ -20,9 +20,12 @@
                        <div class="pull-left paddingL10">
                   <button  class="normal bluebutton bluebuttonmedium" (click)="goToEditPage()">EDIT</button>
               </div>
+              <div class="pull-right">
                       <img *ngIf="ticketData?.data?.StoryType?.Id==1" src="assets/images/story-icon.png"  title="{{ticketData?.data?.StoryType?.Name}}"  />
                       <img  *ngIf="ticketData?.data?.StoryType?.Id==2" src="assets/images/task-icon.png" title="{{ticketData?.data?.StoryType?.Name}}" /> 
                       #{{ticketData?.data?.TicketId}}
+                    </div>
+
                   </div>
               </div>
               </div>
@@ -167,8 +170,10 @@
 
 
             <div class="expand_collapse">
-            <a type="button" id="expand" (click)="expand()" class="colapse"><span class="glyphicon glyphicon-chevron-up alignright"></span></a>
-<a type="button" id="collapse" (click)="collapse()" class="colapse"><span class="glyphicon glyphicon-chevron-down alignright"></span></a>
+            <a type="button" id="expand" (click)="expand()" class="colapse"><i class="fa fa-arrow-up alignright" aria-hidden="true"></i>
+            </a>
+<a type="button" id="collapse" (click)="collapse()" class="colapse"><i class="fa fa-arrow-down alignright" aria-hidden="true"></i>
+</a>
 </div>
 <div class="main_div widgetmainbg" [ngClass]="{ 'hide': hide}">
 <!--Show the Followers list start-->
@@ -335,7 +340,7 @@
         </div>
     </div>
     <div class="col-md-1"  >
-        <div class="mart10" (click)="showdeleteDiv(1,relatedTask.TicketId)"><i class="fa fa-times removetask deletebutton" aria-hidden="true" id="del_{{relatedTask.TicketId}}"></i></div>
+        <div class="mart10" (click)="showdeleteDiv(1,relatedTask.TicketId)"><i class="fa fa-times removetask deletebutton pull-right" aria-hidden="true" id="del_{{relatedTask.TicketId}}"></i></div>
 
        
 </div>

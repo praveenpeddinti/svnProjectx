@@ -23,8 +23,8 @@
 .knowemore a{color:#0199e0; text-decoration: none;}
 .knowemore a:hover{color:#0199e0;}
 .add{
-    background: #207fa9 none repeat scroll 0 0;
-    border-radius: 0;
+    background: #695ea5 none repeat scroll 0 0;
+    border-radius: 4px;
     cursor: pointer;
     display: table-cell;
     float: right;

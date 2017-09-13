@@ -45,10 +45,10 @@
 
 
 /*Followers*/
-.add{ background:#207fa9; width:30px; height:30px;  text-align:center; vertical-align:middle; -webkit-border-radius:1100%;
- -moz-border-radius:100%;
- -o-border-radius:100%;
- border-radius:100%; float:right; display:table-cell;
+.add{ background:#695ea5; width:30px; height:30px;  text-align:center; vertical-align:middle; -webkit-border-radius:1100%;
+ -moz-border-radius:4px;
+ -o-border-radius:4px;
+ border-radius:4px; float:right; display:table-cell;
 padding:5px 10px; cursor:pointer; margin-top:10px;
   position: relative;
 }
@@ -190,8 +190,8 @@ padding:5px 10px; cursor:pointer; margin-top:10px;
 .addtask_title{ color:#000; font-size:15px; line-height:18px; margin-top:5px;}
 .addtask_status{ color:#979797;font-size:14px; line-height:24px;}
 .addtask label{ color:#6d6d6d;font-size:13px;font-family: 'robotoregular';font-weight: normal;}
-.colapse{ background: #e0dfdf; cursor: pointer; text-align: center; display: table-cell; float: right; padding: 5px 10px; color: #fff; }
-.widgetmainbg{ border:solid 1px #f0f0f0; padding:20px; margin-top: 50px;}
+.colapse{ background: #e0dfdf; cursor: pointer; text-align: center; display: table-cell; float: right; padding: 5px 10px; color: #695ea5; }
+.widgetmainbg{ border:solid 1px #e6e8eb; padding:20px; margin-top: 50px;}
 
 /* Progress bar */
 .progress_bar{margin-left: 43%; margin-top:15%;position:absolute;}

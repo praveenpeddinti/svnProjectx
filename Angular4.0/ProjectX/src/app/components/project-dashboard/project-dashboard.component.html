@@ -25,18 +25,18 @@
 
    <div class="state_bg marb20">
                 <div class="clearfix">
-                   <div class="col-md-3 col-xs-12">
+                   <div class="col-md-3 col-sm-3 col-xs-12">
                       <div class="marb10">
                      All Stories/ Tasks<span class="but cursor_pointer" [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:1,filterType:'general'}">{{projectDetails.allTickets}}</span>
                       </div>
                    </div>
-                   <div class="col-md-3 col-xs-12">
+                   <div class="col-md-3 col-sm-3 col-xs-12">
                        <div class="marb10">New <span class="but cursor_pointer" [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:1,filterType:'state'}">{{projectDetails.New}}</span></div>
                    </div>
-                   <div class="col-md-3 col-xs-12">
+                   <div class="col-md-3 col-sm-3 col-xs-12">
                        <div class="marb10">Inprogress <span class="but" [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:3,filterType:'state'}">{{projectDetails.InProgress}}</span></div>
                    </div>
-                   <div class="col-md-3 col-xs-12">
+                   <div class="col-md-3 col-sm-3 col-xs-12">
                       <div class="marb10">Closed <span class="but" [routerLink]="['/project',projectName,'list']" [queryParams]="{page:1,sort:'desc',col:'Id',filter:6,filterType:'state'}">{{projectDetails.closedTickets}}</span></div>
                    </div>
                 </div>
@@ -79,10 +79,10 @@
              </div> 
        <div class="project">
             <div class="row">
-               <div class="col-md-9">
+               <div class="col-md-9 col-sm-6 col-xs-5">
                    <div class="heading2">Team <span class="but"><a href="">{{projectDetails.Team}}</a></span></div>
                </div>
-               <div class="col-md-3">
+               <div class="col-md-3  col-sm-6 col-xs-7">
                  <app-email-invite></app-email-invite>
                  </div>
             </div>
@@ -113,9 +113,9 @@
 
 <div class="heading2">Buckets</div>
 
-            <div class="row marb20">
+            <div class="row marb10">
                 <div class="col-md-9">
-                    <div class="bucketbox">
+                    <div class="bucketbox marb10">
                        <ul>
                          <li>Total <span> {{bucketStats.Total}}</span></li>
                          <li>Current <span>{{bucketStats.Current}}</span></li>
@@ -140,10 +140,10 @@
              <div class="clearfix" *ngFor="let current of currentBucketContainer;let current=index;">
               <div class="row devider1"></div>
                <div class="row">
-                   <div class="col-md-8">
-                      <div class="but" [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:current.Id}">{{current.Name}}</div>
+                   <div class="col-md-8 col-sm-5 marb10">
+                      <div class="but " [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:current.Id}">{{current.Name}}</div>
                    </div>
-                   <div class="col-md-4">
+                   <div class="col-md-4 col-sm-7">
                       <div class="float_right">
                          <img [src]="current.ProfilePicture" class="userpic"/> {{current.UserName}}
                       </div>
