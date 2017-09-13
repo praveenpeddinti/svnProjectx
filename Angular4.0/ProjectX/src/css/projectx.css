@@ -507,7 +507,7 @@ color: #0199e0;
 .user span a{ font-size:16px!important; color:#0199e0; text-decoration:none;}
 .user .userdate{ color:#a2a2a2; font:normal 12px/30px 'robotoregular', Arial, Helvetica, sans-serif; display:inline-block;}
 
-.ticketactivity{ display:block; background:#fff; height:auto; min-height:31px;  margin-bottom:10px; font:normal 13px/15px 'robotoregular', Arial, Helvetica, sans-serif; color:#4c4c4c; margin-left:40px; padding:8px 10px 8px 10px; border-radius:2px;
+.ticketactivity{ display:block; background:#fff; height:auto; min-height:31px;  margin-bottom:10px; font:normal 13px/15px 'robotoregular', Arial, Helvetica, sans-serif; color:#4c4c4c; margin-left:40px; padding:8px 10px 0px 10px; border-radius:2px;
 	 -moz-border-radius:2px;
 	 -webkit-border-radius:2px;word-wrap: break-word;}
 .ticketactivity .property {color:#0199e0; cursor:pointer;}
