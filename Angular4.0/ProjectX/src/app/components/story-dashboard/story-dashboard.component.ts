@@ -265,7 +265,7 @@ setFilterValue(response){
            
             let jsonForm = {};
             if (response.statusCode == 200) {
-
+                this.criteriaLabel=[];
                 this.rows = response.data;        
                 
                // this.getRowClass(this.rows);
@@ -601,14 +601,17 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
         },500)
     }
 
-
+/**
+ * @author Anand
+ * @description Get advance filtered data.
+ */
 getFilteredData(response){
    let jsonForm = {};
             if (response.statusCode == 200) {
 
                 this.rows = response.data; 
                 this.rows = response.data;
-                this.count = 5;//response.totalCount;
+                this.count =response.totalCount;
                 for(var i in this.editing){
     //    for(var j in this.editing){   
           this.editing[i] = false;
@@ -627,7 +630,9 @@ getFilteredData(response){
 
             } 
 }
-
+/**
+ * @author Anand
+ */
 getFilterCriteria(result){
 this.criteriaLabel=result;
 }

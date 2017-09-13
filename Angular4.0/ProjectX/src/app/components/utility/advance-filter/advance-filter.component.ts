@@ -1,7 +1,10 @@
-import { Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
+import { Component, OnInit,Input,Output,EventEmitter,ElementRef} from '@angular/core';
 import { StoryService } from '../../../services/story.service';
 declare var jQuery:any;
 @Component({
+  host: {
+    '(document:click)': 'onClick($event)',
+  },
   selector: 'app-advance-filter',
   templateUrl: './advance-filter.component.html',
   styleUrls: ['./advance-filter.component.css'],
@@ -31,7 +34,7 @@ public filterCriteria:any=[];
    @Input()  filterData:any='';
    @Output() emitFiltereResponse: EventEmitter<any> = new EventEmitter();
    @Output() emitCriteriaResponse: EventEmitter<any> = new EventEmitter();
-  constructor( private _service: StoryService) { }
+  constructor( private _service: StoryService,private _eref: ElementRef) { }
 
   ngOnInit() {
       var thisObj=this;
@@ -39,12 +42,10 @@ public filterCriteria:any=[];
    thisObj._service.getAdvanceFilterOptions(thisObj.projectId,(response) => {
         
                this.advanceFilter=response.data;
-           console.log("(((()))))))))))))"+ typeof thisObj.filterData);
 
                this.advanceFilter.forEach(element => {
                 filterKey[element.type]=[];
                 if(typeof thisObj.filterData === 'object'){
-                  console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNN");
                 if(thisObj.filterData.hasOwnProperty(element.type)){
                     element.filterValue.forEach(val=>{
                      thisObj.filterData[element.type].forEach(obj =>{
@@ -52,7 +53,7 @@ public filterCriteria:any=[];
                        val.value.isChecked=true;
                        filterKey[element.type].push(val.value);
                        thisObj.defaultCall=true;
-                       thisObj.filterCriteria.push(val.value.label);
+                       thisObj.filterCriteria.push({'type':element.type,'label':val.value.label});
                      }
                      })
                    })
@@ -64,19 +65,13 @@ public filterCriteria:any=[];
    this.emptyObjLength = 62;//filterString.length;
    if(this.defaultCall)this.applyFilter();
    })
-    //  jQuery(document).ready(function(){
-    //   jQuery(document).bind("click",function(event){ 
-    //     if(event.target.id == "advance_filter_icon")
-    //       return;
-    //     else if(thisObj.showPanel){
-    //       thisObj.showPanel=false;
-    //       // alert(thisObj.showPanel)  ;
-    //     }
-    //   });
-     
-    // });
+    
   }
 
+onClick(event) {
+   if (!this._eref.nativeElement.contains(event.target)) 
+     this.showPanel=false;
+  }
 showFilterPanel(){
    var thisObj=this;
      this.showPanel=true;
@@ -180,6 +175,7 @@ applyFilter(option=''){
   this._service.applyAdvanceFilter(reqParams,(response)=>{
     this.filterName='';
      this.showPanel=false;
+     if(option=='')
      this.emitCriteriaResponse.emit(this.filterCriteria);
     this.emitFiltereResponse.emit(response);
     // console.log("Filtered___data_______-----"+JSON.stringify(response));

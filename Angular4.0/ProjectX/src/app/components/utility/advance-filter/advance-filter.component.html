@@ -9,7 +9,7 @@
     </div>
 </div>-->
 
-<div class="arrowbox">
+<div class="arrowbox" id='advFilterPannel'>
     {{filterSelectedError}}
 <div *ngFor="let filter of advanceFilter;let i=index;" id="accordion" role="tablist" aria-multiselectable="true" class="clearfix">
 
@@ -22,12 +22,12 @@
     </div>
     <div  class="devider1"></div>
      <div   id="collapse1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-       <div *ngIf="filter.type=='DueDate'">
-       <p-calendar [(ngModel)]="dateObj.dateVal" class="primeDateComponent"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" dateFormat="M-dd-yy" (onSelect)="selectCustomDate($value,filter.type,i)" ></p-calendar>
+       <div *ngIf="filter.type=='DueDate'" class="marb10">
+       <p-calendar [(ngModel)]="dateObj.dateVal" class="primeDateComponent "  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" dateFormat="M-dd-yy" (onSelect)="selectCustomDate($value,filter.type,i)" ></p-calendar>
       </div>
        <div *ngFor="let val of filter.filterValue;let j=index; ">
        <!--<div class="filter_but marr10 active">All</div>-->
-       <div  class="{{(val.value.isChecked)?'filter_butactive':'filter_but'}} marr10" (click)="selectFilterOption(val.value,filter.type,i)">{{val.label}}</div>
+       <div  class="{{(val.value.isChecked)?'filter_butactive':'filter_but'}} marr10 cursor_pointer" (click)="selectFilterOption(val.value,filter.type,i)">{{val.label}}</div>
        <!--<div *ngIf="filter.type=='Status'" class="{{(val.value.isChecked)?'filter_butactive':'filter_but'}} marr10" (click)="selectFilterOption(val.value,filter.type)">
          {{val.label}}
          </div>-->
