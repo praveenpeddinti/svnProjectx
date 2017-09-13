@@ -1386,11 +1386,13 @@ class StoryController extends Controller
         
         try{
          $postData = json_decode(file_get_contents("php://input"));
+         $totalCount = ServiceFactory::getStoryServiceInstance()->advanceFilterDataCount($postData);
          $data = ServiceFactory::getStoryServiceInstance()->applyAdvanceFilter($postData);
          $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $data;
+            $responseBean->totalCount = $totalCount;
             $response = CommonUtility::prepareResponse($responseBean, "json");
           return $response; 
         } catch (\Throwable $th) {

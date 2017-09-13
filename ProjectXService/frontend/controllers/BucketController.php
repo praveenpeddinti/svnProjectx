@@ -157,7 +157,7 @@ class BucketController extends Controller
             if($checkbucket["available"]=='Yes'){
                 $lastBucketId=ServiceFactory::getBucketServiceInstance()->getSaveBucketDetails($postData);
                 if($lastBucketId!='failure'){
-                  EventTrait::saveEvent($postData->projectId,"Bucket",$lastBucketId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$lastBucketId)],array("BucketId"=>(int)$lastBucketId));    
+                  EventTrait::saveEvent($postData->projectId,"Bucket",$lastBucketId,"created","create",$postData->userInfo->Id,[array("ActionOn"=>"bucketcreation","OldValue"=>0,"NewValue"=>(int)$lastBucketId)],array("BucketId"=>(int)$lastBucketId));    
                 }
                
                 $response=array("status"=>'success',"BucketId"=>$lastBucketId);
