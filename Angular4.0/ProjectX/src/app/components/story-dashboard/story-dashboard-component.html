@@ -1,7 +1,7 @@
 <!-- Menu -->
 <div class="custom_menu">
   <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-5 ">
+    <div class="col-xs-12 col-sm-4 col-md-3 ">
       <button id="collapsediv" hidden (click)="collapseAll()">Collapse All</button>
       <div data-toggle="tooltip" data-placement="top" title="List view" class="listpage marr15"><i class="fa fa-list-ul" aria-hidden="true"></i></div>
       <div (click)="renderStoryForm()" data-toggle="tooltip" data-placement="top" title="Add Story/Task" class="createbut">Add Story/Task<i class="fa fa-plus ifontsize" aria-hidden="true"></i></div>
@@ -10,11 +10,12 @@
    
       
    
-    <div class="col-xs-12 col-sm-6 col-md-7 ">
+    <div class="col-xs-12 col-sm-8 col-md-9 ">
      
       <div class="pull-right n_ddown">
         <div class="filterlabel_status marr15 float_left">
-         <span *ngFor="let lbl of criteriaLabel;let l=index;">{{lbl }}</span>
+         <!-- <span *ngFor="let lbl of criteriaLabel;let l=index;">{{lbl }}</span> -->
+         <label>label name</label> <span>label staus</span>
         </div>
         <div class="custom_selctdropdown float_left marr15" id="filterDropdown">
           <p-dropdown [style]="{'width':'220px'}" [(ngModel)]="selectedFilter" (onChange)="filterDashboard()" [displayOptions]="FilterOptionToDisplay" [options]="FilterOption" class="dropdown_wrap">

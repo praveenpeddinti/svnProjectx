@@ -670,14 +670,14 @@ color: #0199e0;
 }
 
 .ngx-datatable.material .datatable-footer .datatable-pager li.active a {
-    background-color:#237ea7!important;
+    background-color:#695ea5!important;
 /*    font-weight: bold!important;*/
     color: #fff!important;
     border:none!important;
     font-weight: normal!important;
 }
 
-.submit{background:#237fa8;
+.submit{background:#695ea5;
     font-size:20px;
 	font-family:'robotoregular';
 	color:#fff;
@@ -786,7 +786,7 @@ padding-left:0px!important;
 .datatable-header-cell> div{padding-left:10px!important }
 .titlecolumn img{vertical-align: text-bottom}
 /*custom model*/
-.custommodel .modal-dialog{width:400px; margin: auto;}
+.custommodel .modal-dialog{width:400px; margin: auto!important;}
 .custommodel .modal-content{background:#fff;border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;}
 .custommodel .modal-header{background:#f7f9fa; border-bottom:solid 1px #e6e8eb; color:#695ea5; font:normal 16px/24px 'open_sansregular';}
 .custommodel .modal-footer {border-top: 0px solid #e5e5e5;padding: 0px 15px 15px;text-align: right;}
@@ -1772,6 +1772,8 @@ ngx-charts-legend-entry span:focus{ outline: none!important; border: none!import
 .chart-legend .legend-label-text:focus{outline: none!important; border: none!important;}
 .chart-legend .legend-label:focus{outline: none!important; border: none!important;}
 
+#projectDesc p br{ display:none!important;}
+
 @media (max-width: 767px) {
 .chart-legend .legend-label{ width:50%!important;}
 .activity_date{width:100%!important;}
@@ -1803,7 +1805,7 @@ input:focus{outline: none!important;}
 .notetext{ font-size: 12px!important;}    
 
 
- @media only screen and (max-width:767px){
+ @media (max-width:767px){
 .navbar-nav {
     margin: 0px -15px!important;
 }
@@ -1811,22 +1813,38 @@ input:focus{outline: none!important;}
 .float_right{float:left!important;}
  }
 
- @media only screen and (max-width:419px){
+ @media (max-width:460px){
+    .loginsection{width:300px!important;margin:auto;}
+    .logpadding {
+        padding: 20px!important;
+    }
+    }
+
+    @media (max-width:360px){
+        .loginsection{width:240px!important;margin:auto;}
+         
+        .logpadding {
+            padding: 20px!important;
+        }
+
+        }
+ @media (max-width:419px){
 
 .custommodel .modal-dialog {
-    width: 300px;
-    margin: auto;
+    width: 290px!important;
+    margin: auto!important;
 }
 
  }
  
- @media only screen and (max-width:320px){
+ @media (max-width:320px){
 
 .ngx-charts {
 
     width: 106%!important;
     margin-left:-15px!important;
 }
+
 
  }
 
