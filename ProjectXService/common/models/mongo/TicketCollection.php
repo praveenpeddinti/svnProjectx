@@ -20,6 +20,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\IdentityInterface;
 use common\components\CommonUtility;
 use common\models\mysql\Bucket;
+use common\models\mongo\PersonalizedFilterCollection;
 class TicketCollection extends ActiveRecord 
 {
     public static function collectionName()
@@ -240,6 +241,10 @@ class TicketCollection extends ActiveRecord
            else if($StoryData->filterOption->type=='state'){
             $conditions['Fields.state.value']=(int)$StoryData->filterOption->id;
            }
+           else if($StoryData->filterOption->type=='personalfilters'){
+            $personalFilter = PersonalizedFilterCollection::getPersonalizedFilter($StoryData->userInfo->Id, $projectId,$StoryData->filterOption->id);
+            $conditions=$personalFilter[0]['Conditions'];
+           }
         }
             if ($StoryData->sortorder == 'desc')
                 $order = -1;
@@ -344,6 +349,10 @@ class TicketCollection extends ActiveRecord
            }
            else if($StoryData->filterOption->type=='state'){
             $conditions['Fields.state.value']=(int)$StoryData->filterOption->id;
+           }
+           else if($StoryData->filterOption->type=='personalfilters'){
+            $personalFilter = PersonalizedFilterCollection::getPersonalizedFilter($StoryData->userInfo->Id, $projectId,$StoryData->filterOption->id);
+            $conditions=$personalFilter[0]['Conditions'];
            }
         }
             $query->from('TicketCollection')
@@ -802,6 +811,114 @@ class TicketCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
        
+        
+    }
+    
+    /**
+     * @author Anand Singh
+     * @use get story list by selected adv. filter options
+     * @param type $requestData
+     */
+    
+    public static function getStoryListByAdvanceFilter($requestData){
+        
+        try{
+        $projectId=$requestData->projectId;
+        $filterOption=$requestData->filterOption;
+        $filterName=$requestData->filterName;
+        $option=$filterOption[0];
+        $isState= false;
+        $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
+        $conditions["IsChild"] = array('$in' => array(0,1));
+        $conditions['$or']=[];
+        $conditions['$and']=[];
+        $or['$or']=[];
+        //error_log("filter___option__".print_r($filterOption[0],1));
+        
+            if(sizeof($option->NoLabel)!=0){
+                 foreach($option->NoLabel as $nolabel){
+                     if($nolabel->id==2){
+                        $conditions['Fields.assignedto.value']=(int)$requestData->userInfo->Id;
+                     }
+                      if($nolabel->id==3){
+                          $conditions['Followers.FollowerId']=(int)$requestData->userInfo->Id;
+                     }
+                      
+                 }
+                  
+            }if(sizeof($option->Buckets)!=0){
+                 foreach($option->Buckets as $obj){
+                      array_push( $or['$or'],['Fields.bucket.value'=>(int)$obj->id]);
+                 }
+                 array_push( $conditions['$and'],$or);
+              $or['$or']=[];
+            } if(sizeof($option->State)!=0){
+                 foreach($option->State as $obj){
+                      array_push( $or['$or'],['Fields.state.value'=>(int)$obj->id]);
+                 }
+             array_push( $conditions['$and'],$or);
+             $or['$or']=[];
+            }
+           if(sizeof($option->Status)!=0){
+                    $or['$or']=[];
+                 foreach($option->Status as $obj){
+                          array_push($or['$or'],['Fields.workflow.value'=>(int)$obj->id]);
+                } 
+                array_push($conditions['$and'],$or); 
+                $or['$or']=[];
+         } 
+         if(sizeof($option->DueDate)!=0){
+                    $or['$or']=[];
+                     $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
+                     $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
+                 foreach($option->DueDate as $obj){
+                      if($obj->id==0){
+                        $custom_date = date("Y-m-d H:i:s", strtotime($obj->dateVal));
+                       array_push($or['$or'],['Fields.duedate.value' => new \MongoDB\BSON\UTCDateTime(strtotime($custom_date) * 1000)]);  
+                     }
+                     if($obj->id==4){
+                       array_push($or['$or'],['Fields.duedate.value' => ['$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000)]]);  
+                     }
+                     if($obj->id==5){
+                       array_push($or['$or'],['Fields.duedate.value' => ['$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000)]]);  
+                     }
+                } 
+                array_push( $conditions['$and'],$or); 
+                $or['$or']=[];
+         }
+        
+       error_log("condition_____________".print_r($conditions,1));
+         if(sizeof($conditions['$or'])==0)unset($conditions['$or']);
+         if(sizeof($conditions['$and'])==0)unset($conditions['$and']);
+         
+         if($filterName!=''){
+             PersonalizedFilterCollection::savePersonalizedFilter($filterName, $requestData->userInfo->Id,$projectId, $conditions);
+         }
+         if ($requestData->sortorder == 'desc')
+                $order = -1;
+            if ($requestData->sortorder == 'asc')
+                $order = 1;
+            if ($requestData->sortvalue == 'Id')
+                $sortData = "TicketId";
+            else if ($requestData->sortvalue == 'Title')
+                $sortData = "Title";
+            else
+                $sortData = "Fields." . $requestData->sortvalue . ".value_name";
+            $options = array(
+                "sort" => array($sortData => $order),
+                "limit" => $requestData->pagesize,
+                "skip" => $requestData->offset * $requestData->pagesize
+            );
+           $collection = Yii::$app->mongodb->getCollection('TicketCollection');
+           
+           $cursor = $collection->find($conditions, array(), $options);
+            $ticketDetails = iterator_to_array($cursor);
+            error_log("couint-----XX------".count($ticketDetails));
+            return $ticketDetails;  
+        } catch (\Throwable $ex) {
+            Yii::error("TicketCollection:getStoryListByAdvanceFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
         
     }
 

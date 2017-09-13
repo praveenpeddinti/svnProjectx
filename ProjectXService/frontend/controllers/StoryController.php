@@ -13,6 +13,7 @@ use common\models\bean\ResponseBean;
 use common\components\ServiceFactory;
 use common\models\mongo\TinyUserCollection;
 use common\models\mongo\NotificationCollection;
+use common\models\mongo\PersonalizedFilterCollection;
 /**
  * 
  * Story Controller
@@ -1023,6 +1024,7 @@ class StoryController extends Controller
 
                 $tempFilter[$item['Type']][] = $item;
         }
+        $options['Personal Filters']= PersonalizedFilterCollection::getPersonalizedFilter($postData->userInfo->Id, $projectId);
         $options['General']=$tempFilter['general'];
         $options['My']=$tempFilter['individual'];
         $options['Buckets'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
@@ -1345,7 +1347,7 @@ class StoryController extends Controller
 //        }
 //        $options['General']=$tempFilter['general'];
 //        $options['My']=$tempFilter['individual'];
-        $tempFilter = array();
+//       $tempFilter = array();
         foreach ($advanceFilters as $item) {
 
                 $tempFilter[$item['Type']][] = $item;
@@ -1368,6 +1370,34 @@ class StoryController extends Controller
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message =   $th->getMessage();//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+        
+    }
+    
+    /**
+     * @author Anand
+     * @uses Apply advance filter based on filter option selected
+     */
+    
+    public function actionApplyAdvanceFilter(){
+        
+        try{
+         $postData = json_decode(file_get_contents("php://input"));
+         $data = ServiceFactory::getStoryServiceInstance()->applyAdvanceFilter($postData);
+         $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $data;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+          return $response; 
+        } catch (\Throwable $th) {
+             Yii::error("StoryController:actionApplyAdvanceFilter::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message =   $th->getMessage(). "--" . $th->getTraceAsString();//ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;

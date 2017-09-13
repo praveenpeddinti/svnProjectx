@@ -1992,6 +1992,37 @@ class StoryService {
             throw new ErrorException($ex->getMessage());
         }  
     }
+    
+     /**
+     * @author Anand
+     * @uses Get  data based on adv. filter selection
+     * @return type
+     */
+    public function applyAdvanceFilter($StoryData){
+        
+        try {
+            $timezone = $StoryData->timeZone;
+            $projectId = $StoryData->projectId;
+            $ticketDetails = TicketCollection::getStoryListByAdvanceFilter($StoryData);
+            $finalData = array();
+            $fieldsOrderArray = [5,6,7,3,10];
+           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
+            $fitlerOption=null;
+              
+          
+            foreach ($ticketDetails as $ticket) {
+                $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
+                array_push($finalData, $details);
+                
+               } 
+            
+            return $finalData;
+        } catch (\Throwable $ex) {
+            Yii::error("StoryService:applyAdvanceFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+  
       
             
     

@@ -1195,7 +1195,7 @@ $text_message=$html . $text_message .
 </body>
 </html>";
 //$subject_text="ProjectX | ".$subject;
-         echo("4. In CommonUtiltiy sendEmail started\n".print_r($recipient_list,1));
+         //echo("4. In CommonUtiltiy sendEmail started\n".print_r($recipient_list,1));
          ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
         $attachments=array();//list of artifacts
         $EEemail = new Email();
@@ -1988,12 +1988,16 @@ $text_message=$html . $text_message .
            foreach($options as $key=>$value){
              $temp['type']=$key;
                  foreach($value as $val){
-                   $type= (array_key_exists("Type",$val))?$val['Type']:strtolower($temp['type']);
+                   $type= (array_key_exists("Type",$val))?$val['Type']:strtolower(preg_replace('/\s+/', '', $temp['type']));
                    $showchild=(array_key_exists("ShowChild",$val))?$val['ShowChild']:1;
                    if($key == "State"){
                        $showchild =0;
                    }
-                   array_push($temp['filterValue'],array("label"=>$val['Name'],"value"=>array("label"=>$val['Name'],"id"=>$val['Id'],"type"=>$type,"showChild"=>$showchild)));
+                   $valueData=array("label"=>$val['Name'],"id"=>$val['Id'],"type"=>$type,"showChild"=>$showchild,'isChecked'=>false);
+                   if($key == "Status"){
+                      $valueData['stateId']=$val['State'];
+                   }
+                   array_push($temp['filterValue'],array("label"=>$val['Name'],"value"=>$valueData));
                }
              array_push($refinedFilter,$temp); 
              $temp=array('type'=>'','filterValue'=>array());
