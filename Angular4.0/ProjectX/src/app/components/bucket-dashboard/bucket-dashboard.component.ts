@@ -283,4 +283,23 @@ prepareEditFromData(){
            },5000);
     }
 
-}
+    gotoStory(bucketObj,filterVal,filterType,key){
+       var filterKey:any={}; 
+        filterKey['Buckets']=[{
+            "label":bucketObj.BucketName ,
+            "id": bucketObj.BucketId,
+            "type": "buckets",
+            "showChild": 1,
+            "isChecked": true
+          }];
+
+        filterKey[key]=[{
+            "label":"" ,
+            "id": filterVal,
+            "type": filterType,
+            "showChild": 1,
+            "isChecked": true
+          }];
+     this._router.navigate(['project',this.projectName,'list'],{queryParams: {page:1,sort:'desc',col:'Id','adv':true,'advData':JSON.stringify(filterKey)}});
+        }
+    }

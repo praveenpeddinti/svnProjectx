@@ -99,4 +99,21 @@ getAllStoryDetails(projectId,offset,pagesize,sortvalue,sortorder,selectedOption,
     });
   }
 
+applyAdvanceFilter(requestParams,applyAdvanceFilterCallback){
+   var post_data={
+      'projectId':requestParams.projectId,
+      'offset' : requestParams.offset,
+      'pagesize': requestParams.pagesize,
+      'sortvalue' :requestParams.sortvalue,
+      'sortorder': requestParams.sortorder,
+      'filterName':requestParams.filterName,
+      'filterOption':requestParams.selectedFilters,
+   }
+    this._ajaxService.AjaxSubscribe("story/apply-advance-filter",post_data,(data)=>
+    { 
+         applyAdvanceFilterCallback(data);
+    });
+}
+
+
 }

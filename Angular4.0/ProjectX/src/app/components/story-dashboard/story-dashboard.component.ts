@@ -34,7 +34,10 @@ export class StoryDashboardComponent {
      private dateVal = new Date();
      public minDate:Date;
      public filterType:any;
+    public advFilterData:any;
+    public criteriaLabel:any=[];
      private fieldsData = [];
+     private isAdvanceFilter:boolean=false;
   public currentFieldData={
     fieldDataId:'',
     fieldIndex:'',
@@ -127,6 +130,9 @@ expanded: any = {};
             if(params['filter']!=undefined){
                 this.filterValue=params['filter'];
                 this.filterType=params['filterType'];
+            }else if(params['adv']!=undefined){
+                this.isAdvanceFilter = params['adv'];
+                this.advFilterData=JSON.parse(params['advData']);
             }
             thisObj.offset=this.pageNo-1;//added by Ryan
             this.rememberState(this.pageNo,this.sortorder,this.sortvalue,this.filterValue);
@@ -147,6 +153,7 @@ expanded: any = {};
                 localStorage.setItem('ProjectName',thisObj.projectName);
                 localStorage.setItem('ProjectId',thisObj.projectId);
                 thisObj._service.getFilterOptions(thisObj.projectId,(response) => {
+                    if(!this.isAdvanceFilter){
                 this.setFilterValue(response).then((val:any)=>{ 
                 thisObj.FilterOption=response.data[val].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
@@ -157,6 +164,11 @@ expanded: any = {};
                 thisObj.page(thisObj.projectId,thisObj.offset, thisObj.limit, thisObj.sortvalue, thisObj.sortorder,thisObj.selectedFilter);
            
                 })
+        }else{
+            thisObj.FilterOption=response.data[1].filterValue;
+            thisObj.FilterOptionToDisplay=response.data;
+        }
+               
             })
                 
             
@@ -588,6 +600,37 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
       
         },500)
     }
+
+
+getFilteredData(response){
+   let jsonForm = {};
+            if (response.statusCode == 200) {
+
+                this.rows = response.data; 
+                this.rows = response.data;
+                this.count = 5;//response.totalCount;
+                for(var i in this.editing){
+    //    for(var j in this.editing){   
+          this.editing[i] = false;
+    //   }
+      }
+                
+                /* Section To Remember the State of Pages and to replace the Url with required params while user navigation */
+                // this.pageNo=offset+1;//added by Ryan
+                // this.sortorder=sortorder;//added by Ryan
+                // this.sortvalue=sortvalue;//added by Ryan
+                // this.offset=this.pageNo-1;//added by Ryan
+                // this.rememberState(this.pageNo,this.sortorder,this.sortvalue,this.filterValue);
+                // var url='/project/'+this.projectName+'/list?page='+(offset+1)+'&sort='+sortorder+'&col='+sortvalue+'&filter='+this.filterValue+'&filterType='+this.filterType;
+                // this.location.replaceState(url);
+                /* =========Section End==========================================*/ 
+
+            } 
+}
+
+getFilterCriteria(result){
+this.criteriaLabel=result;
+}
 
     }
 

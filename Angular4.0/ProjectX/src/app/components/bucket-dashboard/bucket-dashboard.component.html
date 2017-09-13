@@ -79,21 +79,21 @@
                         <div class="clearfix marb10">
                            <div class="col-md-10 col-xs-9">All active stories/tasks</div>
                            <div class="col-md-2 col-xs-3">
-                              <div class="pull-right but">{{bucketDetails[0].topTicketStats[0].ActiveTickets}}</div>
+                              <div class="pull-right but" (click)="gotoStory(bucketDetails[0],3,'state','State')">{{bucketDetails[0].topTicketStats[0].ActiveTickets}}</div>
                            </div>
                         </div>
                         
                          <div class="clearfix marb10">
                            <div class="col-md-10 col-xs-9">Over due stories/tasks</div>
                            <div class="col-md-2 col-xs-3">
-                              <div class="pull-right but">{{bucketDetails[0].topTicketStats[0].OverDue}}</div>
+                              <div class="pull-right but" (click)="gotoStory(bucketDetails[0],4,'DueDate','DueDate')">{{bucketDetails[0].topTicketStats[0].OverDue}}</div>
                            </div>
                         </div>
                         
                         <div class="clearfix marb10">
                            <div class="col-md-10 col-xs-9">Due stories/tasks for current week</div>
                            <div class="col-md-2 col-xs-3">
-                              <div class="pull-right but">{{bucketDetails[0].topTicketStats[0].CurrentOverDue}}</div>
+                              <div class="pull-right but" (click)="gotoStory(bucketDetails[0],3,'DueDate','DueDate')">{{bucketDetails[0].topTicketStats[0].CurrentOverDue}}</div>
                            </div>
                         </div>
                         
