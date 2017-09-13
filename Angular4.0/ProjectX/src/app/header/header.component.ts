@@ -68,12 +68,12 @@ export class HeaderComponent implements OnInit {
            if(typeof thisObj.projectName != "undefined"){
              thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode ==200) {
-                thisObj.projectId=data.data.PId;   
+                thisObj.projectId=data.data.PId; 
                }
                 
         });
            }
-          
+           
         });
            });
     }
@@ -192,12 +192,16 @@ projectsArray(list){
       delete this.PName;
     
     }
+    if(searchString){
           if(this.projectName=='' || this.projectName==undefined){
               this._router.navigate(['search',],{queryParams: {q:searchString}});
           }else{
              this._router.navigate(['project',this.projectName,'search'],{queryParams: {q:searchString}});
        }
       
+    }else{
+     console.log("here only");
+    }
     }
   showErrorFunction(id,message){
           jQuery("#"+id).html(message);

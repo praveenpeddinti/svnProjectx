@@ -132,7 +132,12 @@ export class UserDashboardComponent implements OnInit {
 
   globalSearch(){
     var searchString=jQuery("#userglobalsearch").val().trim();
-     this._router.navigate(['search',],{queryParams: {q:searchString}});
+    if(searchString){
+      this._router.navigate(['search',],{queryParams: {q:searchString}});
+    }else{
+      console.log("stay here----");
+    }
+     
   }
 
 }
