@@ -6,7 +6,7 @@
       <div class="col-md-6">
         <div class="form-group">
           <div class="icon-addon ">
-            <input type="text" placeholder="Search" class="form-control user_searchbox" id="userglobalsearch"  (keyup.enter)="globalSearch()">
+            <input type="text" placeholder="Search" [(ngModel)]="srch" class="form-control user_searchbox" id="userglobalsearch"  (keyup.enter)="globalSearch()">
           <i class="fa fa-search user_searchboxi" aria-hidden="true"></i>
           </div>
         </div>

@@ -44,6 +44,7 @@ export class HeaderComponent implements OnInit {
   private PName='';
   private projectId;
   public projectName;
+  public srchStr:any;
    constructor(
     private _ajaxService: AjaxService,
     public _router: Router,
@@ -186,13 +187,14 @@ projectsArray(list){
       return listMainArray;
 }
   globalSearchNavigate(){
-    var searchString=jQuery("#globalsearch").val().trim();
+  //  var searchString=jQuery("#globalsearch").val().trim();
+  var searchString=this.srchStr;
      if(this._router.url=='/home'){
   // localStorage.setItem('PName',null);
       delete this.PName;
     
     }
-    if(searchString){
+    if(typeof searchString !== 'undefined'){
           if(this.projectName=='' || this.projectName==undefined){
               this._router.navigate(['search',],{queryParams: {q:searchString}});
           }else{

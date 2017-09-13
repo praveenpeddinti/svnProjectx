@@ -33,6 +33,7 @@ export class UserDashboardComponent implements OnInit {
   public noProjectsFound:boolean = false;
   public noActivitiesFound:boolean = false;
  public projectForm:string;
+ public srch:any;
   constructor(
           private _router: Router,
           private _service: LoginService,
@@ -131,8 +132,9 @@ export class UserDashboardComponent implements OnInit {
   }
 
   globalSearch(){
-    var searchString=jQuery("#userglobalsearch").val().trim();
-    if(searchString){
+    console.log("here-----"+this.srch);
+   var searchString=this.srch;
+    if (typeof searchString !== 'undefined'){
       this._router.navigate(['search',],{queryParams: {q:searchString}});
     }else{
       console.log("stay here----");
