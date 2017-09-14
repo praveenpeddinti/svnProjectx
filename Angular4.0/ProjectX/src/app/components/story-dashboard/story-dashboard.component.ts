@@ -608,12 +608,17 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
 getFilteredData(response){
    let jsonForm = {};
             if (response.statusCode == 200) {
-
+                var filterData = response.data.filterData;
+                if(filterData==''){
                 this.rows = response.data.ticketData; 
                 this.rows = response.data.ticketData;
-                var filterData = response.data.filterData;
-
-            var filterOption ={
+                 this.count =response.totalCount;
+                for(var i in this.editing){
+                this.editing[i] = false;
+   
+                  }
+                }else{
+          var filterOption ={
           "label":filterData.Name,
           "value": {
             "label": filterData.Name,
@@ -623,14 +628,12 @@ getFilteredData(response){
             "isChecked": false
           }
         }
-
         this.FilterOptionToDisplay[0].filterValue.push(filterOption);
-                this.count =response.totalCount;
-                for(var i in this.editing){
-    //    for(var j in this.editing){   
-          this.editing[i] = false;
-    //   }
-      }
+        this.selectedFilter=filterOption.value;
+        this.filterDashboard();
+       }
+                
+               
                 
                 /* Section To Remember the State of Pages and to replace the Url with required params while user navigation */
                 // this.pageNo=offset+1;//added by Ryan

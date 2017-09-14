@@ -182,7 +182,6 @@ applyFilter(option=''){
      if(option=='')
      this.emitCriteriaResponse.emit(this.filterCriteria);
     this.emitFiltereResponse.emit(response);
-    // console.log("Filtered___data_______-----"+JSON.stringify(response));
   })
   }else{
     this.filterSelectedError="No filter selected";
