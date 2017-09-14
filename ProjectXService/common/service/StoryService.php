@@ -2022,6 +2022,26 @@ class StoryService {
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+    /**
+     * @author Anand Singh
+     * @param type $StoryData
+     * @return type
+     * @throws ErrorException
+     */
+      public function advanceFilterDataCount($StoryData){
+        
+        try {
+            $totalCount = TicketCollection::getStoryListCountByAdvanceFilter($StoryData);
+            return $totalCount;
+        } catch (\Throwable $ex) {
+            Yii::error("StoryService:advanceFilterDataCount::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+    
+    
   
       
             

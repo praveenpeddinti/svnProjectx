@@ -1354,10 +1354,13 @@ class StoryController extends Controller
         }
         $options['NoLabel']=$tempFilter['NoLabel'];
         $options['Buckets'] = ServiceFactory::getStoryServiceInstance()->getBucketsList($projectId);
+        array_unshift($options['Buckets'],array("Id"=>0,"Name"=>'All'));
         $options['State'] = ServiceFactory::getStoryServiceInstance()->getStateListFilters();
+        array_unshift($options['State'],array("Id"=>0,"Name"=>'All',''));
         $options['Status'] = ServiceFactory::getStoryServiceInstance()->getWorkflowFields();
+        array_unshift($options['Status'],array("Id"=>0,"Name"=>'All','State'=>0));
         $options['DueDate']=$tempFilter['DueDate'];
-      
+         array_unshift($options['DueDate'],array("Id"=>0,"Name"=>'All'));
         $preparedFilters = CommonUtility::prepareFilterOption($options);
         $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;

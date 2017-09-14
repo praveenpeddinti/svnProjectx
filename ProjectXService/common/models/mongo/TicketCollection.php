@@ -239,6 +239,7 @@ class TicketCollection extends ActiveRecord
             $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
            }
            else if($StoryData->filterOption->type=='state'){
+               unset($conditions["IsChild"]);
             $conditions['Fields.state.value']=(int)$StoryData->filterOption->id;
            }
            else if($StoryData->filterOption->type=='personalfilters'){
@@ -246,6 +247,8 @@ class TicketCollection extends ActiveRecord
             $conditions=$personalFilter[0]['Conditions'];
            }
         }
+        
+        error_log("-----------ANAND----".print_r($conditions,1));
             if ($StoryData->sortorder == 'desc')
                 $order = -1;
             if ($StoryData->sortorder == 'asc')
@@ -848,13 +851,22 @@ class TicketCollection extends ActiveRecord
                   
             }if(sizeof($option->Buckets)!=0){
                  foreach($option->Buckets as $obj){
-                      array_push( $or['$or'],['Fields.bucket.value'=>(int)$obj->id]);
+                     if($obj->id == 0){
+                      array_push($or['$or'],['Fields.bucket.value' => ['$gte' => 0]]);    
+                     }else{
+                       array_push( $or['$or'],['Fields.bucket.value'=>(int)$obj->id]);  
+                     }
+                      
                  }
                  array_push( $conditions['$and'],$or);
               $or['$or']=[];
             } if(sizeof($option->State)!=0){
                  foreach($option->State as $obj){
-                      array_push( $or['$or'],['Fields.state.value'=>(int)$obj->id]);
+                    if($obj->id == 0){
+                      array_push($or['$or'],['Fields.bucket.value' => ['$gte' => 0]]);    
+                     }else{
+                        array_push( $or['$or'],['Fields.state.value'=>(int)$obj->id]); 
+                     }
                  }
              array_push( $conditions['$and'],$or);
              $or['$or']=[];
@@ -862,7 +874,11 @@ class TicketCollection extends ActiveRecord
            if(sizeof($option->Status)!=0){
                     $or['$or']=[];
                  foreach($option->Status as $obj){
+                      if($obj->id == 0){
+                      array_push($or['$or'],['Fields.bucket.value' => ['$gte' => 0]]);    
+                     }else{
                           array_push($or['$or'],['Fields.workflow.value'=>(int)$obj->id]);
+                     }
                 } 
                 array_push($conditions['$and'],$or); 
                 $or['$or']=[];
@@ -872,7 +888,10 @@ class TicketCollection extends ActiveRecord
                      $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
                      $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
                  foreach($option->DueDate as $obj){
-                      if($obj->id==0){
+                     if($obj->id==0){
+                      array_push($or['$or'],['Fields.duedate.value' => ['$ne' => '']]); 
+                     }
+                      if($obj->id==6){
                         $custom_date = date("Y-m-d H:i:s", strtotime($obj->dateVal));
                        array_push($or['$or'],['Fields.duedate.value' => new \MongoDB\BSON\UTCDateTime(strtotime($custom_date) * 1000)]);  
                      }
@@ -945,7 +964,7 @@ class TicketCollection extends ActiveRecord
         $or['$or']=[];
         //error_log("filter___option__".print_r($filterOption[0],1));
         
-            if(sizeof($option->NoLabel)!=0){
+                     if(sizeof($option->NoLabel)!=0){
                  foreach($option->NoLabel as $nolabel){
                      if($nolabel->id==2){
                         $conditions['Fields.assignedto.value']=(int)$requestData->userInfo->Id;
@@ -958,13 +977,22 @@ class TicketCollection extends ActiveRecord
                   
             }if(sizeof($option->Buckets)!=0){
                  foreach($option->Buckets as $obj){
-                      array_push( $or['$or'],['Fields.bucket.value'=>(int)$obj->id]);
+                     if($obj->id == 0){
+                      array_push($or['$or'],['Fields.bucket.value' => ['$gte' => 0]]);    
+                     }else{
+                       array_push( $or['$or'],['Fields.bucket.value'=>(int)$obj->id]);  
+                     }
+                      
                  }
                  array_push( $conditions['$and'],$or);
               $or['$or']=[];
             } if(sizeof($option->State)!=0){
                  foreach($option->State as $obj){
-                      array_push( $or['$or'],['Fields.state.value'=>(int)$obj->id]);
+                    if($obj->id == 0){
+                      array_push($or['$or'],['Fields.bucket.value' => ['$gte' => 0]]);    
+                     }else{
+                        array_push( $or['$or'],['Fields.state.value'=>(int)$obj->id]); 
+                     }
                  }
              array_push( $conditions['$and'],$or);
              $or['$or']=[];
@@ -972,7 +1000,11 @@ class TicketCollection extends ActiveRecord
            if(sizeof($option->Status)!=0){
                     $or['$or']=[];
                  foreach($option->Status as $obj){
+                      if($obj->id == 0){
+                      array_push($or['$or'],['Fields.bucket.value' => ['$gte' => 0]]);    
+                     }else{
                           array_push($or['$or'],['Fields.workflow.value'=>(int)$obj->id]);
+                     }
                 } 
                 array_push($conditions['$and'],$or); 
                 $or['$or']=[];
@@ -982,7 +1014,11 @@ class TicketCollection extends ActiveRecord
                      $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
                      $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
                  foreach($option->DueDate as $obj){
-                      if($obj->id==0){
+                     if($obj->id==0){
+                        $today = date("Y-m-d H:i:s", strtotime('today'));
+                       array_push($or['$or'],['Fields.duedate.value' => ['$ne' => '']]);  
+                     }
+                      if($obj->id==6){
                         $custom_date = date("Y-m-d H:i:s", strtotime($obj->dateVal));
                        array_push($or['$or'],['Fields.duedate.value' => new \MongoDB\BSON\UTCDateTime(strtotime($custom_date) * 1000)]);  
                      }
