@@ -292,14 +292,16 @@ prepareEditFromData(){
             "showChild": 1,
             "isChecked": true
           }];
-
-        filterKey[key]=[{
+  if(filterVal!=''){
+      filterKey[key]=[{
             "label":"" ,
             "id": filterVal,
             "type": filterType,
             "showChild": 1,
             "isChecked": true
           }];
+  }
+       
      this._router.navigate(['project',this.projectName,'list'],{queryParams: {page:1,sort:'desc',col:'Id','adv':true,'advData':JSON.stringify(filterKey)}});
         }
     }

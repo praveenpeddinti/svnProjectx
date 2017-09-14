@@ -53,14 +53,14 @@
                         <div class="clearfix marb10">
                            <div class="col-md-10 col-xs-9">Stories/tasks</div>
                            <div class="col-md-2 col-xs-3">
-                              <div class="pull-right but">{{bucketDetails[0].topTicketStats[0].TicketsCount}}</div>
+                              <div class="pull-right but" (click)="gotoStory(bucketDetails[0])">{{bucketDetails[0].topTicketStats[0].TicketsCount}}</div>
                            </div>
                         </div>
                         
                         <div class="clearfix marb10">
                            <div class="col-md-10 col-xs-9">Story points</div>
                            <div class="col-md-2 col-xs-3">
-                              <div class="pull-right counts">{{bucketDetails[0].topTicketStats[0].StoryPoints}}</div>
+                              <div class="pull-right counts" >{{bucketDetails[0].topTicketStats[0].StoryPoints}}</div>
                            </div>
                         </div>
                         
