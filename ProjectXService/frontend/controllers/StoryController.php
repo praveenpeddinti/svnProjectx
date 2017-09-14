@@ -803,7 +803,7 @@ class StoryController extends Controller
           $activityOn="TicketRelation";
           $notify_type ='related';
           ServiceFactory::getStoryServiceInstance()->saveNotifications($storyData, $notify_type,$activityOn,'',$slug,'',(int)$searchTicketId);
-          ServiceFactory::getStoryServiceInstance()->saveEvent($projectId,"Ticket",$ticketId,"related",'relate',$loginUserId,array("ActionOn"=>  strtolower("relatetask"),"OldValue"=>0,"NewValue"=>(int)$searchTicketId),array("BucketId"=>(int)$bucketId));
+          ServiceFactory::getStoryServiceInstance()->saveEvent($projectId,"Ticket",$ticketId,"related",'relate',$loginUserId,[array("ActionOn"=>  strtolower("relatetask"),"OldValue"=>0,"NewValue"=>(int)$searchTicketId)],array("BucketId"=>(int)$bucketId));
           $ticketData = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId,$ticketId);
           $responseData=array('ticketData'=>$ticketData,'activityData'=>$activityData);
           $responseBean = new ResponseBean();
@@ -960,7 +960,7 @@ class StoryController extends Controller
             $activityOn="TicketRelation";
             $slug =  new \MongoDB\BSON\ObjectID();
             ServiceFactory::getStoryServiceInstance()->saveNotifications($ticketData, $notifyType,$activityOn,'',$slug,'',$unRelateTicketId);
-            ServiceFactory::getStoryServiceInstance()->saveEvent($projectId,"Ticket",$parentTicketId,"unrelated",'unrelate',$loginUserId,array("ActionOn"=>  strtolower("unrelatetask"),"OldValue"=>0,"NewValue"=>(int)$unRelateTicketId),array("BucketId"=>(int)$bucketId));
+            ServiceFactory::getStoryServiceInstance()->saveEvent($projectId,"Ticket",$parentTicketId,"unrelated",'unrelate',$loginUserId,[array("ActionOn"=>  strtolower("unrelatetask"),"OldValue"=>0,"NewValue"=>(int)$unRelateTicketId)],array("BucketId"=>(int)$bucketId));
             $response['ticketInfo'] = ServiceFactory::getStoryServiceInstance()->getAllRelateStory($projectId, $parentTicketId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
