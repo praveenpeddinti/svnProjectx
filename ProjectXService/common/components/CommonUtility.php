@@ -1109,7 +1109,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }
             else if ($type == 10) {
                 //bucket
-                 $property["PreviousValue"] = "";
+                // $property["PreviousValue"] = ""; // this line was creating problem in showing activity and notification 
                 if($property["PreviousValue"] != ""){
                     $bucketDetails = Bucket::getBucketName($property["PreviousValue"], $projectId); 
                     $property["PreviousValue"] = $bucketDetails["Name"];
