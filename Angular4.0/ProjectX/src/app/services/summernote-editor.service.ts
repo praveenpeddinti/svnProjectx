@@ -104,21 +104,21 @@ export class SummerNoteEditorService
                         //  alert("444444444444444444"+this.summernoteLength);
                         // console.log(element+"==========Iddddd===========");
                          var editor=jQuery('#'+element).summernote('code');
-                        //  console.log(editor+"=====**=======");
+                           console.log(editor+"=====**======1111111111=");
+                         editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*$/gi, "");
+                          console.log(editor+"=====**=======");
                          if(obj.formB != undefined){
                              obj.formB['description']=editor;
                          }
                          editor=jQuery(editor).text().trim();
-                        //  console.log(editor+"============");
                         //  console.log(obj.formB['description']+"=-=-=-=-=-");
                          if(obj.form != undefined){
                             obj.form['description']=editor;
-                            // alert("2323");
                             if(editor!='')
                             {
                                 obj.form['description']=editor;
                             //  obj.form['description']= jQuery('#'+element).summernote('code');
-                                console.log(obj.form['description']);
+                              //  alert(obj.form['description']+"===================");
                             }
                             else
                             {
