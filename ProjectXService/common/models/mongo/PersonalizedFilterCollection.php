@@ -70,7 +70,7 @@ class PersonalizedFilterCollection extends ActiveRecord {
             $filterObj->CreatedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
             $result = $filterObj->save();
             if($result){
-               $returnValue = $filterObj->_id;
+               $returnValue = $filterObj;
             } 
             return $returnValue;
               

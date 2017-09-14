@@ -909,9 +909,9 @@ class TicketCollection extends ActiveRecord
       // error_log("condition_____________".print_r($conditions,1));
          if(sizeof($conditions['$or'])==0)unset($conditions['$or']);
          if(sizeof($conditions['$and'])==0)unset($conditions['$and']);
-         
+         $newFilter=array();
          if($filterName!=''){
-             PersonalizedFilterCollection::savePersonalizedFilter($filterName, $requestData->userInfo->Id,$projectId, $conditions);
+           $newFilter =  PersonalizedFilterCollection::savePersonalizedFilter($filterName, $requestData->userInfo->Id,$projectId, $conditions);
          }
          if ($requestData->sortorder == 'desc')
                 $order = -1;
@@ -933,7 +933,7 @@ class TicketCollection extends ActiveRecord
            $cursor = $collection->find($conditions, array(), $options);
             $ticketDetails = iterator_to_array($cursor);
             error_log("couint-----XX------".count($ticketDetails));
-            return $ticketDetails;  
+            return array('ticketDetails'=>$ticketDetails,'filterData'=>$newFilter);  
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getStoryListByAdvanceFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());

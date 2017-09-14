@@ -2004,15 +2004,15 @@ class StoryService {
             $timezone = $StoryData->timeZone;
             $projectId = $StoryData->projectId;
             $ticketDetails = TicketCollection::getStoryListByAdvanceFilter($StoryData);
-            $finalData = array();
+            $finalData = array('ticketData'=>array(),'filterData'=>$ticketDetails['filterData']);
             $fieldsOrderArray = [5,6,7,3,10];
            //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             $fitlerOption=null;
               
           
-            foreach ($ticketDetails as $ticket) {
+            foreach ($ticketDetails['ticketDetails'] as $ticket) {
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
-                array_push($finalData, $details);
+                array_push($finalData['ticketData'], $details);
                 
                } 
             
