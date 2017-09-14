@@ -83,7 +83,7 @@ background-color: #237ea7;
 .custom_menu{padding-bottom:10px}
 .normal{background:#ecebeb;border:1px solid #e7e7e7;padding:14px 12px 14px;line-height:0}
 .normal i{color:#78c9ee;font-size:20px;line-height:10px}
-.bluebutton{background:#695ea5;border:1px solid #695ea5; font-size:14px; font-weight:normal;}
+.bluebutton{background:#695ea5;border:1px solid #695ea5; font-size:14px; font-weight:normal; border-radius:4px;}
 .bluebutton, .bluebutton i{color:#fff}
 .greybutton{ background: #a7b4d3;border: 1px solid #a7b4d3;color:#FFFFFF}
 .customtable{display:table;width:100%}
@@ -566,6 +566,8 @@ color: #0199e0;
     left: 7px;
 }
 
+.edit_icn:hover:before { color: #59ac26!important;}
+
 .reply_icn {
    position: relative;
 	width:28px; height:28px; 
@@ -590,6 +592,8 @@ color: #0199e0;
     top: 4px;
     left: 7px;
 }
+
+.reply_icn:hover:before { color: #3e93d4;}
 
 .delete_icn {
    position: relative;
@@ -616,6 +620,7 @@ color: #0199e0;
     left: 8px;
 }
 
+.delete_icn:hover:before { color: #ff0000;}
 
 .close_icn {
     position: relative;
@@ -641,6 +646,9 @@ color: #0199e0;
     top: 0px;
     left: 5px;
 }
+
+.close_icn:hover:before { color: #ff0000;}
+
 .bold{font-weight: bold;}
 
 
@@ -844,8 +852,8 @@ padding-left:0px!important;
 /*.ngx-datatable{overflow: visible!important;}*/
 .normal.buttonmediumheight{padding: 13px 12px 14px!important;}
 .customdropdown-menutablealignment{right:0;left:auto}
-.yes{ background:#237ea7; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center; display:inline-block;}
-.no{background:#757777; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center;display:inline-block;}
+.yes{ background:#695ea5; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center; display:inline-block;}
+.no{background:#a7b4d3; color:#fff;font-family: 'robotoregular'; font-size:13px; padding:5px 10px; line-height:18px; text-align:center;display:inline-block;}
 /*.modal.custommodel{overflow-x: visible!important;overflow-y: visible!important;}*/
 .marb5{ margin-bottom: 5px!important;}
 .marb10{ margin-bottom: 10px!important;}

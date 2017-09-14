@@ -23,17 +23,17 @@ header{display: block;margin: 4px;padding: 5px;min-height: 100px;border: 1px sol
 .notification .notificationlist .notificationdiv .notificationusericon img{width:30px; height:30px;border-radius:100px;}
 .notification .notificationlist .notificationdiv .not_description{padding:0px 40px 0px 40px}
 .notification .notificationlist .notificationdiv .not_description .not_header{color:#a2a2a2;font-size:12px}
-.notification .notificationlist .notificationdiv .not_description .not_content{color:#7b7b7b;font-size:14px;line-height:16px;cursor: pointer}
-.notification .notificationlist .notificationdiv .not_description .not_content .not_mention{color:#0199e0}
-.notification .notificationlist .notificationdiv .not_description .not_header .not_profilename{color:#0199e0;font-size:16px}
-.notificationdelete{position:absolute;width:30px;height:30px;border-radius:100px;background:#eeeeee;background:-moz-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:-webkit-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:linear-gradient(to bottom,#eeeeee 0%,#eeeeee 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee',endColorstr='#eeeeee',GradientType=0);text-align:center;padding-top:4px;right:5px;top:10px}
+.notification .notificationlist .notificationdiv .not_description .not_content{color:#637282;font-size:14px;line-height:16px;cursor: pointer}
+.notification .notificationlist .notificationdiv .not_description .not_content .not_mention{color:#695ea5;}
+.notification .notificationlist .notificationdiv .not_description .not_header .not_profilename{color:#695ea5;font-size:16px}
+.notificationdelete{position:absolute;width:23px;height:23px;border-radius:100px;background:#eeeeee;background:-moz-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:-webkit-linear-gradient(top,#eeeeee 0%,#eeeeee 100%);background:linear-gradient(to bottom,#eeeeee 0%,#eeeeee 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee',endColorstr='#eeeeee',GradientType=0);text-align:center;right:5px;top:10px}
 .notificationdelete{border:1px solid #e8e8e8;cursor: pointer}
-.notificationdelete:hover{border:1px solid #ccc}
-.notificationdelete i{font-size:20px;color:#4c4c4c;line-height: 0}
-.notificationdelete:hover i{color:#7f7f7f}
+.notificationdelete:hover{border:1px solid #ccc; background:#fff!important;}
+.notificationdelete i{font-size:15px;color:#7f7f7f;line-height: 0;}
+.notificationdelete:hover i{color:#5aac24;}
 .notbuttonarea{text-align:right;;padding:5px 10px 5px;}
 .notbuttonarea .margin-right5{margin-right:5px}
-.not_date{font-size:12px;color:#a8a8a8}
+.not_date{font-size:12px!important;color:#a8a8a8}
 .notification.dropdown-menu{right:-37px;}
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus{background:#237ea7}
 .notification:after { bottom: 100%; right: 50px; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(204, 204, 204, 0); border-bottom-color: #e0e0e0; border-width: 10px; margin-left: -10px;}
