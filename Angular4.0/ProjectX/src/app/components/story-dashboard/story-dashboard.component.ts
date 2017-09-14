@@ -609,8 +609,22 @@ getFilteredData(response){
    let jsonForm = {};
             if (response.statusCode == 200) {
 
-                this.rows = response.data; 
-                this.rows = response.data;
+                this.rows = response.data.ticketData; 
+                this.rows = response.data.ticketData;
+                var filterData = response.data.filterData;
+
+            var filterOption ={
+          "label":filterData.Name,
+          "value": {
+            "label": filterData.Name,
+            "id": filterData.Id,
+            "type": "personalfilters",
+            "showChild": 1,
+            "isChecked": false
+          }
+        }
+
+        this.FilterOptionToDisplay[0].filterValue.push(filterOption);
                 this.count =response.totalCount;
                 for(var i in this.editing){
     //    for(var j in this.editing){   
