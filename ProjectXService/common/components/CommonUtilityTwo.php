@@ -547,7 +547,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                 $setNewVal=$getTicketDetails['Title'];
                                 $getActivities['Title']='#'.$activitiesArray['ReferringId'].' '.$getTicketDetails['Title'];
                                 $getActivities['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
-                                
+                                error_log("here343--".$getActivities['Title']);
                             }
                             else if($getActivities['OccuredIn']=='Bucket'){
                               $getBucketDetails =Bucket::getBucketName($activitiesArray['ReferringId'],$activitiesArray['ProjectId']);
@@ -579,12 +579,12 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 //                           $getActivities['Year']= $datetime1->format('Y');
                           $getActivities['time']= $Date;
                           $getActivities['ChangeSummary'] = array();
-//                           error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
+                        // error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
                                $summary = array();
                                $summary['ActionOn']=!empty($changeSummary['ActionOn'])?$changeSummary['ActionOn']:'';
                                $actionOn=$summary['ActionOn'];
-                               error_log("aa@@@@@@@@---==========================--".$actionOn);
+                               error_log("aa@@@@@@@@---==========================--"."###".$actionOn);
                                 if( $summary['ActionOn']=='duedate'){
                                 $prepare_text = Yii::t('app','dueDate');
                                 $summary['prepare_text']= $prepare_text;
@@ -671,7 +671,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
                                    }
-                               }else if($summary['ActionOn']=='projectcreation'){
+                               }else if($summary['ActionOn']=='projectcreation' ||$summary['ActionOn']=='bucketcreation'){
+                                   error_log("here454545-----".$summary['ActionOn']);
                                    // $prepare_text = array('message' => Yii::$app->params['created']);
                                   $prepare_text = Yii::t('app','created');
                                   $summary['action']='';
@@ -686,8 +687,12 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    }
                                     if(!empty($changeSummary['NewValue'])){
                                        $summary['NewValue']=$setNewVal;
-                                       $summary['NewValueText']='a Project';
-                                   }else{
+                                       if($summary['ActionOn']=='projectcreation'){
+                                          $summary['NewValueText']= 'a Project';
+                                       }else{
+                                           $summary['NewValueText']= 'a Bucket';
+                                       }
+                                    }else{
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
                                    }
@@ -700,7 +705,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                         error_log("innere22323----");
                                      $prepare_text = Yii::t('app','comment');
                                     }elseif($getActivities['ActionType']=='repliedOn'){
-                                        $prepare_text = Yii::t('app','repliedOn');
+                                        $prepare_text = Yii::t('app','reply');
                                     }
                                     $summary['action']='';
                                       //error_log("@@@@--".print_r($prepare_text,1));
@@ -713,8 +718,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
-                                       $summary['NewValue']=$changeSummary['NewValue'];
-                                       $summary['NewValueText']='to';
+                                       $summary['NewValue']=($getActivities['ActionType']=='repliedOn')?'':CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
+                                       $summary['NewValueText']=($getActivities['ActionType']=='repliedOn')?'':'to';
                                    }else{
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
@@ -735,6 +740,32 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     if(!empty($changeSummary['NewValue'])){
                                        $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
                                        $summary['NewValueText']='to';
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
+                                   }
+                                 $summary['prepare_text']= $prepare_text;
+                               }else if($summary['ActionOn']=='relatetask'|| $summary['ActionOn']=='unrelatetask'){
+                                   error_log("jhhhk----------^^^^^^^^^^^^^---------");
+                                    
+                                     if($summary['ActionOn']=='relatetask'){
+                                         $prepare_text = Yii::t('app','related');
+                                    }else{
+                                         $prepare_text = Yii::t('app','unrelated');
+                                    }
+                                     $summary['action']='';
+                                    // error_log("changesummery55555555555-------".$changeSummary['OldValue']);
+                                    if(!empty($changeSummary['OldValue'])){
+                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValueText']='from';
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       //$summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
+                                        $summary['NewValue']=$setNewVal;
+                                        $summary['NewValueText']='to';
                                    }else{
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
