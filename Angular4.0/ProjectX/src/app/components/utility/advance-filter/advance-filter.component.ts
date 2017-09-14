@@ -82,6 +82,21 @@ selectFilterOption(filterObj,filterType,index){
   var thisObj= this;
   if(this.selectedFilters[0][filterType].indexOf(filterObj)==-1){
     //check and push
+    if(filterObj.type=='NoLabel'){
+         this.advanceFilter[index]['filterValue'].forEach(element => {
+              if(element.value.id!=filterObj.id){
+                element.value.isChecked = false;
+               this.selectedFilters[0][filterType].splice(this.selectedFilters[0][filterType].indexOf(element.value), 1);
+              }
+               
+      })
+    }
+
+
+
+
+
+
     if(filterObj.type=='state'){
       this.selectedStateIds.push(filterObj.id);
       this.advanceFilter[index+1]['filterValue'].forEach(element => {
