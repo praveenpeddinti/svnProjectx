@@ -152,7 +152,7 @@ addBucket(){
         }
         });
     }else{
-      alert("In else"+JSON.stringify(this.formB));
+      //alert("In else"+JSON.stringify(this.formB));
       this._service.updateBucket(this.projectId,this.bucketId,this.formB,(response)=>{
         // alert(JSON.stringify(response)+"******updateBucket***********");
           this.bucketUpdated.emit(response.data);
