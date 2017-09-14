@@ -18,7 +18,7 @@ export class AdvanceFilterComponent implements OnInit {
   public selectedStateIds:any=[];
   public dateObj:any={
           "label": "Custome date",
-          "id": "0",
+          "id": "6",
           "type": "DueDate",
           "showChild": 1,
           "isChecked": false,
@@ -135,7 +135,7 @@ selectFilterOption(filterObj,filterType,index){
     }
  }
 
-// console.log("Selected_________________filter"+JSON.stringify(this.selectedFilters));
+ console.log("Selected_________________filter"+JSON.stringify(this.selectedFilters));
 }
 
 selectCustomDate(value,type,index){
@@ -143,17 +143,6 @@ selectCustomDate(value,type,index){
     this.selectedFilters[0][type].push(this.dateObj);
 }
 
-// markStatus(statusObj){
-//   if(this.selectedStateIds.indexOf(statusObj.id)!=-1){
-//    statusObj.isChecked=true;
-//    return true;
-//   }
-//   else{
-//     statusObj.isChecked=false;
-//     return true
-//   }
-   
-// }
 
 
 applyFilter(option=''){
