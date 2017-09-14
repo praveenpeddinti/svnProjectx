@@ -2010,11 +2010,14 @@ class StoryService {
             $fitlerOption=null;
               
           
-            foreach ($ticketDetails['ticketDetails'] as $ticket) {
+            if(sizeof($ticketDetails['ticketDetails'])!=0){
+              foreach ($ticketDetails['ticketDetails'] as $ticket) {
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
                 array_push($finalData['ticketData'], $details);
                 
-               } 
+               }  
+            }
+             
             
             return $finalData;
         } catch (\Throwable $ex) {

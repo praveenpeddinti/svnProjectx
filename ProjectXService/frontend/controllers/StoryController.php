@@ -1389,8 +1389,11 @@ class StoryController extends Controller
         
         try{
          $postData = json_decode(file_get_contents("php://input"));
-         $totalCount = ServiceFactory::getStoryServiceInstance()->advanceFilterDataCount($postData);
+         $totalCount =0;
          $data = ServiceFactory::getStoryServiceInstance()->applyAdvanceFilter($postData);
+         if(sizeof($data['ticketData'])!=0){
+           $totalCount = ServiceFactory::getStoryServiceInstance()->advanceFilterDataCount($postData);  
+         }
          $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
