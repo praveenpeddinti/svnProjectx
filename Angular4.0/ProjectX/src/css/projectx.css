@@ -315,8 +315,8 @@ footer{font-size:12px}
 .arrowClass a:focus {
      outline-offset: 0px;
 }
-.arrowClass .fa-chevron-down {border-left:1px solid #e8e8e8; font-size: 20px;line-height: 0;   position: absolute;text-align: center;top: 0;width: 39px;bottom:0;color:#ccc}
-.arrowClass .fa-chevron-up {border-left:1px solid #e8e8e8; font-size: 20px;line-height: 0;   position: absolute;text-align: center;top: 0;width: 41px;background:#f4f4f4;bottom:-2px;color:#ccc;}
+.arrowClass .fa-chevron-down {border-left:1px solid #e8e8e8; font-size: 20px;line-height: 0;   position: absolute;text-align: center;top: 0;width: 39px;bottom:0;color:#695ea5; }
+.arrowClass .fa-chevron-up {border-left:1px solid #e8e8e8; font-size: 20px;line-height: 0;   position: absolute;text-align: center;top: 0;width: 41px;background:#f4f4f4;bottom:-2px;color:#695ea5; }
 .arrowClass  .fa-chevron-up::before {
   
     left: 50%;
@@ -324,12 +324,17 @@ footer{font-size:12px}
     margin-left:-10px;
     position: absolute;
     top: 50%;
+    content:'\f063'!important;
+    color:#695ea5!important;
 }
 .arrowClass  .fa-chevron-down::before{left: 50%;
    margin-top:-2px;
     margin-left:-10px;
     position: absolute;
-    top: 50%;}
+    top: 50%;
+    content:'\f062'!important;
+    color:#695ea5!important;
+}
 .story_tasks .customdatatable.ngx-datatable.material{}
 .story_tasks .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row, .story_tasks .ngx-datatable .datatable-scroll .datatable-body-row{margin:0 0 0;background:#f4f4f4;border-bottom:1px solid #fff;border-top:0}
 .story_tasks .datatable-scroll .datatable-row-wrapper:last-child .datatable-body-row{margin:0 0 0;background:#f4f4f4;border-bottom:1px solid #e8e8e8}
@@ -781,7 +786,7 @@ padding-left:0px!important;
 .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell{font-size:14px}
 .ngx-datatable .datatable-body{border-left:1px solid #e8e8e8;border-right:1px solid #e8e8e8;}
 .tablebuttons {padding: 12px 10px;font-size:12px}
-.tablebuttonsgrey{background:#757777;;border:1px solid #757777}
+.tablebuttonsgrey{background:#a7b4d3;;border:1px solid #a7b4d3;}
 .ngx-datatable .datatable-body .datatable-row-wrapper{display: table;}
 .ngx-datatable .datatable-body .datatable-body-row > div{display: table-row}
 .customdatatable .datatable-header{ padding: 10px 0!important;}
