@@ -513,14 +513,20 @@ trait NotificationTrait {
                     $actionType = "set";
                 }
                 if ($fieldType == 4) {
-                    $validDate = CommonUtility::validateDate($newValue);
-                    if ($validDate) {
-                        $newValue = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                    }
-                    $validDate = CommonUtility::validateDate($oldValue);
-                    if ($validDate) {
-                        $oldValue = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
-                    }
+//                    error_log("$$$--------++++".$newValue);
+//                    $validDate = CommonUtility::validateDate($newValue);
+//                    error_log("common--++++++++++++".$validDate);
+//                    if ($validDate) {
+//                         error_log("new--+++++++".$validDate);
+//                        $newValue = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+//
+//                    }
+//                    $validDate = CommonUtility::validateDate($oldValue);
+//                    if ($validDate) {
+//                        $oldValue = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+//                        error_log("$$$$----+++++++++".$oldValue);
+//
+//                    }
                 }
             } else if ($fieldType == 6) {
                                   error_log("===========333333333333333333============");
@@ -736,6 +742,8 @@ trait NotificationTrait {
                     $notificationId = $tic->_id;
                     array_push($notificationIds, $notificationId);
                     if ($bulkUpdate == '' && strtolower($notify_type) != "childtask" && strtolower($notify_type) != "relate" && strtolower($notify_type) != "unrelate") {
+                        error_log ("@@@@@--wewesdsdsd--++++++++++". $tic->NewValue."edfgdfg---++++++++++".$tic->OldValue);
+                 
                         EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" => strtolower($notify_type), "OldValue" => $tic->OldValue, "NewValue" => $tic->NewValue)], array("BucketId" => (int) $bucket));
                     }
                 }

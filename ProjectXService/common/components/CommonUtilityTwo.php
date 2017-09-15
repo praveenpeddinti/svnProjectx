@@ -671,7 +671,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
                                    }
-                               }else if($summary['ActionOn']=='projectcreation' ||$summary['ActionOn']=='bucketcreation'){
+                               }else if($summary['ActionOn']=='projectcreation' ||$summary['ActionOn']=='bucketcreation'||$summary['ActionOn']=='childtask'){
                                    error_log("here454545-----".$summary['ActionOn']);
                                    // $prepare_text = array('message' => Yii::$app->params['created']);
                                   $prepare_text = Yii::t('app','created');
@@ -689,8 +689,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValue']=$setNewVal;
                                        if($summary['ActionOn']=='projectcreation'){
                                           $summary['NewValueText']= 'a Project';
-                                       }else{
+                                       }else if($summary['ActionOn']=='bucketcreation'){
                                            $summary['NewValueText']= 'a Bucket';
+                                       }else{
+                                           $summary['NewValueText']='a';
                                        }
                                     }else{
                                        $summary['NewValue'] ='';
