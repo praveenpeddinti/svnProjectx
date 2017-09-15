@@ -281,6 +281,7 @@ trait NotificationTrait {
             $collaboratorIds = array();
             //  error_log("description------------".$description);
             $commentDescripition = $description;
+            $comment_desc = str_replace("&nbsp;", ' ', $commentDescripition);
             $data = TicketCollection::getTicketDetails($ticketId, $projectId);
             $followers = $data['Followers'];
             $followers = CommonUtility::filterFollowers($followers);
@@ -333,7 +334,7 @@ trait NotificationTrait {
                 $tic->ActivityFrom = (int) $loggedinUser;
                 $tic->NotificationDate = $currentDate;
                 $tic->OldValue = $oldValue; //added for consistency
-                $tic->NewValue = $commentDescripition; //added for consistency
+                $tic->NewValue = $comment_desc; //added for consistency
                 $tic->Notification_Type = 'mention';
                 $tic->CommentOwner=$commentOwnerName['UserName'];
                 //$tic->ActivityOn=$user['Id']; //previous use case
@@ -374,7 +375,7 @@ trait NotificationTrait {
                 $tic->ActivityFrom = (int) $loggedinUser;
                 $tic->NotificationDate = $currentDate;
                 $tic->OldValue = $oldValue; //added for consistency
-                $tic->NewValue = strip_tags($commentDescripition); //added for consistency
+                $tic->NewValue = strip_tags($comment_desc); //added for consistency
                 $tic->CommentSlug = $slug;
                 $tic->Notification_Type = $notify_type;
                 $tic->CommentOwner=$commentOwnerName['UserName'];
@@ -406,7 +407,7 @@ trait NotificationTrait {
                     $tic->ActivityFrom = (int) $loggedinUser;
                     $tic->NotificationDate = $currentDate;
                     $tic->OldValue = $oldValue; //added for consistency
-                    $tic->NewValue = $commentDescripition; //added for consistency
+                    $tic->NewValue = $comment_desc; //added for consistency
                     $tic->CommentSlug = $slug;
                     $tic->CommentOwner=$commentOwnerName['UserName'];
                     //eg : moin.hussain commented on or replied on the ticket.
@@ -455,6 +456,7 @@ trait NotificationTrait {
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
             // error_log("=+++++++++=save notifications=+++++++____".print_r($notification_data,1));
             $ticketDetails = TicketCollection::getTicketDetails($ticketId, $projectId);
+            error_log("=+++++++++=save notifications=+++++++____".print_r($ticketDetails,1));
             $followers = $ticketDetails['Followers'];
             $bucket = $ticketDetails["Fields"]["bucket"]["value"];
             $followers = CommonUtility::filterFollowers($followers);
@@ -484,12 +486,16 @@ trait NotificationTrait {
                     $actionType = "change";
                 }
             } else if (isset($ticketDetails["Fields"][$notifyType])) {
+                error_log("=============11111111111111111===============");
                 $oldValue = $ticketDetails["Fields"][$notifyType]["value"];
+                   error_log("=============11111111111111111===============".$oldValue);
+
             }
 
 //                    if(!($notify_type=='added' || $notify_type=='removed'))
 //                    {
             if ($fieldType == 1 || $fieldType == 4 || $fieldType == 5 || $fieldType == 8) {
+                  error_log("============2222222222222222222=============");
                 //for due date,dod and estimated points
                 $oldValue = $oldValue;
                 $newValue = $activityOn;
@@ -517,6 +523,8 @@ trait NotificationTrait {
                     }
                 }
             } else if ($fieldType == 6) {
+                                  error_log("===========333333333333333333============");
+
                 $oldCollaborator = $oldValue;
                 $newCollaborator = $activityOn; //this is a field value....
 
@@ -589,9 +597,12 @@ trait NotificationTrait {
 //                    }
                 }
             } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog") && ($activityOn !== "ChildTask" && $activityOn != "TicketRelation")) { //This is for left hand property changes
+                error_log("===========44444444444444444444============".$oldValue);
                 $oldFieldId = $oldValue;
                 $newFieldId = $activityOn;
                 $newValue = self::getFieldChangeValue($notifyType, $newFieldId);
+                error_log("===========45555555555555555555============".$newValue);
+
                 if ($oldValue == $activityOn) {
                     return;
                 }
@@ -718,6 +729,7 @@ trait NotificationTrait {
                 $oldValue = ($fieldType == 4) ? $oldValue : (string) $oldValue;
                 $tic->OldValue = $oldValue;
                 $tic->NewValue = $newValue;
+                error_log($oldValue."____________IIIIIIIIIIIIIIII++6+++++++++++++++++++++++".$newValue);
                 $result = $tic->save(); //here not sending emails for left hand side propert change excpet Assinged to , stake holder
                 if ($result) {
                     //  error_log("-----------_SSSSSSSSS------saving type----------");
@@ -954,6 +966,7 @@ error_log("-------------------------55555555555555----------------".$notificatio
 
                         array_push($result_msg, $message);
                     } else if ($storyField['Type'] != 6) {
+                        error_log($notification['Notification_Type']."================@@@@@@@@@@@@@@@=================".$notification['ActivityOn']);
                         if ($notification['ActivityOn'] != "workflow" && $notification['ActivityOn'] != "tickettype") {
                            $notification['OldValue'] = CommonUtility::refineActivityData($notification['OldValue'], 50);
                             $notification['NewValue'] = CommonUtility::refineActivityData($notification['NewValue'], 50);
