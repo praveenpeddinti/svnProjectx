@@ -62,6 +62,8 @@ class TinyUserCollection extends ActiveRecord
         $userObj= new TinyUserCollection();
         $userObj->CollaboratorId = (int)$userId;
        // $userObj->UserName=$user->firstName.'.'.$user->lastName;
+         $userObj->FirstName=$user->firstName;
+         $userObj->LastName=$user->lastName;
          $userObj->UserName=$user->displayName;
        // $userObj->DisplayName=$user->displayName;
         $userObj->ProfilePicture=$user->userProfileImage;
