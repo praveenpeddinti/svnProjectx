@@ -153,8 +153,8 @@ expanded: any = {};
                 localStorage.setItem('ProjectName',thisObj.projectName);
                 localStorage.setItem('ProjectId',thisObj.projectId);
                 thisObj._service.getFilterOptions(thisObj.projectId,(response) => {
-                    if(!this.isAdvanceFilter){
-                this.setFilterValue(response).then((val:any)=>{ 
+                    if(!this.isAdvanceFilter ){
+                this.setFilterValue(response).then((val:any)=>{ ;
                 thisObj.FilterOption=response.data[val].filterValue;
                 thisObj.FilterOptionToDisplay=response.data;
                 if(localStorage.getItem('filterArray')!=null){
@@ -231,8 +231,8 @@ setFilterValue(response){
       } else {
        if(index== -1 || inner)
         {
-       index = 0;
-       thisObj.selectedFilter =response.data[index].filterValue[0].value;
+       index = 1;
+       thisObj.selectedFilter =response.data[1].filterValue[0].value;
        localStorage.setItem('filterArray',JSON.stringify(thisObj.selectedFilter));
         }
         resolve(index);
@@ -344,7 +344,7 @@ toggleExpandRow(row) {
 
     filterDashboard(){
         this.offset=0;
-        if(this.selectedFilter.id==8){
+        if(this.selectedFilter.type=='buckets'){
            this.sortvalue='bucket' ;
            this.sortorder='asc'; 
         }
