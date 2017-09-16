@@ -1,6 +1,6 @@
 <?php
 namespace common\service;
-use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection};
+use common\models\mongo\{TicketCollection,TinyUserCollection,ProjectTicketSequence,TicketTimeLog,TicketComments,TicketArtifacts,NotificationCollection,PersonalizedFilterCollection};
 use common\components\{CommonUtility,CommonUtilityTwo,NotificationTrait,EventTrait};
 use common\models\mysql\{WorkFlowFields,StoryFields,Priority,PlanLevel,TicketType,Bucket,Collaborators,TaskTypes,Filters,Projects,UserPreferences,AdvanceFilters};
 use common\models\bean\FieldBean;
@@ -2043,7 +2043,23 @@ class StoryService {
         }
     }
     
+    /**
+     * @author Anand Singh
+     * @param type $filterData
+     * @return type
+     * @throws ErrorException
+     */
     
+      public function deleteAdvanceFilter($filterData){
+        
+        try {
+            $deletedRes = PersonalizedFilterCollection::deleteAdvanceFilter($filterData);
+            return $deletedRes;
+        } catch (\Throwable $ex) {
+            Yii::error("StoryService:deleteAdvanceFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
     
   
       
