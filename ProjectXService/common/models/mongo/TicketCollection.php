@@ -1049,6 +1049,6 @@ class TicketCollection extends ActiveRecord
         }
         
     }
-
+    
 }  
 ?>

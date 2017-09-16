@@ -107,6 +107,25 @@ class PersonalizedFilterCollection extends ActiveRecord {
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+    
+     /**
+     * @author Anand Singh
+     * @param type $filterDta
+     * @throws ErrorException
+     */
+    
+    public static function deleteAdvanceFilter($filterDta){
+        try{
+              $collection = Yii::$app->mongodb->getCollection('PersonalizedFilterCollection');
+              error_log("deleteAdvanceFilter__".print_r($filterDta,1));
+              $conditions = array("ProjectId" => (int)$filterDta->projectId,"Id" => $filterDta->filterId,'UserId'=>(int)$filterDta->userInfo->Id);
+             return $collection->remove($conditions);
+        } catch (\Throwable $ex) {
+            Yii::error("TicketCollection:deleteAdvanceFilter::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
 
 }
 

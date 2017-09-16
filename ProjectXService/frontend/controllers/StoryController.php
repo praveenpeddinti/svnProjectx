@@ -1413,6 +1413,38 @@ class StoryController extends Controller
         
     }
     
+    
+    /**
+     * @author Anand Singh 
+     * @return type
+     */
+    
+     public function actionDeleteAdvanceFilter(){
+        
+        try{
+         $postData = json_decode(file_get_contents("php://input"));
+        
+         $data = ServiceFactory::getStoryServiceInstance()->deleteAdvanceFilter($postData);
+        
+         $responseBean = new ResponseBean();
+            $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $data;
+            $responseBean->totalCount = 0;
+            $response = CommonUtility::prepareResponse($responseBean, "json");
+          return $response; 
+        } catch (\Throwable $th) {
+             Yii::error("StoryController:actionDeleteAdvanceFilter::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message =   $th->getMessage(). "--" . $th->getTraceAsString();//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+        
+    }
+    
 } 
     
 

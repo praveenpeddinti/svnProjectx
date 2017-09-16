@@ -1993,9 +1993,12 @@ $text_message=$html . $text_message .
                    if($key == "State"){
                        $showchild =0;
                    }
-                   $valueData=array("label"=>$val['Name'],"id"=>$val['Id'],"type"=>$type,"showChild"=>$showchild,'isChecked'=>false);
+                   $valueData=array("label"=>$val['Name'],"id"=>$val['Id'],"type"=>$type,"showChild"=>$showchild,'isChecked'=>false,'canDelete'=>false);
                    if($key == "Status"){
                       $valueData['stateId']=$val['State'];
+                   }
+                   if($key == "Personal Filters"){
+                      $valueData['canDelete']=true;
                    }
                    array_push($temp['filterValue'],array("label"=>$val['Name'],"value"=>$valueData));
                }
