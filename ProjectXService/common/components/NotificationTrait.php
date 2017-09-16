@@ -46,7 +46,7 @@ trait NotificationTrait {
      * @params  $notifyType,$Value
      * @return type string
      */
-    public static function getFieldChangeValue($notifyType, $Value) {
+    public static function getFieldChangeValue($notifyType, $Value,$projectId='') {
         try {
             if ($notifyType == 'priority') {
                 $priorityObj = new Priority();
@@ -55,7 +55,8 @@ trait NotificationTrait {
                 return $priorityValue;
             }
             if ($notifyType == 'bucket') {
-                $bucketDetails = Bucket::getBucketName($Value, 1);
+                error_log("TYpe___".$notifyType."Value___".$Value);
+                $bucketDetails = Bucket::getBucketName($Value, $projectId);
                 $bucketValue = $bucketDetails['Name'];
                 return $bucketValue;
             }
@@ -603,18 +604,16 @@ trait NotificationTrait {
 //                    }
                 }
             } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog") && ($activityOn !== "ChildTask" && $activityOn != "TicketRelation")) { //This is for left hand property changes
-                error_log("===========44444444444444444444============".$oldValue);
                 $oldFieldId = $oldValue;
                 $newFieldId = $activityOn;
-                $newValue = self::getFieldChangeValue($notifyType, $newFieldId);
-                error_log("===========45555555555555555555============".$newValue);
+                $newValue = self::getFieldChangeValue($notifyType, $newFieldId,$projectId);
 
                 if ($oldValue == $activityOn) {
                     return;
                 }
                 if ($oldValue != '') { //if changed
                     $activityOn = 'changed';
-                    $oldValue = self::getFieldChangeValue($notifyType, $oldFieldId);
+                    $oldValue = self::getFieldChangeValue($notifyType, $oldFieldId,$projectId);
                     $displayAction = "changed";
                     $actionType = "change";
                 } else { //if set new value
