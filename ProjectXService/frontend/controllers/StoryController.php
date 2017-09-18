@@ -232,7 +232,7 @@ class StoryController extends Controller
             Yii::error("StoryController:saveTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = $th->getMessage()."--" . $th->getTraceAsString();
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
