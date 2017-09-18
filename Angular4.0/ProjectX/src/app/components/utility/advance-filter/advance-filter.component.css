@@ -49,3 +49,10 @@
 	margin-left: -18px;
 }
 
+.no_option_selected {
+	position: relative;margin-top:4px;
+	background: #f57979;
+	padding:5px;color:#fff;font-size:12px;
+	text-align:center;
+	}
+

@@ -62,7 +62,6 @@ public filterCriteria:any=[];
        }) 
    this.selectedFilters.push(filterKey);
    var filterString=JSON.stringify(this.selectedFilters);
-   this.emptyObjLength = 62;//filterString.length;
    if(this.defaultCall)this.applyFilter();
    })
     
@@ -73,6 +72,7 @@ onClick(event) {
      this.showPanel=false;
   }
 showFilterPanel(){
+   this.filterError=this.filterSelectedError='';
    var thisObj=this;
      this.showPanel=true;
    
@@ -150,7 +150,7 @@ selectFilterOption(filterObj,filterType,index){
     }
  }
 
- console.log("Selected_________________filter"+JSON.stringify(this.selectedFilters));
+ //console.log("Selected_________________filter"+JSON.stringify(this.selectedFilters));
 }
 
 selectCustomDate(value,type,index){
@@ -161,9 +161,18 @@ selectCustomDate(value,type,index){
 
 
 applyFilter(option=''){
+  var isValid:boolean=false;
+  for (var k in this.selectedFilters[0]){
+    if (this.selectedFilters[0].hasOwnProperty(k)) {
+       if(this.selectedFilters[0][k]!=''){
+         isValid= true;
+         break;
+       }
+    }
+}
   if(option=='save' && this.filterName == ''){
     this.filterError='Please give name to save filter as.';
-  }else if(this.emptyObjLength != (JSON.stringify(this.selectedFilters).length)){
+  }else if(isValid){
     this.filterName=(option=='go')?'':this.filterName;
     this.filterError='';
     this.filterSelectedError='';
@@ -180,8 +189,10 @@ applyFilter(option=''){
     this.filterName='';
      this.showPanel=false;
      if(option=='')
-     this.emitCriteriaResponse.emit(this.filterCriteria);
-    this.emitFiltereResponse.emit(response);
+       this.emitCriteriaResponse.emit(this.filterCriteria);
+       this.emitFiltereResponse.emit(response);
+    
+     
   })
   }else{
     this.filterSelectedError="No filter selected";

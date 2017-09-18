@@ -1816,7 +1816,16 @@ input:focus{outline: none!important;}
       margin-bottom:0px!important;
     font-weight:normal!important;
     line-height: 40px!important;}
-.notetext{ font-size: 12px!important;}    
+.notetext{ font-size: 12px!important;}
+/*.filter_del .ng-tns-c3-0 .ui-widget *{box-sizing:unset!important; }
+.filter_del .ng-tns-c3-0 .ui-dropdown-item li span{ width:100%!important;}*/
+/*.filter_del .ng-tns-c3-0:first-child .ui-dropdown-item li{ position: relative;}
+
+
+.filter_del .ng-tns-c3-0:first-child .dropdown_wrap .ui-dropdown-items-wrapper ul li{ position: relative;}*/
+/*.filter_del .ng-tns-c3-0:first-child .ui-dropdown-item{ background:none!important;}
+.filter_del .ng-tns-c3-0:first-child .ui-dropdown-item:hover{ background:none!important;}
+.filter_del .ng-tns-c3-0:first-child .ui-dropdown-item span:first-child:hover{background:none!important;}*/
 
 
  @media (max-width:767px){
