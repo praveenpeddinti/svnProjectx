@@ -288,12 +288,13 @@ export class HomeComponent{
        // this.load_contents(this.page, this.projectFlag,this.limit,this.flag,this.activityPage,this.ProjectId,this.activityDropdownFlag,'unscroll');
     }
     public repo=[];
-    createProject(){alert("----1----");
+
+    createProject(){
     var sendData={
            userId:JSON.parse(this.users.Id),
            repName:'ProjectXaq'
            }
-           alert("----1----"+JSON.stringify(sendData));
+           
          this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         {  jQuery('#createProjectDiv').show();
            jQuery('#showLogDiv').hide();
@@ -303,13 +304,13 @@ export class HomeComponent{
            })
     }
     
-    createUser(){alert("----1----");
+    createUser(){
     var sendData={
            userId:JSON.parse(this.users.Id),
-           userName:'Sreeni1',
+           userName:'moin',
            password:'minimum8'
            }
-           alert("----1----"+JSON.stringify(sendData));
+           
          this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
         {
            jQuery('#createProjectDiv').hide();
@@ -320,12 +321,12 @@ export class HomeComponent{
            })
     }
     
-    showLog(){alert("----log----");
+    showLog(){
     var sendData={
            userId:JSON.parse(this.users.Id),
            repName:'ProjectX'
            }
-           alert("----1----"+JSON.stringify(sendData));
+           
          this._ajaxService.AjaxSubscribe('site/show-svnlog',sendData,(result)=>
         {
            jQuery('#createProjectDiv').hide();
