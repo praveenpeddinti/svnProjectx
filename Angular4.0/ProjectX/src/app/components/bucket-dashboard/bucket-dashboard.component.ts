@@ -173,6 +173,7 @@ prepareEditFromData(){
                         this._ajaxService.AjaxSubscribe("bucket/get-bucket-change-status",postData,(response) => {
                             // alert(JSON.stringify(response)+"<=====changeStatus=========>");
                             if(response.statusCode == 200){
+                                this.bucketPageError = "";
                                 if(response.message == "SUCCESS"){
                                     this.bucketChangedFilterToDisplay=this.prepareItemArray(response.data.dropList,false,'changebucket');
                                     this.bucketChangedFilterOption=this.bucketChangedFilterToDisplay[0].filterValue;
@@ -280,7 +281,7 @@ prepareEditFromData(){
         this.bucketPageError = msg;
             setTimeout(()=>{
                this.bucketPageError = "";
-           },5000);
+           },3500);
     }
 
     gotoStory(bucketObj,filterVal,filterType,key){
