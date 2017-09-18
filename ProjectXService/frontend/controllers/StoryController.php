@@ -232,7 +232,7 @@ class StoryController extends Controller
             Yii::error("StoryController:saveTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = $th->getMessage();
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -1233,7 +1233,7 @@ class StoryController extends Controller
         try{
            
         $project_data = json_decode(file_get_contents("php://input"));
-        $data = ServiceFactory::getStoryServiceInstance()->getProjectDetailsByName($project_data->projectName);
+       $data = ServiceFactory::getStoryServiceInstance()->getProjectDetailsByName($project_data->projectName);
             $responseBean = new ResponseBean();
         if(is_array($data)){
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -1326,7 +1326,7 @@ class StoryController extends Controller
              return $response;
         }
     }
-    
+
     /**
      * @author  Anand Singh
      * @uses    Get all advanced filter options
@@ -1447,6 +1447,4 @@ class StoryController extends Controller
     
 } 
     
-
-
 ?>
