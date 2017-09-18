@@ -131,7 +131,10 @@ addBucket(){
     
     var editor=jQuery('#bucketDescId').summernote('code');
     // this.editorDesc=jQuery(editor).text().trim();
+    editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*$/gi, "");
+//alert(editor+"----------------");
     this.formB['description']=editor;
+
 // alert(this.formB['description']);
     if(this.Type == "New"){
       // this.formB['description']=editor;
