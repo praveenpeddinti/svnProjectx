@@ -8,6 +8,13 @@ class SVNUtility {
         try{
             $ch = curl_init();
             $postfields = array();
+            
+            $projectName = preg_replace('/[^A-Za-z0-9\. -]/', '', $projectName);
+
+            // Replace sequences of spaces with hyphen
+            $projectName = preg_replace('/  */', '-', $projectName);
+            
+            
             $postfields['projectName'] = $projectName;
             error_log("--createRepository----".$projectName);
             //$postfields['field2'] = urlencode('value2');
@@ -22,7 +29,7 @@ class SVNUtility {
             //$info = curl_getinfo($ch);
             error_log("-createRepository response-".print_r($result,1));
           
-            return $response;
+          //  return $response;
        } catch (\Throwable $th) {
             Yii::error("SVNUtility:createRepository::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
            
