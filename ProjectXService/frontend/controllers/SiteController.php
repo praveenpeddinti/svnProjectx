@@ -17,7 +17,7 @@ use common\models\mongo\AccessTokenCollection;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-use common\components\{CommonUtility,EventTrait};
+use common\components\{CommonUtility};
 use common\components\CommonUtilityTwo;
 use common\models\bean\ResponseBean;
 use common\models\mysql\Projects;//testing
@@ -794,5 +794,155 @@ class SiteController extends Controller
         } 
         
     }
+
+ 
+    
+    //Subversion code start
+    /**
+    * @author Praveen
+    * @description This is used for create repository via subversion
+    * @param type 
+    * @return array
+    */
+    public function actionCreateRepository(){
+       try{
+            $postData = json_decode(file_get_contents("php://input"));
+            error_log("------".print_r($postData,1));
+             error_log("------".$postData->repName);
+            $ch = curl_init();
+           
+
+            $postfields = array();
+            $postfields['projectName'] = $postData->repName;
+            error_log("------".$postfields['projectName']);
+            //$postfields['field2'] = urlencode('value2');
+            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/test.php");
+            curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+            
+            $result = curl_exec($ch);
+            //$info=curl_exec($ch);
+            //$info = curl_getinfo($ch);
+            error_log("-curl response-".print_r($result,1));
+            
+            
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $result;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            return $response;
+       } catch (\Throwable $th) {
+            Yii::error("SiteController:actionGetProjectNameByUserid::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+    /**
+    * @author Praveen
+    * @description This is used for for create users via subversion
+    * @param type 
+    * @return array
+    */
+    public function actionCreateUser(){
+       try{
+            $postData = json_decode(file_get_contents("php://input"));
+            error_log("------".print_r($postData,1));
+             error_log($postData->password."------".$postData->userName);
+            $ch = curl_init();
+            $post_data = array(
+                'username' => $postData->userName,
+                'password' => $postData->password
+            );
+            $postfields = array();
+            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/user.php");
+            curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+            
+            $result = curl_exec($ch);
+            //$info=curl_exec($ch);
+            //$info = curl_getinfo($ch);
+            error_log("-curl user response-".print_r($result,1));
+            
+            
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $result;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            /*}else{
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::FAILURE;
+                $responseBean->message = "failure";
+                $responseBean->data = $projectsInfo;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            }*/
+            return $response;
+       } catch (\Throwable $th) {
+            Yii::error("SiteController:actionGetProjectNameByUserid::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+    /**
+    * @author Praveen
+    * @description This is used for for create users via subversion
+    * @param type 
+    * @return array
+    */
+    public function actionShowSvnlog(){
+       try{
+            $postData = json_decode(file_get_contents("php://input"));
+            error_log("------".print_r($postData,1));
+             error_log("------".$postData->repName);
+            $ch = curl_init();
+           
+            $postfields = array();
+            $postfields['projectName'] = $postData->repName;
+            error_log("------".$postfields['projectName']);
+            //$postfields['field2'] = urlencode('value2');
+            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/log.php");
+            curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+            
+            $result = curl_exec($ch);
+            //$info=curl_exec($ch);
+            //$info = curl_getinfo($ch);
+            error_log("-curl response-".print_r($result,1));
+            
+            
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data = $result;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            return $response;
+       } catch (\Throwable $th) {
+            Yii::error("SiteController:actionGetProjectNameByUserid::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+           
 }
 ?>
