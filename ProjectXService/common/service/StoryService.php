@@ -896,7 +896,9 @@ class StoryService {
                              error_log("updateStoryFieldInline---9");
                             $validDate = CommonUtility::validateDate($ticket_data->value);
                                 if($validDate){
+                                     error_log("================++++++++++++++".$validDate);
                                    $ticket_data->value = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
+                                   error_log("&&&&&&&&&&&&&&777++++++++++++++".$ticket_data->value);
                                    $leftsideFieldVal = $ticket_data->value; 
                                 }else{
                                 //error_log("===Field Name==".$leftsideFieldVal);
@@ -1401,7 +1403,10 @@ class StoryService {
                $activityData= $this->saveActivity($postData->ticketId,$postData->projectId,"ChildTask", $ticketNumber,$postData->userInfo->Id,$slug,$timezone);
                $returnStatus=array('Tasks'=>$subTicketDetails,'activityData'=>$activityData);
                /* end Notifications */
-               EventTrait::saveEvent($postData->projectId,"Ticket",$postData->projectId,"created",'create',$loggedInUserId,array("ActionOn"=>  strtolower("childtask"),"OldValue"=>0,"NewValue"=>(int)$ticketNumber),array("BucketId"=>(int)$bucket));
+               
+               //Padmaja-refreeing id is saving wrongly
+//               EventTrait::saveEvent($postData->projectId,"Ticket",$postData->projectId,"created",'create',$loggedInUserId,array("ActionOn"=>  strtolower("childtask"),"OldValue"=>0,"NewValue"=>(int)$ticketNumber),array("BucketId"=>(int)$bucket));
+               EventTrait::saveEvent($postData->projectId,"Ticket",$postData->ticketId,"created",'create',$loggedInUserId,[array("ActionOn"=>  strtolower("childtask"),"OldValue"=>0,"NewValue"=>(int)$ticketNumber)],array("BucketId"=>(int)$bucket));
             }
              return $returnStatus;
          } catch (\Throwable $ex) {
