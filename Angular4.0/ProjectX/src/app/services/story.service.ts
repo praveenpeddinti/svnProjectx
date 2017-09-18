@@ -115,5 +115,16 @@ applyAdvanceFilter(requestParams,applyAdvanceFilterCallback){
     });
 }
 
+deleteAdvanceFilter(projectId,filterId,deleteAdvanceFilterCallback) { 
+   var post_data={
+      'projectId':projectId,
+      'filterId':filterId
+    }
+    this._ajaxService.AjaxSubscribe("story/delete-advance-filter",post_data,(data)=>
+    { 
+         deleteAdvanceFilterCallback(data);
+    });
+  }
+
 
 }

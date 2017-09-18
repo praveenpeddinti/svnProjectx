@@ -19,7 +19,7 @@
          </span>
         </div>
         <div class="custom_selctdropdown float_left marr15" id="filterDropdown">
-          <p-dropdown [style]="{'width':'220px'}" [(ngModel)]="selectedFilter" (onChange)="filterDashboard()" [displayOptions]="FilterOptionToDisplay" [options]="FilterOption" class="dropdown_wrap">
+          <p-dropdown [style]="{'width':'220px'}" [(ngModel)]="selectedFilter" (onDelete)="deleteOption($event)" (onChange)="filterDashboard()" [displayOptions]="FilterOptionToDisplay" [options]="FilterOption" class="dropdown_wrap">
       
           </p-dropdown>
 

@@ -609,7 +609,7 @@ getFilteredData(response){
    let jsonForm = {};
             if (response.statusCode == 200) {
                 var filterData = response.data.filterData;
-                if(filterData==''){
+                if(filterData.length==0){
                 this.rows = response.data.ticketData; 
                 this.rows = response.data.ticketData;
                  this.count =response.totalCount;
@@ -625,7 +625,8 @@ getFilteredData(response){
             "id": filterData.Id,
             "type": "personalfilters",
             "showChild": 1,
-            "isChecked": false
+            "isChecked": false,
+            "canDelete": true
           }
         }
         this.FilterOptionToDisplay[0].filterValue.push(filterOption);
@@ -652,6 +653,22 @@ getFilteredData(response){
  */
 getFilterCriteria(result){
 this.criteriaLabel=result;
+}
+
+deleteOption(event){
+    var thisObj = this;
+  console.log("deleteOptiondeleteOptiondeleteOption"+JSON.stringify(event));
+  this.FilterOptionToDisplay.forEach(element=>{
+      if(element.type==event.type){
+thisObj._service.deleteAdvanceFilter(thisObj.projectId,event.option.value.id,(response)=>{
+     if (response.statusCode == 200) {
+        element.filterValue.splice(event.index, 1);
+     }
+})
+        
+      }
+  })
+
 }
 
     }
