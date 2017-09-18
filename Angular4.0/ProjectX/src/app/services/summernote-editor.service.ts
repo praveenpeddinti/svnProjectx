@@ -105,7 +105,7 @@ export class SummerNoteEditorService
                         // console.log(element+"==========Iddddd===========");
                          var editor=jQuery('#'+element).summernote('code');
                            console.log(editor+"=====**======1111111111=");
-                         editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*$/gi, "");
+                         editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
                           console.log(editor+"=====**=======");
                          if(obj.formB != undefined){
                              obj.formB['description']=editor;
