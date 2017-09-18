@@ -120,22 +120,24 @@ private prepareItemArray(list:any,priority:boolean,status){
 public editorDesc="";
 BucketForAddorEdit(event){
 
-  // alert("BucketForAddorEdit");
-// if(event=='New')
+  var editor=jQuery('#bucketDescId').summernote('code');
+    // this.editorDesc=jQuery(editor).text().trim();
+    editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
+  //alert(editor+"----------------");
+    this.formB['description']=editor;
+    // alert("+++++trm+++++++"+jQuery(editor).text().trim()+"----------------");
+    this.formB['description']=editor;
+    // alert(this.formB['description']+"===form desc");
   this.addBucket();
+
 // else
 //   this.editBucket();
 }
 
 addBucket(){
-    
-    var editor=jQuery('#bucketDescId').summernote('code');
-    // this.editorDesc=jQuery(editor).text().trim();
-    editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*$/gi, "");
-//alert(editor+"----------------");
-    this.formB['description']=editor;
 
 // alert(this.formB['description']);
+
     if(this.Type == "New"){
       // this.formB['description']=editor;
         this._service.saveBucket(this.projectId,this.formB,(response)=>{
@@ -155,7 +157,7 @@ addBucket(){
         }
         });
     }else{
-      //alert("In else"+JSON.stringify(this.formB));
+      // alert("In else"+JSON.stringify(this.formB));
       this._service.updateBucket(this.projectId,this.bucketId,this.formB,(response)=>{
         // alert(JSON.stringify(response)+"******updateBucket***********");
           this.bucketUpdated.emit(response.data);
@@ -169,7 +171,12 @@ checkBucketName(event){
   if(event.trim()=='' || event.trim() == undefined || titlePattern.test(event) == false || event.trim() == this.prevBucketName){
     this.typeAheadResults.flag = false;
     this.typeAheadResults.msg = "";
-      if(titlePattern.test(event) == false){
+    if(event.trim() == ""){
+        this.typeAheadResults.flag = false;
+        this.typeAheadResults.msg = "Bucket name cannot be empty";
+        this.spinnerSettings.color="red";
+        this.spinnerSettings.class = "fa fa-times";
+    }else if(titlePattern.test(event.trim()) == false){
         this.spinnerSettings.color="red";
         this.spinnerSettings.class = "fa fa-times";
       }else{
