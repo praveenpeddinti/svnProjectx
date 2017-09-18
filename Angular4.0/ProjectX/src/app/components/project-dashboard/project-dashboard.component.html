@@ -206,7 +206,10 @@
                </div>
                <div class="row devider1"></div>
                <div class="pro_bucketbg backlog_bg ">
-                  <div class="status_backlog">Backlog</div>
+                  <!--<div class="status_backlog">Backlog</div>-->
+                  <div *ngIf="currentWeekBucket.BucketStatus==1" class="status_backlog">Backlog</div>
+                  <div *ngIf="currentWeekBucket.BucketStatus==3" class="status_complete">Completed</div>
+                  <div *ngIf="currentWeekBucket.BucketStatus==4" class="status_closed">Closed</div>
                   <div class="clearfix">
                       
                          <div [innerHTML]="currentWeekBucket.Description" class="prodashboard_desc marb10">
@@ -283,8 +286,8 @@
                <div class="row devider1"></div>
                <div class="pro_bucketbg backlog_bg ">
                   <div *ngIf="otherBuckets.BucketStatus==1" class="status_backlog">Backlog</div>
-                  <div *ngIf="otherBuckets.BucketStatus==3" class="status_backlog">Completed</div>
-                  <div *ngIf="otherBuckets.BucketStatus==4" class="status_backlog">Closed</div>
+                  <div *ngIf="otherBuckets.BucketStatus==3" class="status_complete">Completed</div>
+                  <div *ngIf="otherBuckets.BucketStatus==4" class="status_closed">Closed</div>
                   <div class="clearfix">
                       
                          <div [innerHTML]="otherBuckets.Description" class="prodashboard_desc marb10"></div>
