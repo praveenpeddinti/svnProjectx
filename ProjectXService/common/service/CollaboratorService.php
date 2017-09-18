@@ -3,7 +3,7 @@
 namespace common\service;
 
 use common\models\mongo\{TicketCollection,TinyUserCollection};
-use common\components\{CommonUtility,CommonUtilityTwo,ServiceFactory,NotificationTrait};
+use common\components\{CommonUtility,CommonUtilityTwo,ServiceFactory,NotificationTrait,SVNUtility};
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
 use common\models\mongo\AccessTokenCollection;
@@ -399,9 +399,11 @@ class CollaboratorService {
             error_log("saven ew user------1111111111----");
             TinyUserCollection::createNewUser($user,$userId);
             if ($userId > 0) {
-                $status = $this->addUserToTeam($projectId, $userId);
+               
                 Collaborators::saveUserProfile($userId, $user->userProfileImage);
                 Settings::saveNotificationsSettingsForUser($userId);
+                $status = $this->addUserToTeam($projectId, $userId);
+                 //SVNUtility::createRepositoryUser($user);
                 $this->invalidateInvite($usermail, $invite_code);
             }
             }else{
