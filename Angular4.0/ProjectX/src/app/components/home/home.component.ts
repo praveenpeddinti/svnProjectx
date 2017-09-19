@@ -317,7 +317,7 @@ export class HomeComponent{
            userId:JSON.parse(this.users.Id),
            repName:this.projName
            }
-           alert(JSON.stringify(sendData));
+        //    alert(JSON.stringify(sendData));
          this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         {  jQuery('#createProjectDiv').show();
            jQuery('#showLogDiv').hide();
