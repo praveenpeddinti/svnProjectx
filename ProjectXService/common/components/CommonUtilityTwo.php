@@ -579,7 +579,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 //                           $getActivities['Year']= $datetime1->format('Y');
                           $getActivities['time']= $Date;
                           $getActivities['ChangeSummary'] = array();
-                        // error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
+                           error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
                                $summary = array();
                                $summary['ActionOn']=!empty($changeSummary['ActionOn'])?$changeSummary['ActionOn']:'';
@@ -700,14 +700,16 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    }
                                     $summary['prepare_text']= $prepare_text;
                                }else if($summary['ActionOn']=='comment'){
-                                   error_log("jhhhk-------------------");
+                                   error_log("jhhhk-------------------comment__comment");
                                    // $prepare_text = array('message' => Yii::$app->params['created']);
                                    error_log("@@@------333333333333--------".$getActivities['ActionType']);
                                     if($getActivities['ActionType']=='comment'){
-                                        error_log("innere22323----");
+                                        error_log("innere22323----222222222");
                                      $prepare_text = Yii::t('app','comment');
                                     }elseif($getActivities['ActionType']=='repliedOn'){
                                         $prepare_text = Yii::t('app','reply');
+                                    }elseif($getActivities['ActionType']=='edit'){
+                                        $prepare_text = Yii::t('app','edit');
                                     }
                                     $summary['action']='';
                                       //error_log("@@@@--".print_r($prepare_text,1));
