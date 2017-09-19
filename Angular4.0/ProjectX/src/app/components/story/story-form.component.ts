@@ -1,4 +1,4 @@
-import { Component,ViewChild,Output } from '@angular/core';
+import { Component,ViewChild,Output,NgZone } from '@angular/core';
 import { StoryService} from '../../services/story.service';
 import { NgForm } from '@angular/forms';
 import {Router,ActivatedRoute} from '@angular/router';
@@ -48,7 +48,7 @@ export class StoryComponent
     public projectName;
     public checkvalue:boolean=false;
     public projectId:any;
-    constructor(private projectService:ProjectService,private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService,private editor:SummerNoteEditorService,private shared:SharedService,private route:ActivatedRoute) {
+    constructor(private projectService:ProjectService,private fileUploadService: FileUploadService, private _service: StoryService, private _router:Router,private mention:MentionService,private _ajaxService: AjaxService,private editor:SummerNoteEditorService,private shared:SharedService,private route:ActivatedRoute,private zone:NgZone) {
         this.filesToUpload = [];
     }
 
@@ -107,6 +107,7 @@ export class StoryComponent
                 if(this.selectedTickets.length==this.taskArray.length)
                 { 
                     this.checkvalue=true;
+                    //this.zone.run(()=>{this.checkvalue=true;})
                 }
                
                 jsonForm['tasks']=this.selectedTickets;//shifted by Ryan from above
@@ -150,7 +151,7 @@ export class StoryComponent
     {
 
         var formobj=this;
-        this.editor.initialize_editor('summernote','keyup',formobj);
+        this.editor.initialize_editor('summernote_create','keyup',formobj);
         jQuery(document)
     .one('focus.autoExpand', 'textarea.autoExpand', function(){
         var savedValue = this.value;
@@ -250,17 +251,17 @@ export class StoryComponent
                    result[i].originalname =  result[i].originalname.replace(/[^a-zA-Z0-9.]/g,'_'); 
                     var uploadedFileExtension = (result[i].originalname).split('.').pop();
                     if(uploadedFileExtension == "png" || uploadedFileExtension == "jpg" || uploadedFileExtension == "jpeg" || uploadedFileExtension == "gif") {
-                        jQuery('#summernote').summernote('code',this.form['description']+"<p>[[image:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" ");
-                        this.form['description'] = jQuery('#summernote').summernote('code');
+                        jQuery('#summernote_create').summernote('code',this.form['description']+"<p>[[image:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" ");
+                        this.form['description'] = jQuery('#summernote_create').summernote('code');
                     } else{
-                        jQuery('#summernote').summernote('code',this.form['description']+"<p>[[file:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" ");
-                        this.form['description'] = jQuery('#summernote').summernote('code');
+                        jQuery('#summernote_create').summernote('code',this.form['description']+"<p>[[file:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" ");
+                        this.form['description'] = jQuery('#summernote_create').summernote('code');
                     }
                 }
                 this.fileUploadStatus = false;
             }, (error) => {
                 console.error("Error occured in story-formcomponent::fileUploadEvent"+error);
-                this.form['description'] =jQuery('#summernote').summernote('code') + "Error while uploading";
+                this.form['description'] =jQuery('#summernote_create').summernote('code') + "Error while uploading";
                 this.fileUploadStatus = false;
             });
     }
@@ -276,11 +277,11 @@ export class StoryComponent
     */
     saveStory(){
         var thisObj = this;
-        var editor=jQuery('#summernote').summernote('code');
-        editor=jQuery(editor).text().trim();
-        this.form['description']=jQuery('#summernote').summernote('code'); //for summernote editor
-        
-       if(editor!='')
+        //var editor=jQuery('#summernote_create').summernote('code'); alert(editor);
+        var editor=this.form['description'];
+        var editorDesc=jQuery(editor).text().trim();
+        //this.form['description']=jQuery('#summernote_create').summernote('code'); //for summernote editor
+       if(editorDesc!='')
        { 
              this.form['default_task']=[];
                 for (let task of this.form['tasks']) {
