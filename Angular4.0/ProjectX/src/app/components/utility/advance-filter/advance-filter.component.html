@@ -1,6 +1,6 @@
  <div type="submit" class="filter float_left marr10" id="advance_filter_icon" (click)="showFilterPanel()"><i class="fa fa-filter" aria-hidden="true"></i></div>
  
- <div *ngIf="showPanel" class="advance_filter_panel">
+ <div *ngIf="showPanel" class="advance_filter_panel" >
 <!--<div *ngFor="let filter of advanceFilter;let i=index;">
     <span>{{filter.type}}</span>
     <div *ngFor="let val of filter.filterValue;let j=index;">
@@ -9,7 +9,8 @@
     </div>
 </div>-->
 
-<div class="arrowbox" id='advFilterPannel'>
+<div class="arrowbox" id='advFilterPannel' style="max-height:300px;overflow:auto;">
+    <div class="activity_hed text-center">ProjectX Filters</div>
   <div class="no_option_selected" *ngIf="filterSelectedError">  {{filterSelectedError}} </div>
 <div *ngFor="let filter of advanceFilter;let i=index;" id="accordion" role="tablist" aria-multiselectable="true" class="clearfix">
 
@@ -23,7 +24,7 @@
     <div  class="devider1"></div>
      <div   id="collapse1_{{i}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
        <div *ngIf="filter.type=='DueDate'" class="marb10">
-       <p-calendar [(ngModel)]="dateObj.dateVal" class="primeDateComponent "  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" dateFormat="M-dd-yy" (onSelect)="selectCustomDate($value,filter.type,i)" ></p-calendar>
+       <p-calendar [(ngModel)]="dateObj.dateVal" class="primeDateComponent filter_date"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" dateFormat="M-dd-yy" (onSelect)="selectCustomDate($value,filter.type,i)" ></p-calendar>
       </div>
        <div *ngFor="let val of filter.filterValue;let j=index; ">
        <!--<div class="filter_but marr10 active">All</div>-->
@@ -36,11 +37,11 @@
     </div>
   
   </div>
-  <div class="clearfix"><input type="text" [(ngModel)]="filterName" placeholder="Save filter as..."  class="customformfields"/>
+  <div class="clearfix"><input type="text" [(ngModel)]="filterName" placeholder="Save filter as..."  class="editinput" style="width:100%;"/>
   <div *ngIf="filterName=='' && filterError!=''" class="fielderror">{{filterError}}</div>
 
   </div>
-  <div class="pull-right">
+  <div class="pull-right" style="margin-top:10px;">
     <div class="model_submit butnbor float_left marr10"  (click)="applyFilter('save')">SAVE</div> <div class="model_submit butnbor float_left" (click)="applyFilter('go')">GO</div>
   </div>
 <div class="clearfix"></div>

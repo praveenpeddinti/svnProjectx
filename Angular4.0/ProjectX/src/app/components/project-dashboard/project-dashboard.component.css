@@ -75,7 +75,7 @@ width: 30px;
 /*Bucket Details*/
 
 .pro_bucketbg{ background:#edf0f6; margin-top:8px; padding:10px; clear:both; color:#637282; font:normal 14px/18px 'open_sansregular';}
-.prodashboard_desc{font:normal 14px/18px 'open_sansregular'; color:#637282;}
+.prodashboard_desc{font:normal 14px/18px 'open_sansregular'; color:#637282; overflow-wrap: break-word;}
 .pro_bucketdetails{color:#695ea5;}
 
 .status_current{ color:#6ed146; font:bold 16px/24px 'open_sansregular';}

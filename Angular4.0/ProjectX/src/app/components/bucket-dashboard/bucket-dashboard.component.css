@@ -12,7 +12,7 @@
 .heading2{font:normal 16px/25px 'open_sansregular'; color:#524693;}
 .heading2:focus{ outline:none; border:none;}
 .pro_bucketbg{ background:#edf0f6; margin-top:8px; padding:10px; clear:both; color:#637282; font:normal 14px/18px 'open_sansregular'; width: 100%; float: left;}
-.prodashboard_desc{font:normal 14px/18px 'open_sansregular'; color:#637282;}
+.prodashboard_desc{font:normal 14px/18px 'open_sansregular'; color:#637282;overflow-wrap: break-word;}
 .pro_bucketdetails{color:#695ea5;}
 .chartbg{ background:#fff; padding:10px;}
 .martb5{ margin-bottom:5px; margin-top:5px;}

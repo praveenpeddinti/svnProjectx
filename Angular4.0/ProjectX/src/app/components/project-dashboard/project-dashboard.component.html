@@ -143,11 +143,11 @@
              <div class="clearfix" *ngFor="let current of currentBucketContainer;let current=index;">
               <div class="row devider1"></div>
                <div class="row">
-                   <div class="col-md-8 col-sm-5 marb10">
-                      <div class="but " [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:current.Id}">{{current.Name}}</div>
+                   <div class="col-md-8 col-sm-5 ">
+                      <div class="but marb10" [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:current.Id}">{{current.Name}}</div>
                    </div>
                    <div class="col-md-4 col-sm-7">
-                      <div class="float_right">
+                      <div class="float_right marb10">
                          <img [src]="current.ProfilePicture" class="userpic"/> {{current.UserName}}
                       </div>
                    </div>
@@ -198,11 +198,11 @@
                    <div *ngFor="let currentWeekBucket of currentWeekBucketContainer;let currentweek=index;"  class="col-md-6">
                    <div class="marb20">
                        <div class="row">
-                   <div class="col-md-6">
-                      <div class="but" [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:currentWeekBucket.Id}">{{currentWeekBucket.Name}}</div>
+                   <div class="col-md-6 col-sm-6">
+                      <div class="but marb10" [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:currentWeekBucket.Id}">{{currentWeekBucket.Name}}</div>
                    </div>
-                   <div class="col-md-6">
-                      <div class="float_right">
+                   <div class="col-md-6 col-sm-6">
+                      <div class="float_right marb10">
                          <img [src]="currentWeekBucket.ProfilePicture" class="userpic"/> {{currentWeekBucket.UserName}}
                       </div>
                    </div>

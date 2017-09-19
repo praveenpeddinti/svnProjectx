@@ -28,7 +28,7 @@
 .activity_hed{ color:#000000; font:normal 18px/30px 'open_sansregular';}
 .activity_datebg{ background:#524693; border:solid 2px #695ea5; display:inline-block; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;  clear:both; margin-bottom:10px; height:35px; padding-right:5px;}
 .activity_datebg .datemonth{ background:#fff; float:left;color:#695ea5;  line-height:30px; border-radius:4px 0px 0px 4px; -moz-border-radius:4px 0px 0px 4px; -webkit-border-radius:4px 0px 0px 4px; padding:1px 6px 0px 6px; font-weight:500;}
-.activity_datebg .datemonth span{ color:#637282!important; text-transform:uppercase; margin-right: 5px;}
+.activity_datebg .datemonth span{ color:#637282!important; text-transform:uppercase;}
 .activity_datebg .Year{float:left; margin-left:5px; color:#fff; line-height:31px;}
 .activities_bg{ border-bottom:solid 1px #c1c7cd; padding:5px 0px 5px 40px; margin-bottom:10px; position:relative; min-height:50px; cursor:pointer; clear: both;}
 .activities_bg .user{ width:30px; height:30px; position:absolute; left:0px; top:10px;}

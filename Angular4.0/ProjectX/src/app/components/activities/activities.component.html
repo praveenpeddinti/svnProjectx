@@ -25,7 +25,7 @@
                                             <span class="" *ngIf="ChangeSummary.NewValueText"> {{ChangeSummary.NewValueText}}</span>
                                         "{{ChangeSummary.NewValue}}" <span *ngIf="!ChangeSummary.prepare_text.includes('replied')" >{{ChangeSummary.prepostion}}</span> {{finalData.Title}}
                                             </div>
-                     <div class="activitypro">({{finalData.time| dateFormat:'hh:mm:ss A'}}) -{{finalData.ProjectName}}</div>
+                     <div class="activitypro">{{finalData.time| dateFormat:'hh:mm:ss A'}} -{{finalData.ProjectName}}</div>
                </a>
                 </span>
                   <span *ngIf ="!finalData.Miscellaneous.Slug">
@@ -46,7 +46,7 @@
                         {{ChangeSummary.NewValue}} {{ChangeSummary.prepostion}} {{finalData.Title}}
                         </span>
                             </div>
-                     <div class="activitypro">({{finalData.time| dateFormat:'hh:mm:ss A'}}) -{{finalData.ProjectName}}</div>
+                     <div class="activitypro">{{finalData.time| dateFormat:'hh:mm:ss A'}} -{{finalData.ProjectName}}</div>
                   </a>
                    </span>   
                 </span>
@@ -60,7 +60,7 @@
                                     <span class="" *ngIf="ChangeSummary.NewValueText"> {{ChangeSummary.NewValueText}}</span>
                                "{{ChangeSummary.NewValue}}" {{ChangeSummary.prepostion}}  {{finalData.ProjectName}}<!--in  {{finalData.Title}}-->
                                            </div>
-                     <div class="activitypro">({{finalData.time| dateFormat:'hh:mm:ss A'}}) -{{finalData.ProjectName}}</div>
+                     <div class="activitypro">{{finalData.time| dateFormat:'hh:mm:ss A'}} -{{finalData.ProjectName}}</div>
                             </span>
                 </div> 
                 

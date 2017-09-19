@@ -1826,6 +1826,16 @@ input:focus{outline: none!important;}
 /*.filter_del .ng-tns-c3-0:first-child .ui-dropdown-item{ background:none!important;}
 .filter_del .ng-tns-c3-0:first-child .ui-dropdown-item:hover{ background:none!important;}
 .filter_del .ng-tns-c3-0:first-child .ui-dropdown-item span:first-child:hover{background:none!important;}*/
+img{border:none; outline:none;}
+.border_none{ border: none; outline: none;}
+/* .filter_date .ui-calendar .ui-calendar-w-btn input{width:100%!important;}
+.filter_date .ui-calendar .ui-calendar-w-btn button{right:0px!important;} */
+.filter_date .ui-calendar{display:block!important;}
+/* .filter_date .primeDateComponent button{left: 92%!important;} */
+.filter_date .ui-calendar button{ height:29px;}
+.filter_date button {
+    left: 92%!important;
+}
 
 
  @media (max-width:767px){
