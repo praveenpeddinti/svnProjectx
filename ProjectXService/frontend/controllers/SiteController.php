@@ -831,11 +831,11 @@ class SiteController extends Controller
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
-                $responseBean->data = $result;
+                $responseBean->data =  json_decode($result) ;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             return $response;
        } catch (\Throwable $th) {
-            Yii::error("SiteController:actionGetProjectNameByUserid::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+            Yii::error("SiteController:actionCreateRepository::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
@@ -888,7 +888,7 @@ class SiteController extends Controller
             }*/
             return $response;
        } catch (\Throwable $th) {
-            Yii::error("SiteController:actionGetProjectNameByUserid::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+            Yii::error("SiteController:actionCreateUser::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
@@ -934,7 +934,7 @@ class SiteController extends Controller
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             return $response;
        } catch (\Throwable $th) {
-            Yii::error("SiteController:actionGetProjectNameByUserid::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+            Yii::error("SiteController:actionShowSvnlog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
@@ -942,6 +942,10 @@ class SiteController extends Controller
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
         }
+    }
+    
+    public function actionDirectTest(){
+        echo json_encode(scandir("/usr/share/nginx/www/ProjectX"));
     }
            
 }
