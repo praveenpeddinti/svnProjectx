@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-md-8">
-        <div class="dashboard_userbg">
+        <!--<div class="dashboard_userbg">
             <div class="user"><img alt="" src="{{profilePicture}}" /></div>
             <div class="userinfo">{{users.username}}
             <span class="clearfix">{{users.Email}}</span>
@@ -18,13 +18,13 @@
             </div>
             
             
-        </div>
+        </div>-->
     </div>
    </div> 
 
 
          <!-- popup Starts -->
-             <div class="modal fade custommodel"  id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+             <!--<div class="modal fade custommodel"  id="addProjectModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -75,12 +75,12 @@
        </form>
     </div>
   </div>
-</div>
+</div>-->
 <!-- popup Ends -->
-    <div *ngIf="assignedToDataCount==0 && followersDetailsCount==0">
+    <!--<div *ngIf="assignedToDataCount==0 && followersDetailsCount==0">
     Welcome To ProjectX
-    </div>
-<div *ngIf="assignedToDataCount!=0 || followersDetailsCount!=0">
+    </div>-->
+<div >
         <div class="container " id="nosearchdiv" >
 <ul class="nav nav-tabs">
 <!--<li class="active"><a (click)="callprojectsByClick(1)" data-toggle="tab">All Projects</a></li>
@@ -95,7 +95,7 @@
     <div id="showLogDiv">{{this.repo}}</div>
   <div class="tab-content tab-content_content" >
 
- <div class="col-md-12"> 
+ <!--<div class="col-md-12"> 
       <div *ngIf="projectFlag!=2" >
     <div class="widgethed "> 
         Projects({{totalProjectCount}})
@@ -115,9 +115,9 @@
       </div>
        </div>
     </div>
-</div>
-<div class="row">
-<div *ngIf="projectFlag!=2 && projectDetails!=''">
+</div>-->
+<!--<div class="row">-->
+<!--<div *ngIf="projectFlag!=2 && projectDetails!=''">
 <div *ngFor=" let finalData of projectDetails" > 
 <div class="col-md-3 col-sm-6">
         <div class="dashboard_project">
@@ -169,8 +169,8 @@
 <app-activities [activityDetails]="activityDetails"></app-activities>
  </div>
 
-</div>
-<div id="searchsection"></div>
-    </div>
+</div>-->
+<!--<div id="searchsection"></div>
+    </div>-->
 
 </div>

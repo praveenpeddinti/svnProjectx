@@ -50,42 +50,65 @@ export class HomeComponent{
     public activityDropdownFlag=0;
     public activitydropdownDetails=[];
     public ProjectId;
+
+    private projName;
     //public offset=0;
     public rows = [];
       ngOnInit() {
+          this.route.queryParams.subscribe(
+        params => 
+            { 
+                this.projName=params['ProjectName'];
+                // alert(params["BucketId"]);
+            //     thisObj.navBucketId = params["BucketId"];
+            // thisObj.route.params.subscribe(params => {
+            //     thisObj.projectName=params['projectName'];
+            //     thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
+            //     if(data.statusCode!=404) {
+            //         this.page = 0;
+            //     //   alert("+++++++++");
+            //         thisObj.projectId=data.data.PId;
+            //         thisObj.load_bucketContents(1,'','');
+            //         thisObj.projectActivities(this.page);
+            //         //this.shared.change(this._router.url,null,'Time Report','Other',thisObj.projectName);
+            //     }
+            //     });
+            // });
+        })
          // alert("----home");
-       localStorage.setItem('ProjectName','');
-       localStorage.setItem('ProjectId','');
-        this.shared.change('','','','','');
-      //  alert("----home"+localStorage.getItem('ProjectName'));
-      //  alert("3333333333333333");
-               this.load_contents(this.page,'',this.limit,this.flag,this.activityPage,this.ProjectId,this.activityDropdownFlag,'unscroll');
-       var thisObj=this;
-                    jQuery(document).ready(function(){
-            jQuery(window).scroll(function() {
-                    if (thisObj.dashboardScroll && jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height())) {
-                        thisObj.dashboardScroll=false;
-                    //     alert("flagggggggggg------------"+thisObj.dashboardScroll);
-                    //  alert("before------------"+thisObj.page);
-                        thisObj.page++;
-                    //  alert("After------------"+thisObj.flag);
-                       if(thisObj.flag==2){
-                           thisObj.activityPage++;
-                      //     alert("After--33333----------"+thisObj.activityPage);
-                       }
-                        console.log("loading-------------");
-                      //     setTimeout(() => { 
-                        thisObj.load_contents(thisObj.page,thisObj.projectFlag,thisObj.limit,thisObj.flag,thisObj.activityPage,thisObj.ProjectId,thisObj.activityDropdownFlag,'scroll');
-                      //    },2000); 
+    //    localStorage.setItem('ProjectName','');
+    //    localStorage.setItem('ProjectId','');
+    //     this.shared.change('','','','','');
+    //   //  alert("----home"+localStorage.getItem('ProjectName'));
+    //   //  alert("3333333333333333");
+    //            this.load_contents(this.page,'',this.limit,this.flag,this.activityPage,this.ProjectId,this.activityDropdownFlag,'unscroll');
+    //    var thisObj=this;
+    //                 jQuery(document).ready(function(){
+    //         jQuery(window).scroll(function() {
+    //                 if (thisObj.dashboardScroll && jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height())) {
+    //                     thisObj.dashboardScroll=false;
+    //                 //     alert("flagggggggggg------------"+thisObj.dashboardScroll);
+    //                 //  alert("before------------"+thisObj.page);
+    //                     thisObj.page++;
+    //                 //  alert("After------------"+thisObj.flag);
+    //                    if(thisObj.flag==2){
+    //                        thisObj.activityPage++;
+    //                   //     alert("After--33333----------"+thisObj.activityPage);
+    //                    }
+    //                     console.log("loading-------------");
+    //                   //     setTimeout(() => { 
+    //                     thisObj.load_contents(thisObj.page,thisObj.projectFlag,thisObj.limit,thisObj.flag,thisObj.activityPage,thisObj.ProjectId,thisObj.activityDropdownFlag,'scroll');
+    //                   //    },2000); 
                         
-                    }
+    //                 }
                 
-                    });
-            });
-             this.getAllProjectNames();
+    //                 });
+    //         });
+    //          this.getAllProjectNames();
    }
      constructor(
           private _router: Router,
+          private route: ActivatedRoute,
          private _service: LoginService,
           private _authGuard:AuthGuard,
           private shared:SharedService,
@@ -292,9 +315,9 @@ export class HomeComponent{
     createProject(){
     var sendData={
            userId:JSON.parse(this.users.Id),
-           repName:'ProjectXaq'
+           repName:this.projName
            }
-           
+           alert(JSON.stringify(sendData));
          this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         {  jQuery('#createProjectDiv').show();
            jQuery('#showLogDiv').hide();

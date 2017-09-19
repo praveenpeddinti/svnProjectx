@@ -66,7 +66,7 @@ import { NgPasswordHelperModule, NgPasswordRulesService} from 'ng-password-helpe
 const ROUTES=[
               {path: '',redirectTo: 'login',pathMatch: 'full' },
               {path: '404',component: PageNotFoundComponent },
-              {path: 'home',children:[
+              {path: 'svn/:projectName',children:[
                 { path: '' , component: HomeComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}

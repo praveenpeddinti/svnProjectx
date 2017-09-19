@@ -266,5 +266,9 @@ export class ProjectDashboardComponent implements OnInit {
     }
   }
 
+  gotoRepo(projName){
+    this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName}});
+  }
+
  
 }
