@@ -586,6 +586,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                 if( $summary['ActionOn']=='duedate'){
                                 $prepare_text = Yii::t('app','dueDate');
                                 $summary['prepare_text']= $prepare_text;
+                                $summary['prepostion']= '';
                                 $summary['action']='';
                                 if(!empty($changeSummary['OldValue'])){
                                     $datetime1=$changeSummary['OldValue']->toDateTime();
@@ -609,26 +610,26 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     $summary['NewValue'] ='';
                                     $summary['NewValueText']='';
                                 }  
-                                
+                                $summary['prepostion']= 'for';
                                }else if($summary['ActionOn']=='totaltimelog' ){
                                   $prepare_text = Yii::t('app','TotalTimeLog');
                                   $summary['prepare_text']= $prepare_text;
-                                  $summary['action']='Total Time Log';
+                                  $summary['action']='Total Time Log';   
                                    if(!empty($changeSummary['OldValue'])){
-                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValue']=number_format(round($changeSummary['OldValue'],2), 1);
                                        $summary['OldValueText']='from';
                                    }else{
                                        $summary['OldValue'] ='';
                                        $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
-                                       $summary['NewValue']=$changeSummary['NewValue'];
-                                       $summary['NewValueText']='to';
+                                       $summary['NewValue']= number_format(round($changeSummary['NewValue'],2), 1);             
+                                        $summary['NewValueText']='to';
                                    }else{
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
                                    }
-                                 
+                                 $summary['prepostion']= 'for';
                                }elseif($summary['ActionOn']=='estimatedpoints' || $summary['ActionOn']=='dod' ){
                                     $prepare_text = Yii::t('app','set');
                                     $summary['action']=Yii::t('app',$summary['ActionOn']);
@@ -647,11 +648,12 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValueText']='';
                                    }
                                     $summary['prepare_text']= 'has '.$prepare_text;
-                               }else if($summary['ActionOn']=='description'){
+                                     $summary['prepostion']= 'for';
+                               }else if($summary['ActionOn']=='description' || $summary['ActionOn']=='tickettype'){
                                    error_log("@@@------------");
                                     $prepare_text = Yii::t('app','TotalTimeLog');
                                     $summary['prepare_text']= $prepare_text;
-                                    $summary['action']=$actionOn;
+                                    $summary['action']=($summary['ActionOn']=='description')?$actionOn:'type';
                                     if(!empty($changeSummary['OldValue'])){
                                         
                                        $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 80);
@@ -669,6 +671,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
                                    }
+                                    $summary['prepostion']= 'for';
                                }else if($summary['ActionOn']=='projectcreation' ||$summary['ActionOn']=='bucketcreation'||$summary['ActionOn']=='childtask'){
                                    error_log("here454545-----".$summary['ActionOn']);
                                    // $prepare_text = array('message' => Yii::$app->params['created']);
@@ -694,17 +697,20 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        }
                                     }else{
                                        $summary['NewValue'] ='';
-                                       $summary['NewValueText']='';
+                                       $summary['NewValueText']=''; 
                                    }
                                     $summary['prepare_text']= $prepare_text;
+                                    $summary['prepostion']= 'for';
                                }else if($summary['ActionOn']=='comment'){
                                    error_log("jhhhk-------------------comment__comment");
                                    // $prepare_text = array('message' => Yii::$app->params['created']);
                                    error_log("@@@------333333333333--------".$getActivities['ActionType']);
                                     if($getActivities['ActionType']=='comment'){
-                                     $prepare_text = Yii::t('app','comment');
+                                    $prepare_text =(strpos($changeSummary['NewValue'], '@')!==false)? (Yii::t('app','mention')):(Yii::t('app','comment'));
+                                    // $prepare_text = Yii::t('app','comment');
                                     }elseif($getActivities['ActionType']=='repliedOn'){
-                                        $prepare_text = Yii::t('app','reply');
+                                        $prepare_text =(strpos($changeSummary['NewValue'], '@')!==false)? (Yii::t('app','mention')):(Yii::t('app','reply'));
+                                      //  $prepare_text = Yii::t('app','reply');
                                     }elseif($getActivities['ActionType']=='edit'){
                                         $prepare_text = Yii::t('app','edit');
                                     }
@@ -723,12 +729,13 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    }
                                     if(!empty($changeSummary['NewValue'])){
                                        $summary['NewValue']=($getActivities['ActionType']=='repliedOn')?'':CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
-                                       $summary['NewValueText']=($getActivities['ActionType']=='repliedOn')?'':'to';
+                                       $summary['NewValueText']=($getActivities['ActionType']=='repliedOn')?'':'';
                                    }else{
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
                                    }
                                     $summary['prepare_text']= $prepare_text;
+                                    $summary['prepostion']= 'on';
                                }else if($summary['ActionOn']=='bucket'|| $summary['ActionOn']=='workflow'){
                                    error_log("jhhhk-------------------");
                                      $prepare_text = Yii::t('app','TotalTimeLog');
@@ -749,6 +756,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValueText']='';
                                    }
                                  $summary['prepare_text']= $prepare_text;
+                                 $summary['prepostion']= 'for';
                                }else if($summary['ActionOn']=='relatetask'|| $summary['ActionOn']=='unrelatetask'){
                                    error_log("jhhhk----------^^^^^^^^^^^^^---------");
                                     
@@ -775,6 +783,54 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValueText']='';
                                    }
                                     $summary['prepare_text']= $prepare_text;
+                                    $summary['prepostion']= 'for';
+                               }else if($summary['ActionOn']=='assignedto'|| $summary['ActionOn']=='stakeholder'){
+                                   error_log("jhhhk----------^^^^^^^^^^^^^---------");
+                                    $prepare_text = Yii::t('app','assigned');
+                                     if($summary['ActionOn']=='stakeholder'){
+                                         $prepare_text = Yii::t('app','stakeholder');
+                                    }
+                                    $summary['action']='';
+                                    if(!empty($changeSummary['OldValue'])){
+                                    //   $tinyUserDetails=TinyUserCollection::getMiniUserDetails($changeSummary['OldValue']);
+                                    //   $setNewVal=$tinyUserDetails['UserName'];
+                                       $summary['OldValue']='';
+                                       $summary['OldValueText']='';
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                        $tinyUserDetails=TinyUserCollection::getMiniUserDetails($changeSummary['NewValue']);
+                                        $setNewVal=$tinyUserDetails['UserName'];
+                                        error_log("setNew--@@@@@@@@@@@@@@@@@@@@@@@@--".$setNewVal);
+                                        $summary['NewValue']=$setNewVal;
+                                        $summary['NewValueText']='';
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
+                                   }
+                                    $summary['prepare_text']= $prepare_text;
+                                    $summary['prepostion']= 'to';
+                               }elseif($summary['ActionOn']=='followed' || $summary['ActionOn']=='unfollowed' ){
+                                    $prepare_text = '';
+                                    $summary['action']=Yii::t('app',$summary['ActionOn']);
+                                   if(!empty($changeSummary['OldValue'])){
+                                       $summary['OldValue']='';
+                                       $summary['OldValueText']='';
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $summary['NewValue']='';
+                                       $summary['NewValueText']='';
+                                   }else{
+                                       $summary['NewValue'] ='';
+                                       $summary['NewValueText']='';
+                                   }
+                                    $summary['prepare_text']= $prepare_text;
+                                     $summary['prepostion']= '';
                                }else{
                                     error_log("jhhhk------34444444444-------------");
                                     $prepare_text='';
@@ -797,6 +853,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValueText']='to';
                                    }
                                     $summary['prepare_text']= $prepare_text;
+                                     $summary['prepostion']= 'for';
                                }
                             array_push($getActivities['ChangeSummary'], $summary);  
                            }

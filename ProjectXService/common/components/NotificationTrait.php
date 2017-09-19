@@ -455,6 +455,8 @@ trait NotificationTrait {
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
             // error_log("=+++++++++=save notifications=+++++++____".print_r($notification_data,1));
             $ticketDetails = TicketCollection::getTicketDetails($ticketId, $projectId);
+            //error_log("=+++++++++=save notifications=+++++++____".print_r($ticketDetails,1));
+
             $followers = $ticketDetails['Followers'];
             $bucket = $ticketDetails["Fields"]["bucket"]["value"];
             $followers = CommonUtility::filterFollowers($followers);
@@ -527,7 +529,7 @@ trait NotificationTrait {
 //                    }
                 }
             } else if ($fieldType == 6) {
-                                  error_log("===========333333333333333333============");
+                                 
 
                 $oldCollaborator = $oldValue;
                 $newCollaborator = $activityOn; //this is a field value....
@@ -542,6 +544,7 @@ trait NotificationTrait {
                     $displayAction = "set";
                     $actionType = "set";
                 }
+                 error_log("===========333333333333333333============".$oldValue."++++".$newCollaborator);
 //               // error_log("==activity on== newCollaborator==========" . $newCollaborator);
 //                $tic = new NotificationCollection();
 //                $tic->CommentSlug = $slug;
@@ -570,6 +573,7 @@ trait NotificationTrait {
 //                }
                 //self::sendMail($ticketDetails,$loggedInUser, $newCollaborator,$notify_type);   
                 //}
+                 EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" => strtolower($notify_type), "OldValue" => $oldValue, "NewValue" => $activityOn)], array("BucketId" => (int) $bucket));
             } else if ($fieldType == "FollowObj") {
                 if ($loggedInUser != $activityOn) {
                     error_log("follow object firsrt case((((((((((((***");
@@ -599,8 +603,10 @@ trait NotificationTrait {
 //                        if($bulkUpdate=='')
 //                        EventTrait::saveEvent($projectId,"Ticket",$ticketId,$displayAction,$actionType,$loggedInUser,[array("ActionOn"=>  strtolower($fieldType),"OldValue"=>0,"NewValue"=>(int)$tic->NewValue)],array("BucketId"=>(int)$bucket));
 //                    }
+                  
                 }
             } else if (($notifyType != "Description" && $notifyType != "Title" && $notifyType != "TotalTimeLog") && ($fieldType != "Description" && $fieldType != "Title" && $fieldType != "TotalTimeLog") && ($activityOn !== "ChildTask" && $activityOn != "TicketRelation")) { //This is for left hand property changes
+                error_log("@@@@@@@----------------+++++++++++");
                 $oldFieldId = $oldValue;
                 $newFieldId = $activityOn;
                 $newValue = self::getFieldChangeValue($notifyType, $newFieldId,$projectId);
@@ -677,9 +683,11 @@ trait NotificationTrait {
                     array_push($notificationIds, $notificationId);
                     if ($bulkUpdate == '')
                         EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" => strtolower($notify_type), "OldValue" => $tic->OldValue, "NewValue" => $tic->NewValue)], array("BucketId" => (int) $bucket));
+                    error_log("hellooo----2222-++");
+                    
                 }
             } else if ($fieldType == "FollowObj") {
-
+                error_log("folloererer----------------------------");
                 $tic->ActivityOn = $fieldType;
                 if ($loggedInUser == $activityOn) {
                     $notification_Type = ($notifyType == 'add') ? 'followed' : 'unfollowed';
@@ -698,6 +706,7 @@ trait NotificationTrait {
                     $notificationId = $tic->_id;
                     array_push($notificationIds, $notificationId);
                 }
+                  EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" =>$displayAction, "OldValue" => $oldValue, "NewValue" => $activityOn)], array("BucketId" => (int) $bucket));
             } else if ($fieldType == 6) {
 
                 error_log("hey---------------------**");
