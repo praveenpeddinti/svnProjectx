@@ -40,6 +40,7 @@ export class CreateBucketComponent implements OnInit {
   private BucketFilterOption=[];
   private BucketFilterOptionToDisplay=[];
   private bucketSuccessMsg="";
+  private dueDateMsg="";
   private bucketMsgClass="";
   private prevBucketName = "";
   private minDate = new Date();
@@ -128,7 +129,17 @@ BucketForAddorEdit(event){
     // alert("+++++trm+++++++"+jQuery(editor).text().trim()+"----------------");
     this.formB['description']=editor;
     // alert(this.formB['description']+"===form desc");
-  this.addBucket();
+    var startDate = this.formB['startDateVal'].toLocaleDateString();
+    alert(startDate+"start date");
+    var endDate=new Date(this.formB['dueDateVal']).toLocaleDateString();
+    alert(endDate+"due date");
+   if(endDate>=startDate){
+          this.addBucket();
+    }else{
+          this.bucketMsgClass='fielderror';
+          this.bucketSuccessMsg = 'End Date is must be greater or equal to Start Date.';
+     }
+ 
 
 // else
 //   this.editBucket();
@@ -221,6 +232,7 @@ clearForm(resetEditForm){
   this.submitted = false;
   this.bucketSuccessMsg="";
   this.bucketMsgClass="";
+  this.dueDateMsg="";
 
     this.formB['startDateVal']=new Date();
     jQuery('#bucketDescId').summernote('code','');
