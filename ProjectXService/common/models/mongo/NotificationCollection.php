@@ -224,7 +224,6 @@ class NotificationCollection extends ActiveRecord
 //                    )),
                 );
             $notifications = $query->aggregate($pipeline);
-            echo ("=========================+************************8".print_r($notifications,1)."===========");exit;
             return $notifications;  
         } catch (\Throwable $ex) {
             Yii::error("NotificationCollection:getNotificationDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

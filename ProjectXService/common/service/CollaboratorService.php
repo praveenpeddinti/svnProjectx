@@ -365,7 +365,7 @@ class CollaboratorService {
             return $preparedDahboard;
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getUserDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
-            throw new ErrorException($ex->getMessage());
+            throw new ErrorException($ex->getMessage()."____".$ex->getTraceAsString());
         }
     }
 
@@ -379,18 +379,24 @@ class CollaboratorService {
     public function saveNewUser($projectId, $user,$code) {
         try { 
             $userId='';
+            
+            error_log($projectId."11111111"."2222222222222222".$code);
             $isUserExist = Collaborators::getCollaboratorByEmail($user->email);
             if($isUserExist==''){
+                error_log("6666666666666666666666");
             $userId = Collaborators::createUser($user);
             $extension = CommonUtility::getExtension($user->originalImageName);
             $extension = strtolower($extension);
+            error_log("AAAAAAAAAAAAAAAAAAAAAa");
             $userName =  $user->firstName."".$user->lastName;
             $newImagePath = $userName."_".$userId.".".$extension;
+            error_log("BBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            error_log("________Image__path_________".$user->userProfileImage);
             $userProfileTempPath = Yii::$app->params['ProjectRoot'].$user->userProfileImage;
-            //error_log("userProfileTempPath----".$userProfileTempPath);
+            error_log("userProfileTempPath----3333333333333333333333".$userProfileTempPath);
             $newFilePath = Yii::$app->params['UserProfilePath']."".$newImagePath;
             $userNewProfilePath = Yii::$app->params['ProjectRoot']. $newFilePath ;
-           // error_log("userNewProfilePath----".$userNewProfilePath);  
+            error_log("userNewProfilePath----4444444444444444444444444".$userNewProfilePath);  
             rename($userProfileTempPath,$userNewProfilePath);
            // $logo=$postData->projectName."_".$returnId.".$fileExt";
             $user->userProfileImage = $newFilePath;
@@ -746,7 +752,6 @@ class CollaboratorService {
     public function checkUserInTeam($projectId,$email){
         try{
             $user=Collaborators::findUserInTeam($projectId,$email);
-            error_log("Users Data--".print_r($user,1));
             if($user!=''){
                 return 'exist';
             }else{

@@ -102,7 +102,7 @@ class EventCollection extends ActiveRecord
             $matchArray = ['Status'=>(int)1];
           
             $attributes = self::getEventAttribute();
-            error_log("$$$$$+++++++==++++++++$$$$".print_r($postData,1));
+//            error_log("$$$$$+++++++==++++++++$$$$".print_r($postData,1));
             foreach ($attributes as $attribute){
                 if(property_exists($postData->attributes, $attribute)){
                     if($postData->attributes->$attribute != null && $postData->attributes->$attribute != ""){
@@ -376,7 +376,6 @@ class EventCollection extends ActiveRecord
                     );
              $query = Yii::$app->mongodb->getCollection('EventCollection');
              $activityBucketCount=$query->aggregate($pipeline);
-             error_log("==Activity Bucket Count==".print_r($activityBucketCount,1));
              return $activityBucketCount;
         }catch (\Throwable $ex) {
             Yii::error("EventCollection:getCurrentWeekActiveBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

@@ -171,7 +171,6 @@ class TicketCollection extends ActiveRecord
         public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
         try {
             $ticketDetails = [];
-            error_log("data-----------".print_r($StoryData,1));
             $conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
                 if($StoryData->filterOption->type=='general'){
@@ -248,7 +247,6 @@ class TicketCollection extends ActiveRecord
            }
         }
         
-        error_log("-----------ANAND----".print_r($conditions,1));
             if ($StoryData->sortorder == 'desc')
                 $order = -1;
             if ($StoryData->sortorder == 'asc')

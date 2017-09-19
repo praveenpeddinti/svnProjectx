@@ -118,7 +118,6 @@ class PersonalizedFilterCollection extends ActiveRecord {
     public static function deleteAdvanceFilter($filterDta){
         try{
               $collection = Yii::$app->mongodb->getCollection('PersonalizedFilterCollection');
-              error_log("deleteAdvanceFilter__".print_r($filterDta,1));
               $conditions = array("ProjectId" => (int)$filterDta->projectId,"Id" => $filterDta->filterId,'UserId'=>(int)$filterDta->userInfo->Id);
              return $collection->remove($conditions);
         } catch (\Throwable $ex) {

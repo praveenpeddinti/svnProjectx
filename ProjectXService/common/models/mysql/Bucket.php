@@ -121,7 +121,6 @@ class Bucket extends ActiveRecord
            
             $bucketsQuery = "SELECT b.*,bs.Name as BucketStatusName FROM Bucket b,BucketStatus bs WHERE b.Id=$bucketData->bucketId AND b.Status=1 AND b.Projectid=$bucketData->projectId and b.BucketStatus = bs.Id"; 
         $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
-        error_log("----------------------".print_r($bucketDetails,1));
         return $bucketDetails;
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -466,8 +465,6 @@ class Bucket extends ActiveRecord
                    return $a['count']<=$b['count'];
                });
                
-               error_log("==After Sort Array==".print_r($currentWeekBuckets,1));
-               error_log("==Bucket Ids==".print_r($bucketIds,1));
                if(!empty($bucketIds[0])){ 
                     $ids= implode(",",$bucketIds);
                     error_log("==Ids==".$ids);

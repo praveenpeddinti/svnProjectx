@@ -160,7 +160,7 @@ class TicketTimeLog extends ActiveRecord
         try {
             $toDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($StoryData->toDate)));
             $skip = $StoryData->offset * $StoryData->pagesize;
-            $limit = $skip + $StoryData->pagesize; error_log("----Member Ids---".print_r($StoryData->members,1));
+            $limit = $skip + $StoryData->pagesize; 
             $selectedMembers=array();
             $members=$StoryData->members;
             foreach($members as $member){
@@ -380,7 +380,6 @@ class TicketTimeLog extends ActiveRecord
                 ),
             );
             $Arraytimelog = $query->aggregate($pipeline);
-            error_log("log--ggggggggggggg----".print_r($Arraytimelog,1));
             return $Arraytimelog;  
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:getTotalTimeLogByProject::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

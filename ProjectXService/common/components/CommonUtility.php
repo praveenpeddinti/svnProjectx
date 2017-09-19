@@ -1009,7 +1009,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }
            if($poppedFromChild !=""){
                 $ticketDetails = TicketCollection::getTicketDetails($poppedFromChild, $projectId,["TicketId","Title"]);
-                error_log(print_r($ticketDetails,1));
                 $ticketInfo = $ticketDetails["TicketId"]." ".$ticketDetails["Title"];
                 $property["ActionFieldTitle"] = $property["ActionFieldTitle"];
                 $property["ActionFieldType"] = $type;
@@ -1227,14 +1226,12 @@ $text_message=$html . $text_message .
     public static function searchStringCountForProjectwise($ticketCommentsCount){
         try{
             $individualCount=array();
-            error_log("@@@@@---".print_r($ticketCommentsCount,1));
             if(!empty($ticketCommentsCount)){
                 foreach($ticketCommentsCount as $extractProjectCount){
                    // error_log("@@@@@---".print_r($extractProjectCount,1));
                     error_log("########--------".$extractProjectCount['_id']['ProjectId']);
                   //  array_push($individualCount, $extractProjectCount['ProjectId']);
                 }
-                 error_log("**********".print_r($individualCount,1));
                 return $projectwiseCount = array_count_values($individualCount);
             }else{
               return $projectwiseCount =0;  
@@ -1297,7 +1294,6 @@ $text_message=$html . $text_message .
                 );
                 if(!empty($pName)){
                    $getProjectInfo= Projects::getProjectDetails($pName);
-                   error_log("aaeae^^^^^^^^^^^^^^^".print_r($getProjectInfo,1));
                    $projectId=$getProjectInfo['PId'];
                 }
                 //error_log("search------------".print_r($options,1));
@@ -2446,7 +2442,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                     $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
                     $cursorCountTinyUser=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array());
                     $tinyUserDataCount = iterator_to_array($cursorCountTinyUser);
-                error_log("ticketuserCount-----sdfdsf------".print_r($tinyUserDataCount,1));
                     $prepareArrayForAllCount=array(count($ticketCollectionCount),count($ticketCommentsCount),count($ticketArtifactsCount),count($tinyUserDataCount));
                     $getAllCount=array_sum($prepareArrayForAllCount);  
                     $dataCount=array();

@@ -317,6 +317,7 @@ class Collaborators extends ActiveRecord
     public static function getCollaboratorByEmail($email)
     {
         try{
+            error_log("Log___________________________".$email);
             $qry = "select Id from Collaborators where Email='$email'";
             $data = Yii::$app->db->createCommand($qry)->queryOne();   
             return $data;
@@ -344,7 +345,6 @@ class Collaborators extends ActiveRecord
             $collaborator->Password=md5($user->password);
             $collaborator->OrganizationId=1;
             $collaborator->save();
-            error_log("==primary key==".print_r($collaborator->primaryKey(),1));
             return  $collaborator->primaryKey;
             
         } catch (\Throwable $ex) {

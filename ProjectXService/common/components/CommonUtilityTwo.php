@@ -578,7 +578,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 //                           $getActivities['Year']= $datetime1->format('Y');
                           $getActivities['time']= $Date;
                           $getActivities['ChangeSummary'] = array();
-                           error_log("changee-------".print_r($activitiesArray['ChangeSummary'],1));
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
                                $summary = array();
                                $summary['ActionOn']=!empty($changeSummary['ActionOn'])?$changeSummary['ActionOn']:'';

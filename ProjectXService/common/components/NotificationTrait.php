@@ -289,7 +289,6 @@ trait NotificationTrait {
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
             $oldValue = "";
             $commentOwnerName = Collaborators::getCollaboratorById($commentOwner);
-            error_log("------------------------".print_r($commentOwnerName['UserName'],1));
 
             if ($notify_type == "edit") {
                 $OldNotfication = NotificationCollection::getNotificationDetail($slug, $ticketId, $projectId);
@@ -387,7 +386,6 @@ trait NotificationTrait {
                     $notificationId = $tic->_id;
                     array_push($notificationIdsArray, $notificationId);
                 }
-                error_log("===========================". print_r($CollaboratorNotifications, 1));
                 // seprate record for comment owner
                 $collaboratorIds = array();
                 if ($commentOwner != '' && $commentOwner != $loggedinUser) {
@@ -457,7 +455,6 @@ trait NotificationTrait {
             $currentDate = new \MongoDB\BSON\UTCDateTime(time() * 1000);
             // error_log("=+++++++++=save notifications=+++++++____".print_r($notification_data,1));
             $ticketDetails = TicketCollection::getTicketDetails($ticketId, $projectId);
-            error_log("=+++++++++=save notifications=+++++++____".print_r($ticketDetails,1));
             $followers = $ticketDetails['Followers'];
             $bucket = $ticketDetails["Fields"]["bucket"]["value"];
             $followers = CommonUtility::filterFollowers($followers);
@@ -1006,7 +1003,6 @@ error_log("-------------------------55555555555555----------------".$notificatio
      */
     public static function sendEmailNotification($notificationIds, $projectId, $bulkUpdate = 0) {
         try {
-            error_log("sendEmailNotification____==============" . print_r($notificationIds, 1));
             $notificationIds = json_encode($notificationIds);
             // error_log("send e,ao;=======222222222===============");
             $path = "/data/logs/ProjectX";
