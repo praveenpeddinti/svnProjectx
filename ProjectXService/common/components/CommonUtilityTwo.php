@@ -289,7 +289,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                      $projectInfo['storyPoints']=  self::getTotalStoryPoints($extractDetails['ProjectId'],$userId);
                       array_push($prepareDetails,$projectInfo);
                     }
-                    error_log("prepareProjectsForUserDashboard______________".print_r($prepareDetails,1));
                     return $prepareDetails;
              } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:prepareProjectDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -704,12 +703,14 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    // $prepare_text = array('message' => Yii::$app->params['created']);
                                    error_log("@@@------333333333333--------".$getActivities['ActionType']);
                                     if($getActivities['ActionType']=='comment'){
-                                        error_log("innere22323----222222222");
                                      $prepare_text = Yii::t('app','comment');
                                     }elseif($getActivities['ActionType']=='repliedOn'){
                                         $prepare_text = Yii::t('app','reply');
                                     }elseif($getActivities['ActionType']=='edit'){
                                         $prepare_text = Yii::t('app','edit');
+                                    }
+                                    elseif($getActivities['ActionType']=='delete'){
+                                        $prepare_text = Yii::t('app','delete');
                                     }
                                     $summary['action']='';
                                       //error_log("@@@@--".print_r($prepare_text,1));
@@ -819,7 +820,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                         $finalActivity = array('activityDate' => $key, 'activityData' => $value);
                         array_push($preparedActivities, $finalActivity);
                     }
-        
                   return array('activities'=>$preparedActivities);  
      } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:getAllProjectActivities::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -1101,7 +1101,7 @@ public static function prepareUserDashboardActivities($activities) {
                     ),
                 ),
             ); 
-                $result=$query->aggregate($pipeline);error_log("==Result==".print_r($result,1));
+                $result=$query->aggregate($pipeline);
                 switch($ticketState['Id']){
                     case 1: if(count($result)>0){$states['New']=$result[0]['count'];}break;
                     case 2: if(count($result)>0){$states['Waiting']=$result[0]['count'];}break;
@@ -1236,7 +1236,6 @@ public static function prepareUserDashboardActivities($activities) {
             }
             
         }
-        error_log("++++++getStatusCount+++++++++".print_r($statusCounts,1));
         return $statusCounts;
         
         
