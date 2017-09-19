@@ -104,13 +104,16 @@ export class SummerNoteEditorService
                         //  alert("444444444444444444"+this.summernoteLength);
                         // console.log(element+"==========Iddddd===========");
                          var editor=jQuery('#'+element).summernote('code');
+                         if(!(editor.indexOf("<p>")>-1)){
+                              editor="<p>"+editor+"</p>";
+                          }
                            console.log(editor+"=====**======1111111111=");
-                         editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
+                        editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
                           console.log(editor+"=====**=======");
                          if(obj.formB != undefined){
                              obj.formB['description']=editor;
                          }
-                         editor=jQuery(editor).text().trim();
+                         //editor=jQuery(editor).text().trim();
                         //  console.log(obj.formB['description']+"=-=-=-=-=-");
                          if(obj.form != undefined){
                             obj.form['description']=editor;
