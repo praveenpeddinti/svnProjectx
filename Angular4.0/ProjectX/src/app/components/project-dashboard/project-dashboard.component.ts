@@ -265,9 +265,24 @@ export class ProjectDashboardComponent implements OnInit {
       });
     }
   }
-
+public users=JSON.parse(localStorage.getItem('user'));
   gotoRepo(projName){
-    this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName}});
+
+    var sendData={
+           userId:JSON.parse(this.users.Id),
+           repName:projName
+           };
+           
+        //    alert(JSON.stringify(sendData));
+         this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
+        {  
+        // jQuery('#createProjectDiv').show();
+        //    jQuery('#showLogDiv').hide();
+        //    jQuery('#createUserDiv').hide();
+        //    alert("----repodata----"+JSON.stringify(result));
+        this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName}});
+
+           })
   }
 
  
