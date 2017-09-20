@@ -9,15 +9,15 @@
     </div>
 </div>-->
 
-<div class="arrowbox" id='advFilterPannel' style="max-height:300px;overflow:auto;">
+<div class="arrowbox" id='advFilterPannel' >
     <div class="activity_hed text-center">ProjectX Filters</div>
   <div class="no_option_selected" *ngIf="filterSelectedError">  {{filterSelectedError}} </div>
 <div *ngFor="let filter of advanceFilter;let i=index;" id="accordion" role="tablist" aria-multiselectable="true" class="clearfix">
 
     <div class="" role="tab" id="filter1">
        <div class="morebuckets">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1_{{i}}" aria-expanded="true" aria-controls="collapse1" >
-          <span *ngIf="filter.type!='NoLabel'">{{filter.type}}</span> <i class="fa pull-right" aria-hidden="true"></i>
+        <a  data-toggle="collapse" data-parent="#accordion" href="#collapse1_{{i}}" aria-expanded="true" aria-controls="collapse1" >
+          <span *ngIf="filter.type!='NoLabel'">{{filter.type}}</span> <i *ngIf="filter.type!='NoLabel'" class="fa pull-right" aria-hidden="true"></i>
         </a>
       </div>
     </div>
