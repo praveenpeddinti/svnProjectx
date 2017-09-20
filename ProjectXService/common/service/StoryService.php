@@ -1361,7 +1361,7 @@ class StoryService {
                           $fieldBean->value_name= $workFlowDetail["Name"];  // New
                      }
                      else if($fieldName == "state"){
-                         $fieldBean->value= 'New'; 
+                         $fieldBean->value= (int)1; 
                           $fieldBean->value_name= 'New';  // New
                      }
                      else if($fieldName == "planlevel"){
@@ -1867,7 +1867,7 @@ class StoryService {
     
     public function getProjectDetailsByName($projectName){
         try
-        {
+        {            
             
             $projectDetails = Projects::getProjectDetails($projectName);
             return $projectDetails;
@@ -2107,5 +2107,4 @@ class StoryService {
             
     
    }
-        
-        
+
