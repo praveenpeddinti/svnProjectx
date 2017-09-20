@@ -811,7 +811,7 @@ class SiteController extends Controller
              error_log("------".$postData->repName);
             $ch = curl_init();
            
-
+            $postData->repName = preg_replace("/\s*/", "", $postData->repName);
             $postfields = array();
             $postfields['projectName'] = $postData->repName;
             error_log("------".$postfields['projectName']);
@@ -935,6 +935,93 @@ class SiteController extends Controller
             return $response;
        } catch (\Throwable $th) {
             Yii::error("SiteController:actionShowSvnlog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+    
+    public function actionGetRepositoryStructure(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            error_log("------".print_r($postData,1));
+//             error_log("------".$postData->repName);
+            $ch = curl_init();
+           
+            $postData->directory = preg_replace("/\s*/", "", $postData->directory);
+            $postfields = array();
+            $postfields['directory'] = $postData->directory;
+            error_log("------".$postfields['directory']);
+            //$postfields['field2'] = urlencode('value2');
+            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/getRepo.php");
+            curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+            
+            $result = curl_exec($ch);
+            //$info=curl_exec($ch);
+            //$info = curl_getinfo($ch);
+            error_log("-curl response-".print_r($result,1));
+            
+            
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data =  json_decode($result) ;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            return $response;
+       } catch (\Throwable $th) {
+            Yii::error("SiteController:actionCreateRepository::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+    
+    public function actionCreateFolder(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            error_log("------".print_r($postData,1));
+//             error_log("------".$postData->repName);
+            $ch = curl_init();
+           
+            $postData->curerntDirectory = preg_replace("/\s*/", "", $postData->curerntDirectory);
+            $postData->newFolder = preg_replace("/\s*/", "", $postData->newFolder);
+            $postfields = array();
+            $postfields['curerntDirectory'] = $postData->curerntDirectory;
+            $postfields['newFolder'] = $postData->newFolder;
+            
+            error_log("------".$postfields['curerntDirectory']);
+            error_log("------".$postfields['newFolder']);
+            //$postfields['field2'] = urlencode('value2');
+            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/createFolder.php");
+            curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+            
+            $result = curl_exec($ch);
+            //$info=curl_exec($ch);
+            //$info = curl_getinfo($ch);
+            error_log("-curl response-".print_r($result,1));
+            
+            
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data =  json_decode($result) ;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            return $response;
+       } catch (\Throwable $th) {
+            Yii::error("SiteController:actionCreateRepository::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
