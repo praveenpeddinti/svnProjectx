@@ -71,6 +71,7 @@ export class ProjectDashboardComponent implements OnInit {
           
 
   ngOnInit() {
+    jQuery('body').removeClass('modal-open');
      window.scrollTo(0,0);
     this.dashboardData ='';
     var thisObj = this;

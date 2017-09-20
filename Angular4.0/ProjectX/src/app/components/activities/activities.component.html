@@ -58,7 +58,10 @@
                                     <span class="" *ngIf="ChangeSummary.OldValueText"> {{ChangeSummary.OldValueText}}</span>
                                      <span *ngIf="ChangeSummary.OldValue">"{{ChangeSummary.OldValue}}"</span>
                                     <span class="" *ngIf="ChangeSummary.NewValueText"> {{ChangeSummary.NewValueText}}</span>
-                               <span *ngIf="ChangeSummary.NewValue">"{{ChangeSummary.NewValue}}"</span> {{ChangeSummary.prepostion}}  {{finalData.ProjectName}}<!--in  {{finalData.Title}}-->
+                               "{{ChangeSummary.NewValue}}" for  <span *ngIf="finalData.occuredIn!='Bucket'" >{{ChangeSummary.prepostion}}  {{finalData.ProjectName}}</span>
+                               <span *ngIf="finalData.occuredIn=='Bucket'" > {{ChangeSummary.prepostion}} {{finalData.Title}}</span> <!--in  {{finalData.Title}}-->
+
+
                                            </div>
                      <div class="activitypro">{{finalData.time| dateFormat:'hh:mm:ss A'}} -{{finalData.ProjectName}}</div>
                             </span>
