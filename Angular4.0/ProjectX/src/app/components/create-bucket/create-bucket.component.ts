@@ -123,16 +123,14 @@ BucketForAddorEdit(event){
 
   var editor=jQuery('#bucketDescId').summernote('code');
     // this.editorDesc=jQuery(editor).text().trim();
+    editor=editor.replace(/\&nbsp;/gi,'');
     editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
-  //alert(editor+"----------------");
     this.formB['description']=editor;
     // alert("+++++trm+++++++"+jQuery(editor).text().trim()+"----------------");
     this.formB['description']=editor;
     // alert(this.formB['description']+"===form desc");
     var startDate = this.formB['startDateVal'].toLocaleDateString();
-    alert(startDate+"start date");
     var endDate=new Date(this.formB['dueDateVal']).toLocaleDateString();
-    alert(endDate+"due date");
    if(endDate>=startDate){
           this.addBucket();
     }else{
@@ -147,7 +145,6 @@ BucketForAddorEdit(event){
 
 addBucket(){
 
-// alert(this.formB['description']);
 
     if(this.Type == "New"){
       // this.formB['description']=editor;
@@ -184,7 +181,7 @@ checkBucketName(event){
     this.typeAheadResults.msg = "";
     if(event.trim() == ""){
         this.typeAheadResults.flag = false;
-        this.typeAheadResults.msg = "Bucket name cannot be empty";
+     //   this.typeAheadResults.msg = "Bucket name cannot be empty";
         this.spinnerSettings.color="red";
         this.spinnerSettings.class = "fa fa-times";
     }else if(titlePattern.test(event.trim()) == false){
