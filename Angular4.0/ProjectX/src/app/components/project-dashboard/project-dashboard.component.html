@@ -9,12 +9,12 @@
                          <img *ngIf="!setLogo" src="{{projectLogo}}" class="project_logo imgs 55"/>
                         {{projectName}}</div>
                   </div>
-                  <div class="col-md-3">
-                      <div class="user_more pull-right"  (click)="gotoRepo(projectName)" >
-                       Create Repo 
-                        </div>
+                  <div class="col-md-3">                      
                       <div class="user_more pull-right" data-backdrop="false" data-toggle="modal" data-target="#addProjectModel" (click)="clearEditedDetails(form)" >
                        Edit 
+                        </div>
+                        <div class="user_more pull-right marr10"  (click)="gotoRepo(projectName)" >
+                       Create Repo 
                         </div>
                   </div>
                   </div>
@@ -157,8 +157,11 @@
                   <div *ngIf="current.BucketStatus==2" class="status_current">Current</div>
                   <div class="row">
                       <div class="col-md-8">
-                         <div [innerHTML]="current.Description" class="prodashboard_desc marb10">
-                             </div>
+                         <div class="clearfix">
+                          <span style="cursor:default" [innerHTML]="current.Description" class="prodashboard_desc">
+                             </span>
+                             <span *ngIf="current.Description.length > 500" class="desc_more"  [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:current.Id}">...More</span>
+                         </div>
                       </div>
                       <div class="col-md-4">
                           <div class="row marb10">
@@ -214,10 +217,12 @@
                   <div *ngIf="currentWeekBucket.BucketStatus==3" class="status_complete">Completed</div>
                   <div *ngIf="currentWeekBucket.BucketStatus==4" class="status_closed">Closed</div>
                   <div class="clearfix">
-                      
-                         <div [innerHTML]="currentWeekBucket.Description" class="prodashboard_desc marb10">
-                             </div>
-                   
+                      <div class="clearfix">
+                          <span style="cursor:default" [innerHTML]="currentWeekBucket.Description" class="prodashboard_desc">
+                             </span>
+                             <span *ngIf="currentWeekBucket.Description.length > 500" class="desc_more"  [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:currentWeekBucket.Id}">...More</span>
+                      </div>
+                          
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Start Date</div>
                              <div class="col-md-6 col-xs-6 pro_bucketdetails">{{currentWeekBucket.StartDate | dateFormat:'MMM-DD-YYYY'}}</div>
@@ -293,8 +298,12 @@
                   <div *ngIf="otherBuckets.BucketStatus==4" class="status_closed">Closed</div>
                   <div class="clearfix">
                       
-                         <div [innerHTML]="otherBuckets.Description" class="prodashboard_desc marb10"></div>
-                   
+                         <div class="clearfix">
+                          <span style="cursor:default" [innerHTML]="otherBuckets.Description" class="prodashboard_desc">
+                             </span>
+                             <span *ngIf="otherBuckets.Description.length > 500" class="desc_more"  [routerLink]="['/project',projectName,'bucket']" [queryParams]="{BucketId:otherBuckets.Id}">...More</span>
+                        </div>
+                         
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Start Date</div>
                              <div class="col-md-6 col-xs-6 pro_bucketdetails">{{otherBuckets.StartDate | dateFormat:'MMM-DD-YYYY'}}</div>
