@@ -269,9 +269,7 @@ getArtifacts(obj){
   }
 
   cancelDesc(){
-    alert("RRRRRRR");
     this.descError = "";
-    alert(this.ticketCrudeDesc);
     this.ticketEditableDesc = this.ticketCrudeDesc;
     this.showDescEditor = true;
 
