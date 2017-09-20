@@ -486,16 +486,13 @@ trait NotificationTrait {
                     $actionType = "change";
                 }
             } else if (isset($ticketDetails["Fields"][$notifyType])) {
-                error_log("=============11111111111111111===============");
                 $oldValue = $ticketDetails["Fields"][$notifyType]["value"];
-                   error_log("=============11111111111111111===============".$oldValue);
 
             }
 
 //                    if(!($notify_type=='added' || $notify_type=='removed'))
 //                    {
             if ($fieldType == 1 || $fieldType == 4 || $fieldType == 5 || $fieldType == 8) {
-                  error_log("============2222222222222222222=============");
                 //for due date,dod and estimated points
                 $oldValue = $oldValue;
                 $newValue = $activityOn;
@@ -544,7 +541,6 @@ trait NotificationTrait {
                     $displayAction = "set";
                     $actionType = "set";
                 }
-                 error_log("===========333333333333333333============".$oldValue."++++".$newCollaborator);
 //               // error_log("==activity on== newCollaborator==========" . $newCollaborator);
 //                $tic = new NotificationCollection();
 //                $tic->CommentSlug = $slug;
@@ -573,7 +569,7 @@ trait NotificationTrait {
 //                }
                 //self::sendMail($ticketDetails,$loggedInUser, $newCollaborator,$notify_type);   
                 //}
-                 EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" => strtolower($notify_type), "OldValue" => $oldValue, "NewValue" => $activityOn)], array("BucketId" => (int) $bucket));
+                // EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" => strtolower($notify_type), "OldValue" => $oldValue, "NewValue" => $activityOn)], array("BucketId" => (int) $bucket));
             } else if ($fieldType == "FollowObj") {
                 if ($loggedInUser != $activityOn) {
                     error_log("follow object firsrt case((((((((((((***");
@@ -681,10 +677,6 @@ trait NotificationTrait {
                 if ($result) {
                     $notificationId = $tic->_id;
                     array_push($notificationIds, $notificationId);
-                    if ($bulkUpdate == '')
-                        EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" => strtolower($notify_type), "OldValue" => $tic->OldValue, "NewValue" => $tic->NewValue)], array("BucketId" => (int) $bucket));
-                    error_log("hellooo----2222-++");
-                    
                 }
             } else if ($fieldType == "FollowObj") {
                 error_log("folloererer----------------------------");
@@ -706,7 +698,7 @@ trait NotificationTrait {
                     $notificationId = $tic->_id;
                     array_push($notificationIds, $notificationId);
                 }
-                  EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" =>$displayAction, "OldValue" => $oldValue, "NewValue" => $activityOn)], array("BucketId" => (int) $bucket));
+                  EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" =>($displayAction=='added')?'follow':'unfollow', "OldValue" => (int)$oldValue, "NewValue" => (int)$activityOn)], array("BucketId" => (int) $bucket));
             } else if ($fieldType == 6) {
 
                 error_log("hey---------------------**");
@@ -746,11 +738,11 @@ trait NotificationTrait {
                     //  error_log("-----------_SSSSSSSSS------saving type----------");
                     $notificationId = $tic->_id;
                     array_push($notificationIds, $notificationId);
-                    if ($bulkUpdate == '' && strtolower($notify_type) != "childtask" && strtolower($notify_type) != "relate" && strtolower($notify_type) != "unrelate") {
-                        error_log ("@@@@@--wewesdsdsd--++++++++++". $tic->NewValue."edfgdfg---++++++++++".$tic->OldValue);
-                 
-                        EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" => strtolower($notify_type), "OldValue" => $tic->OldValue, "NewValue" => $tic->NewValue)], array("BucketId" => (int) $bucket));
-                    }
+//                    if ($bulkUpdate == '' && strtolower($notify_type) != "childtask" && strtolower($notify_type) != "relate" && strtolower($notify_type) != "unrelate") {
+//                        error_log ("@@@@@--wewesdsdsd--++++++++++". $tic->NewValue."edfgdfg---++++++++++".$tic->OldValue);
+//                 
+//                        EventTrait::saveEvent($projectId, "Ticket", $ticketId, $displayAction, $actionType, $loggedInUser, [array("ActionOn" => strtolower($notify_type), "OldValue" => $tic->OldValue, "NewValue" => $tic->NewValue)], array("BucketId" => (int) $bucket));
+//                    }
                 }
             }
             //  }

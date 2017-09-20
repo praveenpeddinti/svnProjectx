@@ -496,7 +496,7 @@ class StoryService {
             if($notificationDescIds!=''){
                 $saveEvent = true;
                 $notificationIds=array_merge($notificationIds,$notificationDescIds);
-                array_push($summary,array("ActionOn"=>"description","OldValue"=>$oldDescription,"NewValue"=>trim($ticket_data->description)));
+                array_push($summary,array("ActionOn"=>"description","OldValue"=>strip_tags($oldDescription),"NewValue"=>trim($ticket_data->description)));
             }
            
             $newworkflowId = "";
@@ -739,6 +739,7 @@ class StoryService {
             $timezone =$ticket_data->timeZone;
             $ticket_data->value = trim($ticket_data->value);
             $artifacts = array();
+            $summary=array();
             $workFlowDetail=array();
             $valueName = "";
             $updatedState=array();
@@ -746,6 +747,10 @@ class StoryService {
             $selectFields = ['ProjectId','WorkflowType','TicketId','ParentStoryId', 'IsChild','TotalEstimate','Fields.estimatedpoints.value','Fields.workflow.value','Tasks','Fields'];
             $childticketDetails = TicketCollection::getTicketDetails($ticket_data->ticketId,$ticket_data->projectId,$selectFields); 
             $ticketDetails=TicketCollection::getTicketDetails($ticket_data->ticketId,$ticket_data->projectId);//added by Ryan for Email Purpose
+            $oldDueDate=$ticketDetails['Fields']['duedate']['value'];
+            $oldTitle=$ticketDetails["Title"];
+            $oldDescription =$ticketDetails["Description"];
+            
             error_log("updateStoryFieldInline---1");
             if($checkData==0){
                  error_log("updateStoryFieldInline---2");
@@ -757,6 +762,9 @@ class StoryService {
                     $condition=array("TicketId" => (int)$ticket_data->ticketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$ticket_data->value;
                     $activityNewValue = $ticket_data->value;
+                     if(trim($oldTitle) != trim($ticket_data->value))
+                      array_push($summary,array("ActionOn"=>'title',"OldValue"=>  strip_tags(trim($oldTitle)),"NewValue"=>strip_tags(trim($activityNewValue))));
+                              
                 }else if($ticket_data->id=='Description'){
                     $field_name = "Description";
                     $fieldType = "Description";
@@ -769,7 +777,9 @@ class StoryService {
                     $condition=array("TicketId" => (int)$ticket_data->ticketId,"ProjectId"=>(int)$ticket_data->projectId);
                     $selectedValue=$actualdescription;
                     $activityNewValue = $ticket_data->value;
-                    
+                     if(trim($oldDescription) != trim($ticket_data->value))
+                      array_push($summary,array("ActionOn"=>'description',"OldValue"=>strip_tags(trim($oldDescription)),"NewValue"=>trim($plainDescription)));
+                     
                     /* Send Notifications to @mentioned user by Ryan and send mail to @mentioned user*/
                             try
                             {
@@ -793,13 +803,16 @@ class StoryService {
                   $fieldDetails =  StoryFields::getFieldDetails($field_id);
                   $fieldName = $fieldDetails["Field_Name"];
                   $fieldType =  $fieldDetails["Type"];
+                  $oldvalue =$ticketDetails["Fields"][$fieldName]["value"];
                      if(is_numeric($ticket_data->value)){
                         if($fieldDetails["Type"] == 6 ){
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
                             $this->followTicket($ticket_data->value,$ticket_data->ticketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
                            //  $this->saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
-
+                             if((int)$oldvalue != (int)$ticket_data->value)
+                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
+                                
                             /*Send Mail to Assigned to User by Ryan*/
                             try
                             {
@@ -856,11 +869,17 @@ class StoryService {
                                 error_log("updateStoryFieldInline---5");
                                  $workFlowDetail = WorkFlowFields::getWorkFlowDetails($ticket_data->value);
                                 $valueName = $workFlowDetail["Name"];
+                                if((int)$oldvalue != (int)$ticket_data->value)
+                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
+                             
                                 error_log("updateStoryFieldInline---6");
                                 }
                                 else if($fieldDetails["Field_Name"] == "priority"){
                                 $priorityDetail = Priority::getPriorityDetails($ticket_data->value);
                                 $valueName = $priorityDetail["Name"];
+                                if((int)$oldvalue != (int)$ticket_data->value)
+                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
+                             
                                 }
                                 else if($fieldDetails["Field_Name"] == "bucket"){
                                 $bucketDetail =  Bucket::getBucketName($ticket_data->value,(int)$ticket_data->projectId);
@@ -871,14 +890,23 @@ class StoryService {
                                    $db->update(array("ProjectId" => (int) $projectId, "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.bucket.value' => (int) $bucketDetail['Id'], 'Fields.bucket.value_name' => $bucketDetail['Name'])));
                                 }
                                 }
+                                if((int)$oldvalue != (int)$ticket_data->value)
+                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
+                             
                                 }
                                 else if($fieldDetails["Field_Name"] == "planlevel"){
                                 $planlevelDetail =  PlanLevel::getPlanLevelDetails($ticket_data->value);
                                 $valueName = $planlevelDetail["Name"];
+                                if((int)$oldvalue != (int)$ticket_data->value)
+                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
+                             
                                 }
                                 else if($fieldDetails["Field_Name"] == "tickettype"){
                                 $tickettypeDetail = TicketType::getTicketType($ticket_data->value);
                                 $valueName = $tickettypeDetail["Name"];
+                                if((int)$oldvalue != (int)$ticket_data->value)
+                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
+                             
                                 } 
 //                              else if($fieldDetails["Field_Name"] == "estimatedpoints"){
 //                                if($childticketDetails['IsChild']==0){
@@ -900,10 +928,17 @@ class StoryService {
                                    $ticket_data->value = new \MongoDB\BSON\UTCDateTime(strtotime($validDate) * 1000);
                                    error_log("&&&&&&&&&&&&&&777++++++++++++++".$ticket_data->value);
                                    $leftsideFieldVal = $ticket_data->value; 
+                                    if($oldDueDate != $ticket_data->value)
+                                    array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>$oldDueDate,"NewValue"=>$ticket_data->value));
+                             
                                 }else{
                                 //error_log("===Field Name==".$leftsideFieldVal);
                                     $leftsideFieldVal = $ticket_data->value; 
+                                     if(trim($oldvalue) != trim($ticket_data->value))
+                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>$oldvalue,"NewValue"=>$ticket_data->value));
+                             
                                 }
+                               
                         }else{
                              error_log("updateStoryFieldInline---10");
                             $leftsideFieldVal = $ticket_data->value;
@@ -937,6 +972,8 @@ class StoryService {
                                   }
                                   $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
                                   TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
+                                  array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
+                             
                                   }
                     
                     
@@ -948,12 +985,10 @@ class StoryService {
                     $condition=array("TicketId" => (int)$ticket_data->ticketId,"ProjectId"=>(int)$ticket_data->projectId,$fieldtochangeId=>(int)$ticket_data->id);
                     $selectedValue=$leftsideFieldVal;
                     $activityNewValue = $leftsideFieldVal;
-             error_log("==call check==".$ticket_data->value);       
           if($fieldDetails["Field_Name"] == "estimatedpoints"){
                if($childticketDetails['IsChild'] == 0){
                  $ticketId= $ticket_data->ticketId;
                  $getTicketDetailsForEstimate = TicketCollection::getTicketDetails($ticketId,$ticket_data->projectId,['Fields.totalestimatepoints.value']);
-                 error_log($ticket_data->ticketId."@@@@-------------------".print_r($getTicketDetailsForEstimate,1));
                  $totalEstimatePoints = $getTicketDetailsForEstimate["Fields"]["totalestimatepoints"]; 
                  $selectedValue=$totalEstimatePoints;
                  
@@ -963,7 +998,6 @@ class StoryService {
             }
             $slug =  new \MongoDB\BSON\ObjectID();
             $this->saveNotifications($ticket_data,$field_name,$ticket_data->value,$fieldType,$slug);
-    error_log("updateStoryFieldInline---13");
                 $reportdata=array();
                  if(property_exists($ticket_data,'reportData')){
                     $refinedData = CommonUtility::refineDescription($ticket_data->reportData);
@@ -979,12 +1013,14 @@ class StoryService {
                     TicketArtifacts::saveArtifacts($ticket_data->ticketId, $ticket_data->projectId, $reportsArtifacts, $loggedInUser);
                   }
                  }
-                 
+                  if(sizeof($summary)!=0){
+                      $newTicketDetails= TicketCollection::getTicketDetails($ticket_data->ticketId,$ticket_data->projectId,['Fields']);
+                $this->saveEvent($projectId,"Ticket",$ticket_data->ticketId,"updated","inline",(int)$ticket_data->userInfo->Id,$summary,array("BucketId"=>(int)$newTicketDetails["Fields"]['bucket']["value"]));   
+              }
                 $activityData = $this->saveActivity($ticket_data->ticketId,$ticket_data->projectId,$fieldName,$activityNewValue,$loggedInUser,$slug,$timezone,$reportdata);
                 $updateStaus = $collection->update($condition, $newData);
                 if($field_name=='workflow'){
                 $updateStatus = $this->updateWorkflowAndSendNotification($childticketDetails,$ticket_data->value,$loggedInUser);
- error_log("updateStoryFieldInline---14");
                 $collection->findAndModify( array("ProjectId"=> (int)$ticket_data->projectId ,"TicketId"=>(int)$ticket_data->ticketId),array('$set' => array('Fields.state.value' => (int)$workFlowDetail['StateId'],'Fields.state.value_name' =>$workFlowDetail['State']))); 
                 $updatedState['field_name'] ='state';
                 $updatedState['state']=$workFlowDetail['State'];
@@ -997,7 +1033,6 @@ class StoryService {
                 }else{
                     $ticketId= $childticketDetails['ParentStoryId'];
                 }
-            error_log("updateStoryFieldInline---15");
             // if($updateStaus==1){
                 $returnValue=$selectedValue;
            // }

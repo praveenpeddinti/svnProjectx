@@ -546,18 +546,21 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                 $setNewVal=$getTicketDetails['Title'];
                                 $getActivities['Title']='#'.$activitiesArray['ReferringId'].' '.$getTicketDetails['Title'];
                                 $getActivities['planlevel'] = $getTicketDetails['Fields']['planlevel']['value_name'];
+                                $getActivities['occuredIn']=$getActivities['OccuredIn'];
                                 error_log("here343--".$getActivities['Title']);
                             }
                             else if($getActivities['OccuredIn']=='Bucket'){
                               $getBucketDetails =Bucket::getBucketName($activitiesArray['ReferringId'],$activitiesArray['ProjectId']);
                               $getActivities['Title']=!empty($getBucketDetails['Name'])?$getBucketDetails['Name']:'';
                               $getActivities['planlevel']='';
-                               $setNewVal=$getActivities['Title'];
+                              $setNewVal=$getActivities['Title'];
+                              $getActivities['occuredIn']=$getActivities['OccuredIn'];
                             }
                             else if($getActivities['OccuredIn']=='Project'){
                                 $getActivities['Title']=!empty($projectDetails['ProjectName'])?$projectDetails['ProjectName']:'';
                                 $getActivities['planlevel']='';
-                                 $setNewVal=$getActivities['Title'];
+                                $setNewVal=$getActivities['Title'];
+                                $getActivities['occuredIn']=$getActivities['OccuredIn'];
                             }
                                 
                            $getActivities['ReferringId']=$activitiesArray['ReferringId'];
@@ -649,11 +652,11 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    }
                                     $summary['prepare_text']= 'has '.$prepare_text;
                                      $summary['prepostion']= 'for';
-                               }else if($summary['ActionOn']=='description' || $summary['ActionOn']=='tickettype'){
+                               }else if($summary['ActionOn']=='title'){
                                    error_log("@@@------------");
                                     $prepare_text = Yii::t('app','TotalTimeLog');
                                     $summary['prepare_text']= $prepare_text;
-                                    $summary['action']=($summary['ActionOn']=='description')?$actionOn:'type';
+                                    $summary['action']=$actionOn;
                                     if(!empty($changeSummary['OldValue'])){
                                         
                                        $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 80);
