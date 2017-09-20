@@ -475,6 +475,8 @@ class Bucket extends ActiveRecord
                         foreach($bucket_data as $bucketData){
                             if($bucketData['Id']==$value['_id']){
                                  error_log("---buckkkk--".$bucketData['Id']);
+                                $bucketDescription= CommonUtilityTwo::truncateHtml($bucketData['Description'],500);//added newly for truncate
+                                $bucketData['Description']=$bucketDescription;//added newly for truncate
                                 $owner=TinyUserCollection::getMiniUserDetails($bucketData['Responsible']);
                                 $mergedBucketInfo=array_merge($bucketData,$owner);
                                 array_push($currentWeekBucketDetailsByMaxActivity,$mergedBucketInfo);
