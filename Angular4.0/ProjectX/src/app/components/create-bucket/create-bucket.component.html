@@ -20,7 +20,7 @@
                         <label class="timereportlabel"> Bucket Name </label>
                         <div class="customformfieldsmarginbottom ">
                             <!--placeholder="Bucket Name"-->
-                            <input type="text" class="spinner_relative" pInputText [(ngModel)]="formB.title" name="title"  #title="ngModel"  minlength="3" pattern="^[a-zA-Z0-9\s\._\-]+$" (keyup)="checkBucketName(formB.title)" autocomplete="off" required/>
+                            <input type="text" class="spinner_relative" pInputText [(ngModel)]="formB.title" id="bucketName" name="title"  #title="ngModel"  minlength="3" pattern="^[a-zA-Z0-9\s\._\-]+$" (keyup)="checkBucketName(formB.title)" autocomplete="off" required/>
                             <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
                             <div *ngIf="submitted && title.errors " class="fielderror">
                                 <div [hidden]="!title.errors.required">
@@ -110,7 +110,7 @@
     
             <div class="modal-footer">
                 <button type="submit" class="model_submit butnbor" (click)="submitted=true;">{{(Type=='New')?'SUBMIT':'UPDATE'}}</button>
-                <button type="button" class="model_cancel butnbor" data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
+                <button type="button" class="model_cancel butnbor" data-dismiss="modal" (click)="resetForm();submitted=false;" >CANCEL</button>
             </div>
 
         </form>

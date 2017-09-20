@@ -55,13 +55,12 @@ private typeAheadResults ={
       color:"",
       class:""
     };
-@ViewChild('addBucketForm') bucketForm:HTMLFormElement;
+@ViewChild('addBucketForm') bucketForm:any;
 @Output() bucketUpdated: EventEmitter<any> = new EventEmitter();
   constructor(private editor:SummerNoteEditorService,private _router: Router,
         private _service: BucketService,private projectService:ProjectService, private _ajaxService: AjaxService) { }
 
   ngAfterViewInit() { 
-   
          this._service.getResponsibleFilter(this.projectId,this.role,(response) => { 
                         this.FilterOptionToDisplay=this.prepareItemArray(response.data,false,'Member');
                         this.FilterOption=this.FilterOptionToDisplay[0].filterValue;
@@ -98,7 +97,13 @@ private typeAheadResults ={
 
    
   }
-
+ 
+//  ngDoCheck(){
+//    setTimeout(()=>{
+//        alert("onIntelse+++111111111111++"+JSON.stringify(this.formB));
+//   },30000);
+// }  
+  
 private prepareItemArray(list:any,priority:boolean,status){
         var listItem=[];
         var listMainArray=[];
@@ -125,9 +130,11 @@ BucketForAddorEdit(event){
     // this.editorDesc=jQuery(editor).text().trim();
     editor=editor.replace(/\&nbsp;/gi,'');
     editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
+   //editor="<p>"+editor+"</p>";
+   //alert("spaces"+editor+"editor");
     this.formB['description']=editor;
     // alert("+++++trm+++++++"+jQuery(editor).text().trim()+"----------------");
-    this.formB['description']=editor;
+   // this.formB['description']=editor;
     // alert(this.formB['description']+"===form desc");
     var startDate = this.formB['startDateVal'].toLocaleDateString();
     var endDate=new Date(this.formB['dueDateVal']).toLocaleDateString();
@@ -224,7 +231,7 @@ checkBucketName(event){
 }
 
 clearForm(resetEditForm){
-  this.bucketForm.reset();
+  //this.bucketForm.reset();
   // alert(JSON.stringify(this.form));
   this.submitted = false;
   this.bucketSuccessMsg="";
@@ -261,6 +268,9 @@ clearForm(resetEditForm){
         jQuery('body').removeClass('modal-open');
       // alert(JSON.stringify(this.form)+"--------------After clear");
 
+}
+resetForm(){ 
+ this.clearForm(this.formData);
 }
 
 }
