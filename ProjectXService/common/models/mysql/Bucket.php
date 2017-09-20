@@ -468,7 +468,7 @@ class Bucket extends ActiveRecord
         }
    }
    
-   public static function getCurrentWeekBucketsInfo($currentWeekBuckets){
+   public static function getCurrentWeekBucketsInfo($currentWeekBuckets,$projectId){
        try{
            
             $bucketIds=array(); 
@@ -488,7 +488,7 @@ class Bucket extends ActiveRecord
                if(!empty($bucketIds[0])){ 
                     $ids= implode(",",$bucketIds);
                     error_log("==Ids==".$ids);
-                    $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where  Id in (".$ids.") and BucketStatus!=2 order by DueDate desc";
+                    $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where  Id in (".$ids.") and BucketStatus!=2 and ProjectId=$projectId order by DueDate desc";
                     $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
             
                     foreach($currentWeekBuckets as $key=>$value){
