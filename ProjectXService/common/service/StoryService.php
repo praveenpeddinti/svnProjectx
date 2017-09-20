@@ -972,6 +972,7 @@ class StoryService {
                                   }
                                   $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
                                   TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
+                                   if((int)($oldvalue) != (int)($ticket_data->value))
                                   array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
                              
                                   }
