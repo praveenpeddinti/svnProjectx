@@ -1837,6 +1837,7 @@ img{border:none; outline:none;}
     left: 92%!important;
 }
 
+.desc_more{ margin-top: -15px!important; float: right;color: #695ea5; cursor: pointer;}
 
  @media (max-width:767px){
 .navbar-nav {
