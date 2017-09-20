@@ -231,7 +231,11 @@ export class TimeReportComponent{
                 }
                 this.rows = data;
                 this.count = response.totalCount;
-                this.totaltimehours=response.data.totalHours;
+                if(response.data.totalHours.length==0){
+                    this.totaltimehours=0.0;
+                }else{
+                    this.totaltimehours=response.data.totalHours;
+                }
                
                 this.pageNo=offset+1;//added by Ryan
                 this.sortorder=sortorder;//added by Ryan
