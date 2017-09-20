@@ -634,7 +634,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    }
                                  $summary['prepostion']= 'for';
                                }elseif($summary['ActionOn']=='estimatedpoints' || $summary['ActionOn']=='dod' ){
-                                    $prepare_text = Yii::t('app','set');
+                                    $prepare_text = (!empty($changeSummary['OldValue']))? Yii::t('app','TotalTimeLog'):Yii::t('app','set');
                                     $summary['action']=Yii::t('app',$summary['ActionOn']);
                                    if(!empty($changeSummary['OldValue'])){
                                        $summary['OldValue']=$changeSummary['OldValue'];
@@ -650,24 +650,36 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
                                    }
-                                    $summary['prepare_text']= 'has '.$prepare_text;
+                                    $summary['prepare_text']= $prepare_text;
                                      $summary['prepostion']= 'for';
-                               }else if($summary['ActionOn']=='title'){
+                               }else if($summary['ActionOn']=='description' || $summary['ActionOn']=='tickettype'||$summary['ActionOn']=='title'){
                                    error_log("@@@------------");
                                     $prepare_text = Yii::t('app','TotalTimeLog');
                                     $summary['prepare_text']= $prepare_text;
-                                    $summary['action']=$actionOn;
+                                    $summary['action']=($summary['ActionOn']=='description'||$summary['ActionOn']=='title')?$actionOn:'type';
+                                     error_log("@@@----45435435435--------".$summary['action']);
                                     if(!empty($changeSummary['OldValue'])){
-                                        
+                                        if($summary['ActionOn']=='tickettype'){
+                                            $tickettypeDetail = TicketType::getTicketType($changeSummary['OldValue']);
+                                            $summary['OldValue']= $tickettypeDetail["Name"];
+                                            
+                                        }else{
                                        $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 80);
+                                        }
                                        $summary['OldValueText']='from';
+                                        
                                        
                                     }else{
                                        $summary['OldValue'] ='';
                                        $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
-                                       $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);;
+                                         if($summary['ActionOn']=='tickettype'){
+                                            $tickettypeDetail = TicketType::getTicketType($changeSummary['NewValue']);
+                                            $summary['NewValue']= $tickettypeDetail["Name"];
+                                        }else{
+                                       $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
+                                        }
                                        $summary['NewValueText']='to';
                                        
                                     }else{
@@ -675,7 +687,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['NewValueText']='';
                                    }
                                     $summary['prepostion']= 'for';
-                               }else if($summary['ActionOn']=='projectcreation' ||$summary['ActionOn']=='bucketcreation'||$summary['ActionOn']=='childtask'){
+                               }else if($summary['ActionOn']=='projectcreation' ||$summary['ActionOn']=='bucketcreation'){
                                    error_log("here454545-----".$summary['ActionOn']);
                                    // $prepare_text = array('message' => Yii::$app->params['created']);
                                   $prepare_text = Yii::t('app','created');
@@ -722,41 +734,76 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     }
                                     $summary['action']='';
                                       //error_log("@@@@--".print_r($prepare_text,1));
-                                    if(!empty($changeSummary['OldValue'])){
-                                        
-                                       $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 80);
-                                       $summary['OldValueText']='from';
-                                   }else{
-                                       $summary['OldValue'] ='';
-                                       $summary['OldValueText']='';
-                                   }
-                                    if(!empty($changeSummary['NewValue'])){
-                                       $summary['NewValue']=($getActivities['ActionType']=='repliedOn')?'':CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
-                                       $summary['NewValueText']=($getActivities['ActionType']=='repliedOn')?'':'';
-                                   }else{
-                                       $summary['NewValue'] ='';
-                                       $summary['NewValueText']='';
-                                   }
+                                    if($getActivities['ActionType']=='comment'){
+                                        error_log("%%%%%%%%%%%%%%%%%%%%%%5");
+                                        if(!empty($changeSummary['OldValue'])){
+                                            
+                                           $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 80);
+                                           $summary['OldValueText']='from';
+                                       }else{
+                                           $summary['OldValue'] ='';
+                                           $summary['OldValueText']='';
+                                       }
+                                        if(!empty($changeSummary['NewValue'])){
+                                           $summary['NewValue']=($getActivities['ActionType']=='repliedOn')?'':CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
+                                           $summary['NewValueText']=($getActivities['ActionType']=='repliedOn')?'':'';
+                                       }else{
+                                           $summary['NewValue'] ='';
+                                           $summary['NewValueText']='';
+                                       }
+                                    }else{
+                                          error_log("%%%%%%%%%%%%%%%%%%%%%%5-------------");
+                                        $summary['OldValue']='';
+                                        $summary['OldValueText']='';
+                                        $summary['NewValue'] ='';
+                                        $summary['NewValueText']='';
+                                    }
                                     $summary['prepare_text']= $prepare_text;
                                     $summary['prepostion']= 'on';
-                               }else if($summary['ActionOn']=='bucket'|| $summary['ActionOn']=='workflow'){
+                               }else if($summary['ActionOn']=='bucket'|| $summary['ActionOn']=='workflow' || $summary['ActionOn']=='priority'){
                                    error_log("jhhhk-------------------");
                                      $prepare_text = Yii::t('app','TotalTimeLog');
                                     $summary['action']=($summary['ActionOn']=='workflow'?'work flow':$actionOn);
                                     error_log("changesummery55555555555-------".$changeSummary['OldValue']);
-                                    if(!empty($changeSummary['OldValue'])){
-                                       $summary['OldValue']=$changeSummary['OldValue'];
-                                       $summary['OldValueText']='from';
+                                   if($summary['ActionOn']=='bucket'){
+                                        if(!empty($changeSummary['OldValue'])){
+                                           $summary['OldValue']=$changeSummary['OldValue'];
+                                           $summary['OldValueText']='from';
+                                       }else{
+                                           $summary['OldValue'] ='';
+                                           $summary['OldValueText']='';
+                                       }
+                                        if(!empty($changeSummary['NewValue'])){
+                                           $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
+                                           $summary['NewValueText']='to';
+                                       }else{
+                                           $summary['NewValue'] ='';
+                                           $summary['NewValueText']='';
+                                       }
                                    }else{
-                                       $summary['OldValue'] ='';
-                                       $summary['OldValueText']='';
-                                   }
-                                    if(!empty($changeSummary['NewValue'])){
-                                       $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
-                                       $summary['NewValueText']='to';
-                                   }else{
-                                       $summary['NewValue'] ='';
-                                       $summary['NewValueText']='';
+//                                         $priorityDetail = Priority::getPriorityDetails($ticket_data->$key);
+//                                $value["value_name"] = $priorityDetail["Name"];
+                                    
+                                       if(!empty($changeSummary['OldValue'])){
+                                            $priorityDetail = Priority::getPriorityDetails($changeSummary['OldValue']);
+                                           error_log("@@@@@@@@@--------helloo---+++--------".$priorityDetail["Name"]);
+                                            $extractFields=($summary['ActionOn']=='workflow')?(WorkFlowFields::getWorkFlowDetails($changeSummary['OldValue'])):(Priority::getPriorityDetails($changeSummary['OldValue']));
+                                           $summary['OldValue'] =$extractFields["Name"];
+                                           $summary['OldValueText']='from';
+                                       }else{
+                                           $summary['OldValue'] ='';
+                                           $summary['OldValueText']='';
+                                       }
+                                        if(!empty($changeSummary['NewValue'])){
+                                            $priorityDetail = Priority::getPriorityDetails($changeSummary['NewValue']);
+                                           error_log("@@@@@@@@@--------helloo---+++--------".$priorityDetail["Name"]);
+                                           $extractFields=($summary['ActionOn']=='workflow')? WorkFlowFields::getWorkFlowDetails($changeSummary['NewValue']):(Priority::getPriorityDetails($changeSummary['NewValue']));
+                                           $summary['NewValue'] =$extractFields["Name"];
+                                           $summary['NewValueText']='to';
+                                       }else{
+                                           $summary['NewValue'] ='';
+                                           $summary['NewValueText']='';
+                                       } 
                                    }
                                  $summary['prepare_text']= $prepare_text;
                                  $summary['prepostion']= 'for';
@@ -815,8 +862,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    }
                                     $summary['prepare_text']= $prepare_text;
                                     $summary['prepostion']= 'to';
-                               }elseif($summary['ActionOn']=='followed' || $summary['ActionOn']=='unfollowed' ){
-                                    $prepare_text = '';
+                               }elseif($summary['ActionOn']=='follow' || $summary['ActionOn']=='unfollow' ){
+                                    $prepare_text = 'is';
                                     $summary['action']=Yii::t('app',$summary['ActionOn']);
                                    if(!empty($changeSummary['OldValue'])){
                                        $summary['OldValue']='';
@@ -834,6 +881,31 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                    }
                                     $summary['prepare_text']= $prepare_text;
                                      $summary['prepostion']= '';
+                               }elseif($summary['ActionOn']=='childtask' ){
+                                     $prepare_text = Yii::t('app','created');
+                                  $summary['action']='';
+                                      //error_log("@@@@--".print_r($prepare_text,1));
+                                    if(!empty($changeSummary['OldValue'])){
+                                        
+                                       $summary['OldValue']=$setNewVal;
+                                       $summary['OldValueText']='from';
+                                   }else{
+                                       $summary['OldValue'] ='';
+                                       $summary['OldValueText']='';
+                                   }
+                                    if(!empty($changeSummary['NewValue'])){
+                                       $selectFields = ['Title','Fields.planlevel.value_name'];
+                                     $getTicketDetails = TicketCollection::getTicketDetails($changeSummary['NewValue'],$activitiesArray['ProjectId'],$selectFields);
+                                        $setNewVal=$getTicketDetails['Title'];
+                                        $summary['NewValue']=$setNewVal;
+                                       $summary['NewValueText']='';
+                                    }else{
+                                       $summary['NewValue'] ='';
+                                       $summary['NewValueText']=''; 
+                                   }
+                                    $summary['prepare_text']= $prepare_text;
+                                    $summary['prepostion']= 'for';
+                 
                                }else{
                                     error_log("jhhhk------34444444444-------------");
                                     $prepare_text='';
