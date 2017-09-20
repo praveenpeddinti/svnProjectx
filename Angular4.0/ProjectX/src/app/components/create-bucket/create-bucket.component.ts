@@ -128,10 +128,10 @@ BucketForAddorEdit(event){
 
   var editor=jQuery('#bucketDescId').summernote('code');
     // this.editorDesc=jQuery(editor).text().trim();
-    editor=editor.replace(/\&nbsp;/gi,'');
+    editor=editor.replace(/\&nbsp;*\s*(<br>)*/gi,'');
     editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
    //editor="<p>"+editor+"</p>";
-   //alert("spaces"+editor+"editor");
+   alert("spaces"+editor+"editor");
     this.formB['description']=editor;
     // alert("+++++trm+++++++"+jQuery(editor).text().trim()+"----------------");
    // this.formB['description']=editor;
@@ -270,7 +270,15 @@ clearForm(resetEditForm){
 
 }
 resetForm(){ 
+if(this.Type=="New"){
+ jQuery('#bucketDescId').summernote('code','');
+ this.bucketForm.reset();  
+}
+else{
  this.clearForm(this.formData);
+ 
 }
 
+  }
 }
+
