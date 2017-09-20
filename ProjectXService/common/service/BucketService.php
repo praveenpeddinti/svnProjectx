@@ -225,7 +225,7 @@ class BucketService {
         try{
             $currentBucketsItems=array();
             $currentWeekBucketsId=  EventCollection::getCurrentWeekActiveBuckets($projectId);
-            $currentWeekBuckets=Bucket::getCurrentWeekBucketsInfo($currentWeekBucketsId);
+            $currentWeekBuckets=Bucket::getCurrentWeekBucketsInfo($currentWeekBucketsId,$projectId);
             foreach($currentWeekBuckets as $currentBucketInfo){
                     $currentBucketDetails=CommonUtilityTwo::getTopTicketsStats($projectId, '', $currentBucketInfo['Id']);
                     $merged_other_bucket=array_merge($currentBucketDetails,$currentBucketInfo);
@@ -247,7 +247,7 @@ class BucketService {
         try{
             $otherBucketsItems=array();
             $otherBuckets= EventCollection::getOtherBucketsCount($projectId,$isData);
-            $otherBucketsData=Bucket::getCurrentWeekBucketsInfo($otherBuckets);
+            $otherBucketsData=Bucket::getCurrentWeekBucketsInfo($otherBuckets,$projectId);
             if($isData==0){
                  error_log("==count otherrrr==".count($otherBucketsData));
                  return count($otherBucketsData);
