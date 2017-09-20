@@ -269,6 +269,7 @@ getArtifacts(obj){
   }
 
   cancelDesc(){
+    alert("RRRRRRR");
     this.descError = "";
     alert(this.ticketCrudeDesc);
     this.ticketEditableDesc = this.ticketCrudeDesc;
@@ -287,7 +288,8 @@ public commentDesc = "";//"sdadas<img src='https://10.10.73.21/files/story/thumb
 public commentCount = 0;
 submitComment(){
 var commentText=jQuery("#commentEditor").summernote('code');
-
+commentText = commentText.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
+commentText="<p>"+commentText+"</p>";
 if(commentText != "" && jQuery(commentText).text().trim() != ""){
 this.commentDesc="";
 jQuery("#commentEditor").summernote('reset');
@@ -1298,6 +1300,7 @@ var thisObj = this;
 
 
    cancelEdit(commentIndex){
+    jQuery("#edit_comment_"+commentIndex).hide();
     this.commentError='';
     this.editCommentError='';
    jQuery("#Activity_content_"+commentIndex).summernote('code',this.commentsList[commentIndex].CDescription);
