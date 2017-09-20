@@ -909,8 +909,12 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                }else{
                                     error_log("jhhhk------34444444444-------------");
                                     $prepare_text='';
-                                    $summary['action']=$actionOn;
+                                    $summary['action']=trim(strtolower(preg_replace('/(?<!\ )[A-Z]/', ' $0', $actionOn)));
                                     if(!empty($changeSummary['OldValue'])){
+                                        if($actionOn=='bucketOwner'){
+                                         $userDetails = TinyUserCollection::getMiniUserDetails($changeSummary['OldValue']);
+                                         $changeSummary['OldValue']=$userDetails['UserName'];
+                                         }
                                        $summary['OldValue']=$changeSummary['OldValue'];
                                        $summary['OldValueText']='from';
                                        $prepare_text = Yii::t('app','TotalTimeLog');// for the text has changed
@@ -921,6 +925,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
+                                        if($actionOn=='bucketOwner'){
+                                         $userDetails = TinyUserCollection::getMiniUserDetails($changeSummary['NewValue']);
+                                         $changeSummary['NewValue']=$userDetails['UserName'];
+                                         }
                                        $summary['NewValue']=$changeSummary['NewValue'];
                                         $summary['NewValueText']='to';
                                    }else{

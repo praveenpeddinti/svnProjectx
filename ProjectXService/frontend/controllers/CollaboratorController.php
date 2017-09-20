@@ -381,7 +381,8 @@ class CollaboratorController extends Controller
             $postData = json_decode(file_get_contents("php://input")); 
             $fileExt=!empty($postData->fileExtention)?$postData->fileExtention:"";
             $projectId=!empty($postData->projectId)?$postData->projectId:"";
-            $updateStatus=ServiceFactory::getProjectServiceInstance()->updatingProjectDetails($postData->projectName,$postData->description,$fileExt,$postData->projectLogo,$projectId);
+            $userId = $postData->userInfo->Id;
+            $updateStatus=ServiceFactory::getProjectServiceInstance()->updatingProjectDetails($postData->projectName,$postData->description,$fileExt,$postData->projectLogo,$projectId,$userId);
             if($updateStatus=='success'){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -419,19 +420,12 @@ class CollaboratorController extends Controller
             error_log("111111111111111111111--------");
             $projectdetails=ServiceFactory::getProjectServiceInstance()->getProjectDashboardDetails($postData->projectName,$postData->projectId,$postData->userInfo->Id,$postData->page);
            // $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData);
-            if(!empty($projectdetails)){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $projectdetails;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
-            }else{
-                $responseBean = new ResponseBean;
-                $responseBean->statusCode = ResponseBean::FAILURE;
-                $responseBean->message = "failure";
-                $responseBean->data = $projectdetails;
-                $response = CommonUtility::prepareResponse($responseBean,"json"); 
-            }
+           
              return $response;
              
         } catch (\Throwable $th) { 
@@ -454,25 +448,17 @@ class CollaboratorController extends Controller
         try{
             $postData = json_decode(file_get_contents("php://input"));
             $projectdetails=ServiceFactory::getProjectServiceInstance()->getAllActivities($postData);
-            if(!empty($projectdetails)){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $projectdetails;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
-            }else{
-                $responseBean = new ResponseBean;
-                $responseBean->statusCode = ResponseBean::FAILURE;
-                $responseBean->message = "failure";
-                $responseBean->data = $projectdetails;
-                $response = CommonUtility::prepareResponse($responseBean,"json"); 
-            }
              return $response; 
         }  catch (\Throwable $th) { 
              Yii::error("SiteController:getAllActivitiesForProjectDashboard::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =$th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;

@@ -450,7 +450,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionUpdateStoryFieldInline::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =  $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =   ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;

@@ -12,7 +12,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use yii\base\ErrorException;
-use common\components\CommonUtilityTwo;
+use common\components\{CommonUtilityTwo,EventTrait};
 use common\models\mongo\TinyUserCollection;
 
 class Bucket extends ActiveRecord 
@@ -262,17 +262,37 @@ class Bucket extends ActiveRecord
         try {
             $startDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->startDateVal)));
             $dueDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->dueDateVal)));
-            
+            $summary=array();
             $bucket=Bucket::findOne($bucketDetails->data->Id);
             $bucket->ProjectId = (int)$bucketDetails->projectId;
+            if($bucket->Name != $bucketDetails->data->title)
+             array_push($summary,array("ActionOn"=>  'bucketTitle',"OldValue"=>$bucket->Name,"NewValue"=>$bucketDetails->data->title));
             $bucket->Name = $bucketDetails->data->title;
+            if($bucket->Description != $bucketDetails->data->description)
+             array_push($summary,array("ActionOn"=>  'bucketDescription',"OldValue"=>strip_tags($bucket->Description),"NewValue"=>  strip_tags($bucketDetails->data->description)));
             $bucket->Description = $bucketDetails->data->description;
-            $bucket->StartDate = $startDate;
-            $bucket->DueDate = $dueDate;
-            $bucket->Responsible = (int)$bucketDetails->data->selectedUserFilter;
+            if($bucket->StartDate != $startDate){
+            
+                array_push($summary,array("ActionOn"=>  'bucketStartDate',"OldValue"=>$bucket->StartDate,"NewValue"=>$startDate));
 
+            }
+           
+            $bucket->StartDate = $startDate;
+            
+            if($bucket->DueDate != $dueDate){
+                array_push($summary,array("ActionOn"=>  'bucketDueDate',"OldValue"=>$bucket->DueDate,"NewValue"=>$dueDate));
+
+            }
+            $bucket->DueDate = $dueDate;
+            if($bucket->Responsible != (int)$bucketDetails->data->selectedUserFilter){
+                array_push($summary,array("ActionOn"=>  'bucketOwner',"OldValue"=>(int)$bucket->Responsible ,"NewValue"=>(int)$bucketDetails->data->selectedUserFilter));
+
+            }
+            $bucket->Responsible = (int)$bucketDetails->data->selectedUserFilter;
+            
             $bucket->update();
             if ($bucket->update() !== false) {
+                EventTrait::saveEvent((int)$bucketDetails->projectId,"Bucket",$bucketDetails->data->Id,"updated",'update',(int)$bucketDetails->userInfo->Id,$summary,array("BucketId"=>(int)$bucketDetails->data->Id));
                 $result = "success";
             } else {
                 $result = "failed";

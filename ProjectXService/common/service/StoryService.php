@@ -496,7 +496,7 @@ class StoryService {
             if($notificationDescIds!=''){
                 $saveEvent = true;
                 $notificationIds=array_merge($notificationIds,$notificationDescIds);
-                array_push($summary,array("ActionOn"=>"description","OldValue"=>strip_tags($oldDescription),"NewValue"=>trim($ticket_data->description)));
+                array_push($summary,array("ActionOn"=>"description","OldValue"=>strip_tags($oldDescription),"NewValue"=>strip_tags(trim($ticket_data->description))));
             }
            
             $newworkflowId = "";

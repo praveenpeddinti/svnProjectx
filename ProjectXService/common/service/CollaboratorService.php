@@ -565,7 +565,7 @@ class CollaboratorService {
      * @param type $userId
 
      */
-    public function updatingProjectDetails($projectName, $description, $fileExt, $projectLogo, $projectId) {
+    public function updatingProjectDetails($projectName, $description, $fileExt, $projectLogo, $projectId,$userId='') {
         try {
             if (strpos($projectLogo, 'assets') !== false) {
                 $logo = $projectLogo;

@@ -95,7 +95,7 @@ class ProjectService {
             throw new ErrorException($ex->getMessage());
         }
     }
-     public function updatingProjectDetails($projectName, $description, $fileExt, $projectLogo, $projectId) {
+     public function updatingProjectDetails($projectName, $description, $fileExt, $projectLogo, $projectId,$userId='') {
         try {
             if (strpos($projectLogo, 'assets') !== false) {
                 $logo = $projectLogo;
@@ -118,7 +118,18 @@ class ProjectService {
                 }
             }
             error_log("not existeddddddddd@@@@@@@@@@@@@--------" . $logo);
+            $summary = array();
             $ProjectModel = new Projects();
+            $Oldprojects=Projects::findOne($projectId);
+            if(trim($Oldprojects->ProjectName)!= trim($projectName))
+                array_push($summary,array("ActionOn"=>  'projectName',"OldValue"=>trim(strip_tags($Oldprojects->ProjectName)) ,"NewValue"=>trim(strip_tags($projectName))));
+            if(trim($Oldprojects->Description)!= trim($description))
+                array_push($summary,array("ActionOn"=>  'projectDescription',"OldValue"=>trim(strip_tags($Oldprojects->Description)) ,"NewValue"=>trim(strip_tags($description))));
+
+            $updateStatus = $ProjectModel->updateProjectDetails($projectName, $description, $fileExt, $logo, $projectId);
+            if($updateStatus == 'success'){
+              EventTrait::saveEvent((int)$projectId,"Project",$projectId,"updated",'update',(int)$userId,$summary,array("BucketId"=>""));
+            }
             $updateStatus = $ProjectModel->updateProjectDetails($projectName, $description, $fileExt, $logo, $projectId);
             return $updateStatus;
         } catch (\Throwable $ex) {
