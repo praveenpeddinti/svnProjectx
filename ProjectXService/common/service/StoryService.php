@@ -2048,8 +2048,8 @@ class StoryService {
             $finalData = array('ticketData'=>array(),'filterData'=>$ticketDetails['filterData']);
             $fieldsOrderArray = [5,6,7,3,10];
            //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
-            $fitlerOption=null;
-              
+            $obj = array('type'=>'advance','showChild'=>0);
+            $fitlerOption= (object)$obj;
           
             if(sizeof($ticketDetails['ticketDetails'])!=0){
               foreach ($ticketDetails['ticketDetails'] as $ticket) {
