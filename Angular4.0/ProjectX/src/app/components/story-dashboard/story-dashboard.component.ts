@@ -624,7 +624,7 @@ getFilteredData(response){
             "label": filterData.Name,
             "id": filterData.Id,
             "type": "personalfilters",
-            "showChild": 1,
+            "showChild": 0,
             "isChecked": false,
             "canDelete": true
           }
