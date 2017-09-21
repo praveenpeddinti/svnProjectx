@@ -71,7 +71,7 @@ class ProjectService {
             
             
            EventTrait::saveEvent($projectId,"Project",$projectId,"created","create",$userId,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$projectId)]); 
-           EventTrait::saveEvent($projectId,"Bucket",$bucketId,"created","create",$userId,[array("ActionOn"=>"projectcreation","OldValue"=>0,"NewValue"=>(int)$bucketId)],array("BucketId"=>(int)$bucketId));    
+           EventTrait::saveEvent($projectId,"Bucket",$bucketId,"created","create",$userId,[array("ActionOn"=>"bucketcreation","OldValue"=>0,"NewValue"=>(int)$bucketId)],array("BucketId"=>(int)$bucketId));    
             
             return $projectId;
         } catch (\Throwable $ex) {
