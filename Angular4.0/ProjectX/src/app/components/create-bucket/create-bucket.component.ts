@@ -190,9 +190,12 @@ checkBucketName(event){
     }else if(titlePattern.test(event.trim()) == false){
         this.spinnerSettings.color="red";
         this.spinnerSettings.class = "fa fa-times";
-      }else if((event.trim()).toLowerCase() == (this.prevBucketName).toLowerCase()){
+      }
+      else if((event.trim()).toLowerCase() == (this.prevBucketName).toLowerCase()){
         this.typeAheadResults.flag = true;
         this.typeAheadResults.msg = "";
+        this.spinnerSettings.color="green";
+        this.spinnerSettings.class = "fa fa-check";
         }else{
         this.spinnerSettings.color="";
         this.spinnerSettings.class = "";
