@@ -54,7 +54,8 @@ export class StoryComponent
 
   
     ngOnInit() 
-    {    
+    {   
+        jQuery('body').removeClass('modal-open'); 
         var thisObj = this;
   thisObj.route.queryParams.subscribe(
       params => 
