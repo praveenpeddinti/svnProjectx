@@ -234,7 +234,7 @@ class TicketCollection extends ActiveRecord
                default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             }      
            }
-           else if($StoryData->filterOption->type=='bucket'){
+           else if($StoryData->filterOption->type=='buckets'){
             $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
            }
            else if($StoryData->filterOption->type=='state'){
@@ -345,7 +345,7 @@ class TicketCollection extends ActiveRecord
                default:$conditions = array("ProjectId" => (int)$projectId,"IsChild" => (int)0);
             }      
            }
-           else if($StoryData->filterOption->type=='bucket'){
+           else if($StoryData->filterOption->type=='buckets'){
             $conditions['Fields.bucket.value']=(int)$StoryData->filterOption->id;
            }
            else if($StoryData->filterOption->type=='state'){
