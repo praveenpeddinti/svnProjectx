@@ -242,11 +242,14 @@ getArtifacts(obj){
       //var editorData = this.detail_ckeditor.instance.getData();
       //this.form['description']=jQuery('#detailEditor').summernote('code'); //added by Ryan for summernote
       var editorData=jQuery('#detailEditor').summernote('code');
+      if(!(editorData.indexOf("<p>")>-1))
+      { 
+        //added for default unexpected behaviour of editor
+          editorData="<p>"+editorData+"</p>";
+      }
       this.ticketEditableDesc = editorData;
-      console.log("==in submit desc=="+editorData);
       //var editorData=this.form['description'];
       var editorDesc=jQuery(editorData).text().trim();
- 
           if(editorDesc != ""){
           this.descError = "";
         
