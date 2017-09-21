@@ -915,7 +915,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                          $userDetails = TinyUserCollection::getMiniUserDetails($changeSummary['OldValue']);
                                          $changeSummary['OldValue']=$userDetails['UserName'];
                                          }
-                                       $summary['OldValue']=$changeSummary['OldValue'];
+                                       $summary['OldValue']=CommonUtility::refineActivityData($changeSummary['OldValue'], 80);
                                        $summary['OldValueText']='from';
                                        $prepare_text = Yii::t('app','TotalTimeLog');// for the text has changed
                                  
@@ -929,7 +929,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                          $userDetails = TinyUserCollection::getMiniUserDetails($changeSummary['NewValue']);
                                          $changeSummary['NewValue']=$userDetails['UserName'];
                                          }
-                                       $summary['NewValue']=$changeSummary['NewValue'];
+                                       $summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
                                         $summary['NewValueText']='to';
                                    }else{
                                        $summary['NewValue'] ='';
