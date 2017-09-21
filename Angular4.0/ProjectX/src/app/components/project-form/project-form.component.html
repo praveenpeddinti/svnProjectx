@@ -47,12 +47,14 @@
               <div class="col-xs-12 col-sm-12 col-md-12 ">
                 <label class="model_label"> Project Name </label>
                 <div class="customformfieldsmarginbottom autoSearchTask">
-                  <input type="text" class="customformfields " required [(ngModel)]="form.projectName" name="projectName" #projectName="ngModel"
+                  <input type="text" class="customformfields " required [(ngModel)]="form.projectName" pattern="^[^-\s][\w\s-]+$" minlength="3" name="projectName" #projectName="ngModel"
                     id="projectName" (keyup)="verifyProjectName(form.projectName);" (keydown)="veryInputByspinner()" autocomplete="off"/>
                   <div *ngIf="submitted && projectName.errors " class="fielderror" >
-                    <div [hidden]="!projectName.errors.required">Project Name is required</div>
+                    <div *ngIf="projectName.errors.required">Project Name is required</div>
+                    <div *ngIf="!projectName.errors.required && projectName.errors.pattern">Project Name is invalid</div>
+                    <div *ngIf="!projectName.errors.required && !projectName.errors.pattern && projectName.errors.minlength">Project Name must contain atleast 3 characters</div>
                   </div>
-                    <div [hidden]="!verifyProjectMess" class="fielderror"> Project name you have entered is already exists in the system!</div>
+                    <div [hidden]="!verifyProjectMess" class="fielderror"> Project Name you have entered is already exists in the system!</div>
              <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
                 </div>
               </div>
