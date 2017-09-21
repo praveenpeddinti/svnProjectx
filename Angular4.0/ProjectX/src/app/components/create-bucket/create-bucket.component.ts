@@ -125,7 +125,6 @@ private prepareItemArray(list:any,priority:boolean,status){
 
 public editorDesc="";
 BucketForAddorEdit(event){
-
   var editor=jQuery('#bucketDescId').summernote('code');
     // this.editorDesc=jQuery(editor).text().trim();
     editor=editor.replace(/\&nbsp;*\s*(<br>)*/gi,'');
@@ -150,8 +149,6 @@ BucketForAddorEdit(event){
 }
 
 addBucket(){
-
-
     if(this.Type == "New"){
       // this.formB['description']=editor;
         this._service.saveBucket(this.projectId,this.formB,(response)=>{
@@ -232,7 +229,7 @@ checkBucketName(event){
 clearForm(resetEditForm){
   //this.bucketForm.reset();
   // alert(JSON.stringify(this.form));
-  this.submitted = false;
+//  this.submitted = false;
   this.bucketSuccessMsg="";
   this.bucketMsgClass="";
   this.dueDateMsg="";
@@ -261,6 +258,7 @@ clearForm(resetEditForm){
             // alert(JSON.stringify(this.form)+"+++++++After");
             // this.form = resetEditForm;
             // alert(JSON.stringify(this.form)+"+++++++inside if clear form");
+             this.typeAheadResults.flag = true;
             jQuery('#bucketDescId').summernote('code',resetEditForm.description);
             this.prevBucketName = this.formB["title"];
           }
@@ -275,9 +273,7 @@ if(this.Type=="New"){
 }
 else{
  this.clearForm(this.formData);
- 
-}
-
   }
+}
 }
 
