@@ -179,7 +179,7 @@ addBucket(){
 checkBucketName(event){
   var titlePattern = /^[a-zA-Z0-9\s\.\-_]+$/;
   clearTimeout(this.typeAheadTimer);
-  if(event.trim()=='' || event.trim() == undefined || titlePattern.test(event) == false || event.trim() == this.prevBucketName){
+  if(event.trim()=='' || event.trim() == undefined || titlePattern.test(event) == false || (event.trim()).toLowerCase() == (this.prevBucketName).toLowerCase()){
     this.typeAheadResults.flag = false;
     this.typeAheadResults.msg = "";
     if(event.trim() == ""){
@@ -190,9 +190,9 @@ checkBucketName(event){
     }else if(titlePattern.test(event.trim()) == false){
         this.spinnerSettings.color="red";
         this.spinnerSettings.class = "fa fa-times";
-      }else if(event.trim() == this.prevBucketName){
+      }else if((event.trim()).toLowerCase() == (this.prevBucketName).toLowerCase()){
         this.typeAheadResults.flag = true;
-    this.typeAheadResults.msg = "";
+        this.typeAheadResults.msg = "";
         }else{
         this.spinnerSettings.color="";
         this.spinnerSettings.class = "";
@@ -211,7 +211,6 @@ checkBucketName(event){
           };
           this._ajaxService.AjaxSubscribe("bucket/check-bucket-name",postData,(result)=>
           { 
-            // alert(JSON.stringify(result));
               if(result.data.available == "Yes"){
                   this.typeAheadResults.flag = true;
                   this.typeAheadResults.msg = "";
