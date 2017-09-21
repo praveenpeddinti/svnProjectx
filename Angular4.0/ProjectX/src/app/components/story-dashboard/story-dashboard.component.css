@@ -6,3 +6,4 @@ customdropdownheader .ui-widget{font-size:16px}
 .filterlabel_status{ border:solid 1px #c1c7cd; color: #637282; line-height: 18px; border-radius:100px; padding: 5px 0px 5px 15px;}
 .filterlabel_status label{color: #637282; display: inline; font-weight:normal!important;}
 .filterlabel_status span{color: #695ea5;margin:0px 10px 0px 2px; display: inline;}
+.dropdown_wrap .ui-dropdown-panel .ui-dropdown-item {padding-right: 0px!important;}
