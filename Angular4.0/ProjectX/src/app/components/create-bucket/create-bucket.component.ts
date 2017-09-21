@@ -190,7 +190,10 @@ checkBucketName(event){
     }else if(titlePattern.test(event.trim()) == false){
         this.spinnerSettings.color="red";
         this.spinnerSettings.class = "fa fa-times";
-      }else{
+      }else if(event.trim() == this.prevBucketName){
+        this.typeAheadResults.flag = true;
+    this.typeAheadResults.msg = "";
+        }else{
         this.spinnerSettings.color="";
         this.spinnerSettings.class = "";
       }
@@ -228,7 +231,6 @@ checkBucketName(event){
 
 clearForm(resetEditForm){
   //this.bucketForm.reset();
-  // alert(JSON.stringify(this.form));
 //  this.submitted = false;
   this.bucketSuccessMsg="";
   this.bucketMsgClass="";
@@ -246,7 +248,6 @@ clearForm(resetEditForm){
         };
         clearTimeout(this.typeAheadTimer);
           if(this.Type == "Edit"){
-            //  alert(JSON.stringify(this.form)+"+++++++Before-");
                 this.formB['Id']=resetEditForm.Id;
                 this.formB["title"]=resetEditForm.title;
                 this.formB['description']=resetEditForm.description;
