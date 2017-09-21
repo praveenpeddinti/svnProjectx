@@ -279,7 +279,7 @@ footer{font-size:12px}
 .Open{color:#FC4A4A}
 .Accepted{color:#0081c4}*/
 .ngx-datatable.material .datatable-body .datatable-body-row .datatable-body-cell{font-size:13px;line-height:14px}
-.prioritycolumn{width:66px; margin:0 0 0 6px}
+.prioritycolumn{width:68px; margin:0 0 0 6px}
 .duedate{margin:0 0 0 8px}
 .bucket{margin:0 0 0 10px}
 .prioritycolumn i{float:right;margin-top:0px}
@@ -1610,9 +1610,9 @@ button.toast-close-button {
 /*.notfi_deletbox .delete_followersbgtable::after{right:14px!important;}*/
 
 .dropdown_wrap .ui-dropdown-panel .ui-dropdown-item {
-    white-space: nowrap!important;
+    /*white-space: nowrap!important;*/
     overflow-x: hidden!important;
-    overflow-y: auto!important;
+   /* overflow-y: auto!important;*/
     padding-right: 10px;
 }
 .dropdown_wrap .ui-dropdown-items-wrapper ul li{ padding-right:17px!important;}
