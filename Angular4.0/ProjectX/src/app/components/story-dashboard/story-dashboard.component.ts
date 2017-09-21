@@ -629,7 +629,18 @@ getFilteredData(response){
             "canDelete": true
           }
         }
-        this.FilterOptionToDisplay[0].filterValue.push(filterOption);
+        var updated:boolean=false;
+         this.FilterOptionToDisplay[0].filterValue.forEach((element) =>{
+             if(element.value.id==filterOption.value.id){
+                 element=filterOption;
+                 updated = true;
+                 return true;
+             }
+
+         })
+         if(!updated){
+           this.FilterOptionToDisplay[0].filterValue.push(filterOption);
+         }
         this.selectedFilter=filterOption.value;
         this.filterDashboard();
        }
