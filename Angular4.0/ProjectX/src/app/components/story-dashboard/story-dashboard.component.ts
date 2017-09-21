@@ -416,7 +416,7 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
                 var listData = {
                   list:data.data
                 };
-                var priority=(fieldTitle=="Priority"?true:false);
+                var priority=(fieldTitle=="priority"?true:false);
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
                 this.dropList=this.dropDisplayList[0].filterValue;
                 //sets the dropdown prefocused
