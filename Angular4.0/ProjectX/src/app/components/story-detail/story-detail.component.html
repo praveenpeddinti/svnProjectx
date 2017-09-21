@@ -170,9 +170,9 @@
 
 
             <div class="expand_collapse">
-            <a type="button" id="expand" (click)="expand()" class="colapse"><i class="fa fa-arrow-up alignright" aria-hidden="true"></i>
+            <a type="button" id="expand" (click)="expand()" class="colapse"><i class="fa fa-arrow-down alignright" aria-hidden="true"></i>
             </a>
-<a type="button" id="collapse" (click)="collapse()" class="colapse"><i class="fa fa-arrow-down alignright" aria-hidden="true"></i>
+<a type="button" id="collapse" (click)="collapse()" class="colapse"><i class="fa fa-arrow-up alignright" aria-hidden="true"></i>
 </a>
 </div>
 <div class="main_div widgetmainbg" [ngClass]="{ 'hide': hide}">
@@ -270,7 +270,7 @@
             <div class="custom_story_input">
                     <input class="editinput" type="text" placeholder="Create a task here"  id="childtitle" value="" [(ngModel)]="childTaskmodel.childtitle"  #childtitle="ngModel"  name="childtitle" />
             </div>
-             <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="savechiledTask()" type="submit">CREATE</button></div>
+             <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium bor_radius0" (click)="savechiledTask()" type="submit">CREATE</button></div>
    
 
         </div>
@@ -324,7 +324,7 @@
         <p-autoComplete [(ngModel)]="text" [minLength]="1" placeholder="Relate a Story/Task" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchRelateTask($event)" id="relatedTask"></p-autoComplete>
     </div>
    
-   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium" (click)="saveRelatedTask()">RELATE</button></div>
+   <div class="custom_story_button"><button class="normal bluebutton bluebuttonmedium bor_radius0" (click)="saveRelatedTask()">RELATE</button></div>
  </div>
          <div id="relatedTaskerr_msg" class="fielderror" style="display:none;">
 
