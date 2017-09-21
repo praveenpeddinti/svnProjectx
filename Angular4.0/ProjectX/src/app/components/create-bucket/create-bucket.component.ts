@@ -131,7 +131,6 @@ BucketForAddorEdit(event){
     editor=editor.replace(/\&nbsp;*\s*(<br>)*/gi,'');
     editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
    //editor="<p>"+editor+"</p>";
-   alert("spaces"+editor+"editor");
     this.formB['description']=editor;
     // alert("+++++trm+++++++"+jQuery(editor).text().trim()+"----------------");
    // this.formB['description']=editor;
