@@ -778,8 +778,8 @@ padding-left:0px!important;
 		cursor: pointer;
 }
 
-.sticky li:hover{margin-left: -115px;background: #f4f4f4;font-size:15px;color:#333}
-.sticky li span{float: left;margin-right: 10px;border-radius:100px;background: #237ea7;color:#fff;text-align: center;width:32px;height:32px;}
+.sticky li:hover{margin-left: -115px;background: #f4f4f4;font-size:15px;color:#333;}
+.sticky li span{float: left;margin-right: 10px;border-radius:100px;background: #524693;color:#fff;text-align: center;width:32px;height:32px;}
 .sticky li i{font-size:25px;color:#fff;margin-top:3px}
 .sticky li p{padding: 0px;margin: 0px;text-transform: uppercase;line-height: 32px;}
 .ngx-datatable.fixed-row .datatable-scroll .datatable-body-row, .ngx-datatable .datatable-scroll .datatable-body-row{border:0;border-bottom:1px solid #f4f4f4}
@@ -1834,10 +1834,11 @@ img{border:none; outline:none;}
 /* .filter_date .primeDateComponent button{left: 92%!important;} */
 .filter_date .ui-calendar button{ height:29px;}
 .filter_date button {
-    left: 92%!important;
+    left: 93%!important;
 }
 
-.desc_more{ margin-top: -15px!important; float: right;color: #695ea5; cursor: pointer;}
+.desc_more{ margin-top: -10px!important; text-align:right;color: #695ea5; cursor: pointer; clear:both; padding-bottom: 5px; border-bottom: solid 1px #e6e8eb; margin-bottom: 10px; display:block;}
+.bor_radius0{ border-radius: 0px!important;}
 
  @media (max-width:767px){
 .navbar-nav {
@@ -1882,10 +1883,6 @@ img{border:none; outline:none;}
 
  }
  
- 
-/* .ui-inputtext.ng-dirty.ng-invalid, p-dropdown.ng-dirty.ng-invalid > .ui-dropdown, p-autocomplete.ng-dirty.ng-invalid > .ui-autocomplete > .ui-inputtext, p-calendar.ng-dirty.ng-invalid > .ui-inputtext, p-chips.ng-dirty.ng-invalid > .ui-inputtext, p-inputmask.ng-dirty.ng-invalid > .ui-inputtext, p-checkbox.ng-dirty.ng-invalid .ui-chkbox-box, p-radiobutton.ng-dirty.ng-invalid .ui-radiobutton-box, p-inputswitch.ng-dirty.ng-invalid .ui-inputswitch, p-listbox.ng-dirty.ng-invalid .ui-inputtext, p-multiselect.ng-dirty.ng-invalid > .ui-multiselect, p-spinner.ng-dirty.ng-invalid > .ui-inputtext, p-selectbutton.ng-dirty.ng-invalid .ui-button, p-togglebutton.ng-dirty.ng-invalid .ui-button {
-    border-bottom-color: none!important;
-}*/
 .ui-inputtext.ng-dirty.ng-invalid, p-dropdown.ng-dirty.ng-invalid > .ui-dropdown, p-autocomplete.ng-dirty.ng-invalid > .ui-autocomplete > .ui-inputtext, p-calendar.ng-dirty.ng-invalid > .ui-inputtext, p-chips.ng-dirty.ng-invalid > .ui-inputtext, p-inputmask.ng-dirty.ng-invalid > .ui-inputtext, p-checkbox.ng-dirty.ng-invalid .ui-chkbox-box, p-radiobutton.ng-dirty.ng-invalid .ui-radiobutton-box, p-inputswitch.ng-dirty.ng-invalid .ui-inputswitch, p-listbox.ng-dirty.ng-invalid .ui-inputtext, p-multiselect.ng-dirty.ng-invalid > .ui-multiselect, p-spinner.ng-dirty.ng-invalid > .ui-inputtext, p-selectbutton.ng-dirty.ng-invalid .ui-button, p-togglebutton.ng-dirty.ng-invalid .ui-button {
     border-bottom-color:#d6d6d6!important;
 }
