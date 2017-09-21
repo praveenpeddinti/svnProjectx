@@ -286,7 +286,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom relativediv">
 
-                  <p-autoComplete required [(ngModel)]="extractFields.ticketDesc" name="edittask"  #edittask="ngModel" [minLength]="1"  placeholder="search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" (onSelect)="getSelectedValueForTask($event)" id="addtitle" ></p-autoComplete>
+                  <p-autoComplete required [(ngModel)]="extractFields.ticketDesc" name="edittask"  #edittask="ngModel" [minLength]="1"  placeholder="search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" (onSelect)="getSelectedValueForTask($event)" (ngModelChange)="textChanged($event)" id="addtitle" ></p-autoComplete>
   <div *ngIf="esubmitted && edittask.errors " class="fielderror">
                 <div  [hidden]="!edittask.errors.required">
                     Story/task is required
