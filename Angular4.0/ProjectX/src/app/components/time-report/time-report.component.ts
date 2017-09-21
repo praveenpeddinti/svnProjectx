@@ -281,9 +281,14 @@ export class TimeReportComponent{
         this.hourErr=false;
         this.titleErrMsg=false;
     }
+    textChanged(event) {
+        if(event=='' || typeof event == 'undefined'){
+            this.titleErrMsg=false;
+        }
+     } 
     searchTask(event) {
-        console.log("##########"+event.query);
-        this.titleErrMsg=false;
+       //  console.log("##########"+event.query+"-----ad----------"+event.keyCode);
+         this.titleErrMsg=false;
         var searchStrg=event.query;
         var modifiedString=event.query.replace("#","");
         var post_data={
@@ -314,18 +319,26 @@ export class TimeReportComponent{
                             if(!searchStrg.includes("#")){
                             let appendstring=['Please select valid story/task'];
                             this.search_results=appendstring;
+                           // alert(this.entryForm.text);
+                        //    this.entryForm['text']='';
                         }
                     
                     }
                     
                 });
                },700);
- 
+       
     }
 
 
     getSelectedValueForTask(event) {
+        console.log("##########"+"-----ad----------");
         this.selectedValForTask=event;
+        //   if (event.keyCode == 8 || event.keyCode == 46)
+        // {
+        //     console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        //    event.preventDefault();
+        // }
     }
 
     getSelectedValueForDate(event) {
@@ -370,7 +383,7 @@ export class TimeReportComponent{
      }
     }
     
-    addTimeLog(){ 
+    addTimeLog(){
         var getTaskVal=this.entryForm['text']; 
         var thisObj = this;
         var finalDate= this.entryForm['dateVal'].toString();
@@ -388,7 +401,7 @@ export class TimeReportComponent{
 
             }
         
-            if(this.entryForm['hours']!=0){
+            if(this.entryForm['hours']!='0'){
                 this.hourErr=false;
                 this._ajaxService.AjaxSubscribe("time-report/add-timelog",timelogData,(response)=>
                 { 
@@ -511,5 +524,10 @@ export class TimeReportComponent{
        
       this.Members=ids;
 
+    }
+
+    clearForm(){
+       console.log(JSON.stringify(this.entryForm['text']));
+       this.entryForm['text']=' ';
     }
 }

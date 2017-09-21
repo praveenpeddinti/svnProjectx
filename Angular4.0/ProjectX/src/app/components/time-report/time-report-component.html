@@ -192,8 +192,8 @@ Row classes are also dynamically. These classes are pass to service layer-->
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom autoSearchTask">
 
-                  <p-autoComplete  [(ngModel)]="entryForm.text" name="task"  #task="ngModel" [minLength]="1"  placeholder="Search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)"  required></p-autoComplete>
- <div *ngIf="submitted && task.errors " class="fielderror">
+                  <p-autoComplete  [(ngModel)]="entryForm.text" name="task"  #task="ngModel" [minLength]="1"  placeholder="Search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}" (ngModelChange)="textChanged($event)"  (completeMethod)="searchTask($event)"  required></p-autoComplete>
+ <div *ngIf="submitted && task.errors " class="fielderror" >
                 <div  [hidden]="!task.errors.required">Story/task is required</div>
                 
             </div>
@@ -258,7 +258,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
     
       <div class="modal-footer">
         <button type="submit" class="model_submit butnbor" (click)="submitted=true;">SUBMIT</button>
-        <button type="button" class="model_cancel butnbor" data-dismiss="modal" (click)="submitted=false;" >CANCEL</button>
+        <button type="button" class="model_cancel butnbor" data-dismiss="modal" (click)="submitted=false;clearForm()" >CANCEL</button>
       </div>
        </form>
     </div>
@@ -286,7 +286,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
                   <label class="timereportlabel"> Story/Task </label>
                   <div class="customformfieldsmarginbottom relativediv">
 
-                  <p-autoComplete required [(ngModel)]="extractFields.ticketDesc" name="edittask"  #edittask="ngModel" [minLength]="1"  placeholder="search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" (onSelect)="getSelectedValueForTask($event)"></p-autoComplete>
+                  <p-autoComplete required [(ngModel)]="extractFields.ticketDesc" name="edittask"  #edittask="ngModel" [minLength]="1"  placeholder="search for stories/tasks" [suggestions]="search_results"  [style]="{'width':'100%'}"  (completeMethod)="searchTask($event)" (onSelect)="getSelectedValueForTask($event)" id="addtitle" ></p-autoComplete>
   <div *ngIf="esubmitted && edittask.errors " class="fielderror">
                 <div  [hidden]="!edittask.errors.required">
                     Story/task is required
