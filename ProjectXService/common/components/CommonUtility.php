@@ -1995,6 +1995,7 @@ $text_message=$html . $text_message .
                    }
                    if($key == "Personal Filters"){
                       $valueData['canDelete']=true;
+                      $valueData['showChild']=0;
                    }
                    array_push($temp['filterValue'],array("label"=>$val['Name'],"value"=>$valueData));
                }
