@@ -31,6 +31,8 @@ class TinyUserCollection extends ActiveRecord
  "_id" ,      
      "CollaboratorId",
      "UserName",
+     "FirstName",
+     "LastName",
      "ProfilePicture",
      "Email",
     "OrganizationId",
