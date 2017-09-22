@@ -290,7 +290,7 @@ footer{font-size:12px}
 .customcalender .ui-calendar .ui-button{background: #e8e8e8;color:#fff;border:1px solid #f8f8f8;border-left:0}
 .customcalender .ui-calendar .ui-button:hover, .customcalender .ui-calendar .ui-button:focus{background: #f4f4f4;color:#fff;border:1px solid #f8f8f8;}
 .customcalender .ui-datepicker{width:99%}
-.cusomlistbullet{display: block;width:66px;}
+.cusomlistbullet{display: block;width:100%;}
 .cusomlistbullet i{float:right;margin-top:2px}
 .ngx-datatable.material .datatable-header .datatable-header-cell{ padding: 0.5rem 0.5rem;}
 /*.ngx-datatable.material .datatable-footer .datatable-pager a{line-height: 20px}*/
@@ -1504,8 +1504,8 @@ button.toast-close-button {
 .primeDateComponent button{ left:87%!important;}
 .datatable-row-detail{ padding: 0px!important;}
 .ui-dropdown-panel .ui-dropdown-items-wrapper {
-  /*  width: 150px;
-    */
+    width: 150px;
+   
 }
  .ddcs{} 
 
@@ -1610,12 +1610,12 @@ button.toast-close-button {
 /*.notfi_deletbox .delete_followersbgtable::after{right:14px!important;}*/
 
 .dropdown_wrap .ui-dropdown-panel .ui-dropdown-item {
-    /*white-space: nowrap!important;*/
+    white-space: nowrap!important;
     overflow-x: hidden!important;
-   /* overflow-y: auto!important;*/
+   overflow-y: auto!important;
     padding-right: 10px;
 }
-.dropdown_wrap .ui-dropdown-items-wrapper ul li{ padding-right:17px!important;}
+/*.dropdown_wrap .ui-dropdown-items-wrapper ul li{ padding-right:17px!important;}*/
 .ngx-datatable{ overflow:unset !important;}
 .ngx-datatable .datatable-body .datatable-row-detail {
     overflow: unset!important;
