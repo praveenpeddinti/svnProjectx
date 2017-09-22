@@ -1052,12 +1052,18 @@ class SiteController extends Controller
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
             error_log("-curl response-".print_r($result,1));
+            $data = json_decode($result,true);
+            error_log("-cusdjhasjkdhj====se-".print_r($data,1));
+            foreach($data as $key=>$eachDir){
+                $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($eachDir["last_author"]);
+                $data[$key]["ProfilePic"]=$userProfile["ProfilePicture"];
+            }
             
             
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
-                $responseBean->data =  json_decode($result) ;
+                $responseBean->data =  $data ;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             return $response;
        } catch (\Throwable $th) {
