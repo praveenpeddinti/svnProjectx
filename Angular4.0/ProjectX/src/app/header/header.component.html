@@ -17,7 +17,7 @@
 </spinner-component>
 <div *ngIf="projectName!=''" class="sticky-container">
 		<ul class="sticky">
-			<li (click)="TimeReport()">
+			<li *ngIf="_router.url!='/user-dashboard'" (click)="TimeReport()">
                             <span><i class="fa fa-clock-o"></i></span>
 				<p>Time Report</p>
 			</li>
