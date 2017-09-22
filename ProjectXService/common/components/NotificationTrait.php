@@ -1062,6 +1062,8 @@ error_log("-------------------------55555555555555----------------".$notificatio
                 $newValue = "";
                 $oldValue = "";
                 $user_activity = '';
+                $text_message='';
+                $email_text['message']='';
                 echo ("3. sending email ...");
                 /* Left Panel Changed Field Values Start */
                 $ticket_title = " | #" . $ticketId . ": " . $title;
@@ -1155,8 +1157,8 @@ EOD;
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
                  $user_activity = $activityOn;
-        }
-                $commentAllowedArray = ["comment", "reply", "edit", "delete"];
+        }echo "-==================".$notification['Notification_Type'] ;
+                $commentAllowedArray = ["comment", "reply", "edit", "delete","repliedOn"];
                 if ($notification['ActivityOn'] == "comment" && (in_array($notification['Notification_Type'], $commentAllowedArray))) {
                     $datetime = $notification['NotificationDate']->toDateTime();
                     $datetime->setTimezone(new \DateTimeZone("Asia/Kolkata"));
@@ -1179,7 +1181,10 @@ EOD;
         <tr><td style="font-family:'Arial', Helvetica, sans-serif;  font-size:14px;line-height:24px;color:#333333;">{$notification['NewValue']}</td></tr>
 EOD;
                         $email_text['message'] = $fromUser . " replied to your comment in a {$planType}.";
-                    } else if ($notification['Notification_Type'] == "repliedOn") {
+                        
+                    } 
+                    else if ($notification['Notification_Type'] == "repliedOn") {
+                        echo "===================repliedOn========";
 //                        $preposition = "";
 //                        $object = "reply";
 //                        $type = Yii::t('app','reply');
@@ -1325,10 +1330,12 @@ EOD;
 EOD;
                             $user_activity = $notification['Notification_Type'] . " follower";
                         }
-                        if ($notification['Notification_Type'] != "reply") {
+                        if ($notification['Notification_Type'] != "reply" && $notification['Notification_Type'] != "repliedOn") {
                             $email_text = array('message' => Yii::t('app',$user_activity.', {planType}',["planType"=>$planType]));
-                            echo "========22222222222222222=============".$email_text['message'];
                         }
+//                          if ($notification['Notification_Type'] != "reply" && $notification['Notification_Type'] == "repliedOn") {
+//                             $email_text['message'] = "You have new activity alert";
+//                        }
                         $user_message = "<tr><td style='border-bottom:1px solid #f0f0f0; font-family:Arial; font-size:14px;line-height:24px;color:#333333;  padding-bottom:10px;' width='570'>Dear " . $display_name . ",<br/><span style='font-family:Arial; font-size:14px;line-height:24px;color:#333333;'>{$email_text['message']}</span></td></tr>";
 
                         $text_newmessage = $project_logo . $user_message . $ticket_message . $text_message . $view_ticket_message;
