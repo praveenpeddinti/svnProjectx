@@ -863,24 +863,29 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     $summary['prepare_text']= $prepare_text;
                                     $summary['prepostion']= 'to';
                                }elseif($summary['ActionOn']=='follow' || $summary['ActionOn']=='unfollow' ){
-                                    $prepare_text = 'is';
+                                    $prepare_text = 'has';
                                     $summary['action']=Yii::t('app',$summary['ActionOn']);
                                    if(!empty($changeSummary['OldValue'])){
-                                       $summary['OldValue']='';
+                                        $tinyUserDetails=TinyUserCollection::getMiniUserDetails($changeSummary['OldValue']);
+                                        $setNewVal=$tinyUserDetails['UserName'];
+                                        error_log("setNew--@@@@@@@@@@@@@@@@@@@@@@@@--".$setNewVal);
+                                       $summary['OldValue']=$setNewVal;
                                        $summary['OldValueText']='';
                                    }else{
                                        $summary['OldValue'] ='';
                                        $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
-                                       $summary['NewValue']='';
-                                       $summary['NewValueText']='';
+                                       $tinyUserDetails=TinyUserCollection::getMiniUserDetails($changeSummary['NewValue']);
+                                       $setNewVal=$tinyUserDetails['UserName'];
+                                       $summary['NewValue']=$setNewVal;
+                                       $summary['NewValueText']='  as a follwer';
                                    }else{
                                        $summary['NewValue'] ='';
                                        $summary['NewValueText']='';
                                    }
                                     $summary['prepare_text']= $prepare_text;
-                                     $summary['prepostion']= '';
+                                     $summary['prepostion']= $getActivities['DisplayAction'];
                                }elseif($summary['ActionOn']=='childtask' ){
                                      $prepare_text = Yii::t('app','created');
                                   $summary['action']='';
