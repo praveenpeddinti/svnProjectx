@@ -52,26 +52,43 @@ export class HomeComponent{
     // public ProjectId;
 
     private projName;
+    private projId;
     private checkOutUrl="";
+    private team = [];
     private svnServer = "http://10.10.73.16/svn/"
+    private svnLogs = [];
     //public offset=0;
     public rows = [];
       ngOnInit() {
           this.route.queryParams.subscribe(
         params => 
             { 
+                // alert(JSON.stringify(this.users));
                 // localStorage.
                 this.projName=params['ProjectName'];
+                this.projId=params['ProjectId'];
+                var sendData = {
+                    ProjectName:this.projName,
+                    ProjectId:this.projId
+                };
+                this._ajaxService.AjaxSubscribe('site/get-project-team',sendData,(result)=>
+                {  
+                        // alert(JSON.stringify(result));
+                        this.team = this.prepareTeamPermissionsData(result.data);
+                });
                 this.navigateToFolder(this.projName);
+                this.showLog();
         })
          
    }
 
    ngAfterViewInit() {
                 jQuery('#createProjectDiv').show();
-                jQuery('#showLogDiv').hide();
+                // jQuery('#showLogDiv').hide();
                 jQuery('#createUserDiv').hide();
     }
+
+    
     // ngDoCheck() {
     //     localStorage.setItem("currentDirPos",this.fileNavigator.join("/"));
     //     alert("DoCheck===>"+this.fileNavigator.join("/"));
@@ -101,25 +118,29 @@ export class HomeComponent{
            userId:JSON.parse(this.users.Id),
            repName:this.projName
            }
-           
+           jQuery('#createProjectDiv').show();
+        //    jQuery('#showLogDiv').hide();
+           jQuery('#createUserDiv').hide();
         //    alert(JSON.stringify(sendData));
-         this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
-        {  
-        //    alert("----repodata----"+JSON.stringify(result));
-           this.fileNavigator.push(this.projName);
-           this.repo =this.prepareFileStructure(result.data);
-           })
+        //  this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
+        // {  
+        // //    alert("----repodata----"+JSON.stringify(result));
+        //    this.fileNavigator.push(this.projName);
+        //    this.repo =this.prepareFileStructure(result.data);
+        //    })
     }
 
     navigateToFolder(dirName){
         
         var sendData={
-            directory :(this.fileNavigator.length>0)?this.fileNavigator.join("/")+"/"+dirName : dirName
+            directory :(this.fileNavigator.length>0)?this.fileNavigator.join("/")+"/"+dirName : dirName,
+            userName:this.users.username,
+           password:'minimum8'
         };
         // alert("navigateToFolder===>"+JSON.stringify(sendData));
         this._ajaxService.AjaxSubscribe('site/get-repository-structure',sendData,(result)=>
         {  jQuery('#createProjectDiv').show();
-           jQuery('#showLogDiv').hide();
+        //    jQuery('#showLogDiv').hide();
            jQuery('#createUserDiv').hide();
         //    alert("----repodata----"+JSON.stringify(result));
         //    if(action != "pop"){
@@ -158,13 +179,15 @@ export class HomeComponent{
         alert(fodlerName);
         var sendData={
             curerntDirectory :this.fileNavigator.join("/"),
-            newFolder:fodlerName
+            newFolder:fodlerName,
+            userName:this.users.username,
+            password:'minimum8'
         };
         this._ajaxService.AjaxSubscribe('site/create-folder',sendData,(result)=>
         {  jQuery('#createProjectDiv').show();
-           jQuery('#showLogDiv').hide();
+        //    jQuery('#showLogDiv').hide();
            jQuery('#createUserDiv').hide();
-           alert("----repodata----"+JSON.stringify(result));
+        //    alert("----repodata----"+JSON.stringify(result));
         //    if(action != "pop"){
         //    this.fileNavigator.push(dirName);
         //    }else{
@@ -176,36 +199,92 @@ export class HomeComponent{
     }
     
     createUser(){
-    var sendData={
-           userId:JSON.parse(this.users.Id),
-           userName:'moin',
-           password:'minimum8'
-           }
-           
-         this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
-        {
+    // var sendData={
+    //        userId:JSON.parse(this.users.Id),
+    //        userName:'moin',
+    //        password:'minimum8'
+    //        }
            jQuery('#createProjectDiv').hide();
-           jQuery('#showLogDiv').hide();
+        //    jQuery('#showLogDiv').hide();
            jQuery('#createUserDiv').show();
-           console.log("----repodata----"+JSON.stringify(result));
-           this.repo=result.data;
-           })
+        //  this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
+        // {
+           
+        //    console.log("----repodata----"+JSON.stringify(result));
+        //    this.repo=result.data;
+        //    })
     }
     
     showLog(){
     var sendData={
-           userId:JSON.parse(this.users.Id),
-           repName:'ProjectX'
-           }
+           userId:this.users.Id,
+           repName:this.projName,
+           userName:this.users.username,
+           password:'minimum8',
+           role:'RW'
+           };
            
          this._ajaxService.AjaxSubscribe('site/show-svnlog',sendData,(result)=>
         {
            jQuery('#createProjectDiv').hide();
            jQuery('#createUserDiv').hide();
-           jQuery('#showLogDiv').show();
+        //    jQuery('#showLogDiv').show();
            
-           console.log("----repodata----"+JSON.stringify(result));
-           this.repo=result.data;
+        //    alert("----repodata----"+JSON.stringify(result));
+           this.svnLogs = result.data;
+        //    for(let elem of this.svnLogs){
+        //       var d = new Date(Date.parse(elem.date));
+        //       var locale = "en-us";
+        //         var month = d.toLocaleString(locale, { month: "short" });
+        //            alert(d.toLocaleDateString());
+        //            alert(month);
+               
+        //    }
+
+        //    this.repo=result.data;
            })
+    }
+
+    prepareTeamPermissionsData(teamData=[]){
+        var teamPermissions = [];
+        for(let teamMember of teamData){
+            teamPermissions.push({userName: teamMember.Name,ProfilePic:teamMember.ProfilePic, read:false, write:false, modified:false});
+        }
+        return teamPermissions;
+    }
+
+    savePermissions(){
+        var permissonsToBeUpdated = this.getModifiedList(this.team);
+        var sendData = {
+            projectName:this.projName,
+            userData:permissonsToBeUpdated
+        };
+        // alert("----permissions----"+JSON.stringify(sendData));
+        this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
+        {
+           jQuery('#createProjectDiv').hide();
+        //    jQuery('#showLogDiv').hide();
+           jQuery('#createUserDiv').show();
+           console.log("----repodata----"+JSON.stringify(result));
+           alert(result.data);
+        //    this.repo=result.data;
+           })
+
+    }
+
+    getModifiedList(teamList=[]){
+        var modifiedPermissions = [];
+        for(let teamMember of teamList){
+            if(teamMember.modified){
+                var data={userName:teamMember.userName,password:"minimum8", role:"R"};
+                if((teamMember.read && teamMember.write) || teamMember.write){
+                   data.role="RW";
+                }else if(teamMember.read == false && teamMember.write == false){
+                   data.role="REM"; 
+                }
+                modifiedPermissions.push(data);
+            }
+        }
+        return modifiedPermissions;
     }
 }

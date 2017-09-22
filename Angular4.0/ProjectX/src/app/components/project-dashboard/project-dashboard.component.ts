@@ -270,20 +270,37 @@ public users=JSON.parse(localStorage.getItem('user'));
   gotoRepo(projName){
 
     var sendData={
-           userId:JSON.parse(this.users.Id),
-           repName:projName
+           userId:this.users.Id,
+           repName:projName,
+           userName:this.users.username,
+           password:'minimum8',
+           role:'RW'
            };
-           
-        //    alert(JSON.stringify(sendData));
-         this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
+alert("==-->"+JSON.stringify(sendData));
+this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         {  
         // jQuery('#createProjectDiv').show();
         //    jQuery('#showLogDiv').hide();
         //    jQuery('#createUserDiv').hide();
-        //    alert("----repodata----"+JSON.stringify(result));
-        this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName}});
+           alert("----repodata----"+JSON.stringify(result));
+        this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName,ProjectId:this.projectId}});
 
            })
+        //    this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
+        // {
+        //   //  jQuery('#createProjectDiv').hide();
+        //   //  jQuery('#showLogDiv').hide();
+        //   //  jQuery('#createUserDiv').show();
+        //    console.log("----repodata----"+JSON.stringify(result));
+        //    alert("user created--->"+JSON.stringify(sendData));
+        //   //  this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName}});
+
+           
+        //   //  this.repo=result.data;
+        //    })
+           
+        //    alert(JSON.stringify(sendData));
+         
   }
 
    gotoStory(bucketObj,filterVal,filterType,key){ console.log("Bucket__obj__"+JSON.stringify(bucketObj));

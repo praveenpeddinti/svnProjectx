@@ -10,15 +10,17 @@
          
 <div >
         <div class="container " id="nosearchdiv" >
+         <div class="row">  
+             <div class="col-md-8"> 
 <ul class="nav nav-tabs">
 <!--<li class="active"><a (click)="callprojectsByClick(1)" data-toggle="tab">All Projects</a></li>
 <li ><a (click)="callprojectsByClick(2)" data-toggle="tab">All Activity</a></li>-->
 <!--(click)="createProject()"-->
-<li class="active"><a  data-toggle="tab">Create Repository</a></li>
-<li class="active"><a (click)="createUser()" data-toggle="tab">Create User</a></li>
-<li class="active"><a (click)="showLog()" data-toggle="tab">Svn Log</a></li>
+<li class="active"><a (click)="createProject()" data-toggle="tab">Repository</a></li>
+<li class="active"><a (click)="createUser()" data-toggle="tab">User Permissions</a></li>
+<!--<li class="active"><a (click)="showLog()" data-toggle="tab">Svn Log</a></li>-->
 </ul>
- </div> 
+ 
     <div id="createProjectDiv">
         <div>
             Checkout Url:<br>
@@ -44,14 +46,44 @@
             </li>
             <li *ngFor="let repoData of repo">
                 <a (click)="navigateToFolder(repoData.name)">{{repoData.name}}</a>
+                <img src="{{repoData.ProfilePic}}">
                 <span>{{repoData.last_author}}</span>
                 <span>{{repoData.time}}</span>
                 <span>{{repoData.created_rev}}</span>
             </li>
         </ul>
     </div>
-    <div id="createUserDiv">{{this.repo}}</div>
-    <div id="showLogDiv">{{this.repo}}</div>
+    <div id="createUserDiv">
+        <div>
+        <ul>
+            <li *ngFor="let member of team">
+                <img src="{{member.ProfilePic}}">
+                <a>{{member.userName}}</a>
+                <p-checkbox   binary="true" [(ngModel)]="member.read"   label="Read" class="nchbox" (onChange)="member.modified = true" ></p-checkbox>
+                <p-checkbox   binary="true" [(ngModel)]="member.write"  label="Write" class="nchbox" (onChange)="member.modified = true"></p-checkbox>
+            </li>
+        </ul>
+        </div>
+        <div class="user_more pull-right"  (click)="savePermissions()" >
+                       Save Permissions 
+         </div>
+    </div>
+             </div>
+             <div class="col-md-4">
+                 <div id="showLogDiv">
+                     <div>Subversion Logs</div>
+                    <div *ngFor="let eachLog of svnLogs">
+                        <img src="{{eachLog.ProfilePic}}">
+                        <span>{{eachLog.author}}</span>
+                        <span>@ {{projName}} committed</span>
+                        <span>[ {{eachLog.rev}} ]:</span>
+                        <span>{{eachLog.msg}}</span>
+                        <i>{{eachLog.DateTimeString}}</i>
+                    </div>
+                </div>
+             </div>
+         </div>
+    </div> 
   <div class="tab-content tab-content_content" >
 
  
