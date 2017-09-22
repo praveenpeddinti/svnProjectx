@@ -1552,7 +1552,8 @@ public callTicketDetailPage(ticId,projectId){
             this.checkPlanLevel=data.data.StoryType.Name;
             console.log("==Plan Level=="+this.checkPlanLevel);
             this.shared.navigatedFrom(this.navigatedFrom);//added by Ryan
-            this.shared.change(this._router.url,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
+            var url=decodeURIComponent(this._router.url);
+            this.shared.change(url,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
             this.childTaskData=data.data.Tasks;
              this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
              this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
