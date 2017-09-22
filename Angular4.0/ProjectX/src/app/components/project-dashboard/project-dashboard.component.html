@@ -175,7 +175,7 @@
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Stories/Tasks</div>
-                             <div class="col-md-6 col-xs-6"><div class="but">{{current[0].TicketsCount}}</div></div>
+                             <div class="col-md-6 col-xs-6"><div (click)="gotoStory(current)" class="but">{{current[0].TicketsCount}}</div></div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Total Story Points</div>
@@ -235,7 +235,7 @@
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Stories/Tasks</div>
-                             <div class="col-md-6 col-xs-6"><div class="but">{{currentWeekBucket[0].TicketsCount}}</div></div>
+                             <div class="col-md-6 col-xs-6"><div (click)="gotoStory(currentWeekBucket)" class="but">{{currentWeekBucket[0].TicketsCount}}</div></div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Total Story Points</div>
@@ -317,7 +317,7 @@
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Stories/Tasks</div>
-                             <div class="col-md-6 col-xs-6"><div class="but">{{otherBuckets[0].TicketsCount}}</div></div>
+                             <div class="col-md-6 col-xs-6"><div (click)="gotoStory(otherBuckets)" class="but">{{otherBuckets[0].TicketsCount}}</div></div>
                           </div>
                           <div class="row marb10">
                              <div class="col-md-6 col-xs-6">Total Story Points</div>

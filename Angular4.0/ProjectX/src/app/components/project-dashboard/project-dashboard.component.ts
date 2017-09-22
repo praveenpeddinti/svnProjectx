@@ -286,5 +286,27 @@ public users=JSON.parse(localStorage.getItem('user'));
            })
   }
 
+   gotoStory(bucketObj,filterVal,filterType,key){ console.log("Bucket__obj__"+JSON.stringify(bucketObj));
+       var filterKey:any={}; 
+        filterKey['Buckets']=[{
+            "label":bucketObj.Name ,
+            "id": bucketObj.Id,
+            "type": "buckets",
+            "showChild": 1,
+            "isChecked": true
+          }];
+  if(filterVal!=''){
+      filterKey[key]=[{
+            "label":"" ,
+            "id": filterVal,
+            "type": filterType,
+            "showChild": 1,
+            "isChecked": true
+          }];
+  }
+       
+     this._router.navigate(['project',this.projectName,'list'],{queryParams: {page:1,sort:'desc',col:'Id','adv':true,'advData':JSON.stringify(filterKey)}});
+        }
+
  
 }

@@ -20,7 +20,7 @@ export class AdvanceFilterComponent implements OnInit {
           "label": "Custome date",
           "id": "6",
           "type": "DueDate",
-          "showChild": 1,
+          "showChild": 0,
           "isChecked": false,
           "dateVal":''
 }
