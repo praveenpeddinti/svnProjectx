@@ -33,7 +33,14 @@ class CollaboratorService {
     public function getProjectTeam($projectId) {
         try {
             $collaboratorModel = new Collaborators();
-            return $collaboratorModel->getProjectTeam($projectId);
+             $data = $collaboratorModel->getProjectTeam($projectId);
+             error_log("*******project Team***********".print_r($data,1));
+            foreach($data as $key=>$user){
+                $userProfile = TinyUserCollection::getMiniUserDetails($user["Id"]);
+                error_log("++++++keyyyyyy++++++++".$key);
+                $data[$key]["ProfilePic"] = $userProfile["ProfilePicture"];
+            }
+            return $data;
         } catch (\Throwable $ex) {
             Yii::error("CollaboratorService:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());

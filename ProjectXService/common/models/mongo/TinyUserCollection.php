@@ -92,6 +92,20 @@ class TinyUserCollection extends ActiveRecord
        return $userDetails;
      
     }
+    
+    public static function getMiniUserDetailsByUserName($userName=""){
+        
+        $query = new Query();
+        // compose the query
+          $query->select(['CollaboratorId','FirstName','LastName','UserName','ProfilePicture','Email',])
+                ->from('TinyUserCollection')
+            ->where(['UserName' => $userName ]);
+        // execute the query
+        $userDetails = $query->one();
+        $userDetails["ProfilePicture"] = Yii::$app->params['ServerURL'].$userDetails["ProfilePicture"];
+       return $userDetails;
+     
+    }
       public static function createUsers($data){
         
         try {

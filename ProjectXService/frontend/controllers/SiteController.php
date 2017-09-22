@@ -814,6 +814,9 @@ class SiteController extends Controller
             $postData->repName = preg_replace("/\s*/", "", $postData->repName);
             $postfields = array();
             $postfields['projectName'] = $postData->repName;
+            $postfields['username'] = $postData->userName;
+            $postfields['password'] = $postData->password;
+            $postfields['role'] = $postData->role;
             error_log("------".$postfields['projectName']);
             //$postfields['field2'] = urlencode('value2');
             curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/test.php");
@@ -855,23 +858,25 @@ class SiteController extends Controller
        try{
             $postData = json_decode(file_get_contents("php://input"));
             error_log("------".print_r($postData,1));
-             error_log($postData->password."------".$postData->userName);
+//             error_log($postData->password."------".$postData->userName);
+//            die();
             $ch = curl_init();
-            $post_data = array(
-                'username' => $postData->userName,
-                'password' => $postData->password
-            );
+            
             $postfields = array();
+            $postfields['userData'] = json_encode($postData->userData);
+            $postfields['projectName'] = $postData->projectName;
+            
+//            $postfields = array();
             curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/user.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
             
             $result = curl_exec($ch);
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
-            error_log("-curl user response-".print_r($result,1));
+            error_log("-curl user response-".$result);
             
             
                 $responseBean = new ResponseBean;
@@ -908,11 +913,13 @@ class SiteController extends Controller
        try{
             $postData = json_decode(file_get_contents("php://input"));
             error_log("------".print_r($postData,1));
-             error_log("------".$postData->repName);
+            error_log("------".$postData->repName);
             $ch = curl_init();
            
             $postfields = array();
             $postfields['projectName'] = $postData->repName;
+            $postfields['username'] = $postData->userName;
+            $postfields['password'] = $postData->password;
             error_log("------".$postfields['projectName']);
             //$postfields['field2'] = urlencode('value2');
             curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/log.php");
@@ -924,13 +931,36 @@ class SiteController extends Controller
             $result = curl_exec($ch);
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
-            error_log("-curl response-".print_r($result,1));
-            
+//            error_log("-curl response-".print_r($result,1));
+            $data = json_decode($result);
+//            error_log("----".print_r($data,1));
+//            array_column($data, "date")
+//            $time = strtotime($utc);
+//            $dateInLocal = date("Y-m-d H:i:s", $time);
+            foreach($data as $key=>$value){
+                $time = strtotime($value->date);
+                $dateInLocal = date("M-d-Y H:i:s", $time);
+                $timeInLocal = date("H:i:s", $time);
+                $data[$key]->DateTimeString=$dateInLocal;
+                $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($value->author);
+                $data[$key]->ProfilePic=$userProfile["ProfilePicture"];
+//                $data[$key]->TimeString=$timeInLocal;
+//                $data[$key]->Month=date("M", $time);
+//                $data[$key]->Year=date("Y", $time);
+//                $data[$key]->Date=date("d", $time);
+            }
+//            $dates = array_unique(array_column($data, "DateString"));
+//            $returnData = array_fill(0, count($dates), []);
+//            foreach($data as $key=>$value){
+//                if(in_array($value->DateString, $dates))
+//                
+//            }
+            error_log("==12312343535==>>>".print_r($data,1));
             
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
-                $responseBean->data = $result;
+                $responseBean->data = $data;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             return $response;
        } catch (\Throwable $th) {
@@ -955,6 +985,8 @@ class SiteController extends Controller
             $postData->directory = preg_replace("/\s*/", "", $postData->directory);
             $postfields = array();
             $postfields['directory'] = $postData->directory;
+            $postfields['username'] = $postData->userName;
+            $postfields['password'] = $postData->password;
             error_log("------".$postfields['directory']);
             //$postfields['field2'] = urlencode('value2');
             curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/getRepo.php");
@@ -967,12 +999,18 @@ class SiteController extends Controller
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
             error_log("-curl response-".print_r($result,1));
+            $data = json_decode($result,true);
+            error_log("-cusdjhasjkdhj====se-".print_r($data,1));
+            foreach($data as $key=>$eachDir){
+                $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($eachDir["last_author"]);
+                $data[$key]["ProfilePic"]=$userProfile["ProfilePicture"];
+            }
             
             
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
-                $responseBean->data =  json_decode($result) ;
+                $responseBean->data =  $data ;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             return $response;
        } catch (\Throwable $th) {
@@ -998,6 +1036,8 @@ class SiteController extends Controller
             $postfields = array();
             $postfields['curerntDirectory'] = $postData->curerntDirectory;
             $postfields['newFolder'] = $postData->newFolder;
+            $postfields['userName'] = $postData->userName;
+            $postfields['password'] = $postData->password;
             
             error_log("------".$postfields['curerntDirectory']);
             error_log("------".$postfields['newFolder']);
@@ -1029,6 +1069,18 @@ class SiteController extends Controller
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
         }
+    }
+    
+    public function actionGetProjectTeam(){
+        $postData = json_decode(file_get_contents("php://input"));
+        $result = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postData->ProjectId);
+        $responseBean = new ResponseBean;
+        $responseBean->statusCode = ResponseBean::SUCCESS;
+        $responseBean->message = "success";
+        $responseBean->data =  $result ;
+        $response = CommonUtility::prepareResponse($responseBean,"json"); 
+        return $response;
+        
     }
     
     public function actionDirectTest(){
