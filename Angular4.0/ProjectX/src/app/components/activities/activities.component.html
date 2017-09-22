@@ -28,7 +28,7 @@
                      <div class="activitypro">{{finalData.time| dateFormat:'hh:mm:ss A'}} -{{finalData.ProjectName}}</div>
                </a>
                 </span>
-                  <span *ngIf ="!finalData.Miscellaneous.Slug">
+                  <span *ngIf ="!finalData.Miscellaneous.Slug"> 
                        <a  [routerLink]="['/project',finalData.ProjectName,finalData.ReferringId,'details']">
                        <div class="user" *ngIf="finalData.ProfilePicture"><img src="{{finalData.ProfilePicture}}"/></div>
                                           <div class="user" *ngIf="!finalData.ProfilePicture"><img src="{{finalData.ProfilePicture}}"/></div>
@@ -38,12 +38,19 @@
                                       <span class="" *ngIf="ChangeSummary.NewValue">{{ChangeSummary.NewValue}}</span>
                                        {{ChangeSummary.prepare_text}} {{ChangeSummary.prepostion}}  {{finalData.Title}}
                                  </span>
-                            <span *ngIf="!ChangeSummary.ActionOn.includes('stakeholder')"> {{ChangeSummary.prepare_text}}
+                               
+                            <span *ngIf="!ChangeSummary.ActionOn.includes('stakeholder')">
+                                   <span *ngIf="ChangeSummary.ActionOn.includes('unfollow')||ChangeSummary.ActionOn.includes('follow')">{{ChangeSummary.prepare_text}} {{ChangeSummary.prepostion}} 
+                                      <span class="" *ngIf="ChangeSummary.NewValue">{{ChangeSummary.NewValue}}</span>{{ChangeSummary.NewValueText}}
+                                     to   {{finalData.Title}}
+                                 </span>
+                               <span *ngIf="!ChangeSummary.ActionOn.includes('unfollow') && !ChangeSummary.ActionOn.includes('follow')"> {{ChangeSummary.prepare_text}}
                             <span class="" *ngIf="ChangeSummary.action"> {{ChangeSummary.action}}</span>
                             <span class="" *ngIf="ChangeSummary.OldValueText"> {{ChangeSummary.OldValueText}}</span>
                             <span *ngIf="ChangeSummary.OldValue">"{{ChangeSummary.OldValue}}"</span>
                             <span class="" *ngIf="ChangeSummary.NewValueText"> {{ChangeSummary.NewValueText}}</span>
                         <span *ngIf="ChangeSummary.NewValue">"{{ChangeSummary.NewValue}}"</span> {{ChangeSummary.prepostion}} {{finalData.Title}}
+                         </span>
                         </span>
                             </div>
                      <div class="activitypro">{{finalData.time| dateFormat:'hh:mm:ss A'}} -{{finalData.ProjectName}}</div>
