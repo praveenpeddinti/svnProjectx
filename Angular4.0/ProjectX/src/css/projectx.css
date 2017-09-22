@@ -1503,9 +1503,13 @@ button.toast-close-button {
 .inlineblock{ display:inline-block!important;}
 .primeDateComponent button{ left:87%!important;}
 .datatable-row-detail{ padding: 0px!important;}
-.ui-dropdown-panel .ui-dropdown-items-wrapper {
+/*.ui-dropdown-panel .ui-dropdown-items-wrapper {
     width: 150px;
    
+}*/
+
+.priority_dropdown .ui-dropdown-panel .ui-dropdown-items-wrapper {
+    width: 150px;
 }
  .ddcs{} 
 
@@ -1610,7 +1614,7 @@ button.toast-close-button {
 /*.notfi_deletbox .delete_followersbgtable::after{right:14px!important;}*/
 
 .dropdown_wrap .ui-dropdown-panel .ui-dropdown-item {
-    white-space: nowrap!important;
+    /*white-space: nowrap!important;*/
     overflow-x: hidden!important;
    overflow-y: auto!important;
     padding-right: 10px;
