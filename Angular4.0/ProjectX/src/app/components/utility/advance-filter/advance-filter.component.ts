@@ -160,7 +160,7 @@ selectCustomDate(value,type,index){
 
 
 
-applyFilter(option=''){
+applyFilter(option='',offset=0){
   var isValid:boolean=false;
   for (var k in this.selectedFilters[0]){
     if (this.selectedFilters[0].hasOwnProperty(k)) {
@@ -180,7 +180,7 @@ applyFilter(option=''){
     'projectId':this.projectId,
     'filterName':this.filterName,
     'selectedFilters':this.selectedFilters,
-    'offset' : 0,
+    'offset' : offset,
     'pagesize': 10,
     'sortvalue' : 'Id',
     'sortorder': 'desc',

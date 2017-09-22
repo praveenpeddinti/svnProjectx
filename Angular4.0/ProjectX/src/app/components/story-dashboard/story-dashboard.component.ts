@@ -5,6 +5,7 @@ import { Http, Headers } from '@angular/http';
 import { SharedService } from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
 import { ChildtaskComponent } from '../childtask/childtask.component';
+import { AdvanceFilterComponent } from '../utility/advance-filter/advance-filter.component';
 import {Location} from '@angular/common';
 import { AjaxService } from '../../ajax/ajax.service';
 declare var jQuery:any;
@@ -38,6 +39,7 @@ export class StoryDashboardComponent {
     public criteriaLabel:any=[];
      private fieldsData = [];
      private isAdvanceFilter:boolean=false;
+     private advanceFilterGo:boolean=false;
   public currentFieldData={
     fieldDataId:'',
     fieldIndex:'',
@@ -46,6 +48,8 @@ export class StoryDashboardComponent {
     //private projectId;              
      //public projectId;  
     @ViewChild('myTable') table: any;
+    @ViewChild(AdvanceFilterComponent) advFilterObj:AdvanceFilterComponent;
+
     rows = [];
     row1 = [];
     count: number = 0;
@@ -301,8 +305,11 @@ setFilterValue(response){
     onPage(event) {
         this.offset = event.offset;
         this.limit = event.limit;
+        if(!this.advanceFilterGo)
         this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.selectedFilter);
-    }
+        else
+        this.advFilterObj.applyFilter('go',this.offset);
+ }
 
  
     /*
@@ -610,6 +617,7 @@ getFilteredData(response){
             if (response.statusCode == 200) {
                 var filterData = response.data.filterData;
                 if(filterData.length==0){
+                this.advanceFilterGo = true
                 this.rows = response.data.ticketData; 
                 this.rows = response.data.ticketData;
                  this.count =response.totalCount;
@@ -618,6 +626,7 @@ getFilteredData(response){
    
                   }
                 }else{
+          this.advanceFilterGo = false;
           var filterOption ={
           "label":filterData.Name,
           "value": {
