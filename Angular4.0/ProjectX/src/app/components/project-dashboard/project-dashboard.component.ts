@@ -272,17 +272,18 @@ public users=JSON.parse(localStorage.getItem('user'));
     var sendData={
            userId:this.users.Id,
            repName:projName,
+           projectId:this.projectId,
            userName:this.users.username,
            password:'minimum8',
            role:'RW'
            };
-alert("==-->"+JSON.stringify(sendData));
+// alert("==-->"+JSON.stringify(sendData));
 this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         {  
         // jQuery('#createProjectDiv').show();
         //    jQuery('#showLogDiv').hide();
         //    jQuery('#createUserDiv').hide();
-           alert("----repodata----"+JSON.stringify(result));
+          //  alert("----repodata----"+JSON.stringify(result));
         this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName,ProjectId:this.projectId}});
 
            })

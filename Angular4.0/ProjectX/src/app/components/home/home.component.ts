@@ -248,7 +248,7 @@ export class HomeComponent{
     prepareTeamPermissionsData(teamData=[]){
         var teamPermissions = [];
         for(let teamMember of teamData){
-            teamPermissions.push({userName: teamMember.Name,ProfilePic:teamMember.ProfilePic, read:false, write:false, modified:false});
+            teamPermissions.push({id:teamMember.Id,userName: teamMember.Name,ProfilePic:teamMember.ProfilePic, read:false, write:false, modified:false});
         }
         return teamPermissions;
     }
@@ -257,6 +257,7 @@ export class HomeComponent{
         var permissonsToBeUpdated = this.getModifiedList(this.team);
         var sendData = {
             projectName:this.projName,
+            projectId:this.projId,
             userData:permissonsToBeUpdated
         };
         // alert("----permissions----"+JSON.stringify(sendData));
@@ -276,7 +277,7 @@ export class HomeComponent{
         var modifiedPermissions = [];
         for(let teamMember of teamList){
             if(teamMember.modified){
-                var data={userName:teamMember.userName,password:"minimum8", role:"R"};
+                var data={userId:teamMember.id,userName:teamMember.userName,password:"minimum8", role:"R"};
                 if((teamMember.read && teamMember.write) || teamMember.write){
                    data.role="RW";
                 }else if(teamMember.read == false && teamMember.write == false){
