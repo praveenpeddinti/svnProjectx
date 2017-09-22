@@ -25,40 +25,16 @@ export class HomeComponent{
    // public projects:any=[{'label':'ProjectX',value:{'id':1,'name':'ProjectX.0'}},{'label':'Techo2',value:{'id':2,'name':'Techo2'}}];
     //public optionTodisplay:any=[{'type':"",'filterValue':this.projects}];
     public users=JSON.parse(localStorage.getItem('user'));
-    // public Email=localStorage.getItem('Email');
-    // public profilePicture=localStorage.getItem('profilePicture');
-    // public entryForm={};
-    // public verified =0;
-    // public submitted=false;
-    // private cities=[];
-    // private page=0;
-    // public dashboardScroll=true;
-    // public homeFlag=true;
-    // public projectFlag;
-    // public limit=10;
-    // public saved;
-    // public projectDetails=[];
-    // public assignedToDataCount;
-    // public followersDetailsCount;
-    // public projectwiseInfo=[];
-    // public totalProjectCount;
-    // public flag:any;
-    // public activityDetails=[];
-    // public activityPage=0;
-    // public projects=[];
-    // private optionTodisplay=[];
-    // public activityDropdownFlag=0;
-    // public activitydropdownDetails=[];
-    // public ProjectId;
-
     private projName;
     private projId;
     private checkOutUrl="";
     private team = [];
     private svnServer = "http://10.10.73.16/svn/"
     private svnLogs = [];
+    private tabToggler = 1;
     //public offset=0;
     public rows = [];
+    @ViewChild("folderName") folderName:HTMLInputElement;
       ngOnInit() {
           this.route.queryParams.subscribe(
         params => 
@@ -83,9 +59,9 @@ export class HomeComponent{
    }
 
    ngAfterViewInit() {
-                jQuery('#createProjectDiv').show();
+                // jQuery('#createProjectDiv').show();
                 // jQuery('#showLogDiv').hide();
-                jQuery('#createUserDiv').hide();
+                // jQuery('#createUserDiv').hide();
     }
 
     
@@ -118,9 +94,9 @@ export class HomeComponent{
            userId:JSON.parse(this.users.Id),
            repName:this.projName
            }
-           jQuery('#createProjectDiv').show();
+        //    jQuery('#createProjectDiv').show();
         //    jQuery('#showLogDiv').hide();
-           jQuery('#createUserDiv').hide();
+        //    jQuery('#createUserDiv').hide();
         //    alert(JSON.stringify(sendData));
         //  this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         // {  
@@ -139,9 +115,10 @@ export class HomeComponent{
         };
         // alert("navigateToFolder===>"+JSON.stringify(sendData));
         this._ajaxService.AjaxSubscribe('site/get-repository-structure',sendData,(result)=>
-        {  jQuery('#createProjectDiv').show();
+        {  
+            // jQuery('#createProjectDiv').show();
         //    jQuery('#showLogDiv').hide();
-           jQuery('#createUserDiv').hide();
+        //    jQuery('#createUserDiv').hide();
         //    alert("----repodata----"+JSON.stringify(result));
         //    if(action != "pop"){
            this.fileNavigator.push(dirName);
@@ -176,7 +153,7 @@ export class HomeComponent{
     }
 
     createFolder(fodlerName){
-        alert(fodlerName);
+        // alert(fodlerName);
         var sendData={
             curerntDirectory :this.fileNavigator.join("/"),
             newFolder:fodlerName,
@@ -184,9 +161,10 @@ export class HomeComponent{
             password:'minimum8'
         };
         this._ajaxService.AjaxSubscribe('site/create-folder',sendData,(result)=>
-        {  jQuery('#createProjectDiv').show();
+        {  
+            // jQuery('#createProjectDiv').show();
         //    jQuery('#showLogDiv').hide();
-           jQuery('#createUserDiv').hide();
+        //    jQuery('#createUserDiv').hide();
         //    alert("----repodata----"+JSON.stringify(result));
         //    if(action != "pop"){
         //    this.fileNavigator.push(dirName);
@@ -194,6 +172,7 @@ export class HomeComponent{
         //       var idx =  this.fileNavigator.indexOf(dirName);
         //       this.fileNavigator.splice(idx,1); 
         //    }
+            this.folderName.value="";
            this.repo =this.prepareFileStructure(result.data);
            })
     }
@@ -204,9 +183,9 @@ export class HomeComponent{
     //        userName:'moin',
     //        password:'minimum8'
     //        }
-           jQuery('#createProjectDiv').hide();
+        //    jQuery('#createProjectDiv').hide();
         //    jQuery('#showLogDiv').hide();
-           jQuery('#createUserDiv').show();
+        //    jQuery('#createUserDiv').show();
         //  this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
         // {
            
@@ -226,8 +205,8 @@ export class HomeComponent{
            
          this._ajaxService.AjaxSubscribe('site/show-svnlog',sendData,(result)=>
         {
-           jQuery('#createProjectDiv').hide();
-           jQuery('#createUserDiv').hide();
+        //    jQuery('#createProjectDiv').hide();
+        //    jQuery('#createUserDiv').hide();
         //    jQuery('#showLogDiv').show();
            
         //    alert("----repodata----"+JSON.stringify(result));
@@ -263,9 +242,9 @@ export class HomeComponent{
         // alert("----permissions----"+JSON.stringify(sendData));
         this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
         {
-           jQuery('#createProjectDiv').hide();
+        //    jQuery('#createProjectDiv').hide();
         //    jQuery('#showLogDiv').hide();
-           jQuery('#createUserDiv').show();
+        //    jQuery('#createUserDiv').show();
            console.log("----repodata----"+JSON.stringify(result));
            alert(result.data);
         //    this.repo=result.data;

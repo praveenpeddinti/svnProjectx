@@ -169,7 +169,7 @@ html-dropdown {
 		-webkit-user-select: none ;
 }
 
-html-dropdown div.dropdown-root {
+html-dropdown div.dropdown-root {posi
 	border: 1px solid #CCCCCC ;
 	border-radius: 3px 3px 3px 3px ;
 	min-width: 100px ;
@@ -1891,4 +1891,14 @@ img{border:none; outline:none;}
     border-bottom-color:#d6d6d6!important;
 }
 
+
+.repositry_conbg{ border-bottom:solid 1px #e6e8eb; padding-bottom:7px; margin-bottom:8px; list-style:none!important;}
+.parp_color{ color:#695ea5;}
+.folder{ font-size:15px; color:#695ea5;}
+.repositrybut{ background:url(../assets/images/repository-icon.png) no-repeat right center #695ea5; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; padding:5px 30px 5px 5px; display:inline-block; color:#fff; font:normal 14px/20px 'open_sansregular'; cursor:pointer; position:relative;}
+.repositrybut i{ color:#fff; position:absolute; right:7px; top:7px;}
+ @media (max-width:767px){
+	.res_mb10{ margin-bottom:10px;}
+	.res_mb5{ margin-bottom:5px;}
+ }
 

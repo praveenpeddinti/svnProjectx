@@ -110,3 +110,51 @@
  .protask1{ font-size:12px!important;}
  .protask2{ font-size:12px!important;}
 }
+
+.activities_bg{ border-bottom:solid 1px #c1c7cd; padding:5px 0px 5px 40px; margin-bottom:10px; position:relative; min-height:50px; cursor:pointer; clear: both;}
+.activities_bg .user{ width:30px; height:30px; position:absolute; left:0px; top:10px;}
+.activities_bg .user img{ width:30px; height:30px; border-radius:100%;}
+.activities_bg .activitycon{ color:#637282; font:normal 14px/18px 'open_sansregular';
+overflow-wrap: break-word;}
+activities_bg a:hover{text-decoration:none!important;}
+.activities_bg .activitycon a{text-decoration:none!important;}
+.activities_bg .activitypro a{text-decoration:none!important;}
+.activities_bg .activitypro{color:#637282; font:normal 12px/22px 'open_sansregular';}
+#createProjectDiv ul{ margin: 0px; padding: 0px; padding-left: 10px;}
+#createProjectDiv ul li{list-style: none!important; padding-left: 10px;}
+#createUserDiv ul{ margin: 0px; padding: 0px;}
+#createUserDiv ul li{list-style: none!important;}
+.editinput2 {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #d6d6d6;
+    border-radius: 0 !important;
+    font-size: 12px;
+    padding: 5px;
+    display: inline-block;
+}
+.activity_hed{
+    color: #000000;
+    font: 18px/30px "open_sansregular";
+}
+
+.tab-content_content{
+    border: 1px solid #e6e8eb;
+    min-height: 221px;
+    padding:20px!important;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #fff;
+    border-color: #e6e8eb #e6e8eb transparent;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px;
+    color: #695ea5;
+    cursor: default;
+}
+
+ .nav-tabs > li a{color: #637282;  cursor: pointer;}

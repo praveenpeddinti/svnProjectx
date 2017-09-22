@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="margin-top: 20px;">
 
 <div class="row">
     <div class="col-md-8">
@@ -16,76 +16,163 @@
 <!--<li class="active"><a (click)="callprojectsByClick(1)" data-toggle="tab">All Projects</a></li>
 <li ><a (click)="callprojectsByClick(2)" data-toggle="tab">All Activity</a></li>-->
 <!--(click)="createProject()"-->
-<li class="active"><a (click)="createProject()" data-toggle="tab">Repository</a></li>
-<li class="active"><a (click)="createUser()" data-toggle="tab">User Permissions</a></li>
+<li class="active" ><a (click)="tabToggler = 1;" data-toggle="tab">Repository</a></li>
+<li ><a (click)="tabToggler = 2;" data-toggle="tab">User Permissions</a></li>
 <!--<li class="active"><a (click)="showLog()" data-toggle="tab">Svn Log</a></li>-->
 </ul>
- 
-    <div id="createProjectDiv">
-        <div>
-            Checkout Url:<br>
-            <b>
-                {{checkOutUrl}}
-            </b>
+ <div class="tab-content tab-content_content" >
+    <div id="createProjectDiv" [hidden]="tabToggler != 1">
+        <div class="row">
+            <div class="col-md-6">
+               <span class="marr10">Checkout Url:</span>
+            <span>
+                <!--{{checkOutUrl}}-->
+                <input #checkOutUrlId type="text" class="editinput2" [(ngModel)]="checkOutUrl" readonly="true"/>
+            </span>
+
+            </div>
+            <div class="col-md-6">
+              <div class="pull-right">
+                 
+         <input #folderName type="text" class="marr10 editinput2" />
+         
+         <span class="createbut"  (click)="createFolder(folderName.value)" >
+                       Create Folder <i class="fa fa-folder folder" aria-hidden="true"></i>
+         </span>
+
+
+              </div>
+
+            </div>
         </div>
-        <div class="user_more pull-right"  (click)="createFolder(folderName.value)" >
-                       Create Folder 
-         </div>
-         <div>
-         <input #folderName type="text" />
-         </div>
-        <ng-container *ngFor="let folderName of fileNavigator">
-            <a (click)="comeBackToFolder(folderName)">{{folderName}}</a>/
+        <div class="row">
+         <nav class="breadcrumb col-md-12" style="border-bottom: none;"> 
+         <ng-container *ngFor="let folderName of fileNavigator">
+            <a (click)="comeBackToFolder(folderName)" class="breadcrumb-item">{{folderName}}</a>/
         </ng-container>
-        <ul>
-            <li>
+           </nav>
+
+
+        </div>
+        <div class="row">
+
+         <ul>
+            <!--<li>
                 <b>Folder</b>
                 <b>Author</b>
                 <b>Time</b>
                 <b>Revision</b>
-            </li>
+            </li>-->
             <li *ngFor="let repoData of repo">
+<div class="repositry_conbg">
+          <div class="row">
+            <div class="col-md-3 col-sm-3">
+               <i class="fa fa-folder folder" aria-hidden="true"></i>
                 <a (click)="navigateToFolder(repoData.name)">{{repoData.name}}</a>
-                <img src="{{repoData.ProfilePic}}">
+            </div> 
+             <div class="col-md-3 col-sm-3 res_mb5">{{repoData.time}}</div>
+           
+             <div class="col-md-4 col-sm-4">
+                   <div class="res_mb10">
+                       <img src="{{repoData.ProfilePic}}" class="profilepic_table">
+                {{repoData.last_author}}
+   </div>
+             </div>
+              <!--<div class="col-md-3 col-sm-3">Advance filter delete option</div>-->
+             <div class="col-md-2 col-sm-2">
+                  <div class="parp_color">{{repoData.created_rev}}</div>
+             </div>
+          </div>
+      </div>
+
+                <!--<i class="fa fa-folder folder" aria-hidden="true"></i>
+                <a (click)="navigateToFolder(repoData.name)">{{repoData.name}}</a>
+                <img src="{{repoData.ProfilePic}}" class="profilepic_table">
                 <span>{{repoData.last_author}}</span>
                 <span>{{repoData.time}}</span>
-                <span>{{repoData.created_rev}}</span>
+                <span>{{repoData.created_rev}}</span>-->
             </li>
         </ul>
+
+        </div>
+        <div>
+           
+        </div>
+        
+        
+
+         
+        
+        
     </div>
-    <div id="createUserDiv">
+    <div id="createUserDiv" [hidden]="tabToggler != 2">
         <div>
         <ul>
-            <li *ngFor="let member of team">
-                <img src="{{member.ProfilePic}}">
+            <li *ngFor="let member of team" class="repositry_conbg">
+                 
+                  <div class="row">
+             <div class="col-md-6 col-sm-6">
+                   <div class="res_mb10">
+                       <img src="{{member.ProfilePic}}" class="profilepic_table">
+                <a>{{member.userName}}</a>
+                       
+                       </div>
+             </div>
+              <div class="col-md-3 col-sm-3">
+                   <p-checkbox   binary="true" [(ngModel)]="member.read"   label="Read" class="nchbox" (onChange)="member.modified = true" ></p-checkbox>
+             </div>
+             <div class="col-md-3 col-sm-3">
+                 <p-checkbox   binary="true" [(ngModel)]="member.write"  label="Write" class="nchbox" (onChange)="member.modified = true"></p-checkbox>
+             </div>
+          </div>
+                
+                <!--<img src="{{member.ProfilePic}}">
                 <a>{{member.userName}}</a>
                 <p-checkbox   binary="true" [(ngModel)]="member.read"   label="Read" class="nchbox" (onChange)="member.modified = true" ></p-checkbox>
-                <p-checkbox   binary="true" [(ngModel)]="member.write"  label="Write" class="nchbox" (onChange)="member.modified = true"></p-checkbox>
+                <p-checkbox   binary="true" [(ngModel)]="member.write"  label="Write" class="nchbox" (onChange)="member.modified = true"></p-checkbox>-->
             </li>
         </ul>
         </div>
-        <div class="user_more pull-right"  (click)="savePermissions()" >
+        <div class="user_more pull-right model_submit butnbor"  (click)="savePermissions()" >
                        Save Permissions 
          </div>
+        
     </div>
+             </div>
              </div>
              <div class="col-md-4">
                  <div id="showLogDiv">
-                     <div>Subversion Logs</div>
+                    
+                   <div class="activity_hed">Subversion Logs</div>
+<div class="devider1 martb5"></div>
+
                     <div *ngFor="let eachLog of svnLogs">
-                        <img src="{{eachLog.ProfilePic}}">
-                        <span>{{eachLog.author}}</span>
-                        <span>@ {{projName}} committed</span>
-                        <span>[ {{eachLog.rev}} ]:</span>
+
+                     <div class="activities_bg">
+                <div class="user"><img src="{{eachLog.ProfilePic}}"></div>
+                <div class="activitycon">
+                            <span>{{eachLog.author}}</span>
+                        <span>@{{projName}} committed</span>
+                        <span>[{{eachLog.rev}}]:</span>
                         <span>{{eachLog.msg}}</span>
-                        <i>{{eachLog.DateTimeString}}</i>
+
+                </div>
+                <div class="activitypro">{{eachLog.DateTimeString}}</div>
+            </div>
+
+                        <!--<img src="{{eachLog.ProfilePic}}">
+                        <span>{{eachLog.author}}</span>
+                        <span>@{{projName}} committed</span>
+                        <span>[{{eachLog.rev}}]:</span>
+                        <span>{{eachLog.msg}}</span>
+                        <i>{{eachLog.DateTimeString}}</i>-->
                     </div>
                 </div>
              </div>
          </div>
     </div> 
-  <div class="tab-content tab-content_content" >
+  
 
  
 
-</div>
+
