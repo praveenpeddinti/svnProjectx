@@ -497,7 +497,7 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
             break;
             
             case "select":
-             if(restoreFieldId.split("_")[0] == "assignedto"){ alert("in restore field"+row[2].other_data);
+             if(restoreFieldId.split("_")[0] == "assignedto"){
              jQuery("#"+showField+'_assignedto').remove();
              // if(jQuery("#"+showField+'_assignedto').length==0){ 
                  appendHtml = (restoreFieldId.split("_")[0] == "assignedto")?"<img id="+showField+"_assignedto data-toggle=tooltip data-placement=top class='profilepic_table' src='"+row[2].other_data+"'/>&nbsp;":"";
