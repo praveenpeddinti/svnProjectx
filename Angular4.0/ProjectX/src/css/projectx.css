@@ -1902,3 +1902,6 @@ img{border:none; outline:none;}
 	.res_mb5{ margin-bottom:5px;}
  }
 
+.bootbox-alert .modal-footer .btn-primary{background:#695ea5!important; color:#fff!important; border-radius:4px!important;}
+.bootbox-confirm .modal-footer .btn-primary{background:#695ea5!important; color:#fff!important; border-radius:4px!important;}
+.bootbox-confirm .modal-footer .btn-default{background:#a7b4d3!important; color:#fff!important; border-radius:4px!important;}
