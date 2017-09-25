@@ -115,6 +115,7 @@ expanded: any = {};
     headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
     pageNo:number=0; //added by Ryan
     filterValue=null;//added by Ryan
+    trackImage:any;
 
     constructor(
         private _router: Router,
@@ -181,7 +182,8 @@ expanded: any = {};
         @params    :  offset,limit,sortvalue,sortorder
         @Description: Default routing
         */
-      
+        
+        thisObj.page(thisObj.projectId,thisObj.offset, thisObj.limit, thisObj.sortvalue, thisObj.sortorder,thisObj.selectedFilter);
         var ScrollHeightDataTable=jQuery(".ngx-datatable").width() - 12;
         jQuery("#filterDropdown").css("paddingRight",10);
        jQuery(".ngx-datatable").css("width",ScrollHeightDataTable);
@@ -256,7 +258,7 @@ setFilterValue(response){
         @Description: StoryComponent/Task list Rendering
         */
         
-    page(projectId,offset, limit, sortvalue, sortorder,selectedOption ) { 
+    page(projectId,offset, limit, sortvalue, sortorder,selectedOption ) {
         if(selectedOption!=null) //added by Ryan
         {
             this.filterValue=selectedOption.id;
@@ -266,7 +268,6 @@ setFilterValue(response){
        
          this.rows =[];
         this._service.getAllStoryDetails(projectId, offset, limit, sortvalue, sortorder,selectedOption,(response) => {
-           
             let jsonForm = {};
             if (response.statusCode == 200) {
                 this.criteriaLabel=[];
@@ -426,6 +427,7 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
                 var priority=(fieldTitle=="priority"?true:false);
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
                 this.dropList=this.dropDisplayList[0].filterValue;
+              //  alert(JSON.stringify(this.dropList));
                 //sets the dropdown prefocused
                 if(fieldTitle=='workflow'){
                   let value=this.dropList[0].label;
@@ -455,10 +457,10 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
     var listMainArray=[];
      if(list.length>0){
        if(status == "Assigned to" || status == "Stake Holder"){
-       listItem.push({label:"--Select a Member--", value:"",priority:priority,type:status});
+       listItem.push({label:"--Select a Member--", value:"",image:"",priority:priority,type:status});
        }
          for(var i=0;list.length>i;i++){
-           listItem.push({label:list[i].Name, value:list[i].Id,priority:priority,type:status});
+           listItem.push({label:list[i].Name, value:list[i].Id,image:list[i].ProfilePic,priority:priority,type:status});
        }
      }
       listMainArray.push({type:"",filterValue:listItem});
@@ -478,11 +480,15 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
                         id:fieldId,
                         value:"",
                         ticketId:row[0].field_value,
-                        editedId:restoreFieldId.split("_")[0]
-                      };                  
+                        editedId:restoreFieldId.split("_")[0],
+                        userid:editedObj.value
+                      };  
+                       var appendHtml ='';  
+                       var ProfilePic='';              
           switch(renderType){
             case "input":
             case "textarea":
+           
             editedObj=editedObj.trim();
             if(restoreFieldId == this.ticketId+"_dod".trim())
             jQuery("textarea#"+restoreFieldId+"_"+fieldIndex).val(editedObj);
@@ -491,8 +497,21 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
             break;
             
             case "select":
-            var appendHtml = (restoreFieldId.split("_")[0] == "priority")?"&nbsp; <i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
-            document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;            
+             if(restoreFieldId.split("_")[0] == "assignedto"){ alert("in restore field"+row[2].other_data);
+             jQuery("#"+showField+'_assignedto').remove();
+             // if(jQuery("#"+showField+'_assignedto').length==0){ 
+                 appendHtml = (restoreFieldId.split("_")[0] == "assignedto")?"<img id="+showField+"_assignedto data-toggle=tooltip data-placement=top class='profilepic_table' src='"+row[2].other_data+"'/>&nbsp;":"";
+               // }
+                // else if(row[2].other_data){
+                //     alert("======Row data======"+row[2].other_data);
+                //      jQuery("#"+showField+'_assignedto').attr('src',row[2].other_data);    
+                // }   
+               document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":appendHtml+editedObj.text; 
+           //jQuery("#"+showField+'_assignedto').attr('src',row[2].other_data);                                 
+         }else{
+             appendHtml = (restoreFieldId.split("_")[0] == "priority")?"&nbsp; <i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
+             document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;
+            }          
             postEditedText.value = editedObj.value;
             break;
 
@@ -559,12 +578,12 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
 }
   // Added by Padmaja for Inline Edit
 //Common Ajax method to save the changes.
-    public postDataToAjax(postEditedText,isChildActivity=0,showField){
+    public postDataToAjax(postEditedText,isChildActivity=0,showField){ 
      clearTimeout(this.inlineTimeout);
     this.inlineTimeout =  setTimeout(() => { 
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
         {
-          if(result.statusCode== 200){ 
+          if(result.statusCode== 200){
           if(postEditedText.editedId == "title" || postEditedText.editedId == "desc"){
                      if(postEditedText.editedId == "title"){
                         document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerText=result.data.updatedFieldData;
@@ -586,11 +605,27 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
            }
             else if(result.data.activityData.data.ActionFieldName =='assignedto'){ 
                 if(result.data.activityData.data.NewValue.ProfilePicture !=''){
-                    var imgObj = <HTMLImageElement>document.getElementById(showField+"_assignedto")
-                 imgObj.src=result.data.activityData.data.NewValue.ProfilePicture;
-                //this.statusId = result.data.updatedFieldData;
+                    //var imgObj = <HTMLImageElement>document.getElementById(showField+"_assignedto");
+                        var imgObj1=jQuery("#"+showField+'_assignedto').html();
+                   // imgObj.src=result.data.activityData.data.NewValue.ProfilePicture; 
+                    //jQuery("#"+showField+'_assignedto').attr('src',imgObj.src);
+                    jQuery("#"+showField+'_assignedto').attr('src',result.data.activityData.data.NewValue.ProfilePicture);                
+                    //var imgObj1=jQuery("#"+showField+'_assignedto').html();
+                    //jQuery("#"+showField+'_assignedto').attr('src',result.data.activityData.data.NewValue.ProfilePicture);                
            }
             }
+            else { 
+                if(result.data.activityData.data.PropertyChanges[0].ActionFieldName =='assignedto'){ 
+                if(result.data.activityData.data.PropertyChanges[0].NewValue.ProfilePicture  !=''){
+                    var imgObj = <HTMLImageElement>document.getElementById(showField+"_assignedto");
+                   imgObj.src=result.data.activityData.data.PropertyChanges[0].NewValue.ProfilePicture ;
+                  //jQuery("#"+showField+'_assignedto').attr('src',imgObj.src);
+                 // this.trackImage=imgObj.src; // added by Ryan..  This is for first Time
+              }
+             }
+            }
+           
+            
         /**
         * @author:Praveen P
         * @description : This is used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list 
@@ -668,6 +703,7 @@ getFilteredData(response){
 
             } 
 }
+ 
 /**
  * @author Anand
  */
