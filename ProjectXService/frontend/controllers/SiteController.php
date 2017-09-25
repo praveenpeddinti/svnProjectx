@@ -27,7 +27,8 @@ use common\models\mysql\Collaborators;
 use common\models\mongo\TinyUserCollection;
 use common\models\mysql\ProjectTeam;
 use common\service\CollaboratorService;
-
+use common\models\mysql\RepoPermissions;
+//use common\components\SVNUtility;
 /**
  * Site controller
  */
@@ -185,22 +186,28 @@ class SiteController extends Controller
         try{
             $CollabaratorData = json_decode(file_get_contents("php://input"));
             $model = new LoginForm();
+            //checking logged data is existed or not
             $getcollaboratorData = $model->checkLoginData($CollabaratorData);
               if(count($getcollaboratorData)==1 && $getcollaboratorData !='failure'){
                 $collabaratorId=$getcollaboratorData[0]['Id'];
+                //fetching logged data from tiny user collection
                 $collaboratorProfileData = TinyUserCollection::getMiniUserDetails($collabaratorId);
                 $remembermeStatus=isset($CollabaratorData->rememberme)?1:0;
+                //fetching accesstoken data from Accesstoken Collection
                 $collabaratorTokenData = ServiceFactory::getCollaboratorServiceInstance()->getCollabaratorAccesstoken($collabaratorId);
                 if(count($collabaratorTokenData)==0){
+                    //generating access token
                     $accesstoken =  $this->GeneratingAccesstoken($collabaratorId);
                     $collabaratorArr=array('Id'=>$collabaratorId,'username'=>$getcollaboratorData[0]['UserName'],"token"=>$accesstoken,"ProfilePicture"=>$collaboratorProfileData['ProfilePicture'],"Email"=>$collaboratorProfileData['Email']);
                     $browserType=$_SERVER['HTTP_USER_AGENT'];
+                    //saving collabarator  data
                     $getLastId = ServiceFactory::getCollaboratorServiceInstance()->saveCollabaratortokenData($accesstoken,$collabaratorId,$browserType,$remembermeStatus);
                     $responseBean = new ResponseBean;
                     $responseBean->status = ResponseBean::SUCCESS;
                     $responseBean->statusCode = ResponseBean::SUCCESS;
                     $responseBean->message = "success";
                     $responseBean->data =    $collabaratorArr;
+                    //preparing response in the form of json
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==1) {
                     $collabaratorLastToken= $collabaratorTokenData[0]['Accesstoken'];
@@ -211,6 +218,7 @@ class SiteController extends Controller
                     $responseBean->statusCode = ResponseBean::SUCCESS;
                     $responseBean->message = "success";
                     $responseBean->data =    $collabaratorArr;
+                     //preparing response in the form of json
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }else if(count($collabaratorTokenData)>0 && $collabaratorTokenData[0]['Status']==0){
                     $accesstoken =  $this->GeneratingAccesstoken($collabaratorId);
@@ -222,6 +230,7 @@ class SiteController extends Controller
                     $responseBean->statusCode = ResponseBean::SUCCESS;
                     $responseBean->message = "success";
                     $responseBean->data =    $collabaratorArr;
+                     //preparing response in the form of json
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
                 }
                    
@@ -232,6 +241,7 @@ class SiteController extends Controller
                     $responseBean->statusCode = ResponseBean::SUCCESS;
                     $responseBean->message = "FAILURE";
                     $responseBean->data =    $response;
+                     //preparing response in the form of json
                     return  $response = CommonUtility::prepareResponse($responseBean,"json");
            }
        
@@ -242,6 +252,7 @@ class SiteController extends Controller
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
+              //preparing response in the form of json
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
         } 
@@ -266,14 +277,15 @@ class SiteController extends Controller
      */ 
     public function actionUpdateCollabaratorStatus(){
         try{
-//          $headerff=Yii::$app->request->getHeaders()->get('Authorization');
             $collabaratorJson = json_decode(file_get_contents("php://input"));
             $collabaratorToken=$collabaratorJson->userInfo->token;
+            //updating accesstoken status when click on logout in AccessTokenCollection
             $updateStatus  = ServiceFactory::getCollaboratorServiceInstance()->updateStatusCollabarator($collabaratorToken);
             $responseBean     = new ResponseBean;
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = "success";
             $responseBean->data =    $updateStatus;
+            //preparing response in the form of json
             return  $response = CommonUtility::prepareResponse($responseBean,"json");
         }  catch (\Throwable $th) { 
              Yii::error("SiteController:actionUpdateCollabaratorStatus::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
@@ -281,6 +293,7 @@ class SiteController extends Controller
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
+              //preparing response in the form of json
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
         } 
@@ -439,7 +452,7 @@ class SiteController extends Controller
     }
       /**
      * @author Padmaja
-     * @description This is for getSearch results
+     * @description This is used to showing search results
      * @return type json object
      * 
      */ 
@@ -451,13 +464,14 @@ class SiteController extends Controller
             $userId=!empty($postData->userInfo->Id)?$postData->userInfo->Id:"";
             $pName=!empty($postData->pName)?$postData->pName:"";
             $pageLength=Yii::$app->params['pageLength'];
-            error_log("page5555--".$pageLength);
+            //fetching search results by search string 
             $searchData = CommonUtility::getAllDetailsForSearch($postData->searchString,$postData->page,$searchFlag,$projectId,$pageLength,$userId,$pName); 
             if(empty($searchData['mainData']['ticketCollection']) && empty($searchData['mainData']['ticketComments']) && empty($searchData['mainData']['ticketArtifacts'])&& empty($searchData['mainData']['tinyUserData'])){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "no result found";
                 $responseBean->data = $searchData;
+                 //preparing response in the form of json
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
            
             }else{
@@ -465,6 +479,7 @@ class SiteController extends Controller
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
                 $responseBean->data = $searchData;
+                 //preparing response in the form of json
                 $response = CommonUtility::prepareResponse($responseBean,"json");
             }
             return $response;
@@ -474,6 +489,7 @@ class SiteController extends Controller
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message =ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
+               //preparing response in the form of json
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
         }
@@ -807,17 +823,17 @@ class SiteController extends Controller
     public function actionCreateRepository(){
        try{
             $postData = json_decode(file_get_contents("php://input"));
-            error_log("------".print_r($postData,1));
-             error_log("------".$postData->repName);
+//            error_log("------".print_r($postData,1));
+//             error_log("------".$postData->repName);
             $ch = curl_init();
            
             $postData->repName = preg_replace("/\s*/", "", $postData->repName);
             $postfields = array();
             $postfields['projectName'] = $postData->repName;
-            $postfields['username'] = $postData->userName;
-            $postfields['password'] = $postData->password;
-            $postfields['role'] = $postData->role;
-            error_log("------".$postfields['projectName']);
+            $postfields['username'] = $postData->userData[0]->userName;
+            $postfields['password'] = $postData->userData[0]->password;
+            $postfields['role'] = $postData->userData[0]->role;
+//            error_log("------".$postfields['projectName']);
             //$postfields['field2'] = urlencode('value2');
             curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/test.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
@@ -826,15 +842,22 @@ class SiteController extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
             
             $result = curl_exec($ch);
+            $data = json_decode($result,true);
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
-            error_log("-curl response-".print_r($result,1));
-            
+            //error_log("-curl response-".print_r($result,1));
+//            error_log("^^^^^^^^^^^^^^6--------".print_r($data,1));
+            if($data['status'] == "success"){
+                 error_log("asssssssssssssss------".$data['status']);
+                //$projectId=$postData->projectId;
+               ServiceFactory::getProjectServiceInstance()->updateRepositoryStatus($postData->projectId);
+               $getStatus=ServiceFactory::getProjectServiceInstance()->saveUserPermissions($postData->projectId,$postData->userData);
+            }
             
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
-                $responseBean->data =  json_decode($result) ;
+                $responseBean->data =  $data ;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             return $response;
        } catch (\Throwable $th) {
@@ -863,6 +886,7 @@ class SiteController extends Controller
             $ch = curl_init();
             
             $postfields = array();
+            $postData->projectName = preg_replace("/\s*/", "", $postData->projectName);
             $postfields['userData'] = json_encode($postData->userData);
             $postfields['projectName'] = $postData->projectName;
             
@@ -876,8 +900,8 @@ class SiteController extends Controller
             $result = curl_exec($ch);
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
-            error_log("-curl user response-".$result);
-            
+//            error_log("-curl user response-".$result);
+            $getStatus=ServiceFactory::getProjectServiceInstance()->saveUserPermissions($postData->projectId,$postData->userData);
             
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -912,15 +936,18 @@ class SiteController extends Controller
     public function actionShowSvnlog(){
        try{
             $postData = json_decode(file_get_contents("php://input"));
-            error_log("------".print_r($postData,1));
-            error_log("------".$postData->repName);
+//            error_log("------".print_r($postData,1));
+//            error_log("------".$postData->repName);
+            $data = array();
             $ch = curl_init();
-           
+            $userPermission = ServiceFactory::getProjectServiceInstance()->getUserPermissions($postData->ProjectId,$postData->userId);
+            if(is_array($userPermission)){
             $postfields = array();
+            $postData->repName = preg_replace("/\s*/", "", $postData->repName);
             $postfields['projectName'] = $postData->repName;
             $postfields['username'] = $postData->userName;
             $postfields['password'] = $postData->password;
-            error_log("------".$postfields['projectName']);
+//            error_log("------".$postfields['projectName']);
             //$postfields['field2'] = urlencode('value2');
             curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/log.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
@@ -931,23 +958,24 @@ class SiteController extends Controller
             $result = curl_exec($ch);
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
-//            error_log("-curl response-".print_r($result,1));
-            $data = json_decode($result);
-//            error_log("----".print_r($data,1));
+           // error_log("-curl response-".print_r($result,1));
+            $data = json_decode($result,true);
+           // error_log("----".print_r($data,1));
 //            array_column($data, "date")
 //            $time = strtotime($utc);
 //            $dateInLocal = date("Y-m-d H:i:s", $time);
             foreach($data as $key=>$value){
-                $time = strtotime($value->date);
+                $time = strtotime($value["date"]);
                 $dateInLocal = date("M-d-Y H:i:s", $time);
                 $timeInLocal = date("H:i:s", $time);
-                $data[$key]->DateTimeString=$dateInLocal;
-                $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($value->author);
-                $data[$key]->ProfilePic=$userProfile["ProfilePicture"];
+                $data[$key]["DateTimeString"]=$dateInLocal;
+                $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($value["author"]);
+                $data[$key]["ProfilePic"]=$userProfile["ProfilePicture"];
 //                $data[$key]->TimeString=$timeInLocal;
 //                $data[$key]->Month=date("M", $time);
 //                $data[$key]->Year=date("Y", $time);
 //                $data[$key]->Date=date("d", $time);
+            }
             }
 //            $dates = array_unique(array_column($data, "DateString"));
 //            $returnData = array_fill(0, count($dates), []);
@@ -955,7 +983,7 @@ class SiteController extends Controller
 //                if(in_array($value->DateString, $dates))
 //                
 //            }
-            error_log("==12312343535==>>>".print_r($data,1));
+//            error_log("==12312343535==>>>".print_r($data,1));
             
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -978,17 +1006,20 @@ class SiteController extends Controller
     public function actionGetRepositoryStructure(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-            error_log("------".print_r($postData,1));
+//            error_log("------".print_r($postData,1));
 //             error_log("------".$postData->repName);
-            $ch = curl_init();
-           
+            
+           $data=array();
             $postData->directory = preg_replace("/\s*/", "", $postData->directory);
             $postfields = array();
             $postfields['directory'] = $postData->directory;
             $postfields['username'] = $postData->userName;
             $postfields['password'] = $postData->password;
-            error_log("------".$postfields['directory']);
+//            error_log("------".$postfields['directory']);
             //$postfields['field2'] = urlencode('value2');
+            $userPermission = ServiceFactory::getProjectServiceInstance()->getUserPermissions($postData->ProjectId,$postData->userId);
+            if(is_array($userPermission)){
+            $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/getRepo.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -998,15 +1029,15 @@ class SiteController extends Controller
             $result = curl_exec($ch);
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
-            error_log("-curl response-".print_r($result,1));
+//            error_log("-curl response-".print_r($result,1));
             $data = json_decode($result,true);
-            error_log("-cusdjhasjkdhj====se-".print_r($data,1));
+//            error_log("-cusdjhasjkdhj====se-".print_r($data,1));
             foreach($data as $key=>$eachDir){
                 $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($eachDir["last_author"]);
                 $data[$key]["ProfilePic"]=$userProfile["ProfilePicture"];
             }
             
-            
+            }
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
@@ -1080,6 +1111,11 @@ class SiteController extends Controller
     public function actionGetProjectTeam(){
         $postData = json_decode(file_get_contents("php://input"));
         $result = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postData->ProjectId);
+        foreach($result as $key=>$user){
+                $userPermission = ServiceFactory::getProjectServiceInstance()->getUserPermissions($postData->ProjectId,$user["Id"]);
+                $result[$key]["role"] = (isset($userPermission["Permissions"]))?$userPermission["Permissions"]:"";
+            }
+            error_log("====ProjectTeam===>>".print_r($result,1));
         $responseBean = new ResponseBean;
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = "success";
@@ -1090,7 +1126,7 @@ class SiteController extends Controller
     }
     
     public function actionDirectTest(){
-        echo json_encode(scandir("/usr/share/nginx/www/ProjectX"));
+        ServiceFactory::getProjectServiceInstance()->getUserPermissions(109,8);
     }
            
 }

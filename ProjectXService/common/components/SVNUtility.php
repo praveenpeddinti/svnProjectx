@@ -68,6 +68,22 @@ class SVNUtility {
     public static function updateUser(){
         
     }
-   
+ 
+    public static function saveUserPermissions($postData){
+        try{
+             $returnValue = 'failure';
+            $projects = new Projects();
+            $projects->ProjectName = $projectName;
+            $projects->Description = $description;
+            $projects->CreatedBy = $userId;
+            if($projects->save()){
+               error_log("-------Id--------".$projects->PId);
+               $returnValue = $projects->PId;
+          }
+           return $returnValue ;
+        } catch (Exception $ex) {
+
+        }
+    }
     
 }

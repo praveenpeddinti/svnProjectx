@@ -10,6 +10,7 @@ use common\models\mysql\BucketStatus;
 use common\models\mongo\AccessTokenCollection;
 use common\models\mysql\ProjectTeam;
 use common\models\mysql\Projects;
+use common\models\mysql\RepoPermissions;
 use Yii;
 use yii\base\ErrorException;
 /* 
@@ -166,4 +167,54 @@ class ProjectService {
             throw new ErrorException($ex->getMessage());
         }
     }
+           /*
+     * @autor Padmaja
+     *  @param type $postData
+     */
+    public function saveUserPermissions($projectId,$userData){
+        try{
+            error_log("33333333333333333");
+            $RepositoryModel = new RepoPermissions();
+           return  $status = $RepositoryModel->savingUserPermissions($projectId,$userData);
+        } catch (Exception $ex) {
+            Yii::error("ProjectService:saveUserPermissions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+           /*
+     * @autor Padmaja
+     *  @param type $postData
+     */
+    public function getUserPermissions($projectId,$userId){
+        try{
+            error_log("##################==>".$projectId."------>".$userId);
+            $RepositoryModel = new RepoPermissions();
+            $status = $RepositoryModel->getUserPermissions($projectId,$userId);
+            error_log("+++++++getUserPermissions+++++++++>".print_r($status,1));
+           return  $status;
+        } catch (Exception $ex) {
+            Yii::error("ProjectService:getUserPermissions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+        /**
+    * @author Padmaja
+    * @description This is used update the IsRepository column after repository created
+    * @param $projectId 
+    * @return array
+    */
+   public function updateRepositoryStatus($projectId){
+        try{
+            error_log("&&&&&&&&7-------".$projectId);
+            $query="update Projects set IsRepository='1' where PId=$projectId";
+            $data = Yii::$app->db->createCommand($query)->execute();
+            error_log("$$$$$$444".$data);
+            return $data;
+        } catch (Exception $ex) {
+             Yii::error("SVNUtility:updateRepositoryStatus::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+        }
+   }
+    
 }
