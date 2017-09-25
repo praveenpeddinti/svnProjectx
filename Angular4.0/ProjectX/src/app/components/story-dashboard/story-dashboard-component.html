@@ -73,9 +73,9 @@ Row classes are also dynamically. These classes are pass to service layer-->
       <!--This img tag belongs to Ticket Id-->
       <img *ngIf="row[i].other_data.planlevel==1" src="assets/images/story-icon.png"  />
       <img *ngIf="row[i].other_data.planlevel==2" src="assets/images/task-icon.png" />
-       <!--This img tag belongs to Assigned to column i.e UserName and Profile Pic -->
+       <!--This img tag belongs to Assigned to column i.e UserZZZZZZName and Profile Pic -->
       <img id="{{i+'-'+row.$$index+'_assignedto'}}" *ngIf="row[i].field_name=='assignedto' && row[i].other_data!=''" data-toggle="tooltip" data-placement="top" class="profilepic_table"
-        src="{{row[i].other_data}}" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> 
+        [src]="row[i].other_data" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> 
            
       
       <!--<span class="badge" style="position: relative;left:0" *ngIf="row[i].field_name=='Title' && row[i].other_data>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data}}</span>  
