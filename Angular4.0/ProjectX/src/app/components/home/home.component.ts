@@ -160,6 +160,7 @@ export class HomeComponent{
             userName:this.users.username,
             password:'minimum8'
         };
+        if(confirm("Are you sure to create a folder: "+fodlerName+", under "+sendData.curerntDirectory)){
         this._ajaxService.AjaxSubscribe('site/create-folder',sendData,(result)=>
         {  
             // jQuery('#createProjectDiv').show();
@@ -175,6 +176,7 @@ export class HomeComponent{
             this.folderName.value="";
            this.repo =this.prepareFileStructure(result.data);
            })
+        }
     }
     
     createUser(){
@@ -240,6 +242,7 @@ export class HomeComponent{
             userData:permissonsToBeUpdated
         };
         // alert("----permissions----"+JSON.stringify(sendData));
+        if(confirm("Are you sure to save these permissions?")){
         this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
         {
         //    jQuery('#createProjectDiv').hide();
@@ -249,6 +252,7 @@ export class HomeComponent{
            alert(result.data);
         //    this.repo=result.data;
            })
+        }
 
     }
 

@@ -278,6 +278,7 @@ public users=JSON.parse(localStorage.getItem('user'));
            role:'RW'
            };
 // alert("==-->"+JSON.stringify(sendData));
+if(confirm("Would you like to create repository for "+projName+"?")){
 this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         {  
         // jQuery('#createProjectDiv').show();
@@ -287,6 +288,7 @@ this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName,ProjectId:this.projectId}});
 
            })
+  }
         //    this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
         // {
         //   //  jQuery('#createProjectDiv').hide();
