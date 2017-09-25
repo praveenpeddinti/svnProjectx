@@ -10,6 +10,7 @@ import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
 // import {ActivityService} from '../../services/activity.service';
 declare var jQuery:any;
+declare var bootbox:any;
 
 
 @Component({
@@ -22,8 +23,7 @@ declare var jQuery:any;
 
 export class HomeComponent{
     public selectedProject:any;
-   // public projects:any=[{'label':'ProjectX',value:{'id':1,'name':'ProjectX.0'}},{'label':'Techo2',value:{'id':2,'name':'Techo2'}}];
-    //public optionTodisplay:any=[{'type':"",'filterValue':this.projects}];
+
     public users=JSON.parse(localStorage.getItem('user'));
     private projName;
     private projId;
@@ -32,7 +32,6 @@ export class HomeComponent{
     private svnServer = "http://10.10.73.16/svn/"
     private svnLogs = [];
     private tabToggler = 1;
-    //public offset=0;
     public rows = [];
     @ViewChild("folderName") folderNameValue:HTMLInputElement;
       ngOnInit() {
@@ -54,6 +53,7 @@ export class HomeComponent{
                 });
                 this.navigateToFolder(this.projName);
                 this.showLog();
+                
         })
          
    }
@@ -64,16 +64,7 @@ export class HomeComponent{
                 // jQuery('#createUserDiv').hide();
     }
 
-    
-    // ngDoCheck() {
-    //     localStorage.setItem("currentDirPos",this.fileNavigator.join("/"));
-    //     alert("DoCheck===>"+this.fileNavigator.join("/"));
-    // }
-    // ngOnDestroy() {
-    //     localStorage.setItem("currentDirPos","");
-    //     alert("destroy called....");
-
-    //     }
+  
      constructor(
           private _router: Router,
           private route: ActivatedRoute,
@@ -89,22 +80,7 @@ export class HomeComponent{
     private repo=[];
     private fileNavigator = [];
 
-    createProject(){
-    var sendData={
-           userId:JSON.parse(this.users.Id),
-           repName:this.projName
-           }
-        //    jQuery('#createProjectDiv').show();
-        //    jQuery('#showLogDiv').hide();
-        //    jQuery('#createUserDiv').hide();
-        //    alert(JSON.stringify(sendData));
-        //  this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
-        // {  
-        // //    alert("----repodata----"+JSON.stringify(result));
-        //    this.fileNavigator.push(this.projName);
-        //    this.repo =this.prepareFileStructure(result.data);
-        //    })
-    }
+  
 
     navigateToFolder(dirName){
         
@@ -118,17 +94,9 @@ export class HomeComponent{
         // alert("navigateToFolder===>"+JSON.stringify(sendData));
         this._ajaxService.AjaxSubscribe('site/get-repository-structure',sendData,(result)=>
         {  
-            // jQuery('#createProjectDiv').show();
-        //    jQuery('#showLogDiv').hide();
-        //    jQuery('#createUserDiv').hide();
-        //    alert("----repodata----"+JSON.stringify(result));
-        //    if(action != "pop"){
+
            this.fileNavigator.push(dirName.replace(/\s*/g,""));
            this.checkOutUrl = this.svnServer + this.fileNavigator.join("/");
-        //    }else{
-        //       var idx =  this.fileNavigator.indexOf(dirName);
-        //       this.fileNavigator.splice(idx,1); 
-        //    }
            this.repo =this.prepareFileStructure(result.data);
            })
     }
@@ -138,9 +106,6 @@ export class HomeComponent{
         var idx =  this.fileNavigator.indexOf(dirName);
         var len = this.fileNavigator.length;
         var rem = len - idx;
-        // alert("comeBack+++++"+JSON.stringify(this.fileNavigator));
-        // alert("removingLen=>"+rem);
-        // alert("idx==>"+idx);
         var idx =  this.fileNavigator.indexOf(dirName);
         this.fileNavigator.splice(idx,rem);
         this.navigateToFolder(dirName);
@@ -162,41 +127,23 @@ export class HomeComponent{
             userName:this.users.username,
             password:'minimum8'
         };
-        if(confirm("Are you sure to create a folder: "+fodlerName+", under "+sendData.curerntDirectory)){
-        this._ajaxService.AjaxSubscribe('site/create-folder',sendData,(result)=>
+        var thisObj = this;
+        if(fodlerName.value != ""){
+            bootbox.confirm("Are you sure to create a folder: "+fodlerName.value+", under "+sendData.curerntDirectory, function(ok){ if(ok){
+        // if(confirm("Are you sure to create a folder: "+fodlerName.value+", under "+sendData.curerntDirectory)){
+        thisObj._ajaxService.AjaxSubscribe('site/create-folder',sendData,(result)=>
         {  
-            // jQuery('#createProjectDiv').show();
-        //    jQuery('#showLogDiv').hide();
-        //    jQuery('#createUserDiv').hide();
-        //    alert("----repodata----"+JSON.stringify(result));
-        //    if(action != "pop"){
-        //    this.fileNavigator.push(dirName);
-        //    }else{
-        //       var idx =  this.fileNavigator.indexOf(dirName);
-        //       this.fileNavigator.splice(idx,1); 
-        //    }
+           
             fodlerName.value="";
-           this.repo =this.prepareFileStructure(result.data);
+           thisObj.repo =thisObj.prepareFileStructure(result.data);
            })
+        // }
+        } 
+    });
         }
     }
     
-    createUser(){
-    // var sendData={
-    //        userId:JSON.parse(this.users.Id),
-    //        userName:'moin',
-    //        password:'minimum8'
-    //        }
-        //    jQuery('#createProjectDiv').hide();
-        //    jQuery('#showLogDiv').hide();
-        //    jQuery('#createUserDiv').show();
-        //  this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
-        // {
-           
-        //    console.log("----repodata----"+JSON.stringify(result));
-        //    this.repo=result.data;
-        //    })
-    }
+  
     
     showLog(){
     var sendData={
@@ -210,22 +157,9 @@ export class HomeComponent{
            
          this._ajaxService.AjaxSubscribe('site/show-svnlog',sendData,(result)=>
         {
-        //    jQuery('#createProjectDiv').hide();
-        //    jQuery('#createUserDiv').hide();
-        //    jQuery('#showLogDiv').show();
-           
-        //    alert("----repodata----"+JSON.stringify(result));
+        
            this.svnLogs = result.data;
-        //    for(let elem of this.svnLogs){
-        //       var d = new Date(Date.parse(elem.date));
-        //       var locale = "en-us";
-        //         var month = d.toLocaleString(locale, { month: "short" });
-        //            alert(d.toLocaleDateString());
-        //            alert(month);
-               
-        //    }
-
-        //    this.repo=result.data;
+      
            })
     }
 
@@ -259,19 +193,18 @@ export class HomeComponent{
             projectId:this.projId,
             userData:permissonsToBeUpdated
         };
+        var thisObj = this;
         // alert("----permissions----"+JSON.stringify(sendData));
-        if(confirm("Are you sure to save these permissions?")){
-        this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
+        bootbox.confirm("Are you sure to save these permissions?", function(ok){ if(ok){
+        // if(confirm("Are you sure to save these permissions?")){
+        thisObj._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
         {
-        //    jQuery('#createProjectDiv').hide();
-        //    jQuery('#showLogDiv').hide();
-        //    jQuery('#createUserDiv').show();
+
            console.log("----repodata----"+JSON.stringify(result));
-        //   alert(result.data);
-        //    this.repo=result.data;
+
            })
         }
-
+    });
     }
 
     getModifiedList(teamList=[]){

@@ -13,8 +13,12 @@
                       <div class="user_more pull-right" data-backdrop="false" data-toggle="modal" data-target="#addProjectModel" (click)="clearEditedDetails(form)" >
                        Edit 
                         </div>
-                        <div class="user_more pull-right marr10"  (click)="gotoRepo(projectName)" >
-                       Create Repo 
+                        <div *ngIf="repoCreated == 0" class="createbut pull-right marr10"  (click)="gotoRepo(projectName,repoCreated)" >
+                       Create Repo  <i class="fa fa-database" aria-hidden="true"></i>
+
+                        </div>
+                        <div *ngIf="repoCreated == 1" class="repositrybut pull-right marr10"  (click)="gotoRepo(projectName,repoCreated)" >
+                            Go to Repo 
                         </div>
                   </div>
                   </div>

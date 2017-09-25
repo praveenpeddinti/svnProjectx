@@ -12,6 +12,8 @@ import { ProjectFormComponent } from '../../components/project-form/project-form
 import { CreateBucketComponent } from '../../components/create-bucket/create-bucket.component';
 
 declare var jQuery:any;
+declare var bootbox:any;
+
 @Component({
   selector: 'app-project-dashboard',
   templateUrl: './project-dashboard.component.html',
@@ -65,6 +67,8 @@ export class ProjectDashboardComponent implements OnInit {
       color:"",
       class:""
     };
+    private repoCreated = 0;
+    private repoPermissions = "";
        
    constructor(private route: ActivatedRoute,public _router: Router,private projectService:ProjectService,
            private _ajaxService: AjaxService,private bucketService:BucketService,private shared:SharedService) { }
@@ -91,13 +95,23 @@ export class ProjectDashboardComponent implements OnInit {
                  thisObj.description=data.data.Description;
                  thisObj.projectLogo=data.data.ProjectLogo;
                  thisObj.setLogo=data.data.setLogo;
+                 
                 //  alert("------------"+JSON.stringify(thisObj.projectLogo));;
                 
                 }else{
                this._router.navigate(['pagenotfound']);  
               }
                 thisObj.form['projectId']=thisObj.projectId; 
-                thisObj.form['projectName']=thisObj.projectName; 
+                thisObj.form['projectName']=thisObj.projectName;
+                var sendData = {
+                  ProjectId:thisObj.projectId,
+                  userId:this.users.Id
+                };
+                this._ajaxService.AjaxSubscribe("site/get-repo-pemissions-and-access",sendData,(result)=>
+                 {
+                           thisObj.repoCreated = result.data.IsRepository;
+                           thisObj.repoPermissions = result.data.Permissions;
+                 }); 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                 thisObj.form['description']=thisObj.description;
                 thisObj.form['setLogo']=thisObj.setLogo;
@@ -267,7 +281,7 @@ export class ProjectDashboardComponent implements OnInit {
     }
   }
 public users=JSON.parse(localStorage.getItem('user'));
-  gotoRepo(projName){
+  gotoRepo(projName,repoCreated){
 
     var sendData={
            userData:[{
@@ -279,32 +293,42 @@ public users=JSON.parse(localStorage.getItem('user'));
            repName:projName,
            projectId:this.projectId,
            };
+           var thisObj = this;
+           if(repoCreated == 0){
 // alert("==-->"+JSON.stringify(sendData));
-if(confirm("Would you like to create repository for "+projName+"?")){
-this._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
+bootbox.confirm("Would you like to create repository for "+projName+"?", function(ok){ if(ok){
+// if(confirm("Would you like to create repository for "+projName+"?")){
+thisObj._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         {  
         // jQuery('#createProjectDiv').show();
         //    jQuery('#showLogDiv').hide();
         //    jQuery('#createUserDiv').hide();
           //  alert("----repodata----"+JSON.stringify(result));
-        this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName,ProjectId:this.projectId}});
+        thisObj._router.navigate(['svn',projName],{queryParams:{ProjectName:projName,ProjectId:thisObj.projectId}});
 
            })
   }
-        //    this._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
-        // {
-        //   //  jQuery('#createProjectDiv').hide();
-        //   //  jQuery('#showLogDiv').hide();
-        //   //  jQuery('#createUserDiv').show();
-        //    console.log("----repodata----"+JSON.stringify(result));
-        //    alert("user created--->"+JSON.stringify(sendData));
-        //   //  this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName}});
+  });
+  }else{
+    if(this.repoPermissions == "R" ||this.repoPermissions == "RW"){
+    this._router.navigate(['svn',projName],{queryParams:{ProjectName:projName,ProjectId:this.projectId}});
+    }else{
+          bootbox.alert({
+          message: "You need to have atleast Read Permissions to see Repository",
+          size: 'small',
+          title: "Access Denied..!!",
+          button: {
+              
+                  label: 'Ok',
+                  className: 'model_submit butnbor'
+             
+              
+          },
+          
+      });
+    }
+  }
 
-           
-        //   //  this.repo=result.data;
-        //    })
-           
-        //    alert(JSON.stringify(sendData));
          
   }
 
