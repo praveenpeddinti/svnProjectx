@@ -270,12 +270,14 @@ public users=JSON.parse(localStorage.getItem('user'));
   gotoRepo(projName){
 
     var sendData={
-           userId:this.users.Id,
+           userData:[{
+                userId:this.users.Id,
+                userName:this.users.username,
+                password:'minimum8',
+                role:'RW'
+            }],
            repName:projName,
            projectId:this.projectId,
-           userName:this.users.username,
-           password:'minimum8',
-           role:'RW'
            };
 // alert("==-->"+JSON.stringify(sendData));
 if(confirm("Would you like to create repository for "+projName+"?")){

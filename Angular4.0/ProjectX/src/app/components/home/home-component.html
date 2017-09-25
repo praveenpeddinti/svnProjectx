@@ -36,7 +36,7 @@
                  
          <input #folderName type="text" class="marr10 editinput2" />
          
-         <span class="createbut"  (click)="createFolder(folderName.value)" >
+         <span class="createbut"  (click)="createFolder(folderName)" >
                        Create Folder <i class="fa fa-folder folder" aria-hidden="true"></i>
          </span>
 
@@ -119,10 +119,10 @@
                        </div>
              </div>
               <div class="col-md-3 col-sm-3">
-                   <p-checkbox   binary="true" [(ngModel)]="member.read"   label="Read" class="nchbox" (onChange)="member.modified = true" ></p-checkbox>
+                   <p-checkbox   binary="true" [(ngModel)]="member.read"   label="Read" class="nchbox" (onChange)="premissionsChanges(member)" ></p-checkbox>
              </div>
              <div class="col-md-3 col-sm-3">
-                 <p-checkbox   binary="true" [(ngModel)]="member.write"  label="Write" class="nchbox" (onChange)="member.modified = true"></p-checkbox>
+                 <p-checkbox   binary="true" [(ngModel)]="member.write"  label="Write" class="nchbox" (onChange)="premissionsChanges(member)"></p-checkbox>
              </div>
           </div>
                 

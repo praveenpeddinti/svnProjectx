@@ -34,7 +34,7 @@ export class HomeComponent{
     private tabToggler = 1;
     //public offset=0;
     public rows = [];
-    @ViewChild("folderName") folderName:HTMLInputElement;
+    @ViewChild("folderName") folderNameValue:HTMLInputElement;
       ngOnInit() {
           this.route.queryParams.subscribe(
         params => 
@@ -110,6 +110,8 @@ export class HomeComponent{
         
         var sendData={
             directory :(this.fileNavigator.length>0)?this.fileNavigator.join("/")+"/"+dirName : dirName,
+            userId:this.users.Id,
+            ProjectId:this.projId,
             userName:this.users.username,
            password:'minimum8'
         };
@@ -121,7 +123,7 @@ export class HomeComponent{
         //    jQuery('#createUserDiv').hide();
         //    alert("----repodata----"+JSON.stringify(result));
         //    if(action != "pop"){
-           this.fileNavigator.push(dirName);
+           this.fileNavigator.push(dirName.replace(/\s*/g,""));
            this.checkOutUrl = this.svnServer + this.fileNavigator.join("/");
         //    }else{
         //       var idx =  this.fileNavigator.indexOf(dirName);
@@ -152,11 +154,11 @@ export class HomeComponent{
         return fileStructure;
     }
 
-    createFolder(fodlerName){
+    createFolder(fodlerName:HTMLInputElement){
         // alert(fodlerName);
         var sendData={
             curerntDirectory :this.fileNavigator.join("/"),
-            newFolder:fodlerName,
+            newFolder:fodlerName.value,
             userName:this.users.username,
             password:'minimum8'
         };
@@ -173,7 +175,7 @@ export class HomeComponent{
         //       var idx =  this.fileNavigator.indexOf(dirName);
         //       this.fileNavigator.splice(idx,1); 
         //    }
-            this.folderName.value="";
+            fodlerName.value="";
            this.repo =this.prepareFileStructure(result.data);
            })
         }
@@ -201,6 +203,7 @@ export class HomeComponent{
            userId:this.users.Id,
            repName:this.projName,
            userName:this.users.username,
+           ProjectId:this.projId,
            password:'minimum8',
            role:'RW'
            };
@@ -229,7 +232,22 @@ export class HomeComponent{
     prepareTeamPermissionsData(teamData=[]){
         var teamPermissions = [];
         for(let teamMember of teamData){
-            teamPermissions.push({id:teamMember.Id,userName: teamMember.Name,ProfilePic:teamMember.ProfilePic, read:false, write:false, modified:false});
+            var read = false;
+            var write = false;
+            switch(teamMember.role){
+                case "R":
+                read = true;
+                break;
+                case "RW":
+                write = true;
+                read = true;
+                break;
+                case "REM":
+                write = false;
+                read = false;
+                break;
+            }
+            teamPermissions.push({id:teamMember.Id,userName: teamMember.Name,ProfilePic:teamMember.ProfilePic, read:read, write:write, modified:false});
         }
         return teamPermissions;
     }
@@ -249,7 +267,7 @@ export class HomeComponent{
         //    jQuery('#showLogDiv').hide();
         //    jQuery('#createUserDiv').show();
            console.log("----repodata----"+JSON.stringify(result));
-           alert(result.data);
+        //   alert(result.data);
         //    this.repo=result.data;
            })
         }
@@ -270,5 +288,17 @@ export class HomeComponent{
             }
         }
         return modifiedPermissions;
+    }
+
+    premissionsChanges(memberObj){
+        // alert("changes===>"+JSON.stringify(memberObj));
+        memberObj.modified = true;
+        setTimeout(()=>{
+        if(memberObj.write){
+            memberObj.read=true;
+        }
+        // alert("changes=after==>"+JSON.stringify(memberObj));
+        },200);
+        
     }
 }
