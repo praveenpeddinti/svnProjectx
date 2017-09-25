@@ -9,7 +9,7 @@ export class CustomUrlSerializer implements UrlSerializer {
     serialize(tree: UrlTree): any {
         let dus = new DefaultUrlSerializer(),
             path = dus.serialize(tree);
-            console.log("==Serialized Path=="+path);
+            //console.log("==Serialized Path=="+path);
         // use your regex to replace as per your requirement.
         //let replace={'/%3F/g':'?','/%3D/g':'='};
         path=decodeURIComponent(path);
