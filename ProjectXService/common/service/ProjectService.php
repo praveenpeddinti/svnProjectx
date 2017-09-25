@@ -213,7 +213,17 @@ class ProjectService {
             error_log("$$$$$$444".$data);
             return $data;
         } catch (Exception $ex) {
-             Yii::error("SVNUtility:updateRepositoryStatus::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             Yii::error("ProjectService:updateRepositoryStatus::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+        }
+   }
+   
+   public function getRepoPermissionsAndAccess($projectId,$userId){
+       try{
+            $RepositoryModel = new RepoPermissions();
+            $data = $RepositoryModel->getRepoPermissionsAndAccess($projectId,$userId);
+            return $data;
+        } catch (Exception $ex) {
+             Yii::error("ProjectService:getRepoPermissionsAndAccess::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
         }
    }
     

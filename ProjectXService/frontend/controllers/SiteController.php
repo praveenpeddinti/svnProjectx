@@ -884,7 +884,7 @@ class SiteController extends Controller
 //             error_log($postData->password."------".$postData->userName);
 //            die();
             $ch = curl_init();
-            
+            $postData->projectName = preg_replace("/\s*/", "", $postData->projectName);
             $postfields = array();
             $postData->projectName = preg_replace("/\s*/", "", $postData->projectName);
             $postfields['userData'] = json_encode($postData->userData);
@@ -942,6 +942,7 @@ class SiteController extends Controller
             $ch = curl_init();
             $userPermission = ServiceFactory::getProjectServiceInstance()->getUserPermissions($postData->ProjectId,$postData->userId);
             if(is_array($userPermission)){
+            $postData->repName = preg_replace("/\s*/", "", $postData->repName);
             $postfields = array();
             $postData->repName = preg_replace("/\s*/", "", $postData->repName);
             $postfields['projectName'] = $postData->repName;
@@ -964,6 +965,7 @@ class SiteController extends Controller
 //            array_column($data, "date")
 //            $time = strtotime($utc);
 //            $dateInLocal = date("Y-m-d H:i:s", $time);
+            if(!empty($data)){
             foreach($data as $key=>$value){
                 $time = strtotime($value["date"]);
                 $dateInLocal = date("M-d-Y H:i:s", $time);
@@ -975,6 +977,7 @@ class SiteController extends Controller
 //                $data[$key]->Month=date("M", $time);
 //                $data[$key]->Year=date("Y", $time);
 //                $data[$key]->Date=date("d", $time);
+            }
             }
             }
 //            $dates = array_unique(array_column($data, "DateString"));
@@ -1125,8 +1128,29 @@ class SiteController extends Controller
         
     }
     
-    public function actionDirectTest(){
-        ServiceFactory::getProjectServiceInstance()->getUserPermissions(109,8);
+   public function actionGetRepoPemissionsAndAccess(){
+        try{
+            $postData = json_decode(file_get_contents("php://input"));
+            error_log("------".print_r($postData,1));
+//             error_log("------".$postData->repName);
+            $data = ServiceFactory::getProjectServiceInstance()->getRepoPermissionsAndAccess($postData->ProjectId,$postData->userId);
+            
+            
+                $responseBean = new ResponseBean;
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+                $responseBean->message = "success";
+                $responseBean->data =  $data ;
+                $response = CommonUtility::prepareResponse($responseBean,"json"); 
+            return $response;
+       } catch (\Throwable $th) {
+            Yii::error("SiteController:actionGetRepoPemissionsAndAccess::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
     }
            
 }

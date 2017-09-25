@@ -97,4 +97,24 @@ class RepoPermissions extends ActiveRecord
              throw new ErrorException($ex->getMessage());
        }
    }
+   
+   public function getRepoPermissionsAndAccess($projectId,$userId){
+       try{
+       $query = "select Permissions from RepoPermissions where ProjectId=$projectId and UserId=$userId";
+//       error_log("getUserPermissions****qry==".$query);
+       $permissionsData = Yii::$app->db->createCommand($query)->queryOne();
+       $query = "select IsRepository from Projects where PId=$projectId";
+//       error_log("getUserPermissions****qry==".$query);
+       $repoCreated = Yii::$app->db->createCommand($query)->queryOne();
+       $returnData = array(
+           "Permissions"=>(isset($permissionsData["Permissions"]))?$permissionsData["Permissions"]:"",
+           "IsRepository"=>$repoCreated["IsRepository"]
+               );
+               
+       return $returnData;
+       }  catch (\Throwable $ex){
+           Yii::error("RepoPermissions:getRepoPermissionsAndAccess::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+             throw new ErrorException($ex->getMessage());
+       }
+   }
 }
