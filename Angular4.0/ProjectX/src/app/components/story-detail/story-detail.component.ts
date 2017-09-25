@@ -100,7 +100,7 @@ public blurTimeout=[];
     this.filesToUpload = [];
     route.queryParams.subscribe(
       params => 
-      {
+      {                       
             this.searchSlug=params['Slug'];
             console.log(this.searchSlug);
             this.navigatedFrom=params['From'];//added by Ryan
@@ -1552,8 +1552,10 @@ public callTicketDetailPage(ticId,projectId){
             this.checkPlanLevel=data.data.StoryType.Name;
             console.log("==Plan Level=="+this.checkPlanLevel);
             this.shared.navigatedFrom(this.navigatedFrom);//added by Ryan
-            var url=decodeURIComponent(this._router.url);
-            this.shared.change(url,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
+            //var url=decodeURIComponent(this._router.url);alert(url);
+            var url=this._router.url;
+            var url_without_query=url.split('?')[0];
+            this.shared.change(url_without_query,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);
             this.childTaskData=data.data.Tasks;
              this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
              this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
