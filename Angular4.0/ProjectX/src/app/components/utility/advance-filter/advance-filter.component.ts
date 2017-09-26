@@ -67,8 +67,8 @@ public filterCriteria:any=[];
     
   }
 
-onClick(event) {
-   if (!this._eref.nativeElement.contains(event.target)) 
+onClick(event) { 
+   if (!this._eref.nativeElement.contains(event.target) && !jQuery(event.target).hasClass('reset')) 
      this.showPanel=false;
   }
 showFilterPanel(){
@@ -80,6 +80,7 @@ showFilterPanel(){
 
 selectFilterOption(filterObj,filterType,index){
   var thisObj= this;
+  var doReset:boolean=false;
   if(this.selectedFilters[0][filterType].indexOf(filterObj)==-1){
     //check and push
     if(filterObj.type=='NoLabel'){
@@ -91,11 +92,6 @@ selectFilterOption(filterObj,filterType,index){
                
       })
     }
-
-
-
-
-
 
     if(filterObj.type=='state'){
       this.selectedStateIds.push(filterObj.id);
@@ -126,6 +122,7 @@ selectFilterOption(filterObj,filterType,index){
     //uncheck and remove
 
    filterObj.isChecked=false;
+   this.advanceFilter[index]['doReset']=false;
    this.selectedFilters[0][filterType].splice(this.selectedFilters[0][filterType].indexOf(filterObj), 1);
    if(filterObj.type=='state'){
       this.advanceFilter[index+1]['filterValue'].forEach(element => {
@@ -148,14 +145,23 @@ selectFilterOption(filterObj,filterType,index){
     
      
     }
+    
  }
-
- //console.log("Selected_________________filter"+JSON.stringify(this.selectedFilters));
+this.advanceFilter[index]['doReset']=doReset;
+this.advanceFilter[index].filterValue.forEach((element)=>{
+       if(element.value.isChecked){
+         doReset = true;
+       }
+     })
+    if(doReset)this.advanceFilter[index]['doReset']=doReset;
+ console.log("Selected_________________filter"+JSON.stringify(this.selectedFilters));
 }
 
 selectCustomDate(value,type,index){
     this.dateObj.isChecked=true;
     this.selectedFilters[0][type].push(this.dateObj);
+     this.filterSelectedError='';
+     this.advanceFilter[index]['doReset']=true;
 }
 
 
@@ -199,6 +205,32 @@ applyFilter(option='',offset=0){
   }
   
 
+}
+
+resetFilter(filter,index){
+  this.advanceFilter[index]['doReset']=false; 
+  this.selectedFilters[0][filter.type]=[];
+  filter.filterValue.forEach((element)=>{
+    element.value.isChecked = false;
+  })
+  if(filter.type=='State'){
+    this.selectedFilters[0]['Status']=[];
+   this.advanceFilter[index+1].filterValue.forEach((element)=>{
+      element.value.isChecked = false;
+  })
+  }
+ else if(filter.type=='Status'){
+    this.selectedFilters[0]['State']=[];
+   this.advanceFilter[index-1].filterValue.forEach((element)=>{
+      element.value.isChecked = false;
+  })
+  }
+else if(filter.type=='DueDate'){
+  this.dateObj.isChecked = false;
+  this.dateObj.dateVal = '';
+ }
+ 
+ this.showPanel=true;
 }
 
 }

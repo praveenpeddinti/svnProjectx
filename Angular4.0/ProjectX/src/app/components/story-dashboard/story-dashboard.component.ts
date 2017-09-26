@@ -122,6 +122,7 @@ expanded: any = {};
         private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService,private _ajaxService: AjaxService,private location:Location) { console.log("in constructor"); }
 
     ngOnInit() {
+        window.scrollTo(0,0);
  var thisObj = this;
   thisObj.route.queryParams.subscribe(
       params => 

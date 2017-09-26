@@ -1844,6 +1844,9 @@ img{border:none; outline:none;}
 .desc_more{ margin-top: -10px!important; text-align:right;color: #695ea5; cursor: pointer; clear:both; padding-bottom: 5px; border-bottom: solid 1px #e6e8eb; margin-bottom: 10px; display:block;}
 .bor_radius0{ border-radius: 0px!important;}
 
+ .fildrop_deleteicn{ color:#4c4c4c;}
+.fildrop_deleteicn:hover{ color:#ff0000;}
+
  @media (max-width:767px){
 .navbar-nav {
     margin: 0px -15px!important;
@@ -1901,6 +1904,12 @@ img{border:none; outline:none;}
 	.res_mb10{ margin-bottom:10px;}
 	.res_mb5{ margin-bottom:5px;}
  }
+
+.reset{background: #fff;
+    padding: 5px 7px;
+    border-radius: 4px; color:#4c4c4c; cursor: pointer;}
+
+.reset:hover{color:#ff0000;}    
 
 .bootbox-alert .modal-footer .btn-primary{background:#695ea5!important; color:#fff!important; border-radius:4px!important;}
 .bootbox-confirm .modal-footer .btn-primary{background:#695ea5!important; color:#fff!important; border-radius:4px!important;}

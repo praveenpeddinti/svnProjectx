@@ -17,15 +17,19 @@
     <div class="" role="tab" id="filter1">
        <div class="morebuckets">
         <a  data-toggle="collapse" data-parent="#accordion" href="#collapse1_{{i}}" aria-expanded="true" aria-controls="collapse1" >
-          <span *ngIf="filter.type!='NoLabel'">{{filter.type}}</span> <i *ngIf="filter.type!='NoLabel'" class="fa pull-right" aria-hidden="true"></i>
+          <span *ngIf="filter.type!='NoLabel'">{{filter.type}}</span>  <i *ngIf="filter.type!='NoLabel'" class="fa pull-right" aria-hidden="true"></i>
         </a>
       </div>
+      
+      <!--<span *ngIf="filter.doReset" class="cursor_pointer" ">Reset</span>-->
     </div>
     <div  class="devider1"></div>
      <div   id="collapse1_{{i}}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+    
        <div *ngIf="filter.type=='DueDate'" class="marb10">
        <p-calendar [(ngModel)]="dateObj.dateVal" class="primeDateComponent filter_date"  [readonlyInput]="true" [minDate]="minDate" [showIcon]="true" dateFormat="M-dd-yy" (onSelect)="selectCustomDate($value,filter.type,i)" ></p-calendar>
       </div>
+       <i *ngIf="filter.doReset" class="fa fa-undo pull-left reset" aria-hidden="true" (click)="resetFilter(filter,i)"></i>
        <div *ngFor="let val of filter.filterValue;let j=index; ">
        <!--<div class="filter_but marr10 active">All</div>-->
        <div  class="{{(val.value.isChecked)?'filter_butactive':'filter_but'}} marr10 cursor_pointer" (click)="selectFilterOption(val.value,filter.type,i)">{{val.label}}</div>
