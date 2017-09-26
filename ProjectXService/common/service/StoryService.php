@@ -249,8 +249,9 @@ class StoryService {
                      else if($fieldType == 10){
                             $bucket = Bucket::getBackLogBucketId($projectId);
                             if($bucket=='failure'){
-                               $fieldBean->value = 0;
-                               $fieldBean->value_name = "";  
+                               $bucket_by_id=Bucket::getBackLogBucketByProjectId($projectId);
+                               $fieldBean->value =(int)$bucket_by_id["Id"];
+                               $fieldBean->value_name = $bucket_by_id["Name"];  
                             }else{
                                $fieldBean->value = (int)$bucket["Id"];
                                $fieldBean->value_name = $bucket["Name"];  
