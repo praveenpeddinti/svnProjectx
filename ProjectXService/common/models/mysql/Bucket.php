@@ -431,6 +431,8 @@ class Bucket extends ActiveRecord
                    case 2:
                        $currentStats=CommonUtilityTwo::getTopTicketsStats($projectId,'',$bucket_details['Id']);
                        $bucket_owner=TinyUserCollection::getMiniUserDetails($bucket_details['Responsible']);
+                       //$bucketDescription= CommonUtilityTwo::truncateHtml($bucket_details['Description'],500);//added newly for truncate
+                       //$bucket_details['Description']=$bucketDescription;//added newly for truncate
                        $mergedCurrentInfo=array_merge($bucket_details,$currentStats);
                        $finalCurrentInfo=array_merge($mergedCurrentInfo,$bucket_owner);
                        array_push($current_bucket_details,$finalCurrentInfo);
@@ -518,8 +520,13 @@ class Bucket extends ActiveRecord
          $data = Yii::$app->db->createCommand($qry)->queryAll();  
          return $data;
    }
+   
+    public static function getBackLogBucketByProjectId($projectId){
+         $qry = "SELECT Id,Name FROM Bucket where ProjectId = $projectId and Name='Backlog'";
+         $data = Yii::$app->db->createCommand($qry)->queryOne();  
+         return $data;
+    }
  
 }
-
 
 ?>
