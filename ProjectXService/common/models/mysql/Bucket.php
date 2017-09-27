@@ -137,7 +137,7 @@ class Bucket extends ActiveRecord
     {
         try{
 
-          $qry = "SELECT * FROM BucketStatus where Id NOT IN ($type)";
+          $qry = "SELECT * FROM BucketStatus where Id NOT IN ($type) and Id>1"; //this query was modified by Ryan for fixing the Backlog Bucket Issue,added condition as Id>1
          $data = Yii::$app->db->createCommand($qry)->queryAll();  
         //}
          return $data;
