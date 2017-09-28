@@ -27,7 +27,7 @@ export class BucketDashboardComponent implements OnInit {
   private projectName; 
   private projectId;
   private bucketDetails= [];
-  private bucketChangedFilterToDisplay;
+  private bucketChangedFilterToDisplay = [];
   private bucketChangedFilterOption;
 
   private dashboardData:any;
@@ -86,10 +86,12 @@ export class BucketDashboardComponent implements OnInit {
                 this.form = this.prepareEditFromData();
                 this.shared.change(this._router.url,null,this.bucketDetails[0].BucketName,'Other',this.projectName);
                 
-                this._service.getBucketTypeFilter(this.projectId,this.bucketDetails[0].BucketStatus,(response) => {
+                this._service.getBucketTypeFilter(this.projectId,this.bucketDetails[0].BucketStatus,this.navBucketId,(response) => {
                     // alert(JSON.stringify(response)+"+++getBucketTypeFilter+++");
+                    if(response.data.length >0){
                     this.bucketChangedFilterToDisplay=this.prepareItemArray(response.data,false,'changebucket');
                     this.bucketChangedFilterOption=this.bucketChangedFilterToDisplay[0].filterValue;
+                    }
                     });
                 this.statusData = this.bucketDetails[0].chartDetails.statusCounts;
                     this.stateData = this.bucketDetails[0].chartDetails.stateCounts;

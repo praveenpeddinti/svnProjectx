@@ -10,8 +10,8 @@
                    </div>
                    <div class="col-md-4">
                        
-<div class="custom_selctdropdown pull-right">
-<p-dropdown [style]="{'width':'200px'}" [(ngModel)]="bucketDetails[0].DropDownBucket" name="bucketChange" (onChange)="filterBucketChange($event)" [displayOptions]="bucketChangedFilterToDisplay" [options]="bucketChangedFilterOption"></p-dropdown>
+<div *ngIf="bucketChangedFilterToDisplay.length > 0" class="custom_selctdropdown pull-right">
+<p-dropdown  [style]="{'width':'200px'}" [(ngModel)]="bucketDetails[0].DropDownBucket" name="bucketChange" (onChange)="filterBucketChange($event)" [displayOptions]="bucketChangedFilterToDisplay" [options]="bucketChangedFilterOption"></p-dropdown>
 </div>
 
 
