@@ -53,15 +53,18 @@ class BucketService {
     * @return type 
     * @param type $projectId
      */      
-    public function getBucketTypeFilter($projectId,$type){
+    public function getBucketTypeFilter($projectId,$type,$bucketId){
         try{
+            $dropList = array();
+         $bucketStatus=$this->checkDefaultBucket($projectId,$bucketId); //added by Ryan to check default bucket
+         if($bucketStatus != "Default"){
          $bucketModel = new Bucket();
           $data = $bucketModel->getBucketTypeFilter($projectId,$type);
           $dropList = array(array("Id"=>0,"Name"=>"Edit"));
           foreach ($data as $value) {
               array_push($dropList, array("Id"=>$value["Id"],"Name"=>"Set as ".$value["Name"]));
           }
-          
+         }
           error_log("------getBucketTypeFilter----------->".print_r($dropList,1));
           return $dropList;
         } catch (\Throwable $ex) {
@@ -262,6 +265,26 @@ class BucketService {
            
         } catch (\Throwable $ex) {
             Yii::error("BucketService:getMoreCountBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
+     /**
+    * @author Ryan
+    * @description Used for checking for Default Bucket
+    * @return type 
+     */  
+    public function checkDefaultBucket($projectId,$bucketId){
+        try{
+            $status="Default";
+            $bucket_by_id=Bucket::getBackLogBucketId($projectId);
+            if($bucket_by_id["Id"]==$bucketId){
+                return $status;
+            }else{
+                return "Other";
+            }
+        } catch (\Throwable $ex) {
+            Yii::error("BucketService:checkDefaultBucket::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
         }
     }

@@ -126,7 +126,7 @@ class BucketController extends Controller
     public function actionGetBucketFilters(){
         try{
         $postData = json_decode(file_get_contents("php://input"));
-        $bucketFilterData=ServiceFactory::getBucketServiceInstance()->getBucketTypeFilter($postData->projectId,$postData->Type);
+        $bucketFilterData=ServiceFactory::getBucketServiceInstance()->getBucketTypeFilter($postData->projectId,$postData->Type,$postData->bucketId);
         $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
