@@ -37,10 +37,11 @@ getResponsibleFilter(projectId,role,getResponsibleDetailsCallback) {
     });
   }
   
-  getBucketTypeFilter(projectId,type,getBucketTypeFilterDetailsCallback) { 
+  getBucketTypeFilter(projectId,type,bucketId,getBucketTypeFilterDetailsCallback) { 
    var post_data={
       'projectId':projectId,
       'Type':type,
+      'bucketId':bucketId
     }
     this._ajaxService.AjaxSubscribe("bucket/get-bucket-filters",post_data,(data)=>
     { 
