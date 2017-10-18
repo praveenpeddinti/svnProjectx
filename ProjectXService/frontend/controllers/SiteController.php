@@ -28,7 +28,6 @@ use common\models\mongo\TinyUserCollection;
 use common\models\mysql\ProjectTeam;
 use common\service\CollaboratorService;
 use common\models\mysql\RepoPermissions;
-//use common\components\SVNUtility;
 /**
  * Site controller
  */
@@ -101,7 +100,9 @@ class SiteController extends Controller
     $this->enableCsrfValidation = false;
     return parent::beforeAction($action);
     }
-   
+   /**
+    * @Description testing ajax
+    */
     public function actionTestAjax()
     {
 
@@ -150,7 +151,11 @@ class SiteController extends Controller
        
     
     }
-    
+    /**
+     * 
+     * @return type
+     * @Description User login action
+     */
     public function actionLogin()
     {
 
@@ -177,7 +182,7 @@ class SiteController extends Controller
         }
    /**
      * @author Padmaja
-     * @description This is authenticate the  Collaborator data
+     * @Description This is authenticate the  Collaborator data
      * @return type json object
      * 
      */    
@@ -259,7 +264,7 @@ class SiteController extends Controller
     }
  
     /**
-     * Logs out the current user.
+     * @Description Logs out the current user.
      *
      * @return mixed
      */
@@ -271,7 +276,7 @@ class SiteController extends Controller
     
     /**
      * @author Padmaja
-     * @description This is update active Collabarator status to inActive when  logout
+     * @Description This is update active Collabarator status to inActive when  logout
      * @return type json object
      * 
      */ 
@@ -301,7 +306,7 @@ class SiteController extends Controller
         
     } 
     /**
-     * Displays contact page.
+     * @Description Displays contact page.
      *
      * @return mixed
      */
@@ -324,7 +329,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays about page.
+     * @Description Displays about page.
      *
      * @return mixed
      */
@@ -334,7 +339,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Signs user up.
+     * @Description Signs user up.
      *
      * @return mixed
      */
@@ -355,7 +360,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Requests password reset.
+     * @Description Requests password reset.
      *
      * @return mixed
      */
@@ -378,7 +383,7 @@ class SiteController extends Controller
     }
 
     /**
-     * Resets password.
+     * @Description Resets password.
      *
      * @param string $token
      * @return mixed
@@ -403,7 +408,7 @@ class SiteController extends Controller
         ]);
     }
     /**
-     * Get Collaborators from sql table and insert into mongo document.
+     * @Description Get Collaborators from sql table and insert into mongo document.
      *
      * @author Anand Singh
      * @return mixed
@@ -452,7 +457,7 @@ class SiteController extends Controller
     }
       /**
      * @author Padmaja
-     * @description This is used to showing search results
+     * @Description This is used to showing search results
      * @return type json object
      * 
      */ 
@@ -496,7 +501,7 @@ class SiteController extends Controller
     }
    /**
     * @author Padmaja
-    *  @description This is used for verifying projects is exists or not
+    *  @Description This is used for verifying projects is exists or not
     * @param type 
     * @return array
     */
@@ -530,7 +535,7 @@ class SiteController extends Controller
     }
      /**
     * @author Padmaja
-    * @description This is used for saving project details
+    * @Description This is used for saving project details
     * @param type 
     * @return array
     */
@@ -586,7 +591,7 @@ class SiteController extends Controller
     }
         /**
     * @author Padmaja
-     * @description This is used for get all project details
+     * @Description This is used for get all project details
     * @param type 
     * @return array
     */
@@ -637,7 +642,7 @@ class SiteController extends Controller
     }
          /**
     * @author Padmaja
-   * @description This is used for showing list of projects in dropdoown
+   * @Description This is used for showing list of projects in dropdoown
     * @param type 
     * @return array
     */
@@ -672,7 +677,7 @@ class SiteController extends Controller
     }
              /**
     * @author Padmaja
-   * @description This is used for appending image 
+   * @Description This is used for appending image 
     * @param type 
     * @return array
     */
@@ -709,7 +714,7 @@ class SiteController extends Controller
     }
     /**
     * @author Padmaja
-    * @description This is used for updating project Details
+    * @Description This is used for updating project Details
     * @param type 
     * @return array
     */
@@ -740,7 +745,7 @@ class SiteController extends Controller
     }
    /**
     * @author Padmaja
-    * @description This is used for get project dashboard details
+    * @Description This is used for get project dashboard details
     * @param type 
     * @return array
     */
@@ -777,7 +782,7 @@ class SiteController extends Controller
     }
     /**
     * @author Padmaja
-    * @description This is used for get all activities for project dashboard
+    * @Description This is used for get all activities for project dashboard
     * @param type 
     * @return array
     */
@@ -816,7 +821,7 @@ class SiteController extends Controller
     //Subversion code start
     /**
     * @author Praveen
-    * @description This is used for create repository via subversion
+    * @Description This is used for create repository via subversion
     * @param type 
     * @return array
     */
@@ -835,7 +840,7 @@ class SiteController extends Controller
             $postfields['role'] = $postData->userData[0]->role;
 //            error_log("------".$postfields['projectName']);
             //$postfields['field2'] = urlencode('value2');
-            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/test.php");
+            curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."test.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -873,7 +878,7 @@ class SiteController extends Controller
     
     /**
     * @author Praveen
-    * @description This is used for for create users via subversion
+    * @Description This is used for for create users via subversion
     * @param type 
     * @return array
     */
@@ -891,7 +896,7 @@ class SiteController extends Controller
             $postfields['projectName'] = $postData->projectName;
             
 //            $postfields = array();
-            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/user.php");
+            curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."user.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -929,7 +934,7 @@ class SiteController extends Controller
     
     /**
     * @author Praveen
-    * @description This is used for for create users via subversion
+    * @Description This is used for for create users via subversion
     * @param type 
     * @return array
     */
@@ -950,7 +955,7 @@ class SiteController extends Controller
             $postfields['password'] = $postData->password;
 //            error_log("------".$postfields['projectName']);
             //$postfields['field2'] = urlencode('value2');
-            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/log.php");
+            curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."log.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -1005,7 +1010,11 @@ class SiteController extends Controller
         }
     }
     
-    
+    /**
+     * 
+     * @return type
+     * @Description Gets Inner directories and files for creating a folder explorer
+     */
     public function actionGetRepositoryStructure(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
@@ -1023,7 +1032,7 @@ class SiteController extends Controller
             $userPermission = ServiceFactory::getProjectServiceInstance()->getUserPermissions($postData->ProjectId,$postData->userId);
             if(is_array($userPermission)){
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/getRepo.php");
+            curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."getRepo.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -1032,9 +1041,9 @@ class SiteController extends Controller
             $result = curl_exec($ch);
             //$info=curl_exec($ch);
             //$info = curl_getinfo($ch);
-//            error_log("-curl response-".print_r($result,1));
+           error_log("-curl response-".print_r($result,1));
             $data = json_decode($result,true);
-//            error_log("-cusdjhasjkdhj====se-".print_r($data,1));
+            error_log("-cusdjhasjkdhj====se-".print_r($data,1));
             foreach($data as $key=>$eachDir){
                 $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($eachDir["last_author"]);
                 $data[$key]["ProfilePic"]=$userProfile["ProfilePicture"];
@@ -1048,7 +1057,7 @@ class SiteController extends Controller
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
             return $response;
        } catch (\Throwable $th) {
-            Yii::error("SiteController:actionCreateRepository::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+            Yii::error("SiteController:actionGetRepositoryStructure::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
              $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
@@ -1057,7 +1066,11 @@ class SiteController extends Controller
              return $response;
         }
     }
-    
+    /**
+     * 
+     * @return type
+     * @Description Creates a new folder under current directory in repository
+     */
     public function actionCreateFolder(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
@@ -1076,7 +1089,7 @@ class SiteController extends Controller
             error_log("------".$postfields['curerntDirectory']);
             error_log("------".$postfields['newFolder']);
             //$postfields['field2'] = urlencode('value2');
-            curl_setopt($ch, CURLOPT_URL, "http://10.10.73.16/createFolder.php");
+            curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."createFolder.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -1110,7 +1123,11 @@ class SiteController extends Controller
              return $response;
         }
     }
-    
+    /**
+     * 
+     * @return type
+     * @Description Gets project team for rendering in User Permissions tab
+     */
     public function actionGetProjectTeam(){
         $postData = json_decode(file_get_contents("php://input"));
         $result = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postData->ProjectId);
@@ -1122,12 +1139,16 @@ class SiteController extends Controller
         $responseBean = new ResponseBean;
         $responseBean->statusCode = ResponseBean::SUCCESS;
         $responseBean->message = "success";
-        $responseBean->data =  $result ;
+        $responseBean->data = array("userData"=>$result,"svnUrl"=>Yii::$app->params['SVNServerURL'])  ;
         $response = CommonUtility::prepareResponse($responseBean,"json"); 
         return $response;
         
     }
-    
+    /**
+     * 
+     * @return type
+     * @Description Gets user permission/access foe validating before navigating to repository page
+     */
    public function actionGetRepoPemissionsAndAccess(){
         try{
             $postData = json_decode(file_get_contents("php://input"));

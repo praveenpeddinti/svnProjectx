@@ -1,8 +1,8 @@
 <?php
 return [
 
-     "ServerURL" => "http://10.10.73.33",
-    //"ServerURL" => "http://localhost:8050",
+    "ServerURL" => "https://10.10.73.21",
+    "SVNServerURL" => "http://34.194.239.160:81/",
     "ProjectRoot" =>"/usr/share/nginx/www/ProjectXService/frontend/web",
     "StoryArtifactPath" => "/files/story",
     "ProjectEmail" => "moin.hussain@techo2.com",
