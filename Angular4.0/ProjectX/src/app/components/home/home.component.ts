@@ -29,7 +29,7 @@ export class HomeComponent{
     private projId;
     private checkOutUrl="";
     private team = [];
-    private svnServer = "http://10.10.73.16/svn/"
+    private svnServer = ""
     private svnLogs = [];
     private tabToggler = 1;
     public rows = [];
@@ -49,10 +49,12 @@ export class HomeComponent{
                 this._ajaxService.AjaxSubscribe('site/get-project-team',sendData,(result)=>
                 {  
                         // alert(JSON.stringify(result));
-                        this.team = this.prepareTeamPermissionsData(result.data);
+                        this.team = this.prepareTeamPermissionsData(result.data.userData);
+                        this.svnServer = result.data.svnUrl+"svn/";
+                        this.navigateToFolder(this.projName);
+                        this.showLog();
                 });
-                this.navigateToFolder(this.projName);
-                this.showLog();
+                
                 
         })
          
