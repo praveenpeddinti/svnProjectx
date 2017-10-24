@@ -10,6 +10,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 use yii\base\ErrorException;
 use common\components\{CommonUtilityTwo,EventTrait};
@@ -38,8 +39,14 @@ class Bucket extends ActiveRecord
     public static function getBucketName($bucketId,$projectId)
     {
         try{
-        $query = "select Id,Name from Bucket where Id=".$bucketId." and ProjectId=".$projectId;
-        $data = Yii::$app->db->createCommand($query)->queryOne();
+//        $query = "select Id,Name from Bucket where Id=".$bucketId." and ProjectId=".$projectId;
+//        $data = Yii::$app->db->createCommand($query)->queryOne();
+            $query= new Query();
+            $data = $query->select("Id,Name")
+                  ->from("Bucket")
+                  ->where("Id=".$bucketId)
+                  ->andWhere("ProjectId=".$projectId)
+                  ->one();
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketName::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -57,8 +64,13 @@ class Bucket extends ActiveRecord
     public static function getBucketsList($projectId)
     {
         try{
-        $query = "select Id,Name from Bucket where ProjectId=".$projectId;
-        $data = Yii::$app->db->createCommand($query)->queryAll();
+//        $query = "select Id,Name from Bucket where ProjectId=".$projectId;
+//        $data = Yii::$app->db->createCommand($query)->queryAll();
+            $query= new Query();
+            $data = $query->select("Id,Name")
+                  ->from("Bucket")
+                  ->where("ProjectId=".$projectId)
+                  ->all();
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketsList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -76,8 +88,16 @@ class Bucket extends ActiveRecord
     public static function getBackLogBucketId($projectId)
     {
         try{
-        $query = "select Id,Name from Bucket where BucketStatus=1 and ProjectId=".$projectId." order by Id asc limit 1";
-        $data = Yii::$app->db->createCommand($query)->queryOne();
+//        $query = "select Id,Name from Bucket where BucketStatus=1 and ProjectId=".$projectId." order by Id asc limit 1";
+//        $data = Yii::$app->db->createCommand($query)->queryOne();
+            $query= new Query();
+            $data = $query->select("Id,Name")
+                  ->from("Bucket")
+                  ->where("BucketStatus=1")
+                  ->andWhere("ProjectId=".$projectId)
+                  ->limit(1)
+                  ->orderBy("Id ASC")
+                  ->one();
         if(is_array($data)){
             return $data;
         }else{
@@ -99,8 +119,14 @@ class Bucket extends ActiveRecord
      public static function getActiveBucketId($projectId)
     {
         try{
-        $query = "select Id,Name from Bucket where BucketStatus=1 and ProjectId=".$projectId;
-        $data = Yii::$app->db->createCommand($query)->queryOne();
+//        $query = "select Id,Name from Bucket where BucketStatus=1 and ProjectId=".$projectId;
+//        $data = Yii::$app->db->createCommand($query)->queryOne();
+            $query= new Query();
+            $data = $query->select("Id,Name")
+                  ->from("Bucket")
+                  ->where("BucketStatus=1")
+                  ->andWhere("ProjectId=".$projectId)
+                  ->one();
         if(is_array($data)){
             return $data;
         }else{
@@ -123,8 +149,16 @@ class Bucket extends ActiveRecord
     {
         try{
            
-            $bucketsQuery = "SELECT b.*,bs.Name as BucketStatusName FROM Bucket b,BucketStatus bs WHERE b.Id=$bucketData->bucketId AND b.Status=1 AND b.Projectid=$bucketData->projectId and b.BucketStatus = bs.Id"; 
-        $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
+//        $bucketsQuery = "SELECT  FROM  WHERE b.Id=$bucketData->bucketId AND b.Status=1 AND b.Projectid=$bucketData->projectId and b.BucketStatus = bs.Id"; 
+//        $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
+            $query= new Query();
+            $bucketDetails = $query->select("b.*,bs.Name as BucketStatusName")
+                  ->from("Bucket b,BucketStatus bs")
+                  ->where("b.Id=".$bucketData->bucketId)
+                  ->andWhere("b.Status=1")
+                  ->andWhere("b.Projectid=".$bucketData->projectId)
+                  ->andWhere("b.BucketStatus = bs.Id")
+                  ->all();
         return $bucketDetails;
         } catch (\Throwable $ex) {
             Yii::error("Bucket:getBucketDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -142,8 +176,14 @@ class Bucket extends ActiveRecord
     {
         try{
 
-          $qry = "SELECT * FROM BucketStatus where Id NOT IN ($type) and Id>1"; //this query was modified by Ryan for fixing the Backlog Bucket Issue,added condition as Id>1
-         $data = Yii::$app->db->createCommand($qry)->queryAll();  
+//          $qry = "SELECT * FROM BucketStatus where Id NOT IN ($type) and Id>1"; //this query was modified by Ryan for fixing the Backlog Bucket Issue,added condition as Id>1
+//          $data = Yii::$app->db->createCommand($qry)->queryAll();
+          $query= new Query();
+          $data = $query->select("")
+                  ->from("BucketStatus")
+                  ->where("Id NOT IN (".$type.")")
+                  ->andWhere("Id>1")
+                  ->all();
          return $data;
             
         } catch (\Throwable $ex) {
@@ -164,12 +204,17 @@ class Bucket extends ActiveRecord
         try{
             $returnValue='failure';
             $appendQry = '';
+            $query= new Query();
             if($bucketId != ""){
                 $appendQry = " AND Id != $bucketId";
             }
-                 $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'".$appendQry;
-                 error_log("====================".$qry);
-                $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+//                $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'".$appendQry;
+//                $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+                $bucketData = $query->select("")
+                  ->from("Bucket")
+                  ->where("ProjectId=".$projectId.$appendQry)
+                  ->andWhere("Name='".$bucketName."'")
+                  ->all();
                 if(sizeof($bucketData)>0){
                     $returnValue='No';
                 }else{
@@ -227,8 +272,15 @@ class Bucket extends ActiveRecord
             $returnValue='failure';
             
             if($bucketRole=='Current'){
-                $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
-            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+//            $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
+//            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+            $query= new Query();
+            $bucketData = $query->select("")
+                                ->from("Bucket")
+                                ->where("ProjectId=".$projectId)
+                                ->andWhere("Id!=".$bucketId)
+                                ->andWhere("Name='".$bucketName."'")
+                                ->all();
              if(sizeof($bucketData)>0){
                 $returnValue='Yes';
             }else{
@@ -236,11 +288,24 @@ class Bucket extends ActiveRecord
                 }  
             }else{
                 if($btype==2 ){
-            $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketStatus=2 AND Projectid=$projectId"; 
-            $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
-                if(empty($checkCurrentBucket)){error_log("---1----");
-                $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
-            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+//            $checkCurrentBucketQuery = "SELECT Name FROM Bucket WHERE BucketStatus=2 AND Projectid=$projectId"; 
+//            $checkCurrentBucket = Yii::$app->db->createCommand($checkCurrentBucketQuery)->queryOne();
+            $query= new Query();
+            $checkCurrentBucket = $query->select("Name")
+                                ->from("Bucket")
+                                ->where("BucketStatus=2")
+                                ->andWhere("ProjectId=".$projectId)
+                                ->one();
+                if(empty($checkCurrentBucket)){
+//                $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
+//            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+            $query= new Query();
+            $bucketData = $query->select("")
+                                ->from("Bucket")
+                                ->where("Id!=".$bucketId)
+                                ->andWhere("ProjectId=".$projectId)
+                                ->andWhere("Name='".$bucketName."'")
+                                ->all();
              if(sizeof($bucketData)>0){
                 $returnValue='Yes';
             }else{
@@ -248,8 +313,15 @@ class Bucket extends ActiveRecord
                     }
                 }else{$returnValue='current'; }
             }else{
-            $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
-            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+//            $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Id !=$bucketId AND Name='".$bucketName."'";
+//            $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
+            $query= new Query();
+            $bucketData = $query->select("")
+                                ->from("Bucket")
+                                ->where("ProjectId=".$projectId)
+                                ->andWhere("Id!=".$bucketId)
+                                ->andWhere("Name='".$bucketName."'")
+                                ->all();
              if(sizeof($bucketData)>0){
                 $returnValue='Yes';
             }else{
@@ -329,6 +401,7 @@ class Bucket extends ActiveRecord
      * @Description Updates the Status of a Bucket - Backlog,Current,Completed,Closed
      */
     public function getBucketChangeStatus($projectId,$bucketId,$Status) {
+//      Updates the Status of a Bucket - Backlog,Current,Completed,Closed
         try {
             $bucket=Bucket::findOne($bucketId);
             $bucket->BucketStatus = (int)$Status;
@@ -359,8 +432,14 @@ class Bucket extends ActiveRecord
      public static function getProjectBucketByAttributes($projectId,$status=2)
     {
         try{
-        $query = "select Id,Name,BucketStatus from Bucket where BucketStatus= $status and ProjectId=".$projectId;
-        $data = Yii::$app->db->createCommand($query)->queryAll();
+//        $query = "select Id,Name,BucketStatus from Bucket where BucketStatus= $status and ProjectId=".$projectId;
+//        $data = Yii::$app->db->createCommand($query)->queryAll();
+            $query= new Query();
+            $data = $query->select("Id,Name,BucketStatus")
+                                ->from("Bucket")
+                                ->where("ProjectId=".$projectId)
+                                ->andWhere("BucketStatus=".$status)
+                                ->all();
         if(is_array($data)){
             return $data;
         }else{
@@ -380,8 +459,15 @@ class Bucket extends ActiveRecord
      * @Description Returns details of a bucket for given Bucket and Project IDs
      */
     public function getBucketDetailsById($projectId,$bucketId){
-      $bucketsQuery = "SELECT * FROM Bucket WHERE Id=$bucketId AND Status=1 AND Projectid=$projectId";   
-      $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
+//      $bucketsQuery = "SELECT * FROM Bucket WHERE Id=$bucketId AND Status=1 AND Projectid=$projectId";   
+//      $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
+            $query= new Query();
+            $bucketDetails = $query->select("")
+                                    ->from("Bucket")
+                                    ->where("Id=".$bucketId)
+                                    ->andWhere("ProjectId=".$projectId)
+                                    ->andWhere("Status=1")
+                                    ->all();
       return $bucketDetails;
     }
     
@@ -393,8 +479,13 @@ class Bucket extends ActiveRecord
      */
    public static function getTotalBuckets($projectId){
        try{
-          $query="select count(*) as count from Bucket where ProjectId=$projectId";
-          $bucketsCount = Yii::$app->db->createCommand($query)->queryAll();
+//          $query="select count(*) as count from Bucket where ProjectId=$projectId";
+//          $bucketsCount = Yii::$app->db->createCommand($query)->queryAll();
+          $query= new Query();
+          $bucketsCount = $query->select("count(*) as count")
+                                    ->from("Bucket")
+                                    ->where("ProjectId=".$projectId)
+                                    ->all();
           return $bucketsCount;
        } catch (\Throwable $ex) {
             Yii::error("Bucket:getTotalBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -410,8 +501,15 @@ class Bucket extends ActiveRecord
      */
    public static function getBucketsCountByType($projectId){
        try{
-          $query="select BucketStatus,count(*) as Totallog from Bucket where BucketStatus IN (1,2,3,4) and ProjectId=$projectId GROUP BY BucketStatus";
-          $bucketsCount = Yii::$app->db->createCommand($query)->queryAll();
+//          $query="select BucketStatus,count(*) as Totallog from Bucket where BucketStatus IN (1,2,3,4) and ProjectId=$projectId GROUP BY BucketStatus";
+//          $bucketsCount = Yii::$app->db->createCommand($query)->queryAll();
+          $query= new Query();
+          $bucketsCount = $query->select("BucketStatus,count(*) as Totallog")
+                                    ->from("Bucket")
+                                    ->where("BucketStatus IN (1,2,3,4)")
+                                    ->andWhere("ProjectId=".$projectId)
+                                    ->groupBy("BucketStatus")
+                                    ->all();
           $count_array=array();
           $count_array=array("Backlog"=>0,"Current"=>0,"Completed"=>0,"Closed"=>0,"Total"=>0);
           if(isset($bucketsCount) && count($bucketsCount)>0){
@@ -456,8 +554,14 @@ class Bucket extends ActiveRecord
            $closed_bucket_details=array();
            $backlog_bucket_details=array();
            $completed_bucket_details=array();
-           $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where ProjectId=$projectId and BucketStatus=$type";
-           $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
+//           $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where ProjectId=$projectId and BucketStatus=$type";
+//           $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
+          $query= new Query();
+          $bucket_data = $query->select("Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus")
+                                    ->from("Bucket")
+                                    ->where("BucketStatus=".$type)
+                                    ->andWhere("ProjectId=".$projectId)
+                                    ->all();
            error_log("==Bucket Data Count==".count($bucket_data));
            if(isset($bucket_data) && count($bucket_data)>0){
            foreach($bucket_data as $bucket_details){ 
@@ -534,8 +638,16 @@ class Bucket extends ActiveRecord
                if(!empty($bucketIds[0])){ 
                     $ids= implode(",",$bucketIds);
                     error_log("==Ids==".$ids);
-                    $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where  Id in (".$ids.") and BucketStatus!=2 and ProjectId=$projectId order by DueDate desc";
-                    $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
+//                    $query="select Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus from Bucket where  Id in (".$ids.") and BucketStatus!=2 and ProjectId=$projectId order by DueDate desc";
+//                    $bucket_data=Yii::$app->db->createCommand($query)->queryAll();
+                    $query= new Query();
+                    $bucket_data = $query->select("Id,Name,Description,StartDate,DueDate,Responsible,BucketStatus")
+                                              ->from("Bucket")
+                                              ->where("Id in (".$ids.")")
+                                              ->andWhere("BucketStatus!=2")
+                                              ->andWhere("ProjectId=".$projectId)
+                                              ->orderBy("DueDate DESC")
+                                              ->all();
             
                     foreach($currentWeekBuckets as $key=>$value){
                         foreach($bucket_data as $bucketData){
@@ -565,8 +677,13 @@ class Bucket extends ActiveRecord
     * @Description Returns Bucket Status Name based on the Bucket Status ID passed
     */
    public function getBucketStatusNameById($bucketStatusId){
-       $qry = "SELECT Name FROM BucketStatus where Id = $bucketStatusId";
-         $data = Yii::$app->db->createCommand($qry)->queryAll();  
+//         $qry = "SELECT Name FROM BucketStatus where Id = $bucketStatusId";
+//         $data = Yii::$app->db->createCommand($qry)->queryAll();   
+         $query= new Query();
+         $data = $query->select("Name")
+                              ->from("BucketStatus")
+                              ->where("Id=".$bucketStatusId)
+                              ->all();
          return $data;
    }
    /**
@@ -576,8 +693,14 @@ class Bucket extends ActiveRecord
     * @Description Returns the list of Backlog buckets under a project.
     */
     public static function getBackLogBucketByProjectId($projectId){
-         $qry = "SELECT Id,Name FROM Bucket where ProjectId = $projectId and Name='Backlog'";
-         $data = Yii::$app->db->createCommand($qry)->queryOne();  
+//         $qry = "SELECT Id,Name FROM Bucket where ProjectId = $projectId and Name='Backlog'";
+//         $data = Yii::$app->db->createCommand($qry)->queryOne();  
+         $query= new Query();
+         $data = $query->select("Id,Name")
+                              ->from("Bucket")
+                              ->where("ProjectId=".$projectId)
+                              ->andWhere("Name='Backlog'")
+                              ->one();
          return $data;
     }
  
