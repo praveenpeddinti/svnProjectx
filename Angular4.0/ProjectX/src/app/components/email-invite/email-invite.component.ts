@@ -14,7 +14,6 @@ declare var jQuery:any;
 
 export class EmailInviteComponent implements OnInit {
 
- // public isInvite:boolean=false;
   public projectName;
   public projectId;
   public inviteUsers;
@@ -40,7 +39,6 @@ export class EmailInviteComponent implements OnInit {
         thisObj.route.params.subscribe(params => {
            var projectName=decodeURIComponent(params['projectName']);
            this.projectName=projectName;
-              //thisObj.projectName=params['projectName'];
               this.projectService.getProjectDetails(thisObj.projectName,(data)=>{ 
                   if(data.data!=false){
                     thisObj.projectId=data.data.PId;
@@ -51,9 +49,7 @@ export class EmailInviteComponent implements OnInit {
       });
                                  
   }
-  // showToInviteUsers(){
-  //   this.isInvite=true;
-  // }
+  
 
   searchUsersToInvite(event){ 
     this.isEmailValid=false;
@@ -71,10 +67,10 @@ export class EmailInviteComponent implements OnInit {
           this.selectedUsers=null;
         }
          this.inviteUsers=user_data;
-         //this.selectedUsers=null;
+      
          if(this.inviteUsers.length==0){
           this.inviteUsers=['No Results'];
-          //this.noResult=true;
+       
           this.checkEmail(event.query);
          }
       }
@@ -86,7 +82,7 @@ export class EmailInviteComponent implements OnInit {
     {
       if(value!="No Results"){ 
       this.selectedUser.push(value);
-      //this.displayContainerDiv=true;
+      
       jQuery("#invite_placeholder").hide();
       this.isExist=false;
       }
@@ -97,7 +93,7 @@ export class EmailInviteComponent implements OnInit {
   }
 
   validateEmail(object){ 
-      //  email = email["inputEL"];
+     
       if(!this.checkAutoComplete){
           var email =  object["inputEL"]["nativeElement"]["value"];
           this.isEmpty=false;
@@ -159,12 +155,12 @@ export class EmailInviteComponent implements OnInit {
       this.selectedUser=[];
       jQuery("#inviteModel").modal('hide');
       this.isEmpty=false;
-      //this.zone.run(()=>{this.selectedUsers=undefined;})
+      
       jQuery("#invite_search").attr("value",""); //jquery was used since model binding was not getting updated....
       this.isSuccess=false;
       this.isEmailValid=false;
       this.isExist=false;
-      //this.selectedUsers="";
+     
       jQuery("#invite_placeholder").show();
     }
 
@@ -196,7 +192,7 @@ export class EmailInviteComponent implements OnInit {
                   }
             }
         });
-      //this.selectedUsers=null;
+     
     }
 
 }

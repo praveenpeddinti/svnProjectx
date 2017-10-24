@@ -12,7 +12,6 @@ declare var Chart:any;
 })
 export class StateChartComponent implements OnInit {
 
-  //public pieChartLabels:string[] = ['Download Sales', 'In-Store Sales', 'Mail Sales'];
   public pieChartLabels:string[]=[];
   public pieChartData:any[] = [];
   public pieChartType:string;
@@ -23,12 +22,10 @@ export class StateChartComponent implements OnInit {
             scales: {
                   yAxes: [{
                     ticks: {
-                      // beginAtZero: true
                     }
                   }],
                   xAxes: [{
                     ticks: {
-                      // beginAtZero: true,
                       autoSkip: false
                     }
                   }]
@@ -60,11 +57,7 @@ export class StateChartComponent implements OnInit {
 
 
   ngOnInit() { 
-// alert(window.screen.width);
-    //  this.shared.getStateStats().subscribe(value=>
-    //  {
-    //    alert("==From Shared=="+JSON.stringify(value));
-    //  });
+
     if(window.screen.width >=600 && window.screen.width <= 767){
       this.view = [580, 300];
     }else if(window.screen.width >=300 && window.screen.width <= 599){
@@ -73,55 +66,17 @@ export class StateChartComponent implements OnInit {
     
     var key=Object.keys(this.stateCount);
     this.pieChartLabels=key;
-    //this.pieChartData=[this.stateCount.New,this.stateCount.Paused,this.stateCount.InProgress,this.stateCount.Waiting,this.stateCount.Reopened,this.stateCount.Closed];
 
 
   this.pieChartType = this.chartType;
-  // if(this.pieChartType == "pie"){
-  //   this.pieChartData=[
-  //     {data:[this.stateCount.New,this.stateCount.Paused,this.stateCount.InProgress,this.stateCount.Waiting,this.stateCount.Reopened,this.stateCount.Closed],
-  //       label:""
-  //   }];
-    //this.loaded = true;
-  // }else{
-   //this.pieChartLabels=[' '];
-    // this.barChartOptions=
-    // {
-    //   // scaleShowVerticalLines: false,
-    //   // responsive: true
-    //   scales: {
-    //         yAxes: [{
-    //             ticks: {
-    //                 beginAtZero: true,
-    //                 maxTicksLimit: 5,
-                    
-    //             }
-    //         }],
-    //         xAxes: [{
-    //             categoryPercentage: 1.0,
-    //             barPercentage: 0.6
-    //         }]
-    //     },
-    //     legend:{position:'bottom'}
-    // };
-        // alert(JSON.stringify(this.stateCount));
+  
         for(let i in key){
           this.sum+=this.stateCount[key[i]];
           this.pieChartData.push({value:[this.stateCount[key[i]]],name:key[i]});
           
-          //this.pieChartData.push({data:[10,20,30,40,50,60,70,80,90,100,110,120,130,140],label:'New'});
-         //this.barData.push(this.stateCount[key[i]]);
+       
         }
-        // alert(JSON.stringify(this.pieChartData));
-// this.data = {
-//             labels: this.pieChartLabels,
-//             datasets: this.pieChartData
-//         };
-       // this.pieChartData.push({data:this.barData,label:"ProjectX"});
-        // this.loaded = true;
-    
-
-    // }
+       
   
   }
   ngAfterViewInit(){

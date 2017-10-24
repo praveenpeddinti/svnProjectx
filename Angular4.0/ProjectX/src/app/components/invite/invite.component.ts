@@ -31,8 +31,7 @@ export class InviteComponent implements OnInit {
   }
 
   verifyInvitation(code){ 
-   //localStorage.setItem('user',null);
-   //localStorage.setItem('profilePicture',null);
+  
    if(localStorage.getItem('user')!=null){
       var userInfo=localStorage.getItem('user');
       var localUserInfo=JSON.parse(userInfo);
@@ -59,7 +58,7 @@ export class InviteComponent implements OnInit {
           }
         }
         else if(result.data.UserType=="New"){
-          //this._router.navigate(['project',result.data.PName,'create-user'],{queryParams: {code:code}});
+       
           this._router.navigate(['create-user'],{queryParams: {code:code}});
         }else{
               if(userid_from_local==userid_from_cookie){

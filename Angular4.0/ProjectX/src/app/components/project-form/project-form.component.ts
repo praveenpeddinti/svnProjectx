@@ -62,36 +62,28 @@ export class ProjectFormComponent implements OnInit {
           private projectService:ProjectService
   ) {this.filesToUpload = []; }
   ngOnInit() {
-   //alert("##"+this.projectForm);
      if(this.projectForm=='create'){
-      // alert("121212");
      }else if(this.projectForm=='edit'){
-     //  alert("3333");
       var thisObj=this;
         this.route.queryParams.subscribe(
       params => 
       { 
          this.route.params.subscribe(params => {
-          //  this.projectId = params['id'];
           var projectName=decodeURIComponent(params['projectName']);
            this.projectName=projectName;
             this.projectService.getProjectDetails(this.projectName,(data)=>{ 
               if(data.data!=false){
                 thisObj.projectId=data.data.PId;
-                  // alert("------------"+JSON.stringify(thisObj.projectId));
                  thisObj.description= data.data.Description;
                  thisObj.projectLogo=data.data.ProjectLogo;
                  thisObj.setLogo=data.data.setLogo;
-                //  alert("------------"+JSON.stringify(thisObj.projectLogo));;
                 }else{
                this._router.navigate(['pagenotfound']);  
               }
                 thisObj.form['projectId']=thisObj.projectId; 
                 thisObj.form['projectName']=thisObj.projectName; 
                 thisObj.form['projectLogo']=thisObj.projectLogo;
-               // thisObj.form['description']=thisObj.description;;
                   thisObj.form['setLogo']=thisObj.setLogo;
-             // alert("------------"+JSON.stringify(thisObj.form['description']));;
                thisObj.form['description'] =jQuery(thisObj.description).text().trim();
                 console.log("343434--"+thisObj.form['projectName']);
                thisObj.copyProjectname=thisObj.form['projectName'];
@@ -141,9 +133,7 @@ export class ProjectFormComponent implements OnInit {
                                     jQuery(".projectlogo").attr("src",result.data);
                                     this.fileExtention=uploadedFileExtension;
                                     if(this.projectForm=='edit'){
-                                    //  alert("1212");
-                                    //   jQuery(".projectlogo").attr("src",'');
-                                    //   jQuery(".projectlogo").attr("src",result.data)
+                                  
                                     }
                                }
                                this.projectImage=jQuery(".projectlogo").attr("src");
@@ -184,7 +174,6 @@ export class ProjectFormComponent implements OnInit {
                   } ;
                    console.log("sssssssssss---------"+value.trim());
                   if(value.trim()=='' || value.trim() == undefined){
-                  // alert("sssssssssss");
                      this.spinnerSettings.color='';
                      this.spinnerSettings.class ='';
                      this.verifyProjectMess=false;
@@ -192,18 +181,15 @@ export class ProjectFormComponent implements OnInit {
                         this.verifyByspinner=2;
                         this.spinnerSettings.color="";
                         this.spinnerSettings.class = "fa fa-spinner fa-spin";
-                        // alert(this.timer);
                        this.timer = setTimeout(()=>{
                          this._ajaxService.AjaxSubscribe("site/verifying-project-name",postData,(result)=>
                         { 
-                           //alert("@@@---"+JSON.stringify(result.statusCode));
                             if (result.data != false) {
                                this.verified=0;
                                this.verifyByspinner=3;
                               this.spinnerSettings.color="red";
                               this.spinnerSettings.class = "fa fa-times";
                                this.verifyProjectMess=true;
-                              // alert(this.verifyProjectMess);
                              }else{
                               this.verified=1;
                               this.verifyByspinner=1;
@@ -217,7 +203,6 @@ export class ProjectFormComponent implements OnInit {
                   }
     }
     veryInputByspinner(){
-        //this.verifyByspinner='';
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
         this.verifyProjectMess=false;
@@ -236,7 +221,6 @@ export class ProjectFormComponent implements OnInit {
             this.projectImage=jQuery('.projectlogo').attr("src");
            var editor=jQuery('#summernote').summernote('code');
             this.editorDesc =jQuery(editor).text().trim();
-           // alert("3434343++--"+this.editorDesc);
               this.form['description']=this.editorDesc;
              var postData={
                       projectName:this.form['projectName'].trim(),
@@ -255,8 +239,7 @@ export class ProjectFormComponent implements OnInit {
                              jQuery('#addProjectModel').modal('hide');
                          }, 1000);
                          this.creationPopUp=true;
-                        // alert("2"+this.creationPopUp);
-                       //  alert("3"+this.editPopUp);
+                      
                          this._router.navigate(['project',this.form['projectName']]);
                       }else{
                  }
@@ -270,11 +253,9 @@ export class ProjectFormComponent implements OnInit {
            this.projectImage=jQuery('.projectlogo').attr("src");
             var editor=jQuery('#summernote').summernote('code');
             this.editorDesc =jQuery(editor).text().trim();
-           // alert("3434343++--"+this.editorDesc);
+          
               this.form['description']=this.editorDesc;
-            // if(editor.length>500){
-            //     this.summernoteLength=1;
-            // }else{
+         
              var postData={
                       projectName:this.form['projectName'].trim(),
                       description:editor,
@@ -282,7 +263,6 @@ export class ProjectFormComponent implements OnInit {
                       projectLogo:this.projectImage,  
                       fileExtention:this.fileExtention
                   } ;
-            // alert("jsonnn---------"+JSON.stringify(postData));
               this._ajaxService.AjaxSubscribe("collaborator/update-project-details",postData,(result)=>
               {
                     if (result.statusCode == 200) {
@@ -298,7 +278,7 @@ export class ProjectFormComponent implements OnInit {
                       }else{
                  }
                 }) 
-           // }
+          
      
   }
  
@@ -306,16 +286,13 @@ export class ProjectFormComponent implements OnInit {
        this.submitted=false;
        this.form={};
        this.form['description']='';
-        //  this.form={
-        //          description:""
-        //     };
-       // jQuery("#summernote").summernote('code','');
+      
         jQuery("#summernote").summernote('destroy');
         this.verifyProjectMess=false;
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
         this.checkImage=jQuery('.projectlogo').attr("src");
-     // this.clearImgsrc=="assets/images/logo.jpg";
+   
        if(this.checkImage=="assets/images/logo.jpg"){
          this.clearImgsrc=true; 
        }else{
@@ -330,11 +307,11 @@ export class ProjectFormComponent implements OnInit {
         this.spinnerSettings.color='';
         this.spinnerSettings.class ='';
         jQuery("#summernote").summernote('destroy',true);
-       // alert("summer"+this.form['setLogo']);
+      
          if(this.form['setLogo']!=true){
             jQuery(".projectlogo").attr("src",this.form['projectLogo']);
         }else{
-      //    alert("111");
+   
           this.form['setLogo']=true;
           jQuery(".projectlogo").attr("src","assets/images/logo.jpg");
         }
@@ -342,27 +319,24 @@ export class ProjectFormComponent implements OnInit {
   }
 
  creationProject(){ 
-       //jQuery("#summernote").summernote();
-       // alert("121212");
+     
         var formobj=this;
         this.editor.initialize_editor('summernote','keyup',formobj);
-        // this.form={
-        //          description:""
-        //     };
+        
        this.creationPopUp=true;
-      // this.summernoteLength=false;
+    
        this.verifyByspinner='';
        this.fileuploadMessage=0; 
        this.checkImage=jQuery('.projectlogo').attr("src");
-     // this.clearImgsrc=="assets/images/logo.jpg";
+
        if(this.checkImage=="assets/images/logo.jpg"){
          this.clearImgsrc=true; 
        }else{
-        //  alert("asd");
+       
            this.clearImgsrc=false;
-          // this.checkImage='assets/images/logo.jpg';; alert("555"+this.clearImgsrc);
+        
        }
-      //alert("@@--"+this.clearImgsrc);
+   
         this.verifyProjectMess=false; 
          this.spinnerSettings.color='';
          this.spinnerSettings.class ='';
@@ -372,17 +346,17 @@ export class ProjectFormComponent implements OnInit {
      this.fileuploadMessage=0; 
      this.editPopUp=true;
      this.submitted=false;
-    // setTimeout(()=>{
+   
      var formobj=this;
      this.editor.initialize_editor('summernote','keyup',formobj);
     jQuery('#summernote').summernote('code',this.description);
 
-    //  }, 150);
+   
      this.verifyProjectMess=false; 
      this.spinnerSettings.color='';
      this.spinnerSettings.class ='';
      this.form['projectName']=this.copyProjectname;
-     //jQuery("#summernote").summernote('code',this.copydescription);
+  
      this.checkImage=jQuery('.projectlogo').attr("src");
      if(this.checkImage=='assets/images/logo.jpg'){
         this.clearImgsrc=true; 
@@ -392,7 +366,7 @@ export class ProjectFormComponent implements OnInit {
   }
 
   checkDescField(event){
-   // alert("34343");
+  
     jQuery(event).text();
   }
 

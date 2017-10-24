@@ -7,12 +7,7 @@
 <div class="text-center" > <div class="inviteuser_content">You are invited to {{projectName}}</div> </div>
 <div class="modal-body">
 <form   #newUserForm="ngForm" (ngSubmit)="submitted && newUserForm.form.valid && saveUser()" novalidate="true">
-  
-  <!--<div class="model_proimg pull-right
-<img src="/assets/images/homelogo.png"/>
-<div class="model_proimgedit"><i class="fa fa-pencil" aria-hidden="true"></i>
-</div>
-</div>-->
+ 
   
   
   
@@ -86,17 +81,10 @@
                     <div [hidden]="!password.errors.required">
                      Password is required
                     </div>
-                    <!--<div [hidden]="!password.errors.minlength">
-                     Password must be at least 8 characters long.
-                    </div>-->
-                    <!--<div [hidden]="!password.errors.maxlength">
-                     Password cannot be more than 15 characters long.
-                    </div>-->
+                   
                     <div id="password_valid" *ngIf="!(password.errors=='passwordRulesInvalid') && !password.errors.required">Password is not valid</div>
                   </div>
-                  <!--<div id="password_valid" [hidden]="!isInvalid" class="fielderror">
-                     Password must contain atleast one special characters and atleast one digit
-                    </div>-->
+                
                     <div class="password-helper" *ngIf="showHelper" style="background: #f7f9fa; padding:5px 10px!important; font-size: 13px;margin-top:10px;">
                     <ng-password-helper></ng-password-helper>
                     </div>

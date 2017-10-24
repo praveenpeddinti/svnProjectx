@@ -84,19 +84,18 @@ export class ProjectDashboardComponent implements OnInit {
       params => 
       { 
          this.route.params.subscribe(params => {
-          //  this.projectId = params['id'];
+        
           var projectName=decodeURIComponent(params['projectName']);
            this.projectName=projectName;
             this.projectService.getProjectDetails(this.projectName,(data)=>{ 
               if(data.data!=false){
-                // alert(thisObj.projectId+"============");
+              
                 thisObj.projectId=data.data.PId;
-                  // alert("------------"+JSON.stringify(thisObj.projectId));
+                
                  thisObj.description=data.data.Description;
                  thisObj.projectLogo=data.data.ProjectLogo;
                  thisObj.setLogo=data.data.setLogo;
                  
-                //  alert("------------"+JSON.stringify(thisObj.projectLogo));;
                 
                 }else{
                this._router.navigate(['pagenotfound']);  
@@ -163,30 +162,29 @@ export class ProjectDashboardComponent implements OnInit {
                     projectName:  this.form['projectName'],
                     page:this.page
                    }
-            //   alert("33333444444444-----"+JSON.stringify(postData));
+         
       this._ajaxService.AjaxSubscribe("collaborator/get-project-dashboard-details",postData,(result)=>
                             {
-                            //      alert("67868--"+JSON.stringify(result.data.ProjectDetails[0].closedTickets));
+                           
                                   this.projectDetails=result.data.ProjectDetails[0];
                                   this.userInfoLength=result.data.ProjectDetails[0].userInfo.length;
-                                  //  this.activityDetails=result.data.activityDetails;
+                                
                                });
     }
     @HostListener('window:scroll', ['$event']) 
     projectActivityScroll(){
      var thisObj=this;
          if ((!this.noMoreActivities) && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
-                       // thisObj.dashboardScroll=false;
+                       
                         thisObj.page++;
-                       //     setTimeout(() => { 
+                      
                         thisObj.projectActivities(thisObj.page);
-                       //  alert("@@@@@-------"+thisObj.page);;
-                      //    },2000); 
+                     
                         
                     }
     }
     projectActivities(page){
-     // alert("page"+page);
+
               var post_data={
                'page':page,
                'pageLength':10,
@@ -196,12 +194,12 @@ export class ProjectDashboardComponent implements OnInit {
                 {   
                   
                     var thisObj=this;
-                   // alert(JSON.stringify(result.data));
+                  
                     if (page == 0 ) { 
-                    //  alert("121212"); 
+                   
                          this.noMoreActivities = false;     
                             this.dashboardData = result.data;
-                            //console.log("Onload__activity__"+JSON.stringify(this.dashboardData.activities))
+                          
                             var curActLength = this.dashboardData.activities.length;
                               if(this.dashboardData.activities.length==0){
                                   this.noActivitiesFound=true;
@@ -210,25 +208,21 @@ export class ProjectDashboardComponent implements OnInit {
                     }else{
                       var curActLength = this.dashboardData.activities.length;
                         if (result.data.activities.length > 0) {
-                          //console.log("Total__Activity"+JSON.stringify(result.data.activities));
-                          //console.log(this.dashboardData.activities[curActLength - 1].activityDate +"==77777777777777777777===="+ result.data.activities[0].activityDate)
-                          if (this.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
+                             if (this.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
                             this.dashboardData.activities[curActLength - 1].activityData = this.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
-                           // console.log("After__Concat"+JSON.stringify(this.dashboardData.activities));
-                            // // console.log("@@-44-"+JSON.stringify(this.dashboardData.activities[curActLength - 1].activityData));
-                            result.data.activities .splice(0, 1);
+                          result.data.activities .splice(0, 1);
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
-                              //alert("11");
+                          
                         } else {
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
-                          // alert("Final__out"+JSON.stringify(thisObj.dashboardData.activities));
+                        
                       }
                         } else {
                            this.noMoreActivities = true;
                         }
-                      // alert("###--"+JSON.stringify(thisObj.dashboardData));
+                     
                     }
-                  //  this.dashboardScroll=true;
+              
                })
     }
    scrollDataBuilder(activityData,prepareData){
@@ -258,7 +252,7 @@ export class ProjectDashboardComponent implements OnInit {
        
       }
      
-     // this.projectLogo=val;
+   
     }
   }
   appendDescription(val){
@@ -295,15 +289,10 @@ public users=JSON.parse(localStorage.getItem('user'));
            };
            var thisObj = this;
            if(repoCreated == 0){
-// alert("==-->"+JSON.stringify(sendData));
 bootbox.confirm("Would you like to create repository for "+projName+"?", function(ok){ if(ok){
-// if(confirm("Would you like to create repository for "+projName+"?")){
 thisObj._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
         {  
-        // jQuery('#createProjectDiv').show();
-        //    jQuery('#showLogDiv').hide();
-        //    jQuery('#createUserDiv').hide();
-          //  alert("----repodata----"+JSON.stringify(result));
+       
         thisObj._router.navigate(['svn',projName],{queryParams:{ProjectName:projName,ProjectId:thisObj.projectId}});
 
            })

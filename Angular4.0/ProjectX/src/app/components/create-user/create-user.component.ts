@@ -2,7 +2,6 @@ import { Component, OnInit,Output,EventEmitter } from '@angular/core';
 import {Router,ActivatedRoute} from '@angular/router';
 import { AjaxService } from '../../ajax/ajax.service';
 import { ProjectService } from '../../services/project.service';
-//import {UserDashboardComponent} from '../user-dashboard/user-dashboard.component';
 import { GlobalVariable } from '../../config';
 import { FileUploadService } from '../../services/file-upload.service';
 
@@ -20,7 +19,6 @@ export class CreateUserComponent implements OnInit {
   public isPasswordMatch:boolean=true;
   public projectName;
   public projectId;
-  //public userComponent:UserDashboardComponent;
   public fileuploadClick=false;
   public filesToUpload: Array<File>;
   public hasBaseDropZoneOver:boolean = false;
@@ -84,11 +82,7 @@ public prepareDisplayName(){
       if(this.isPasswordMatch && this.isValidFile)
       {
         // Make an ajax to save the User
-        //this.projectImage=jQuery('#projectlogo').attr("src");
-       // var URL = this.projectImage;
-        //var imageURL = URL.replace (/^[a-z]{4}\:\/{2}[a-z]{1,}\:[0-9]{1,4}.(.*)/, '$1');
-        //var link = document.createElement('a');
-       // link.setAttribute('href', URL);
+      
         var invite_obj={projectId:this.projectId,user:this.form,code:this.inviteCode};
         this._ajaxService.AjaxSubscribe("collaborator/save-user",invite_obj,(result)=>
         {
@@ -110,10 +104,6 @@ public prepareDisplayName(){
       }
     }
 
-    // fileUpload(fileInput: any, comeFrom: string){ 
-    //  // this.userComponent.fileUploadEvent(fileInput,comeFrom);
-    //  this.myevent.emit(fileInput,comeFrom);
-    // }
 
     CallFileupload(){
        jQuery("input[id='my_file']").click(); 
@@ -148,21 +138,7 @@ public prepareDisplayName(){
                      }
                      else{
                        this.isValidFile=false;
-                       }//      var postData={
-                  //             logoName:"[[image:" +result[i].path + "|" + result[i].originalname + "]]"
-                  //           }
-                  //         this._ajaxService.AjaxSubscribe("site/get-project-image",postData,(result)=>
-                  //           {
-                  //               if(result.data){
-                  //                  this.userProfile = result.data;
-                  //                  // jQuery("#projectlogo").attr("src",result.data);
-                  //                   this.fileExtention=uploadedFileExtension;
-                  //              }
-                  //              this.projectImage=jQuery("#projectlogo").attr("src");
-                            
-                  //   });
-                  //    } else{
-                  //  }
+                       }
                 }
                 this.fileUploadStatus = false;
             }, (error) => {

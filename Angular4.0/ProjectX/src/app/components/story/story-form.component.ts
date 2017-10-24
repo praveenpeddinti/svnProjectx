@@ -65,7 +65,6 @@ export class StoryComponent
            thisObj.shared.change(this._router.url,thisObj.projectName,'Dashboard','New',thisObj.projectName);            thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode ==200) {
                 thisObj.projectId=data.data.PId;  
-                 //let jsonForm={};//added by Ryan
         thisObj._service.getStoryFields(thisObj.projectId,(response)=>
         {
             
@@ -91,12 +90,10 @@ export class StoryComponent
                     var priority=(element.Title=="Priority"?true:false);
                     var listItemArray: any;
                      listItemArray=thisObj.prepareItemArray(DefaultValue,priority,element.Title);
-                 //   alert(JSON.stringify(listItemArray[0].filterValue));
                     thisObj.storyFormData.push(
                        {'lable':element.Title,'model':element.Field_Name,'value':element.DefaultValue,'required':element.Required,'readOnly':element.ReadOnly,'type':element.Type,'values':listItemArray[0].filterValue,"labels":listItemArray}
                        )
                   });
-                //this.form = jsonForm;-->removed
 
            var preferences=response.data.task_preferences.PreferenceItems;
             if(preferences!=""){
@@ -108,7 +105,6 @@ export class StoryComponent
                 if(this.selectedTickets.length==this.taskArray.length)
                 { 
                     this.checkvalue=true;
-                    //this.zone.run(()=>{this.checkvalue=true;})
                 }
                
                 jsonForm['tasks']=this.selectedTickets;//shifted by Ryan from above
@@ -187,9 +183,7 @@ export class StoryComponent
         }
       }
        listMainArray.push({type:"",filterValue:listItem});
-     // listMainArray["type"]="sfads";
-     // listMainArray["filterValue"]=listItem;
-     // alert(JSON.stringify(listMainArray)+"---"+listMainArray["type"]);
+   
         return listMainArray;
     }
 
@@ -278,10 +272,8 @@ export class StoryComponent
     */
     saveStory(){
         var thisObj = this;
-        //var editor=jQuery('#summernote_create').summernote('code'); alert(editor);
         var editor=this.form['description'];
         var editorDesc=jQuery(editor).text().trim();
-        //this.form['description']=jQuery('#summernote_create').summernote('code'); //for summernote editor
        if(editorDesc!='')
        { 
              this.form['default_task']=[];
@@ -291,7 +283,6 @@ export class StoryComponent
                        this.form['default_task'].push(tsk);
                  };
                }  
-             // delete this.form['tasks']; 
             this._service.saveStory(thisObj.projectId,thisObj.form,(response)=>{
                 if(response.statusCode == 200){
                      thisObj._router.navigate(['project',thisObj.projectName,'list']);
