@@ -92,12 +92,14 @@ class CollaboratorController extends Controller
             $userData = json_decode(file_get_contents("php://input"));
             $projectId=$userData->projectId;
             $user=$userData->user;
-            //$profilepic=$userData->userProfileImage;
             $code=$userData->code;
             $userid=ServiceFactory::getCollaboratorServiceInstance()->saveNewUser($projectId,$user,$code);
             $userDetails=ServiceFactory::getCollaboratorServiceInstance()->getUserDetails($userid);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
+            if($userid=="User Exist")
+            $responseBean->message = "User already exists";
+            else    
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $userDetails;
             $response = CommonUtility::prepareResponse($responseBean,"json");
@@ -209,7 +211,6 @@ class CollaboratorController extends Controller
         try{
             $inviteData = json_decode(file_get_contents("php://input"));
             $invite_code=$inviteData->inviteCode;
-           // $projectId=$inviteData->projectId;
             $userData=ServiceFactory::getCollaboratorServiceInstance()->verifyCode($invite_code);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -322,7 +323,6 @@ class CollaboratorController extends Controller
             $postData = json_decode(file_get_contents("php://input")); 
             $fileExt=!empty($postData->fileExtention)?$postData->fileExtention:"";
             $checkProjectName= Projects::getProjectDetails($postData->projectName);
-           // error_log("22222222-----------".print_r($checkProjectName['PId'],1));
             if($checkProjectName['PId']==''){
                 $returnId=ServiceFactory::getProjectServiceInstance()->savingProjectDetails($postData->projectName,$postData->description,$postData->userInfo->Id,$postData->projectLogo);
                 if($returnId!='failure'){
@@ -342,7 +342,6 @@ class CollaboratorController extends Controller
                     }
                     ServiceFactory::getCollaboratorServiceInstance()->updateProjectlogo($projectId,$logo);
                     $getStatus=ServiceFactory::getProjectServiceInstance()->savingProjectTeamDetails($projectId,$postData->userInfo->Id);
-                   // $getlastIdDetails= CommonUtilityTwo::getLastProjectDetails($projectId,$postData->userInfo->Id);
                  }
                  if($getStatus == 'failure' || $returnId=='failure'){
                     $responseBean = new ResponseBean;
@@ -419,7 +418,6 @@ class CollaboratorController extends Controller
             $postData = json_decode(file_get_contents("php://input"));
             error_log("111111111111111111111--------");
             $projectdetails=ServiceFactory::getProjectServiceInstance()->getProjectDashboardDetails($postData->projectName,$postData->projectId,$postData->userInfo->Id,$postData->page);
-           // $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData);
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";

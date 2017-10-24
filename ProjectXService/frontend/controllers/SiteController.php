@@ -109,19 +109,9 @@ class SiteController extends Controller
         error_log("----------------dddddddddddd");
         $model = new Projects();
        $userdata = $model->listUserData();
-     //   $userData=User::model()->getAllUser();
       $data = SampleCollection::testMongo();
-        //print_r($userdata,1);
-
-        error_log("----------------");
-       // $data = SampleCollection::testMongo();
        $model = new ProjectTicketSequence();
        $model->getNextSequence(2);
-      // $db->getNextSequence(1);
-      // $db->insert(array("TicketNumber" => $this->getNextSequence(2),"name" => "Sarah C."));
-
-       // error_log("+++++++++++++actionTestAjax+++++++++++++++++++".print_r($data,1));
-        //error_log("+++++++++++++actionTestAjax@@@@@@@@@@@@@@@@@+++++++++++++++++++".print_r($userdata,1));
     
     }
     /**
@@ -161,17 +151,10 @@ class SiteController extends Controller
 
         error_log("sssssssssssssssssssssssssssss");
         foreach ($_SERVER as $name => $value) {
-   // error_log($name."----".$value,"---");
         }
-        //error_log("@@@---**".print_r($_SERVER,1));
-
-        error_log("actionLogin------");
-
         $user_data = json_decode(file_get_contents("php://input"));
-       //error_log("request aprams-----------".print_r($user_data,1));
         $model = new LoginForm();
         $userData = $model->loginAjax($user_data);error_log("34444444444".print_r($userData,1));
-        //error_log("use dat---".print_r($userData,1));
         $responseBean = new ResponseBean;
         $responseBean->status = ResponseBean::SUCCESS;
         $responseBean->message = "success";
@@ -561,7 +544,6 @@ class SiteController extends Controller
                 }
                 ServiceFactory::getCollaboratorServiceInstance()->updateProjectlogo($projectId,$logo);
                 $getStatus=ServiceFactory::getCollaboratorServiceInstance()->savingProjectTeamDetails($projectId,$postData->userInfo->Id);
-               // $getlastIdDetails= CommonUtilityTwo::getLastProjectDetails($projectId,$postData->userInfo->Id);
              }
              if($getStatus == 'failure' || $returnId=='failure'){
                 $responseBean = new ResponseBean;
@@ -602,16 +584,13 @@ class SiteController extends Controller
             $limit=!empty($postData->limit)?$postData->limit:"";
             $projectId=!empty($postData->ProjectId)?$postData->ProjectId:"";
             $activityDropdownFlag=!empty($postData->activityDropdownFlag)?$postData->activityDropdownFlag:"";
-//            $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData->userInfo->Id,$postData->page,$limit,$projectFlag,$postData->activityPage,$projectId,$activityDropdownFlag);
             $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData);
             $totalProjectCount=ServiceFactory::getCollaboratorServiceInstance()->getTotalProjectCount($postData->userInfo->Id);
    
-           // error_log("---tttt----".print_r($projectInfo,1));
             if(!empty($projectInfo['ProjectwiseInfo']) || empty($projectInfo['ProjectwiseInfo'])){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
-//                error_log("------tttt-------".print_r($projectInfo,1));
                 if(!empty($projectInfo['ProjectwiseInfo']) || !empty($projectInfo['ActivityData'])){
                     $responseBean->data = $projectInfo;
                 }else{
@@ -754,7 +733,6 @@ class SiteController extends Controller
             $postData = json_decode(file_get_contents("php://input"));
             error_log("111111111111111111111--------");
             $projectdetails=ServiceFactory::getCollaboratorServiceInstance()->getProjectDashboardDetails($postData->projectName,$postData->projectId,$postData->userInfo->Id,$postData->page);
-           // $projectInfo = ServiceFactory::getStoryServiceInstance()->getProjectDetailsForDashboard($postData);
             if(!empty($projectdetails)){
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -828,8 +806,6 @@ class SiteController extends Controller
     public function actionCreateRepository(){
        try{
             $postData = json_decode(file_get_contents("php://input"));
-//            error_log("------".print_r($postData,1));
-//             error_log("------".$postData->repName);
             $ch = curl_init();
            
             $postData->repName = preg_replace("/\s*/", "", $postData->repName);
@@ -838,8 +814,6 @@ class SiteController extends Controller
             $postfields['username'] = $postData->userData[0]->userName;
             $postfields['password'] = $postData->userData[0]->password;
             $postfields['role'] = $postData->userData[0]->role;
-//            error_log("------".$postfields['projectName']);
-            //$postfields['field2'] = urlencode('value2');
             curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."test.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -848,13 +822,8 @@ class SiteController extends Controller
             
             $result = curl_exec($ch);
             $data = json_decode($result,true);
-            //$info=curl_exec($ch);
-            //$info = curl_getinfo($ch);
-            //error_log("-curl response-".print_r($result,1));
-//            error_log("^^^^^^^^^^^^^^6--------".print_r($data,1));
             if($data['status'] == "success"){
                  error_log("asssssssssssssss------".$data['status']);
-                //$projectId=$postData->projectId;
                ServiceFactory::getProjectServiceInstance()->updateRepositoryStatus($postData->projectId);
                $getStatus=ServiceFactory::getProjectServiceInstance()->saveUserPermissions($postData->projectId,$postData->userData);
             }
@@ -886,8 +855,6 @@ class SiteController extends Controller
        try{
             $postData = json_decode(file_get_contents("php://input"));
             error_log("------".print_r($postData,1));
-//             error_log($postData->password."------".$postData->userName);
-//            die();
             $ch = curl_init();
             $postData->projectName = preg_replace("/\s*/", "", $postData->projectName);
             $postfields = array();
@@ -895,7 +862,6 @@ class SiteController extends Controller
             $postfields['userData'] = json_encode($postData->userData);
             $postfields['projectName'] = $postData->projectName;
             
-//            $postfields = array();
             curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."user.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -903,9 +869,6 @@ class SiteController extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
             
             $result = curl_exec($ch);
-            //$info=curl_exec($ch);
-            //$info = curl_getinfo($ch);
-//            error_log("-curl user response-".$result);
             $getStatus=ServiceFactory::getProjectServiceInstance()->saveUserPermissions($postData->projectId,$postData->userData);
             
                 $responseBean = new ResponseBean;
@@ -913,13 +876,6 @@ class SiteController extends Controller
                 $responseBean->message = "success";
                 $responseBean->data = $result;
                 $response = CommonUtility::prepareResponse($responseBean,"json"); 
-            /*}else{
-                $responseBean = new ResponseBean;
-                $responseBean->statusCode = ResponseBean::FAILURE;
-                $responseBean->message = "failure";
-                $responseBean->data = $projectsInfo;
-                $response = CommonUtility::prepareResponse($responseBean,"json"); 
-            }*/
             return $response;
        } catch (\Throwable $th) {
             Yii::error("SiteController:actionCreateUser::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
@@ -941,8 +897,6 @@ class SiteController extends Controller
     public function actionShowSvnlog(){
        try{
             $postData = json_decode(file_get_contents("php://input"));
-//            error_log("------".print_r($postData,1));
-//            error_log("------".$postData->repName);
             $data = array();
             $ch = curl_init();
             $userPermission = ServiceFactory::getProjectServiceInstance()->getUserPermissions($postData->ProjectId,$postData->userId);
@@ -953,8 +907,6 @@ class SiteController extends Controller
             $postfields['projectName'] = $postData->repName;
             $postfields['username'] = $postData->userName;
             $postfields['password'] = $postData->password;
-//            error_log("------".$postfields['projectName']);
-            //$postfields['field2'] = urlencode('value2');
             curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."log.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -962,14 +914,7 @@ class SiteController extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
             
             $result = curl_exec($ch);
-            //$info=curl_exec($ch);
-            //$info = curl_getinfo($ch);
-           // error_log("-curl response-".print_r($result,1));
             $data = json_decode($result,true);
-           // error_log("----".print_r($data,1));
-//            array_column($data, "date")
-//            $time = strtotime($utc);
-//            $dateInLocal = date("Y-m-d H:i:s", $time);
             if(!empty($data)){
             foreach($data as $key=>$value){
                 $time = strtotime($value["date"]);
@@ -978,21 +923,10 @@ class SiteController extends Controller
                 $data[$key]["DateTimeString"]=$dateInLocal;
                 $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($value["author"]);
                 $data[$key]["ProfilePic"]=$userProfile["ProfilePicture"];
-//                $data[$key]->TimeString=$timeInLocal;
-//                $data[$key]->Month=date("M", $time);
-//                $data[$key]->Year=date("Y", $time);
-//                $data[$key]->Date=date("d", $time);
             }
             }
+         
             }
-//            $dates = array_unique(array_column($data, "DateString"));
-//            $returnData = array_fill(0, count($dates), []);
-//            foreach($data as $key=>$value){
-//                if(in_array($value->DateString, $dates))
-//                
-//            }
-//            error_log("==12312343535==>>>".print_r($data,1));
-            
                 $responseBean = new ResponseBean;
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = "success";
@@ -1018,17 +952,12 @@ class SiteController extends Controller
     public function actionGetRepositoryStructure(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
-//            error_log("------".print_r($postData,1));
-//             error_log("------".$postData->repName);
-            
            $data=array();
             $postData->directory = preg_replace("/\s*/", "", $postData->directory);
             $postfields = array();
             $postfields['directory'] = $postData->directory;
             $postfields['username'] = $postData->userName;
             $postfields['password'] = $postData->password;
-//            error_log("------".$postfields['directory']);
-            //$postfields['field2'] = urlencode('value2');
             $userPermission = ServiceFactory::getProjectServiceInstance()->getUserPermissions($postData->ProjectId,$postData->userId);
             if(is_array($userPermission)){
             $ch = curl_init();
@@ -1039,11 +968,7 @@ class SiteController extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
             
             $result = curl_exec($ch);
-            //$info=curl_exec($ch);
-            //$info = curl_getinfo($ch);
-           error_log("-curl response-".print_r($result,1));
             $data = json_decode($result,true);
-            error_log("-cusdjhasjkdhj====se-".print_r($data,1));
             foreach($data as $key=>$eachDir){
                 $userProfile = TinyUserCollection::getMiniUserDetailsByUserName($eachDir["last_author"]);
                 $data[$key]["ProfilePic"]=$userProfile["ProfilePicture"];
@@ -1075,7 +1000,6 @@ class SiteController extends Controller
         try{
             $postData = json_decode(file_get_contents("php://input"));
             error_log("------".print_r($postData,1));
-//             error_log("------".$postData->repName);
             $ch = curl_init();
            
             $postData->curerntDirectory = preg_replace("/\s*/", "", $postData->curerntDirectory);
@@ -1088,7 +1012,6 @@ class SiteController extends Controller
             
             error_log("------".$postfields['curerntDirectory']);
             error_log("------".$postfields['newFolder']);
-            //$postfields['field2'] = urlencode('value2');
             curl_setopt($ch, CURLOPT_URL, Yii::$app->params['SVNServerURL']."createFolder.php");
             curl_setopt($ch, CURLOPT_USERPWD, "guest:guest");
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -1096,8 +1019,6 @@ class SiteController extends Controller
             curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
             
             $result = curl_exec($ch);
-            //$info=curl_exec($ch);
-            //$info = curl_getinfo($ch);
             error_log("-curl response-".print_r($result,1));
             $data = json_decode($result,true);
             error_log("-cusdjhasjkdhj====se-".print_r($data,1));

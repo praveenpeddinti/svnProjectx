@@ -27,7 +27,6 @@ use common\components\Email; //only for testing purpose
 use common\models\mongo\NotificationCollection;
 use common\models\mongo\TicketTimeLog;
 use common\components\CommonUtilityTwo;
-//use common\models\mongo\TicketCollection;
 /**
  * Bucket Controller
  */
@@ -77,7 +76,6 @@ class BucketController extends Controller
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
-            //$responseBean->totalCount = $totalCount;
             $responseBean->data = $bucketDetails;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
@@ -182,7 +180,6 @@ class BucketController extends Controller
                 return $response = CommonUtility::prepareResponse($responseBean,"json");
             }
            
-        //    error_log(count($postData->data->notifyEmail)."==save bucket details ------".count($postData->data->sendReminder));
         } catch (\Throwable $th) { 
              Yii::error("BucketController:actionSaveBucketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
@@ -206,7 +203,6 @@ class BucketController extends Controller
             $checkbucket=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->data->title,$postData->projectId,$postData->bucketId);
             if($checkbucket["available"]=='Yes'){
                 $saveBucketDetails=ServiceFactory::getBucketServiceInstance()->updateBucketDetails($postData);
-               // EventTrait::saveEvent($postData->projectId,"Bucket",$postData->data->Id,"updated","update",$postData->userInfo->Id,[array("ActionOn"=>"bucketupdation","OldValue"=>0,"NewValue"=>(int)$lastBucketId)],array("BucketId"=>(int)$lastBucketId));    
                 if($saveBucketDetails["Status"]=="success"){
                         $response=$saveBucketDetails;
                         $responseBean = new ResponseBean();
@@ -215,7 +211,6 @@ class BucketController extends Controller
                         $responseBean->data = $response["data"];
                         return $response = CommonUtility::prepareResponse($responseBean,"json");
                 }else{
-//                    $response='current';
                     $responseBean = new ResponseBean;
                     $responseBean->statusCode = ResponseBean::FAILURE;
                     $responseBean->message = "Update Failed";
@@ -238,7 +233,6 @@ class BucketController extends Controller
                 return $response = CommonUtility::prepareResponse($responseBean,"json");
             }
            
-        //    error_log(count($postData->data->notifyEmail)."==save bucket details ------".count($postData->data->sendReminder));
         } catch (\Throwable $th) { 
              Yii::error("BucketController:actionUpdateBucketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();

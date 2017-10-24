@@ -80,7 +80,6 @@ class SettingsController extends Controller
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
         }
-       // return $details;
     }
     
     /**

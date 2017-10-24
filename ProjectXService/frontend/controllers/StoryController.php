@@ -98,7 +98,6 @@ class StoryController extends Controller
    public function actionGetAllStoryDetails() {
         try {
             $StoryData = json_decode(file_get_contents("php://input"));
-            //$projectId=1;
             $projectId = $StoryData->projectId;
             $totalCount = ServiceFactory::getStoryServiceInstance()->getAllStoriesCount($StoryData,$projectId);
             $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetails($StoryData, $projectId);
@@ -129,7 +128,6 @@ class StoryController extends Controller
    public function actionGetSubTaskDetails() {
         try {
             $StoryData = json_decode(file_get_contents("php://input"));
-            //$projectId=1;
             $subtaskIds=array();
             $projectId = $StoryData->projectId;
              $timezone = $StoryData->timeZone;
@@ -284,7 +282,6 @@ class StoryController extends Controller
             $storyField["Field_Type"] =  $storyField["Name"];
             
         }
-       // $response_data['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($projectId);
         $userId =  $post_data->userInfo->Id;
         $preference_items = ServiceFactory::getStoryServiceInstance()->getUserPreferences($userId);
         $response_data['task_preferences'] = $preference_items;
@@ -340,7 +337,6 @@ class StoryController extends Controller
         try{
             $postFieldData = json_decode(file_get_contents("php://input"));
             $responseBean = new ResponseBean();
-          //  $responseData['story_fields'] = ServiceFactory::getStoryServiceInstance()->getStoryFieldDataById(5);
             if($postFieldData->fieldId == 5 || $postFieldData->fieldId == 11){
             // get all assigned to details,stakeholeders
                 $responseData = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($postFieldData->projectId);//$projectId
@@ -365,6 +361,29 @@ class StoryController extends Controller
             $responseBean->data = $responseData;
             $response = CommonUtility::prepareResponse($responseBean,"json");
             return $response;
+        }catch (\Throwable $th) {
+            Yii::error("StoryController:actionGetFieldDetailsByFieldId::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
+             $responseBean = new ResponseBean();
+             $responseBean->statusCode =  ResponseBean::SERVER_ERROR_CODE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->data = [];
+             $response = CommonUtility::prepareResponse($responseBean,"json");
+             return $response;
+        }
+    }
+     public function actionGetUserImage(){
+        try{
+            $postFieldData = json_decode(file_get_contents("php://input"));
+            $responseBean = new ResponseBean();
+            // get all assigned to details,stakeholeders
+                $responseData = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeamImages($postFieldData->projectId,$postFieldData->userid);//$projectId
+
+                $responseBean->statusCode = ResponseBean::SUCCESS;
+            $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
+            $responseBean->data = $responseData;
+            $response = CommonUtility::prepareResponse($responseBean,"json");
+            error_log(Yii::$app->params['ServerURL']."==========================".$response->ProfilePic);
+            return $response['ProfilePic'];
         }catch (\Throwable $th) {
             Yii::error("StoryController:actionGetFieldDetailsByFieldId::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
@@ -542,7 +561,6 @@ class StoryController extends Controller
     public function actionGetCollaboratorsForFollow() {
         try {
             $StoryData = json_decode(file_get_contents("php://input"));
-            //$projectId=1;
             $projectId = $StoryData->projectId;
             $searchValue = $StoryData->searchValue;
             $ticketId = $StoryData->ticketId;
@@ -763,14 +781,12 @@ class StoryController extends Controller
             $sortvalue = $storyData->sortvalue;
             $searchString = $storyData->searchString;
             
-           // $totalCount = ServiceFactory::getStoryServiceInstance()->getTotalTicketsCount($projectId);
             $data = ServiceFactory::getStoryServiceInstance()->getAllStoryDetailsForSearch($projectId,$ticketId,$sortvalue, $searchString);
 
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = $data;
-           // $responseBean->totalCount = $totalCount;
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
         } catch (\Throwable $th) {
@@ -866,8 +882,6 @@ class StoryController extends Controller
             $timelog_data = json_decode(file_get_contents("php://input"));
             $projectId = $timelog_data->projectId;
             $parentTicketId = $timelog_data->ticketId;
-//             $projectId = 1;
-//            $parentTicketId = 497;
             $getTimelog = ServiceFactory::getStoryServiceInstance()->getTimeLog($projectId, $parentTicketId);
             $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
@@ -1040,7 +1054,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionGetFilterOptions::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =$th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -1074,7 +1088,6 @@ class StoryController extends Controller
             if($viewAll==0){
              
           
-            //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
             $result_data=ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,0,$limit);
 
             $count = NotificationCollection::getNotificationsCount($notified_userid,$projectId);
@@ -1147,7 +1160,6 @@ class StoryController extends Controller
             if($viewAll==0){
              
           
-            //$result_data=NotificationCollection::getNotifications($notified_username,$projectId);
             $result_data=ServiceFactory::getStoryServiceInstance()->getNotifications($notified_userid,$projectId,0,$limit);
 
             $count = NotificationCollection::getNotificationsCount($notified_userid,$projectId);
@@ -1339,15 +1351,7 @@ class StoryController extends Controller
         $projectId = $postData->projectId;
         $options=array();
         $tempFilter = array();
-       // $filters = ServiceFactory::getStoryServiceInstance()->getFilterOptions();
         $advanceFilters = ServiceFactory::getStoryServiceInstance()->getAdvanceFilterOptions();
-//         foreach ($filters as $item) {
-//
-//                $tempFilter[$item['Type']][] = $item;
-//        }
-//        $options['General']=$tempFilter['general'];
-//        $options['My']=$tempFilter['individual'];
-//       $tempFilter = array();
         foreach ($advanceFilters as $item) {
 
                 $tempFilter[$item['Type']][] = $item;

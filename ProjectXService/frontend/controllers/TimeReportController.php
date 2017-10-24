@@ -83,7 +83,6 @@ class TimeReportController extends Controller
                      $totalCount+=  $timeLog["count"];
                      $totalWorkLogHours =  number_format(round($timeLog["totalHours"],2),2);
                      $totalHours+=$totalWorkLogHours;
-                     //array_push($totalHoursOfEachMember,$totalWorkLogHours);
                   }
                 }
                 array_push($totalHoursOfEachMember,$totalHours);
@@ -146,23 +145,14 @@ class TimeReportController extends Controller
         try{
             $searchData = json_decode(file_get_contents("php://input"));
             $projectId = $searchData->projectId;
-           // $ticketId = $searchData->ticketId;
             $sortvalue = $searchData->sortvalue;
             $searchString = $searchData->searchString;
             $getSearchDetails=ServiceFactory::getTimeReportServiceInstance()->getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
-//            if(!empty($getSearchDetails)){
                 $responseBean = new ResponseBean();
                 $responseBean->statusCode = ResponseBean::SUCCESS;
                 $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
                 $responseBean->data = $getSearchDetails;
                 $response = CommonUtility::prepareResponse($responseBean, "json");
-//            }else{
-//                $responseBean = new ResponseBean;
-//                $responseBean->status = ResponseBean::SUCCESS;
-//                $responseBean->statusCode = ResponseBean::SUCCESS;
-//                $responseBean->data = $getSearchDetails;
-//                $response = CommonUtility::prepareResponse($responseBean,"json"); 
-//                }
         return $response;
          } catch (\Throwable $th) { 
              Yii::error("TimeReportController:actionGetStoryDetailsForTimelog::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
