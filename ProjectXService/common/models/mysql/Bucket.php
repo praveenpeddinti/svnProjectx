@@ -26,7 +26,6 @@ class Bucket extends ActiveRecord
     public function behaviors()
     {
         return [
-            //TimestampBehavior::className(),
         ];
     }  
     /**
@@ -139,7 +138,6 @@ class Bucket extends ActiveRecord
 
           $qry = "SELECT * FROM BucketStatus where Id NOT IN ($type) and Id>1"; //this query was modified by Ryan for fixing the Backlog Bucket Issue,added condition as Id>1
          $data = Yii::$app->db->createCommand($qry)->queryAll();  
-        //}
          return $data;
             
         } catch (\Throwable $ex) {
@@ -164,13 +162,13 @@ class Bucket extends ActiveRecord
                 $appendQry = " AND Id != $bucketId";
             }
                  $qry = "SELECT * FROM Bucket WHERE ProjectId=$projectId AND Name='".$bucketName."'".$appendQry;
+                 error_log("====================".$qry);
                 $bucketData = Yii::$app->db->createCommand($qry)->queryAll();
                 if(sizeof($bucketData)>0){
                     $returnValue='No';
                 }else{
                    $returnValue='Yes'; 
                 }  
-//            }
             return $returnValue;
 
         } catch (\Throwable $ex) {
@@ -425,7 +423,6 @@ class Bucket extends ActiveRecord
                    case 1:
                        $backlogStats=CommonUtilityTwo::getTopTicketsStats($projectId,'',$bucket_details['Id']);
                        $mergedBacklogInfo=array_merge($bucket_details,$backlogStats);
-                       //array_push($backlog_bucket_details,$bucket_details);
                        array_push($backlog_bucket_details,$mergedBacklogInfo);
                        break;
                    case 2:
@@ -440,14 +437,12 @@ class Bucket extends ActiveRecord
                    case 3:
                        $completedStats=CommonUtilityTwo::getTopTicketsStats($projectId,'',$bucket_details['Id']);
                        $mergedCompletedInfo=array_merge($bucket_details,$completedStats);
-                      // array_push($completed_bucket_details,$bucket_details);
                        array_push($completed_bucket_details,$mergedCompletedInfo);
                        break;
                    case 4:
                        $closedStats=CommonUtilityTwo::getTopTicketsStats($projectId,'',$bucket_details['Id']);
                        $mergedClosedInfo=array_merge($bucket_details,$closedStats);
                        array_push($closed_bucket_details,$mergedClosedInfo);
-                      // array_push($closed_bucket_details,$bucket_details);
                        
                        break;
                    default:

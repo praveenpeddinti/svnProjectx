@@ -25,26 +25,8 @@ class ProjectTeam extends ActiveRecord
     public function behaviors()
     {
         return [
-         //   TimestampBehavior::className(),
         ];
     }
-//    /**
-//     * @author Padmaja
-//     * @param type $collabaratorId
-//     * @return type
-//     */
-//    public static function getProjectTeamDetailsByRole($collabaratorId,$limit,$skip)
-//    {
-//        try{
-//            error_log("limitttttttt-----".$limit."-------".$skip);
-//            $query = "select * from ProjectTeam where CollaboratorId=$collabaratorId ORDER BY Id desc limit $skip,$limit";
-//            error_log("qrryyyyyyyyyyyyy---------".$query);
-//            $data = Yii::$app->db->createCommand($query)->queryAll();
-//            return $data;   
-//        } catch (Exception $ex) {
-//        Yii::log("ProjectTeam:getProjectMiniDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
-//        }
-//    }
      /**
      * @author Padmaja
      * @param type $projectId
@@ -144,7 +126,6 @@ class ProjectTeam extends ActiveRecord
            }
           
            $team=implode(',',$userTeam);
-           //$query = "select distinct C.UserName,C.Email from Collaborators C join ProjectTeam PT on PT.CollaboratorId=C.Id where C.UserName like '$search%' and C.Status=1";
            $query = "select distinct C.UserName,C.Email from Collaborators C  where C.UserName like '$search%' and C.Status=1 and C.Id not in($team)";
            $users = Yii::$app->db->createCommand($query)->queryAll();
            return $users;

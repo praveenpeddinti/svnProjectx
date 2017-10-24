@@ -24,7 +24,6 @@ class Collaborators extends ActiveRecord
     public function behaviors()
     {
         return [
-            //TimestampBehavior::className(),
         ];
     }
     
@@ -36,8 +35,26 @@ class Collaborators extends ActiveRecord
     public  function getProjectTeam($projectId)
     {
         try{
-         $qry = "select C.Id,C.UserName as Name,C.Email from ProjectTeam PT join Collaborators C on PT.CollaboratorId = C.Id where PT.ProjectId = $projectId";
+         $qry = "select C.Id,C.UserName as Name,C.Email,cp.ProfilePic from ProjectTeam PT join Collaborators C join CollaboratorProfile cp
+                 on PT.CollaboratorId = C.Id and cp.CollaboratorId = C.Id where  PT.ProjectId = $projectId";
+       error_log("profielpic------------------------------------".$qry);
          $data = Yii::$app->db->createCommand($qry)->queryAll();
+         return $data;    
+        } catch (\Throwable $ex) {
+            Yii::error("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+       
+    }
+       public  function getProjectTeamImages($projectId,$id)
+    {
+        try{
+         $qry = "select C.Id,C.UserName as Name,C.Email,cp.ProfilePic from ProjectTeam PT join Collaborators C join CollaboratorProfile cp
+                 on PT.CollaboratorId = C.Id and cp.CollaboratorId = C.Id where  PT.ProjectId = $projectId and C.Id=$id";
+       error_log("profielpic--------11111111111111111----------------------------".$qry);
+         $data = Yii::$app->db->createCommand($qry)->queryOne();
+          error_log("=========2111111111111111111111=================".print_r($data,1));
+
          return $data;    
         } catch (\Throwable $ex) {
             Yii::error("Collaborators:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -57,7 +74,6 @@ class Collaborators extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
         
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     
     /**
@@ -85,7 +101,6 @@ class Collaborators extends ActiveRecord
     }
      public static function getCollboratorByFieldType($fieldName,$value)
     {
-       // error_log("==Value==".$value);
        try {
         $value=(int)$value;
         $qry = "select * from Collaborators where `". $fieldName."`=$value";
@@ -96,7 +111,6 @@ class Collaborators extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
        
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     public static function getCollabrators()
     {
@@ -109,7 +123,6 @@ class Collaborators extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
        
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     public static function insertCollabrators($noofrecords)
     {   
@@ -180,33 +193,6 @@ class Collaborators extends ActiveRecord
             $data = Yii::$app->db->createCommand($qry)->queryOne();
             if(!empty($data))
             {
-//                try
-//                {
-//          
-//                    $recipients=json_decode(file_get_contents("php://input"));
-//                    error_log('==Email=='.print_r($data['Email'],1));
-//                    $email_recepients=[$data['Email']];
-//                    ApiClient::SetApiKey("9d55f483-0501-4005-8ada-3335f666e731");
-//                    $EEemail = new Email();
-//                    try
-//                       {
-//                           $subject="Ticket Status";
-//                           $from="marshal.ryan@techo2.com";
-//                           $fromName="techo2";
-//                           $html="<h1> Test Email </h1>";
-//                           $text="Hi,This is a Test Email";
-//                           $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $email_recepients, array(), array(), array(), array(), array(), null, null, $html, $text);		
-//                       }
-//                       catch (Exception $e)
-//                       {
-//                           echo 'Something went wrong: ', $e->getMessage(), '\n';
-//
-//                           return;
-//                       }		
-//            
-//                } catch (Exception $ex) {
-//
-//                    }
                 return $user;
             }
             
@@ -319,6 +305,7 @@ class Collaborators extends ActiveRecord
         try{
             error_log("Log___________________________".$email);
             $qry = "select Id from Collaborators where Email='$email'";
+            error_log("==========================".$qry);
             $data = Yii::$app->db->createCommand($qry)->queryOne();   
             return $data;
             
@@ -338,8 +325,6 @@ class Collaborators extends ActiveRecord
             $collaborator=new Collaborators();
             $collaborator->FirstName=$user->firstName;
             $collaborator->LastName=$user->lastName;
-            //$collaborator->DisplayName=$user->displayName;
-          //  $collaborator->UserName=$user->firstName.'.'.$user->lastName;
             $collaborator->UserName=$user->displayName;
             $collaborator->Email=$user->email;
             $collaborator->Password=md5($user->password);

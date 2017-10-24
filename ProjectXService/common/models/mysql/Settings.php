@@ -24,7 +24,6 @@ class Settings extends ActiveRecord
     public function behaviors()
     {
         return [
-            //TimestampBehavior::className(),
         ];
     }  
 
@@ -48,8 +47,6 @@ class Settings extends ActiveRecord
      * @return $data
      */
     public static function getAllNotificationsStatus($userId){
-//        $query="select * from CollaboratorNotificationsSettings cns join
-//                Notifications ns on ns.Id=cns.ActivityId where CollaboratorId=$userId";
 $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$userId";                
         $data = Yii::$app->db->createCommand($query)->queryAll();
                error_log("++++++++++++++++++++++".sizeof($data)."======KKKKKKKKKKkkk=======".print_r($data,1));     
@@ -79,7 +76,6 @@ $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$us
            error_log("%%%%%%%%%%%%%%%%".$query);
 
              $data = Yii::$app->db->createCommand($query)->queryAll();
-         //    $status="(".$data[0]['SystemNotification'].','.$data[0]['EmailNotification'].','.$data[0]['PushNotification'].")";
              return $data; 
     }
          public static function notificationsSetttingsStatusUpdateAll($userId,$type,$isChecked){

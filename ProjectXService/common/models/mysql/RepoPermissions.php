@@ -24,7 +24,6 @@ class RepoPermissions extends ActiveRecord
     public function behaviors()
     {
         return [
-       //   TimestampBehavior::className(),
         ];
     }
      /**

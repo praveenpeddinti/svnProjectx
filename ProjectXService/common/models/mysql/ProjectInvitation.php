@@ -26,7 +26,6 @@ class ProjectInvitation extends ActiveRecord
     public function behaviors()
     {
         return [
-         //   TimestampBehavior::className(),
         ];
     }
     
@@ -101,8 +100,6 @@ class ProjectInvitation extends ActiveRecord
    
    public static function getMiniInvitationDetails($code){
         try{
-//            $qry="select ProjectId,Email,IsValid from ProjectInvitation where InvitationCode='$code'";
-//            $invitationDetails = Yii::$app->db->createCommand($qry)->queryOne();
            $invitationDetails = ProjectInvitation::verifyCode($code);
             return $invitationDetails;
         } catch (\Throwable $ex) {

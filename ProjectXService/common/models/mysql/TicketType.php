@@ -44,7 +44,6 @@ class TicketType extends ActiveRecord
         throw new ErrorException($ex->getMessage()); 
          }
         
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
      /**
      * @author Anand Singh

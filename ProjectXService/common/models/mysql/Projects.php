@@ -24,7 +24,6 @@ class Projects extends ActiveRecord
     public function behaviors()
     {
         return [
-            //TimestampBehavior::className(),
         ];
     }
     /**
@@ -141,7 +140,6 @@ class Projects extends ActiveRecord
     {
         try{
             $query = "select P.PId,P.ProjectName,P.CreatedBy from Projects P join ProjectTeam PT on PT.ProjectId =P.PId where PT.CollaboratorId = $userId";
-           // $query = "select PId,ProjectName,CreatedBy from Projects where CreatedBy=$userId";
             $data = Yii::$app->db->createCommand($query)->queryAll();
            return $data;   
         } catch (\Throwable $ex) {
@@ -150,7 +148,6 @@ class Projects extends ActiveRecord
             
         }
        
-//        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
     }
     /*
      * 

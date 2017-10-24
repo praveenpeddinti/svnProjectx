@@ -24,7 +24,6 @@ class UserPreferences extends ActiveRecord
     public function behaviors()
     {
         return [
-            //TimestampBehavior::className(),
         ];
     }
     
