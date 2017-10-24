@@ -98,9 +98,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             return FALSE; 
         }
         
-//        error_log("-----------------" . $date);
         $date = preg_replace("/\([^)]+\)/", "", $date);
-//        error_log("------------afet-----" . $date);
         if ((bool) strtotime($date)) {
             return $date;
         } else {
@@ -139,8 +137,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     }
 
     static function refineActivityData($html,$length="35") {
-        // $html = CommonUtility::closetags($html);
-        //error_log("lengthtttttt".$length);
          $html = strip_tags($html);
         if (strlen($html) > $length) {
             $html = substr($html, 0, $length) . "...";
@@ -150,8 +146,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     }
     
     static function refineActivityDataTimeDesc($html,$length="35") {
-        // $html = CommonUtility::closetags($html);
-        //error_log("lengthtttttt".$length);
          $html = strip_tags($html);
         if (strlen($html) > $length) {
             $html = substr($html, 0, $length);
@@ -279,16 +273,13 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 }
             }
             // if the words shouldn't be cut in the middle...
-            // if (!$exact) {
             // ...search the last occurance of a space...
             $spacepos = strrpos($truncate, ' ');
             if (isset($spacepos)) {
                 // ...and cut the text in this position
                 $truncate = substr($truncate, 0, $spacepos);
             }
-            //}
             // add the defined ending to the text
-            //$truncate .= $ending;
             if ($considerHtml) {
                 // close all unclosed html-tags
                 $totalTags = count($open_tags);
@@ -322,7 +313,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      */
     public static function prepareTicketDetails($ticketDetails, $projectId,$timezone, $flag = "part") {
         try {
-            // $ticketDetails = TicketCollection::getTicketDetails($ticketId,$projectId);
 
             foreach ($ticketDetails["Fields"] as &$value) {
                 if (isset($value["custom_field_id"])) {
@@ -412,11 +402,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 }
             }
             usort($ticketDetails["Fields"], function($a, $b) {
-                // echo $a["position"]."\n";
                 return $a["position"] >= $b["position"];
             });
-            //  return $ticketDetails["Fields"];
-            // $ticketDetails["Fields"]="";
             $projectDetails = Projects::getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
 
@@ -438,13 +425,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         $ticketDetails["Followers"] = CommonUtility::filterFollowers($ticketDetails["Followers"]);
              
                 foreach ($ticketDetails["Followers"] as &$followersList) {
-                    //error_log($followersList['FollowerId']."----Follower--1--".print_r($followersList,1));
 
                     $projectFDetails = TinyUserCollection::getMiniUserDetails($followersList['FollowerId']);
                     $followersList["ProfilePicture"] = $projectFDetails["ProfilePicture"];
                     $followersList["UserName"] = $projectFDetails["UserName"];
-                    //$followersList["readable_value"] = $projectFDetails;
-                    //error_log($followersList['FollowerId']."----Follower--2--".print_r($followersList,1));
                 }
             }
             usort($ticketDetails["Followers"], function($a, $b) {
@@ -550,7 +534,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 if ($storyFieldDetails["Field_Name"] == "state") {
                    $value["value"] =$workFlowDetails['State'];
                    $value["readable_value"] = $workFlowDetails['State'];
-//                    $value["meta_data"] = WorkFlowFields::getStoryWorkFlowList($ticketDetails['WorkflowType'],$value["value"]);
                 }
                 if ($storyFieldDetails["Field_Name"] == "tickettype") {
 
@@ -561,19 +544,15 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }
             $ticketDetails['collaborators'] = ServiceFactory::getCollaboratorServiceInstance()->getProjectTeam($projectId);
             usort($ticketDetails["Fields"], function($a, $b) {
-                // echo $a["position"]."\n";
                 return $a["position"] >= $b["position"];
             });
             $selectFields = ['Title', 'TicketId','Fields.estimatedpoints'];
             $getchiledTasks=array();
                foreach ($ticketDetails["Tasks"] as &$task) {
                 $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId, $selectFields);
-               // $taskDetails["Title"] = htmlspecialchars_decode($taskDetails["Title"]);
                  array_push($getchiledTasks,$taskDetails);
             }
             $ticketDetails["childTasks"] =$getchiledTasks;
-            //  return $ticketDetails["Fields"];
-            // $ticketDetails["Fields"]="";
             $projectDetails = Projects::getProjectMiniDetails($ticketDetails["ProjectId"]);
             $ticketDetails["Project"] = $projectDetails;
             $ticketDetails["Title"] = htmlspecialchars_decode($ticketDetails["Title"]); 
@@ -607,7 +586,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
               $matches=[];
               $userlist=[];//for email purpose added by ryan
               $mention_matches=[];//added by Ryan
-              //preg_match_all('/(@\w+.\w+)/', $description, $mention_matches);//added by ryan
               preg_match_all('/@([\w_\.]+)/', $description, $mention_matches);
               $mentionmatches=$mention_matches[0];//added by Ryan
               for($i=0;$i<count($mentionmatches);$i++)//added by Ryan
@@ -677,7 +655,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     $artifactData = CommonUtility::getArtifact($tempFileName, $originalFileName, $extension, $fileName, $artifactType);
                     array_push($artifactsList, $artifactData);
                 }
-//               TicketArtifacts::saveArtifacts($ticketNumber, $projectId);
               } 
               $returnData = array("description"=>$description,"ArtifactsList"=>$artifactsList,"UsersList"=>$userlist);//modified by Ryan,added UsersList as key
               return $returnData;
@@ -699,7 +676,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
            $uploadedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
               $matches=[];
               $userlist=[];//for email purpose added by ryan
-              //preg_match_all('/(@\w+.\w+)/', $description, $mention_matches);//added by ryan
           
               
               preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
@@ -775,8 +751,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $arr2ordered[1]["other_data"] = sizeof($ticketDetails["Tasks"]); 
              
             $Othervalue = array();
-            //$Othervalue['childClass']="child_2";
-            //$arr2ordered[3]["other_data"] = $Othervalue['childClass'];
             foreach ($ticketDetails["Fields"] as $key => $value) {
 
                 if ($key == "planlevel") {
@@ -954,7 +928,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $ticketDetails = $arr2ordered;
             $projectDetails = Projects::getProjectMiniDetails($projectId);
            
-           // error_log("----final data ---".print_r($ticketDetails[0],1));
             return $ticketDetails;
         } catch (\Throwable $ex) {
             Yii::error("CommonUtility:prepareDashboardDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -1020,14 +993,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $property["NewValue"];
             $property["CreatedOn"];
             if ($fieldName == "Title" || $fieldName == "Description") {
-                //$property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
-                // $property["NewValue"]   = substr($property["NewValue"], 0, 25);
                 $property["PreviousValue"] = self::refineActivityData($property["PreviousValue"]);
                 $property["NewValue"] = self::refineActivityData($property["NewValue"]);
             }
            else if($actionFieldName=='Followed' || $actionFieldName=='Unfollowed' || $actionFieldName=='Related' || $actionFieldName=='ChildTask' || $actionFieldName=='Unrelated') {
-                //$property["PreviousValue"]  = substr($property["PreviousValue"], 0, 25);
-                // $property["NewValue"]   = substr($property["NewValue"], 0, 25);
             $property["SpecialActivity"]=1;
             $action=array("Id"=>'',"Name"=>'');
             $property["PreviousValue"] = self::refineActivityData($property["PreviousValue"]);
@@ -1108,7 +1077,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }
             else if ($type == 10) {
                 //bucket
-                // $property["PreviousValue"] = ""; // this line was creating problem in showing activity and notification 
                 if($property["PreviousValue"] != ""){
                     $bucketDetails = Bucket::getBucketName($property["PreviousValue"], $projectId); 
                     $property["PreviousValue"] = $bucketDetails["Name"];
@@ -1193,8 +1161,6 @@ $text_message=$html . $text_message .
 </table>
 </body>
 </html>";
-//$subject_text="ProjectX | ".$subject;
-         //echo("4. In CommonUtiltiy sendEmail started\n".print_r($recipient_list,1));
          ApiClient::SetApiKey(Yii::$app->params['ElasticEmailApiKey']);
         $attachments=array();//list of artifacts
         $EEemail = new Email();
@@ -1203,16 +1169,6 @@ $text_message=$html . $text_message .
         $html=$text_message;
         $text=$text_message;
         $response = $EEemail->Send($subject, $from, $fromName, null, null, null, null, null, null, $recipient_list, array(), array(), array(), array(), array(), null, null, $html, $text,null,null,null,null,null,$attachments);		
-//              Yii::$app->mailer->compose()
-//           ->setFrom(Yii::$app->params['ProjectEmail'])
-//           ->setTo($recipient_list)
-//           ->setSubject("ProjectX | ".$subject)
-//           ->setTextBody('This is ProjectX')
-//           ->setHtmlBody($text_message)
-//           ->send();
-            // error_log("in send mail");
-//        echo("5. In CommonUtiltiy sendEmail completed..\n");
-//        echo("6. Sending email background job has completed\n");
         }catch (\Throwable $ex) {
             Yii::error("CommonUtility:sendEmail::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -1228,17 +1184,12 @@ $text_message=$html . $text_message .
             $individualCount=array();
             if(!empty($ticketCommentsCount)){
                 foreach($ticketCommentsCount as $extractProjectCount){
-                   // error_log("@@@@@---".print_r($extractProjectCount,1));
                     error_log("########--------".$extractProjectCount['_id']['ProjectId']);
-                  //  array_push($individualCount, $extractProjectCount['ProjectId']);
                 }
                 return $projectwiseCount = array_count_values($individualCount);
             }else{
               return $projectwiseCount =0;  
             }
-           // error_log("**********".print_r($individualCount,1));
-          //  return $projectwiseCount = array_count_values($individualCount);
-            //error_log("seperate------------".print_r($projectwiseCount,1)); 
         }catch (\Throwable $ex) {
             Yii::error("CommonUtility:searchStringCountForProjectwise::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -1256,7 +1207,6 @@ $text_message=$html . $text_message .
         public static function getAllDetailsForSearch($searchString,$page,$searchFlag="",$projectId="",$pageLength,$userId,$pName=""){
         try{
                 $page = $page ;
-              //  $pageLength = 10;
                 if ($page == 1) {
                     $offset = $page - 1;
                     $limit = $pageLength;   
@@ -1265,7 +1215,6 @@ $text_message=$html . $text_message .
                     $limit = $pageLength;
                 }
                 error_log("projectId-----".$searchString);
-           // $searchString=strtolower($searchString);
             if ( !empty($searchString)) {
                 $collectAllCount=array();
                 $TicketCollFinalArray = array();
@@ -1296,7 +1245,6 @@ $text_message=$html . $text_message .
                    $getProjectInfo= Projects::getProjectDetails($pName);
                    $projectId=$getProjectInfo['PId'];
                 }
-                //error_log("search------------".print_r($options,1));
                 $totalProjects=ProjectTeam::getProjectsCountByUserId($userId);
                 $projectIdArray=array();
                 $getProjectIdArray=array();
@@ -1340,8 +1288,6 @@ $text_message=$html . $text_message .
                         $searchString = \quotemeta($searchString);
                         $searchString=htmlspecialchars($searchString);
                         if(!empty($projectId)){ 
-                        //    $searchString = \quotemeta($searchString);
-                        //   $searchString=htmlspecialchars($searchString);
                            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                            $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
                          }else{
@@ -1374,9 +1320,6 @@ $text_message=$html . $text_message .
                         $forTicketCollection['Project'] = $projectDetails; 
                         array_push($TicketCollFinalArray, $forTicketCollection);
                     }
-                 // $searchString=stripslashes($searchString);
-                  //  $searchString = \quotemeta($searchString);
-                 //   $searchString=htmlspecialchars($searchString);
                     $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>array('$in'=>$projectIdArray));
                     if(!empty($projectId)){
                         $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>(int)$projectId);
@@ -1498,7 +1441,6 @@ $text_message=$html . $text_message .
 
              
                 }else if($searchFlag==2){
-                  //  $searchString=stripslashes($searchString);
                     $searchString = \quotemeta($searchString);
                     $searchString=htmlspecialchars($searchString);
                     $matchArray = array('Activities.PlainDescription'=>array('$regex'=>$searchString,'$options' => 'i'),'Activities.Status'=>1,'ProjectId'=>array('$in'=>$projectIdArray));
@@ -1634,7 +1576,6 @@ $text_message=$html . $text_message .
                            if(!empty($projectId)){
                              $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                              $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
-                            //  error_log("1111111--------".count($cursor));;
                              
                            }else{
                                  error_log("www--".$getTicketIdNumber[1]);
@@ -1658,8 +1599,6 @@ $text_message=$html . $text_message .
                         $searchString=htmlspecialchars($searchString);
                      
                          if(!empty($projectId)){ 
-                        //    $searchString = \quotemeta($searchString);
-                         //   $searchString=htmlspecialchars($searchString);
                            $cursor =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array(),$options);
                            $cursorForCount =  $collection->find(array('$or'=>array(array("Title"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("PlainDescription"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketId"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId),array("TicketIdString"=>array('$regex'=>$searchString,'$options' => 'i'),"ProjectId" => (int)$projectId))),array());
                             error_log("333--------------tttt---------");
@@ -1821,10 +1760,7 @@ $text_message=$html . $text_message .
                               $commentsArray['CrudeCDescription']=$eachOne['PlainDescription'];
                               $commentsArray['Slug']=$eachOne['Slug'];
                               $commentsArray['ActivityOn']=$eachOne['ActivityOn'];
-                             // error_log("crudeeeeeeeee------------".$commentsArray['CrudeCDescription']);
-                             // error_log($searchString."----"."asddddd##########".(int)stripos($commentsArray['CrudeCDescription'],stripslashes($searchString)));
                                if(stripos($commentsArray['CrudeCDescription'],$searchString)!==false){
-                                 //  error_log("####################");
                                 array_push($commentsfinalArray,$commentsArray);
                               }
                            }
@@ -1907,55 +1843,8 @@ $text_message=$html . $text_message .
                 // Ended ----------
             
                 $renderCount=self::getStringCountForGLobalsearch($searchString,$projectId,$userId,$projectIdArray,$limit,$offset);
-//                    if(!empty($ticketCollectionCount)){
-//                        foreach($ticketCollectionCount as $extractProjectCount){
-//                            array_push($individualCountForTask, $extractProjectCount['ProjectId']);
-//                             
-//                        }
-//                        // error_log("**********".print_r($individualCount,1));
-//                        $collectAllCountforTasks = array_count_values($individualCountForTask);
-//                        }else{
-//                         $collectAllCountforTasks =array();  
-//                        }
-//                    //    error_log("**********---4545--".print_r(array($collectAllCountforTasks),1));
-//                             if(!empty($ticketCommentsCount)){
-//                        foreach($ticketCommentsCount as $extractcommentsCount){
-//                            array_push($individualCountForComment,$extractcommentsCount['_id']['ProjectId']);
-//                        }
-//                        $collectAllCountforComments = array_count_values($individualCountForComment);
-//                        }else{
-//                         $collectAllCountforComments =array();  
-//                        }
-//                        if(!empty($ticketArtifactsCount)){
-//                        foreach($ticketArtifactsCount as $extractArtifactCount){
-//                             array_push($individualCountForArtifacts,$extractArtifactCount['ProjectId']);
-//                        }
-//                        $collectAllCountforArtifacts = array_count_values($individualCountForArtifacts);
-//                        }else{
-//                         $collectAllCountforArtifacts =array();  
-//                        }
-//                    $prepareArrayForAllCount=array(count($ticketCollectionCount),count($ticketCommentsCount),count($ticketArtifactsCount),count($tinyUserDataCount));
-//                    $getAllCount=array_sum($prepareArrayForAllCount);  
-//                     $dataCount=array();
-//                    $dataCount['TaskCount']=count($ticketCollectionCount);
-//                    $dataCount['commentsCount']=count($ticketCommentsCount);
-//                    $dataCount['artifactsCount']=count($ticketArtifactsCount);
-//                    $dataCount['userDataCount']=count($tinyUserDataCount);
-//                    $dataCount['allCount']=$getAllCount;
-//                    if(!empty($dataCount)){
-//                        $dataCount=$dataCount;
-//                    }else{
-//                       $dataCount=array();
-//                    }
-//                    $getProjectCountForAll=self::array_sum_combine($collectAllCountforTasks,$collectAllCountforComments,$collectAllCountforArtifacts);
-//                    if(!empty($getProjectCountForAll)){
-//                        $getProjectCountForAll=$getProjectCountForAll;
-//                    }else{
-//                        $getProjectCountForAll=0;
-//                    }
                     $mainData=array('ticketCollection'=>$TicketCollFinalArray,'ticketComments'=>$TicketCommentsFinalArray,'ticketArtifacts'=>$TicketArtifactsFinalArray,'tinyUserData'=>$TinyUserFinalArray);
                  
-                    //  error_log("projectfunction**************".print_r($getProjectCountForAll,1));
                     $getCollectionData=array('mainData'=>$mainData,'dataCount'=>$renderCount['dataCount'],'projectCountForAll'=>$renderCount['getProjectCountForAll']);
                     }else{
                      $getCollectionData=array();
@@ -2029,9 +1918,7 @@ public static function filterFollowers($followers){
 }
 public static function getUniqueArrayObjects($arrayOfObjects){
     try{
-       // echo "getUniqueArrayObjects--".print_r($arrayOfObjects[0],1);
           $uniqueArrayObjects = array_filter($arrayOfObjects, function($obj) {
-             // echo "actovintu o----".$obj["ActivityOn"];
                     static $idList = array();
                     if (in_array($obj["ActivityOn"], $idList)) {
                         return false;
@@ -2109,8 +1996,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                 $totalSubtasks = '0'; 
             
             $finalData = array("Id" => $ticketDetails["TicketId"], "title" => $ticketDetails["Title"],'totalSubtasks'=>$totalSubtasks);
-            //$ticketTitle = array("field_name" => "Title", "value_id" => "", "field_value" => $ticketDetails["Title"], "other_data" => "");
-      // $fieldsOrderArray = ["assignedto","priority","workflow","bucket"];
                 $finalData['ProfilePicture']='';
         foreach ($fieldsOrderArray as $value) {
             
@@ -2140,11 +2025,9 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             if($value=='duedate'){
                  if ($ticketDetails["Fields"][$value]["value"] != "") {error_log($ticketDetails["Fields"][$value]["value"]."---if--".$value);
                             $datetime1 = $ticketDetails["Fields"][$value]["value"]->toDateTime();
-                           // error_log("---ifdate-1-". $datetime1);
                             $timezone="Asia/Kolkata";
                             $datetime1->setTimezone(new \DateTimeZone($timezone));
                             $duedate = $datetime1->format('M-d-Y');
-                           // error_log($timezone."---ifdate-2-".$duedate);
                         } else {error_log("---else--".$value);
                             $duedate = "";
                         }
@@ -2155,11 +2038,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             $finalData[$value] = $ticketDetails["Fields"][$value]["value"];   
             }
               
-            //}
-            //if($value!='assignedto'){
-            // $finalData[$value] = $ticketDetails["Fields"][$value]["value"];   
-            //}
-             
             
         }
         if($ticketDetails["ParentStoryId"]!=""){
@@ -2169,7 +2047,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
             $finalData["hide"] = false;
              $finalData["childClass"] = "";
         }
-        //  error_log("----final data---".print_r($finalData,1));     
             return $finalData;
         } catch (\Throwable $ex) {
             Yii::error("CommonUtility:prepareDashboardDetailsTemp::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -2188,7 +2065,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                 $followersDetails =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId))));
              if($assignedtoDetails !=0 || $followersDetails != 0){
                  error_log("=============ascrollllllllll-------");
-                 //$projectDetails = ProjectTeam::getProjectTeamDetailsByRole($userId,$options['limit'],$options['skip']);
                $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$page);
                 if($projectFlag==1){   
                    $prepareDetails= self::getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId);
@@ -2198,10 +2074,8 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                     $prepareDetails=array();
                     $getEventDetails= EventCollection::getAllActivities();
                     foreach($getEventDetails as $extractedEventDetails){
-                      // error_log("eventtttttttttt------------".print_r($extractedEventDetails,1));
                        foreach($extractedEventDetails['Data'] as $getId){
                            $activitiesArray= EventCollection::getActivitiesById($getId);
-                          // error_log("------44444444--------".print_r($activitiesArray));
                            $getActivities['ProjectId']=$activitiesArray['ProjectId'];
                            $getActivities['OccuredIn']=$activitiesArray['OccuredIn'];
                            $getActivities['ReferringId']=$activitiesArray['ReferringId'];
@@ -2215,7 +2089,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                            $timezone="Asia/Kolkata";
                            $datetime1->setTimezone(new \DateTimeZone($timezone));
                            $getActivities['createdDate']= $datetime1->format('M-d-Y');
-                          // error_log("changee-------".$getActivities['createdDate']);
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
                                error_log("-----s--".$changeSummary['ActionOn']);
                                 $getActivities['ChangeSummary']['ActionOn']=$changeSummary['ActionOn'];
@@ -2439,7 +2312,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                         }else{
                          $collectAllCountforArtifacts =array();  
                         }
-                 // error_log("****---777777777777============--".print_r($collectAllCountforArtifacts,1));
                     $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
                     $cursorCountTinyUser=$collection->find(array('$or'=>array(array("Email"=>array('$regex'=>$searchString,'$options' => 'i')),array("UserName"=>array('$regex'=>$searchString,'$options' => 'i')))),array());
                     $tinyUserDataCount = iterator_to_array($cursorCountTinyUser);
@@ -2476,9 +2348,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
     {
       $return = array();
       $args = func_get_args();
-     // error_log("######".print_r($args,1));
-     // if(!empty($arr1) && !empty($arr2) && !empty($arr3)){
-          error_log("@@----");
         foreach ($args as $arr)
         {
           foreach ($arr as $k => $v)
@@ -2488,7 +2357,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
               $projectDetails=Projects::getProjectMiniDetails($k);
               $k= $projectDetails['ProjectName'];
             }
-             // $project['ProjectName']=$k;
             if (!array_key_exists($k, $return))
             {
                 $return[$k] = 0;
@@ -2497,8 +2365,6 @@ public static function getUniqueArrayObjects($arrayOfObjects){
 
           }
         }
-     // }
-    //  error_log("returrrnnrnr---".print_r($return,1));
       return $return;
     }
  

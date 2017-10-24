@@ -47,7 +47,6 @@ class CommonUtilityTwo {
 
             $l = strlen($str) - $i;
             $ext = substr($str, $i + 1, $l);
-            //$ext .= '_'.$_SESSION['user']->id;
             return $ext;
         } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:getExtension::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -162,7 +161,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 
             $prepareBucketArray = array();
             $prepareBucketArray["chartDetails"]=array();
-//            $prepareBucketArray['BucketType'] = $bucketDetails['BucketType'];
             $prepareBucketArray['BucketStatus'] = $bucketDetails['BucketStatus'];
             $prepareBucketArray['BucketId'] = $bucketDetails['Id'];
             $prepareBucketArray['BucketName'] = $bucketDetails['Name'];
@@ -178,24 +176,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $prepareBucketArray['DropDownBucket'] ="none";
             $prepareBucketArray['BucketStatusName'] = $bucketDetails["BucketStatusName"];
             $prepareBucketArray['milestoneMessage'] = $milestoneMessage;
-            
-            
-//            $checkTicketsinBuckets = TicketCollection::checkTicketsinBuckets($projectId,$bucketDetails['Id']);
-//            if(count($checkTicketsinBuckets)==0){
-//                $prepareBucketArray['AllTasks'] =(int)0;
-//                $prepareBucketArray['ClosedTasks'] =(int)0;
-//                $prepareBucketArray['OpenTasks'] =(int)0;
-//                $prepareBucketArray['TotalHours'] =(int)0;
-//                $prepareBucketArray['Taskspercentage'] = (int)0;
-//                
-//            }else{
-//                $prepareBucketArray['AllTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='All');
-//                $prepareBucketArray['ClosedTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='Closed');
-//                $prepareBucketArray['OpenTasks'] =TicketCollection::getAllTicketsCount($projectId,$bucketDetails['Id'],'Fields.bucket.value','Fields.state.value',$taskFlag='Open');
-//                $prepareBucketArray['TotalHours'] =TicketCollection::getTotalWorkHoursForBucket($projectId,$bucketDetails['Id'],'Fields.bucket.value');
-//                $prepareBucketArray['Taskspercentage'] = (int)round((($prepareBucketArray['ClosedTasks']/$prepareBucketArray['AllTasks'])*100));
-//                
-//            }
             $prepareBucketArray["chartDetails"]["statusCounts"] = CommonUtilityTwo::getStatusCount($projectId, $bucketDetails['Id']);
             $prepareBucketArray["chartDetails"]["stateCounts"] = CommonUtilityTwo::getBucketStatesCount($projectId, $bucketDetails['Id']);
             $prepareBucketArray["topTicketStats"] = CommonUtilityTwo::getTopTicketsStats($projectId,'', $bucketDetails['Id']);
@@ -230,12 +210,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 $assignedtoDetails =  $collection->count(array('$or'=>array( array( "Fields.assignedto.value"=>(int)$userId))));
                 $followersDetails =  $collection->count(array('$or'=>array(array("Followers.FollowerId"=>(int)$userId))));
              if($assignedtoDetails !=0 || $followersDetails != 0){
-                // error_log("=============ascrollllllllll-------");
                  $activitiesArray=array();
                  $getActivities=array();
                  $activityDetails=array();
                  $projectData=array();
-                 //$projectDetails = ProjectTeam::getProjectTeamDetailsByRole($userId,$options['limit'],$options['skip']);
                $projectDetails = ProjectTeam::getAllProjects($userId,$pageLength,$page);
                 if($projectFlag==1){   
                    $projectData= self::prepareProjectsForUserDashboard($collection,$projectDetails,$userId);
@@ -271,7 +249,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                      $topTickets='';
                      $projects=Projects::getProjectMiniDetails($extractDetails['ProjectId']);
                      $userDetails=Collaborators::getCollaboratorById($projects['CreatedBy']);
-                    // $projectTeamDetails=Collaborators::getFilteredProjectTeam($extractDetails['ProjectId'],$userDetails['UserName']);
                      $projectInfo['projectId']=$extractDetails['ProjectId'];
                      $projectInfo['createdBy']=$userDetails['UserName'];
                      $projectInfo['projectName']=$projects['ProjectName'];
@@ -346,7 +323,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      */
     public static function getProjectDetailsForProjectDashboard($projectId,$userId,$page){
         try{
-            // error_log("-----------###################-------------".$projectId."hk--".$userId);
             $projectInfo=array();
             $prepareDetails=array();
             $userInfo=array();
@@ -359,18 +335,14 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             $projectInfo['closedTickets'] =TicketCollection::getTicketsCountByStatus($projectId,'Fields.state.value',6);
             $projectInfo['InProgress'] =TicketCollection::getTicketsCountByStatus($projectId,'Fields.state.value',3);
             $projectInfo['New'] =TicketCollection::getTicketsCountByStatus($projectId,'Fields.state.value',"New");
-          //  $projectInfo['weeklyProjectTimeLog'] =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog($userId,$projectId);
             $projectInfo['weeklyProjectTimeLog']    =  ServiceFactory::getTimeReportServiceInstance()->getCurrentWeekTimeLog('',$projectId);
             $projectInfo['totalProjectTimeLog']     =  ServiceFactory::getTimeReportServiceInstance()->getTotalTimeLogByProject($projectId);
             $projectInfo['topTickets'] = self::getTopTicketsStats($projectId,$userId);
             $projectInfo['allTickets'] =TicketCollection::getAllTicketsCountByProject($projectId);
             $currentActiveUsers      =  EventCollection::getCurrentWeekActiveUsers($projectId);
-           //` error_log("@@@@@-----kkkkkkkkkkkkkkkkkkkkkk--------".print_r($projectInfo['currentActiveUsers'][0]['data'],1));
             if(!empty($currentActiveUsers)){
                 $userIdArray= array_unique($currentActiveUsers[0]['data']);
-               // error_log("#----------".print_r($userIdArray,1));
                 foreach($userIdArray as $collabaratorId){
-                  //  error_log("%%%%%%%%%%".$collabaratorId);
                       $userDetails=TinyUserCollection::getMiniUserDetails($collabaratorId);
                       $extractUserInfo['ProfilePicture']=$userDetails['ProfilePicture'];
                       $extractUserInfo['UserName']=$userDetails['UserName'];
@@ -381,7 +353,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }else{
                $projectInfo['userInfo']=array();  
             }
-         //  error_log("----555555555555----".print_r($projectInfo,1));
             array_push($prepareDetails,$projectInfo);
           
             return array('ProjectDetails'=>$prepareDetails);  
@@ -389,7 +360,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:getProjectDetailsForProjectDashboard::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
            throw new ErrorException($ex->getMessage());
-        //      Yii::log("CommonUtilityTwo:getProjectDetailsForProjectDashboard::".$ex->getMessage()."--".$ex->getTraceAsString(), 'error', 'application');
         }
         
     }
@@ -484,16 +454,13 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                }
                    /*FOR Readmore #7699 Issue with Web preview Url - E */
             // if the words shouldn't be cut in the middle...
-            // if (!$exact) {
             // ...search the last occurance of a space...
             $spacepos = strrpos($truncate, ' ');
             if (isset($spacepos)) {
                 // ...and cut the text in this position
                 $truncate = substr($truncate, 0, $spacepos);
             }
-            //}
             // add the defined ending to the text
-            //$truncate .= $ending;
             if ($considerHtml) {
                 // close all unclosed html-tags
                 $totalTags = count($open_tags);
@@ -530,12 +497,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     $timezone=$postData->timeZone;
                     $setNewVal='';
                    foreach($getEventDetails as $extractedEventDetails){
-                     // error_log("eventttttt-tt------------".print_r($extractedEventDetails,1));
-                    //   foreach($extractedEventDetails['Data'] as $getId){
                            $getActivities=array();
-//                           $activitiesArray= EventCollection::getActivitiesById($extractedEventDetails['_id']);
                            $activitiesArray= $extractedEventDetails;
-//                           error_log("------44444444--------".$activitiesArray['OccuredIn']);
                            $getActivities['ProjectId']=$activitiesArray['ProjectId'];
                            $projectDetails = Projects::getProjectMiniDetails($activitiesArray['ProjectId']);
                            $getActivities['ProjectName'] = $projectDetails['ProjectName']; 
@@ -576,9 +539,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                            $getActivities['createdDate']= $datetime1->format('M-d-Y');
                            $Date = $datetime1->format('Y-m-d H:i:s');
                            $getActivities['dateOnly'] =$datetime1->format('Y-m-d');
-                         //   $getActivities['Month']= $datetime1->format('M');
-//                           $getActivities['Day']= $datetime1->format('d');
-//                           $getActivities['Year']= $datetime1->format('Y');
                           $getActivities['time']= $Date;
                           $getActivities['ChangeSummary'] = array();
                            foreach($activitiesArray['ChangeSummary'] as $changeSummary){
@@ -602,7 +562,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     $summary['OldValueText']='';
                                 }
                                  if(!empty($changeSummary['NewValue'])){
-                                   // error_log("set new vall----".$setNewVal);
                                     $datetime1=$changeSummary['NewValue']->toDateTime();
                                     $datetime1->setTimezone(new \DateTimeZone($timezone));
                                     $summary['NewValue']= $datetime1->format('M-d-Y');
@@ -689,10 +648,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     $summary['prepostion']= 'for';
                                }else if($summary['ActionOn']=='projectcreation' ||$summary['ActionOn']=='bucketcreation'){
                                    error_log("here454545-----".$summary['ActionOn']);
-                                   // $prepare_text = array('message' => Yii::$app->params['created']);
                                   $prepare_text = Yii::t('app','created');
                                   $summary['action']='';
-                                      //error_log("@@@@--".print_r($prepare_text,1));
                                     if(!empty($changeSummary['OldValue'])){
                                         
                                        $summary['OldValue']=$setNewVal;
@@ -718,14 +675,11 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     $summary['prepostion']= 'for';
                                }else if($summary['ActionOn']=='comment'){
                                    error_log("jhhhk-------------------comment__comment");
-                                   // $prepare_text = array('message' => Yii::$app->params['created']);
                                    error_log("@@@------333333333333--------".$getActivities['ActionType']);
                                     if($getActivities['ActionType']=='comment'){
                                     $prepare_text =(strpos($changeSummary['NewValue'], '@')!==false)? (Yii::t('app','mention')):(Yii::t('app','comment'));
-                                    // $prepare_text = Yii::t('app','comment');
                                     }elseif($getActivities['ActionType']=='repliedOn'){
                                         $prepare_text =(strpos($changeSummary['NewValue'], '@')!==false)? (Yii::t('app','mention')):(Yii::t('app','reply'));
-                                      //  $prepare_text = Yii::t('app','reply');
                                     }elseif($getActivities['ActionType']=='edit'){
                                         $prepare_text = Yii::t('app','edit');
                                     }
@@ -733,7 +687,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                         $prepare_text = Yii::t('app','delete');
                                     }
                                     $summary['action']='';
-                                      //error_log("@@@@--".print_r($prepare_text,1));
                                     if($getActivities['ActionType']=='comment'){
                                         error_log("%%%%%%%%%%%%%%%%%%%%%%5");
                                         if(!empty($changeSummary['OldValue'])){
@@ -781,9 +734,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                            $summary['NewValueText']='';
                                        }
                                    }else{
-//                                         $priorityDetail = Priority::getPriorityDetails($ticket_data->$key);
-//                                $value["value_name"] = $priorityDetail["Name"];
-                                    
                                        if(!empty($changeSummary['OldValue'])){
                                             $priorityDetail = Priority::getPriorityDetails($changeSummary['OldValue']);
                                            error_log("@@@@@@@@@--------helloo---+++--------".$priorityDetail["Name"]);
@@ -816,7 +766,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                          $prepare_text = Yii::t('app','unrelated');
                                     }
                                      $summary['action']='';
-                                    // error_log("changesummery55555555555-------".$changeSummary['OldValue']);
                                     if(!empty($changeSummary['OldValue'])){
                                        $summary['OldValue']=$changeSummary['OldValue'];
                                        $summary['OldValueText']='from';
@@ -825,7 +774,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                        $summary['OldValueText']='';
                                    }
                                     if(!empty($changeSummary['NewValue'])){
-                                       //$summary['NewValue']=CommonUtility::refineActivityData($changeSummary['NewValue'], 80);
                                         $summary['NewValue']=$setNewVal;
                                         $summary['NewValueText']='to';
                                    }else{
@@ -842,8 +790,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                     }
                                     $summary['action']='';
                                     if(!empty($changeSummary['OldValue'])){
-                                    //   $tinyUserDetails=TinyUserCollection::getMiniUserDetails($changeSummary['OldValue']);
-                                    //   $setNewVal=$tinyUserDetails['UserName'];
                                        $summary['OldValue']='';
                                        $summary['OldValueText']='';
                                    }else{
@@ -889,7 +835,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                                }elseif($summary['ActionOn']=='childtask' ){
                                      $prepare_text = Yii::t('app','created');
                                   $summary['action']='';
-                                      //error_log("@@@@--".print_r($prepare_text,1));
                                     if(!empty($changeSummary['OldValue'])){
                                         
                                        $summary['OldValue']=$setNewVal;
@@ -946,19 +891,14 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                             array_push($getActivities['ChangeSummary'], $summary);  
                            }
                            array_push($activityDetails, $getActivities);
-                     //  }
                   }
 
                     $preparedActivities = array();
                     $finalActivity = array('activityDate' => '', 'activityData' => array());
                     $tempActivity = array();
-                 //    error_log("@@@@@@@--------item-----".print_r($activityDetails,1));
-//                    foreach ($activityDetails as $extractActs) {
                         foreach($activityDetails as $item){
                                 $tempActivity[$item['dateOnly']][] = $item;
-                             //    error_log("@@@@@@@--------item-----".print_r($tempActivity,1));
                         }
-//                    }
                     foreach ($tempActivity as $key => $value) {
                         $finalActivity = array('activityDate' => '', 'activityData' => array());
                         $finalActivity = array('activityDate' => $key, 'activityData' => $value);
@@ -1048,7 +988,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             //  Due stories/tasks for current week
             $total = $assigned = $followed = '';
             $lastDayOfweek = date("Y-m-d H:i:s", strtotime('next sunday', strtotime('tomorrow')));
-           // $todayDate = date("Y-m-d H:i:s");
              $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
             $conditions['Fields.duedate.value'] = array('$gt' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000), '$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($lastDayOfweek) * 1000));
             unset($conditions['Fields.assignedto.value']);
@@ -1064,28 +1003,6 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             array_push($topTicketsArray, $topTickets);
             $topTickets = '';
             }
-//          foreach ($filters as $filter) {
-//                        $topTickets = '';
-//                        switch((int)$filter['Id']){
-//                            case 4:
-//                                $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId],['Followers.FollowerId'=>(int)$userId]];
-//                                $conditions['Fields.state.value']=(int)3;
-//                                $total = $collection->count($conditions);
-//                                unset($conditions['$or']);
-//                                $conditions['$or']=[['Fields.assignedto.value'=>(int)$userId]];
-//                                $assigned = $collection->count($conditions);
-//                                $followed = (int)$total ;
-//                                $topTickets =  array("id"=>$filter['Id'],"name"=>$filter['Name'],'total'=>$total,'assigned'=>$assigned,'followed'=>$followed);
-//                                break;
-////                             case 1:
-////                                 $total = $collection->count($conditions);
-////                                 error_log("collection---------".print_r($total,1));
-////                                 $topTickets =  array("id"=>$filter['Id'],"name"=>$filter['Name'],'total'=>$total);
-// //                                break; 
-//                                }
-//                        ($topTickets!='')?array_push($topTicketsArray,$topTickets):$topTickets='';       
-//                      } 
-
             return $topTicketsArray;
         } catch (\Throwable $ex) {
             Yii::error("CommonUtilityTwo:getTopTicketsStats::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -1256,93 +1173,6 @@ public static function prepareUserDashboardActivities($activities) {
                     default:break;
                 }
            }
-//            $matchArray["Fields.state.value"]=1;
-//            $pipeline1 = array(
-//               
-//                array('$unwind'=> '$Fields'),
-//                array('$match' => $matchArray),
-//                array(
-//                    '$group' => array(
-//                         '_id' => '$Fields.bucket.value',
-//                        'count'=>array('$sum' => 1), 
-//                        'data'=>array('$push'=>'$Fields.state.value')
-//                    ),
-//                ),
-//            ); 
-//            $matchArray["Fields.state.value"]=4;
-//            $pipeline2 = array(
-//               
-//                array('$unwind'=> '$Fields'),
-//                array('$match' => $matchArray),
-//                array(
-//                    '$group' => array(
-//                         '_id' => '$Fields.bucket.value',
-//                        'count'=>array('$sum' => 1),
-//                    ),
-//                ),
-//            );
-//            $matchArray["Fields.state.value"]=3;
-//            $pipeline3 = array(
-//               
-//                array('$unwind'=> '$Fields'),
-//                array('$match' => $matchArray),
-//                array(
-//                    '$group' => array(
-//                         '_id' => '$Fields.bucket.value',
-//                        'count'=>array('$sum' => 1),
-//                    ),
-//                ),
-//            );
-//            $matchArray["Fields.state.value"]=2;
-//            $pipeline4 = array(
-//               
-//                array('$unwind'=> '$Fields'),
-//                array('$match' => $matchArray),
-//                array(
-//                    '$group' => array(
-//                         '_id' => '$Fields.bucket.value',
-//                        'count'=>array('$sum' => 1),
-//                    ),
-//                ),
-//            );
-//            $matchArray["Fields.state.value"]=7;
-//            $pipeline5 = array(
-//               
-//                array('$unwind'=> '$Fields'),
-//                array('$match' => $matchArray),
-//                array(
-//                    '$group' => array(
-//                         '_id' => '$Fields.bucket.value',
-//                        'count'=>array('$sum' => 1),
-//                    ),
-//                ),
-//            );
-//            $matchArray["Fields.state.value"]=6;
-//            $pipeline6 = array(
-//               
-//                array('$unwind'=> '$Fields'),
-//                array('$match' => $matchArray),
-//                array(
-//                    '$group' => array(
-//                         '_id' => '$Fields.bucket.value',
-//                        'count'=>array('$sum' => 1),
-//                    ),
-//                ),
-//            );
-//            
-//            $new = $query->aggregate($pipeline1); error_log("==New==".print_r($new,1));
-//            if(count($new)>0){$states['New']=$new[0]['count'];}
-//            $paused = $query->aggregate($pipeline2);
-//            if(count($paused)>0){$states['Paused']=$paused[0]['count'];}
-//            $inprogress = $query->aggregate($pipeline3);
-//            if(count($inprogress)>0){$states['InProgress']=$inprogress[0]['count'];}
-//            $waiting = $query->aggregate($pipeline4);
-//            if(count($waiting)>0){$states['Waiting']=$waiting[0]['count'];}
-//            $reopened= $query->aggregate($pipeline5);
-//            if(count($reopened)>0){$states['Reopened']=$reopened[0]['count'];}
-//            $closed= $query->aggregate($pipeline6);
-//            if(count($closed)>0){$states['Closed']=$closed[0]['count'];}
-//            error_log("==States==".print_r($states,1));
             return $states;
             
         } catch (\Throwable $ex) {
@@ -1359,7 +1189,6 @@ public static function prepareUserDashboardActivities($activities) {
         foreach ($StatusList as  $value) {
             error_log("------>>>>>>".$value["Id"]);
             $matchArray["Fields.workflow.value"]=(int)$value["Id"];
-//            $matchArray["Fields.bucket.value"]=(int)22;
             $pipeline5 = array(
                
                 array('$unwind'=> '$Fields'),
