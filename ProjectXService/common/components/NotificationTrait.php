@@ -42,7 +42,7 @@ trait NotificationTrait {
 
     /**
      * @author Ryan
-     * @uses Gets the field change value name for notification purpose
+     * @Description Gets the field change value name for notification purpose
      * @params  $notifyType,$Value
      * @return type string
      */
@@ -83,6 +83,7 @@ trait NotificationTrait {
      * @param type $actionfieldName
      * @param type $newValue
      * @param type $activityUserId
+     * @Description Saves the activity happend in a Ticket under a Project.
      */
     public function saveActivity($ticketId, $projectId, $actionfieldName, $newValue, $activityUserId, $slug = "", $timezone="Asia/Kolkata",$reportData=array()) {
         try {
@@ -208,7 +209,7 @@ trait NotificationTrait {
      * @author Ryan Marshal
      * @param type $property
      * @return type 
-     * @description  Used for saving the notifications in submit Description and comments  
+     * @Description  Used for saving the notifications in submit Description and comments  
      */
     public static function saveNotificationsToMentionOnly($ticket_data, $userslist, $notifyType = null, $slug = null) {
         try {
@@ -253,6 +254,7 @@ trait NotificationTrait {
      * @param type $commentData
      * @param type $notify_type //comment,reply
      * @param type $slug
+     * @Description Used to Save Notification for Comments
      */
     public static function saveNotificationsForComment($commentData, $userslist, $notify_type, $slug) {
         try {
@@ -408,7 +410,7 @@ trait NotificationTrait {
      * @author Ryan Marshal
      * @param type $notification_data
      * @return type
-     * @description  Used for saving the notifications for assignedTo,Add/Remove Followers,stakeholder and left panel property changes  
+     * @Description  Used for saving the notifications for assignedTo,Add/Remove Followers,stakeholder and left panel property changes  
      */
     public static function saveNotifications($notification_data, $notifyType, $activityOn, $fieldType = "", $slug = '', $bulkUpdate = '', $taskId = 0) {
         try {
@@ -638,7 +640,19 @@ trait NotificationTrait {
             throw new ErrorException($ex->getMessage());
         }
     }
-
+    /**
+     * 
+     * @param type $user
+     * @param type $projectId
+     * @param type $offset
+     * @param type $limit
+     * @param type $viewAll
+     * @param type $asActivity
+     * @param type $timeZone
+     * @return array
+     * @throws ErrorException
+     * @Description Returns the notifications data for displaying with Page nation (infinet scroll)
+     */
     public static function getNotifications($user, $projectId = 0, $offset = 0, $limit = 5, $viewAll = 0, $asActivity = false, $timeZone = "Asia/Kolkata") {
         error_log("==in get notifications---" . $user . "---" . $projectId . "---" . $offset . "---" . $limit);
         $msg = '';
@@ -870,6 +884,7 @@ error_log("-------------------------55555555555555----------------".$notificatio
      * @author Moin Hussain
      * @param type $notificationIds
      * @param type $projectId
+     * @Description Sends an Email Notfication for the users on an activity.
      */
     public static function sendEmailNotification($notificationIds, $projectId, $bulkUpdate = 0) {
         try {
@@ -891,6 +906,7 @@ error_log("-------------------------55555555555555----------------".$notificatio
      * @author Moin Hussain
      * @param type $notificationIds
      * @param type $projectId
+     * @Description Sends Emails from background on multiple updates.
      */
     public function sendEmailNotificationFromBackground($notificationIds, $projectId) {
         try {
@@ -1205,6 +1221,7 @@ EOD;
      * @param type $notificationIds
      * @param type $projectId
      * @param type $bulkUpdate=''
+     * @Description Sends Bulk changes, that is, Full ticket edit changes to users as email.
      */
     public function sendBulkEmailNotification($notificationIds, $projectId, $bulkUpdate = '') {
         try {
@@ -1394,6 +1411,7 @@ EOD;
      * @param type $invite_list
      * @param type $text_message
      * @param type $subject
+     * @Description Sends an Invitation Email for the user with Invitation code.
      */
     public static function processSingleEmail($mailingName, $invite_list, $text_message, $subject) {
         try {

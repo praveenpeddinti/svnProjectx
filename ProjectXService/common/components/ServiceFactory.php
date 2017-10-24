@@ -26,7 +26,12 @@ class ServiceFactory {
     private function __construct() {
         
     }
-
+    /**
+     * 
+     * @return type
+     * @throws ErrorException
+     * @Description Checks if the instance of StoryService Class exists or not returns the instance. If no instance exists, returns a new one
+     */
     public static function getStoryServiceInstance() {
         try {
             if (!self::$inst_story_service) {
@@ -38,7 +43,12 @@ class ServiceFactory {
             throw new ErrorException($ex->getMessage());
         }
     }
-
+    /**
+     * 
+     * @return type
+     * @throws ErrorException
+     * @Description Checks if the instance of CollaboratorService Class exists or not returns the instance. If no instance exists, returns a new one
+     */
     public static function getCollaboratorServiceInstance() {
         try {
             if (!self::$inst_collaborator_service) {
@@ -50,7 +60,12 @@ class ServiceFactory {
             throw new ErrorException($ex->getMessage());
         }
     }
-
+    /**
+     * 
+     * @return type
+     * @throws ErrorException
+     * @Description Checks if the instance of TimeReportService Class exists or not returns the instance. If no instance exists, returns a new one
+     */
     public static function getTimeReportServiceInstance() {
         try {
             if (!self::$inst_timereport_service) {
@@ -62,7 +77,12 @@ class ServiceFactory {
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @return type
+     * @throws ErrorException
+     * @Description Checks if the instance of BucketService Class exists or not returns the instance. If no instance exists, returns a new one
+     */
     public static function getBucketServiceInstance() {
         try {
             if (!self::$inst_bucket_service) {
@@ -74,7 +94,13 @@ class ServiceFactory {
             throw new ErrorException($ex->getMessage());
         }
     }
-     public static function getProjectServiceInstance() {
+     /**
+      * 
+      * @return type
+      * @throws ErrorException
+      * @Description Checks if the instance of ProjectService Class exists or not returns the instance. If no instance exists, returns a new one
+      */
+    public static function getProjectServiceInstance() {
         try {
             if (!self::$inst_project_service) {
                 self::$inst_project_service = new ProjectService();

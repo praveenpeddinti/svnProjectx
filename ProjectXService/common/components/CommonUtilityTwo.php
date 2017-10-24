@@ -136,7 +136,16 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $bucketDetails
+     * @param type $projectId
+     * @param type $timezone
+     * @param type $bType
+     * @return type
+     * @throws ErrorException
+     * @Description Prepares and returns the Data for rendering Bucket Dashboard.
+     */
     public static function prepareBucketDashboardDetails($bucketDetails, $projectId,$timezone,$bType) {
         try {
             $closeDate='';
@@ -188,7 +197,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 
      /**
      * @author Padmaja
-     * @description This method is used to get Ticket details for dashboard
+     * @Description This method is used to get Ticket details for dashboard
      * @return type $userId
      * @return type $page
      * @return type $pageLength
@@ -232,7 +241,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     }
     /**
      * @author Padmaja
-     * @description This method is used to prepare Project details for dashboard
+     * @Description This method is used to prepare Project details for dashboard
      * @return type $collection
      * @return type $projectDetails
      * @return type $assignedtoDetails 
@@ -272,9 +281,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             throw new ErrorException($ex->getMessage());
         }
     }
-          /**
+     /**
      * @author Padmaja
-     * @description This method is used to get Last Id Project details for dashboard
+     * @Description This method is used to get Last Id Project details for dashboard
      * @return type $projectId
      *  @return type $userId
      */
@@ -315,9 +324,9 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         }
         
     }
-           /**
+     /**
      * @author Padmaja
-     * @description This method is used to get Last Id Project details for project dashboard
+     * @Description This method is used to get Last Id Project details for project dashboard
      * @return type $projectId
      *  @return type $userId
      */
@@ -364,8 +373,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
         
     }
 
-    /*
-     * @Praveen show the short desc in that html tags
+    /**
+     * @Descriptiuon show the short desc in that html tags
      */
     static function truncateHtml($text, $length, $ending = 'Read more', $exact = true, $considerHtml = true, $customizedHtml = "") {
         try {
@@ -483,10 +492,11 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             throw new ErrorException($ex->getMessage());
         }
     }
-    /**@author Padmaja
-     * @description This method is used to get all project Activities
-     * @return type $projectId
-     *  @return type $userId
+    /**
+     * @author Padmaja
+     * @Description This method is used to get all project Activities
+     * @param type $projectData
+     * @return type $userId
      */
   public static function getAllProjectActivities($postData){
         try{
@@ -914,7 +924,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
 
   /**
    * @author Anand Singh
-   * @uses  Get top tickets statics based on project id,userid or bucket id,
+   * @Description  Gets top tickets statics based on project id,userid or bucket id,
    * @param type $userId
    * @param type $projectId
    * @param type $bucketId
@@ -1017,6 +1027,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
  * @param type $activities
  * @return array
  * @throws ErrorException
+ * @Description Prepares the data for displaying on User Dashboard.
  */
 
 public static function prepareUserDashboardActivities($activities) {
@@ -1048,6 +1059,7 @@ public static function prepareUserDashboardActivities($activities) {
      * @param type $userId
      * @return type
      * @throws ErrorException
+     * @Description Returns the calculated story points for User Dashboard for give project
      */
     public static function getTotalStoryPoints($projectId,$userId='',$bucketId=''){ //modified by Ryan , added 
         try {
@@ -1103,6 +1115,7 @@ public static function prepareUserDashboardActivities($activities) {
      * @param type $bucketId
      * @return type
      * @throws ErrorException
+     * @Description Gets the totdal worked hours of all the tickets in a Bucket and given project.
      */
     public static function getTotalWorkedHoursByBucket($projectId,$bucketId){
         try{
@@ -1134,7 +1147,14 @@ public static function prepareUserDashboardActivities($activities) {
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $projectId
+     * @param type $bucketId
+     * @return type
+     * @throws ErrorException
+     * @Description Returns the Counts of Tickets in each <b>State</b> for displaying in Bucket Dashboard
+     */
     public static function getBucketStatesCount($projectId,$bucketId){
         try{
             $states=array();
@@ -1180,7 +1200,13 @@ public static function prepareUserDashboardActivities($activities) {
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $projectId
+     * @param type $bucketId
+     * @return int
+     * @Description Returns the Counts of Tickets in each <b>Status</b> for displaying in Bucket Dashboard
+     */
     public static function getStatusCount($projectId,$bucketId){
         $StatusList = \common\models\mysql\WorkFlowFields::getWorkflowStatusList();
         $matchArray = array("ProjectId" => (int) $projectId,"Fields.bucket.value"=>(int) $bucketId,);

@@ -7,10 +7,10 @@ use common\models\bean\EventBean;
 use yii\base\ErrorException;
 
 trait EventTrait{
-      /**
-     * @uses This method is use to save events
+     /**
+     * @Description This method is use to save events
      * @param type $eventObj
-     * @author Anand + Ryan
+     * @author Anand & Ryan
      */
     
      public static function saveEvent($projectId,$occuredIn,$refId,$displayAction,$actionType,$actionBy,$summaryArray,$miscellaneousData=array(),$showInActivity=true,$status=1) {

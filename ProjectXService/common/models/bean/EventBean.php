@@ -1,7 +1,8 @@
 <?php
 namespace common\models\bean;
 
-/* @description This bean is used to prepare event bean.
+/**
+ * @Description This bean is used to prepare event bean.
  * @author Anand
  */
 class EventBean {

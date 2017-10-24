@@ -21,6 +21,7 @@ class CommonUtility {
      * @param type $object
      * @param type $type
      * @return type
+     * @Description Sets the format of the passed object to JSON or XML and returns the result.
      */
     public static function prepareResponse($object, $type = "json") {
         if ($type == "json") {
@@ -35,6 +36,7 @@ class CommonUtility {
      * @author Moin Hussain
      * @param type $str
      * @return string
+     * @Description Returns the extension of given file name. If there is no extension it returns <b>Empty String</b>
      */
     public static function getExtension($str) {
         try {
@@ -60,6 +62,7 @@ class CommonUtility {
      * @param type $from_tz
      * @param type $type
      * @return type
+     * @Description Converts the given timestamp in seconds to given time zone, if no time zone is given, it converts to Default Time Zone returned by <i>date_default_timezone_get()</i><br><b>Returned Formats: </b>'m-d-Y h:i:s A','d-m-Y h:i:s A'
      */
     static function convert_time_zone($sec, $to_tz, $from_tz = "", $type = "") {
         try {
@@ -91,6 +94,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @author Moin Hussain
      * @param type $date
      * @return type
+     * @Description Validates the Given date is in right format or not <br><b>Format:</b> 'M-d-Y'
      */
     public static function validateDate($date) {
         
@@ -113,6 +117,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @param type $from_tz
      * @param type $type
      * @return type
+     * @Description Converts the given timestamp in seconds to given time zone, if no time zone is given, it converts to Default Time Zone returned by <i>date_default_timezone_get()</i><br><b>Returned Formats: </b>'M-d-Y H:i:s','M-d-Y'
      */
     static function convert_date_zone($sec, $to_tz, $from_tz = "", $type = "") {
         try {
@@ -135,7 +140,13 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             throw new ErrorException($ex->getMessage());
         }
     }
-
+/**
+ * 
+ * @param type $html
+ * @param type $length
+ * @return type
+ * @Description Truncates the Text for Displaying limited content in Activities
+ */
     static function refineActivityData($html,$length="35") {
          $html = strip_tags($html);
         if (strlen($html) > $length) {
@@ -144,7 +155,13 @@ static function validateDateFormat($date, $format = 'M-d-Y')
        $html = htmlspecialchars_decode($html);
         return $html;
     }
-    
+    /**
+     * 
+     * @param type $html
+     * @param type $length
+     * @return type
+     * @Description Truncates the Text for Displaying limited content in Activities
+     */
     static function refineActivityDataTimeDesc($html,$length="35") {
          $html = strip_tags($html);
         if (strlen($html) > $length) {
@@ -153,7 +170,12 @@ static function validateDateFormat($date, $format = 'M-d-Y')
        $html = htmlspecialchars_decode($html);
         return $html;
     }
-
+/**
+ * 
+ * @param string $html
+ * @return string
+ * @Description Closes the unclosed HTML tags.
+ */
     static function closetags($html) {
 
         #put all opened tags into an array
@@ -200,6 +222,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @param type $considerHtml
      * @param type $customizedHtml
      * @return string
+     * @Description Truncates the given HTML for given length of String to be displayed. Optionally adds <b>Read More</b> button.
      */
     static function truncateHtml($text, $length, $ending = 'Read more', $exact = true, $considerHtml = true, $customizedHtml = "") {
         try {
@@ -304,7 +327,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     }
 
     /**
-     * @description This method is to prepare ticket details
+     * @Description This method is to prepare data for ticket details page
      * @author Moin Hussain
      * @param type $ticketId
      * @param type $projectId
@@ -446,7 +469,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
     }
 
     /**
-     * @description This method is to prepare ticket edit details
+     * @Description This method is to prepare data for editing ticket details
      * @author Moin Hussain
      * @param type $ticketId
      * @param type $projectId
@@ -576,6 +599,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @author Moin Hussain
      * @param type $description
      * @return type
+     * @Description Processes the ticket desctiption, and replaces the artifacts string with respective HTML tags<br><b>Example:</b><br> <ul><li>For Images - img tag</li><li>Other Documents - Anchor tag</li></ul>
      */
 
   public static function refineDescription($description){
@@ -668,6 +692,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
    * @author Moin Hussain
    * @param type $description
    * @return type
+   * @Description Processes the ticket desctiption, and replaces the artifacts string with respective HTML tags for sending emails
    */
    public static function refineDescriptionForEmail($description){
       try{
@@ -704,9 +729,10 @@ static function validateDateFormat($date, $format = 'M-d-Y')
   }
   
   
-    /*
+    /**
      * @author Jagadish
      * @return array
+     * @Description Returns an Artifact Object
      */
     public static function getArtifact($tempFileName, $originalFileName, $extension, $fileName, $artifactType) {
         try {
@@ -738,6 +764,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @param type $fieldsOrderArray
      * @param type $flag
      * @return array
+     * @Description Prepares an an Array with Ticket Details of a Particular Project for displaying in Ticket Listing page
      */
     public static function prepareDashboardDetails($ticketDetails, $projectId,$timezone, $fieldsOrderArray, $flag = "part",$filter=null) {
         try {
@@ -939,6 +966,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @author Moin Hussain
      * @param type $value
      * @param type $projectId
+     * @Description Prepares an Activity Object.
      */
     public static function prepareActivity(&$value, $projectId,$timezone) {
         try {
@@ -966,6 +994,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @param type $property
      * @param type $projectId
      * @return type
+     * @Description Prepares a Property of the given Activity Object.
      */
     public static function prepareActivityProperty(&$property,$projectId,$timezone,$poppedFromChild="") {
         try {
@@ -1132,6 +1161,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
      * @param type $subject
      * @param type $attachment_list
      * @return type
+     * @Description Sends Email to given set of recipient_list, with given text_message and attachments
      */
     
     public static function sendEmail($mailingName="ProjectX",$recipient_list,$text_message,$subject,$attachment_list=array()){
@@ -1177,7 +1207,8 @@ $text_message=$html . $text_message .
      /**
     * @author Padmaja
     * @param Param $ticketCollectionCount
-     * @return array
+    * @return array
+    * @Description Returns the Count of occurrences of the given search string in each project.
     */
     public static function searchStringCountForProjectwise($ticketCommentsCount){
         try{
@@ -1203,6 +1234,7 @@ $text_message=$html . $text_message .
     * @param type $searchFlag
     * @param type $projectId
     * @return array
+    * @Description Retruns the Data to be displayed based on the occurence of the search string.
     */
         public static function getAllDetailsForSearch($searchString,$page,$searchFlag="",$projectId="",$pageLength,$userId,$pName=""){
         try{
@@ -1861,7 +1893,7 @@ $text_message=$html . $text_message .
 
     /**
      * @author Anand
-     * @uses prepare the filter options
+     * @Description Prepares the filter options
      * @param type $options
      * @return string
      */
@@ -1898,7 +1930,13 @@ $text_message=$html . $text_message .
         }
  
 }
-
+/**
+ * 
+ * @param type $followers
+ * @return type
+ * @throws ErrorException
+ * @Description Returns the list of Followers for a filter.
+ */
 public static function filterFollowers($followers){
     try{
           $followers = array_filter($followers, function($obj) {
@@ -1935,7 +1973,7 @@ public static function getUniqueArrayObjects($arrayOfObjects){
 }
 
     /**
-     * @description This method is to prepare follower list when edit the inline for Stack Holder, Assigned to and Reported by
+     * @Description This method is to prepare follower list when edit the inline for Stack Holder, Assigned to and Reported by
      * @author Praveen P
      * @param type $ticketId
      * @param type $projectId
@@ -2055,7 +2093,7 @@ public static function getUniqueArrayObjects($arrayOfObjects){
     }
     /**
      * @author Padmaja
-     * @description This method is used to get Ticket details for dashboard
+     * @Description This method is used to get Ticket details for dashboard
      * @return type array
      */
     public static function getTicketDetailsForDashboard($userId,$page,$pageLength,$projectFlag=""){
@@ -2124,7 +2162,7 @@ public static function getUniqueArrayObjects($arrayOfObjects){
     }
     /**
      * @author Padmaja
-     * @description This method is used to get Project details for dashboard
+     * @Description This method is used to get Project details for dashboard
      * @return type array
      */
     public static function getAllProjectDetailsByUser($collection,$projectDetails,$assignedtoDetails,$followersDetails,$userId){        
@@ -2161,7 +2199,7 @@ public static function getUniqueArrayObjects($arrayOfObjects){
     }
       /**
      * @author Padmaja
-     * @description This method is used to get Last Id Project details for dashboard
+     * @Description This method is used to get Last Id Project details for dashboard
      * @return type array
      */
     public static function getLastProjectDetails($projectId,$userId){
@@ -2203,7 +2241,7 @@ public static function getUniqueArrayObjects($arrayOfObjects){
     }
        /**
      * @author Padmaja
-     * @description This method is used for showing counts for search
+     * @Description This method is used for showing counts for global search
      * @return type array
      */
     public static function getStringCountForGLobalsearch($searchString,$projectId,$userId,$projectIdArray,$limit,$offset){
@@ -2339,9 +2377,9 @@ public static function getUniqueArrayObjects($arrayOfObjects){
                      
              
     }
-         /**
+     /**
      * @author Padmaja
-     * @description This method is used for adding all array
+     * @Description This method is used for adding all array
      * @return type array
      */
    public static function array_sum_combine($arr0,$arr1,$arr2,$arr3)
