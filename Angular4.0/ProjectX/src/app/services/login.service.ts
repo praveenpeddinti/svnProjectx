@@ -44,7 +44,6 @@ login(user,loginCallback) {
     this.collaboratorObj.username=user.email;
     this.collaboratorObj.password=user.password;
     this.collaboratorObj.rememberme=user.rememberme;
-   // this.collaboratorObj.AccessKey=user.AccessKey;
 
     this._ajaxService.AjaxSubscribe("site/user-authentication",this.collaboratorObj,(result)=>
     { 
@@ -53,7 +52,6 @@ login(user,loginCallback) {
       delete userdata.ProfilePicture;
       delete userdata.Email;
       localStorage.setItem("user",JSON.stringify(userdata));
-      //this.collaboratorObj.AccessKey=token;//alert(this.collaboratorObj.headers);
       loginCallback(result);
     });
   
@@ -66,13 +64,6 @@ login(user,loginCallback) {
     return Promise.reject(error.message || error);
   }
 
-
-  // var authenticatedUser = users.find(u => u.email === user.email);
-  // if (authenticatedUser && authenticatedUser.password === user.password){
-  //   localStorage.setItem("user", authenticatedUser);
-  //   this._router.navigate(['home']);      
-  //   return true;
-  // }
 
 
 

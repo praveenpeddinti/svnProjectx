@@ -14,11 +14,9 @@ declare var jstz:any;
 export class SummerNoteEditorService
 {
    
-    // this_obj:AjaxService;
     mention:any=[];
     constructor(@Inject(AjaxService) this_obj:AjaxService,private sharedService:SharedService)
     {
-    //    this.this_obj=this_obj;
     }
 
     initialize_editor(element,options,obj)
@@ -75,7 +73,6 @@ export class SummerNoteEditorService
 
                                         });
                                 
-                                //return this.mentions;
                                 
                             },        
                             search: function (keyword, callback) {
@@ -93,37 +90,29 @@ export class SummerNoteEditorService
                             content: function (item) {
                                 console.log("===Item=="+item);
                                     return '@' + item.name;
-                                    //return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="http://10.10.73.77"'+item.Profile+'"/>'+item.name+'</div>';
                                     
                                     }    
                         },
                     callbacks: {
                     onKeyup: function(e) {
-                        //  alert("333"+this.summernoteLength);
                          this.summernoteLength=false; 
-                        //  alert("444444444444444444"+this.summernoteLength);
-                        // console.log(element+"==========Iddddd===========");
-                         var editor=jQuery('#'+element).summernote('code');
+                       var editor=jQuery('#'+element).summernote('code');
                          if(!(editor.indexOf("<p>")>-1)){ //added for default unexpected behaviour of editor
                               editor="<p>"+editor+"</p>";
                           }
                            console.log(editor+"=====**======1111111111=");
                         editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
-                          console.log(editor+"=====**=======");
                          if(obj.formB != undefined){
                              obj.formB['description']=editor;
                          }
                          if(element=="summernote"){ // added to Fix Padmaja's Issues/Conflicts
                          editor=jQuery(editor).text().trim();
                          }
-                        //  console.log(obj.formB['description']+"=-=-=-=-=-");
                          if(obj.form != undefined){
                             obj.form['description']=editor;
                             if(editor!='')
                             {
                                 obj.form['description']=editor;
-                            //  obj.form['description']= jQuery('#'+element).summernote('code');
-                              //  alert(obj.form['description']+"===================");
                             }
                             else
                             {
@@ -189,7 +178,6 @@ export class SummerNoteEditorService
 
                                         });
                                 
-                                //return this.mentions;
                                 
                             },        
                             search: function (keyword, callback) {
@@ -207,8 +195,7 @@ export class SummerNoteEditorService
                             content: function (item) {
                                 console.log("===Item=="+item);
                                     return '@' + item.name;
-                                    //return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="http://10.10.73.77"'+item.Profile+'"/>'+item.name+'</div>';
-                                    
+                                     
                                     }    
                         },
                     disableDragAndDrop:true,
@@ -219,18 +206,3 @@ export class SummerNoteEditorService
     }
 }
 
-// callbacks: {
-                    // onKeyup: function(e) {
-                    //     if (e.keyCode == 13) 
-                    //     {
-                    //         if(jQuery('#'+element).summernote('isEmpty'))
-                    //         {
-                    //             jQuery('.note-editable').html('');
-                    //         }
-                    //     }
-
-                    //     if(jQuery('#'+element).summernote('isEmpty'))
-                    //     {
-                    //         jQuery('.note-editable').html('');
-                    //     }
-                    // }},
