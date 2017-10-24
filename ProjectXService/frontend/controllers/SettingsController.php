@@ -58,6 +58,7 @@ class SettingsController extends Controller
      * @author Lakshmi
      * @params none
      * @return $response
+     * @Description gets notification settings
      */
     public function actionNotificationPreferences(){
           try{
@@ -86,6 +87,7 @@ class SettingsController extends Controller
      * @author Lakshmi
      * @params none
      * @return $response
+     * @Description Updates status of a notification
      */
     public function actionNotificationsSettingsStatusUpdate(){
         try{
@@ -116,6 +118,7 @@ class SettingsController extends Controller
      * @author Lakshmi
      * @params none
      * @return $response
+      * @Description Updates status of all notifications
      */
         public function actionNotificationsSettingsStatusUpdateAll(){
         try{

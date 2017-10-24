@@ -56,7 +56,7 @@ class TicketTimeLog extends ActiveRecord
     
       /**
      * @author suryaprakash reddy 
-     * @description This method is used to save timelog data in ticketTimeCollection
+     * @Description This method is used to save timelog data in ticketTimeCollection
      * @return type mongoId
      */
     public function saveTimeLogData1($projectId, $ticketId, $userId, $totalWorkHours) {
@@ -88,6 +88,7 @@ class TicketTimeLog extends ActiveRecord
      * @param type $userId
      * @param type $totalWorkHours
      * @return type
+     * @Description This method is used to save timelog data in ticketTimeCollection
      */
       public static function saveTimeLogData($projectId, $ticketId, $userId, $totalWorkHours,$description,$LoggedOn) {
 
@@ -111,7 +112,7 @@ class TicketTimeLog extends ActiveRecord
     /**
      * @modified by Moin Hussain
      * @author suryaprakash reddy 
-     * @description This method is used to getTimeLogRecords for userbased
+     * @Description This method is used to getTimeLogRecords for userbased
      * @return type array
      */
     public static function getTimeLogRecords($projectId, $ticketsList) {
@@ -144,6 +145,7 @@ class TicketTimeLog extends ActiveRecord
      * @param type $collaboratorId
      * @param type $gettimelogdetailsforcollaboratorId
      * @return type
+     * @Description Returns the details of all the Time reports of a story.
      */
     
     public static function getAllTimeReportDetails($StoryData, $projectId) {
@@ -192,6 +194,7 @@ class TicketTimeLog extends ActiveRecord
      * @param type $collaboratorId
      * @param type $totalTimeLogReportforCollaborator
      * @return type
+     * @Description Gets the total work logged on a story.
      */
     
     public static function getTimeReportCountAndWorkLog($StoryData, $projectId) {
@@ -232,6 +235,7 @@ class TicketTimeLog extends ActiveRecord
     /**
      * @author Padmaja
      * @return type
+     * @Description Updates the time log record
      */
     public static function updateTimeLogRecords($projectId,$slug,$timelogHours,$ticketId,$autocompleteticketId="",$editableDate,$calendardate="",$userId,$description=""){
         try{
@@ -274,6 +278,7 @@ class TicketTimeLog extends ActiveRecord
       /**
      * @author Padmaja
      * @return type
+     * @Description Deletes a time log
      */
     public static function removeTimelogData($projectId,$ticketId,$slug,$timelogHours,$userId){
         try{
@@ -295,7 +300,7 @@ class TicketTimeLog extends ActiveRecord
     
     /**
      * @authr   Anand Singh
-     * @uses  Get current week worklog for any particular user.
+     * @Description  Get current week worklog for any particular user.
      * @param type $userId
      * @param type $projectId
      * @return type
@@ -337,7 +342,7 @@ class TicketTimeLog extends ActiveRecord
     }
         /**
      * @authr   Padmaja
-     * @uses  Get Total worklog for Project.
+     * @Description  Get Total worklog for Project.
      * @param type $projectId
      * @return type
      * @throws ErrorException

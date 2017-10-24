@@ -50,6 +50,7 @@ class PersonalizedFilterCollection extends ActiveRecord {
      * @return type
      * @throws ErrorException
      * @author Anand
+     * @Description Saves a Customized personal filter that a user creates.
      */
     
     public static function savePersonalizedFilter($name,$userId,$projectId,$condition){
@@ -85,6 +86,7 @@ class PersonalizedFilterCollection extends ActiveRecord {
      * @return type
      * @throws ErrorException
      * @author Anand
+     * @Description Gets the Personal filerts that a user had created for a given project
      */
     public static function getPersonalizedFilter($userId,$projectId,$id=''){
          try {
@@ -110,6 +112,7 @@ class PersonalizedFilterCollection extends ActiveRecord {
      * @author Anand Singh
      * @param type $filterDta
      * @throws ErrorException
+     * @Description Deletes a particular Personal Filter.
      */
     
     public static function deleteAdvanceFilter($filterDta){

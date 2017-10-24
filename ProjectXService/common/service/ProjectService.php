@@ -1,7 +1,7 @@
 <?php
 namespace common\service;
 use common\models\mongo\TicketCollection;
-use common\components\{CommonUtilityTwo, SVNUtility,EventTrait};
+use common\components\{CommonUtilityTwo,EventTrait};
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
 use common\models\mysql\Bucket;
@@ -20,8 +20,8 @@ use yii\base\ErrorException;
  */
 class ProjectService {
    /**
-     * @authorPadmaja
-     * @description This method to verify  the  project.
+     * @author Padmaja
+     * @Description This method to verify  the  project.
      * @param type $projectId
      * @return type
      */
@@ -35,8 +35,8 @@ class ProjectService {
         }
     }
         /**
-     * @authorPadmaja
-     * @description This method to saving  the  project.
+     * @author Padmaja
+     * @Description This method to saving  the  project.
      * @param type $projectId
      * @param type $description
      * @param type $userId
@@ -74,8 +74,8 @@ class ProjectService {
         }
     }
        /**
-     * @authorPadmaja
-     * @description This method to savingProjectTeamDetails.
+     * @author Padmaja
+     * @Description This method to savingProjectTeamDetails.
      * @param type $projectId
      * @return type
      */
@@ -89,7 +89,19 @@ class ProjectService {
             throw new ErrorException($ex->getMessage());
         }
     }
-     public function updatingProjectDetails($projectName, $description, $fileExt, $projectLogo, $projectId,$userId='') {
+    /**
+     * 
+     * @param type $projectName
+     * @param type $description
+     * @param type $fileExt
+     * @param type $projectLogo
+     * @param type $projectId
+     * @param type $userId
+     * @return type
+     * @throws ErrorException
+     * @Description Updates Project Details on edit
+     */
+    public function updatingProjectDetails($projectName, $description, $fileExt, $projectLogo, $projectId,$userId='') {
         try {
             if (strpos($projectLogo, 'assets') !== false) {
                 $logo = $projectLogo;
@@ -137,7 +149,7 @@ class ProjectService {
      * @param type $projectName
      * @param type $userId
      * @param type $page
-    
+     * @Description Gets Project details of given project name and Id 
      */
     public function getProjectDashboardDetails($projectName, $projectId, $userId,$page) {
         try {
@@ -148,9 +160,10 @@ class ProjectService {
             throw new ErrorException($ex->getMessage());
         }
     }
-         /*
-     * @autor Padmaja
+     /**
+     * @author Padmaja
      *  @param type $postData
+      * @Description gets all the activities based on the posted criteria
      */
     public function getAllActivities($postData){
         try{
@@ -160,9 +173,10 @@ class ProjectService {
             throw new ErrorException($ex->getMessage());
         }
     }
-           /*
-     * @autor Padmaja
+    /**
+     * @author Padmaja
      *  @param type $postData
+     * @Description Saves User persmissions on a repository
      */
     public function saveUserPermissions($projectId,$userData){
         try{
@@ -175,9 +189,10 @@ class ProjectService {
         }
     }
     
-           /*
-     * @autor Padmaja
+    /**
+     * @author Padmaja
      *  @param type $postData
+     * @Description gets User Permission on Repository
      */
     public function getUserPermissions($projectId,$userId){
         try{
@@ -194,7 +209,7 @@ class ProjectService {
     
         /**
     * @author Padmaja
-    * @description This is used update the IsRepository column after repository created
+    * @Description This is used update the IsRepository column after repository created
     * @param $projectId 
     * @return array
     */
@@ -209,7 +224,13 @@ class ProjectService {
              Yii::error("ProjectService:updateRepositoryStatus::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
         }
    }
-   
+   /**
+    * 
+    * @param type $projectId
+    * @param type $userId
+    * @return type
+    * @Description gets User's Access and permission on a repository
+    */
    public function getRepoPermissionsAndAccess($projectId,$userId){
        try{
             $RepositoryModel = new RepoPermissions();

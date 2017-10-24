@@ -42,6 +42,7 @@ class TicketArtifacts extends ActiveRecord {
  * @param type $ticketNumber
  * @param type $projectId
  * @param type $artifactsList
+ * @Description Creates an empty Ticket Artifacts Collection Record on creating a new ticket.
  */
     public static function createArtifactsRecord($ticketNumber, $projectId, $artifactsList = array()) {
         try {
@@ -66,6 +67,7 @@ class TicketArtifacts extends ActiveRecord {
  * @param type $ticketId
  * @param type $projectId
  * @return type
+ * @Description Gets list of Artifacts uploaded under a ticket.
  */
     public static function getTicketArtifacts($ticketId, $projectId) {
         try{
@@ -88,6 +90,7 @@ class TicketArtifacts extends ActiveRecord {
  * @param type $projectId
  * @param type $newArtifactArray
  * @param type $userId
+ * @Description Saves Uploaded Artifacts data to Ticket Artifacts Collection.
  */
     public static function saveArtifacts($ticketNumber, $projectId, $newArtifactArray = array(), $userId) {
         try {

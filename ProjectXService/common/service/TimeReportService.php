@@ -21,6 +21,7 @@ class TimeReportService {
      * @param type $CollaboratorId
      * @param type $projectId
      * @return type 
+     * @Description gets total work log for time report
      */
   
     public function getTimeReportCountAndWorkLog($StoryData, $projectId) {
@@ -37,7 +38,7 @@ class TimeReportService {
      * @author Praveen P
      * @param type $CollaboratorId
      * @param type $projectId
-     * @return type work log details for collaborator
+     * @Description gets work log details for collaborator
      */
     public function getAllTimeReportDetails($StoryData,$projectId) {
         try {
@@ -94,7 +95,7 @@ class TimeReportService {
      * @author Praveen P
      * @param type $CollaboratorId
      * @param type $projectId
-     * @return type work hours for collaborator
+     * @Description gets total work hours for collaborator
      */
     
     public function getTotalWorkLogHours($StoryData, $projectId) {
@@ -107,7 +108,15 @@ class TimeReportService {
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $projectId
+     * @param type $sortvalue
+     * @param type $searchString
+     * @return type
+     * @throws ErrorException
+     * @Description Gets story details for time log
+     */
     public function getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString){
         try{
              $ticketDetails = TicketCollection::getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString);
@@ -123,7 +132,7 @@ class TimeReportService {
     }
     /**
     * @author Padmaja
-    * @uses removing  details
+    * @Description removing  time log details
     * @return type
     */
     public function RemoveTimelogs($timelog_data){
@@ -168,6 +177,7 @@ class TimeReportService {
     * @author Padmaja
     * @param type $ticketData
     * @return type
+    * @Description Updtes time log
     */
     public function updateTimelog($ticketData){
         try{
@@ -257,7 +267,14 @@ class TimeReportService {
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $userId
+     * @param type $projectId
+     * @return type
+     * @throws ErrorException
+     * @Description Gets Current weeks time log
+     */
     public function getCurrentWeekTimelog($userId,$projectId=''){
         try{
             $totalWorkLogHours = 0;
@@ -272,6 +289,12 @@ class TimeReportService {
         }
         
     } 
+    /**
+     * 
+     * @param type $projectId
+     * @return type
+     * @Description Get total time logged on all tickets based on the project
+     */
     public function getTotalTimeLogByProject($projectId=''){
         try{
              $totalWorkLogHours = 0;

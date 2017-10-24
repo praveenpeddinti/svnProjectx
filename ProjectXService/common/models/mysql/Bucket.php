@@ -33,6 +33,7 @@ class Bucket extends ActiveRecord
      * @param type $bucketId
      * @param type $projectId
      * @return type
+     * @Description Returns Name of a Bucket
      */
     public static function getBucketName($bucketId,$projectId)
     {
@@ -51,6 +52,7 @@ class Bucket extends ActiveRecord
      * @author Moin Hussain
      * @param type $projectId
      * @return type
+     * @Description Returns the list of buckets under project
      */
     public static function getBucketsList($projectId)
     {
@@ -69,6 +71,7 @@ class Bucket extends ActiveRecord
      * @author Moin Hussain
      * @param type $projectId
      * @return type
+     * @Description Returns Buckets list under backlog status
      */
     public static function getBackLogBucketId($projectId)
     {
@@ -91,6 +94,7 @@ class Bucket extends ActiveRecord
      * @author Anand Singh
      * @param type $projectId
      * @return string
+     * @Description Gets active Buckets List
      */
      public static function getActiveBucketId($projectId)
     {
@@ -113,6 +117,7 @@ class Bucket extends ActiveRecord
      * @author Praveen
      * @param type $projectId,$status
      * @return type
+     * @Description Returns details of a bucket under give project
      */
     public function getBucketDetails($bucketData)
     {
@@ -131,6 +136,7 @@ class Bucket extends ActiveRecord
      * @author Praveen
      * @param type $projectId,$type
      * @return type
+     * @Description Retunrs Buckets type filter data
      */
     public function getBucketTypeFilter($projectId,$type)
     {
@@ -149,7 +155,7 @@ class Bucket extends ActiveRecord
     
     /**
      * @author Praveen
-     * @description This is to check the Bucket name 
+     * @Description This is to check the Bucket name 
      * @param type $bucketName, $projectId
      * @return type 
      * 
@@ -177,7 +183,13 @@ class Bucket extends ActiveRecord
         }
       
     }
-    
+    /**
+     * 
+     * @param type $bucketDetails
+     * @return type
+     * @throws ErrorException
+     * @Description Saves a New Bucket
+     */
     public function saveBucketDetails($bucketDetails) {
         try {
             $startDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->startDateVal)));
@@ -205,7 +217,7 @@ class Bucket extends ActiveRecord
     
     /**
      * @author Praveen
-     * @description This is to check the Bucket name for Edit Bucket 
+     * @Description This is to check the Bucket name for Edit Bucket 
      * @param type $bucketName, $projectId, $bucketId
      * @return type 
      * 
@@ -255,7 +267,13 @@ class Bucket extends ActiveRecord
         }
       
     }
-    
+    /**
+     * 
+     * @param type $bucketDetails
+     * @return string
+     * @throws ErrorException
+     * @Description Updates the bucket data on edit
+     */
     public function updateBucketDetails($bucketDetails) {
         try {
             $startDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->startDateVal)));
@@ -301,7 +319,15 @@ class Bucket extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $projectId
+     * @param type $bucketId
+     * @param type $Status
+     * @return string
+     * @throws ErrorException
+     * @Description Updates the Status of a Bucket - Backlog,Current,Completed,Closed
+     */
     public function getBucketChangeStatus($projectId,$bucketId,$Status) {
         try {
             $bucket=Bucket::findOne($bucketId);
@@ -327,6 +353,7 @@ class Bucket extends ActiveRecord
      * @param type $type
      * @return string
      * @throws ErrorException
+     * @Description Rertuns the Buckets under project for given project ID
      */
     
      public static function getProjectBucketByAttributes($projectId,$status=2)
@@ -345,7 +372,13 @@ class Bucket extends ActiveRecord
         }
        
     }
-    
+    /**
+     * 
+     * @param type $projectId
+     * @param type $bucketId
+     * @return type
+     * @Description Returns details of a bucket for given Bucket and Project IDs
+     */
     public function getBucketDetailsById($projectId,$bucketId){
       $bucketsQuery = "SELECT * FROM Bucket WHERE Id=$bucketId AND Status=1 AND Projectid=$projectId";   
       $bucketDetails = Yii::$app->db->createCommand($bucketsQuery)->queryAll();
@@ -356,6 +389,7 @@ class Bucket extends ActiveRecord
      * @author Ryan
      * @return array
      * @throws ErrorException
+     * @Description retruns total number of buckets under a project
      */
    public static function getTotalBuckets($projectId){
        try{
@@ -372,6 +406,7 @@ class Bucket extends ActiveRecord
      * @author Ryan
      * @return array
      * @throws ErrorException
+     * @Description Returns Buckets count under a project based on bucket status
      */
    public static function getBucketsCountByType($projectId){
        try{
@@ -407,7 +442,14 @@ class Bucket extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
    }
-   
+   /**
+    * 
+    * @param type $projectId
+    * @param type $type
+    * @return array
+    * @throws ErrorException
+    * @Description Returns the Bucket details under a project based on the status (type) passed
+    */
    public static function getBucketsInfo($projectId,$type=0){
        try{
            $current_bucket_details=array();
@@ -464,7 +506,14 @@ class Bucket extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
    }
-   
+   /**
+    * 
+    * @param type $currentWeekBuckets
+    * @param type $projectId
+    * @return array
+    * @throws ErrorException
+    * @Description Retruns buckets active in current week.
+    */
    public static function getCurrentWeekBucketsInfo($currentWeekBuckets,$projectId){
        try{
            
@@ -509,13 +558,23 @@ class Bucket extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
    }
-   
+   /**
+    * 
+    * @param type $bucketStatusId
+    * @return type
+    * @Description Returns Bucket Status Name based on the Bucket Status ID passed
+    */
    public function getBucketStatusNameById($bucketStatusId){
        $qry = "SELECT Name FROM BucketStatus where Id = $bucketStatusId";
          $data = Yii::$app->db->createCommand($qry)->queryAll();  
          return $data;
    }
-   
+   /**
+    * 
+    * @param type $projectId
+    * @return type
+    * @Description Returns the list of Backlog buckets under a project.
+    */
     public static function getBackLogBucketByProjectId($projectId){
          $qry = "SELECT Id,Name FROM Bucket where ProjectId = $projectId and Name='Backlog'";
          $data = Yii::$app->db->createCommand($qry)->queryOne();  

@@ -39,7 +39,13 @@ class EventCollection extends ActiveRecord
         ];
     }
     
-    
+    /**
+     * 
+     * @param type $eventBean
+     * @return type
+     * @throws ErrorException
+     * @Description Saves an activity into event collection.
+     */
     
     public static function saveEvent($eventBean){
         try {
@@ -70,7 +76,7 @@ class EventCollection extends ActiveRecord
     }
        /**
      * @author Padmaja
-     * @description This method is used to get Ticket details for dashboard
+     * @Description This method is used to get Ticket details for dashboard
      * @return type $userId
      * @return type $page
      * @return type $pageLength
@@ -117,7 +123,13 @@ class EventCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-     public static function getEventAttribute() {
+     /**
+      * 
+      * @return type
+      * @throws ErrorException
+      * @Description Gets the list of attributes in Event Collection.Used for building query in getAllActivities()
+      */
+    public static function getEventAttribute() {
         try{
              error_log("$$$$$$$$$-----------");
              $eventCollection = new EventCollection();
@@ -130,7 +142,7 @@ class EventCollection extends ActiveRecord
     }
     /**
      * @author Padmaja
-     * @description This method is used to get activities
+     * @Description This method is used to get activities
      * @param type $projectId
      * @param type $page
   
@@ -157,7 +169,7 @@ class EventCollection extends ActiveRecord
    
        /**
      * @author Padmaja
-     * @description This method is used to get Ticket details for dashboard
+     * @Description This method is used to get Ticket details for dashboard
      * @return type $userId
      * @return type $page
      * @return type $pageLength
@@ -178,7 +190,7 @@ class EventCollection extends ActiveRecord
     }
        /**
      * @author Padmaja
-     * @description This method is used to get Ticket details for dashboard
+     * @Description This method is used to get Ticket details for dashboard
      * @return type $userId
      * @return type $page
      * @return type $pageLength
@@ -213,7 +225,7 @@ class EventCollection extends ActiveRecord
     }
        /**
      * @author Padmaja
-     * @description This method is used to get current week users
+     * @Description This method is used to get current week users
      * @return type $userId
     */
     public static function getCurrentWeekActiveUsers($projectId){
@@ -242,7 +254,7 @@ class EventCollection extends ActiveRecord
     
     /**
      * @author Ryan
-     * @description This method is used to get current week active buckets
+     * @Description This method is used to get current week active buckets
      * @return type $projectId
     */
     public static function getCurrentWeekActiveBuckets($projectId){
@@ -270,7 +282,7 @@ class EventCollection extends ActiveRecord
     
     /**
      * @author Ryan
-     * @description This method is used to get other buckets and their count
+     * @Description This method is used to get other buckets (which are not current) and their count
      * @return type $projectId
     */
     public static function getOtherBucketsCount($projectId,$isData=0){

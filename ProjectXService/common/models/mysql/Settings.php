@@ -10,6 +10,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 use yii\base\ErrorException;
 
@@ -31,25 +32,32 @@ class Settings extends ActiveRecord
      * @author Lakshmi
      * @params $userId
      * @return $data
+     * @Description Returns all the notification types
      */
     public static function getAllNotificationTypes($userId){
-        $query="select * from CollaboratorNotificationsSettings cns join
-                Notifications ns on ns.Id=cns.ActivityId where cns.CollaboratorId=$userId  order by ActivityTitle";
-                   error_log("%%%%%%%%%%%%%%%%".$query);
-
-        $data = Yii::$app->db->createCommand($query)->queryAll();
-        error_log("+++++++++++++++++++++".sizeof($data));
+        $query= new Query();
+        $data = $query->select("")
+                      ->from("CollaboratorNotificationsSettings cns")
+                      ->join("join", "Notifications ns", "ns.Id=cns.ActivityId")
+                      ->where("cns.CollaboratorId=".$userId)
+                      ->orderBy("ActivityTitle")
+                      ->all();
         return $data;
     }
       /**
      * @author Lakshmi
      * @params $userId
      * @return $data
+     * @Description gets the data of the Notification status of a user
      */
     public static function getAllNotificationsStatus($userId){
-$query="select * from CollaboratorNotificationsSettings where CollaboratorId=$userId";                
-        $data = Yii::$app->db->createCommand($query)->queryAll();
-               error_log("++++++++++++++++++++++".sizeof($data)."======KKKKKKKKKKkkk=======".print_r($data,1));     
+//        $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$userId";                
+//        $data = Yii::$app->db->createCommand($query)->queryAll();
+        $query= new Query();
+        $data = $query->select("")
+                      ->from("CollaboratorNotificationsSettings")
+                      ->where("CollaboratorId=".$userId)
+                      ->all();
 
         return $data; 
     }
@@ -58,6 +66,7 @@ $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$us
      * @author Lakshmi
      * @params $userId,$status,$type,$activityId
      * @return $data
+     * @Description Updates a particular notification for given User.
      */
         public static function notificationsSetttingsStatusUpdate($userId,$type,$activityId,$isChecked){
             
@@ -69,16 +78,33 @@ $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$us
         $data = Yii::$app->db->createCommand($query)->execute();
         return $data; 
     }
-    
-            public static function getNotificationSettingsStatus($fieldName,$userId){
-           $query="select * from Notifications ns join CollaboratorNotificationsSettings cns 
-                    on ns.ActivityOn='$fieldName' and cns.CollaboratorId=$userId and ns.Id=cns.ActivityId"; 
-           error_log("%%%%%%%%%%%%%%%%".$query);
-
-             $data = Yii::$app->db->createCommand($query)->queryAll();
+    /**
+     * 
+     * @param type $fieldName
+     * @param type $userId
+     * @return type
+     * @Description Gets Notification setttings data of a User.
+     */
+        public static function getNotificationSettingsStatus($fieldName,$userId){
+//           $query="select * from Notifications ns join CollaboratorNotificationsSettings cns 
+//                    on ns.ActivityOn='$fieldName' and cns.CollaboratorId=$userId and ns.Id=cns.ActivityId"; 
+//             $data = Yii::$app->db->createCommand($query)->queryAll();
+            $query= new Query();
+            $data = $query->select("")
+                          ->from("Notifications ns")
+                          ->join("join", "CollaboratorNotificationsSettings cns", "ns.ActivityOn='".$fieldName."' and cns.CollaboratorId=".$userId." and ns.Id=cns.ActivityId")
+                          ->all();
              return $data; 
     }
-         public static function notificationsSetttingsStatusUpdateAll($userId,$type,$isChecked){
+        /**
+         * 
+         * @param type $userId
+         * @param type $type
+         * @param type $isChecked
+         * @return type
+         * @Description Upadres all the notification status for a given user
+         */
+        public static function notificationsSetttingsStatusUpdateAll($userId,$type,$isChecked){
             
             if($isChecked==1){
               $query="update CollaboratorNotificationsSettings set $type=1 where CollaboratorId=$userId and $type=0"; 
@@ -95,11 +121,17 @@ $query="select * from CollaboratorNotificationsSettings where CollaboratorId=$us
     * @author Moin Hussain
     * @param type $userId
     * @return type
+    * @Description Saves the notification settings for a user.
     */
         public static function saveNotificationsSettingsForUser($userId){
           try{
-             $query="select Id from Notifications where status=1"; 
-             $data = Yii::$app->db->createCommand($query)->queryAll();
+//             $query="select Id from Notifications where status=1"; 
+//             $data = Yii::$app->db->createCommand($query)->queryAll();
+            $query= new Query();
+            $data = $query->select("Id")
+                          ->from("Notifications")
+                          ->where("status=1")
+                          ->all();
              $insertQuery = "INSERT INTO CollaboratorNotificationsSettings(CollaboratorId,ActivityId,SystemNotification,EmailNotification,PushNotification) VALUES";
              $dataArray = array();
                foreach ($data as $value) {

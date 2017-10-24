@@ -39,6 +39,13 @@ class ProjectTicketSequence extends ActiveRecord
             TimestampBehavior::className(),
         ];
     }
+    
+    /**
+     * 
+     * @param type $projectId
+     * @return type
+     * @Description Gets next squence number for a new Project.
+     */
      public static function getNextSequence($projectId) {
          $db =  ProjectTicketSequence::getCollection();
          $ret = $db->findAndModify( array("ProjectId"=> (int)$projectId ), array('$inc'=> array('seq' =>1)),array('new' => 1,"upsert"=>1));

@@ -64,7 +64,7 @@ class TimeReportController extends Controller
     
     /**
     * @author Praveen P
-    * @description This method is used to get all data for Work log details.
+    * @Description This method is used to get all data for Work log details.
     * @return type
     */
    public function actionGetTimeReportDetails() {
@@ -111,7 +111,7 @@ class TimeReportController extends Controller
     
     /**
     * @author Padmaja
-    * @uses updating timelog details
+    * @Description updating timelog details
     * @return type
     */
     public function actionUpdateTimelog(){
@@ -138,7 +138,7 @@ class TimeReportController extends Controller
     }
     /**
     * @author Padmaja
-    * @uses get dearchdetails for timelog 
+    * @Description get dearchdetails for timelog 
     * @return type
     */
     public function actionGetStoryDetailsForTimelog(){
@@ -166,7 +166,7 @@ class TimeReportController extends Controller
     }
     /**
     * @author Padmaja
-    * @uses adding timelog details
+    * @Description adding timelog details
     * @return type
     */
     public function actionAddTimelog(){
@@ -192,7 +192,7 @@ class TimeReportController extends Controller
     }
     /**
     * @author Padmaja
-    * @uses adding removing details
+    * @Description adding removing details
     * @return type
     */
     public function actionRemoveTimelog(){
@@ -217,6 +217,11 @@ class TimeReportController extends Controller
         } 
 
     }
+    /**
+     * 
+     * @return type
+     * @Description Gets time log details by activity ID(Slug)
+     */
     public function actionGetTimelogDetailsBySlug(){
       try{ 
          $timelogData = json_decode(file_get_contents("php://input"));

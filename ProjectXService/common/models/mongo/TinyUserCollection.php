@@ -55,8 +55,14 @@ class TinyUserCollection extends ActiveRecord
         ];
        
     }
-    
-       public static function createNewUser($user,$userId){
+    /**
+     * 
+     * @param type $user
+     * @param type $userId
+     * @throws ErrorException
+     * @Description Updates user details, when new user comes on invitation and fills the form.
+     */
+    public static function createNewUser($user,$userId){
         
         try {
         error_log("======================3##################=================");
@@ -76,6 +82,12 @@ class TinyUserCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
+    /**
+     * 
+     * @param type $collaboratorId
+     * @return string
+     * @Description Gets the User Data by UserId - CollaboratorId
+     */
     public static function getMiniUserDetails($collaboratorId){
         
         $query = new Query();
@@ -89,7 +101,12 @@ class TinyUserCollection extends ActiveRecord
        return $userDetails;
      
     }
-    
+    /**
+     * 
+     * @param type $userName
+     * @return string
+     * @Description Gets the User Data by UserName
+     */
     public static function getMiniUserDetailsByUserName($userName=""){
         
         $query = new Query();
@@ -103,7 +120,13 @@ class TinyUserCollection extends ActiveRecord
        return $userDetails;
      
     }
-      public static function createUsers($data){
+    /**
+     * 
+     * @param type $data
+     * @throws ErrorException
+     * @Description Create a new User
+     */  
+    public static function createUsers($data){
         
         try {
         foreach ($data as $value) {
@@ -122,7 +145,13 @@ class TinyUserCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $follower
+     * @return type
+     * @throws ErrorException
+     * @Description Gets the Data of a Follower
+     */
     public static function getProfileOfFollower($follower) {
         try {
             $query = new Query();

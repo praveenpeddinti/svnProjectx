@@ -10,6 +10,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 use yii\base\ErrorException;
 
@@ -32,12 +33,18 @@ class TicketType extends ActiveRecord
      * @author Moin Hussain
      * @param type $id
      * @return type
+     * @Description Returns Name and Id of a particular Ticket Type.
      */
     public static function getTicketType($id)
     {
         try{
-        $query = "select Id,Name from TicketType where Id=".$id;
-        $data = Yii::$app->db->createCommand($query)->queryOne();
+//        $query = "select Id,Name from TicketType where Id=".$id;
+//        $data = Yii::$app->db->createCommand($query)->queryOne();
+        $query= new Query();
+        $data = $query->select("Id,Name")
+              ->from("TicketType")
+              ->where("Id=".$id)
+              ->one();
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("TicketType:getTicketType::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');
@@ -48,11 +55,16 @@ class TicketType extends ActiveRecord
      /**
      * @author Anand Singh
      * @return type
+     * @Description Gets the details of all the Ticket Types in system.
      */
     public static function getTicketTypeList() {
         try {
-            $qry = "select * from TicketType";
-            $data = Yii::$app->db->createCommand($qry)->queryAll();
+//            $qry = "select * from TicketType";
+//            $data = Yii::$app->db->createCommand($qry)->queryAll();
+            $query= new Query();
+            $data = $query->select("")
+                  ->from("TicketType")
+                  ->all();
             return $data;
         } catch (\Throwable $ex) { 
             Yii::error("TicketType:getTicketTypeList::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

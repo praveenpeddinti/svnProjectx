@@ -61,7 +61,7 @@ class AccessTokenCollection extends ActiveRecord
     
      /**
     * @author Padmaja
-    * @description This is to checkCollabaratorStatus
+    * @Description This is to checkCollabaratorStatus
     * @return type 
     * @param type $collabaratorId
      */     
@@ -84,9 +84,9 @@ class AccessTokenCollection extends ActiveRecord
         
 
     }
-       /**
+    /**
     * @author Padmaja
-    * @description This is to saveAccesstokenData
+    * @Description This is to saveAccesstokenData
     * @return type 
     * @param type $accesstoken,$collabaratorId,$browserType
      */ 
@@ -111,9 +111,9 @@ class AccessTokenCollection extends ActiveRecord
         }
          
     }
-          /**
+    /**
     * @author Padmaja
-    * @description This is to updateStatusByToken
+    * @Description This is to updateStatusByToken
     * @return type 
     * @param type $collabaratortoken
      */ 

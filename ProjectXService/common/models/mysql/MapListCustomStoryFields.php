@@ -10,6 +10,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 use yii\base\ErrorException;
 
@@ -32,12 +33,19 @@ class MapListCustomStoryFields extends ActiveRecord
      * @param type $bucketId
      * @param type $projectId
      * @return type
+     * @Description Gets the value of a Custom field.
      */
     public static function getListValue($customFieldId,$valueId)
     {
         try{
-        $query = "select Id,ListOption from MapListCustomStoryFields where Id=".$valueId." and StoryFieldId=".$customFieldId;
-        $data = Yii::$app->db->createCommand($query)->queryOne();
+//        $query = "select Id,ListOption from MapListCustomStoryFields where Id=".$valueId." and StoryFieldId=".$customFieldId;
+//        $data = Yii::$app->db->createCommand($query)->queryOne();
+        $query= new Query();
+        $data = $query->select("Id,ListOption")
+              ->from("MapListCustomStoryFields")
+              ->where("Id=".$valueId)
+              ->andWhere("StoryFieldId=".$customFieldId)
+              ->one();
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("MapListCustomerStoryFields:getListValue::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');

@@ -46,7 +46,7 @@ class NotificationCollection extends ActiveRecord
 
     /**
      * @author Ryan Marshal  
-     * @description This method is used for getting all the notifications for user.
+     * @Description This method is used for getting all the notifications for user.
      * @param type $user
      * @param type $projectId
      * @return array
@@ -64,6 +64,14 @@ class NotificationCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+    /**
+     * 
+     * @param type $user
+     * @return type
+     * @throws ErrorException
+     * @Description Gets the Notifications Count to show in header.
+     */
      public static function getNotificationsCount($user)
     { 
          try{
@@ -80,7 +88,18 @@ class NotificationCollection extends ActiveRecord
         }
      }
     
-      public static function getNotifications($user,$offset=0,$limit=5,$viewAll=0,$asActivity=false)
+     /**
+      * 
+      * @param type $user
+      * @param type $offset
+      * @param type $limit
+      * @param type $viewAll
+      * @param type $asActivity
+      * @return type
+      * @throws ErrorException
+      * @Description Gets list of notifications as per the page number passed.
+      */
+    public static function getNotifications($user,$offset=0,$limit=5,$viewAll=0,$asActivity=false)
       { 
            try{
            $cond=array();    
@@ -117,7 +136,7 @@ class NotificationCollection extends ActiveRecord
      * @author Ryan Marshal
      * @param type $notifyid,$user
      * @return type 
-     * @description  Used for deleting the notification 
+     * @Description  Used for deleting the notification 
      */
     public static function readNotification($notify)
     {
@@ -133,8 +152,14 @@ class NotificationCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-    
-        public static function deleteNotification($notify){
+    /**
+     * 
+     * @param type $notify
+     * @return type
+     * @throws ErrorException
+     * @Description Deletes a Notification.
+     */
+    public static function deleteNotification($notify){
         $user=$notify->userInfo->Id;
         $notifyid=$notify->notifyid;
         try
@@ -154,7 +179,7 @@ class NotificationCollection extends ActiveRecord
      * @author Ryan Marshal
      * @param type $notifyid,$user
      * @return type 
-     * @description  Used for deleting all notifications of the user 
+     * @Description  Used for deleting all notifications of the user 
      */
     public static function readAllNotifications($notify)
     {
@@ -178,8 +203,9 @@ class NotificationCollection extends ActiveRecord
      * @param type $ticketId
      * @param type $projectId
      * @return type
+     * @Description Gets the data related to a particular notification.
      */
-        public static function getNotificationDetail($notificationId,$ticketId,$projectId){
+     public static function getNotificationDetail($notificationId,$ticketId,$projectId){
         try{
            $query=new Query();
             $query->from('NotificationCollection')
@@ -193,6 +219,14 @@ class NotificationCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
+    /**
+     * 
+     * @param type $activityOn
+     * @param type $userId
+     * @return type
+     * @throws ErrorException
+     * @Description Gets notification data to know if the notification is notified to the user or not.
+     */
     public static function getNotificationStatus($activityOn,$userId){
          try{
             echo("=============+FFFFFFFFFFFFFFFF=============".$userId);

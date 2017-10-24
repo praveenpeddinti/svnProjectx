@@ -3,7 +3,7 @@
 namespace common\service;
 
 use common\models\mongo\{TicketCollection,TinyUserCollection};
-use common\components\{CommonUtility,CommonUtilityTwo,ServiceFactory,NotificationTrait,SVNUtility};
+use common\components\{CommonUtility,CommonUtilityTwo,ServiceFactory,NotificationTrait};
 use common\models\mysql\WorkFlowFields;
 use common\models\mysql\Collaborators;
 use common\models\mongo\AccessTokenCollection;
@@ -25,7 +25,7 @@ class CollaboratorService {
 
     /**
      * @author Moin Hussain
-     * @description This method to get the collaborators of a project.
+     * @Description This method to get the collaborators of a project.
      * @param type $ticketId
      * @param type $projectId
      * @return type
@@ -60,6 +60,7 @@ class CollaboratorService {
      * @author Padmaja
      * @return type 
      * @param type $collabaratorId
+     * @Description Gets Access Token for given collaborator Id
      */
     public function getCollabaratorAccesstoken($collabaratorId) {
         try {
@@ -74,7 +75,7 @@ class CollaboratorService {
 
     /**
      * @author Padmaja
-     * @description This is to save the Collabarator accesstoken details 
+     * @Description This is to save the Collabarator accesstoken details 
      * @return type 
      * @param type $accesstoken,$collabaratorId,$browserType,$remembermeStatus
      */
@@ -90,7 +91,7 @@ class CollaboratorService {
 
     /**
      * @author Padmaja
-     * @description This is to updateStatusCollabarator 
+     * @Description This is to updateStatusCollabarator 
      * @return type 
      * @param type $collabaratortoken
      */
@@ -106,7 +107,7 @@ class CollaboratorService {
 
     /**
      * @author Ryan
-     * @description This is to get filtered team list in @mention 
+     * @Description This is to get filtered team list in @mention 
      * @return type 
      * @param type $projectId, $search_query
      */
@@ -122,7 +123,7 @@ class CollaboratorService {
 
     /**
      * @author Ryan
-     * @description This is to get matched user in @mention 
+     * @Description This is to get matched user in @mention 
      * @return type 
      * @param type $user
      */
@@ -138,7 +139,7 @@ class CollaboratorService {
 
     /**
      * @author Praveen P
-     * @description This is to get filtered team list in Followerlist 
+     * @Description This is to get filtered team list in Followerlist 
      * @return type 
      * @param type $projectId, $search_query,$defaultusers
      */
@@ -168,7 +169,7 @@ class CollaboratorService {
 
     /**
      * @author Praveen P
-     * @description This method is to used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list.
+     * @Description This method is to used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list.
      * @param type $ticketId
      * @param type $projectId
      * @return type
@@ -187,8 +188,8 @@ class CollaboratorService {
     }
 
     /**
-     * @authorPadmaja
-     * @description This method to get the collaborators of a project.
+     * @author Padmaja
+     * @Description This method to get the collaborators of a project.
      * @param type $ticketId
      * @param type $projectId
      * @return type
@@ -205,7 +206,7 @@ class CollaboratorService {
 
     /**
      * @author Praveen
-     * @description This is to get filtered team list in creating buckets 
+     * @Description This is to get filtered team list in creating buckets 
      * @return type 
      * @param type $projectId, $role
      */
@@ -220,8 +221,8 @@ class CollaboratorService {
     }
 
     /**
-     * @authorPadmaja
-     * @description This method to verify  the  project.
+     * @author Padmaja
+     * @Description This method to verify  the  project.
      * @param type $projectId
      * @return type
      */
@@ -236,8 +237,8 @@ class CollaboratorService {
     }
 
     /**
-     * @authorPadmaja
-     * @description This method to verify  the  project.
+     * @author Padmaja
+     * @Description This method to verify  the  project.
      * @param type $projectId
      * @return type
      */
@@ -253,8 +254,8 @@ class CollaboratorService {
     }
 
     /**
-     * @authorPadmaja
-     * @description This method to updateProjectlogo
+     * @author Padmaja
+     * @Description This method to updateProjectlogo
      * @param type $projectId
      * @return type
      */
@@ -270,8 +271,8 @@ class CollaboratorService {
     }
 
     /**
-     * @authorPadmaja
-     * @description This method to verify  the  project.
+     * @author Padmaja
+     * @Description This method to verify  the  project.
      * @param type $projectId
      * @return type
      */
@@ -287,8 +288,8 @@ class CollaboratorService {
     }
 
     /**
-     * @authorPadmaja
-     * @description This method to   project count.
+     * @author Padmaja
+     * @Description This method to   project count.
      * @param type $userId
      * @return type
      */
@@ -304,8 +305,8 @@ class CollaboratorService {
     }
 
     /**
-     * @authorPadmaja
-     * @description This method to   project Names by UserId
+     * @author Padmaja
+     * @Description This method to   project Names by UserId
      * @param type $userId
      * @return type
      */
@@ -320,8 +321,8 @@ class CollaboratorService {
     }
 
     /**
-     * @authorPadmaja
-     * @description This method to   save projectlog
+     * @author Padmaja
+     * @Description This method to   save projectlog
      * @param type $userId
      * @return type
      */
@@ -359,7 +360,7 @@ class CollaboratorService {
      * @return type
      * @throws ErrorException
      * @author  Anand Singh
-     * @uses Get user dashboard details.
+     * @Description Get user dashboard details.
      */
     public function getUserDashboardDetails($params) {
         try {
@@ -390,6 +391,7 @@ class CollaboratorService {
      * @param type $user
      * @param type $profilepic
      * @return type int
+     * @Description Creates a new user
      */
     public function saveNewUser($projectId, $user,$code) {
         try { 
@@ -429,7 +431,14 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
-
+    /**
+     * 
+     * @param type $projectId
+     * @param type $userid
+     * @return boolean
+     * @throws ErrorException
+     * @Description Adds a user to project team.
+     */
     public function addUserToTeam($projectId, $userid) {
         try { error_log("in team==".$projectId."==".$userid);
             Collaborators::addToTeam($projectId, $userid);
@@ -439,7 +448,13 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
-
+    /**
+     * 
+     * @param type $userid
+     * @return type
+     * @throws ErrorException
+     * @Description returns data of a particular user.
+     */
     public function getUserDetails($userid) {
         try {
             $user = Collaborators::getCollaboratorById($userid);
@@ -456,6 +471,7 @@ class CollaboratorService {
      * @param type $search
      * @param type $projectId
      * @return type
+     * @Description gets users to invite in a Project
      */
     public function getUsersToInvite($search, $projectId) {
         try {
@@ -473,6 +489,7 @@ class CollaboratorService {
      * @param type $projectName
      * @param type $invited_by
      * @return type
+     * @Description Sends a mail for with User Invitation
      */
     public function sendMailInvitation($invited_users, $projectName, $invited_by) {
         try {
@@ -508,6 +525,7 @@ class CollaboratorService {
     /**
      * @author Ryan
      * @return type string
+     * @Description Generates an Invitation code to send user invitation
      */
     public function generateInvitation() {
         try {
@@ -526,7 +544,7 @@ class CollaboratorService {
 
     /**
      * @author Ryan
-     * @description Used for Verifying Invitation Code
+     * @Description Used for Verifying Invitation Code
      * @param type $invite_code
      * @return type array
      */
@@ -554,7 +572,14 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
-
+    /**
+     * 
+     * @param type $invite_email
+     * @param type $invite_code
+     * @return boolean
+     * @throws ErrorException
+     * @Description Invalidates or diables an Invite code
+     */
     public function invalidateInvite($invite_email, $invite_code) {
         try {
             ProjectInvitation::disableInvite($invite_email, $invite_code);
@@ -569,7 +594,7 @@ class CollaboratorService {
      * @author Padmaja
      * @param type $projectId
      * @param type $userId
-
+     * @Description Update Project details on edit
      */
     public function updatingProjectDetails($projectName, $description, $fileExt, $projectLogo, $projectId,$userId='') {
         try {
@@ -608,7 +633,7 @@ class CollaboratorService {
      * @author Padmaja
      * @param type $projectId
      * @param type $userId
-
+     * @Description gets Project dashboard details.
      */
     public function getProjectDashboardDetails($projectName, $projectId, $userId,$page) {
         try {
@@ -622,6 +647,7 @@ class CollaboratorService {
      /**
      * @author Lakshmi
      * @param type $userId
+      * @Description returns all notification types for a user.
      */
     public function getAllNotificationTypes($userId) {
         try {
@@ -640,6 +666,7 @@ class CollaboratorService {
     /**
      * @author Lakshmi
      * @param type $userId
+     * @Description Gets status of all notifications
      */
     public function getAllNotificationsStatus($userId) {
         try {
@@ -658,6 +685,7 @@ class CollaboratorService {
      * @param type $invite_list
      * @param type $text_message
      * @param type$subject
+     * @Description Sends invite to a user
      */
     public function sendSingleMailToInvite($mailingName,$invite_list,$text_message,$subject){
         try{
@@ -677,6 +705,7 @@ class CollaboratorService {
      * @param type $type
      * @param type $activityId
      * @param type $isChecked
+     * @Description Updates a notification's status
      */
     
     public function notificationsSetttingsStatusUpdate($userId, $type, $activityId,$isChecked) {
@@ -695,6 +724,7 @@ class CollaboratorService {
      * @param type $userId
      * @param type $type
      * @param type $isChecked
+       * @Description Updates the all notifications status
      */
     public function notificationsSetttingsStatusUpdateAll($userId, $type, $isChecked) {
         try {
@@ -722,9 +752,10 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
-     /*
+     /**
      * @autor Padmaja
      *  @param type $page
+      * @Description Gets and processes Activities data based on the criteria
      */
     public function getAllActivities($postData){
         try{
@@ -735,10 +766,10 @@ class CollaboratorService {
         }
     }
     
-     /*
+     /**
      * @autor Ryan
      * @param type $userId,$projectId
-     * @description Used for getting the role of logged in user
+     * @Description Used for getting the role of logged in user
      */
     public function checkRole($projectId,$userId){ 
         try{
@@ -750,10 +781,10 @@ class CollaboratorService {
         }
     }
     
-     /*
+     /**
      * @autor Ryan
      * @param type $projectId,$email
-     * @description Used for checking user exists in team
+     * @Description Used for checking user exists in team
      */
     public function checkUserInTeam($projectId,$email){
         try{

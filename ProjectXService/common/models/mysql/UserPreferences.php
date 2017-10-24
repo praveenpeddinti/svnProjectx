@@ -11,6 +11,7 @@ use yii\base\NotSupportedException;
 use yii\base\ErrorException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 
 class UserPreferences extends ActiveRecord 
@@ -32,6 +33,7 @@ class UserPreferences extends ActiveRecord
      * @param type $userid
      * @param type $tasks
      * @return type
+      * @Description Saves User Preferences
      */
     public static function savePreference($userid,$tasks)
     {
@@ -46,8 +48,13 @@ class UserPreferences extends ActiveRecord
                   $prefered_items = ',';
              }
 
-             $query = "select * from UserPreferences where CollaboratorId=$userid";
-             $data = Yii::$app->db->createCommand($query)->queryAll();
+//             $query = "select * from UserPreferences where CollaboratorId=$userid";
+//             $data = Yii::$app->db->createCommand($query)->queryAll();
+                $query= new Query();
+                $data = $query->select("")
+                      ->from("UserPreferences")
+                      ->where("CollaboratorId=".$userid)
+                      ->all();
              if(sizeof($data)>0) // if there is preference existing
              {
                  $query="update UserPreferences set PreferenceItems='$prefered_list' where CollaboratorId=$userid";
@@ -72,13 +79,19 @@ class UserPreferences extends ActiveRecord
      * @author Ryan Marshal
      * @param type $userid
      * @return type
+     * @Description Gets User Preferences
      */
     public static function getPreference($userid)
     {
         $userid=(int)$userid;
         try{
-            $query = "select PreferenceItems from UserPreferences where CollaboratorId=$userid";
-            $data = Yii::$app->db->createCommand($query)->queryOne();
+//            $query = "select PreferenceItems from UserPreferences where CollaboratorId=$userid";
+//            $data = Yii::$app->db->createCommand($query)->queryOne();
+            $query= new Query();
+            $data = $query->select("PreferenceItems")
+                          ->from("UserPreferences")
+                          ->where("CollaboratorId=".$userid)
+                          ->one();
             return $data;    
         } catch (\Throwable $ex) {
            

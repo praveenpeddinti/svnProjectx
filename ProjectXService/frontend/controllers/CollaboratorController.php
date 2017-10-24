@@ -58,6 +58,7 @@ class CollaboratorController extends Controller
     /**
      * @author  Anand
      * @return type
+     * @Description Gets user dashboard details
      */
     
     public function  actionGetUserDashboardDetails(){
@@ -82,9 +83,9 @@ class CollaboratorController extends Controller
         }
     }
     
-    /*
+    /**
      * @author Ryan
-     * Saves a New User in the System
+     * @Description Saves a New User in the System
      */
     public function actionSaveUser(){
         try{
@@ -116,9 +117,9 @@ class CollaboratorController extends Controller
         }
     }
     
-    /*
+    /**
      * @author Ryan
-     * Gets Users Not yet Invited in Project
+     * @Description Gets Users Not yet Invited in Project
      */
     public function  actionGetInviteUsers(){
        
@@ -144,9 +145,9 @@ class CollaboratorController extends Controller
         }
     }
     
-    /*
+    /**
      * @author Ryan
-     * Sends Mail Invitation
+     * @Description Sends Mail Invitation
      */
     public function  actionSendInvite(){
        
@@ -173,9 +174,9 @@ class CollaboratorController extends Controller
         }
     }
     
-    /*
+    /**
      * @author Ryan
-     * Used for adding existing user to Team
+     * @Description Used for adding existing user to Team
      */
     public function actionAddToTeam(){
         try{
@@ -203,9 +204,9 @@ class CollaboratorController extends Controller
         }
     }
     
-    /*
+    /**
      * @author Ryan
-     * Used for verfiying invitation code
+     * @Description Used for verfiying invitation code
      */
     public function actionVerifyInvitationCode(){
         try{
@@ -230,9 +231,9 @@ class CollaboratorController extends Controller
         
     }
     
-    /*
+    /**
      * @author Ryan
-     * Used for Invalidating Invitation Code
+     * @Description Used for Invalidating Invitation Code
      */
     public function actionInvalidateInvitation(){
         try{
@@ -280,7 +281,7 @@ class CollaboratorController extends Controller
     }
     /**
     * @author Padmaja
-    *  @description This is used for verifying projects is exists or not
+    *  @Description This is used for verifying projects is exists or not
     * @param type 
     * @return array
     */
@@ -314,7 +315,7 @@ class CollaboratorController extends Controller
     }
       /**
     * @author Padmaja
-    * @description This is used for saving project details
+    * @Description This is used for saving project details
     * @param type 
     * @return array
     */
@@ -371,7 +372,7 @@ class CollaboratorController extends Controller
     }
         /**
     * @author Padmaja
-    * @description This is used for updating project Details
+    * @Description This is used for updating project Details
     * @param type 
     * @return array
     */
@@ -409,7 +410,7 @@ class CollaboratorController extends Controller
     }
        /**
     * @author Padmaja
-    * @description This is used for get project dashboard details
+    * @Description This is used for get project dashboard details
     * @param type 
     * @return array
     */
@@ -438,7 +439,7 @@ class CollaboratorController extends Controller
     }
         /**
     * @author Padmaja
-    * @description This is used for get all activities for project dashboard
+    * @Description This is used for get all activities for project dashboard
     * @param type 
     * @return array
     */
@@ -466,7 +467,7 @@ class CollaboratorController extends Controller
     
      /**
     * @author Ryan
-    * @description This is used for getting the Team  Members for Project based on Roles
+    * @Description This is used for getting the Team  Members for Project based on Roles
     * @param type 
     * @return array or null
     */
@@ -507,7 +508,7 @@ class CollaboratorController extends Controller
     
      /**
     * @author Ryan
-    * @description This is used for checking whether user already in team
+    * @Description This is used for checking whether user already in team
     * @param type 
     * @return string
     */

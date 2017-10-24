@@ -10,6 +10,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 use yii\base\ErrorException;
 
@@ -32,13 +33,19 @@ class StoryCustomFields extends ActiveRecord
      * @param type $bucketId
      * @param type $projectId
      * @return type
+     * @Description Returns Custom fields in a story.
      */
     public static function getFieldDetails($fieldId)
     {
         try{
-        $query = "select * from StoryCustomFields sf join FieldTypes ft on sf.Type=ft.Id  where sf.Id=".$fieldId;
-        error_log($query);
-        $data = Yii::$app->db->createCommand($query)->queryOne();
+//        $query = "select * from StoryCustomFields sf join FieldTypes ft on sf.Type=ft.Id  where sf.Id=".$fieldId;
+//        $data = Yii::$app->db->createCommand($query)->queryOne();
+        $query= new Query();
+        $data = $query->select("")
+              ->from("StoryCustomFields sf")
+              ->join("join", "FieldTypes ft", "sf.Type=ft.Id")
+              ->where("sf.Id=".$fieldId)
+              ->one();
         return $data;  
         } catch (\Throwable $ex) {
             Yii::error("StoryCustomFields:getFieldDetails::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'error', 'application');

@@ -67,7 +67,13 @@ class TicketCollection extends ActiveRecord
             ],
         ];
     }
-    
+    /**
+     * 
+     * @param type $ticket_data
+     * @return type
+     * @throws ErrorException
+     * @Description Saves the ticket details
+     */
     public static function saveTicketDetails($ticket_data) {
         try {
             $returnValue = "failure";
@@ -90,6 +96,7 @@ class TicketCollection extends ActiveRecord
      * @param type $ticketId
      * @param type $projectId
      * @return type
+     * @Description Returns given set of field's data of a ticket under a peoject.
      */
     public static function getTicketDetails($ticketId,$projectId,$selectFields=[]){
       try{
@@ -115,6 +122,7 @@ class TicketCollection extends ActiveRecord
      * @param type $ticketId
      * @param type $projectId
      * @return type
+     * @Description Gets list of tickets assigned to a any user
      */
     public static function getMyAssignedTickets($selectFields=[]){
       try{
@@ -137,6 +145,7 @@ class TicketCollection extends ActiveRecord
      * @param type $ticketId
      * @param type $projectId
      * @return type
+     * @Description Updates a Field of a given ticket
      */
     public static function updateTicketField(){
       try{
@@ -159,6 +168,7 @@ class TicketCollection extends ActiveRecord
     /**
      * @author Praveen P
      * @return type
+     * @Description Gets data of all tickets in a project.
      */
         public static function getAllTicketDetails($StoryData, $projectId, $select = []) {
         try {
@@ -266,7 +276,7 @@ class TicketCollection extends ActiveRecord
 
     /**
      * @author Praveen P
-     * getting total count.
+     * @Description Getting count of all stories.
      * @return type  $projectId
      */
     public static function getAllStoriesCount($StoryData,$projectId) {
@@ -356,7 +366,7 @@ class TicketCollection extends ActiveRecord
 
      /**
      * @author Praveen P
-     * This method is used to getting subtask Ids by passing particular story Id.
+     * @Description This method is used to getting subtask Ids by passing particular story Id.
      * @return type  $projectId $storyId
      */
     public static function getSubTaskIds($storyId,$projectId) {
@@ -373,7 +383,7 @@ class TicketCollection extends ActiveRecord
     }
     /**
      * @author Praveen P
-     * @description This method is used to getting subtask details for the particular story.
+     * @Description This method is used to getting subtask details for the particular story.
      * @return typesubtasks
      */
     public static function getSubTaskDetails($subTaskIds, $projectId, $select = []) {
@@ -394,6 +404,7 @@ class TicketCollection extends ActiveRecord
      * @param type $projectId
      * @param type $selectFields
      * @return type
+     * @Description gets Count of all tickets assigned to a user.
      */
        public static function getMyTicketsCount($userId,$projectId,$selectFields=[]){
       try{
@@ -417,6 +428,7 @@ class TicketCollection extends ActiveRecord
      * @param type $projectId
      * @param type $select
      * @return type
+     * @Description gets the details of all the tickets assigned to a user.
      */
        public static function getMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId, $select = []) {
         try {
@@ -452,7 +464,7 @@ class TicketCollection extends ActiveRecord
      * @param type $parentTicNumber
      * @param type $$childTicketIds
      * @return type
-     * @use used for inserting childtickets into Tasks(array) of parentticket.
+     * @Description Used for inserting childtickets into Tasks(array) of parentticket.
      */
     
     public static function updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketObjArray) {
@@ -470,6 +482,7 @@ class TicketCollection extends ActiveRecord
      * @param type $parentTicketId
      * @param type $newTasksList
      * @return type
+     * @Description Updates the ChildTasks of a Particulat ticket.
      */
     public static function updateChildTaskObject($parentTicketId,$projectId,$newTasksList){
       try{
@@ -488,6 +501,7 @@ class TicketCollection extends ActiveRecord
      * @author Padmaja 
      * @return array
      * @updated by suryaprakash reddy
+     * @Description Gets details of all tickets based on a Search String
      */
     public static function getAllTicketDetailsForSearch($projectId,$ticketId,$sortvalue, $searchString,$subTaskArray) {
         try {
@@ -502,7 +516,7 @@ class TicketCollection extends ActiveRecord
     }
       /**
      * @author suryaprakash reddy 
-     * @description This method is used to update TotalTime log in collection
+     * @Description This method is used to update TotalTime log in collection
      * @return type mongoId
      */
       public static function updateTotalTimeLog($projectId, $ticketId, $totalWorkHours) {
@@ -519,7 +533,7 @@ class TicketCollection extends ActiveRecord
 
     /**
      * @author suryaprakash reddy 
-     * @description This method is used to get TicketId,TotalTimeLog,Tasks,ParentStoryId from ticket collection
+     * @Description This method is used to get TicketId,TotalTimeLog,Tasks,ParentStoryId from ticket collection
      * @return type array
      */
     public static function updateRelateTicket($projectId, $ticketId, $searchTicketId) {
@@ -535,7 +549,7 @@ class TicketCollection extends ActiveRecord
 
     /**
      * @author suryaprakash reddy 
-     * @description This method is used to get allrelated stories
+     * @Description This method is used to get allrelated stories
      * @return type array
      */
     public static function getAllRelateStory($projectId, $ticketId, $ticketArray) {
@@ -553,7 +567,7 @@ class TicketCollection extends ActiveRecord
 
     /**
      * @author suryaprakash reddy 
-     * @description This method is used to unrelate task from parent ticket
+     * @Description This method is used to unrelate task from parent ticket
      * @return type array
      */
     public static function unRelateTask($projectId, $parentTicketId, $unRelateTicketId) {
@@ -568,15 +582,16 @@ class TicketCollection extends ActiveRecord
     }
         /**
      * @author Padmaja
-     * @description This method is used to updated the Total Estimated points
+     * @Description This method is used to updated the Total Estimated points
      * @return type array
      */
        public static function updateTotalEstimatedPoints($projectId,$parentticketId, $totalEstmatedPts) {
         try {
             error_log("update here".$totalEstmatedPts."ticketId".$parentticketId."prokjeccc".$projectId);
             $ticketCollection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $updateTotalEstimatedPts = array('$inc' => array("Fields.totalestimatepoints.value" => $totalEstmatedPts));
+            $updateTotalEstimatedPts = array('$inc' => array("Fields.totalestimatepoints.value" =>(int) $totalEstmatedPts));
             $ticketCollection->update(array("TicketId" => (int) $parentticketId, "ProjectId" => (int) $projectId), $updateTotalEstimatedPts);
+            error_log("\nupdateTotal**--**EstimatedPoints".$projectId."+++++".$parentticketId."++++".$totalEstmatedPts."\n");
           
         }catch (\Throwable $ex) {
             Yii::error("TicketCollection:updateTotalEstimatedPoints::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -586,7 +601,7 @@ class TicketCollection extends ActiveRecord
 
           /**
      * @author Padmaja
-     * @description This method is used to get Ticket details by User
+     * @Description This method is used to get Ticket details by User
      * @return type array
      */
      public static function getTicketDetailsByUser($collabaratorId,$projectId,$selectFields=[]){
@@ -606,7 +621,7 @@ class TicketCollection extends ActiveRecord
     }
            /**
      * @author Padmaja
-     * @description This method is used to get Ticket details for time log
+     * @Description This method is used to get Ticket details for time log
      * @return type array
      */
     public static function getAllStoryDetailsForTimelog($projectId,$sortvalue, $searchString){
@@ -622,7 +637,7 @@ class TicketCollection extends ActiveRecord
     }
                /**
      * @author Padmaja
-     * @description This method is used to get Ticket details for dashboard
+     * @Description This method is used to get Ticket details for dashboard
      * @return type array
      */
     public static function getTicketDetailsForDashboard($userId){
@@ -642,6 +657,7 @@ class TicketCollection extends ActiveRecord
      * @param type $userId
      * @param type $projectId
      * @return type
+     * @Description Returns the Count of all Closed Tickets 
      */
     public static function getClosedTicketsCount($projectId,$userId,$FieldName,$value,$selectFields=[]){
       try{
@@ -665,6 +681,7 @@ class TicketCollection extends ActiveRecord
      * @param type $userId
      * @param type $projectId
      * @return type
+     * @Description Gets Counts of tickets based on the FieldName passed.
      */
     public static function getActiveOrClosedTicketsCount($projectId,$userId,$FieldName,$value,$selectFields=[]){
       try{
@@ -684,7 +701,17 @@ class TicketCollection extends ActiveRecord
         }
     }
 
-
+    /**
+     * 
+     * @param type $projectId
+     * @param type $value
+     * @param type $FieldBucket
+     * @param type $FieldState
+     * @param type $taskFlag
+     * @return type
+     * @throws ErrorException
+     * @Description Returns Count of all the tickets in a Project
+     */
     public static function getAllTicketsCount($projectId,$value,$FieldBucket,$FieldState,$taskFlag){
      try{
             $query = new Query();
@@ -706,7 +733,15 @@ class TicketCollection extends ActiveRecord
  
    }
    
-   
+   /**
+    * 
+    * @param type $projectId
+    * @param type $value
+    * @param type $FieldBucket
+    * @return type
+    * @throws ErrorException
+    * @Description Retuns aggtregated Total work hours of all the tickets in a Bucket
+    */
    public static function getTotalWorkHoursForBucket($projectId,$value,$FieldBucket){
     try{
     $query = Yii::$app->mongodb->getCollection('TicketCollection');
@@ -726,7 +761,14 @@ class TicketCollection extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
    }
-   
+   /**
+    * 
+    * @param type $projectId
+    * @param type $bucketId
+    * @return type
+    * @throws ErrorException
+    * @Description Returns the TicketIds of all tickets in a Bucket.
+    */
     public static function checkTicketsinBuckets($projectId,$bucketId){
         try{
             $query = new Query();
@@ -749,6 +791,7 @@ class TicketCollection extends ActiveRecord
      * @param type $FieldName
      * @param type $projectId
      * @return type
+     * @Description Returns the Counts Tickets under a given status
      */
     public static function getTicketsCountByStatus($projectId,$FieldName,$value){
         try{
@@ -771,11 +814,12 @@ class TicketCollection extends ActiveRecord
         }
         
     }
-               /**
+     /**
      * @author Padmaja
      * @param type $FieldName
      * @param type $projectId
      * @return type
+     * @Description Returns Count of all tickets under a Project.
      */
     public static function getAllTicketsCountByProject($projectId){
         try{
@@ -794,7 +838,7 @@ class TicketCollection extends ActiveRecord
     
     /**
      * @author Anand Singh
-     * @use get story list by selected adv. filter options
+     * @Description get story list by selected adv. filter options
      * @param type $requestData
      */
     
@@ -921,6 +965,7 @@ class TicketCollection extends ActiveRecord
      * @param type $requestData
      * @return type
      * @throws ErrorException
+     * @Description Gets Storys Count based on the advanced filter combination.
      */
     
     public static function getStoryListCountByAdvanceFilter($requestData){

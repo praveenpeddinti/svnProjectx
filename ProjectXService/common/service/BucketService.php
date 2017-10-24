@@ -23,7 +23,7 @@ class BucketService {
 
     /**
     * @author Praveen
-    * @description This is to get bucket details in bucket table(mysql
+    * @Description This is to get bucket details in bucket table(mysql
     * @return type 
     * @param type $projectId, $bucketStatus
      */      
@@ -48,7 +48,7 @@ class BucketService {
     
     /**
     * @author Praveen
-    * @description This is to get filtered bucket list in creating buckets 
+    * @Description This is to get filtered bucket list in creating buckets 
     * @return type 
     * @param type $projectId
      */      
@@ -74,7 +74,7 @@ class BucketService {
     
     /**
     * @author Praveen
-    * @description This method is used to check the bucket is existing in the project before saving the bucket details  
+    * @Description This method is used to check the bucket is existing in the project before saving the bucket details  
     * @return type 
     * @param type $bucketData
      */      
@@ -91,7 +91,7 @@ class BucketService {
     }
     /**
     * @author Praveen
-    * @description This is to saving the bucket details 
+    * @Description This is to saving the bucket details 
     * @return type 
     * @param type $bucketData
      */      
@@ -108,7 +108,7 @@ class BucketService {
     
     /**
     * @author Praveen
-    * @description This method is used to check the bucket is existing in the project before updating the bucket details  
+    * @Description This method is used to check the bucket is existing in the project before updating the bucket details  
     * @return type 
     * @param type $bucketData
      */      
@@ -123,7 +123,7 @@ class BucketService {
     }
     /**
     * @author Praveen
-    * @description This is to updating the bucket details 
+    * @Description This is to updating the bucket details 
     * @return type 
     * @param type $bucketData
      */      
@@ -148,7 +148,7 @@ class BucketService {
     }
     /**
     * @author Praveen
-    * @description This is to change the status for bucket 
+    * @Description This is to change the status for bucket 
     * @return type 
     * @param type $projectId,$bucketId,statusType
      */      
@@ -184,7 +184,7 @@ class BucketService {
     
     /**
     * @author Ryan
-    * @description Used for getting Count of Buckets with Types
+    * @Description Used for getting Count of Buckets with Types
     * @return type 
      */  
     public function getBucketsCount($projectId){
@@ -200,7 +200,7 @@ class BucketService {
     
     /**
     * @author Ryan
-    * @description Used for getting Count of Buckets with Types
+    * @Description Used for getting Count of Buckets with Types
     * @return type 
      */  
     public function getBucketsForProject($projectId,$type){
@@ -216,7 +216,7 @@ class BucketService {
     
      /**
     * @author Ryan
-    * @description Used for getting Current Week Buckets with more count
+    * @Description Used for getting Current Week Buckets with more count
     * @return type array
      */  
     public function getCurrentWeekBuckets($projectId){
@@ -238,7 +238,7 @@ class BucketService {
     
      /**
     * @author Ryan
-    * @description Used for getting Count of Buckets with Types
+    * @Description Used for getting Count of Buckets with Types
     * @return type 
      */  
     public function getMoreCountBuckets($projectId,$isData=0){
@@ -266,7 +266,7 @@ class BucketService {
     
      /**
     * @author Ryan
-    * @description Used for checking for Default Bucket
+    * @Description Used for checking for Default Bucket
     * @return type 
      */  
     public function checkDefaultBucket($projectId,$bucketId){

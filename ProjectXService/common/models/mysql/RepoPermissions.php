@@ -10,6 +10,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Query;
 use yii\web\IdentityInterface;
 use yii\base\ErrorException;
 
@@ -26,10 +27,11 @@ class RepoPermissions extends ActiveRecord
         return [
         ];
     }
-     /**
+    /**
      * @author Padmaja
      * @param type $postData
      * @return type
+     * @Description Saves the Permissions for Project Repository for the given list of users.
      */
     public static function savingUserPermissions($projectId,$userData)
     {
@@ -82,29 +84,55 @@ class RepoPermissions extends ActiveRecord
         }
        
    }
-   
+   /**
+    * 
+    * @param type $projectId
+    * @param type $userId
+    * @return type
+    * @throws ErrorException
+    * @Description Returns the Permission that a particular user has.
+    */
    public function getUserPermissions($projectId,$userId){
        try{
-           error_log("getUserPermissions****repo");
-       $query = "select Permissions from RepoPermissions where ProjectId=$projectId and UserId=$userId";
-       error_log("getUserPermissions****qry==".$query);
-       $data = Yii::$app->db->createCommand($query)->queryOne();
-       error_log("getUserPermissions****data==". print_r($data,1));
+//       $query = "select Permissions from RepoPermissions where ProjectId=$projectId and UserId=$userId";
+//       $data = Yii::$app->db->createCommand($query)->queryOne();
+       $query= new Query();
+       $data = $query->select("Permissions")
+                           ->from("RepoPermissions")
+                           ->where("ProjectId=".$projectId)
+                           ->andWhere("UserId=".$userId)
+                           ->one();
        return $data;
        }catch(\Throwable $ex){
            Yii::error("RepoPermissions:getUserPermissions::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
              throw new ErrorException($ex->getMessage());
        }
    }
-   
+   /**
+    * 
+    * @param type $projectId
+    * @param type $userId
+    * @return type
+    * @throws ErrorException
+    * @Description returns the permissions and the flag to check the creation of repository for a given userId and ProjectId
+    */
    public function getRepoPermissionsAndAccess($projectId,$userId){
        try{
-       $query = "select Permissions from RepoPermissions where ProjectId=$projectId and UserId=$userId";
-//       error_log("getUserPermissions****qry==".$query);
-       $permissionsData = Yii::$app->db->createCommand($query)->queryOne();
-       $query = "select IsRepository from Projects where PId=$projectId";
-//       error_log("getUserPermissions****qry==".$query);
-       $repoCreated = Yii::$app->db->createCommand($query)->queryOne();
+//       $query = "select Permissions from RepoPermissions where ProjectId=$projectId and UserId=$userId";
+//       $permissionsData = Yii::$app->db->createCommand($query)->queryOne();
+       $query= new Query();
+       $permissionsData = $query->select("Permissions")
+                           ->from("RepoPermissions")
+                           ->where("ProjectId=".$projectId)
+                           ->andWhere("UserId=".$userId)
+                           ->one();
+//       $query = "select IsRepository from Projects where PId=$projectId";
+//       $repoCreated = Yii::$app->db->createCommand($query)->queryOne();
+       $query= new Query();
+       $repoCreated = $query->select("IsRepository")
+                           ->from("Projects")
+                           ->where("PId=".$projectId)
+                           ->one();
        $returnData = array(
            "Permissions"=>(isset($permissionsData["Permissions"]))?$permissionsData["Permissions"]:"",
            "IsRepository"=>$repoCreated["IsRepository"]

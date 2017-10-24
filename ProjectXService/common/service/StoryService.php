@@ -23,6 +23,7 @@ class StoryService {
      * @param type $ticketId
      * @param type $projectId
      * @return type
+     * @Description Gets Ticket details of given ticket
      */
     public function getTicketDetails($ticket_data) {
         try {
@@ -49,6 +50,7 @@ class StoryService {
      * @param type $ticketId
      * @param type $projectId
      * @return type
+      * @Description Gets Ticket details for Full edit
      */
        public function getTicketEditDetails($ticket_data) {
         try {
@@ -63,7 +65,13 @@ class StoryService {
         }
        
       } 
-
+      /**
+       * 
+       * @param type $projectId
+       * @return type
+       * @throws ErrorException
+       * @Description Gets details of all tickets in a project
+       */
       public function getAllTicketDetails($projectId) {
         try {
 
@@ -93,6 +101,7 @@ class StoryService {
     /**
      * @author Moin Hussain
      * @return type
+     * @Description Gets Story fields for a new ticket
      */
     public function getNewTicketStoryFields() {
         try {
@@ -106,6 +115,7 @@ class StoryService {
         /**
          * @author Anand Singh
          * @return type
+         * @Description Gets Priority List
          */
         public function getPriorityList() {
             try {
@@ -119,6 +129,7 @@ class StoryService {
     /**
      * @author Anand Singh
      * @return type
+     * @Description Gets Plan Levels
      */
     public  function getPlanLevelList() {
         try {
@@ -132,6 +143,7 @@ class StoryService {
     /**
      * @author Anand Singh
      * @return type
+     * @Description Gets Ticket Types
      */
     public  function getTicketTypeList() {
         try {
@@ -144,7 +156,8 @@ class StoryService {
     /**
      * @author Moin Hussain
      * @return type
-     * @modification -ANAND - Now thsi method has argument $workflowType,$workflowId
+     * @UpdatedBy Anand
+     * @Description Now thsi method has argument $workflowType,$workflowId and gets story work flow list
      */
     public function getStoryWorkFlowList($workflowType,$workflowId){
         try{
@@ -157,6 +170,7 @@ class StoryService {
     /**
      * @author Moin Hussain
      * @return type
+     * @Description Gets list of all buckets in a project
      */
       public function getBucketsList($projectId){
         try{
@@ -170,6 +184,7 @@ class StoryService {
  * @author Moin Hussain
  * @param type $ticket_data
  * @updated $parentTicNumber by suryaprakash
+ * @Description Saves ticket details
  */
        public function saveTicketDetails($ticket_data,$parentTicNumber="") {
         try {
@@ -331,6 +346,7 @@ class StoryService {
      /**
      * @author Praveen P
      * @return type
+      * @Description Gets details of all stories in a project
      */
     public function getAllStoryDetails($StoryData, $projectId) {
         try {
@@ -358,7 +374,7 @@ class StoryService {
     
     /**
      * @author Praveen P
-     * getting total count.
+     * @Description getting total count of tickets for a user.
      * @return type  $projectId
      */
     public function getMyTicketsCount($userId,$projectId) {
@@ -371,7 +387,8 @@ class StoryService {
             throw new ErrorException($ex->getMessage());
         }
     }
-       public function getAllStoriesCount($StoryData,$projectId) {
+    
+    public function getAllStoriesCount($StoryData,$projectId) {
         try {
             $totalCount = TicketCollection::getAllStoriesCount($StoryData,$projectId);
             
@@ -384,7 +401,7 @@ class StoryService {
             
     /**
      * @author Praveen P
-     * @description This method is used to getting subtask Ids for the particular story.
+     * @Description This method is used to getting subtask Ids for the particular story.
      * @return type subtasks Ids
      */
     public function getSubTaskIds($StoryData, $projectId) {
@@ -399,7 +416,7 @@ class StoryService {
     
     /**
      * @author Praveen P
-     * @description This method is used to getting subtask details for the particular story.
+     * @Description This method is used to getting subtask details for the particular story.
      * @return type subtasks
      */
     public function getSubTaskDetails($subTaskIds, $projectId,$timezone) {
@@ -420,6 +437,7 @@ class StoryService {
     /**
          * @author Anand Singh
          * @return type
+     * @Description Gets list of all ticket for logged in user.
          */
         public function getMyTickets() {
             try {
@@ -436,6 +454,7 @@ class StoryService {
         /**
  * @author Moin Hussain
  * @param type $ticket_data
+         * @Description Updates ticket details on full edit
  */
        public function updateTicketDetails($ticket_data) {
         try {
@@ -706,9 +725,11 @@ class StoryService {
         }
        
       }
-    /*@modified by Moin Hussain
+    /**
+     * @modified by Moin Hussain
     * @author Padmaja
     * @param type $ticket_data
+     * @Description Updates an story field on inline edit
      */
     public function updateStoryFieldInline($ticket_data){
            try{
@@ -1019,7 +1040,12 @@ class StoryService {
         }
 
     }
-    
+    /**
+     * 
+     * @param type $commentData
+     * @throws ErrorException
+     * @Description Deletes a Comment made on a ticket
+     */
     public function removeComment($commentData){
         try {
             $res = TicketComments::removeComment($commentData);
@@ -1033,7 +1059,13 @@ class StoryService {
         } 
      
     }
-  
+    /**
+     * 
+     * @param type $commentData
+     * @return type
+     * @throws ErrorException
+     * @Description Saves a comment made on a ticket
+     */
     public function saveComment($commentData){
         try{
             $slug="";
@@ -1119,6 +1151,7 @@ class StoryService {
   * @param type $loggedInUser
   * @param type $fieldName
   * @param type $defaultFollower
+        * @Description add the user to follower list of a ticket
   */
      public function followTicket($collaboratorId,$ticketId,$projectId,$loggedInUser,$fieldName,$defaultFollower=FALSE,$from=""){
         
@@ -1152,6 +1185,7 @@ class StoryService {
     * @param type $collaboratorId
     * @param type $ticketId
     * @param type $projectId
+     * @Description Unfollow a user from a ticket
     */
     public function unfollowTicket($collaboratorId,$ticketId,$projectId,$fieldType = "",$is_default=1){
         try {
@@ -1180,6 +1214,7 @@ class StoryService {
      * @param type $pageLength
      * @param type $projectId
      * @return array
+     * @Description Gets all ticket of a user based on Page nation
      */
      public function getAllMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId,$timezone) {
         try {
@@ -1201,6 +1236,7 @@ class StoryService {
  * @author Moin Hussain
  * @param type $ticketId
  * @param type $projectId
+ * @Description gets activity done in a ticket
  */
     public function getTicketActivity($ticket_data){
         try{
@@ -1228,6 +1264,7 @@ class StoryService {
      * @author Suryaprakash
      * @param type $parentTicNumber
      * @param type $childTicketIds
+     * @Description Updates parent ticket details.
      * @return empty
      */
     public function updateParentTicketTaskField($projectId,$parentTicNumber, $childTicketObjArray) {
@@ -1245,6 +1282,7 @@ class StoryService {
      * @param type $ticketId
      * @param type $projectId
      * @return empty
+     * @Description Gets followers of a ticket
      */
     public function getTicketFollowers($ticketId,$projectId)
     {
@@ -1266,6 +1304,7 @@ class StoryService {
      * @author Ryan
      * @param type $follower
      * @return empty
+     * @Description Gets details of follower
      */
     public function getFollower($follower)
     {
@@ -1277,12 +1316,12 @@ class StoryService {
             throw new ErrorException($ex->getMessage());
         } 
     }    
-        /*
+        /**
      * @author Padmaja
-     * @description This method is used to save child task details.
+     * @Description This method is used to save child task details.
     * @return type 
-         * Modified by Anand 
-         * Modification Update Task object before saving to the collection baesd on task type.
+    * @ModifiedBy Anand 
+    * @Modification Update Task object before saving to the collection baesd on task type.
      */
     public function createChildTask($postData)
             {
@@ -1420,6 +1459,7 @@ class StoryService {
      * @author Padmaaja 
      * @return array
      * @updated by suryaprakash
+        * @Description Gets all story details based on the search string
      */
     public function getAllStoryDetailsForSearch($projectId, $ticketId, $sortvalue, $searchString) {
         try {
@@ -1453,6 +1493,7 @@ class StoryService {
       /**
      * @author suryaprakash reddy 
      * @return array
+       * @Description Updates the data changes in a related task
      */
     public function updateRelatedTaskId($projectId,$ticketId,$searchTicketId,$loginUserId=''){
         try{
@@ -1466,7 +1507,7 @@ class StoryService {
     
       /**
      * @author suryaprakash reddy 
-     * @description This method is used to insertTimelog
+     * @Description This method is used to insertTimelog
      * @return type array
      */
     public function insertTimeLog($timelog_data) {
@@ -1506,7 +1547,7 @@ class StoryService {
 
     /**
      * @author suryaprakash reddy 
-     * @description This method is used to getTimeLog
+     * @Description This method is used to getTimeLog
      * @return type array
      */
     public function getTimeLog($projectId, $parentTicketId) {
@@ -1539,6 +1580,7 @@ class StoryService {
      /**
      * @author Jagadish 
      * @return type array
+      * @Description Gets artifacts in a ticket
      */
     public function getTicketAttachments($ticketId,$projectId){
         try {
@@ -1553,6 +1595,7 @@ class StoryService {
     /**
      * @author suryaprakash reddy 
      * @return type array
+     * @Description gets all the stories related to a ticket.
      */
     public function getAllRelateStory($projectId, $ticketId) {
         try {
@@ -1574,6 +1617,7 @@ class StoryService {
     /**
      * @author suryaprakash reddy 
      * @return type array
+     * @Description Unrelates a task from parent story
      */
     public function unRelateTask($projectId, $parentTicketId, $unRelateTicketId,$loginUserId='',$timezone) {
         try {
@@ -1588,7 +1632,7 @@ class StoryService {
     }
      /**
      * @author Padmaja
-      * @description updatung follower list for subTask
+      * @Description updatung follower list for subTask
      * @return type 
      */
        public function updateFollowersForSubTask($ticketId,$projectId,$followerArray){
@@ -1604,7 +1648,7 @@ class StoryService {
     }
   /**
    * @author Anand
-   * @description Get default task types Ex:- UI,QA,Peer
+   * @Description Get default task types Ex:- UI,QA,Peer
    * @return type
    */
     public function getTaskTypes(){
@@ -1619,7 +1663,7 @@ class StoryService {
     
     /**
      * @author Anand 
-     * @description This method is responsible to update ticket status and send the notification to appropriate user.
+     * @Description This method is responsible to update ticket status and send the notification to appropriate user.
      * @param type $oldTicketObj
      * @param type $newWorkflowId
      * @return boolean
@@ -1770,7 +1814,7 @@ class StoryService {
     
     /**
      * @author Anand
-     * @uses Get all active filter options
+     * @Description Get all active filter options
      * @return type
      */
     
@@ -1785,7 +1829,15 @@ class StoryService {
     }
     
    
-    
+    /**
+     * 
+     * @param type $oldTicketObj
+     * @param type $type
+     * @param type $projectId
+     * @return type
+     * @throws ErrorException
+     * @Description Returns the data of a user to who ticket is assigned
+     */
     
     public function getAssignedToUser($oldTicketObj,$type,$projectId)
     {
@@ -1809,6 +1861,7 @@ class StoryService {
     /**
      * @author Anand
      * @param type $projectName
+     * @Description gets project details by project name
      */
     
     public function getProjectDetailsByName($projectName){
@@ -1827,6 +1880,7 @@ class StoryService {
     /**
      * @author Praveen P
      * @return type
+     * @Description gets Story details
      */
     public function getAllStoryDetailsNew($draw,$offset, $projectId) {
         try {error_log("-----service----");
@@ -1860,7 +1914,7 @@ class StoryService {
     }
      /**
      * @author Padmaja
-     * @description This method is used to get all project details for dashboard
+     * @Description This method is used to get all project details for dashboard
      * @return type
       * 
       * $userId,$page,$pageLength,$projectFlag,$activityPage,$projectId,$activityDropdownFlag
@@ -1876,7 +1930,7 @@ class StoryService {
     }
      /**
      * @author Ryan
-     * @uses Saves User Preferences in Story Creation
+     * @Description Saves User Preferences in Story Creation
      * @return type
      */
     public function saveUserPreferences($userid,$tasks)
@@ -1892,7 +1946,7 @@ class StoryService {
     
     /**
      * @author Ryan
-     * @uses Gets User Preferences 
+     * @Description Gets User Preferences 
      * @return type
      */
     public function getUserPreferences($userid)
@@ -1914,6 +1968,7 @@ class StoryService {
      * @param type $projectId
      * @param type $timeZone
      * @return type
+     * @Description Gets ticket detaild after updating
      */
     
     public function getUpdatedTicketDetails($ticketId,$projectId,$timeZone){
@@ -1928,6 +1983,12 @@ class StoryService {
         } 
        
     }
+    /**
+     * 
+     * @return type
+     * @throws ErrorException
+     * @Description gets list of states based on filter
+     */
     public function getStateListFilters(){
         try{
             $stateFilters=WorkFlowFields::getBucketsListFilters();
@@ -1940,7 +2001,7 @@ class StoryService {
     
     /**
      * @author Anand
-     * @uses Get  advance filter options
+     * @Description Get  advance filter options
      * @return type
      */
     
@@ -1957,7 +2018,7 @@ class StoryService {
     
     /**
      * @author Anand
-     * @uses Get  getWorkflowFields options
+     * @Description Get  getWorkflowFields options
      * @return type
      */
      public function getWorkflowFields(){
@@ -1972,7 +2033,7 @@ class StoryService {
     
      /**
      * @author Anand
-     * @uses Get  data based on adv. filter selection
+     * @Description Get  data based on adv. filter selection
      * @return type
      */
     public function applyAdvanceFilter($StoryData){
@@ -2007,6 +2068,7 @@ class StoryService {
      * @param type $StoryData
      * @return type
      * @throws ErrorException
+     * @Description Gets count of the data returned on given filter
      */
       public function advanceFilterDataCount($StoryData){
         
@@ -2024,6 +2086,7 @@ class StoryService {
      * @param type $filterData
      * @return type
      * @throws ErrorException
+     * @Description Deletes a filter
      */
     
       public function deleteAdvanceFilter($filterData){

@@ -40,7 +40,13 @@ class TicketComments extends ActiveRecord
         return [
         ];
     }
-    
+    /**
+     * 
+     * @param type $ticketNumber
+     * @param type $projectId
+     * @throws ErrorException
+     * @Description Creates an Empty Comments Record on creating a ticket.
+     */
     public static function createCommentsRecord($ticketNumber,$projectId){
         try{
             $tktCommentsColl = new TicketComments();
@@ -64,7 +70,14 @@ class TicketComments extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $ticketId
+     * @param type $projectId
+     * @return type
+     * @throws ErrorException
+     * @Description Retruns the Comments under a given ticket.
+     */
     public static function getTicketComments($ticketId,$projectId){
          try{
           $query = new Query();
@@ -79,7 +92,14 @@ class TicketComments extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $ticketNumber
+     * @param type $projectId
+     * @param type $newCommentArray
+     * @throws ErrorException
+     * @Description Saves the Comments made on a ticket.
+     */
     public static function saveComment($ticketNumber,$projectId,$newCommentArray=array()){
         try{
             if(!empty($newCommentArray)){
@@ -103,6 +123,7 @@ class TicketComments extends ActiveRecord
      * @param type $ticketId
      * @param type $projectId
      * @return type
+     * @Description Gets Activity done on a ticket.
      */
        public static function getTicketActivity($ticketId, $projectId){
         try{
@@ -117,7 +138,13 @@ class TicketComments extends ActiveRecord
             throw new ErrorException($ex->getMessage());
         }
     }
-    
+    /**
+     * 
+     * @param type $commentData
+     * @return type
+     * @throws ErrorException
+     * @Description Deletes a Comment.
+     */
     public static function removeComment($commentData){
         try{
         $collection = Yii::$app->mongodb->getCollection('TicketComments');

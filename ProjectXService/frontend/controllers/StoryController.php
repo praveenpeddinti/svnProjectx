@@ -57,7 +57,7 @@ class StoryController extends Controller
     }
    /**
     * @author Moin Hussain
-    * @description This method to get a ticket details.
+    * @Description This method to get a ticket details.
     * @return type
     */
     public function actionGetTicketDetails(){
@@ -92,7 +92,7 @@ class StoryController extends Controller
 
     /**
     * @author Praveen P
-    * @description This method is used to get all data for stories/tasks.
+    * @Description This method is used to get all data for stories/tasks.
     * @return type
     */
    public function actionGetAllStoryDetails() {
@@ -122,7 +122,7 @@ class StoryController extends Controller
 
     /**
     * @author Praveen P
-    * @description This method is used to getting subtask details for the particular story.
+    * @Description This method is used to getting subtask details for the particular story.
     * @return type subtasks
     */
    public function actionGetSubTaskDetails() {
@@ -154,7 +154,7 @@ class StoryController extends Controller
     }
     /**
     * @author Moin Hussain
-    * @description This method is used to get data for edit mode.
+    * @Description This method is used to get data for edit mode.
     * @return type
     */
     public function actionEditTicket(){
@@ -193,7 +193,8 @@ class StoryController extends Controller
    /**
     * @author Moin Hussain
     * @return string
-    * @updated suryaprakash for defualt child ticket insertions
+    * @updated suryaprakash 
+    * @Description defualt child ticket insertions
     */
     public function actionSaveTicketDetails() {
         try {
@@ -238,7 +239,7 @@ class StoryController extends Controller
     }
 
     /**
-     * @description This method to get a template for story creation
+     * @Description This method to get a template for story creation
      * @modified Moin Hussain
      * @author Anand Singh
      * @return mixed
@@ -305,7 +306,7 @@ class StoryController extends Controller
 
  /**
     * @author Moin Hussain
-    * @description This method to get a ticket details.
+    * @Description This method to get a ticket details.
     * @return type
     */
     public function actionGetMyTickets(){
@@ -327,9 +328,9 @@ class StoryController extends Controller
              return $response;
         }
     }
-    /*
+    /**
     * @author Padmaja
-    * @description This method to get Project details by FieldId.
+    * @Description This method to get Project details by FieldId.
     * @return type Json
     */
 
@@ -441,9 +442,9 @@ class StoryController extends Controller
         }
     }
     
-    /*
+    /**
      * @author Padmaja
-     * @description This method to update the story feilds.
+     * @Description This method to update the story feilds.
     * @return type Json
      */
     public function actionUpdateStoryFieldInline(){
@@ -482,7 +483,7 @@ class StoryController extends Controller
     
     /**
     * @author Moin Hussain
-    * @description This method is used to get all data for stories/tasks.
+    * @Description This method is used to get all data for stories/tasks.
     * @return type
     */
    public function actionGetMyTicketsDetails() {
@@ -522,9 +523,9 @@ class StoryController extends Controller
        
      
     
-    /*
+    /**
      * @author Ryan
-     * @description This method is used to get all the collaborators.
+     * @Description This method is used to get all the collaborators.
     * @return type Json
      */
     public function actionGetCollaborators()
@@ -553,9 +554,9 @@ class StoryController extends Controller
 
 
     
-    /*
+    /**
     * @author Praveen P
-    * @description This method to get Follower list.
+    * @Description This method to get Follower list.
     * @return type Json
     */
     public function actionGetCollaboratorsForFollow() {
@@ -582,7 +583,11 @@ class StoryController extends Controller
         }
     }
 
-
+/**
+ * 
+ * @return type
+ * @Description Saves a Comment made on ticket
+ */
    public function actionSubmitComment(){
        
        try {
@@ -610,7 +615,11 @@ class StoryController extends Controller
         }
        
    }
-   
+   /**
+    * 
+    * @return type
+    * @Description Deletes comment made on ticket
+    */
    public function actionDeleteComment(){
        
        try {
@@ -637,6 +646,7 @@ class StoryController extends Controller
     /**
      * @author Moin Hussain
      * @return type
+     * @Description gets ticket activity
      */
     public function actionGetTicketActivity(){
         try{
@@ -659,9 +669,9 @@ class StoryController extends Controller
         }
     }
 
-    /*
+    /**
     * @author Praveen P
-    * @description This method to add and remove followers in Story Details.
+    * @Description This method to add and remove followers in Story Details.
     * @return type Json
     */
    public function actionFollowTicket() {
@@ -701,7 +711,11 @@ class StoryController extends Controller
              return $response;
         }
     }
-
+/**
+ * 
+ * @return type
+ * @Description Unfollow a ticket
+ */
     public function actionUnfollowTicket() {
         try {
             $post_data = json_decode(file_get_contents("php://input"));
@@ -730,9 +744,9 @@ class StoryController extends Controller
         }
     }
     
-    /*
+    /**
      * @author Padmaja
-     * @description This method is used to save child task details.
+     * @Description This method is used to save child task details.
     * @return type Json
      */
     public function actionCreateChildTask(){
@@ -770,7 +784,7 @@ class StoryController extends Controller
       /**
     * @author Padmaja 
     * @updated  suryaprakash 
-    * @description This method is used to get all data for stories/tasks.
+    * @Description This method is used to get all data for stories/tasks.
     * @return type
     */
    public function actionGetAllTicketDetailsForSearch() {
@@ -801,7 +815,7 @@ class StoryController extends Controller
     }
       /**
     * @author  suryaprakash 
-    * @description This method is used to get all data for stories/tasks.
+    * @Description This method is used to get all data for stories/tasks.
     * @return type
     */
     public function actionUpdateRelatedTasks(){
@@ -842,7 +856,7 @@ class StoryController extends Controller
     
       /**
      * @author suryaprakash reddy 
-     * @description This method is used to insertTimelog
+     * @Description This method is used to insertTimelog
      * @return type array
      */
     public function actionInsertTimeLog() {
@@ -874,7 +888,7 @@ class StoryController extends Controller
 
     /**
      * @author suryaprakash reddy 
-     * @description This method is used to getworklog
+     * @Description This method is used to getworklog
      * @return type array
      */
     public function actionGetWorkLog() {
@@ -902,7 +916,7 @@ class StoryController extends Controller
     
             /**
      * @author Jagadish
-     * @description This method is used to get all attachments for stories/tasks.
+     * @Description This method is used to get all attachments for stories/tasks.
      * @return Attachmets
      */
     public function actionGetMyTicketAttachments() {
@@ -954,7 +968,7 @@ class StoryController extends Controller
     
       /**
      * @author suryaprakash reddy
-     * @description unrelate ticket from Parent story
+     * @Description unrelate ticket from Parent story
      * @return relatedTicketsInfo
      */
     public function actionUnRelateTask() {
@@ -994,7 +1008,7 @@ class StoryController extends Controller
     }
        /**
      * @author suryaprakash reddy
-     * @description getall related tasks for Parent
+     * @Description getall related tasks for Parent
      * @return relatedTicketsInfo
      */
     public function actionGetAllRelatedTasks() {
@@ -1023,7 +1037,7 @@ class StoryController extends Controller
    
     /**
      * @author Anand
-     * @uses Get all Filter Options
+     * @Description Get all Filter Options
      * @return type
      */
     
@@ -1067,7 +1081,7 @@ class StoryController extends Controller
     
     /**
      * @author Ryan
-     * @uses Deleting Specific Notification
+     * @Description Deleting Specific Notification
      * @return type
      */
     public function actionReadNotification()
@@ -1117,7 +1131,7 @@ class StoryController extends Controller
     
      /**
      * @author Ryan
-     * @uses Deleting all Notifications
+     * @Description Deleting all Notifications
      * @return type
      */
     public function actionReadNotifications()
@@ -1192,7 +1206,7 @@ class StoryController extends Controller
 //    Ticket #91
     /**
      * @author Kavya
-     * @uses Upload functionality
+     * @Description Upload functionality
      * @return type
      */
     
@@ -1238,7 +1252,7 @@ class StoryController extends Controller
   
     /**
      * @author Anand
-     * @uses Get project details by project name.
+     * @Description Get project details by project name.
      * @return type
      */
       public function actionGetProjectDetails(){
@@ -1268,9 +1282,9 @@ class StoryController extends Controller
         }
     }
     
-    /*
+    /**
     * @author Praveen P
-    * @description This method is to used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list.
+    * @Description This method is to used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list.
     * @return type Json
     */
     public function actionGetTicketFollowersList() {
@@ -1296,12 +1310,17 @@ class StoryController extends Controller
         }
     }
     
-
+    /**
+     * 
+     * @return type
+     * @Description Dummy action for testing
+     */
     public function actionTestCheck(){
        $responseBean = new ResponseBean();
             $responseBean->statusCode = ResponseBean::SUCCESS;
             $responseBean->message = ResponseBean::SUCCESS_MESSAGE;
             $responseBean->data = "hi";
+            \common\components\CommonUtilityTwo::prepareBucketStoryActivities();
             $response = CommonUtility::prepareResponse($responseBean, "json");
             return $response;
     }
@@ -1310,7 +1329,7 @@ class StoryController extends Controller
     
     /**
      * @author Anand
-     * @uses Get updated ticket data
+     * @Description Get updated ticket data
      * @return type
      */
     
@@ -1341,7 +1360,7 @@ class StoryController extends Controller
 
     /**
      * @author  Anand Singh
-     * @uses    Get all advanced filter options
+     * @Description    Get all advanced filter options
      * @return type
      */
     
@@ -1386,7 +1405,7 @@ class StoryController extends Controller
     
     /**
      * @author Anand
-     * @uses Apply advance filter based on filter option selected
+     * @Description Apply advance filter based on filter option selected
      */
     
     public function actionApplyAdvanceFilter(){
@@ -1421,6 +1440,7 @@ class StoryController extends Controller
     /**
      * @author Anand Singh 
      * @return type
+     * @Description Delets advanced filter
      */
     
      public function actionDeleteAdvanceFilter(){

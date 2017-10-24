@@ -66,7 +66,7 @@ class BucketController extends Controller
     
     /**
     * @author Praveen P
-    * @description This method is used to get all data for Buckets details.
+    * @Description This method is used to get all data for Buckets details.
     * @return type
     */
    public function actionGetAllBucketDetails() {
@@ -92,7 +92,7 @@ class BucketController extends Controller
     
     /**
      * @author Praveen
-     * @uses Get collaborators role as Admin for current project
+     * @Description Get collaborators role as Admin for current project
      * @return type
      */
     public function actionGetResponsibleCollaborators(){
@@ -118,7 +118,7 @@ class BucketController extends Controller
     
     /**
      * @author Praveen
-     * @uses Get buckets for current project
+     * @Description Get buckets for current project
      * @return type
      */
     public function actionGetBucketFilters(){
@@ -145,7 +145,7 @@ class BucketController extends Controller
     
     /**
      * @author Praveen
-     * @uses Saving the bucket
+     * @Description Saving the bucket
      * @return type
      */
     public function actionSaveBucketDetails(){
@@ -194,7 +194,7 @@ class BucketController extends Controller
     
     /**
      * @author Praveen
-     * @uses Updating the bucket
+     * @Description Updating the bucket
      * @return type
      */
     public function actionUpdateBucketDetails(){
@@ -246,7 +246,7 @@ class BucketController extends Controller
     
     /**
      * @author Praveen
-     * @uses Get bucket change status
+     * @Description Get bucket change status
      * @return type
      */
     public function actionGetBucketChangeStatus(){
@@ -288,7 +288,7 @@ class BucketController extends Controller
     
     /**
      * @author Ryan
-     * @uses gets total bucket counts
+     * @Description gets total bucket counts
      * @return type
      */
     public function actionGetTotalBucketStats(){
@@ -314,7 +314,7 @@ class BucketController extends Controller
     
     /**
      * @author Ryan
-     * @uses gets total bucket counts
+     * @Description gets total bucket counts
      * @return type
      */
     public function actionGetBuckets(){
@@ -337,7 +337,11 @@ class BucketController extends Controller
              return $response;
         } 
     }
-    
+    /**
+     * 
+     * @return type
+     * @Description gets current week buckets
+     */
     public function actionGetCurrentWeekBuckets(){
         try{
             $postData = json_decode(file_get_contents("php://input"));
@@ -360,7 +364,11 @@ class BucketController extends Controller
              return $response;
         } 
     }
-  
+    /**
+     * 
+     * @return type
+     * @Description Used for verfying Bucket name to avoid duplicates
+     */
     public function actionCheckBucketName(){
         $postData = json_decode(file_get_contents("php://input"));
         $availablity=ServiceFactory::getBucketServiceInstance()->checkBucketName($postData->bucketName,$postData->projectId);
@@ -377,7 +385,11 @@ class BucketController extends Controller
             $response = CommonUtility::prepareResponse($responseBean,"json");
       return $response;
     }
-    
+    /**
+     * 
+     * @return type
+     * @Description Gets buckets which are not in Current status
+     */
     public function actionGetOtherBuckets(){
         try{
         $postData = json_decode(file_get_contents("php://input"));
