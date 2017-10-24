@@ -80,8 +80,6 @@ class StoryService {
             $ticketDetails["ReportedBy"] = $reportedByDetails;
             $ticketDetails["Bucket"] = $bucketName;
             $ticketDetails["TicketType"] = $ticketTypeDetails;
-            //error_log(print_r($priorityDetails)."-----".print_r($projectDetails)."--".print_r($workFlowDetails)."--".print_r($tinyUserDetails));
-            // error_log(print_r($ticketDetails));
             return $ticketDetails;
 
          $details =  CommonUtility::prepareTicketDetails($ticketId, $projectId);
@@ -180,7 +178,6 @@ class StoryService {
              $projectId =  $ticket_data->projectId;
              $userId = $userdata->Id;
              $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
-            // error_log(print_r($collaboratorData,1));
               $ticket_data = $ticket_data->data;
               $dataArray = array();
               $fieldsArray = array();
@@ -213,9 +210,6 @@ class StoryService {
                          $fieldBean->value= (int)$collaboratorData["Id"]; 
                          $fieldBean->value_name= $collaboratorData["UserName"]; 
                          }
-//                     else if($fieldName == "tickettype"){
-//                         $fieldBean->value= (int)1; 
-//                     }
                      else if($fieldName == "tickettype"){
                             $fieldBean->value= (int)1; 
                             $tickettypeDetail = TicketType::getTicketType($fieldBean->value);
@@ -280,7 +274,6 @@ class StoryService {
                           
                      }
                      $dataArray[$fieldName]= $fieldBean;
-                      //array_push($dataArray, $fieldBean);
                   }
 
            $ticketModel = new TicketCollection();  
@@ -319,7 +312,6 @@ class StoryService {
                           
                 if(!empty($refinedData['UsersList']))
                 {
-                    //error_log("===in if mail sending.....==");
                     $newticket_data->ticketId = $ticketNumber;
                     self::saveNotificationsToMentionOnly($newticket_data,$refinedData['UsersList'],'mention');
 
@@ -346,28 +338,15 @@ class StoryService {
             $ticketDetails = TicketCollection::getAllTicketDetails($StoryData, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array();
             $fieldsOrderArray = [5,6,7,3,10];
-           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             $fitlerOption=null;
               if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
-                   //error_log("fitler-------ss----".$StoryData->filterOption);
                    $fitlerOption=$StoryData->filterOption;
               }
           
             foreach ($ticketDetails as $ticket) {
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
                 array_push($finalData, $details);
-                 /*$tasks = $ticket["Tasks"];
-                 error_log("Task Id---".print_r($tasks,1));
-               
-              
-               foreach ($tasks as $task) {
-               error_log("Task Id--1-".$task["TaskId"]);
-                  $task = TicketCollection::getTicketDetails($task["TaskId"],$projectId,$select=['TicketId', 'Title','Fields','ProjectId','ParentStoryId','Tasks']);
-                  if(is_array($task)){ error_log("Task Id--2-".$task["TicketId"]);
-                  $details = CommonUtility::prepareDashboardDetails($task, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
-                array_push($finalData, $details);  
-               }
-               }*/ 
+                
                } 
             
             return $finalData;
@@ -447,7 +426,6 @@ class StoryService {
                $this->sampleMethod();
                $priorityModel = new TicketCollection();
            return $priorityModel->getMyAssignedTickets();
-          //return $priorityModel->updateTicketField();
             } catch (\Throwable $ex) {
             Yii::error("StoryService:getMyTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -668,7 +646,6 @@ class StoryService {
                              
                          }
                         
-                       // error_log($fieldName."----------activtiyr reuls---------------");
                         $slug =  new \MongoDB\BSON\ObjectID();
                         $reportdata=array();
                         if($fieldDetails["Field_Name"] == "workflow"){
@@ -794,7 +771,6 @@ class StoryService {
                                 {
                                     error_log("===in if mail sending.....==");
                                    self::saveNotificationsToMentionOnly($ticket_data,$refinedData['UsersList'],'mention');
-                                  //  CommonUtility::sendMail($ticket_data->userInfo->username, $refinedData['UsersList'],$ticketDetails);
                                     
                                 }
                             } catch (Exception $ex) {
@@ -815,7 +791,6 @@ class StoryService {
                             $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$ticket_data->value);
                             $valueName = $collaboratorData["UserName"]; 
                             $this->followTicket($ticket_data->value,$ticket_data->ticketId,$ticket_data->projectId,$loggedInUser,$fieldDetails["Field_Name"],true);
-                           //  $this->saveNotifications($ticket_data,$fieldDetails["Field_Name"],$ticket_data->value);
                              if((int)$oldvalue != (int)$ticket_data->value)
                                  array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
                                 
@@ -914,15 +889,6 @@ class StoryService {
                                  array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->value));
                              
                                 } 
-//                              else if($fieldDetails["Field_Name"] == "estimatedpoints"){
-//                                if($childticketDetails['IsChild']==0){
-//                                    $ticketId= $ticket_data->ticketId;
-//                                  }else{
-//                                      $ticketId= $childticketDetails['ParentStoryId'];
-//                                  }
-//                                  $updatedEstimatedPts=(int)$ticket_data->value-(int)$childticketDetails['Fields']['estimatedpoints']['value'];
-//                                  TicketCollection::updateTotalEstimatedPoints($ticket_data->projectId,$ticketId,$updatedEstimatedPts);
-//                                  }
                          $leftsideFieldVal = (int)$ticket_data->value;  
                     }else{
                          error_log("updateStoryFieldInline---8");
@@ -938,7 +904,6 @@ class StoryService {
                                     array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>$oldDueDate,"NewValue"=>$ticket_data->value));
                              
                                 }else{
-                                //error_log("===Field Name==".$leftsideFieldVal);
                                     $leftsideFieldVal = $ticket_data->value; 
                                      if(trim($oldvalue) != trim($ticket_data->value))
                                  array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>$oldvalue,"NewValue"=>$ticket_data->value));
@@ -948,7 +913,6 @@ class StoryService {
                         }else{
                              error_log("updateStoryFieldInline---10");
                             $leftsideFieldVal = $ticket_data->value;
-                            //error_log("===Ticket Data Value==".$leftsideFieldVal);
                                 if($fieldDetails["Type"] == 6 ){
                                     $this->unfollowTicket($ticket_data->value,$ticket_data->ticketId,$ticket_data->projectId,$fieldDetails["Field_Name"]);
                                     if($childticketDetails['IsChild'] == 0){
@@ -1040,9 +1004,7 @@ class StoryService {
                 }else{
                     $ticketId= $childticketDetails['ParentStoryId'];
                 }
-            // if($updateStaus==1){
                 $returnValue=$selectedValue;
-           // }
                  error_log("updateStoryFieldInline---16");
                  if($ticket_data->editedId == "title"){
                       $returnValue = htmlspecialchars_decode($returnValue);
@@ -1221,11 +1183,9 @@ class StoryService {
      */
      public function getAllMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId,$timezone) {
         try {
-           // $ticketModel = new TicketCollection();
             $ticketDetails = TicketCollection::getMyTickets($userId,$sortorder,$sortvalue,$offset,$pageLength,$projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array();
             $fieldsOrderArray = [5,6,7,3,9,10];
-           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             foreach ($ticketDetails as $ticket) {
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray);
                 unset($details['project_name']);
@@ -1333,7 +1293,6 @@ class StoryService {
             $ticketCollectionModel = new TicketCollection();
            $loggedInUserId =  $postData->userInfo->Id;
            $ticketDetails = $ticketCollectionModel->getTicketDetails($postData->ticketId, $postData->projectId);
-             // $ticketDetails = $ticketCollectionModel->getTicketDetails1($postData->TicketId, $postData->projectId);
            $bucket=$ticketDetails["Fields"]["bucket"]["Id"]; 
            $storyField = new StoryFields();
             $standardFields = $storyField->getStoryFieldList();
@@ -1436,7 +1395,6 @@ class StoryService {
                $selectFields = [];
                $selectFields = ['Title', 'TicketId','Fields.priority','Fields.assignedto','Fields.assignedto','Fields.workflow'];
                $subTicketDetails = $ticketCollectionModel->getTicketDetails($ticketNumber,$postData->projectId,$selectFields);
-               //$returnStatus=$subTicketDetails;
                /* Notifications */
                $activityOn="ChildTask";
                $notify_type ='created';
@@ -1447,7 +1405,6 @@ class StoryService {
                /* end Notifications */
                
                //Padmaja-refreeing id is saving wrongly
-//               EventTrait::saveEvent($postData->projectId,"Ticket",$postData->projectId,"created",'create',$loggedInUserId,array("ActionOn"=>  strtolower("childtask"),"OldValue"=>0,"NewValue"=>(int)$ticketNumber),array("BucketId"=>(int)$bucket));
                EventTrait::saveEvent($postData->projectId,"Ticket",$postData->ticketId,"created",'create',$loggedInUserId,[array("ActionOn"=>  strtolower("childtask"),"OldValue"=>0,"NewValue"=>(int)$ticketNumber)],array("BucketId"=>(int)$bucket));
             }
              return $returnStatus;
@@ -1561,7 +1518,6 @@ class StoryService {
                 foreach ($ticketDetails["Tasks"] as $task){
                    array_push($taskArray, (int) $task["TaskId"]); 
                 }
-             //   $taskArray = $ticketDetails["Tasks"];
                 array_push($taskArray, (int) $parentTicketId);
             }
             $ticketTimeLog = TicketTimeLog::getTimeLogRecords($projectId, $taskArray);
@@ -1600,7 +1556,6 @@ class StoryService {
      */
     public function getAllRelateStory($projectId, $ticketId) {
         try {
-            // $ticketModel = new TicketCollection();
              $ParentTicketInfo = TicketCollection::getTicketDetails($ticketId,$projectId,array("TicketId","RelatedStories") );
             $finalData = array();
             $ticketArray = $ParentTicketInfo["RelatedStories"];
@@ -1688,7 +1643,6 @@ class StoryService {
                         error_log("updateWorkflowAndSendNotification-----------------2");
                         $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
                         foreach ($oldTicketObj['Tasks'] as $task) {
-                            //  error_log("Task type------------".$task['TaskType']);
                             $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
                             $task_array=array('ticketId'=>$taskDetails['TicketId'],'projectId'=>$projectId,'userInfo'=>array('Id'=>$loggedInUser));
                             $ticket_data=json_decode(json_encode($task_array,1));
@@ -1699,7 +1653,6 @@ class StoryService {
                                 // send notification to assigned to person
                             $this->saveNotifications($ticket_data,'workflow',$newWorkflowId,'','',$bulkUpdate=1);
                             $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                            //$this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                             break;
 
                             case 8 : // 8-Fixed
@@ -1709,11 +1662,9 @@ class StoryService {
                             if ($taskDetails['WorkflowType'] == 1) {
                                 
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $fixedworkflowDetail['Id'], 'Fields.workflow.value_name' => $fixedworkflowDetail['Name'], 'Fields.state.value' => (int) $fixedworkflowDetail['StateId'], 'Fields.state.value_name' => $fixedworkflowDetail['State'])));
-                              //  $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                                 
                             } else {
                                 $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
-                               // $this->saveNotifications($ticket_data,'workflow',14);
                             }
                             break;
 
@@ -1736,14 +1687,12 @@ class StoryService {
 
                      }
                     }
-                    //error_log("Send notification to AssignedTo person and Peer person");
                     return true;
                 } else {
                     return true;
                 }
             } else if ($oldTicketObj['WorkflowType'] == 2 && $newWorkflowId == 5) { // 2-UI
                 // Developer should get notification 
-              //  $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                 error_log("Developer should get notification about UI completion");
             } else if ($oldTicketObj['WorkflowType'] == 3) { // 3- Peer
                 
@@ -1764,7 +1713,6 @@ class StoryService {
                         // Send Notification to QA person to start the QA for this parent ticket.
                         error_log("Send Notification to QA person to start the QA for this parent ticket");
                         break;
-                   //  $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);
                 }
                
             } else if ($oldTicketObj['WorkflowType'] == 4) { // 4--QA
@@ -1776,12 +1724,10 @@ class StoryService {
                 {
                    case 6:
                         error_log("Send notification to Developer(AssignedTo) and Peer");
-                      //  $this->saveNotifications($ticket_data,'workflow',$newWorkflowId);  
                         break;
                 
                     case 14 :
                         // 14- Closed
-                   // $parentTicketDetails = TicketCollection::getTicketDetails($oldTicketObj['ParentStoryId'], $projectId);
                     $workFlowDetail = WorkFlowFields::getWorkFlowDetails($newWorkflowId);
                     foreach ($parentTicketDetails['Tasks'] as $task) {
                        
@@ -1795,7 +1741,6 @@ class StoryService {
                        $child_ticket_data=json_decode(json_encode($task_array,1));
                      
                        // Peer UI QA status updated to Close
-                       // $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $task['TaskId']), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                         if($taskDetails['WorkflowType']==1){
                          $workFlowDetail = WorkFlowFields::getWorkFlowDetails(8); 
                          $newWorkflowId = 8;
@@ -1811,7 +1756,6 @@ class StoryService {
                      $this->saveNotifications($ticket_data,'workflow',8,'','',$bulkUpdate=1);
                     $collection->update(array("ProjectId" => (int) $oldTicketObj['ProjectId'], "TicketId" => (int) $ticketId), array('$set' => array('Fields.workflow.value' => (int) $workFlowDetail['Id'], 'Fields.workflow.value_name' => $workFlowDetail['Name'], 'Fields.state.value' => (int) $workFlowDetail['StateId'], 'Fields.state.value_name' => $workFlowDetail['State'])));
                     // Send Notification toAll followers.
-                    //error_log("Send Notification to All followers");
                    
                     break;
                 }
@@ -1851,12 +1795,8 @@ class StoryService {
             {
                 if($task['TaskType']==$type)//peer ticket
                 {
-                    //error_log("==Type==".$type);
-                    //get peer task details
                     $taskDetails = TicketCollection::getTicketDetails($task['TaskId'], $projectId);
-                   // error_log("==Task details==".print_r($taskDetails,1));
                     $collaborator=$taskDetails['Fields']['assignedto']['value'];
-                    //error_log("==collaborator==".$collaborator);
                     return $collaborator;   
                 }
             }
@@ -1890,17 +1830,11 @@ class StoryService {
      */
     public function getAllStoryDetailsNew($draw,$offset, $projectId) {
         try {error_log("-----service----");
-           // $ticketModel = new TicketCollection();
             $ticketDetails = TicketCollection::getAllTicketDetailsNew($draw,$offset, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array("draw"=>$draw,"recordsTotal"=>60,"recordsFiltered"=>60);
             $data = array();
             $fieldsOrderArray = ["assignedto","priority","workflow","bucket","duedate","planlevel"];
-           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             $fitlerOption=null;
-              /*if($StoryData->filterOption !=null || $StoryData->filterOption != 0){
-                   //error_log("fitler-------ss----".$StoryData->filterOption);
-                   $fitlerOption=$StoryData->filterOption;
-              }*/
           
             foreach ($ticketDetails as $ticket) {
                 $details = CommonUtility::prepareDashboardDetailsTemp($ticket, $projectId,$fieldsOrderArray,"part",$fitlerOption);
@@ -1908,17 +1842,14 @@ class StoryService {
                 $tasks = $ticket["Tasks"];
                 
                foreach ($tasks as $task) {
-                   //error_log("Task Id---".$task["TaskId"]);
                  $task = TicketCollection::getTicketDetails($task["TaskId"],$projectId,$select=['TicketId', 'Title','Fields','ProjectId','ParentStoryId']);
                 if(is_array($task)){
-                  // error_log("Task Id-sds--".print_r($task,1));
                  $details = CommonUtility::prepareDashboardDetailsTemp($task, $projectId,$fieldsOrderArray,"part",$fitlerOption);
                  array_push($data, $details);   
                     
                 }
                  
                }
-               //break;
             }
             $finalData["data"]=$data;
             return $finalData;
@@ -1936,7 +1867,6 @@ class StoryService {
      */
        public function getProjectDetailsForDashboard($postData) {
         try {
-//            $totalCount = CommonUtilityTwo::getTicketDetailsForDashboard($userId,$page,$pageLength,$projectFlag,$activityPage,$projectId,$activityDropdownFlag);
             $totalCount = CommonUtilityTwo::getTicketDetailsForDashboard($postData);
             return $totalCount;
         } catch (\Throwable $ex) {
@@ -2053,7 +1983,6 @@ class StoryService {
             $ticketDetails = TicketCollection::getStoryListByAdvanceFilter($StoryData);
             $finalData = array('ticketData'=>array(),'filterData'=>$ticketDetails['filterData']);
             $fieldsOrderArray = [5,6,7,3,10];
-           //  $fieldsOrderArray = [10,11,12,3,4,5,6,7,8,9];
             $obj = array('type'=>'advance','showChild'=>0);
             $fitlerOption= (object)$obj;
           

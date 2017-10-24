@@ -36,7 +36,6 @@ class BucketService {
             foreach ($bucketDetails as $bucket) {
                 $details = CommonUtilityTwo::prepareBucketDashboardDetails($bucket,$bucketData->projectId,$timezone,$bucket["BucketStatus"]);
                 array_push($finalData, $details);
-                //break;
             } 
             return $finalData;
         } catch (\Throwable $ex) {
@@ -140,9 +139,6 @@ class BucketService {
          }else{
              $response["data"] = "";
          }
-         
-//          $Oldbucket=Bucket::findOne($bucketData->data->Id);
-//          error_log("OLd_bucket_details___".print_r($Oldbucket,1));
           return $response;
           
         } catch (\Throwable $ex) {
@@ -166,7 +162,6 @@ class BucketService {
                 $query->from('TicketCollection')
                     ->where($conditions);
                 $totalCount = $query->count();
-//                error_log("===================".$totalCount);
                 if($totalCount){
                     $response["Status"] = "Can not mark as Completed. Please close all the tickets in the bucket";
                     return $response;

@@ -46,6 +46,15 @@ class CollaboratorService {
             throw new ErrorException($ex->getMessage());
         }
     }
+      public function getProjectTeamImages($projectId,$id) {
+        try {
+            $collaboratorModel = new Collaborators();
+            return $collaboratorModel->getProjectTeamImages($projectId,$id);
+        } catch (\Throwable $ex) {
+            Yii::error("CollaboratorService:getProjectTeam::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
 
     /**
      * @author Padmaja
@@ -149,7 +158,6 @@ class CollaboratorService {
             );
             $Arraytimelog = $query->aggregate($pipeline);
             ;
-            // error_log("--data--------".print_r($Arraytimelog,1));
             $dafaultUserList = $Arraytimelog[0]["followerData"][0];
             return $collaboratorModel->getCollaboratorsForFollow($dafaultUserList, $searchValue, $projectId);
         } catch (\Throwable $ex) {
@@ -399,9 +407,7 @@ class CollaboratorService {
             $newFilePath = Yii::$app->params['UserProfilePath']."".$newImagePath;
             $userNewProfilePath = Yii::$app->params['ProjectRoot']. $newFilePath ;
             error_log("userNewProfilePath----4444444444444444444444444".$userNewProfilePath);  
-            //rename($userProfileTempPath,$userNewProfilePath);
             copy($userProfileTempPath,$userNewProfilePath);
-           // $logo=$postData->projectName."_".$returnId.".$fileExt";
             $user->userProfileImage = $newFilePath;
             $usermail=$user->email;
             $invite_code=$code;
@@ -412,7 +418,6 @@ class CollaboratorService {
                 Collaborators::saveUserProfile($userId, $user->userProfileImage);
                 Settings::saveNotificationsSettingsForUser($userId);
                 $status = $this->addUserToTeam($projectId, $userId);
-                 //SVNUtility::createRepositoryUser($user);
                 $this->invalidateInvite($usermail, $invite_code);
             }
             }else{
@@ -490,8 +495,6 @@ class CollaboratorService {
                 $text_message = "You have been Invited to " . $projectName . "<br/> <a href=" . Yii::$app->params['InviteUrl']  . '/Invitation?code=' . '' . $new_invite_code . ">Click to Accept</a>";
                 $subject = "ProjectX | " . $projectName;
                 $mailingName="ProjectX";
-                //array_push($invite_list,$recipient_email);
-                //CommonUtility::sendEmail($mailingName,$invite_list,$text_message,$subject);
                 NotificationTrait::processSingleEmail($mailingName,$recipient_email,$text_message,$subject);
             }
             return 'success';
