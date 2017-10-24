@@ -19,7 +19,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
                         <label class="timereportlabel"> Bucket Name </label>
                         <div class="customformfieldsmarginbottom ">
-                            <!--placeholder="Bucket Name"-->
+                       
                             <input type="text" class="spinner_relative" pInputText [(ngModel)]="formB.title" id="bucketName" name="title"  #title="ngModel"  minlength="3" pattern="^[^~\s][a-zA-Z0-9\s\._\-]+$" (keyup)="checkBucketName(formB.title)" autocomplete="off" required/>
                             <div  class="txtbox_spinner {{spinnerSettings.color}}_color"><i class="{{spinnerSettings.class}}" aria-hidden="true"></i></div>
                             <div *ngIf="submitted && title.errors " class="fielderror">
@@ -44,13 +44,11 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
                         <label class="timereportlabel"> Description </label>
                         <div class="customformfieldsmarginbottom relativediv ">
-                            <!--{{formB.description}}-->
+                          
                             <textarea  [(ngModel)]="formB.description" id="bucketDescId" name="description"  #description="ngModel"  class="customformfieldstextarea " required></textarea>
                             <div *ngIf="submitted && description.errors " class="fielderror">
                                 <div [hidden]="!description.errors.required">Description is required</div>
-                                <!--maxlength="500"-->
-                                <!--<div [hidden]="!description.errors.maxlength">Description should be less than 500</div>-->
-                            </div>
+                              </div>
                             
                         </div>
                     </div>
@@ -97,8 +95,7 @@
                         <div class="modal_checkboxlable ">
                             <p-checkbox name="setCurrent"  binary="true" [(ngModel)]="formB.setCurrent"  #setCurrent="ngModel" label="Set as Current" class="nchbox" ></p-checkbox>
                         </div>
-                        <!--<p-checkbox name="sendReminder" binary="true"  [(ngModel)]="form.sendReminder" #sendReminder="ngModel"  label="Send Reminder?" ></p-checkbox>-->
-                    </div>
+                     </div>
                 </div>
 
                 <div *ngIf="Type == 'New'" class="row">

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-//import { Headers,RequestOptions, Http } from '@angular/http';
 import { GlobalVariable } from '../../app/config';
 import {SharedService} from '../services/shared.service';
 
@@ -10,7 +9,6 @@ declare var socket:any;
 var headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
 
 declare var jQuery:any;
-//headers.append('Authorization',"sdssqweqw2111");
  var  Url = GlobalVariable.BASE_API_URL;  // URL to web api
 @Injectable()
 export class AjaxService {
@@ -26,10 +24,8 @@ AjaxSubscribe(url:string,params:Object,callback)
    var getAllData=  JSON.parse(localStorage.getItem('user'));
    if(getAllData != null){
       params["userInfo"] = getAllData;
-     // params["projectId"] = 1;
       params["timeZone"] = jstz.determine_timezone().name();
     }
-      //var  options = new RequestOptions({headers: headers});
       this.http.post(GlobalVariable.BASE_API_URL+url, JSON.stringify(params))
       .subscribe(
       (data) => {
@@ -60,13 +56,10 @@ NodeSubscribe(url:string,params:Object,callback)
       params["projectId"] = 1;
       params["timeZone"] = jstz.determine_timezone().name();
     }
-      //var  options = new RequestOptions({headers: headers});
       this.http.post(GlobalVariable.NOTIFICATION_URL+url, params) 
       .subscribe(
       (data) => {
           this.sharedServece.setLoader(false);
-        // jQuery("#commonSpinner").removeClass("loading"); 
-        // jQuery("#commonSpinner").addClass("unloading"); 
         var res = data.json();//For Success Response
           callback(res);
       },

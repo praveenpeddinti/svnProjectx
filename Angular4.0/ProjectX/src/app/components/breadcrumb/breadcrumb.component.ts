@@ -61,7 +61,7 @@ export class BreadcrumbComponent implements OnInit {
             {
             //////  console.log("==Length=="+this.items.length);
             ///  console.log("==projectName=="+this.route_changes.projectName);
-              // this.removeItems(0,false);
+          
              if(this.id.length==1 && this.items.length==1) //newly added for The Notification Use Case
              {
                this.removeItems(0,false);
@@ -77,8 +77,7 @@ export class BreadcrumbComponent implements OnInit {
                  
             if((this.route_changes.page=='Detail') && !(this.id.indexOf('#'+this.route_changes.params)>-1))
             { 
-            //  for (var key in this.items[0]) 
-                 //  { 
+          
                    if( this.items[0].type != "Other"){
 
                     this.items[0].url="/project/"+this.route_changes.projectName+"/list";
@@ -88,17 +87,14 @@ export class BreadcrumbComponent implements OnInit {
                     if(this.project!=this.route_changes.projectName && this.project!='')
                     {
                     //  console.log("==not equal==");
-                      //this.id=[];
                       this.items.splice(1,this.items.length);
                       this.project='';
                       this.status=false;
                     }
-                 //  }
               this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type,queryString:''});
               this.id.push('#'+this.route_changes.params);
               this.count++;
             //  console.log("==Details Count=="+this.count);
-             // this.removeItems(this.count-1,true); //added newly by Ryan
             }
 
             /*For Back Logic */
@@ -107,10 +103,8 @@ export class BreadcrumbComponent implements OnInit {
                      if((this.items[key].label==this.route_changes.params) || (this.items[key].label=='#'+this.route_changes.params || this.route_changes.params==''))
                      {
                     //   console.log("==Key=="+key);
-                       //this.removeItems(key+1,true);
                        for(var i:any=parseInt(key);i<this.items.length;i++)
                         {
-                          //this.items[i].remove();
                           if(this.route_changes.params=='')
                           {
                             this.removeItems(0,false);
@@ -135,8 +129,7 @@ export class BreadcrumbComponent implements OnInit {
                    }
             /*Back Logic End */
             
-        // }
-        //  else{ //for search  and notifications
+       //for search  and notifications
           if(this.route_changes.type=='Other'){ 
               this.status=true;
             //  console.log("==Id length=="+this.id.length);
@@ -151,7 +144,6 @@ export class BreadcrumbComponent implements OnInit {
               else
               { 
               var url = this.route_changes.url;
-              // var arrayQueryString = this.getUrlVars(url);
                var urlPart = url.split("?")[0];
                 this.items.push({label:this.route_changes.page,type:this.route_changes.type,url:"/"+urlPart,queryString:this.route_changes.params});
                 if(this.items.length>1)
@@ -185,10 +177,7 @@ export class BreadcrumbComponent implements OnInit {
            // console.log("navigated from");
             for (var key in this.items)
             {
-              // if(this.items[key].label=="Search")  // correct Use Case for Notification,need to verify with Moin
-              //         {
-              //           this.items.splice(parseInt(key),1);
-              //         }
+           
               this.removeItems(0,false);
               this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type,queryString:''});
               this.id.push('#'+this.route_changes.params);
@@ -201,17 +190,12 @@ export class BreadcrumbComponent implements OnInit {
               this.id=[];
               this.count=0;
               this.status=false;
-              //this.status=true;
               this.isLoggedOut=true;
               this.items=[];
             }
          
-     // }
-
       });
 
-      // this.items.push({url:'/story-detail/317',label:'#317'});
-      //  this.items.push({url:'/story-detail/318',label:'#318'});
 
   }
   
@@ -229,7 +213,6 @@ export class BreadcrumbComponent implements OnInit {
     }
     else 
     {
-     // this.removeItems(index,true);
      this.removeItems(index+1,true); //newly added
     }
   }
@@ -238,15 +221,13 @@ export class BreadcrumbComponent implements OnInit {
   {
     for(var i=index;i<this.items.length;i++)
       {
-        //this.items[i].remove();
         this.items.splice(i,this.items.length);
       }
-      // if(this.items.length==0)
-      // {
+     
         this.id=[];
         this.count=0;
         this.status=status;
-      //}
+     
   }
  getUrlVars(url)
 {

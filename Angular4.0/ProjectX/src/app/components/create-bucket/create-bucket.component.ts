@@ -28,11 +28,10 @@ export class CreateBucketComponent implements OnInit {
     startDateVal:new Date(),
     dueDateVal:'',
     setCurrent:false,
-    // sendReminder:true   ,
+   
     selectedUserFilter:'',
-    // selectedBucketTypeFilter:''
+    
     };
-//---------------------------------------------//
   private submitted=false;
   private role: number = 1;
   private FilterOption=[];
@@ -70,15 +69,13 @@ private typeAheadResults ={
         this.editor.initialize_editor('bucketDescId','keyup',formobj);
         if(this.Type == "Edit"){
           jQuery('#bucketDescId').summernote('code',this.formB['description']);
-          // this.checkBucketName(this.form['title']);
+         
           this.typeAheadResults.flag = true;
         }
     }
 
   ngOnInit() {
-                // alert(this.Type+"-----ngOnInit------"+this.projectId)
-                // alert("Form___data___"+JSON.stringify(this.formData))
-
+               
     if(this.Type == "New"){
     this.formB['Id']='';
     this.formB['title']='';
@@ -86,23 +83,18 @@ private typeAheadResults ={
     this.formB['startDateVal']=new Date();
     this.formB['dueDateVal']='';
     this.formB['setCurrent']=false;
-    // this.form['sendReminder']=true;
+    
     this.formB['selectedUserFilter']='';
-    // this.form['selectedBucketTypeFilter']='';
+    
     }else{
-      // alert("onIntelse+++++"+JSON.stringify(this.formData));
+    
       this.formB = this.formData;
       this.prevBucketName = this.formB["title"];
     }
 
    
   }
- 
-//  ngDoCheck(){
-//    setTimeout(()=>{
-//        alert("onIntelse+++111111111111++"+JSON.stringify(this.formB));
-//   },30000);
-// }  
+
   
 private prepareItemArray(list:any,priority:boolean,status){
         var listItem=[];
@@ -126,14 +118,14 @@ private prepareItemArray(list:any,priority:boolean,status){
 public editorDesc="";
 BucketForAddorEdit(event){
   var editor=jQuery('#bucketDescId').summernote('code');
-    // this.editorDesc=jQuery(editor).text().trim();
+  
     editor=editor.replace(/\&nbsp;*\s*(<br>)*/gi,'');
     editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
-   //editor="<p>"+editor+"</p>";
+   
     this.formB['description']=editor;
-    // alert("+++++trm+++++++"+jQuery(editor).text().trim()+"----------------");
-   // this.formB['description']=editor;
-    // alert(this.formB['description']+"===form desc");
+    
+   
+    
     var startDate = this.formB['startDateVal'].toLocaleDateString();
     var endDate=new Date(this.formB['dueDateVal']).toLocaleDateString();
    if(endDate>=startDate){
@@ -142,15 +134,12 @@ BucketForAddorEdit(event){
           this.bucketMsgClass='fielderror';
           this.bucketSuccessMsg = 'End Date is must be greater or equal to Start Date.';
      }
- 
 
-// else
-//   this.editBucket();
 }
 
 addBucket(){
     if(this.Type == "New"){
-      // this.formB['description']=editor;
+    
         this._service.saveBucket(this.projectId,this.formB,(response)=>{
         
         if(response.data["status"]=='failure'){
@@ -168,9 +157,9 @@ addBucket(){
         }
         });
     }else{
-      // alert("In else"+JSON.stringify(this.formB));
+    
       this._service.updateBucket(this.projectId,this.bucketId,this.formB,(response)=>{
-        // alert(JSON.stringify(response)+"******updateBucket***********");
+        
           this.bucketUpdated.emit(response.data);
         });
     }
@@ -179,12 +168,13 @@ addBucket(){
 checkBucketName(event){
   var titlePattern = /^[a-zA-Z0-9\s\.\-_]+$/;
   clearTimeout(this.typeAheadTimer);
+  
   if(event.trim()=='' || event.trim() == undefined || titlePattern.test(event) == false || (event.trim()).toLowerCase() == (this.prevBucketName).toLowerCase()){
     this.typeAheadResults.flag = false;
     this.typeAheadResults.msg = "";
     if(event.trim() == ""){
         this.typeAheadResults.flag = false;
-     //   this.typeAheadResults.msg = "Bucket name cannot be empty";
+    
         this.spinnerSettings.color="red";
         this.spinnerSettings.class = "fa fa-times";
     }else if(titlePattern.test(event.trim()) == false){
@@ -233,8 +223,7 @@ checkBucketName(event){
 }
 
 clearForm(resetEditForm){
-  //this.bucketForm.reset();
-//  this.submitted = false;
+
   this.bucketSuccessMsg="";
   this.bucketMsgClass="";
   this.dueDateMsg="";
@@ -257,18 +246,14 @@ clearForm(resetEditForm){
                 this.formB['startDateVal']=resetEditForm.startDateVal;
                 this.formB['dueDateVal']=resetEditForm.dueDateVal;
                 this.formB['setCurrent']=resetEditForm.setCurrent;
-                // this.form['sendReminder']=true;
+               
                 this.formB['selectedUserFilter']=resetEditForm.selectedUserFilter;
-            // alert(JSON.stringify(this.form)+"+++++++After");
-            // this.form = resetEditForm;
-            // alert(JSON.stringify(this.form)+"+++++++inside if clear form");
-             this.typeAheadResults.flag = true;
+          this.typeAheadResults.flag = true;
             jQuery('#bucketDescId').summernote('code',resetEditForm.description);
             this.prevBucketName = this.formB["title"];
           }
         jQuery('body').removeClass('modal-open');
-      // alert(JSON.stringify(this.form)+"--------------After clear");
-
+    
 }
 resetForm(){ 
 if(this.Type=="New"){

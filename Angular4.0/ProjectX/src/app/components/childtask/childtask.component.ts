@@ -19,7 +19,7 @@ export class ChildtaskComponent implements OnInit {
     public FilterOptionToDisplay=[];
      public selectedFilter=null;  
      public projectName; 
-    // private projectId;
+  
      public statusId=''; 
      private dropList=[];
      private ticketData;
@@ -27,7 +27,7 @@ export class ChildtaskComponent implements OnInit {
      private dropDisplayList=[];
      private dateVal = new Date();
      public minDate:Date;
-     //private ticketId;
+    
      public editing = {};
      private fieldsData = [];
   public currentFieldData={
@@ -110,8 +110,7 @@ private _service: StoryService,private _ajaxService: AjaxService) { }
                    let jsonForm = {};
             if (response.statusCode == 200) {
                 this.row1=response.data;
-                //this.row1.push(response.data);
-              //  this.table.rowDetail.toggleExpandRow(row);
+              
                 console.log('Toggled Expand Row!', this.row1);
             } else {
                 console.log("fail---");
@@ -130,7 +129,6 @@ private _service: StoryService,private _ajaxService: AjaxService) { }
 
 
 editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row){ 
-    //alert("fieldId---"+fieldId+"---fieldDataId---"+fieldDataId+"---fieldTitle---"+fieldTitle+"---renderType--"+renderType); 
      this.dropList=[];
     var inptFldId = fieldId;
       for(var i in this.editing){
@@ -147,14 +145,14 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
           workflowType:1,
           statusId:1,
         };
-       // alert(JSON.stringify(reqData));
+      
         //Fetches the field list data for current dropdown in edit mode.
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
             { 
                 var listData = {
                   list:data.data
                 };
-               // alert(JSON.stringify(data.data));
+              
                 var priority=(fieldTitle=="priority"?true:false);
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
                 this.dropList=this.dropDisplayList[0].filterValue;
@@ -201,7 +199,7 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
 //Also prepares the data to be sent to service to save the changes.
 //This is common to left Column fields.
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
-            //alert("---restoreFieldId---"+restoreFieldId+"---fieldIndex--"+fieldIndex+"--renderType--"+renderType+"---fieldId--"+fieldId);
+          
     var intRegex = /^\d+$/;
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
       var postEditedText={
@@ -266,12 +264,10 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
   }
    
 closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
-    //alert(alert("editedObj----"+editedText+"---restoreFieldId---"+restoreFieldId+"---fieldIndex--"+fieldIndex+"--renderType--"+renderType+"---fieldId--"+fieldId);
         if(editedText.trim() !=""){
-          // alert("if");
-          // this.titleError="";
+         
           document.getElementById(restoreFieldId).innerText= editedText;
-          //alert("editedObj----"+editedText);
+        
       // Added by Padmaja for Inline Edit
           var postEditedText={
             isLeftColumn:0,
@@ -303,7 +299,7 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
                       }else if(postEditedText.editedId == "desc"){
                       document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerHTML=result.data.updatedFieldData;
                        var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
-                      //this.getArtifacts(ticketIdObj);                     
+                                  
                    }
                
           }
@@ -319,7 +315,7 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
                 if(result.data.activityData.data.NewValue.ProfilePicture !=''){
                     var imgObj = <HTMLImageElement>document.getElementById(showField+"_assignedto_child")
                  imgObj.src=result.data.activityData.data.NewValue.ProfilePicture;
-                //this.statusId = result.data.updatedFieldData;
+             
            }
                 }
              

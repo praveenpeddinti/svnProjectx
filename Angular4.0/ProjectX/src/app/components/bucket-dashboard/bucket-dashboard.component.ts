@@ -39,7 +39,6 @@ export class BucketDashboardComponent implements OnInit {
   private form={};
   private bucketPageError="";
 @ViewChild(CreateBucketComponent) editBucketObj:CreateBucketComponent;
-  // private dropClass="selectpicker show-menu-arrow sbox float_right";
 
 
   constructor(private _router: Router,
@@ -51,18 +50,17 @@ export class BucketDashboardComponent implements OnInit {
         thisObj.route.queryParams.subscribe(
         params => 
             { 
-                // alert(params["BucketId"]);
                 thisObj.navBucketId = params["BucketId"];
             thisObj.route.params.subscribe(params => {
                 thisObj.projectName=params['projectName'];
                 thisObj.projectService.getProjectDetails(thisObj.projectName,(data)=>{
                 if(data.statusCode!=404) {
                     this.page = 0;
-                //   alert("+++++++++");
+               
                     thisObj.projectId=data.data.PId;
                     thisObj.load_bucketContents(1,'','');
                     thisObj.projectActivities(this.page);
-                    //this.shared.change(this._router.url,null,'Time Report','Other',thisObj.projectName);
+                 
                 }
                 });
             });
@@ -77,9 +75,9 @@ export class BucketDashboardComponent implements OnInit {
         'bucketStatus':bucketStatus,
         'page':page
         }
-        // alert(JSON.stringify(postData));
+    
         this._ajaxService.AjaxSubscribe("bucket/get-all-bucket-details",postData,(response) => {
-        //   alert(JSON.stringify(response)+"---------getAllBucketDetails Data");
+      
             if (response.statusCode == 200) {
             this.zone.run(() =>{ 
                 this.bucketDetails= this.prepareBucketData(response.data,this.bucketDetails);
@@ -87,7 +85,7 @@ export class BucketDashboardComponent implements OnInit {
                 this.shared.change(this._router.url,null,this.bucketDetails[0].BucketName,'Other',this.projectName);
                 
                 this._service.getBucketTypeFilter(this.projectId,this.bucketDetails[0].BucketStatus,this.navBucketId,(response) => {
-                    // alert(JSON.stringify(response)+"+++getBucketTypeFilter+++");
+                 
                     if(response.data.length >0){
                     this.bucketChangedFilterToDisplay=this.prepareItemArray(response.data,false,'changebucket');
                     this.bucketChangedFilterOption=this.bucketChangedFilterToDisplay[0].filterValue;
@@ -154,9 +152,6 @@ prepareEditFromData(){
 
     filterBucketChange(event){
       var bucketId = this.navBucketId
-    //         alert(JSON.stringify(event)+"+++++++++++++++++filterBucketChange");
-
-    //   alert(event.value+"+++++++out if+++++++");
       if(event.value == 0){
           this.form = {};
           var editForm = this.prepareEditFromData();;
@@ -166,14 +161,14 @@ prepareEditFromData(){
                     
       }else if(event.value != "none"){
              
-                // alert(event.value+"----in elif-------")
+               
                 var postData={
                         'projectId':this.projectId,
                         'bucketId':this.bucketDetails[0].BucketId,
                         'changeStatus':event.value
                         };
                         this._ajaxService.AjaxSubscribe("bucket/get-bucket-change-status",postData,(response) => {
-                            // alert(JSON.stringify(response)+"<=====changeStatus=========>");
+                           
                             if(response.statusCode == 200){
                                 this.bucketPageError = "";
                                 if(response.message == "SUCCESS"){
@@ -183,20 +178,12 @@ prepareEditFromData(){
                                     this.bucketDetails[0].BucketStatusName = response.data.newBucketStatusName;
                                 }else{
                                         if(event.value == 3){
-                                            //  alert(response.message);
+                                          
                                             this.showBucketPageError(response.message)
                                             this.bucketDetails[0].DropDownBucket = "none";
                                         }
                                 }
-                            // if(response.data.newBucketStatusName == "Completed"){
-                            //     this.bucketDetails[0].topTicketStats = response.data.topTicketStats;
-                            //     this.statusData={};
-                            //     this.stateData={};
-                            //     setTimeout(()=>{
-                            //     this.statusData = response.data.statusCounts; 
-                            //     this.stateData = response.data.stateCounts;
-                            //     },200);
-                            // }
+                         
                          }
                         });
 
@@ -208,18 +195,17 @@ prepareEditFromData(){
     projectActivityScroll(){
      var thisObj=this;
          if ((!this.noMoreActivities) && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
-                       // thisObj.dashboardScroll=false;
+                     
                         thisObj.page++;
-                       //     setTimeout(() => { 
+                     
                         thisObj.projectActivities(thisObj.page);
-                       //  alert("@@@@@-------"+thisObj.page);;
-                      //    },2000); 
+                      
                         
                     }
     }
 
      projectActivities(page){
-     // alert("page"+page);
+     
               var post_data={
                'page':page,
                'pageLength':10,
@@ -233,7 +219,7 @@ prepareEditFromData(){
                 {   
                   
                     var thisObj=this;
-                   // alert(JSON.stringify(result.data));
+                 
                     if (page == 0 ) { 
                      console.log("121212"); 
                          this.noMoreActivities = false;     
@@ -252,30 +238,28 @@ prepareEditFromData(){
                           if (this.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
                             this.dashboardData.activities[curActLength - 1].activityData = this.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
                             console.log("After__Concat"+JSON.stringify(this.dashboardData.activities));
-                            // // console.log("@@-44-"+JSON.stringify(this.dashboardData.activities[curActLength - 1].activityData));
+                            
                             result.data.activities .splice(0, 1);
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
-                            //alert("11");
+                            
                         } else {
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
-                          // alert("Final__out"+JSON.stringify(thisObj.dashboardData.activities));
+                          
                         }
                         } else {
                            this.noMoreActivities = true;
                         }
-                      // alert("###--"+JSON.stringify(thisObj.dashboardData));
+                      
                     }
-                  //  this.dashboardScroll=true;
+                 
                })
     }
 
     onBucketUpdate(updatedData){
-        // alert(JSON.stringify(updatedData)+"+++onBucketUpdate++++");
         this.bucketDetails = [];
         this.bucketDetails= this.prepareBucketData(updatedData,this.bucketDetails);
          this.bucketDetails[0].DropDownBucket = "none";
         jQuery("#addBucketModel").modal('hide');
-        // alert(this.bucketDetails[0].DropDownBucket);
     }
 
 

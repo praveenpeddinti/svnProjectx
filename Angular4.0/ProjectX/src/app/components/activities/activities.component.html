@@ -3,7 +3,6 @@
         <div *ngIf="dashboardData!=''">
                   <div *ngFor="let getActivity of dashboardData.activities;let i=index;">
                          <div class="activity_date">
-                                  <!--<div class="devider1 martb5"></div>-->
             <div class="activity_datebg">
                 <div class="datemonth"><span>{{getActivity.activityDate| dateFormat:'MMM'}}</span>  {{getActivity.activityDate | dateFormat:'DD'}}</div>
                 <div class="Year">  {{getActivity.activityDate| dateFormat:'YYYY'}}</div>
@@ -76,7 +75,6 @@
                                       </div>
                             </div>
                   </div>
-            <!--</div>-->
                         </div>
                 </div>
        

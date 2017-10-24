@@ -144,7 +144,6 @@ const ROUTES=[
                ],canActivate:[AuthGuard]},
                {path: 'project/:projectName/bucket',children:[
                 { path: '' , component: BucketDashboardComponent},
-                // { path: '' , component: BucketComponent},
                 { path: '' , component: HeaderComponent,outlet:'header'},
                 { path: '' , component: FooterComponent,outlet:'footer'}
                ],canActivate:[AuthGuard]},
@@ -185,7 +184,6 @@ const ROUTES=[
    RoundProgressModule,
    ToasterModule,
    SpinnerComponentModule,
-   //Ng2DropdownModule,
    ChipsModule,
    MultiSelectModule,
    ListboxModule,
