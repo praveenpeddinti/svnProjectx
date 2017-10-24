@@ -44,9 +44,7 @@ export class UserDashboardComponent implements OnInit {
    ) { }
 
    ngAfterViewInit() { 
-       // var formobj=this;
-        //this.editor.initialize_editor('summernote','keyup',formobj);
-    }
+      }
   ngOnInit() {
      window.scrollTo(0,0);
     this.activityOffset=0;
@@ -111,7 +109,6 @@ export class UserDashboardComponent implements OnInit {
 
      @HostListener('window:scroll', ['$event']) 
     loadNotificationsOnScroll(event) {
-     // console.debug("Scroll Event", window.pageYOffset );
       if ((!this.noMoreActivities || !this.noMoreProjects ) && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
           var thisObj = this;
           this.projectOffset= this.projectOffset+1;

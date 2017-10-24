@@ -112,12 +112,10 @@ public blurTimeout=[];
  private calenderClickedOutside = false;
  private comment_status:boolean=true;
 
- //public form={description:''};//added by ryan
   ngOnInit() {
       this.showTotalEstimated=false;
 var thisObj = this;
-    //let jsonform={};//added by ryan
-    //jsonform['description']='';//added by ryan
+  
    this.replyToComment=-1;
    //@Praveen P toggle for plus button in follower list
    jQuery('body').removeClass('modal-open');// for enabling the scrollbar after popup closing
@@ -172,7 +170,7 @@ var thisObj = this;
             
             console.log("==Id=="+params['id']);
             console.log("==Slug params=="+params['Slug']);
-            //this.searchSlug = params['Slug'];//added by Ryan
+           
               //added By Ryan for BreadCrumb Purpose
             
         });
@@ -180,13 +178,7 @@ var thisObj = this;
           localStorage.setItem('ProjectName',this.projectName);
            
 
-      //      this.route.queryParams.subscribe(
-      // params => 
-      // { 
-      //   // for navigation to ticket
-      // this.route.params.subscribe(params => {
-      //       this.searchSlug = params['Slug'];
-//alert("onInit"+JSON.stringify(this.relatedTaskArray));
+  
       jQuery(document).click(function(e){
                 if(jQuery(e.target).closest(".deletebutton").length == 0 ) {
                     jQuery("#delete_relateTask").css("display", "none");
@@ -206,7 +198,6 @@ var thisObj = this;
       console.log("Comment Editor");
          this.editor.initialize_editor('commentEditor','keyup',this); //for comment
          console.log("=Plan Level="+this.checkPlanLevel);
-      //jQuery('span[id^="check_"]').hide();
     }
 
 getArtifacts(obj){
@@ -230,25 +221,19 @@ getArtifacts(obj){
     //added by Ryan for summernote
     this.editor.initialize_editor('detailEditor',null,this);
      jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
-    //  alert("here");
-    //  jQuery("#detailEditor").summernote('code',jQuery("#detailEditor").html());
     this.showDescEditor = false;
 
   }
 
   private descError="";
   submitDesc(){
-    //setTimeout(()=>{
-      //var editorData = this.detail_ckeditor.instance.getData();
-      //this.form['description']=jQuery('#detailEditor').summernote('code'); //added by Ryan for summernote
-      var editorData=jQuery('#detailEditor').summernote('code');
+    var editorData=jQuery('#detailEditor').summernote('code');
       if(!(editorData.indexOf("<p>")>-1))
       { 
         //added for default unexpected behaviour of editor
           editorData="<p>"+editorData+"</p>";
       }
       this.ticketEditableDesc = editorData;
-      //var editorData=this.form['description'];
       var editorDesc=jQuery(editorData).text().trim();
           if(editorDesc != ""){
           this.descError = "";
@@ -264,11 +249,10 @@ getArtifacts(obj){
         };
         this.postDataToAjax(postEditedText);
         this.showDescEditor = true;
-        this.ticketCrudeDesc = editorData;//this.ticketEditableDesc;
+        this.ticketCrudeDesc = editorData;
         }else{
           this.descError = "Description cannot be empty.";
         }
-//},250);
   }
 
   cancelDesc(){
@@ -284,7 +268,7 @@ getArtifacts(obj){
 //---------------------------Comments Part-------------------------------------
 
 @ViewChild('commentEditor')  detail_comment_ckeditor;
-public commentDesc = "";//"sdadas<img src='https://10.10.73.21/files/story/thumb1.png' height='50%' width='50%' />";
+public commentDesc = "";
 
 public commentCount = 0;
 submitComment(){
@@ -378,10 +362,8 @@ cancelReply(){
 */
 private showTitleEdit=true;
 public min_row:any=1;
-// private titleError="";
 
 editTitle(titleId){
-//  alert("+++++++++"+titleId);
   var offsetHeight:any = parseInt(jQuery('.viewinputtext').height());
   var lineheight:any = parseInt(jQuery('#'+this.ticketId+"_title").css('line-height'));
   this.showTitleEdit = false;
@@ -403,8 +385,7 @@ console.log('time');
 
 closeTitleEdit(editedText){
         if(editedText.trim() !=""){
-          // alert("if");
-          // this.titleError="";
+       
           document.getElementById(this.ticketId+"_title").innerText= editedText;
           this.showTitleEdit = true;
       // Added by Padmaja for Inline Edit
@@ -710,8 +691,6 @@ private dateVal = new Date();
             data.renderType = "select";
             break;
 
-            // case "Checkbox":
-            // break;
 
             case "Bucket":
             data.title = field.title;
@@ -813,7 +792,6 @@ var thisObj = this;
     var editor_contents;
     var appended_content;
     if(where=="edit_comments"){
-      //editor_contents=jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html();
       editor_contents=jQuery("#Activity_content_"+comment).summernote('code'); // for summernote editor
       fileInput.preventDefault();
     }
@@ -849,21 +827,17 @@ var thisObj = this;
                       jQuery("#commentEditor").summernote('code',this.commentDesc);
                     }else if(where=="edit_comments"){
                       appended_content=editor_contents+"<p>[[image:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" "; 
-                    //jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html(appended_content);
                     jQuery("#Activity_content_"+comment).summernote('code',appended_content);//for summernote
                   }else{
                       this.ticketEditableDesc = jQuery("#detailEditor").summernote('code') + "<p>[[image:" +result[i].path + "|" + result[i].originalname + "]] </p>";
                       jQuery("#detailEditor").summernote('code',this.ticketEditableDesc);
-                        // jQuery('#detailEditor').summernote('code',this.form['description']+"[[image:" +result[i].path + "|" + result[i].originalname + "]] " +" ");
-                        // this.form['description'] = jQuery('#detailEditor').summernote('code');
-                    }
+                          }
                 } else{
                     if(where =="comments"){
                       this.commentDesc = jQuery("#commentEditor").summernote('code') + "<p>[[file:" +result[i].path + "|" + result[i].originalname + "]] </p>" +" ";
                       jQuery("#commentEditor").summernote('code',this.commentDesc);
                     }else if(where=="edit_comments"){
                       appended_content =editor_contents+"<p>[[file:" +result[i].path + "|" + result[i].originalname + "]]</p>" +" ";
-                      // jQuery("#cke_Activity_content_"+comment).find("iframe").contents().find('body').html(appended_content);
                       jQuery("#Activity_content_"+comment).summernote('code',appended_content); //for summernote
                     }else{
                       this.ticketEditableDesc = jQuery("#detailEditor").summernote('code') + "<p>[[file:" +result[i].path + "|" + result[i].originalname + "]]</p> ";
@@ -1014,7 +988,6 @@ var thisObj = this;
         'searchString':modifiedString
     }
     let prepareSearchData = [];
-      //  this.search_results=data;
         this._ajaxService.AjaxSubscribe("story/get-all-ticket-details-for-search",post_data,(result)=>
          { 
            var subTaskData = result.data;
@@ -1066,7 +1039,6 @@ var thisObj = this;
           if (response.statusCode == 200) {
                  var fList:any=[];
          for(var l=0;l<response.data.length;l++){
-           //fList.push(response.data[l].ProfilePicture+" "+response.data[l].UserName);
            fList.push({Name:response.data[l].Name,id:response.data[l].Id,ProfilePic:response.data[l].ProfilePic});
            }
            
@@ -1252,14 +1224,12 @@ var thisObj = this;
      }else{
        jQuery("#edit_comment_"+commentIndex).html('Comment can not be empty');
        jQuery("#edit_comment_"+commentIndex).show();
-         //this.editCommentError='Comment can not be empty';
      }
 
    }
 
    deleteComment(){
-    //  commentIndex=this.commentDelId;
-    //  slug=this.commentDelSlug;
+   
      var editedContent= jQuery("#Activity_content_"+this.commentDelId).summernote('code');
      var CrudeCDescription=editedContent.replace(/^(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)|(((\\n)*<p>(&nbsp;)*<\/p>(\\n)*)+|(&nbsp;)+|(\\n)+)$/gm,"");
      var reqData;
@@ -1437,7 +1407,6 @@ var thisObj = this;
         this.commentDelSlug=cslug;
          if(id==1){
            jQuery("#delete_comment").css("display", "block");
-            //   jQuery("#delete_comment").css("display", "block");
                var delbutton_Height=10;
               var delbutton_Width=jQuery('#commentdel_'+cslug).width()/2;
               var delete_popup=jQuery('.delete_followersbgtable').width()/2;
@@ -1490,7 +1459,6 @@ var thisObj = this;
     this.showTotalEstimated=false;
     this.fieldsData = []; 
     this.showMyEditableField =[];
-          //this.callTicketDetailPage(ticketId,projectId);        
         }
 
 public callTicketDetailPage(ticId,projectId){
@@ -1552,7 +1520,6 @@ public callTicketDetailPage(ticId,projectId){
             this.checkPlanLevel=data.data.StoryType.Name;
             console.log("==Plan Level=="+this.checkPlanLevel);
             this.shared.navigatedFrom(this.navigatedFrom);//added by Ryan
-            //var url=decodeURIComponent(this._router.url);alert(url);
             var url=this._router.url;
             var url_without_query=url.split('?')[0];
             this.shared.change(url_without_query,this.ticketId,'Detail',this.checkPlanLevel,this.projectName);

@@ -69,7 +69,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
   [flexGrow]="column.flexGrow">
   <ng-template  class="foo" let-row="row" ngx-datatable-cell-template>
     <div class="{{column.class}} " *ngIf="row[i].field_name!='arrow'"  (click)="(row[i].field_name=='Id') ? showStoryDetail(row):''" >
-      <!--(click)=="showStoryDetail(row)"-->
+      
       <!--This img tag belongs to Ticket Id-->
       <img *ngIf="row[i].other_data.planlevel==1" src="assets/images/story-icon.png"  />
       <img *ngIf="row[i].other_data.planlevel==2" src="assets/images/task-icon.png" />
@@ -78,9 +78,7 @@ Row classes are also dynamically. These classes are pass to service layer-->
         [src]="row[i].other_data" data-toggle="tooltip" data-placement="top" title=" {{row[i].field_value}}" /> 
            
       
-      <!--<span class="badge" style="position: relative;left:0" *ngIf="row[i].field_name=='Title' && row[i].other_data>0" data-toggle="tooltip" data-placement="top" title="Task count">{{row[i].other_data}}</span>  
      
-      <!--  <p *ngIf="row[i].field_name=='workflow'" ></p> -->
          <div class="stateStyle" *ngIf="row[i].field_name=='workflow'" id="{{i+'-'+row.$$index+'_workflow'}}">{{row[i].other_data}} </div>
         <span [ngSwitch]="row[i].render_type"  >
          <span     

@@ -45,8 +45,7 @@ export class StoryDashboardComponent {
     fieldIndex:'',
     fieldValueId:''
   };
-    //private projectId;              
-     //public projectId;  
+
     @ViewChild('myTable') table: any;
     @ViewChild(AdvanceFilterComponent) advFilterObj:AdvanceFilterComponent;
 
@@ -188,7 +187,6 @@ expanded: any = {};
         var ScrollHeightDataTable=jQuery(".ngx-datatable").width() - 12;
         jQuery("#filterDropdown").css("paddingRight",10);
        jQuery(".ngx-datatable").css("width",ScrollHeightDataTable);
-      // var thisObj = this;
        
             jQuery( window ).resize(function() { 
             if( thisObj.checkScrollBar() == true){
@@ -249,11 +247,6 @@ setFilterValue(response){
   return promise;
 }
 
-    // ngAfterViewInit()
-    // {
-    //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.general:eq(0)').before('<label>Filter</label>');
-    //  jQuery('#filter_dropdown_label #filter_dropdown').find(' > li.bucket:eq(0)').before('<label>Bucket</label>');
-    // }
         /*
         @params    :  offset,limit,sortvalue,sortorder
         @Description: StoryComponent/Task list Rendering
@@ -273,17 +266,13 @@ setFilterValue(response){
             if (response.statusCode == 200) {
                 this.criteriaLabel=[];
                 this.rows = response.data;        
-                
-               // this.getRowClass(this.rows);
-                //console.log("ROWS___"+JSON.stringify(this.rows));
+              
 
                 this.rows = response.data;
 
                 this.count = response.totalCount;
                 for(var i in this.editing){
-    //    for(var j in this.editing){   
           this.editing[i] = false;
-    //   }
       }
                 
                 /* Section To Remember the State of Pages and to replace the Url with required params while user navigation */
@@ -373,9 +362,7 @@ toggleExpandRow(row) {
 }
 
 getRowClass(row) {
-   // console.log("etRowVCla=**"+JSON.stringify(row));
- //  console.log("etRowVCla==="+JSON.stringify(row[0].other_data.planlevel));
-  // console.log("etRowVCla==fildvalue="+row[0].field_value);
+ 
 var className = "childTask childTask_"+row[0].other_data.parentStoryId;
 if(row[0].other_data.planlevel==2){
    return className;
@@ -399,7 +386,6 @@ if(row[0].other_data.planlevel==2){
 
 
 editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,value_id,row){ 
-    //alert("fieldId---"+fieldId+"---fieldDataId---"+fieldDataId+"---fieldTitle---"+fieldTitle+"---renderType--"+renderType); 
      this.dropList=[];
     var inptFldId = fieldId;
       for(var i in this.editing){
@@ -413,12 +399,9 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
           fieldId:fieldDataId,
           projectId:this.projectId,
           ticketId:row[0].field_value,
-         // workflowType:1,
           workflowType:1,
-          //statusId:1,
           statusId:value_id
         };
-       // alert(JSON.stringify(reqData));
         //Fetches the field list data for current dropdown in edit mode.
         this._ajaxService.AjaxSubscribe("story/get-field-details-by-field-id",reqData,(data)=>
             { 
@@ -428,7 +411,6 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
                 var priority=(fieldTitle=="priority"?true:false);
                 this.dropDisplayList=this.prepareItemArray(listData.list,priority,fieldTitle);
                 this.dropList=this.dropDisplayList[0].filterValue;
-              //  alert(JSON.stringify(this.dropList));
                 //sets the dropdown prefocused
                 if(fieldTitle=='workflow'){
                   let value=this.dropList[0].label;
@@ -472,7 +454,6 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
 //Also prepares the data to be sent to service to save the changes.
 //This is common to left Column fields.
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
-            //alert("---restoreFieldId---"+restoreFieldId+"---fieldIndex--"+fieldIndex+"--renderType--"+renderType+"---fieldId--"+fieldId);
     var intRegex = /^\d+$/;
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
       var postEditedText={
@@ -500,15 +481,9 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
             case "select":
              if(restoreFieldId.split("_")[0] == "assignedto"){
              jQuery("#"+showField+'_assignedto').remove();
-             // if(jQuery("#"+showField+'_assignedto').length==0){ 
                  appendHtml = (restoreFieldId.split("_")[0] == "assignedto")?"<img id="+showField+"_assignedto data-toggle=tooltip data-placement=top class='profilepic_table' src='"+row[2].other_data+"'/>&nbsp;":"";
-               // }
-                // else if(row[2].other_data){
-                //     alert("======Row data======"+row[2].other_data);
-                //      jQuery("#"+showField+'_assignedto').attr('src',row[2].other_data);    
-                // }   
+             
                document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":appendHtml+editedObj.text; 
-           //jQuery("#"+showField+'_assignedto').attr('src',row[2].other_data);                                 
          }else{
              appendHtml = (restoreFieldId.split("_")[0] == "priority")?"&nbsp; <i class='fa fa-circle "+editedObj.text+"' aria-hidden='true'></i>":"";
              document.getElementById(restoreFieldId).innerHTML = (editedObj.text == ""||editedObj.text == "--Select a Member--") ? "--":editedObj.text+appendHtml;
@@ -554,12 +529,10 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
   }
    
 closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
-    //alert(alert("editedObj----"+editedText+"---restoreFieldId---"+restoreFieldId+"---fieldIndex--"+fieldIndex+"--renderType--"+renderType+"---fieldId--"+fieldId);
         if(editedText.trim() !=""){
-          // alert("if");
-          // this.titleError="";
+        
           document.getElementById(restoreFieldId).innerText= editedText;
-          //alert("editedObj----"+editedText);
+         
       // Added by Padmaja for Inline Edit
           var postEditedText={
             isLeftColumn:0,
@@ -591,7 +564,6 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
                       }else if(postEditedText.editedId == "desc"){
                       document.getElementById(this.ticketId+'_'+postEditedText.editedId).innerHTML=result.data.updatedFieldData;
                        var ticketIdObj={'ticketId': this.ticketId,'projectId':this.projectId};
-                      //this.getArtifacts(ticketIdObj);                     
                    }
                
           }
@@ -602,27 +574,20 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
           
              else if(result.data.updatedState!=''){ 
                  document.getElementById(showField+"_workflow").innerText=result.data.updatedState.state;
-                //this.statusId = result.data.updatedFieldData;
            }
             else if(result.data.activityData.data.ActionFieldName =='assignedto'){ 
                 if(result.data.activityData.data.NewValue.ProfilePicture !=''){
-                    //var imgObj = <HTMLImageElement>document.getElementById(showField+"_assignedto");
                         var imgObj1=jQuery("#"+showField+'_assignedto').html();
-                   // imgObj.src=result.data.activityData.data.NewValue.ProfilePicture; 
-                    //jQuery("#"+showField+'_assignedto').attr('src',imgObj.src);
+                
                     jQuery("#"+showField+'_assignedto').attr('src',result.data.activityData.data.NewValue.ProfilePicture);                
-                    //var imgObj1=jQuery("#"+showField+'_assignedto').html();
-                    //jQuery("#"+showField+'_assignedto').attr('src',result.data.activityData.data.NewValue.ProfilePicture);                
-           }
+                   }
             }
             else { 
                 if(result.data.activityData.data.PropertyChanges[0].ActionFieldName =='assignedto'){ 
                 if(result.data.activityData.data.PropertyChanges[0].NewValue.ProfilePicture  !=''){
                     var imgObj = <HTMLImageElement>document.getElementById(showField+"_assignedto");
                    imgObj.src=result.data.activityData.data.PropertyChanges[0].NewValue.ProfilePicture ;
-                  //jQuery("#"+showField+'_assignedto').attr('src',imgObj.src);
-                 // this.trackImage=imgObj.src; // added by Ryan..  This is for first Time
-              }
+                     }
              }
             }
            
@@ -630,12 +595,7 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
         /**
         * @author:Praveen P
         * @description : This is used to show the selected user (Stake Holder, Assigned to and Reproted by) in Follower list 
-        */
-
-
-
-
-               
+        */        
 
  }
         });
@@ -689,20 +649,7 @@ getFilteredData(response){
         this.selectedFilter=filterOption.value;
         this.filterDashboard();
        }
-                
-               
-                
-                /* Section To Remember the State of Pages and to replace the Url with required params while user navigation */
-                // this.pageNo=offset+1;//added by Ryan
-                // this.sortorder=sortorder;//added by Ryan
-                // this.sortvalue=sortvalue;//added by Ryan
-                // this.offset=this.pageNo-1;//added by Ryan
-                // this.rememberState(this.pageNo,this.sortorder,this.sortvalue,this.filterValue);
-                // var url='/project/'+this.projectName+'/list?page='+(offset+1)+'&sort='+sortorder+'&col='+sortvalue+'&filter='+this.filterValue+'&filterType='+this.filterType;
-                // this.location.replaceState(url);
-                /* =========Section End==========================================*/ 
-
-            } 
+   } 
 }
  
 /**

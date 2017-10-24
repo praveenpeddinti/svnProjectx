@@ -78,7 +78,6 @@ export class StoryEditComponent implements OnInit
             this.projectService.getProjectDetails(this.projectName,(data)=>{ 
              thisObj.projectId=data.data.PId;
              if(data.statusCode!=404){
-                      // this.callTicketDetailPage(thisObj.ticketId, projectId);
          this._ajaxService.AjaxSubscribe("story/edit-ticket",{ticketId:this.url_TicketId,projectId:thisObj.projectId},(data)=>
           {   
           if(data.statusCode!=404){
@@ -196,7 +195,6 @@ export class StoryEditComponent implements OnInit
             case "TextArea":
             data.title = field.title;
             data.value = field.value;
-            // data.renderType = "input";
             data.renderType = (field.field_type == "TextArea")?"textarea":"input";
             data.type="text";
             break;
@@ -249,10 +247,7 @@ export class StoryEditComponent implements OnInit
           data.id =  ticketId+"_"+field.field_name;
           data.fieldType = field.field_type;
           data.fieldName =  field.field_name;
-          // if(field.field_name == "dod")
-          // {
-          //     data.renderType = "textarea";
-          // }
+        
           var priority=(data.title=="Priority"?true:false);
           var status=data.title;
           data.listDisplayData=this.prepareItemArray(data.listdata,priority,status);
@@ -305,7 +300,6 @@ export class StoryEditComponent implements OnInit
     desc=jQuery(desc).text().trim();
     edit_data.dod=edit_data.dod.trim();
     var error = 0;
-   // alert(edit_data.title);
     if(edit_data.title=='')
     {
       jQuery("#title_error").show();
@@ -450,22 +444,7 @@ export class StoryEditComponent implements OnInit
       this._router.navigate(['project',this.projectName,this.url_TicketId,'details']);
     }
 
-    
-
-    //     /*For Notifications */
-        
-    //     //  var socket=io("http://10.10.73.39:4201");
-    //     // //  var data={'ticketId':this.url_TicketId,'collaborator':collaborator_id};
-    //     //         socket.emit('assignedTo',collaborator_id);
-    //     var notify_data={'ticketId':this.url_TicketId,'comment_type':'assigned','collaborator':collaborator_id};
-
-    //     this._ajaxService.NodeSubscribe('/assignedTo',notify_data,(data)=>
-    //     {
-
-    //     });
-                
-    //   }
-    // }
+ 
    taskDataBuilder(taskArray){
      var subTasksArray = [];
        let prepareData = [];

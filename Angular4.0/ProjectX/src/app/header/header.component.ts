@@ -40,7 +40,6 @@ export class HeaderComponent implements OnInit {
   public homeFlag=false;
   public showLoader:Boolean=true;
   public toast:any;
-  //private ProjectName='';
   private PName='';
   private projectId;
   public projectName;
@@ -124,7 +123,6 @@ export class HeaderComponent implements OnInit {
     
      jQuery(document).ready(function(){
       jQuery(document).bind("click",function(event){   
-//alert(jQuery(event.target).closest('ul#notifications_list').length); 
           if(jQuery(event.target).closest('ul#notifications_list').length == 0 && jQuery(event.target).closest('li#notificationIcon').length == 0){
            jQuery("#notifications_list").hide();
           }
@@ -139,31 +137,17 @@ export class HeaderComponent implements OnInit {
       jQuery("div.note-popover.popover.in.note-hint-popover").css("display","none");
     }
     
-   // this.getAllProjectNames();
   
-        //  alert("#########"+thisObj.projectName);
       }
 
       ngAfterViewChecked(){
-       // console.log("---ngAfterViewChecked---");
       }
      ngOnDestroy(){
         var thisObj = this;
-       // console.log("---ngOnDestroy---");
         socket.off('getAllNotificationsCountResponse');
       }
   
-      // getAllProjectNames(){
-      //   var sendData={
-      //      userId:JSON.parse(this.users.Id)
-      //      }
-      //    this._ajaxService.AjaxSubscribe('site/get-project-name-by-userid',sendData,(result)=>
-      //   {
-      //      this.optionTodisplay=this.projectsArray(result.data);
-      //      this.projects=this.optionTodisplay[0].filterValue;
-      //        })
-
-      // }
+     
   logout() {
          this._service.logout((data)=>{ 
               this._router.navigate(['login']);
@@ -187,10 +171,8 @@ projectsArray(list){
       return listMainArray;
 }
   globalSearchNavigate(){
-  //  var searchString=jQuery("#globalsearch").val().trim();
   var searchString=this.srchStr;
      if(this._router.url=='/home'){
-  // localStorage.setItem('PName',null);
       delete this.PName;
     
     }
@@ -292,7 +274,6 @@ projectsArray(list){
       {
        this.notification_msg=[];
       if(data.notify_result.length >0){
-     // this.notify_count = data.notify_result.length;
       this.notification_msg = data.notify_result;
      
         }
@@ -320,7 +301,6 @@ projectsArray(list){
 }
 
  changeProject(){
-       // alert("s__P@@@@@@@@@---"+JSON.stringify(this.selectedProject));
         localStorage.setItem('ProjectName',this.selectedProject.name);
         localStorage.setItem('ProjectId',this.selectedProject.id);
         this._router.navigate(['project',this.selectedProject.name,'list']);
