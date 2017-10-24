@@ -23,7 +23,6 @@ class TicketComments extends ActiveRecord
     }
     
     public function attributes() {
-//        parent::attributes();
         return [
       "_id",      
      "TicketId",
@@ -39,7 +38,6 @@ class TicketComments extends ActiveRecord
     public function behaviors()
     {
         return [
-//            TimestampBehavior::className(),
         ];
     }
     

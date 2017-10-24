@@ -10,7 +10,6 @@ namespace common\models\mongo;
  * https://github.com/yiisoft/yii2-mongodb/blob/master/docs/guide/usage-ar.md
  */
 use Yii;
-//use yii\db\ActiveRecord;
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use common\models\mysql\Collaborators;
@@ -25,7 +24,6 @@ class NotificationCollection extends ActiveRecord
     }
     
     public function attributes() {
-//        parent::attributes();
         return [
       "_id",      
      "TicketId",
@@ -45,12 +43,6 @@ class NotificationCollection extends ActiveRecord
         ];
     }
     
-//    public function behaviors()
-//    {
-//        return [
-//            TimestampBehavior::className(),
-//        ];
-//    }
 
     /**
      * @author Ryan Marshal  
@@ -113,13 +105,6 @@ class NotificationCollection extends ActiveRecord
             ]
         ]);
         $notifications = $provider->getModels();
-//            $query->from('NotificationCollection')
-//            ->where($cond)
-//            ->andWhere(['!=','ActivityFrom', (int)$user])
-//            ->orderBy(["_id"=>SORT_DESC])
-//             ->offset($offset)      
-//            ->limit($limit);
-//            $notifications=$query->all();
             return $notifications;
           } catch (\Throwable $ex) {
             Yii::error("NotificationCollection:getNotifications::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -217,11 +202,6 @@ class NotificationCollection extends ActiveRecord
                 array('$unwind' => '$NotifiedCollaborators'),
                 array('$match' => $matchArray),
                 array('$limit' => 1),
-//                array(
-//                    '$group' => array(
-//                        '_id' => '$NotifiedCollaborators.CollaboratorId',
-//                         "data" => array('$push' => '$NotifiedCollaborators'),
-//                    )),
                 );
             $notifications = $query->aggregate($pipeline);
             return $notifications;  

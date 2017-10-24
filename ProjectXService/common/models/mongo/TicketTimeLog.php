@@ -27,7 +27,6 @@ class TicketTimeLog extends ActiveRecord
         return 'TicketTimeLog';
     }
     public function attributes() {
-//        parent::attributes();
         return [
             
           "_id",
@@ -94,15 +93,6 @@ class TicketTimeLog extends ActiveRecord
 
         try {
             $returnValue = 'failure';
-//            $timelogObj = new TicketTimeLog();
-//            $timelogObj->ProjectId = (int) $projectId;
-//            $timelogObj->TicketId = (int) $ticketId;
-//            $timelogObj->CollaboratorId = (int) $userId;
-//            $timelogObj->Time = $totalWorkHours;
-//            if ($timelogObj->insert()) {
-//                $returnValue = $timelogObj->_id;
-//            }
-//            
           $db =  TicketTimeLog::getCollection();
           $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($LoggedOn)*1000);
           $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$ticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$ticketId,"Time"=>(float)$totalWorkHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
@@ -168,7 +158,6 @@ class TicketTimeLog extends ActiveRecord
                 array_push($selectedMembers,$member);
             }
             if($skip>0){
-                //$skip =$skip-1; 
             }
             if(empty($StoryData->members)){
                 $matchArray = array('TimeLog.CollaboratorId' => (int)$StoryData->userInfo->Id, "ProjectId" => (int) $projectId,'TimeLog.LoggedOn'=>array('$gte' =>new \MongoDB\BSON\UTCDateTime(strtotime($StoryData->fromDate)*1000),'$lte' =>new \MongoDB\BSON\UTCDateTime(strtotime($toDate)*1000)));
@@ -223,7 +212,6 @@ class TicketTimeLog extends ActiveRecord
             $pipeline = array(
                 array('$unwind' => '$TimeLog'),
                 array('$match' => $matchArray),
-                //array('Time.LoggedOn'=>array('$lt' => new MongoDate($date))),
                 array(
                     '$group' => array(
                         '_id' => '$TimeLog.CollaboratorId',
@@ -233,7 +221,6 @@ class TicketTimeLog extends ActiveRecord
                 ),
             );
             $Arraytimelog = $query->aggregate($pipeline);
-           // $Arraytimelog[0]['count']=!empty($Arraytimelog[0]['count'])?$Arraytimelog[0]['count']:0;
             return $Arraytimelog;
         } catch (\Throwable $ex) {
             Yii::error("TicketTimeLogCollection:getTimeReportCountAndWorkLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -253,16 +240,11 @@ class TicketTimeLog extends ActiveRecord
             if(!empty($calendardate)){
                 $loggonDate=$calendardate;
             }
-//            }else{
-//                  error_log("else---------------");
-//                $loggonDate=$editableDate;
-//            }
             if(!empty($autocompleteticketId)){
                   if($loggonDate == ""){
                      $loggonDate=$editableDate;
                   }
                 $db =  TicketTimeLog::getCollection();
-                // $currentDate =$loggonDate;
                 $currentDate = new \MongoDB\BSON\UTCDateTime(strtotime($loggonDate) * 1000);
                 $returnValue =  $db->findAndModify( array("ProjectId"=> (int)$projectId ,"TicketId"=> (int)$autocompleteticketId), array('$addToSet'=> array('TimeLog' =>array("Slug" => new \MongoDB\BSON\ObjectID(),"TicketId"=> (int)$autocompleteticketId,"Time"=>(float)$timelogHours,"CollaboratorId" => (int)$userId,"LoggedOn" => $currentDate,"Description"=> $description))),array('new' => 1,"upsert"=>1));
                 $collection = Yii::$app->mongodb->getCollection('TicketTimeLog');
@@ -363,7 +345,6 @@ class TicketTimeLog extends ActiveRecord
     public static function getTotalTimeLogByProject($projectId=''){
    
         try {
-           // $projectId=1;
              error_log("log--ggggggggggggg----".$projectId);
             $matchArray = array( "ProjectId" => (int) $projectId);  
             if($projectId=='')unset($matchArray['ProjectId']);

@@ -11,7 +11,6 @@ namespace common\models\mongo;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-//use yii\db\ActiveRecord;
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
@@ -26,7 +25,6 @@ class PersonalizedFilterCollection extends ActiveRecord {
     }
 
     public function attributes() {
-//        parent::attributes();
         return [
             "_id",
             "ProjectId",
@@ -40,7 +38,6 @@ class PersonalizedFilterCollection extends ActiveRecord {
 
     public function behaviors() {
         return [
-//            TimestampBehavior::className(),
         ];
     }
     

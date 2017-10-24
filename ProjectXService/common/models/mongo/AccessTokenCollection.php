@@ -12,7 +12,6 @@ namespace common\models\mongo;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-//use yii\db\ActiveRecord;
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
@@ -29,7 +28,6 @@ class AccessTokenCollection extends ActiveRecord
     }
     
     public function attributes() {
-//        parent::attributes();
         return [
             
           "_id",

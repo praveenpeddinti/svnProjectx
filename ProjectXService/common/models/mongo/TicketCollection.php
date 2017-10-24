@@ -13,7 +13,6 @@ use Yii;
 use yii\base\ErrorException;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
-//use yii\db\ActiveRecord;
 use yii\mongodb\ActiveRecord;
 use yii\mongodb\Query;
 use yii\data\ActiveDataProvider;
@@ -29,7 +28,6 @@ class TicketCollection extends ActiveRecord
     }
     
     public function attributes() {
-//        parent::attributes();
         return [
             "_id",
             "Title",
@@ -124,12 +122,7 @@ class TicketCollection extends ActiveRecord
            
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
          $cursor =  $collection->find(array('$or'=>array( array( "Fields.assignedto.Id"=>5 ,"Fields.assignedto.value"=>11),array("FollowersRef"=>array('$in'=>array(6))))));
-         //error_log("count------------------".$cursor); 
          $mergedChatUsers = iterator_to_array($cursor);
-//         foreach ($cursor as $doc) {
-//            print_r($doc);
-//}
-           
            return $mergedChatUsers;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:getMyAssignedTickets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -149,7 +142,6 @@ class TicketCollection extends ActiveRecord
       try{
            
           $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-//}
           $newdata = array('$set' => array("Fields.$.value" => (int)2));
           $collection->update(array("TicketId" => 1,"Fields.Id"=>(int)5), $newdata); 
          
@@ -187,7 +179,6 @@ class TicketCollection extends ActiveRecord
                   break;
               case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
                case 9:
-                   //  unset($conditions['Fields.duedate.value']);
                  $conditions["IsChild"] = array('$in' => array(0,1));
                  $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
                  $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000));break;                 //  $conditions['Fields.duedate.value']=(int)$StoryData->userInfo->Id;break;
@@ -218,7 +209,6 @@ class TicketCollection extends ActiveRecord
                case 6:
                    $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
-             // case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
               case 11:
                    $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
@@ -298,7 +288,6 @@ class TicketCollection extends ActiveRecord
                   break;
               case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
                case 9:
-                   //  unset($conditions['Fields.duedate.value']);
                  $conditions["IsChild"] = array('$in' => array(0,1));
                  $yesterday = date("Y-m-d H:i:s", strtotime('yesterday'));
                  $conditions['Fields.duedate.value'] = array('$lte' => new \MongoDB\BSON\UTCDateTime(strtotime($yesterday) * 1000));break;                 //  $conditions['Fields.duedate.value']=(int)$StoryData->userInfo->Id;break;
@@ -329,7 +318,6 @@ class TicketCollection extends ActiveRecord
                case 6:
                    $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['Followers.FollowerId']=(int)$StoryData->userInfo->Id;break;
-             // case 8:$conditions['Fields.state.value']=(int)6;break; //all closed 
               case 11:
                    $conditions["IsChild"] = array('$in' => array(0,1));
                    $conditions['$or']=[['Fields.assignedto.value'=>(int)$StoryData->userInfo->Id],['Followers.FollowerId'=>(int)$StoryData->userInfo->Id ]];
@@ -520,11 +508,9 @@ class TicketCollection extends ActiveRecord
       public static function updateTotalTimeLog($projectId, $ticketId, $totalWorkHours) {
         try {
 
-            //if ($totalWorkHours > 0) {
                 $ticketCollection = Yii::$app->mongodb->getCollection('TicketCollection');
                 $updateTotalTimeLog = array('$inc' => array("TotalTimeLog" =>(float)$totalWorkHours));
                 $ticketCollection->update(array("TicketId" => (int) $ticketId, "ProjectId" => (int) $projectId), $updateTotalTimeLog);
-            //}
         } catch (\Throwable $ex) {
             Yii::error("TicketCollection:updateTotalTimeLog::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
             throw new ErrorException($ex->getMessage());
@@ -711,9 +697,6 @@ class TicketCollection extends ActiveRecord
             
             $query->from('TicketCollection')
                     ->where($condition);
-           //->where(['Fields.assignedto.value' => (int)$userId, "ProjectId" =>(int)$projectId])
-           //->orWhere(['Followers.FollowerId'=>(int)$userId, "ProjectId" =>(int)$projectId])
-           //->andWhere([$FieldName=>(int)$value, "ProjectId" =>(int)$projectId]);
            $ticketDetails = $query->count();
           return $ticketDetails;  
      }catch (\Throwable $ex) {
@@ -753,12 +736,6 @@ class TicketCollection extends ActiveRecord
                     ->where(['Fields.bucket.value'=>(int)$bucketId ,'ProjectId'=>(int)$projectId])
                 ->limit(1);
             $models = $query->all();
-           
-//             $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-//         $cursor =  $collection->find(array('$or'=>array( array( "Fields.bucket.value"=>(int)$bucketId ,"ProjectId"=>(int)$projectId))));
-//         error_log("count------------------".$cursor); 
-//         $mergedChatUsers = iterator_to_array($cursor);
-           
            return $models;  
       } catch (\Throwable $ex) {
             Yii::error("TicketCollection:checkTicketsinBuckets::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
@@ -834,7 +811,6 @@ class TicketCollection extends ActiveRecord
         $conditions['$or']=[];
         $conditions['$and']=[];
         $or['$or']=[];
-        //error_log("filter___option__".print_r($filterOption[0],1));
         
             if(sizeof($option->NoLabel)!=0){
                  foreach($option->NoLabel as $nolabel){
@@ -904,7 +880,6 @@ class TicketCollection extends ActiveRecord
                 $or['$or']=[];
          }
         
-      // error_log("condition_____________".print_r($conditions,1));
          if(sizeof($conditions['$or'])==0)unset($conditions['$or']);
          if(sizeof($conditions['$and'])==0)unset($conditions['$and']);
          $newFilter=array();
@@ -962,7 +937,6 @@ class TicketCollection extends ActiveRecord
         $conditions['$or']=[];
         $conditions['$and']=[];
         $or['$or']=[];
-        //error_log("filter___option__".print_r($filterOption[0],1));
         
                      if(sizeof($option->NoLabel)!=0){
                  foreach($option->NoLabel as $nolabel){
@@ -1033,7 +1007,6 @@ class TicketCollection extends ActiveRecord
                 $or['$or']=[];
          }
         
-      // error_log("condition_____________".print_r($conditions,1));
          if(sizeof($conditions['$or'])==0)unset($conditions['$or']);
          if(sizeof($conditions['$and'])==0)unset($conditions['$and']);
         

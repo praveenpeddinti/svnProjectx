@@ -26,7 +26,6 @@ class TinyUserCollection extends ActiveRecord
     }
     
     public function attributes() {
-//        parent::attributes();
         return [
  "_id" ,      
      "CollaboratorId",
@@ -63,11 +62,9 @@ class TinyUserCollection extends ActiveRecord
         error_log("======================3##################=================");
         $userObj= new TinyUserCollection();
         $userObj->CollaboratorId = (int)$userId;
-       // $userObj->UserName=$user->firstName.'.'.$user->lastName;
          $userObj->FirstName=$user->firstName;
          $userObj->LastName=$user->lastName;
          $userObj->UserName=$user->displayName;
-       // $userObj->DisplayName=$user->displayName;
         $userObj->ProfilePicture=$user->userProfileImage;
         $userObj->Email=$user->email;
         $userObj->OrganizationId= 1;
@@ -109,8 +106,6 @@ class TinyUserCollection extends ActiveRecord
       public static function createUsers($data){
         
         try {
-//        $collection = Yii::$app->mongodb->getCollection('TinyUserCollection');
-//        $collection->batchInsert($data);
         foreach ($data as $value) {
         $userObj= new TicketCollection();
          $userObj->Title="hi";
