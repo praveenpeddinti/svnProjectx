@@ -49,7 +49,9 @@ export class EmailInviteComponent implements OnInit {
       });
                                  
   }
-  
+  /**
+ * @description Checking the user is available or not and getting the username if exists.
+ */
 
   searchUsersToInvite(event){ 
     this.isEmailValid=false;
@@ -76,7 +78,9 @@ export class EmailInviteComponent implements OnInit {
       }
     })   
   }
-
+/**
+ * @description Auto populating in the text field when user selects the username.
+ */
   selectedValue(value){ this.checkAutoComplete=true; //This is used to avoid conflict between (keyup.enter) and default enter of component
     if(!(this.selectedUser.indexOf(value)>-1))
     {
@@ -91,7 +95,9 @@ export class EmailInviteComponent implements OnInit {
     this.selectedUsers=undefined;
     jQuery(".ui-chips-input-token>input[type='text']").attr("disabled","disabled");
   }
-
+/**
+ * @description Validating the email format
+ */
   validateEmail(object){ 
      
       if(!this.checkAutoComplete){
@@ -117,7 +123,10 @@ export class EmailInviteComponent implements OnInit {
       this.checkAutoComplete=false;
     }
 
-    sendInvitation(){ 
+/**
+ * @description To invite the users through the email.
+ */
+  sendInvitation(){ 
       if(this.selectedUser.length==0 && (this.selectedUsers==undefined || this.selectedUsers=='')){
         this.isEmpty=true;
       }else{
@@ -150,6 +159,9 @@ export class EmailInviteComponent implements OnInit {
             })
       }
     }
+/**
+ * @description  To cancel the user from sending invitations
+ */
 
     cancelInvitation(){
       this.selectedUser=[];
@@ -163,7 +175,10 @@ export class EmailInviteComponent implements OnInit {
      
       jQuery("#invite_placeholder").show();
     }
-
+    
+/**
+ * @description To check the email exists or not
+ */
 
     checkEmail(email){
       this.isExist=false;
@@ -175,7 +190,9 @@ export class EmailInviteComponent implements OnInit {
         this.noResult=false;
       }
     }
-
+/**
+ * @description Adding new user if there is no user with the given details.
+ */
     addNewUser(){ 
        var userInfo={email:this.selectedUsers,projectId:this.projectId};
        var userMail=this.selectedUsers;

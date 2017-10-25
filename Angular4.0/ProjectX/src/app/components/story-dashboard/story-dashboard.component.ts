@@ -206,7 +206,9 @@ expanded: any = {};
  
 }
 
-
+/**
+ * @description Preparing dropdown list 
+ */
 setFilterValue(response){
 
      var error=false;
@@ -384,7 +386,9 @@ if(row[0].other_data.planlevel==2){
     localStorage.setItem('pageState',page_state);
   }
 
-
+/**
+ * @description Editing the story from dashboard
+ */
 editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,value_id,row){ 
      this.dropList=[];
     var inptFldId = fieldId;
@@ -434,7 +438,9 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
     
   }
 
-  //Prepares the Custom Dropdown's Options array.
+  /**
+   * @description Prepares the Custom Dropdown's Options array.
+   */
  public prepareItemArray(list:any,priority:boolean,status:string){
    var listItem=[];
     var listMainArray=[];
@@ -449,11 +455,12 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
       listMainArray.push({type:"",filterValue:listItem});
     return listMainArray;
 }
- 
-//Restores the editable field to static mode.
-//Also prepares the data to be sent to service to save the changes.
-//This is common to left Column fields.
-   restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
+ /**
+  * @description Restores the editable field to static mode.
+                 Also prepares the data to be sent to service to save the changes.
+                 This is common to left Column fields.
+  */
+  restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
     var intRegex = /^\d+$/;
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
       var postEditedText={
@@ -527,7 +534,9 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,val
 
     this.showMyEditableField[fieldIndex] = true;
   }
-   
+   /**
+    * @description Inline story title edit closing when click on out side.
+    */
 closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
         if(editedText.trim() !=""){
         
@@ -550,8 +559,11 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
 
       }
 }
-  // Added by Padmaja for Inline Edit
-//Common Ajax method to save the changes.
+/**
+ *  @description Added by Padmaja for Inline Edit
+Common Ajax method to save the changes.
+  
+ */
     public postDataToAjax(postEditedText,isChildActivity=0,showField){ 
      clearTimeout(this.inlineTimeout);
     this.inlineTimeout =  setTimeout(() => { 
@@ -658,7 +670,9 @@ getFilteredData(response){
 getFilterCriteria(result){
 this.criteriaLabel=result;
 }
-
+/**
+ * @description Giving option to delete the custom filters
+ */
 deleteOption(event){
     var thisObj = this;
   console.log("deleteOptiondeleteOptiondeleteOption"+JSON.stringify(event));

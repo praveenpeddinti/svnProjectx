@@ -94,6 +94,9 @@ export class ProjectFormComponent implements OnInit {
            });
     }
    }
+   /**
+    * @description To upload an image in the form
+    */
    CallFileupload(){
        jQuery("input[id='inputFile']").click(); 
       this.fileuploadClick=true;
@@ -154,6 +157,9 @@ export class ProjectFormComponent implements OnInit {
     }
     public timer=undefined;
  
+ /**
+  * @description To check the projectname with the existing project names.
+  */
     verifyProjectName(value){
           clearTimeout(this.timer);
           if(this.projectForm=='create'){
@@ -168,6 +174,9 @@ export class ProjectFormComponent implements OnInit {
               }
           }
     }
+    /**
+     * @description Verifying the project name 
+     */
     AjaxCallForProjectName(value){
            var postData={
                       projectName:value.trim()
@@ -208,6 +217,9 @@ export class ProjectFormComponent implements OnInit {
         this.verifyProjectMess=false;
     }
     public editorDesc="";
+    /**
+     * @description saving/editing the project details 
+     */
     postProjectDetails(projectForm){
         if(projectForm=='create'){
           this.saveProjectDetails();
@@ -216,6 +228,9 @@ export class ProjectFormComponent implements OnInit {
         }
 
     }
+    /**
+     * @description saving the project
+     */
    saveProjectDetails(){
         if(this.verified==1 && this.fileuploadMessage==0){
             this.projectImage=jQuery('.projectlogo').attr("src");
@@ -249,6 +264,9 @@ export class ProjectFormComponent implements OnInit {
 
        }
     }
+    /**
+     * @description Updating the project details
+     */
       editProjectDetails(){
            this.projectImage=jQuery('.projectlogo').attr("src");
             var editor=jQuery('#summernote').summernote('code');
@@ -281,7 +299,9 @@ export class ProjectFormComponent implements OnInit {
           
      
   }
- 
+ /**
+  * @description Clearing the form before creating the project
+  */
     resetFormForcreate(){
        this.submitted=false;
        this.form={};
@@ -301,6 +321,10 @@ export class ProjectFormComponent implements OnInit {
        }  
 
   }
+  
+ /**
+  * @description Reset the form while doing edit.
+  */
      resetFormForedit(){
        this.submitted=false;
        jQuery("#summernote").summernote('code',this.copydescription);
@@ -318,6 +342,9 @@ export class ProjectFormComponent implements OnInit {
         this.verifyProjectMess=false; 
   }
 
+ /**
+  * @description Project Creation
+  */
  creationProject(){ 
      
         var formobj=this;
@@ -341,6 +368,9 @@ export class ProjectFormComponent implements OnInit {
          this.spinnerSettings.color='';
          this.spinnerSettings.class ='';
     }
+    /**
+     * @description Clearing the edited details from the Project Update form
+     */
    clearEditedDetails(form){
     console.log("12333");
      this.fileuploadMessage=0; 
@@ -365,6 +395,9 @@ export class ProjectFormComponent implements OnInit {
       }
   }
 
+ /**
+  * @description Binding the event to the description
+  */
   checkDescField(event){
   
     jQuery(event).text();

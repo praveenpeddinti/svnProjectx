@@ -68,7 +68,10 @@ export class BucketDashboardComponent implements OnInit {
 
   }
 
-  load_bucketContents(page,bucketStatus,scroll) {
+/**
+ * @description To get the bucket details on page load 
+ */
+ load_bucketContents(page,bucketStatus,scroll) {
         var postData={
         'projectId':this.projectId,
         'bucketId':this.navBucketId,
@@ -101,6 +104,7 @@ export class BucketDashboardComponent implements OnInit {
             }
         });
     }
+
  parseDate(s) {
      if(s !=null){
         var months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,
@@ -112,6 +116,9 @@ export class BucketDashboardComponent implements OnInit {
      }
 }
 
+/**
+ *@description To display the bucket details in the edit form when user selects to update.
+*/
 prepareEditFromData(){
     var editBucketData = {};
     editBucketData['Id']=this.bucketDetails[0].BucketId;
@@ -124,14 +131,19 @@ prepareEditFromData(){
 
     return editBucketData;
 }
-    prepareBucketData(bucketData,prepareData){
+/**
+ *@description Preparing bucket details to display
+ */
+   prepareBucketData(bucketData,prepareData){
          for(let bucketArray in bucketData){
         prepareData.push(bucketData[bucketArray]);
        }
        return prepareData;
     }
-
-    public prepareItemArray(list:any,priority:boolean,status){
+/**
+ *@description Preparing an array to push the bucket details.
+ */
+   public prepareItemArray(list:any,priority:boolean,status){
         var listItem=[];
         var listMainArray=[];
         if(list.length>0) { 
@@ -150,7 +162,10 @@ prepareEditFromData(){
         return listMainArray;
     }
 
-    filterBucketChange(event){
+/**
+ * @description To change the bucket event dynamically using dropdown.
+ */
+   filterBucketChange(event){
       var bucketId = this.navBucketId
       if(event.value == 0){
           this.form = {};
@@ -254,22 +269,28 @@ prepareEditFromData(){
                  
                })
     }
-
-    onBucketUpdate(updatedData){
+/**
+ *@description Will get call when user tries to update the bucket details
+ */
+onBucketUpdate(updatedData){
         this.bucketDetails = [];
         this.bucketDetails= this.prepareBucketData(updatedData,this.bucketDetails);
          this.bucketDetails[0].DropDownBucket = "none";
         jQuery("#addBucketModel").modal('hide');
     }
 
-
-    showBucketPageError(msg){
+/**
+ * @description When there is any error occurs while changing the status of bucket dropdown, it will check here.
+ */
+ showBucketPageError(msg){
         this.bucketPageError = msg;
             setTimeout(()=>{
                this.bucketPageError = "";
            },3500);
     }
-
+    /**
+     * @description To navigate to the bucket dashboard page when user selects the bucket.
+     */
     gotoStory(bucketObj,filterVal,filterType,key){
        var filterKey:any={}; 
         filterKey['Buckets']=[{

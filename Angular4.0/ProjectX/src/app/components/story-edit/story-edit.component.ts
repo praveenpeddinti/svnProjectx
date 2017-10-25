@@ -71,7 +71,9 @@ export class StoryEditComponent implements OnInit
 
   ngOnInit() 
   { var thisObj=this;
-    //getting the route param(Ticketid) for specific ticket to edit
+    /**
+     *  @description getting the route param(Ticketid) for specific ticket to edit
+    */
     this.route.params.subscribe(params => {
             this.url_TicketId = params['id'];
             this.projectName=params['projectName'];
@@ -436,15 +438,17 @@ export class StoryEditComponent implements OnInit
         });
    }
 
-     /*
-     @Description  : Routing to Story Detail on Cancel Edit
+     /**
+     @description Routing to Story Detail on Cancel Edit
      */
     cancelDesc()
     {
       this._router.navigate(['project',this.projectName,this.url_TicketId,'details']);
     }
 
- 
+ /**
+  *  @description Preaparing task array to display the task data
+  */
    taskDataBuilder(taskArray){
      var subTasksArray = [];
        let prepareData = [];
@@ -471,12 +475,17 @@ export class StoryEditComponent implements OnInit
      
         return subTasksArray;
     }
-
+/**
+ *  @description Removing cancel button based on user priority.
+ */
 cancleChangingStatus(value:any){
   this.openReportPopup=false;
   jQuery('body').removeClass('modal-open');
   
 }
+/**
+ *  @description Updating/saving the workflow when user did something on status
+ */
 saveReportWithStatus(value:any){
   value.workflow=value.workflow.Id;
   this.editStorySubmit(value);

@@ -29,7 +29,9 @@ export class InviteComponent implements OnInit {
         thisObj.verifyInvitation(thisObj.inviteCode);
       })
   }
-
+/**
+ * @description To verify invited users details
+ */
   verifyInvitation(code){ 
   
    if(localStorage.getItem('user')!=null){

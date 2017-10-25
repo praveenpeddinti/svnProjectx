@@ -60,7 +60,9 @@ export class UserDashboardComponent implements OnInit {
    thisObj.loadUserDashboard(req_params);
    this.shared.change('','','','','');
    }
-
+/**
+ * @description Fetching details to display in user dashboard
+ */
   loadUserDashboard(req_params) {
     var thisObj = this;
     this._ajaxService.AjaxSubscribe('collaborator/get-user-dashboard-details', req_params, (result) => {
@@ -106,7 +108,9 @@ export class UserDashboardComponent implements OnInit {
     creationProject(){
       this.projectFormComponent.creationProject();
     }
-
+/**
+ * @description loading notification to display on page load
+ */
      @HostListener('window:scroll', ['$event']) 
     loadNotificationsOnScroll(event) {
       if ((!this.noMoreActivities || !this.noMoreProjects ) && jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
@@ -122,12 +126,16 @@ export class UserDashboardComponent implements OnInit {
           thisObj.loadUserDashboard(req_params);   
       }
     }
-
+/**
+ * @description Redirecting to ticket page when click
+ */
   goToTicket(project,ticketid,notify_id,comment)
   {
     this._router.navigate(['project',project.ProjectName,ticketid,'details'],{queryParams: {Slug:comment}});
   }
-
+/**
+ * @description Providing global search option 
+ */
   globalSearch(){
     console.log("here-----"+this.srch);
    var searchString=this.srch;

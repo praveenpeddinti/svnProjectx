@@ -25,21 +25,17 @@ export class BreadcrumbComponent implements OnInit {
   private project;
   constructor(private router:Router,private route:ActivatedRoute,private shared:SharedService){
     this.shared=shared;
-   // console.log("==in const==");
     this.isLoggedOut=true;
   }
   ngOnInit()
   {
     
     var path_url;
-   // console.log("==In breadcrumb==");
       this.shared.getEmittedValue().subscribe(value=>
       {
         
         this.route_changes=value; //params from URL
-       // console.log("==Count=="+this.count);
-      //  console.log("==Value in BreadCrumb=="+this.route_changes.url +' '+this.route_changes.params);
-      //  console.log("==local storage=="+localStorage.getItem('ProjectName'));
+     
       this.project=this.route_changes.projectName;
         if(this.route_changes.page!='Logout')
         {
@@ -53,14 +49,10 @@ export class BreadcrumbComponent implements OnInit {
                 }
                 if(this.route_changes.type=="New" && this.items.length>0)
                     {
-                    //  console.log("in new"+this.items.length);
                       this.items.push({label:this.route_changes.type,url:"/project/"+this.route_changes.params+"/new",queryString:''});
-                    //  console.log("in new"+this.items.length);
                     }
           if(this.route_changes.projectName!=''  && this.status!=true && this.project!='') //newly changed
             {
-            //////  console.log("==Length=="+this.items.length);
-            ///  console.log("==projectName=="+this.route_changes.projectName);
           
              if(this.id.length==1 && this.items.length==1) //newly added for The Notification Use Case
              {
@@ -86,7 +78,6 @@ export class BreadcrumbComponent implements OnInit {
                     }
                     if(this.project!=this.route_changes.projectName && this.project!='')
                     {
-                    //  console.log("==not equal==");
                       this.items.splice(1,this.items.length);
                       this.project='';
                       this.status=false;
@@ -94,7 +85,6 @@ export class BreadcrumbComponent implements OnInit {
               this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type,queryString:''});
               this.id.push('#'+this.route_changes.params);
               this.count++;
-            //  console.log("==Details Count=="+this.count);
             }
 
             /*For Back Logic */
@@ -102,7 +92,6 @@ export class BreadcrumbComponent implements OnInit {
                    {
                      if((this.items[key].label==this.route_changes.params) || (this.items[key].label=='#'+this.route_changes.params || this.route_changes.params==''))
                      {
-                    //   console.log("==Key=="+key);
                        for(var i:any=parseInt(key);i<this.items.length;i++)
                         {
                           if(this.route_changes.params=='')
@@ -132,7 +121,6 @@ export class BreadcrumbComponent implements OnInit {
        //for search  and notifications
           if(this.route_changes.type=='Other'){ 
               this.status=true;
-            //  console.log("==Id length=="+this.id.length);
               if(this.id.length!=0)
               {      
                 this.removeItems(1,true);
@@ -148,17 +136,13 @@ export class BreadcrumbComponent implements OnInit {
                 this.items.push({label:this.route_changes.page,type:this.route_changes.type,url:"/"+urlPart,queryString:this.route_changes.params});
                 if(this.items.length>1)
                 {
-                //  console.log("==Items Length=="+this.items.length);
                   for(var key in this.items) 
                     {
-                  //    console.log("== Count key ===="+key);
                       var i:any=parseInt(key);
                       if(i<this.items.length)
                       {
-                    //    console.log("condition satisfied");
                         if(this.items[i].label==this.route_changes.page)
                         {
-                     //     console.log("condition satisfied");
                           this.removeItems(i+1,true);
                         }
                       }
@@ -174,7 +158,6 @@ export class BreadcrumbComponent implements OnInit {
           }
           if(this.route_changes.navigatedFrom=="Notification") //newly added by Ryan
           {
-           // console.log("navigated from");
             for (var key in this.items)
             {
            
@@ -186,7 +169,6 @@ export class BreadcrumbComponent implements OnInit {
           this.isLoggedOut=false;
         }
         else{
-            //  console.log("==Page after Logout=="+this.route_changes.page);
               this.id=[];
               this.count=0;
               this.status=false;
@@ -198,10 +180,11 @@ export class BreadcrumbComponent implements OnInit {
 
 
   }
-  
+  /**
+   *@description Will get call when we are selecting the previous breadcrumb from current.
+*/
   modifyBreadcrumb(index)
   {
-  //  console.log(index);
     if(index==0)
     {
       this.removeItems(index+1,true);
@@ -217,6 +200,9 @@ export class BreadcrumbComponent implements OnInit {
     }
   }
 
+/**
+ * @description To remove the current breadcrumb when click on previous breadcrumb
+*/
   removeItems(index,status)
   {
     for(var i=index;i<this.items.length;i++)
@@ -229,7 +215,11 @@ export class BreadcrumbComponent implements OnInit {
         this.status=status;
      
   }
- getUrlVars(url)
+
+/**
+ * @description To prepare pattern as we required. 
+ */
+getUrlVars(url)
 {
     var vars = [], hash;
     var hashes = url.slice(url.indexOf('?') + 1).split('&');

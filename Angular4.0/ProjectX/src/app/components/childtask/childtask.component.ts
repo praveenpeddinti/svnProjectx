@@ -127,7 +127,9 @@ private _service: StoryService,private _ajaxService: AjaxService) { }
             this._router.navigate(['project',event[0].other_data.project_name, event[0].field_value,'details']);
     }
 
-
+/**
+ *@description This method wlll get call when editing the child task.
+ */
 editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row){ 
      this.dropList=[];
     var inptFldId = fieldId;
@@ -179,7 +181,9 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
     
   }
 
-  //Prepares the Custom Dropdown's Options array.
+  /**
+   *@description Prepares the Custom Dropdown's Options array.
+   */
  public prepareItemArray(list:any,priority:boolean,status:string){
    var listItem=[];
     var listMainArray=[];
@@ -194,10 +198,12 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
       listMainArray.push({type:"",filterValue:listItem});
     return listMainArray;
 }
- 
-//Restores the editable field to static mode.
-//Also prepares the data to be sent to service to save the changes.
-//This is common to left Column fields.
+ /**
+  * @description Restores the editable field to static mode.
+Also prepares the data to be sent to service to save the changes.
+This is common to left Column fields.
+  */
+
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
           
     var intRegex = /^\d+$/;
@@ -262,7 +268,10 @@ editThisField(event,fieldId,fieldDataId,fieldTitle,renderType,restoreFieldId,row
 
     this.showMyEditableField[fieldIndex] = true;
   }
-   
+
+ /**
+  *@description To restore the title on inline edit  
+ */
 closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField,row,isChildActivity=0){
         if(editedText.trim() !=""){
          
@@ -285,8 +294,10 @@ closeTitleEdit(editedText,restoreFieldId,fieldIndex,renderType,fieldId,showField
 
       }
 }
-  // Added by Padmaja for Inline Edit
-//Common Ajax method to save the changes.
+  /**
+   * @description Added by Padmaja for Inline Edit
+                 Common Ajax method to save the changes.
+*/
     public postDataToAjax(postEditedText,isChildActivity=0,showField){
      clearTimeout(this.inlineTimeout);
     this.inlineTimeout =  setTimeout(() => { 

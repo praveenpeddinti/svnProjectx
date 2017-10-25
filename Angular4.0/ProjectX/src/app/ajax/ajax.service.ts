@@ -16,6 +16,9 @@ export class AjaxService {
    private sharedServece:SharedService,
    private http: Http) { }
 
+/**
+ * @description AjaxSubscribe function using as common to get data from services.
+*/
 AjaxSubscribe(url:string,params:Object,callback)
 {   console.log("params____"+JSON.stringify(params));
    this.sharedServece.setLoader(true);
@@ -47,6 +50,7 @@ AjaxSubscribe(url:string,params:Object,callback)
  * @param url 
  * @param params 
  * @param callback 
+ * @description Commonly using for notificatioins
  */
 NodeSubscribe(url:string,params:Object,callback)
 {
@@ -67,7 +71,9 @@ NodeSubscribe(url:string,params:Object,callback)
       );
 }
 
-
+/**
+ * @description To make node calls
+ */
 SocketSubscribe(url:string,params:Object)
 { 
   var getAllData=  JSON.parse(localStorage.getItem('user'));

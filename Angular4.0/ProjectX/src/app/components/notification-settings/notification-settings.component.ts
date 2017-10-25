@@ -25,7 +25,9 @@ public totalNotificationsCount=0;
         this.shared.change(this._router.url,'','Notification Settings','Other',''); //added By Ryan for breadcrumb purpose
 this.notificationPrefernces();
 }
-
+/**
+ * @description Making the select all option as checked by checking the count
+ */
 public checkCount(){
         if(this.totalNotificationsCount==this.SN_count){
              this.isSelectedAll_SN=true;
@@ -69,7 +71,9 @@ this._ajaxService.AjaxSubscribe("settings/notification-preferences",data,(respon
      }
     });
 }
-
+/**
+ * @description Ckhecking or unchecking the checkboxes based on user option
+ */
 isChecked(Id,type,e){
         var isChecked=e.target.checked;
         if(isChecked==false){
@@ -97,7 +101,9 @@ isChecked(Id,type,e){
         this._ajaxService.AjaxSubscribe("settings/notifications-settings-status-update",post_data,(response) => {
     });
     }
-   
+   /**
+    * @description Providing select/deselect all option for each type of notification.
+    */
 isCheckedAll(type,e){
       var isChecked=e.target.checked;
 

@@ -94,8 +94,9 @@ private typeAheadResults ={
 
    
   }
-
-  
+/**
+ * @description Prepares the bucket details array.
+ */
 private prepareItemArray(list:any,priority:boolean,status){
         var listItem=[];
         var listMainArray=[];
@@ -116,6 +117,10 @@ private prepareItemArray(list:any,priority:boolean,status){
     }
 
 public editorDesc="";
+/**
+ * @description To add or edit the bucket to the particulr project.
+ */
+
 BucketForAddorEdit(event){
   var editor=jQuery('#bucketDescId').summernote('code');
   
@@ -137,6 +142,9 @@ BucketForAddorEdit(event){
 
 }
 
+/**
+ * @description To add the bucket to the particulr project.
+*/
 addBucket(){
     if(this.Type == "New"){
     
@@ -165,6 +173,9 @@ addBucket(){
     }
 }    
 
+/**
+ * @description Checking the given bucket name with existing buckets to prevent from duplicates.
+ */
 checkBucketName(event){
   var titlePattern = /^[a-zA-Z0-9\s\.\-_]+$/;
   clearTimeout(this.typeAheadTimer);
@@ -221,7 +232,9 @@ checkBucketName(event){
     },2000);
  }
 }
-
+/**
+ * @description To clearing the form on cancel or closing the popup
+ */
 clearForm(resetEditForm){
 
   this.bucketSuccessMsg="";
@@ -255,6 +268,10 @@ clearForm(resetEditForm){
         jQuery('body').removeClass('modal-open');
     
 }
+
+/**
+ *@description To reset the form on cancel or closing the popup based on bucket type
+*/
 resetForm(){ 
 if(this.Type=="New"){
  jQuery('#bucketDescId').summernote('code','');

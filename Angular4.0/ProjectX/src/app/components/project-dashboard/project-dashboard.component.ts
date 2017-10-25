@@ -155,7 +155,9 @@ export class ProjectDashboardComponent implements OnInit {
    ngAfterViewInit() {
     
     }
-
+/**
+ * @description Displaying the current project details in project dashboard.
+ */
     currentProjectDetails(){
       var postData={
                     projectId: this.form['projectId'],
@@ -171,6 +173,9 @@ export class ProjectDashboardComponent implements OnInit {
                                 
                                });
     }
+    /**
+     * @description Provding scroll to the current project details page.
+     */
     @HostListener('window:scroll', ['$event']) 
     projectActivityScroll(){
      var thisObj=this;
@@ -180,9 +185,11 @@ export class ProjectDashboardComponent implements OnInit {
                       
                         thisObj.projectActivities(thisObj.page);
                      
-                        
                     }
     }
+    /**
+     * @description Fetching all project activivties and showing in dashboard.
+     */
     projectActivities(page){
 
               var post_data={
@@ -231,10 +238,16 @@ export class ProjectDashboardComponent implements OnInit {
             }
         return prepareData;
    }
+   /**
+     * @description Clearing the project updation form.
+     */
   clearEditedDetails(form){
     console.log("12333");
       this.projectFormComponent.clearEditedDetails(form);
   }
+  /**
+     * @description Appending logo to the project creation form.
+     */
   appendLogo(val){
       jQuery(".imgs").attr("src",'');
     if(val != undefined){
@@ -255,6 +268,9 @@ export class ProjectDashboardComponent implements OnInit {
    
     }
   }
+  /**
+     * @description Appending description to the page
+     */
   appendDescription(val){
     this.description=val;
   }
@@ -320,7 +336,9 @@ thisObj._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
 
          
   }
-
+/**
+     * @description Opening Bucket story when click on buckets
+     */
    gotoStory(bucketObj,filterVal,filterType,key){ console.log("Bucket__obj__"+JSON.stringify(bucketObj));
        var filterKey:any={}; 
         filterKey['Buckets']=[{

@@ -62,6 +62,9 @@ public showHelper:boolean=false;
         })
       })
   }
+/**
+ * @description To display the username in the display name field by combining firstname and lastname.
+ */
 
 public prepareDisplayName(){
   if(this.form['displayName']=='' || this.form['displayName']==undefined){
@@ -70,6 +73,10 @@ public prepareDisplayName(){
   }
  
 }
+
+/**
+ * @description To create new user
+ */
     saveUser()
     {       
         if(this.form['password'] ==this.form['confirmpassword']){
@@ -104,11 +111,17 @@ public prepareDisplayName(){
       }
     }
 
-
+/**
+ * @description  To upload the user profile
+ */
     CallFileupload(){
        jQuery("input[id='my_file']").click(); 
       this.fileuploadClick=true;
     }
+
+/**
+ * @description To upload the user profile
+ */
 
     public fileUpload(fileInput: any, comeFrom: string):void 
     {
@@ -147,6 +160,9 @@ public prepareDisplayName(){
             });
     }
 
+/**
+ * @description Validates the password.
+ */
     public checkConfirmField(event){
 
          if(event==''){
@@ -154,15 +170,25 @@ public prepareDisplayName(){
          }
     }
 
+/**
+ * @description Validates the password
+ */
     public checkPasswordField(event){
       if(event==''){
         jQuery("#password_valid").hide();
       }
     }
 
+/**
+ * @description Validates the password
+ */
     public showPasswordHelper(){
       this.showHelper=true;
     }
+
+/**
+ * @description Validates the password.
+ */
 
     public hidePasswordHelper(){
       this.showHelper=false;

@@ -8,7 +8,6 @@ import { AjaxService } from '../../ajax/ajax.service';
 import {AccordionModule,DropdownModule,SelectItem} from 'primeng/primeng';
 import {SharedService} from '../../services/shared.service';
 import { ProjectService } from '../../services/project.service';
-// import {ActivityService} from '../../services/activity.service';
 declare var jQuery:any;
 declare var bootbox:any;
 
@@ -20,7 +19,9 @@ declare var bootbox:any;
     styleUrls: ['./home-component.css'],    
     	
 })
-
+/**
+ * @description Subversion related logic is here in Home Component.
+ */
 export class HomeComponent{
     public selectedProject:any;
 
@@ -38,7 +39,7 @@ export class HomeComponent{
           this.route.queryParams.subscribe(
         params => 
             { 
-                // alert(JSON.stringify(this.users));
+              
                 // localStorage.
                 this.projName=params['ProjectName'];
                 this.projId=params['ProjectId'];
@@ -48,7 +49,7 @@ export class HomeComponent{
                 };
                 this._ajaxService.AjaxSubscribe('site/get-project-team',sendData,(result)=>
                 {  
-                        // alert(JSON.stringify(result));
+                    
                         this.team = this.prepareTeamPermissionsData(result.data.userData);
                         this.svnServer = result.data.svnUrl+"svn/";
                         this.navigateToFolder(this.projName);
@@ -61,9 +62,7 @@ export class HomeComponent{
    }
 
    ngAfterViewInit() {
-                // jQuery('#createProjectDiv').show();
-                // jQuery('#showLogDiv').hide();
-                // jQuery('#createUserDiv').hide();
+             
     }
 
   
@@ -75,15 +74,16 @@ export class HomeComponent{
           private shared:SharedService,
           private _ajaxService: AjaxService,
           private zone:NgZone,
-        //   private _activityService: ActivityService
+       
           ) { }
 
 
     private repo=[];
     private fileNavigator = [];
-
+/**
+ * @description Navigates deeper into folder when clicked on them.
+ */
   
-
     navigateToFolder(dirName){
         
         var sendData={
@@ -93,7 +93,7 @@ export class HomeComponent{
             userName:this.users.username,
            password:'minimum8'
         };
-        // alert("navigateToFolder===>"+JSON.stringify(sendData));
+       
         this._ajaxService.AjaxSubscribe('site/get-repository-structure',sendData,(result)=>
         {  
 
@@ -102,9 +102,12 @@ export class HomeComponent{
            this.repo =this.prepareFileStructure(result.data);
            })
     }
+/**
+ * @description Comes out of current directory when clicked on folder breadcrumb.
+ */
 
     comeBackToFolder(dirName){
-        //  this.navigateToFolder(dirName,"pop")
+      
         var idx =  this.fileNavigator.indexOf(dirName);
         var len = this.fileNavigator.length;
         var rem = len - idx;
@@ -112,7 +115,9 @@ export class HomeComponent{
         this.fileNavigator.splice(idx,rem);
         this.navigateToFolder(dirName);
     }
-
+/**
+ * @description Processes the directory data which is coming from backend.
+ */
     prepareFileStructure(data){
         var fileStructure = [];
         for(let datum in data){
@@ -120,9 +125,11 @@ export class HomeComponent{
         }
         return fileStructure;
     }
-
+/**
+ * @description creates the folder under current directory.
+ */
     createFolder(fodlerName:HTMLInputElement){
-        // alert(fodlerName);
+      
         var sendData={
             curerntDirectory :this.fileNavigator.join("/"),
             newFolder:fodlerName.value,
@@ -132,20 +139,21 @@ export class HomeComponent{
         var thisObj = this;
         if(fodlerName.value != ""){
             bootbox.confirm("Are you sure to create a folder: "+fodlerName.value+", under "+sendData.curerntDirectory, function(ok){ if(ok){
-        // if(confirm("Are you sure to create a folder: "+fodlerName.value+", under "+sendData.curerntDirectory)){
         thisObj._ajaxService.AjaxSubscribe('site/create-folder',sendData,(result)=>
         {  
            
             fodlerName.value="";
            thisObj.repo =thisObj.prepareFileStructure(result.data);
+           thisObj.showLog();
            })
-        // }
         } 
     });
         }
     }
     
-  
+/**
+ * @description Displays subversion logs.
+ */
     
     showLog(){
     var sendData={
@@ -164,6 +172,9 @@ export class HomeComponent{
       
            })
     }
+/**
+ * @description Processes user permissions coming from backend.
+ */
 
     prepareTeamPermissionsData(teamData=[]){
         var teamPermissions = [];
@@ -187,6 +198,9 @@ export class HomeComponent{
         }
         return teamPermissions;
     }
+/**
+ * @description Saves the modified permissions.
+ */
 
     savePermissions(){
         var permissonsToBeUpdated = this.getModifiedList(this.team);
@@ -196,9 +210,7 @@ export class HomeComponent{
             userData:permissonsToBeUpdated
         };
         var thisObj = this;
-        // alert("----permissions----"+JSON.stringify(sendData));
         bootbox.confirm("Are you sure to save these permissions?", function(ok){ if(ok){
-        // if(confirm("Are you sure to save these permissions?")){
         thisObj._ajaxService.AjaxSubscribe('site/create-user',sendData,(result)=>
         {
 
@@ -207,8 +219,10 @@ export class HomeComponent{
            })
         }
     });
-    }
-
+}
+     /**
+     * @description Fetches the list of users whose permissions are modified.
+     */
     getModifiedList(teamList=[]){
         var modifiedPermissions = [];
         for(let teamMember of teamList){
@@ -224,15 +238,17 @@ export class HomeComponent{
         }
         return modifiedPermissions;
     }
-
+    /**
+     * @description This will not uncheck read when right is checked.
+     */
     premissionsChanges(memberObj){
-        // alert("changes===>"+JSON.stringify(memberObj));
+       
         memberObj.modified = true;
         setTimeout(()=>{
         if(memberObj.write){
             memberObj.read=true;
         }
-        // alert("changes=after==>"+JSON.stringify(memberObj));
+     
         },200);
         
     }

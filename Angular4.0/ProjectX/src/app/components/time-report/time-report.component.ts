@@ -127,12 +127,7 @@ export class TimeReportComponent{
     ngOnInit() {
         var thisObj=this;
          this.deletePopUp=false;
-    //    jQuery(document).click(function(e){
-    //            if(jQuery(e.target).closest(".deletebutton").length == 0 ) {
-    //                // jQuery("#delete_timelog").css("display", "none");
-    //                this.deletePopUp=false;
-    //             }
-    //   });
+   
         var thisObj = this;
         this.date4 = (this.calendarVal.getMonth() + 1) + '-' + this.calendarVal.getDate() + '-' + this.calendarVal.getFullYear(); 
         var maxDate = new Date();//set current date to datepicker as min date
@@ -145,22 +140,7 @@ export class TimeReportComponent{
         thisObj.route.queryParams.subscribe(
         params => 
         { 
-            /* Section To Remember the State of Pages while user navigation */
-            // if(params['page']!=undefined)
-            // {
-               
-            //     this.pageNo=params['page'];//added by Ryan
-            //     this.sortorder=params['sort'];//added by Ryan
-            //     this.sortvalue=params['col'];
-            //     this.fromDateVal=params['fromDate'];//added by Ryan 
-            //     this.toDateVal=params['toDate']; // added by Ryan
-            //     thisObj.offset=this.pageNo-1;//added by Ryan
-            //     var pagination_count={page:'Time Report',count:this.pageNo,sort:this.sortorder,col:this.sortvalue,fromDate:this.fromDateVal,toDate:this.toDateVal};
-            //     var pagination=JSON.stringify(pagination_count);
-            //     localStorage.setItem('timeReportState',pagination);//added by Ryan
-            // }
-            /* =========Section End==========================================*/ 
-
+      
             thisObj.route.params.subscribe(params => {
                 thisObj.projectName=params['projectName'];
                 this.shared.change(this._router.url,true,'Time Report','Other',thisObj.projectName);
@@ -179,16 +159,22 @@ export class TimeReportComponent{
     }
 
     ngAfterViewInit(){ 
-    //    jQuery(".ui-chkbox-icon ui-clickable").addClass("fa fa-check");
-    //    jQuery(".ui-chkbox-box ui-widget ui-corner-all ui-state-default").addClass("ui-state-active");
-    }
-
+     }
+/**
+ * For start date
+ */
     selectFromDate(event){
         this.fromDateVal=event;
     }
+    /**
+ * For end date
+ */
     selectToDate(event){
         this.toDateVal=event;
     }
+    /**
+ * Filtering date based on requirement
+ */
     dateFilterSearch(){
         this.offset = 0;
         jQuery("#toDate_error").hide();
@@ -200,6 +186,9 @@ export class TimeReportComponent{
         this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDate,this.toDate,this.Members);
         }
     }
+    /**
+     * Removing the date which selected previously
+     */
     clearDateTimeEntry(){
         this.addPopUp=true;
         this.entryForm['text']='';
@@ -268,26 +257,33 @@ export class TimeReportComponent{
         this.sortorder = event.sorts[0].dir;
         this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal,this.Members);
     }
-
+/**
+ * Naviagating to story form page.
+ */
     renderStoryForm() {
         this._router.navigate(['story-form']);
     }
-    // editTimeReport(){
-    //       document.getElementById("editTimeReport").style.display='block';
-    // }
+   
+   /**
+ * Form Reset
+  */
     resetForm(){
-       // alert("asdddddddddddd");
         this.extractFields=[];
         this.hourErr=false;
         this.titleErrMsg=false;
     }
+ /**
+ * When changing the text
+ */
     textChanged(event) {
         if(event=='' || typeof event == 'undefined'){
             this.titleErrMsg=false;
         }
      } 
+     /**
+      * Fetching the story details based on the timelog
+      */
     searchTask(event) {
-       //  console.log("##########"+event.query+"-----ad----------"+event.keyCode);
          this.titleErrMsg=false;
         var searchStrg=event.query;
         var modifiedString=event.query.replace("#","");
@@ -302,7 +298,6 @@ export class TimeReportComponent{
                 this._ajaxService.AjaxSubscribe("time-report/get-story-details-for-timelog",post_data,(result)=>
                 {
                     
-                    //if(result.status !='401'){ 
                         if(result.data.length !=0){ 
                         var subTaskData = result.data;
                         for(let subTaskfield of subTaskData){
@@ -315,12 +310,10 @@ export class TimeReportComponent{
                         this.search_results=prepareSearchData;
                         jQuery(".ui-autocomplete-list-item").removeClass("ui-state-highlight");
                     }else{
-                        //if(!searchStrg.includes("#") && result.status =='401'){
                             if(!searchStrg.includes("#")){
                             let appendstring=['Please select valid story/task'];
                             this.search_results=appendstring;
-                           // alert(this.entryForm.text);
-                        //    this.entryForm['text']='';
+                 
                         }
                     
                     }
@@ -334,16 +327,15 @@ export class TimeReportComponent{
     getSelectedValueForTask(event) {
         console.log("##########"+"-----ad----------");
         this.selectedValForTask=event;
-        //   if (event.keyCode == 8 || event.keyCode == 46)
-        // {
-        //     console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        //    event.preventDefault();
-        // }
+     
     }
 
     getSelectedValueForDate(event) {
         this.selectedValForDate=event; 
     }
+    /**
+     * Functionality to edit the timelog
+     */
     editTimeLog(){
         this.selectedValForDate = null;
         this.hourErr=false;
@@ -382,6 +374,9 @@ export class TimeReportComponent{
             this.titleErrMsg=true;
      }
     }
+    /**
+     * Functionality to add the timelog for the story or task
+     */
     
     addTimeLog(){
         var getTaskVal=this.entryForm['text']; 
@@ -414,7 +409,7 @@ export class TimeReportComponent{
                        }, 500);
                         this.addPopUp=true;
                     } else {
-                    // this.errorMsg = 'dsasdasd';
+                  
                     }
                 });
             }else{
@@ -424,7 +419,9 @@ export class TimeReportComponent{
         this.titleErrMsg=true;
        }
     }
- 
+ /**
+  * Displaying delete optin
+  */
     showdeleteDiv(delObj,slug,e){
         this.deletePopUp=true;
         var delbutton_Height=25;
@@ -434,10 +431,12 @@ export class TimeReportComponent{
         var offsetTop=offset.top+delbutton_Height+2;
         var offsetRight=offset.left-(delbutton_Width+delete_popup)+16;
         jQuery('#delete_timelog').css({'top':offsetTop,'left':offsetRight,'min-width':"auto"});
-       //jQuery('#delete_timelog').css('min-width',"auto");
+     
         this.extractDelFields=delObj;
     }
-  
+  /**
+   * Removing time log
+   */
     removeTimelog(){
         var input="_Input";
         var removeTicketSpilt = this.extractDelFields['ticketDesc'].split(" ");
@@ -458,7 +457,9 @@ export class TimeReportComponent{
             this.page(this.projectId,this.offset, this.limit, this.sortvalue, this.sortorder,this.fromDateVal,this.toDateVal,this.Members);
         });            
     }
-    
+/**
+ * Hiding the delete popup
+ */     
     blockDeleteDiv(){
         this.deletePopUp=false;
     }
@@ -479,11 +480,15 @@ export class TimeReportComponent{
             } 
         }
     }
-    
+    /**
+     * Navigating to story detail page
+     */
     navigateToStoryDetail(ticketId){
         this._router.navigate(['project',this.projectName,ticketId,'details']);
      }
-
+/**
+ * @description Giving edit functionolity fot timelog
+ */
     editTimeEntry(row){
           this.editPopUp=true;
           this.editSuccessMsg=false;

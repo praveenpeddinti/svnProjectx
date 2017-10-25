@@ -211,8 +211,8 @@ getArtifacts(obj){
         });
 }
 
-  /*
-  * Description part
+  /** 
+  * @description Description part
   */
   openDescEditor(){
     var formobj=this;//added by ryan
@@ -226,6 +226,9 @@ getArtifacts(obj){
   }
 
   private descError="";
+  /**
+   * @description Submitting description
+   */
   submitDesc(){
     var editorData=jQuery('#detailEditor').summernote('code');
       if(!(editorData.indexOf("<p>")>-1))
@@ -271,6 +274,9 @@ getArtifacts(obj){
 public commentDesc = "";
 
 public commentCount = 0;
+/**
+ *  @description To submit comment
+ */
 submitComment(){
 var commentText=jQuery("#commentEditor").summernote('code');
 commentText = commentText.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
@@ -362,7 +368,9 @@ cancelReply(){
 */
 private showTitleEdit=true;
 public min_row:any=1;
-
+/**
+ *  @description Story title editing
+ */
 editTitle(titleId){
   var offsetHeight:any = parseInt(jQuery('.viewinputtext').height());
   var lineheight:any = parseInt(jQuery('#'+this.ticketId+"_title").css('line-height'));
@@ -382,7 +390,9 @@ console.log('time');
  },100);
   
 }
-
+/**
+ *  @description Cancelling title edit
+ */
 closeTitleEdit(editedText){
         if(editedText.trim() !=""){
        
@@ -406,13 +416,16 @@ closeTitleEdit(editedText){
 }
 //------------------------------Title part-----------------------------------
 
-//Navigate to Edit Page
+/**
+ * @description Navigate to Edit Page
+  */
   goToEditPage(){
 this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
   }
-
-//Changes inline editable filed to thier respective edit modes - Left Column fields.
-//Renders data to dropdowns dynamically.
+/**
+ * @description Changes inline editable filed to thier respective edit modes - Left Column fields.
+Renders data to dropdowns dynamically.
+ */
   editThisField(event,fieldIndex,fieldId,fieldDataId,fieldTitle,renderType,where){ 
    this.currentFieldData.fieldDataId=fieldDataId,
    this.currentFieldData.fieldIndex=fieldIndex
@@ -492,9 +505,11 @@ this._router.navigate(['project',this.projectName, this.ticketId,'edit']);
   }
 
 private dateVal = new Date();
-//Restores the editable field to static mode.
-//Also prepares the data to be sent to service to save the changes.
-//This is common to left Column fields.
+/**
+ * @description Restores the editable field to static mode.
+Also prepares the data to be sent to service to save the changes.
+This is common to left Column fields. 
+ */
    restoreField(editedObj,restoreFieldId,fieldIndex,renderType,fieldId,where,isChildActivity=0){
     var intRegex = /^\d+$/;
     var floatRegex = /^((\d+(\.\d *)?)|((\d*\.)?\d+))$/;
@@ -588,7 +603,9 @@ private dateVal = new Date();
     this.showMyEditableField[fieldIndex] = true;
   }
 
-//Dropdown's onFocus event
+/**
+ * @description Dropdown's onFocus event
+  */
   dropdownFocus(event,fieldIndex,where){
      if(where == "Tasks"){
       var row = fieldIndex.split("_")[0];
@@ -606,7 +623,9 @@ private dateVal = new Date();
     } 
   }
 
-//Dropdown's onBlur event
+/**
+ * @description Dropdown's onBlur event
+  */
   selectBlurField(event,fieldIndex,where){ 
    var thisobj = this;
    var i;
@@ -633,9 +652,10 @@ private dateVal = new Date();
           },1000);
 
     }
-
-//Processes the left column filed's data coming from the service 
-//And creates a Common data array to render in Angular Views.
+/**
+ * @description Processes the left column filed's data coming from the service 
+And creates a Common data array to render in Angular Views. 
+ */
   fieldsDataBuilder(fieldsArray,ticketId){
     let fieldsBuilt = [];
     let data = {title:"",value:"",valueId:"",readonly:true,required:true,elId:"",fieldType:"",renderType:"",type:"",Id:"",displayFlag:true};
@@ -723,8 +743,10 @@ private dateVal = new Date();
     return fieldsBuilt;
 
   }
+/**
+ * @description  Prepares the Custom Dropdown's Options array.
+ */
 
-//Prepares the Custom Dropdown's Options array.
  public prepareItemArray(list:any,priority:boolean,status:string){
    var listItem=[];
     var listMainArray=[];
@@ -740,7 +762,9 @@ private dateVal = new Date();
     return listMainArray;
 }
 
-//----------------------File Upload codes---------------------------------
+/**
+ * ----------------------File Upload codes---------------------------------
+*/
 public fileOverBase(fileInput:any,where:string,comment:string):void {
   if(where=="edit_comments"){
     
@@ -855,12 +879,13 @@ var thisObj = this;
 }
 
 
-
-
-//------------------------------------File Upload logics end-----------------------------------------------------
-
-// Added by Padmaja for Inline Edit
-//Common Ajax method to save the changes.
+/**
+ * ------------------------------------File Upload logics end-----------------------------------------------------
+*/
+/**
+ * @description Added by Padmaja for Inline Edit
+Common Ajax method to save the changes.
+*/
     public postDataToAjax(postEditedText,isChildActivity=0){
       console.log("-------"+JSON.stringify(postEditedText));
      clearTimeout(this.inlineTimeout);
@@ -932,8 +957,10 @@ var thisObj = this;
         },500)
     }
 
-//Navigate back to dashboard page.
-    public goBack()
+/**
+ * Navigate back to dashboard page.
+   */
+   public goBack()
     {
         this._router.navigate(['story-dashboard']);
     }
@@ -1148,7 +1175,7 @@ var thisObj = this;
 
     /**
      * @author:Ryan
-     * @description: This is used to expand the div section
+     * @description : This is used to expand the div section
      */
     public expand()
     {
@@ -1189,7 +1216,9 @@ var thisObj = this;
       jQuery("#Reply_Icons_"+comment).hide();
     jQuery("#Actions_"+comment).show();//show submit and cancel button on editor replace at the bottom
    }
-
+/**
+ * @description Functionality to submit the comment when edit
+ */
    submitEditedComment(commentIndex,slug){
      var editedContent= jQuery("#Activity_content_"+commentIndex).summernote('code');//added for summernote
      if(editedContent != "" && jQuery(editedContent).text().trim() != ""){
@@ -1227,7 +1256,9 @@ var thisObj = this;
      }
 
    }
-
+/**
+ * Functionality to delete the comment
+ */
    deleteComment(){
    
      var editedContent= jQuery("#Activity_content_"+this.commentDelId).summernote('code');
@@ -1269,7 +1300,9 @@ var thisObj = this;
 
    }
 
-
+/**
+ * @description Providing functionality to cancel the edit if user dont want to submit the changes
+ */
    cancelEdit(commentIndex){
     jQuery("#edit_comment_"+commentIndex).hide();
     this.commentError='';
@@ -1280,7 +1313,9 @@ var thisObj = this;
     jQuery("#Reply_Icons_"+commentIndex).show();
    }
 
-
+/**
+ * prepraring array for task 
+ */
     taskDataBuilder(taskArray){
      var subTasksArray = [];
        let prepareData = [];
@@ -1387,6 +1422,9 @@ var thisObj = this;
           jQuery("#timelog").fadeOut(4000);
           jQuery("#workedhours").val("");
         }
+        /**
+         * Showing the delete div 
+         */
         showdeleteDiv(id,ticId){
           this.relateTicketId=ticId;
            if(id==1){
@@ -1402,6 +1440,9 @@ var thisObj = this;
             jQuery("#delete_relateTask").css("display", "none");
           }
       }
+      /**
+       * displaying the comment  delete div
+      */
       commentdeleteDiv(id,cId,cslug){
         this.commentDelId=cId;
         this.commentDelSlug=cslug;
@@ -1460,7 +1501,9 @@ var thisObj = this;
     this.fieldsData = []; 
     this.showMyEditableField =[];
         }
-
+/**
+ * @description taking user to ticket detail page
+ */
 public callTicketDetailPage(ticId,projectId){
 
     var thisObj = this;
@@ -1584,7 +1627,9 @@ submitOnEnter(event) {
    this.closeTitleEdit(event.target.value);
   }
 }
-
+/**
+ * @description Providing cancel option when user don't want to submit the changes on status
+ */
 cancleChangingStatus(value:any){
   this.openReportPopup=false;
   jQuery('body').removeClass('modal-open');
@@ -1595,6 +1640,9 @@ cancleChangingStatus(value:any){
   this.currentFieldData.fieldDataId='';
   this.currentFieldData.fieldIndex='';
 }
+/**
+ * Saving Ticket status when user update the status
+ */
 saveReportWithStatus(value:any){
   this.postDataToAjax(value);
 }
