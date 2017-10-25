@@ -16,7 +16,6 @@ declare var jQuery:any;
 export class SearchComponent implements OnInit{
     public searchString="";
     public searchArray=[];
-   // public searchCount=[];
     public stringPosition;
     private page=1;
     public ready=true;
@@ -47,13 +46,10 @@ export class SearchComponent implements OnInit{
           console.log("searchhhhhhhhhhhhhhh"+JSON.stringify(thisObj.searchString));
         this.route.params.subscribe(params => {
            this.projectName=params['projectName'];
-         //  alert("projectName"+this.projectName);
             if(this.projectName==""||this.projectName==undefined){
-               // alert("55555555555555555");;
                this.checkData=0;
                   this.page=1;
                 this.searchArray=[];
-               // this.searchCount=[];
                     console.log("@@@@@@@@@@@@@"+JSON.stringify(thisObj.searchString));
                    this.load_contents(this.page,this.searchString,this.searchFlag,'','','');
             }else{
@@ -75,21 +71,8 @@ export class SearchComponent implements OnInit{
                this._router.navigate(['pagenotfound']);  
            }  
            })
-        // this.load_contents(this.page);
              var thisObj=this; 
         
-        //      jQuery(document).ready(function(){
-        //    jQuery(window).scroll(function() {
-        //         if (thisObj.ready && jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height())) {
-        //             thisObj.ready=false;
-        //             thisObj.page++;
-        //           //  alert("loading"+thisObj.projectId);
-        //             thisObj.load_contents(thisObj.page,thisObj.searchString,thisObj.searchFlag,thisObj.projectId,'scroll'); 
-                    
-        //         }
-              
-        //         });
-        // });
         this.shared.change(this._router.url,this.searchString,'Search','Other',this.projectName); //added By Ryan for breadcrumb purpose
         }
              @HostListener('window:scroll', ['$event']) 
@@ -98,11 +81,13 @@ export class SearchComponent implements OnInit{
                          if (thisObj.ready && jQuery(window).scrollTop() >= (jQuery(document).height() - jQuery(window).height())) {
                     thisObj.ready=false;
                     thisObj.page++;
-                  //  alert("loading"+thisObj.projectId);
                     thisObj.load_contents(thisObj.page,thisObj.searchString,thisObj.searchFlag,thisObj.projectId,'scroll',''); 
                     
                 }
               }
+     /**
+      * @description To search the data on the given data
+      */
    public  load_contents(page,searchString,searchFlag,projectId,scroll,pName){
         var post_data={
         'projectId':projectId,
@@ -116,11 +101,9 @@ export class SearchComponent implements OnInit{
          {
              this.zone.run(() => { 
                    if(result.message !='no result found'){
-                   // document.getElementById("nosearchdiv").style.display = 'block';;
                    this.searchDivTabs=true;
                     document.getElementById('searchsection').innerHTML=' '; 
                     this.noSearchDivClass='col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero';
-                    //  alert("here4444--------"+JSON.stringify(result.data.mainData));
                     this.searchArray= this.searchDataBuilder(result.data.mainData,this.searchArray);
                     this.taskCount= result.data.dataCount.TaskCount;
                     this.commentsCount=result.data.dataCount.commentsCount;
@@ -129,29 +112,21 @@ export class SearchComponent implements OnInit{
                     this.allCount=result.data.dataCount.allCount;
                     this.optionTodisplay=this.projectsArray(result.data.projectCountForAll);
                     this.projects=this.optionTodisplay[0].filterValue;
-                 // alert("here33--############------"+JSON.stringify(this.copyList));
-                 // alert("hjkhjkjhk------"+JSON.stringify(this.optionTodisplay));
-                //  alert("@@@---"+pName);;
                     if(this.copyList!=undefined){
                     this.projects=this.copyList;
                     this.optionTodisplay=this.copyList;
                     }
-                 //    alert("uyuyy------"+JSON.stringify(this.optionTodisplay));
                    console.log("###-555-----"+JSON.stringify(this.copyList));
                     this.checkDataForcount=0;
                     this.ready=true;
                     }else{
-                      //  alert("2323232");
                           this.optionTodisplay=this.projectsArray(result.data.projectCountForAll);
                         this.projects=this.optionTodisplay[0].filterValue;
-                    //    console.log("here33--############------"+JSON.stringify(this.projects));
-                    //  alert("@@@---"+pName);;
                         if(this.copyList!=undefined){
                         this.projects=this.copyList;
                          this.optionTodisplay=this.copyList;
                         }
                          this.checkDataForcount=1;
-                       // alert("23232323");
                         if(scroll=='scroll' && result.message =='no result found'){
                                if (document.getElementById('searchsection').innerHTML.indexOf("No Results Found") != -1) {
                                   document.getElementById('searchsection').innerHTML='No Results Found';
@@ -166,9 +141,7 @@ export class SearchComponent implements OnInit{
                             if(searchFlag=='' || searchFlag==undefined){
                                 this.noSearchDivClass='';
                                 this.noSearchDivClass=' tabpaddingleftzero';
-                             //   document.getElementById("nosearchdiv").style.display ='';
-                              //  document.getElementById("nosearchdiv").style.display = 'none'; 
-                               this.searchDivTabs=false;
+                              this.searchDivTabs=false;
                             }
                                 document.getElementById('searchsection').innerHTML=' ';
                                 document.getElementById('searchsection').innerHTML='No Results Found';
@@ -191,9 +164,11 @@ export class SearchComponent implements OnInit{
         ) {
 
          }
+         /**
+          * @description Preparing array 
+          */
   projectsArray(list:any){
      var listItem=[];
-      // listItem.push({label:"--Projects--", value:"",'count':''});
         var listMainArray=[];
               for (var key in list) {
              listItem.push({label:key+' '+list[key], value:key,'count':list[key]});
@@ -201,13 +176,18 @@ export class SearchComponent implements OnInit{
         listMainArray.push({type:"",filterValue:listItem});
          return listMainArray;
 }
-    // preparing serach data
+    /**
+     * @description preparing serach data
+    */
     searchDataBuilder(searchData,prepareData){
         for(let searchArray in searchData){
         prepareData.push(searchData[searchArray]);
        }
        return prepareData;
     }
+    /**
+     * @description Navigating to the story details page
+     */
     navigateToStoryDetail(project,ticketId,slug){
         if(slug=='' || slug==undefined){
             this._router.navigate(['project',project.ProjectName,ticketId,'details']);
@@ -215,6 +195,9 @@ export class SearchComponent implements OnInit{
          this._router.navigate(['project',project.ProjectName,ticketId,'details'],{queryParams: {Slug:slug}});
         }
     }
+    /**
+     * @description searching fucntionality when click 
+     */
      callsearchByClick(searchFlag){
         this.searchArray=[];
         this.searchFlag=searchFlag;
@@ -223,12 +206,16 @@ export class SearchComponent implements OnInit{
         this.load_contents(this.page,this.searchString,this.searchFlag,this.projectId,'',this.getPname);
         
      }
+     /**
+      * @description Changing the project with the dynamic dropdown
+      */
       changeProject(){
-       // alert("s__P@@@@@@@@@---"+JSON.stringify(this.selectedProject));
         localStorage.setItem('ProjectName',this.selectedProject.name);
         localStorage.setItem('ProjectId',this.selectedProject.id);
-      //  this._router.navigate(['project',this.selectedProject.name,'list']);
     }
+    /**
+     * @description Fetching the project details
+     */
     showDetailsByProject(pName){
         this.copyList=this.projects;
         this.copyList=this.optionTodisplay;
