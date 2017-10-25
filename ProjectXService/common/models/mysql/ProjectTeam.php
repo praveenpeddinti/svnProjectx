@@ -150,7 +150,8 @@ class ProjectTeam extends ActiveRecord
 //           $query = "select distinct C.UserName,C.Email from Collaborators C  where C.UserName like '$search%' and C.Status=1 and C.Id not in($team)";
 //           $users = Yii::$app->db->createCommand($query)->queryAll();
            $query= new Query();
-           $users = $query->select("distinct C.UserName,C.Email")
+           $users = $query->select("C.UserName,C.Email")
+                           ->distinct(true)
                            ->from("Collaborators C")
                            ->where("C.UserName like '".$search."%'")
                            ->andWhere("C.Status=1")
