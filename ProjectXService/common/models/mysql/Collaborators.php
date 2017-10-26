@@ -263,8 +263,6 @@ class Collaborators extends ActiveRecord
         try{
 //            $qry="select UserName,Email from Collaborators where UserName = '$user'";
 //            $data = Yii::$app->db->createCommand($qry)->queryOne();
-            $qry="select  from  where  = ''";
-            $data = Yii::$app->db->createCommand($qry)->queryOne();
             $query= new Query();
             $data = $query->select("UserName,Email")
                   ->from("Collaborators")
@@ -524,7 +522,7 @@ class Collaborators extends ActiveRecord
 //            $qry="select C.Id from Collaborators C join ProjectTeam PT on PT.CollaboratorId=C.Id where C.Email='$email' and PT.ProjectId=$projectId";
 //            $user=Yii::$app->db->createCommand($qry)->queryOne();
             $query= new Query();
-            $role = $query->select("C.Id")
+            $user = $query->select("C.Id")
                   ->from("Collaborators C")
                   ->join("join", "ProjectTeam PT", "PT.CollaboratorId=C.Id")
                   ->where("C.Email='".$email."'")
