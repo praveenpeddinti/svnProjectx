@@ -243,7 +243,7 @@ class TicketCollection extends ActiveRecord
            }
            else if($StoryData->filterOption->type=='personalfilters'){
             $personalFilter = PersonalizedFilterCollection::getPersonalizedFilter($StoryData->userInfo->Id, $projectId,$StoryData->filterOption->id);
-            $conditions=$personalFilter[0]['Conditions'];
+            $conditions=unserialize(base64_decode($personalFilter[0]['Conditions']));
            }
         }
         
@@ -351,7 +351,7 @@ class TicketCollection extends ActiveRecord
            }
            else if($StoryData->filterOption->type=='personalfilters'){
             $personalFilter = PersonalizedFilterCollection::getPersonalizedFilter($StoryData->userInfo->Id, $projectId,$StoryData->filterOption->id);
-            $conditions=$personalFilter[0]['Conditions'];
+            $conditions=unserialize(base64_decode($personalFilter[0]['Conditions']));
            }
         }
             $query->from('TicketCollection')

@@ -56,7 +56,6 @@ class PersonalizedFilterCollection extends ActiveRecord {
     public static function savePersonalizedFilter($name,$userId,$projectId,$condition){
          try {
             $returnValue = "failure";
-            
             $db = PersonalizedFilterCollection::getCollection();
             $record = $db->remove(array("ProjectId" => (int) $projectId, "UserId" => (int) $userId,"Id"=>preg_replace('/\s+/', '', $name)));
             $filterObj = new PersonalizedFilterCollection();
@@ -64,7 +63,7 @@ class PersonalizedFilterCollection extends ActiveRecord {
             $filterObj->Name=$name;
             $filterObj->Id=preg_replace('/\s+/', '', $name);
             $filterObj->UserId=(int)$userId;
-            $filterObj->Conditions=$condition;
+            $filterObj->Conditions=  base64_encode(serialize($condition));
             $filterObj->CreatedOn = new \MongoDB\BSON\UTCDateTime(time() * 1000);
             $result = $filterObj->save();
             if($result){
