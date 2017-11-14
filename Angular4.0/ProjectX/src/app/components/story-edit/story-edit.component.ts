@@ -125,7 +125,7 @@ export class StoryEditComponent implements OnInit
     
     this.minDate=new Date(); //set current date to datepicker as min date
      jQuery(document)
-    .one('focus.autoExpand', 'textarea.autoExpand', function(){ console.log('focus');
+    .one('focus.autoExpand', 'textarea.autoExpand', function(){ 
          var minRows = this.getAttribute('data-min-rows')|0, rows;
         var savedValue = this.value;
         this.value = '';
@@ -379,7 +379,7 @@ export class StoryEditComponent implements OnInit
   public fileOverBase(fileInput:any):void 
   {
       this.hasBaseDropZoneOver = true;
-      if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ console.log("clear---");
+      if(this.dragTimeout != undefined && this.dragTimeout != "undefined"){ 
       clearTimeout(this.dragTimeout);
       }
   

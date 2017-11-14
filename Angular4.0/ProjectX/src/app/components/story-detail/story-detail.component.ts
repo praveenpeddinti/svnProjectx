@@ -102,7 +102,6 @@ public blurTimeout=[];
       params => 
       {                       
             this.searchSlug=params['Slug'];
-            console.log(this.searchSlug);
             this.navigatedFrom=params['From'];//added by Ryan
        })
   
@@ -127,7 +126,7 @@ var thisObj = this;
 
    jQuery(document).ready(function(){
        jQuery(document)
-    .one('focus.autoExpand', 'textarea.autoExpand', function(){ console.log("********focus");
+    .one('focus.autoExpand', 'textarea.autoExpand', function(){ 
          var minRows = this.getAttribute('data-min-rows')|0, rows;
         var savedValue = this.value;
         this.value = '';
@@ -150,7 +149,6 @@ var thisObj = this;
    this.route.queryParams.subscribe(
       params => 
       { 
-         console.log("==Slug params=="+params['Slug']);
          this.searchSlug = params['Slug'];
         // for navigation to ticket
       this.route.params.subscribe(params => {
@@ -168,8 +166,6 @@ var thisObj = this;
 
             jQuery("#notifications_list").hide();
             
-            console.log("==Id=="+params['id']);
-            console.log("==Slug params=="+params['Slug']);
            
               //added By Ryan for BreadCrumb Purpose
             
@@ -195,9 +191,7 @@ var thisObj = this;
      */
     ngAfterViewInit()
     {
-      console.log("Comment Editor");
          this.editor.initialize_editor('commentEditor','keyup',this); //for comment
-         console.log("=Plan Level="+this.checkPlanLevel);
     }
 
 getArtifacts(obj){
@@ -286,7 +280,6 @@ this.commentDesc="";
 jQuery("#commentEditor").summernote('reset');
 
 jQuery("#commentEditorArea").removeClass("replybox");
-  console.log("comment is submitted");
 
 var commentedOn = new Date()
 var formatedDate =(commentedOn.getMonth() + 1) + '-' + commentedOn.getDate() + '-' +  commentedOn.getFullYear();
@@ -386,7 +379,6 @@ editTitle(titleId){
 jQuery("#"+titleId).focus();
  setTimeout(()=>{ 
   jQuery("#"+titleId).focus();
-console.log('time');
  },100);
   
 }
@@ -785,7 +777,6 @@ public fileOverBase(fileInput:any,where:string,comment:string):void {
   }
 
     else{
-      console.log("==in else fileOverBase==");
     this.hasBaseDropZoneOver = true;
   }
     
@@ -887,7 +878,6 @@ var thisObj = this;
 Common Ajax method to save the changes.
 */
     public postDataToAjax(postEditedText,isChildActivity=0){
-      console.log("-------"+JSON.stringify(postEditedText));
      clearTimeout(this.inlineTimeout);
     this.inlineTimeout =  setTimeout(() => { 
        this._ajaxService.AjaxSubscribe("story/update-story-field-inline",postEditedText,(result)=>
@@ -1037,7 +1027,7 @@ Common Ajax method to save the changes.
      */
     
     /* When click the plus button to open the input box for followers*/
-    public loadFollowersWidget(event){ console.log("load foloer");
+    public loadFollowersWidget(event){ 
     if( event.target.id== "follwersAdd" || event.target.id == "follwersAddI" ){
 
       jQuery("#followerdiv").show();
@@ -1070,9 +1060,7 @@ Common Ajax method to save the changes.
            }
            
              this.follower_search_results=fList;
-               console.log(this.followers.length+"--followerdate-------"+JSON.stringify(this.follower_search_results));
             } else {
-                console.log("fail---");
             } 
              
          });
@@ -1561,7 +1549,6 @@ public callTicketDetailPage(ticId,projectId){
             jQuery("#detailEditor").html(this.ticketEditableDesc);//for summernote editor
             this.fieldsData = this.fieldsDataBuilder(data.data.Fields,data.data.TicketId);
             this.checkPlanLevel=data.data.StoryType.Name;
-            console.log("==Plan Level=="+this.checkPlanLevel);
             this.shared.navigatedFrom(this.navigatedFrom);//added by Ryan
             var url=this._router.url;
             var url_without_query=url.split('?')[0];
@@ -1570,7 +1557,6 @@ public callTicketDetailPage(ticId,projectId){
              this.childTasksArray=this.taskDataBuilder(data.data.Tasks);
              this._ajaxService.AjaxSubscribe("story/get-ticket-activity",ticketIdObj,(data)=>
             { 
-              console.log(data.data.Activities);
               this.commentsList = data.data.Activities;
                setTimeout(() => { 
                     if(typeof this.searchSlug != "undefined"){ 

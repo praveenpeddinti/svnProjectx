@@ -117,7 +117,6 @@ export class TimeReportComponent{
     constructor(
         private _router: Router,
         private _service: TimeReportService,private projectService:ProjectService, private _ajaxService: AjaxService,private http: Http, private route: ActivatedRoute,private shared:SharedService,private timeLocation:Location) { 
-        console.log("in constructor"); 
         let PageParameters = {
                 offset: 0,
                 Sortvalue: "Id",
@@ -236,7 +235,6 @@ export class TimeReportComponent{
                 var url='/project/'+this.projectName+'/time-report?page='+this.pageNo+'&sort='+sortorder+'&col='+sortvalue+'&fromDate='+this.fromDateString+'&toDate='+this.toDateString;
                 this.timeLocation.go(url);
             } else {
-                console.log("fail---");
             }
         });
     }
@@ -325,7 +323,6 @@ export class TimeReportComponent{
 
 
     getSelectedValueForTask(event) {
-        console.log("##########"+"-----ad----------");
         this.selectedValForTask=event;
      
     }
@@ -364,7 +361,6 @@ export class TimeReportComponent{
                            }, 500);
                           this.editPopUp=true;
                          } else {
-                            console.log("fail---");
                         }
                     });
             }else{
@@ -509,7 +505,6 @@ export class TimeReportComponent{
         {
             this.teamMembers=[];
             this.teamCount=result.totalCount;
-            console.log("==Team Members=="+JSON.stringify(result));
             if(result.data==null){
                 /*Hide Dropdown for Team Members */
             }else{
@@ -532,7 +527,6 @@ export class TimeReportComponent{
     }
 
     clearForm(){
-       console.log(JSON.stringify(this.entryForm['text']));
        this.entryForm['text']=' ';
     }
 }

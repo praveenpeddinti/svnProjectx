@@ -81,7 +81,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 ">
                         <label class="timereportlabel"> Owner </label> 
                         <div class="custom_selctdropdown2" id="filterDropdown">
-                            <p-dropdown required [style]="{'width':'367px'}" [(ngModel)]="formB.selectedUserFilter" name="selectedUserFilter" #selectedUserFilter="ngModel" (onChange)="filterCreateBucketUsers()" [displayOptions]="FilterOptionToDisplay" [options]="FilterOption"></p-dropdown>
+                            <p-dropdown required [style]="{'width':'367px'}" [(ngModel)]="formB.selectedUserFilter" name="selectedUserFilter" #selectedUserFilter="ngModel" [displayOptions]="FilterOptionToDisplay" [options]="FilterOption"></p-dropdown>
                         </div>
                         <div *ngIf="submitted && selectedUserFilter.errors " class="fielderror">
                             <div  [hidden]="!selectedUserFilter.errors.required">Please select Responsible</div>

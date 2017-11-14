@@ -154,7 +154,6 @@ this.advanceFilter[index].filterValue.forEach((element)=>{
        }
      })
     if(doReset)this.advanceFilter[index]['doReset']=doReset;
- console.log("Selected_________________filter"+JSON.stringify(this.selectedFilters));
 }
 
 selectCustomDate(value,type,index){

@@ -104,16 +104,12 @@ private _service: StoryService,private _ajaxService: AjaxService) { }
   this.ticketName = this.ticketId;
   
      this.row1=[];
-     console.log('In child task', this.ticketId);
     this._service.getSubTasksDetails(this.projectId, this.ticketId, (response) => {
-     console.log('response came----');
                    let jsonForm = {};
             if (response.statusCode == 200) {
                 this.row1=response.data;
               
-                console.log('Toggled Expand Row!', this.row1);
             } else {
-                console.log("fail---");
             }
         });
   

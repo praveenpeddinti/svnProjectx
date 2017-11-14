@@ -25,7 +25,6 @@ export class SummerNoteEditorService
         var thisObj= this;
         if(options=='keyup' && obj!=null)
         {
-            console.log("first if");
             jQuery('#'+element).summernote(
             {
                 height:200,
@@ -39,7 +38,6 @@ export class SummerNoteEditorService
                             match: /\B@(\w*)$/,
                             users:function(keyword,callback)
                             {
-                                console.log("===In users=="+keyword);
                                 var params={search_term:keyword};
                                 var getAllData=  JSON.parse(localStorage.getItem('user'));
                                 if(getAllData != null){
@@ -59,7 +57,6 @@ export class SummerNoteEditorService
                                             if(data.statusCode!=200){
                                             thisObj.sharedService.setToasterValue(data.message);
                                             }
-                                            console.log("==Data=="+JSON.stringify(data));
                                             var mention_list=[];
                                             for(let i in data.data)
                                             {
@@ -84,11 +81,9 @@ export class SummerNoteEditorService
                             
                             },
                             template: function (item) {
-                                console.log("==Profile==**"+item.Profile);
                                return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>&nbsp;'+item.name+'</div>';
                             },
                             content: function (item) {
-                                console.log("===Item=="+item);
                                     return '@' + item.name;
                                     
                                     }    
@@ -100,7 +95,6 @@ export class SummerNoteEditorService
                          if(!(editor.indexOf("<p>")>-1)){ //added for default unexpected behaviour of editor
                               editor="<p>"+editor+"</p>";
                           }
-                           console.log(editor+"=====**======1111111111=");
                         editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
                          if(obj.formB != undefined){
                              obj.formB['description']=editor;
@@ -116,7 +110,6 @@ export class SummerNoteEditorService
                             }
                             else
                             {
-                                console.log("cmoing here******");
                                 obj.form['description']='';
                             }
                          }
@@ -129,7 +122,6 @@ export class SummerNoteEditorService
         }
         else
         {
-            console.log("==else==");
             jQuery("#"+element).summernote(
                 {
                     height:200,
@@ -144,7 +136,6 @@ export class SummerNoteEditorService
                             match: /\B@(\w*)$/,
                             users:function(keyword,callback)
                             {
-                                console.log("===In users=="+keyword);
                                 var params={search_term:keyword};
                                 var getAllData=  JSON.parse(localStorage.getItem('user'));
                                 if(getAllData != null){
@@ -164,7 +155,6 @@ export class SummerNoteEditorService
                                              if(data.statusCode!=200){
                                             thisObj.sharedService.setToasterValue(data.message);
                                             }
-                                            console.log("==Data=="+JSON.stringify(data));
                                             var mention_list=[];
                                             for(let i in data.data)
                                             {
@@ -189,11 +179,9 @@ export class SummerNoteEditorService
                             
                             },
                             template: function (item) {
-                                console.log("==Profile=="+item.Profile);
                                return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>&nbsp;'+item.name+'</div>';
                             },
                             content: function (item) {
-                                console.log("===Item=="+item);
                                     return '@' + item.name;
                                      
                                     }    

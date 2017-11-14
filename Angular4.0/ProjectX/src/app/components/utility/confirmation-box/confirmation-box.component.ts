@@ -19,12 +19,10 @@ export class ConfirmationBoxComponent implements OnInit {
   }
  
   getDataFromParent(domPosition){
-      console.log('getDataFromParent--'+ domPosition);
        this.selectedValue = domPosition;
  
   }
   closeConfirmationBox(domPosition){
-      console.log('closeConfirmationBox--'+ domPosition);
        this.selectedValue = domPosition;
  
   }

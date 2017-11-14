@@ -20,7 +20,7 @@ export class AjaxService {
  * @description AjaxSubscribe function using as common to get data from services.
 */
 AjaxSubscribe(url:string,params:Object,callback)
-{   console.log("params____"+JSON.stringify(params));
+{   
    this.sharedServece.setLoader(true);
    jQuery("#commonSpinner").removeClass("unloading"); 
    jQuery("#commonSpinner").addClass("loading"); 

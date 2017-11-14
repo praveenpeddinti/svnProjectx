@@ -129,7 +129,6 @@ export class ProjectDashboardComponent implements OnInit {
                   });
                   this.bucketService.getCurrentBucketsInfo(thisObj.projectId,(data)=>
                   {
-                    console.log("==Current Buckets Data=="+JSON.stringify(data));
                     if(data.statusCode==200){
                       if(data.data.BucketInfo!=null){
                         this.currentBucketContainer=data.data.BucketInfo.Current;
@@ -139,7 +138,6 @@ export class ProjectDashboardComponent implements OnInit {
                   });
                   this.bucketService.getCurrentWeekActiveBuckets(thisObj.projectId,(data)=>
                   {
-                    console.log("==Current Week Buckets=="+JSON.stringify(data));
                     if(data.statusCode==200){
                       this.currentWeekBucketContainer=data.data;
                       this.moreCount=data.totalCount;
@@ -242,7 +240,6 @@ export class ProjectDashboardComponent implements OnInit {
      * @description Clearing the project updation form.
      */
   clearEditedDetails(form){
-    console.log("12333");
       this.projectFormComponent.clearEditedDetails(form);
   }
   /**
@@ -284,7 +281,6 @@ export class ProjectDashboardComponent implements OnInit {
     {
       this.bucketService.getOtherBucketsInfo(this.projectId,(data)=>
       {
-        console.log("==Other buckets data=="+JSON.stringify(data));
         this.otherBucketsContainer=data.data;
         jQuery(".panel-collapse").collapse("show");
       });
@@ -339,7 +335,7 @@ thisObj._ajaxService.AjaxSubscribe('site/create-repository',sendData,(result)=>
 /**
      * @description Opening Bucket story when click on buckets
      */
-   gotoStory(bucketObj,filterVal,filterType,key){ console.log("Bucket__obj__"+JSON.stringify(bucketObj));
+   gotoStory(bucketObj,filterVal,filterType,key){ 
        var filterKey:any={}; 
         filterKey['Buckets']=[{
             "label":bucketObj.Name ,

@@ -118,7 +118,7 @@ expanded: any = {};
 
     constructor(
         private _router: Router,
-        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService,private _ajaxService: AjaxService,private location:Location) { console.log("in constructor"); }
+        private _service: StoryService,private projectService:ProjectService, private http: Http, private route: ActivatedRoute,private shared:SharedService,private _ajaxService: AjaxService,private location:Location) {  }
 
     ngOnInit() {
         window.scrollTo(0,0);
@@ -288,7 +288,6 @@ setFilterValue(response){
                 /* =========Section End==========================================*/ 
 
             } else {
-                console.log("fail---");
             }
         });
     }
@@ -317,8 +316,7 @@ collapseAll(){
     this.table.rowDetail.collapseAllRows()
 }
 toggleExpandRow(row) { 
-  this.table.rowDetail.toggleExpandRow(row);
-    
+        this.table.rowDetail.toggleExpandRow(row);
 }
 
       /* @Praveen P
@@ -675,7 +673,6 @@ this.criteriaLabel=result;
  */
 deleteOption(event){
     var thisObj = this;
-  console.log("deleteOptiondeleteOptiondeleteOption"+JSON.stringify(event));
   this.FilterOptionToDisplay.forEach(element=>{
       if(element.type==event.type){
 thisObj._service.deleteAdvanceFilter(thisObj.projectId,event.option.value.id,(response)=>{

@@ -43,7 +43,6 @@ export class NotificationComponent implements OnInit{
     var post_data={viewAll:1,page:page};
     this._ajaxService.NodeSubscribe('/getAllNotifications',post_data,(data)=>
       {
-      console.log("--leing-----viewAllNotifications--"+data.notify_result.length);
       if(data.notify_result.length >0){
           this.nomorenotifications = false;
           this.notify_count=data.notify_result.length;

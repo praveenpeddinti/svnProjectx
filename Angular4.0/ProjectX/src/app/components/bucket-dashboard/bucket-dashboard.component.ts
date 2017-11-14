@@ -100,7 +100,7 @@ export class BucketDashboardComponent implements OnInit {
                  })
                
             } else {
-                console.log("fail---");
+//                console.log("fail---");
             }
         });
     }
@@ -236,10 +236,8 @@ prepareEditFromData(){
                     var thisObj=this;
                  
                     if (page == 0 ) { 
-                     console.log("121212"); 
                          this.noMoreActivities = false;     
                             this.dashboardData = result.data;
-                            console.log("Onload__activity__"+JSON.stringify(this.dashboardData.activities))
                             var curActLength = this.dashboardData.activities.length;
                               if(this.dashboardData.activities.length==0){
                                   this.noActivitiesFound=true;
@@ -248,12 +246,9 @@ prepareEditFromData(){
                     }else{
                       var curActLength = this.dashboardData.activities.length;
                         if (result.data.activities.length > 0) {
-                          console.log("Total__Activity"+JSON.stringify(result.data.activities));
-                          console.log(this.dashboardData.activities[curActLength - 1].activityDate +"==77777777777777777777===="+ result.data.activities[0].activityDate)
                           if (this.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
                             this.dashboardData.activities[curActLength - 1].activityData = this.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
-                            console.log("After__Concat"+JSON.stringify(this.dashboardData.activities));
-                            
+                           
                             result.data.activities .splice(0, 1);
                             this.dashboardData.activities=this.dashboardData.activities.concat(result.data.activities);
                             

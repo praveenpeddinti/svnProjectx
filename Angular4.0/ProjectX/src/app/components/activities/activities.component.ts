@@ -15,7 +15,7 @@ export class ActivitiesComponent implements OnInit {
 
   dashboardData:any[];
    ngOnInit() {
-    console.log("@@@@-------"+JSON.stringify(this.dashboardData));
+//    console.log("@@@@-------"+JSON.stringify(this.dashboardData));
    
   }
 

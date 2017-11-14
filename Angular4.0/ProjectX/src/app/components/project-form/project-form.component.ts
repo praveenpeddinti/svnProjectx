@@ -85,7 +85,6 @@ export class ProjectFormComponent implements OnInit {
                 thisObj.form['projectLogo']=thisObj.projectLogo;
                   thisObj.form['setLogo']=thisObj.setLogo;
                thisObj.form['description'] =jQuery(thisObj.description).text().trim();
-                console.log("343434--"+thisObj.form['projectName']);
                thisObj.copyProjectname=thisObj.form['projectName'];
                 
                 
@@ -165,10 +164,7 @@ export class ProjectFormComponent implements OnInit {
           if(this.projectForm=='create'){
             this.AjaxCallForProjectName(value);
           }else if(this.projectForm==='edit'){
-             console.log("@@@---"+this.copyProjectname.trim());
-            console.log("444---"+value.trim().toLowerCase( ));
               if(this.copyProjectname.trim().toLowerCase( )===value.trim().toLowerCase( )){
-                console.log("yes");
               }else{
                 this.AjaxCallForProjectName(value);
               }
@@ -181,7 +177,6 @@ export class ProjectFormComponent implements OnInit {
            var postData={
                       projectName:value.trim()
                   } ;
-                   console.log("sssssssssss---------"+value.trim());
                   if(value.trim()=='' || value.trim() == undefined){
                      this.spinnerSettings.color='';
                      this.spinnerSettings.class ='';
@@ -372,7 +367,6 @@ export class ProjectFormComponent implements OnInit {
      * @description Clearing the edited details from the Project Update form
      */
    clearEditedDetails(form){
-    console.log("12333");
      this.fileuploadMessage=0; 
      this.editPopUp=true;
      this.submitted=false;

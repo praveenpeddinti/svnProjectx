@@ -88,7 +88,6 @@ export class UserDashboardComponent implements OnInit {
             if (thisObj.dashboardData.activities[curActLength - 1].activityDate == result.data.activities[0].activityDate) {
                thisObj.dashboardData.activities[curActLength - 1].activityData = thisObj.dashboardData.activities[curActLength - 1].activityData.concat(result.data.activities[0].activityData)
                result.data.activities .splice(0, 1);
-                            console.log("@@-44-"+JSON.stringify(result.data.activities));
                thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
             } else {
               thisObj.dashboardData.activities=thisObj.dashboardData.activities.concat(result.data.activities);
@@ -137,12 +136,10 @@ export class UserDashboardComponent implements OnInit {
  * @description Providing global search option 
  */
   globalSearch(){
-    console.log("here-----"+this.srch);
    var searchString=this.srch;
     if (typeof searchString !== 'undefined'){
       this._router.navigate(['search',],{queryParams: {q:searchString}});
     }else{
-      console.log("stay here----");
     }
      
   }
