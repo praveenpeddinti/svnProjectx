@@ -238,14 +238,15 @@ class Bucket extends ActiveRecord
     public function saveBucketDetails($bucketDetails) {
         try {
             $startDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->startDateVal)));
-
+            $endDate = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes', strtotime($bucketDetails->data->dueDateVal)));
+            //error_log($bucketDetails->data->startDateVal."------------------------startDate".$startDate);
             $returnValue = 'failure';
             $bucket = new Bucket();
             $bucket->ProjectId = (int)$bucketDetails->projectId;
             $bucket->Name = $bucketDetails->data->title;
             $bucket->Description = $bucketDetails->data->description;
-            $bucket->StartDate = $startDate;
-            $bucket->DueDate = $bucketDetails->data->dueDateVal;
+            $bucket->StartDate =$startDate;
+            $bucket->DueDate = $endDate;
             $bucket->Responsible = (int)$bucketDetails->data->selectedUserFilter;
             $bucket->BucketStatus = ($bucketDetails->data->setCurrent)?(int)2:(int)1;
             $bucket->Status = (int)1;
