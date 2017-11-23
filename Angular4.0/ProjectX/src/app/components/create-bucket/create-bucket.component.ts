@@ -25,7 +25,7 @@ export class CreateBucketComponent implements OnInit {
     Id:'',
     title:'',
     description:'',
-    startDateVal:new Date(),
+    startDateVal:'',
     dueDateVal:'',
     setCurrent:false,
    
@@ -42,7 +42,7 @@ export class CreateBucketComponent implements OnInit {
   private dueDateMsg="";
   private bucketMsgClass="";
   private prevBucketName = "";
-  private minDate = new Date();
+  //private minDate = new Date();
 
 
   private typeAheadTimer=undefined;
@@ -80,7 +80,7 @@ private typeAheadResults ={
     this.formB['Id']='';
     this.formB['title']='';
     this.formB['description']='';
-    this.formB['startDateVal']=new Date();
+    this.formB['startDateVal']='';
     this.formB['dueDateVal']='';
     this.formB['setCurrent']=false;
     
@@ -131,14 +131,14 @@ BucketForAddorEdit(event){
     
    
     
-    var startDate = this.formB['startDateVal'].toLocaleDateString();
+    var startDate = new Date(this.formB['startDateVal']).toLocaleDateString();
     var endDate=new Date(this.formB['dueDateVal']).toLocaleDateString();
-   if(endDate>=startDate){
-          this.addBucket();
+   if(endDate<startDate){
+      this.bucketMsgClass='fielderror';
+      this.bucketSuccessMsg = 'End Date is must be greater or equal to Start Date.';
     }else{
-          this.bucketMsgClass='fielderror';
-          this.bucketSuccessMsg = 'End Date is must be greater or equal to Start Date.';
-     }
+        this.addBucket();
+        }
 
 }
 
@@ -241,7 +241,7 @@ clearForm(resetEditForm){
   this.bucketMsgClass="";
   this.dueDateMsg="";
 
-    this.formB['startDateVal']=new Date();
+    this.formB['startDateVal']='';
     jQuery('#bucketDescId').summernote('code','');
     this.typeAheadResults ={
               flag:false,
