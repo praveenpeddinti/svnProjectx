@@ -76,7 +76,7 @@ class SettingsController extends Controller
                 Yii::error("SiteController:actionEmailPreferences::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -107,7 +107,7 @@ class SettingsController extends Controller
                 Yii::error("SiteController:actionUserAuthentication::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -137,7 +137,7 @@ class SettingsController extends Controller
                 Yii::error("SiteController:actionUserAuthentication::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;

@@ -305,7 +305,7 @@ class BucketController extends Controller
              Yii::error("BucketController:actionGetTotalBucketStats::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -331,7 +331,7 @@ class BucketController extends Controller
              Yii::error("BucketController:actionGetBuckets::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -358,7 +358,7 @@ class BucketController extends Controller
              Yii::error("BucketController:actionGetCurrentWeekBuckets::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -404,7 +404,7 @@ class BucketController extends Controller
              Yii::error("BucketController:actionGetOtherBuckets::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;

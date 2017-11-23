@@ -76,7 +76,7 @@ class CollaboratorController extends Controller
             Yii::error("StoryController:actionGetUserDashboardDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;// ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -110,7 +110,7 @@ class CollaboratorController extends Controller
             Yii::error("StoryController:actionSaveUser::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage() ;// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -138,7 +138,7 @@ class CollaboratorController extends Controller
             Yii::error("StoryController:actionGetUpdatedTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -167,7 +167,7 @@ class CollaboratorController extends Controller
             Yii::error("StoryController:actionSendInvite::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -197,7 +197,7 @@ class CollaboratorController extends Controller
             Yii::error("StoryController:actionAddToTeam::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -223,7 +223,7 @@ class CollaboratorController extends Controller
             Yii::error("StoryController:actionVerifyInvitationCode::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -251,7 +251,7 @@ class CollaboratorController extends Controller
             Yii::error("StoryController:actionInvalidateInvitation::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -273,7 +273,7 @@ class CollaboratorController extends Controller
             Yii::error("StoryController:actionInvalidateInvitation::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -307,7 +307,7 @@ class CollaboratorController extends Controller
              Yii::error("CollabaratorController:actionVerifyingProjectName::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =  $th->getMessage();
+             $responseBean->message =  ResponseBean::SERVER_ERROR_MESSAGE;;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -457,7 +457,7 @@ class CollaboratorController extends Controller
              Yii::error("SiteController:getAllActivitiesForProjectDashboard::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =$th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -499,7 +499,7 @@ class CollaboratorController extends Controller
              Yii::error("CollaboratorController:getTeamMembers::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -528,7 +528,7 @@ class CollaboratorController extends Controller
              Yii::error("CollaboratorController:checkUserExist::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;

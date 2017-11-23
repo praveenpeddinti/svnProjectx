@@ -113,7 +113,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionGetAllStoryDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode =ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage() ;//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -182,7 +182,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionEditTicket::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -231,7 +231,7 @@ class StoryController extends Controller
             Yii::error("StoryController:saveTicketDetails::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage()."--" . $th->getTraceAsString();
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -544,7 +544,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionGetCollaborators::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =  $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =   ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -608,7 +608,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionSubmitComment::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage();//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -705,7 +705,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionFollowTicket::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message = $th->getMessage() ;// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =  ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -772,7 +772,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionCreateChildTask::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =  $th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =   ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -1068,7 +1068,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionGetFilterOptions::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =$th->getMessage();// ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message = ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -1395,7 +1395,7 @@ class StoryController extends Controller
             Yii::error("StoryController:actionGetFilterOptions::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =   $th->getMessage();//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =   ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -1428,7 +1428,7 @@ class StoryController extends Controller
              Yii::error("StoryController:actionApplyAdvanceFilter::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =   $th->getMessage(). "--" . $th->getTraceAsString();//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =   ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
@@ -1461,7 +1461,7 @@ class StoryController extends Controller
              Yii::error("StoryController:actionDeleteAdvanceFilter::" . $th->getMessage() . "--" . $th->getTraceAsString(), 'application');
              $responseBean = new ResponseBean();
              $responseBean->statusCode = ResponseBean::SERVER_ERROR_CODE;
-             $responseBean->message =   $th->getMessage(). "--" . $th->getTraceAsString();//ResponseBean::SERVER_ERROR_MESSAGE;
+             $responseBean->message =   ResponseBean::SERVER_ERROR_MESSAGE;
              $responseBean->data = [];
              $response = CommonUtility::prepareResponse($responseBean,"json");
              return $response;
