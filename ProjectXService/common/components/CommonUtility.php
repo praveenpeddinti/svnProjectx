@@ -629,7 +629,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                   
               }//code end .... By Ryan
               
-              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
+              preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_.+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
               $filematches = $matches[0];
               $artifactsList=array();
               for($i = 0; $i< count($filematches); $i++){
