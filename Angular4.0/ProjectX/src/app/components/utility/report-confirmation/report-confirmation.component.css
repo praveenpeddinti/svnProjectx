@@ -1,1 +1,46 @@
+.pop_over_bg{
+       background-color: #FFF;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1040;
+    opacity: 0.5;
+ 
+}
+.pop_over_bg img{
+    position: absolute; top:50%; left:45%;
+}
+
+.dragdrop{ 
+    width: 100%; 
+    height:auto; 
+    min-height: 200px; 
+    position: absolute; 
+    left: 0px; bottom: 0px; 
+    border: dashed 2px #ffcc00; 
+    text-align:center; 
+    padding: 30px 0px; 
+    background: #4da1d2;
+    z-index: 9999;
+    
+}   
+.dragdrop:before{ 
+    content: "Drag your files Here";
+    text-align: center; color: #fff;
+    position: absolute;
+    left:40%; top:30%; 
+
+}
+
+
+.capturebox { position: relative; background: #fff; border-radius:2px; width:500px; height:auto; min-height:150px; text-align:center; color:#fff; text-align:center; border:solid 20px #758cc4; }
+.capturebox:after { content: ''; position: absolute; left: 0; top: 70%; width: 0; height: 0; border: 23px solid transparent; border-right-color: #758cc4; border-left: 0; border-bottom: 0; margin-top: -11.5px; margin-left: -43px; }
+.capcturehed{
+    background: #f7f9fa;
+    border-bottom: solid 1px #e6e8eb;
+    color: #695ea5;
+    font: normal 16px/35px 'open_sansregular';
+}
 label{ font-weight:normal!important; }
