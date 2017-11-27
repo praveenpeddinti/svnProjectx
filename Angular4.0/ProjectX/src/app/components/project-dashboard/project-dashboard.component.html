@@ -349,14 +349,7 @@
                 <h4 class="modal-title">Team Members <span class="but">{{projectDetails.Team}}</span></h4>
             </div>
             <div class="modal-body userScroller">
-
-                <div class="teamshow_bg">
-                    <div class="user">
-                        <img src="http://s3.amazonaws.com/digitaltrends-uploads-prod/2014/06/Brain.jpg" alt="">
-                    </div>
-                    <div class="activitycon"> User Name two3</div>
-                </div>
-                <div class="teamshow_bg" *ngFor="let extractTeamMembersInfo of projectDetails.projectTeamMembers ">
+                 <div class="teamshow_bg" *ngFor="let extractTeamMembersInfo of projectDetails.projectTeamMembers ">
                     <div class="user" id="user{{extractTeamMembersInfo.Id}}">
                         <img src="{{extractTeamMembersInfo.ProfilePic}}" alt="{{extractTeamMembersInfo.ProfilePicture}}">
                     </div>
