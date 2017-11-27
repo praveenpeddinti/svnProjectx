@@ -121,3 +121,38 @@ width: 30px;
 
 
 /*Bucket Details End*/
+
+/*team view modal css start*/
+.teamshow_bg{
+    border-bottom: solid 1px #c1c7cd;
+    padding: 10px 20px 5px 60px;
+    position: relative;
+    min-height: 42px;
+    cursor: pointer;
+    clear: both;
+}
+
+.teamshow_bg .user{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 20px;
+    top: 5px;
+}
+
+.teamshow_bg .activitycon{
+    color: #637282;
+    font: normal 16px/25px 'open_sansregular';
+    overflow-wrap: break-word;
+}
+
+.userScroller{
+
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+/*.teamshow_bg:nth-child(odd){
+   background: #f7f9fa!important;
+}*/
+    /*team view modal css end*/
