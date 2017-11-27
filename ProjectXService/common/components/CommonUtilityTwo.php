@@ -362,6 +362,14 @@ static function validateDateFormat($date, $format = 'M-d-Y')
             }else{
                $projectInfo['userInfo']=array();  
             }
+/**
+     * @author_edited Waheed
+     * @param type $projectId
+     * @param  role admin - int 1 
+     * @Description role 1 admin to get all responsible collaborators 
+     */
+ $projectInfo['projectTeamMembers'] = ServiceFactory::getCollaboratorServiceInstance()->getResponsibleProjectTeam($projectId,1);
+ 
             array_push($prepareDetails,$projectInfo);
           
             return array('ProjectDetails'=>$prepareDetails);  
