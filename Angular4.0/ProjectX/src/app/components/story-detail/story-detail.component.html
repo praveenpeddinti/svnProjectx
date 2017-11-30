@@ -223,6 +223,7 @@
 <div class="widgethed">Attachments</div>
     <div class="attatchment">
         <div *ngFor="let attachment of attachmentsData;let i=index;">
+            <div *ngIf='attachment.Status ==1'>
             <div *ngIf='attachment.ArtifactType =="other"'>
                 <div class="attatchment_url"><a href="{{attachment.FileName}}" target="_blank" download>{{attachment.OriginalFileName}}</a></div>
                 <div class="attatchment_postename">{{attachment.UploadedBy}}<span>{{attachment.UploadedOn}}</span></div>
@@ -240,7 +241,7 @@
                 <div class="attatchment_postename">{{attachment.UploadedBy}}<span>({{attachment.UploadedOn}})</span></div>
             </div>
         </div>
-
+</div>
         </div>
        
     </div>
