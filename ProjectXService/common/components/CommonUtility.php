@@ -611,12 +611,14 @@ static function validateDateFormat($date, $format = 'M-d-Y')
               $userlist=[];//for email purpose added by ryan
               $mention_matches=[];//added by Ryan
               preg_match_all('/@([\w_\.]+)/', $description, $mention_matches);
+              
               $mentionmatches=$mention_matches[0];//added by Ryan
               for($i=0;$i<count($mentionmatches);$i++)//added by Ryan
               {
                   $value=explode('@',$mentionmatches[$i]);
                   //query for matching users 
                   $user=ServiceFactory::getCollaboratorServiceInstance()->getMatchedCollaborator($value[1]);
+                  
                   if(!empty($user))
                   {
                       array_push($userlist,$user);//added by ryan for email purpose
@@ -630,6 +632,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
               }//code end .... By Ryan
               
               preg_match_all("/\[\[\w+:\w+\/\w+(\|[A-Z0-9\s-_.+#$%^&()*a-z]+\.\w+)*\]\]/", $description, $matches);
+              $existfilename  = array();
+              
               $filematches = $matches[0];
               $artifactsList=array();
               for($i = 0; $i< count($filematches); $i++){
@@ -639,6 +643,8 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                    $tempFileName = $secondArray[0];
                    $originalFileName = $secondArray[1];
                    $originalFileName = str_replace("]]", "", $originalFileName);
+                   
+                   
                    $storyArtifactPath = Yii::$app->params['ProjectRoot']. Yii::$app->params['StoryArtifactPath'] ;
                    if(!is_dir($storyArtifactPath)){
                        if(!mkdir($storyArtifactPath, 0775,true)){
@@ -649,6 +655,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                 $push = true;
                 if (file_exists($storyArtifactPath . "/" . $tempFileName . "-" . $originalFileName)) {
                     $push = false;
+                    array_push($existfilename,$originalFileName);
                 } else {
                     $push = true;
                 }
@@ -680,7 +687,7 @@ static function validateDateFormat($date, $format = 'M-d-Y')
                     array_push($artifactsList, $artifactData);
                 }
               } 
-              $returnData = array("description"=>$description,"ArtifactsList"=>$artifactsList,"UsersList"=>$userlist);//modified by Ryan,added UsersList as key
+              $returnData = array("description"=>$description,"ArtifactsList"=>$artifactsList,"UsersList"=>$userlist,'existfilename'=>$existfilename);//modified by Ryan,added UsersList as key
               return $returnData;
       } catch (\Throwable $ex) {
             Yii::error("CommonUtility:refineDescription::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
