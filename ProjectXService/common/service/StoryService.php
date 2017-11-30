@@ -188,6 +188,7 @@ class StoryService {
  */
        public function saveTicketDetails($ticket_data,$parentTicNumber="") {
         try {
+             
              $newticket_data=$ticket_data; //added by Ryan
              $userdata =  $ticket_data->userInfo;
              $projectId =  $ticket_data->projectId;
@@ -212,6 +213,7 @@ class StoryService {
               
                $storyField = new StoryFields();
                   $standardFields = $storyField->getStoryFieldList();
+                   error_log("standardFields----".print_r($standardFields,1));
                   foreach ($standardFields as $field) {
                      $fieldBean = new FieldBean();
                      $fieldId =  $field["Id"];
@@ -314,7 +316,7 @@ class StoryService {
            }
           
                   
-                       
+            error_log("collection value-----".print_r($ticketModel,1));           
           $returnValue = TicketCollection::saveTicketDetails($ticketModel);
           if($returnValue != "failure"){
               $this->followTicket($userId,$ticketNumber,$projectId,$userId,"reportedby",true);
@@ -350,6 +352,7 @@ class StoryService {
      */
     public function getAllStoryDetails($StoryData, $projectId) {
         try {
+           
             $timezone = $StoryData->timeZone;
             $ticketDetails = TicketCollection::getAllTicketDetails($StoryData, $projectId,$select=['TicketId', 'Title','Fields','ProjectId']);
             $finalData = array();
@@ -362,7 +365,21 @@ class StoryService {
             foreach ($ticketDetails as $ticket) {
                 $details = CommonUtility::prepareDashboardDetails($ticket, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
                 array_push($finalData, $details);
+
                 
+                 /*$tasks = $ticket["Tasks"];
+                 error_log("Task Id---".print_r($tasks,1));
+               
+              
+               foreach ($tasks as $task) {
+               error_log("Task Id--1-".$task["TaskId"]);
+                  $task = TicketCollection::getTicketDetails($task["TaskId"],$projectId,$select=['TicketId', 'Title','Fields','ProjectId','ParentStoryId','Tasks']);
+                  if(is_array($task)){ error_log("Task Id--2-".$task["TicketId"]);
+                  $details = CommonUtility::prepareDashboardDetails($task, $projectId,$timezone,$fieldsOrderArray,"part",$fitlerOption);
+                array_push($finalData, $details);  
+               }
+               }*/ 
+
                } 
             
             return $finalData;
@@ -466,6 +483,7 @@ class StoryService {
              $userId = $userdata->Id;
              $saveEvent = false;
              $collaboratorData = Collaborators::getCollboratorByFieldType("Id",$userId);
+            
             $ticket_data = $ticket_data->data;
             $workFlowDetail = array();
             $summary=array();
@@ -486,22 +504,27 @@ class StoryService {
               $notificationIds=array_merge($notificationIds,$notificationTitleIds); 
               array_push($summary,array("ActionOn"=>"title","OldValue"=>$oldTitle,"NewValue"=>trim($ticket_data->title)));
             }
-            
+           
             $ticket_data->description = str_replace('&nbsp;', ' ', $ticket_data->description);
             $description = $ticket_data->description;
             $ticketDetails["CrudeDescription"] = $description;
+          
             $refiendData = CommonUtility::refineDescription($description);
+            
             $ticketDetails["Description"] = $refiendData["description"];
+            
             $ticketDetails["PlainDescription"] = (string)strip_tags($ticket_data->description);
+          
             $slug =  new \MongoDB\BSON\ObjectID();
             $this->saveActivity($ticket_data->ticketId,$projectId,"Description", $description,$userId,$slug,$timezone);
             $notificationDescIds=$this->saveNotifications($editticket,"Description",$description,'',$slug,$bulkUpdate=1);
+           
+        
             if($notificationDescIds!=''){
                 $saveEvent = true;
                 $notificationIds=array_merge($notificationIds,$notificationDescIds);
                 array_push($summary,array("ActionOn"=>"description","OldValue"=>strip_tags($oldDescription),"NewValue"=>strip_tags(trim($ticket_data->description))));
             }
-           
             $newworkflowId = "";
             foreach ($ticketDetails["Fields"] as $key => &$value) {
                  $fieldId =  $value["Id"];
@@ -592,7 +615,7 @@ class StoryService {
                                 array_push($summary,array("ActionOn"=>$fieldDetails["Field_Name"],"OldValue"=>(int)$oldvalue,"NewValue"=>(int)$ticket_data->$key));
                                 }
                                 else if($fieldDetails["Field_Name"] == "estimatedpoints"){
-                                    error_log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@----");
+                                    
                                     if($ticketDetails['IsChild']==0){
                                         $ticketId= $ticket_data->ticketId;
                                     }else{
@@ -667,10 +690,14 @@ class StoryService {
                         
                         $slug =  new \MongoDB\BSON\ObjectID();
                         $reportdata=array();
+                        
                         if($fieldDetails["Field_Name"] == "workflow"){
-                            
+                           
+                                
                             if(property_exists($ticket_data,'reportData')){
+                               
                             $refinedData = CommonUtility::refineDescription($ticket_data->reportData);
+                           
                                 $plainDescription= strip_tags($ticket_data->reportData);
                                 $reportMentionArray = $refinedData['UsersList'];               
                                 $reportProcessedDesc = $refinedData["description"];
@@ -706,17 +733,31 @@ class StoryService {
                    
                 
              }
+             
              if($newworkflowId != ""){
                 $updateStatus = $this->updateWorkflowAndSendNotification($ticketDetails,$newworkflowId,$userId);
              }
              $newTicketDetails = TicketCollection::getTicketDetails($ticket_data->ticketId,$projectId);
              $ticketDetails["Followers"] = $newTicketDetails["Followers"];
              $collection = Yii::$app->mongodb->getCollection('TicketCollection');
-            $collection->save($ticketDetails);
+             $collection->save($ticketDetails);
              if(sizeof($summary)!=0){
                 $this->saveEvent($projectId,"Ticket",$ticket_data->ticketId,"updated","fulledit",$userId,$summary,array("BucketId"=>(int)$bucketId));   
               }
-            self::sendEmailNotification($notificationIds, $projectId,1);
+              
+             self::sendEmailNotification($notificationIds, $projectId,1);
+             
+             $existfilename=$refiendData['existfilename'];           
+             $artifacts = TicketArtifacts::getTicketArtifacts($ticket_data->ticketId, $projectId);
+             if((count($artifacts["Artifacts"])>0 && count($existfilename)>=0)){    
+             foreach($artifacts["Artifacts"] as $key=>$value):  
+                    if(!in_array($value['OriginalFileName'],$existfilename)){
+                        TicketArtifacts::udpateArtifacts($ticket_data->ticketId, $projectId, $value['FileName']);
+                    }                     
+                      
+                  endforeach;
+              }
+              
             TicketArtifacts::saveArtifacts($ticket_data->ticketId, $projectId, $refiendData["ArtifactsList"],$userId);
             
         } catch (\Throwable $ex) {

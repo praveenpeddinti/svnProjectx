@@ -74,7 +74,7 @@ class TicketArtifacts extends ActiveRecord {
          $query = new Query();
         $query->from('TicketArtifacts')
                 ->select(array("Artifacts"))
-                ->where(['TicketId' => (int) $ticketId, "ProjectId" => (int) $projectId]);
+                ->where(['TicketId' => (int) $ticketId, "ProjectId" => (int) $projectId,'Artifacts.Status' => (int) 1 ]);
         $ticketArtifactsDetails = $query->one();
 
         return $ticketArtifactsDetails;   
@@ -94,6 +94,8 @@ class TicketArtifacts extends ActiveRecord {
  */
     public static function saveArtifacts($ticketNumber, $projectId, $newArtifactArray = array(), $userId) {
         try {
+           
+            
             if (!empty($newArtifactArray)) {
                 foreach ($newArtifactArray as $artifact) {
                     $artifact["UploadedBy"] = (int) $userId;
@@ -107,6 +109,28 @@ class TicketArtifacts extends ActiveRecord {
             throw new ErrorException($ex->getMessage());
         }
     }
+    
+/**
+ * @author Sowmya
+ * @param type $ticketNumber
+ * @param type $projectId
+ * @param type $filename
+
+ * @Description updates Artifacts Status to 0 in TicketArtifacts collection.
+ */    
+    public static function udpateArtifacts($ticketNumber, $projectId, $filename) {
+        try {
+                    $collection = Yii::$app->mongodb->getCollection('TicketArtifacts');
+                    $newdata = array('$set' => array('Artifacts.$.Status' => (int) 0 ));
+                    $res = $collection->update(array("TicketId" => (int) $ticketNumber, "ProjectId" => (int) $projectId,"Artifacts.FileName"=>$filename), $newdata, array('new' => 1,"upsert"=>1));
+               
+            
+        } catch (\Throwable $ex) {
+            Yii::error("TicketArtifactsCollection:udpateArtifacts::" . $ex->getMessage() . "--" . $ex->getTraceAsString(), 'application');
+            throw new ErrorException($ex->getMessage());
+        }
+    }
+    
 
 }
 
