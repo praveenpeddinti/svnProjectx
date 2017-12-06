@@ -47,11 +47,11 @@ saveReport(){
 public fileOverBase(fileInput:any,where:string,comment:string):void {
   if(where=="edit_comments"){
     
-    jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
+    jQuery("div[id^='dropble_comment_report_']").removeClass("dragdrop");
 
     if(jQuery("#Activity_content_"+comment).length >0)
     {
-      jQuery("#dropble_comment_"+comment).addClass("dragdrop","true");
+      jQuery("#dropble_comment_report_"+comment).addClass("dragdrop","true");
     }
 
 
@@ -59,8 +59,8 @@ public fileOverBase(fileInput:any,where:string,comment:string):void {
   }else if(where=="comments")
   {
     
-    jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
-    jQuery("#dropble_comment_").addClass("dragdrop","true");
+    jQuery("div[id^='dropble_comment_report_']").removeClass("dragdrop");
+    jQuery("#dropble_comment_report_").addClass("dragdrop","true");
   }
 
     else{
@@ -81,7 +81,7 @@ var thisObj = this;
     clearTimeout(this.dragTimeout);
     }
      this.dragTimeout = setTimeout(function(){
-     jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
+     jQuery("div[id^='dropble_comment_report_']").removeClass("dragdrop");
      thisObj.hasBaseDropZoneOver = false;
     
      
@@ -107,12 +107,12 @@ public fileUploadEvent(fileInput: any, comeFrom: string,where:string,comment:str
    }
 
         if(where=="edit_comments"){
-             jQuery("div[id^='dropble_comment_']").removeClass("dragdrop");
+             jQuery("div[id^='dropble_comment_report_']").removeClass("dragdrop");
              jQuery("#comments_gif_"+comment).show();
           }
           else if(where=="comments")
           {
-            jQuery("#dropble_comment_").removeClass("dragdrop","true");
+            jQuery("#dropble_comment_report_").removeClass("dragdrop","true");
             jQuery("#last_comments").show();
           }
           else{
