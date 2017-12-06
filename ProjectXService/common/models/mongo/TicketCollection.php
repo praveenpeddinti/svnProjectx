@@ -823,7 +823,9 @@ class TicketCollection extends ActiveRecord
      */
     public static function getAllTicketsCountByProject($projectId){
         try{
-            $where=   ["ProjectId" =>(int)$projectId];
+            //$where=   ["ProjectId" =>(int)$projectId];
+            //Edited by @Waheed TicketId != 0 will get the correct stories count.!
+            $where=   ["ProjectId" =>(int)$projectId,"TicketId" => array('$nin'=>[0])]; 
             $query = new Query();
              $query->from('TicketCollection')
              ->where($where);
