@@ -60,12 +60,12 @@ export class LoginComponent implements OnInit{
 *This is login used for login of the user it returns string if it is error and redirect to the dashboard page if it is success
 */        
     login() {
-        this._service.login(this.user,(data)=>{ 
+         this._service.login(this.user,(data)=>{ 
             if(data.status==200){
             //Getting cookie to redirect page for specified url after login
             var rURL =this._cookieService.getObject("rUrl");
            
-             if(rURL!=undefined && rURL!=''){
+           if(rURL!=undefined && rURL!=''){
              
                     var rURLString:string;
                     rURLString = JSON.stringify(rURL);
@@ -90,10 +90,16 @@ export class LoginComponent implements OnInit{
                 this.checkData=true;
                 this.errorMsg = 'Invalid Email/Password';
             }
-
+           
         });
 
     }
+<!--To  clear the error mesasge -->
+unsetValidation(){
+       this.checkData=false;
+     }
+    
+     
 /*
 * Added by Padmaja
 * Validating Email in Email pattern

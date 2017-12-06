@@ -7,16 +7,16 @@
 
         <h2 class="loginheader text-center">SIGN IN</h2>
         <form #loginForm="ngForm" (ngSubmit)="submitted && loginForm.form.valid && isEmailValid && login()" novalidate="true">
-          <div class="loginform">
+            <div class="loginform">
             <div *ngIf="submitted && user_name.errors == null && this.checkData" class="fielderror">
-                    {{errorMsg}}
-               </div>
+                {{errorMsg}}
+           </div>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
 
                   <label class="loginformlabel" for="email">Username</label>
-                  <input [(ngModel)]="user.email" id="email" type="email" class="form-control customfield" required minlength="10" maxlength="50"
+                  <input [(ngModel)]="user.email" (ngModelChange)="unsetValidation()" id="email" type="email" class="form-control customfield" required minlength="10" maxlength="50"
                     (blur)="validateEmail(user.email)" (keyup)="validateEmail(user.email)" name="user_name" #user_name="ngModel">
                   <div *ngIf="submitted && user_name.errors " class="fielderror">
                     <div [hidden]="!user_name.errors.required">
@@ -38,8 +38,8 @@
               <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                   <label class="loginformlabel" for="password">Password</label>
-                  <input [(ngModel)]="user.password" id="password" type="password" id="pass" class="form-control customfield" required minlength="1"
-                    maxlength="50" name="user_password" #user_password="ngModel">
+                  <input [(ngModel)]="user.password" (ngModelChange)="unsetValidation()" id="password" type="password" id="pass" class="form-control customfield" required minlength="1"
+                    maxlength="50" name="user_password" #user_password="ngModel" >
                   <div *ngIf=" submitted && user_password.errors" class="fielderror">
                     <div [hidden]="!user_password.errors.required">
                       Password is required
