@@ -54,7 +54,7 @@ class BucketService {
      */      
     public function getBucketTypeFilter($projectId,$type,$bucketId){
         try{
-            $dropList = array();
+         $dropList = array();
          $bucketStatus=$this->checkDefaultBucket($projectId,$bucketId); //added by Ryan to check default bucket
          if($bucketStatus != "Default"){
          $bucketModel = new Bucket();
@@ -172,7 +172,10 @@ class BucketService {
          $resStatus =  $bucketModel->getBucketChangeStatus($projectId,$bucketId,$Status);
          $response["Status"] = $resStatus;
          if($resStatus == "success"){
-             $response["dropList"] = $this->getBucketTypeFilter($projectId, $Status);
+
+ //server error issue fix working when we change the parameters according to method #Edited by waheed
+ $response["dropList"] = $this->getBucketTypeFilter($projectId,$Status,$bucketId);
+ //  $response["dropList"] = $this->getBucketTypeFilter($projectId, $Status); 
              $response["newBucketStatusName"] = $bucketModel->getBucketStatusNameById($Status)[0]["Name"];                 
          }
          return $response;
