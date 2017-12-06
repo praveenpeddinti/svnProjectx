@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit{
         });
 
     }
-<!--To  clear the error mesasge -->
+/*To  clear the error mesasge */
 unsetValidation(){
        this.checkData=false;
      }
