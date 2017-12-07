@@ -1,8 +1,9 @@
-import { Component,OnInit,HostListener } from '@angular/core';
+import { Component,OnInit,HostListener,ViewChildren,QueryList } from '@angular/core';
 import { Router,ActivatedRoute } from '@angular/router';
 import {AuthGuard} from '../../services/auth-guard.service';
 import { AjaxService } from '../../ajax/ajax.service';
 import {SharedService} from '../../services/shared.service';
+import { ConfirmationBoxComponent } from '../../components/utility/confirmation-box/confirmation-box.component';
 declare var jQuery:any;
 
 @Component({
@@ -19,6 +20,8 @@ export class NotificationComponent implements OnInit{
     public stringPosition;
     public pageNo=1;
     private page=1;
+    private promptedBoxId;
+     @ViewChildren(ConfirmationBoxComponent) confirmationBox: QueryList<ConfirmationBoxComponent>;
     public nomorenotifications:boolean= false;
     public ready=true;
      constructor(
@@ -61,12 +64,48 @@ export class NotificationComponent implements OnInit{
      
       });
     }
+  /* mark as read function*/
+  
+   readNotification(project,notify_id,event,domPosition) 
+  {
+    var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
+    this._ajaxService.AjaxSubscribe('story/read-notification',post_data,(data)=>
+    {
+      if(data)
+      {
+       this._ajaxService.SocketSubscribe('getAllNotificationsCount',{});
+       if(data.data.notify_result != "nodata"){ 
+         this.allNotification[domPosition].IsSeen = 1;
+       }
+       
+      }
+    })
+  }
+   
+ 
+  /*
+  confirmation box
+  */  
+  promptConfirmationBox(domPosition) 
+  { 
+   var array = this.confirmationBox.toArray();
+  
+   array.forEach(function (value) {
+      value.getDataFromParent(-1);
+    });
+  
+    if(this.promptedBoxId !== domPosition){
+         array[domPosition].getDataFromParent(domPosition);
+    this.promptedBoxId = domPosition;
+    }else{
+     this.promptedBoxId = "";
+    }
+  }
 /**
  * @description To delete notification when user delete.
  */
     deleteNotification(project,notify_id,event,domPosition) 
   {
-  
     //ajax call for delete notificatin
     var post_data={'projectId':project.PId,'notifyid':notify_id,viewAll:1,page:this.pageNo};
     this._ajaxService.AjaxSubscribe('story/delete-notification',post_data,(data)=>
@@ -75,9 +114,14 @@ export class NotificationComponent implements OnInit{
       {
           this.notify_count=data.totalCount;
           this.shared.changeNotificationCount(data.totalCount);
-       if(data.data.notify_result != "nodata"){ 
+         if(data.data.notify_result != "nodata"){
+          this.allNotification.splice(domPosition,1); 
          this.allNotification[domPosition].IsSeen = 1;
-       }
+         if(this.allNotification.length==14){
+              this.pageNo =1; 
+              this.getAllNotification(this.pageNo); 
+          }
+      }
        
       }
     })
