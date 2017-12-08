@@ -126,16 +126,18 @@ BucketForAddorEdit(event){
   
     editor=editor.replace(/\&nbsp;*\s*(<br>)*/gi,'');
     editor = editor.replace(/^(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*|(<p>(<br>)*\s*(<br>)*<\/p>)*(<br>)*$/gi, "");
-   
-    this.formB['description']=editor;
-    
-   
+   this.formB['description']=editor;
     
     var startDate = new Date(this.formB['startDateVal']).toLocaleDateString();
     var endDate=new Date(this.formB['dueDateVal']).toLocaleDateString();
-   if(endDate<startDate){
+  
+  /**
+   * @description  Date Validation By Nagendra
+   */
+   if(this.formB['startDateVal'] > this.formB['dueDateVal'])
+   {
       this.bucketMsgClass='fielderror';
-      this.bucketSuccessMsg = 'End Date is must be greater or equal to Start Date.';
+      this.bucketSuccessMsg = 'End Date must be greater or equal to Start Date.';
     }else{
         this.addBucket();
         }
