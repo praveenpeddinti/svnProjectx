@@ -136,8 +136,8 @@ export class UserDashboardComponent implements OnInit {
  * @description Providing global search option 
  */
   globalSearch(){
-   var searchString=this.srch;
-    if (typeof searchString !== 'undefined'){
+      var searchString=btoa(this.srch);
+      if (typeof searchString !== 'undefined'){
       this._router.navigate(['search',],{queryParams: {q:searchString}});
     }else{
     }

@@ -36,7 +36,7 @@ export class BreadcrumbComponent implements OnInit {
         
         this.route_changes=value; //params from URL
      
-      this.project=this.route_changes.projectName;
+        this.project=this.route_changes.projectName;
         if(this.route_changes.page!='Logout')
         {
           if(this.items.length>0 && this.count==0 && this.route_changes.page!='Detail' && this.route_changes.type!='Other')
@@ -85,7 +85,7 @@ export class BreadcrumbComponent implements OnInit {
               this.items.push({label:'#'+this.route_changes.params,url:"/"+this.route_changes.url,type:this.route_changes.type,queryString:''});
               this.id.push('#'+this.route_changes.params);
               this.count++;
-            }
+                       }
 
             /*For Back Logic */
             for (var key in this.items) 
@@ -126,14 +126,17 @@ export class BreadcrumbComponent implements OnInit {
                 this.removeItems(1,true);
                 var url = this.route_changes.url;
                 var urlPart = url.split("?")[0];
-                this.items.push({label:this.route_changes.page,type:this.route_changes.type,url:"/"+urlPart,queryString:this.route_changes.params});
+                var query_string=btoa(this.route_changes.params);
+                this.items.push({label:this.route_changes.page,type:this.route_changes.type,url:"/"+urlPart,queryString:query_string});
                 
               }
               else
               { 
               var url = this.route_changes.url;
-               var urlPart = url.split("?")[0];
-                this.items.push({label:this.route_changes.page,type:this.route_changes.type,url:"/"+urlPart,queryString:this.route_changes.params});
+              var urlPart = url.split("?")[0];
+               var query_string=btoa(this.route_changes.params);
+                this.items.push({label:this.route_changes.page,type:this.route_changes.type,url:"/"+urlPart,queryString:query_string});
+               
                 if(this.items.length>1)
                 {
                   for(var key in this.items) 

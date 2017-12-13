@@ -175,8 +175,9 @@ export class HeaderComponent implements OnInit {
     return listMainArray;
   }
   globalSearchNavigate(){
-    var searchString=this.srchStr;
-    if(this._router.url=='/home'){
+
+    var searchString=btoa(this.srchStr);
+     if(this._router.url=='/home'){
       delete this.PName;
 
     }
@@ -188,7 +189,7 @@ export class HeaderComponent implements OnInit {
       }
       
     }else{
-      console.log("here only");
+
     }
   }
   showErrorFunction(id,message){

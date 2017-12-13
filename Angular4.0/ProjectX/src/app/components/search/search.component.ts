@@ -37,21 +37,19 @@ export class SearchComponent implements OnInit{
     public getPname;
     public copyList:any;
     ngOnInit(){
-   var thisObj = this;
-     this.route.queryParams.subscribe(
+    var thisObj = this;
+    this.route.queryParams.subscribe(
       params => 
       {
-           thisObj.searchString=params['q'];
+           thisObj.searchString=atob(params['q']);
            if(thisObj.searchString){
-          console.log("searchhhhhhhhhhhhhhh"+JSON.stringify(thisObj.searchString));
-        this.route.params.subscribe(params => {
+           this.route.params.subscribe(params => {
            this.projectName=params['projectName'];
             if(this.projectName==""||this.projectName==undefined){
                this.checkData=0;
-                  this.page=1;
-                this.searchArray=[];
-                    console.log("@@@@@@@@@@@@@"+JSON.stringify(thisObj.searchString));
-                   this.load_contents(this.page,this.searchString,this.searchFlag,'','','');
+               this.page=1;
+               this.searchArray=[];
+               this.load_contents(this.page,this.searchString,this.searchFlag,'','','');
             }else{
                  this.checkData=1;
                   this.projectService.getProjectDetails(this.projectName,(data)=>{ 
@@ -72,8 +70,8 @@ export class SearchComponent implements OnInit{
            }  
            })
              var thisObj=this; 
-        
-        this.shared.change(this._router.url,this.searchString,'Search','Other',this.projectName); //added By Ryan for breadcrumb purpose
+            
+              this.shared.change(this._router.url,this.searchString,'Search','Other',this.projectName); //added By Ryan for breadcrumb purpose
         }
              @HostListener('window:scroll', ['$event']) 
               loadsearchDataOnScroll(event) {
@@ -101,7 +99,7 @@ export class SearchComponent implements OnInit{
          {
              this.zone.run(() => { 
                    if(result.message !='no result found'){
-                   this.searchDivTabs=true;
+                    this.searchDivTabs=true;
                     document.getElementById('searchsection').innerHTML=' '; 
                     this.noSearchDivClass='col-xs-12 col-sm-9 col-md-9 tabpaddingleftzero';
                     this.searchArray= this.searchDataBuilder(result.data.mainData,this.searchArray);
