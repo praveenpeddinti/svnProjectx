@@ -42,58 +42,61 @@ declare var jstz:any;
                          var getAllData=  JSON.parse(localStorage.getItem('user'));
                          if(getAllData != null){
                              params["userInfo"] = getAllData;
-                                    params["projectId"] = obj.projectId;//parseInt(localStorage.getItem('ProjectId'));
-                                    params["timeZone"] = jstz.determine_timezone().name();
-                                }
-                                var url=GlobalVariable.BASE_API_URL+"story/get-collaborators";
-                                jQuery.ajax(
-                                {
-                                    url:url,
-                                    type:'POST',
-                                    data:JSON.stringify(params),
-                                    async:true
-                                }).done(function(data)
-                                {
-                                    if(data.statusCode!=200){
-                                        thisObj.sharedService.setToasterValue(data.message);
-                                    }
-                                    var mention_list=[];
-                                    for(let i in data.data)
-                                    {
-                                        mention_list.push({'name':data.data[i].Name,'Profile':data.data[i].ProfilePic});
-                                    }
-                                           
-                                    this.mentions=mention_list;
-                                    callback(jQuery.grep(this.mentions, function (item) {
+                             params["projectId"] = obj.projectId;
+                             if(params["projectId"] == undefined){
+                                 params["projectId"] = obj.formData.projectId;  //Added by @waheed because the projectId is inside formdata when reason/report popup opens
+                             }
+                             params["timeZone"] = jstz.determine_timezone().name();
+                         }
+                         var url=GlobalVariable.BASE_API_URL+"story/get-collaborators";
+                         jQuery.ajax(
+                         {
+                             url:url,
+                             type:'POST',
+                             data:JSON.stringify(params),
+                             async:true
+                         }).done(function(data)
+                         {
+                             if(data.statusCode!=200){
+                                 thisObj.sharedService.setToasterValue(data.message);
+                             }
+                             var mention_list=[];
+                             for(let i in data.data)
+                             {
+                                 mention_list.push({'name':data.data[i].Name,'Profile':data.data[i].ProfilePic});
+                             }
+
+                             this.mentions=mention_list;
+                             callback(jQuery.grep(this.mentions, function (item) {
                                         // console.log(item.name.toLowerCase().indexOf(keyword.toLowerCase()));
                                         // return item.name.indexOf(keyword) == 0; //old-one
                                         return item.name.toLowerCase().indexOf(keyword.toLowerCase()) == 0; //Edited@waheed to avoid case sensitive in autocomplete. 
                                     }));
 
-                                });
-                                
-                                
-                            },        
-                            search: function (keyword, callback) {
-                                if(keyword.length>0)
-                                {
-                                    this.users(keyword,callback);
+                         });
 
-                                }
 
-                            },
-                            template: function (item) {
-                                return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>&nbsp;'+item.name+'</div>';
-                            },
-                            content: function (item) {
-                                return '@' + item.name;
+                     },        
+                     search: function (keyword, callback) {
+                         if(keyword.length>0)
+                         {
+                             this.users(keyword,callback);
 
-                            }    
-                        },
-                        callbacks: {
-                            onKeyup: function(e) {
-                                this.summernoteLength=false; 
-                                var editor=jQuery('#'+element).summernote('code');
+                         }
+
+                     },
+                     template: function (item) {
+                         return '<div value="'+item.name + '" name="'+item.name+ '"><img width="20" height="20" src="' + item.Profile + '"/>&nbsp;'+item.name+'</div>';
+                     },
+                     content: function (item) {
+                         return '@' + item.name;
+
+                     }    
+                 },
+                 callbacks: {
+                     onKeyup: function(e) {
+                         this.summernoteLength=false; 
+                         var editor=jQuery('#'+element).summernote('code');
                          if(!(editor.indexOf("<p>")>-1)){ //added for default unexpected behaviour of editor
                              editor="<p>"+editor+"</p>";
                          }
