@@ -325,7 +325,9 @@ export class StoryEditComponent implements OnInit
            return ;
         }
     }
-      edit_data.description= jQuery("#description").summernote('code');
+     var description= jQuery("#description").summernote('code');
+     var des = this.editor.linkFun(description);
+    edit_data.description=des;
       edit_data.default_task=[];
       if(this.defaultTasksShow){
       var selectedTask=[];
@@ -335,6 +337,7 @@ export class StoryEditComponent implements OnInit
                }
             }
       }
+      //console.log('edit data'+JSON.stringify(edit_data));
        var post_data={
           'projectId':this.projectId,
           'data':edit_data,
@@ -349,6 +352,8 @@ export class StoryEditComponent implements OnInit
     }
           
    }
+
+   
 
   /*
     @params    :  event,id

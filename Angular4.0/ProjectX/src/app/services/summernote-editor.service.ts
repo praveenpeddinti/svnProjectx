@@ -197,5 +197,57 @@ else
                     );
 }
 }
+
+/*
+@author:Sowmya
+ * @description: Function to create link  for the url which was not added by summernote
+ * @param: text
+
+*/
+
+linkFun(text) {
+    var out = "";   var str = ""; 
+    str=text;
+    do {
+        var reject=str.match(/<a [^>]+>([^<]+)<\/a>/);
+        var  url = str.match(/((https?|ftp|file:\/\/)?([a-z\-]+\.)*[\-\w]+(\.[a-z]{2,4})+(\/[\w\_\-\?\=\&\.]*)*(?![a-z]))/i);
+        if(reject != null){
+             var position=  str.indexOf(reject[0]); 
+             var newstr=str.substr(0,position);
+             
+           if(newstr!= null){
+                var urlRegex= /((https?|ftp|file:\/\/)?([a-z\-]+\.)*[\-\w]+(\.[a-z]{2,4})+(\/[\w\_\-\?\=\&\.]*)*(?![a-z]))/ig;
+                var newstr = newstr.replace(urlRegex, function (url) {
+                     return '<a href="' + url + '" target="_blank">' + url + '</a>';
+                });
+               
+            }
+            out +=newstr;
+            out += reject[0];
+            var str = str.substr((position+reject[0].length));
+        }
+        else{   
+           if(url != null ) {
+           // get href value
+            var href = url[0];
+            if(href.substr(0,7)!="http://") href = "http://"+href;
+           // where the match occured
+           var where = str.indexOf(url[0]);
+           // add it to the output
+            out += str.substr(0,where);
+           // link it
+            out += '<a href="'+href+'"  target="_blank">'+url[0]+ '</a>';
+           // prepare str for next round
+           var str = str.substr((where+url[0].length));
+            } 
+            else {
+                out += str;
+                str = "";
+            }
+        }
+    } while(str.length>0); 
+    return out; 
+}
+
 }
 
