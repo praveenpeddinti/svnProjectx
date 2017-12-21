@@ -414,7 +414,7 @@ trait NotificationTrait {
      */
     public static function saveNotifications($notification_data, $notifyType, $activityOn, $fieldType = "", $slug = '', $bulkUpdate = '', $taskId = 0) {
         try {
-            error_log("saveNotifications---" . $notifyType . "---" . $activityOn . "---" . $fieldType);
+            //error_log("saveNotifications---" . $notifyType . "---" . $activityOn . "---" . $fieldType);
             $oldValue = '';
             $newValue = '';
             $oldCollaborator = '';
@@ -622,7 +622,8 @@ trait NotificationTrait {
                 $tic->Notification_Type = $activityOn;
                 $oldValue = ($fieldType == 4) ? $oldValue : (string) $oldValue;
                 $tic->OldValue = $oldValue;
-                $tic->NewValue = $newValue;
+               // $tic->NewValue = $newValue; this line is  commented and the below line added to  save due date new value as mongo date type in notification colection 
+                 $tic->NewValue = ($fieldType == 4) ? (new \MongoDB\BSON\UTCDateTime(strtotime($newValue) * 1000)):$newValue;
                 error_log($oldValue."____________IIIIIIIIIIIIIIII++6+++++++++++++++++++++++".$newValue);
                 $result = $tic->save(); //here not sending emails for left hand side propert change excpet Assinged to , stake holder
                 if ($result) {
